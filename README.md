@@ -6,7 +6,7 @@ view - viewmodel - usecase - repository - datasource
 
 * 사용 라이브러리   
     retrofit2   
-    gson   
+    kotlinx-serialization   
     room   
     glide   
     workmanager   
