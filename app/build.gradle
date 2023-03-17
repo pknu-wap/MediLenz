@@ -64,7 +64,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'org.jetbrains:annotations:23.0.0'
+    implementation 'org.jetbrains:annotations:24.0.1'
     testImplementation 'junit:junit:4.13.2.'
     implementation "androidx.core:core-ktx:1.9.0"
 
@@ -78,7 +78,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
     // gson ---------------------------------------------------------
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     // room ---------------------------------------------------------
     annotationProcessor "androidx.room:room-compiler:$room_version"
@@ -89,8 +89,8 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
 
     // glide ---------------------------------------------------------
-    implementation 'com.github.bumptech.glide:glide:4.14.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
 
     // workmanager ---------------------------------------------------------
     implementation "androidx.work:work-runtime-ktx:$work_version"
