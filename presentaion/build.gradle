@@ -6,8 +6,6 @@ plugins {
     id 'kotlin-parcelize'
     id 'org.jetbrains.kotlin.android'
     id 'androidx.navigation.safeargs.kotlin'
-    id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -49,6 +47,10 @@ android {
 }
 
 dependencies {
+
+    implementation project(':domain')
+    implementation project(':data')
+
     def room_version = '2.5.0'
     def work_version = "2.8.0"
     def lifecycle_version = "2.6.0"
@@ -119,11 +121,6 @@ dependencies {
 
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
-
-    // firebase ---------------------------------------------------------
-    implementation platform('com.google.firebase:firebase-bom:31.2.3')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     // to use java apis ---------------------------------------------------------
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

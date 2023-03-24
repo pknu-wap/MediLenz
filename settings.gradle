@@ -13,4 +13,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "MediProject"
-include ':app'
+include ':presentaion'
+include ':domain'
+include ':data'
