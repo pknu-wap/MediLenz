@@ -21,7 +21,7 @@ internal fun Project.configureKotlinAndroid(
             minSdk = 28
         }
 
-        dataBinding.isEnabled = true
+        dataBinding.enable = true
 
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_11
