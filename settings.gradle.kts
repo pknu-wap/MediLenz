@@ -19,4 +19,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "mediproject"
 
 include(":app")
-include(":core:core-common")
+include(":core:common")
+include(":core:data")
+include(":core:ui")
+include(":feature:interestedmedicine")

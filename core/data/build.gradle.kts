@@ -4,8 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "com.android.mediproject.core.core.common"
+    namespace = "com.android.mediproject.core.data"
 }
 
 dependencies {
+
 }

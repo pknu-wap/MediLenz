@@ -1,4 +1,4 @@
-package com.android.core_common
+package com.android.mediproject.common.core
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

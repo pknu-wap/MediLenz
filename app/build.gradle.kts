@@ -18,6 +18,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-common"))
+    implementation(project(":core:common"))
     implementation(libs.androidx.appcompat)
 }

@@ -1,3 +1,4 @@
+@file:Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.firebase.crashlytics) apply false
@@ -6,6 +7,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.nav.safeargs.kotlin) apply false
+    id("com.android.library") version "7.4.2" apply false
+    id("org.jetbrains.kotlin.android") version "1.8.0" apply false
     /*
     android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
