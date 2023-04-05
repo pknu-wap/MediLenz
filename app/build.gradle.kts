@@ -1,6 +1,7 @@
 plugins {
     id("mediproject.android.application")
     id("mediproject.android.hilt")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -15,6 +16,16 @@ android {
     }
 
     namespace = "com.android.mediproject"
+    buildFeatures {
+        viewBinding = true
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -28,4 +39,7 @@ dependencies {
     implementation(libs.androidx.fragment)
     implementation(libs.material.main)
     implementation(libs.androidx.core.ktx)
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 }
