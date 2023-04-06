@@ -9,8 +9,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MediProject"
-        tools:targetApi="31">
+        android:theme="@style/Theme.MediProject">
         <activity
             android:name=".MainActivity"
             android:exported="true"
