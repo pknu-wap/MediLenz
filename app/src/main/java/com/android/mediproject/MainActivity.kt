@@ -7,6 +7,6 @@ import com.android.mediproject.databinding.ActivityMainBinding
 class MainActivity() : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     override fun afterBinding() {
-        TODO("Not yet implemented")
+
     }
 }

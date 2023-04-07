@@ -23,7 +23,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>(Frag
     }
 
     fun handelEvent(event : SplashViewModel.SplashEvent) = when(event){
-        is SplashViewModel.SplashEvent.TimerDone -> {}
+        is SplashViewModel.SplashEvent.TimerDone -> { log("스플래쉬끝")}
     }
 
 }
