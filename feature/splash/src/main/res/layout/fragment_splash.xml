@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.splash.SplashViewModel" />
     </data>
 
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/main"
-    tools:context=".SplashFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/main">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
+            android:orientation="vertical"
+            tools:context=".SplashFragment">
+
+            <ImageView
+                android:layout_width="176dp"
+                android:layout_height="221dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/logo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/cafe"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+        </LinearLayout>
+    </FrameLayout>
 </layout>
