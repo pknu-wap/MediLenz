@@ -2,4 +2,6 @@
     <string name="nonMember">비회원으로 시작하기</string>
     <string name="singUp">5초만에 회원가입</string>
     <string name="login">로그인</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

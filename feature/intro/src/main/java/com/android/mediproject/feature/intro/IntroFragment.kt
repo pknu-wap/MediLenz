@@ -8,7 +8,7 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentIntroBinding
 import repeatOnStarted
 
-class SplashFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(FragmentIntroBinding::inflate) {
+class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(FragmentIntroBinding::inflate) {
 
     override val fragmentViewModel: IntroViewModel by viewModels()
 
