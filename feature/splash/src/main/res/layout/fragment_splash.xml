@@ -26,7 +26,7 @@
                 android:layout_height="221dp"
                 android:layout_gravity="center"
                 android:scaleType="fitXY"
-                android:src="@drawable/logo" />
+                android:src="@drawable/logo"/>
 
             <TextView
                 android:layout_width="wrap_content"
