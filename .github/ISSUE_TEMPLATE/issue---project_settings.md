@@ -1,5 +1,5 @@
 ---
-name: 'Issue : 프로젝트 관련 변경'
+name: '프로젝트 관련 변경'
 about: 프로젝트 관련 라이브러리나 설정 변경 시 사용
 title: ''
 labels: ''
