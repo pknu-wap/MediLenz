@@ -1,7 +1,6 @@
 plugins {
     id("mediproject.android.application")
     id("mediproject.android.hilt")
-    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -23,10 +22,8 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":feature:interestedmedicine"))
 
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.fragment)
-    implementation(libs.material.main)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.work.ktx)
+    implementation(libs.bundles.lifecycles)
+    implementation(libs.bundles.materials)
+    implementation(libs.bundles.composes)
+    implementation(libs.bundles.kotlins)
 }

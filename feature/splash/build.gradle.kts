@@ -1,6 +1,7 @@
 plugins {
     id("mediproject.android.library")
     id("mediproject.android.hilt")
+    id("mediproject.android.feature")
 }
 
 android {
@@ -8,6 +9,8 @@ android {
 }
 
 dependencies {
-    implementation(project(mapOf("path" to ":core:common")))
-    implementation(project(mapOf("path" to ":core:ui")))
+    implementation(project(":core:common"))
+    implementation(project(":core:data"))
+    implementation(project(":core:ui"))
+    implementation(libs.bundles.glides)
 }

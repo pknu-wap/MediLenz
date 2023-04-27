@@ -1,6 +1,7 @@
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.mediproject.configureKotlinAndroid
+import com.android.tools.r8.internal.li
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -23,6 +24,12 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             }
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+            dependencies {
+
+                "testImplementation"(kotlin("test"))
+                "androidTestImplementation"(kotlin("test"))
+            }
         }
     }
 }
