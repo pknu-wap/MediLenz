@@ -15,6 +15,7 @@ import repeatOnStarted
 class SingUpFragment : BaseFragment<FragmentSingUpBinding,SignUpViewModel>(FragmentSingUpBinding::inflate) {
 
     override val fragmentViewModel: SignUpViewModel by viewModels()
+
     override fun afterBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,7 +27,7 @@ class SingUpFragment : BaseFragment<FragmentSingUpBinding,SignUpViewModel>(Fragm
             }
         }
     }
-    
+
     fun handelEvent(event : SignUpViewModel.SignUpEvent) = when(event){
         else -> {}
     }

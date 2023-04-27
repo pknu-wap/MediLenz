@@ -17,7 +17,7 @@ class IntroViewModel : BaseViewModel() {
     fun memberLogin(){event(IntroEvent.MemberLogin())}
     fun signUp(){event(IntroEvent.SignUp())}
 
-    sealed class IntroEvent{
+    sealed class IntroEvent {
         data class NonMemberLogin(val unit : Unit? = null) : IntroEvent()
         data class MemberLogin(val unit : Unit? = null) : IntroEvent()
         data class SignUp(val unit : Unit? = null) : IntroEvent()
