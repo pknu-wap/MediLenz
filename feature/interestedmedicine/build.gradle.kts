@@ -8,11 +8,11 @@ android {
     namespace = "com.android.mediproject.feature.interestedmedicine"
 }
 
-dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:data"))
-    implementation(project(":core:ui"))
+hilt {
+    enableAggregatingTask = true
+}
 
+dependencies {
     implementation(libs.bundles.glides)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.materials)

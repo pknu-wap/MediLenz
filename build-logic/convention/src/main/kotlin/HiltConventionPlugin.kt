@@ -4,7 +4,7 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
-class AndroidHiltConventionPlugin : Plugin<Project> {
+class HiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
@@ -19,7 +19,6 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
                 "kapt"(libs.findLibrary("androidx.hilt.compilerKapt").get())
                 "androidTestImplementation"(libs.findLibrary("androidx.hilt.android.testingAndroidTestImplementation").get())
             }
-
         }
     }
 

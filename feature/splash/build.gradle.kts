@@ -7,10 +7,9 @@ plugins {
 android {
     namespace = "com.android.mediproject.feature.splash"
 }
-
+hilt {
+    enableAggregatingTask = true
+}
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:data"))
-    implementation(project(":core:ui"))
     implementation(libs.bundles.glides)
 }

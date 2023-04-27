@@ -1,5 +1,6 @@
 plugins {
     id("mediproject.android.application")
+    id("mediproject.android.application.compose")
     id("mediproject.android.hilt")
 }
 
@@ -20,6 +21,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
+    implementation(project(":core:model"))
     implementation(project(":feature:interestedmedicine"))
 
     implementation(libs.bundles.lifecycles)
