@@ -5,6 +5,7 @@ kotlin = "1.8.20"
 kotlinCompilerExtension = "1.4.6"
 kotlinxCoroutines = "1.6.4"
 kotlinxSerializationJson = "1.5.0"
+kotlinxDateTime = "0.4.0"
 
 androidGradlePlugin = "8.0.0"
 androidDesugarJdkLibs = "1.2.2"
@@ -133,6 +134,7 @@ kotlin-stdlib-root = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", v
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-testImplementation = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 
 # retrofit2--------------------------------------------------------------------------------------------------------------
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
@@ -174,7 +176,7 @@ retrofits = ["retrofit-core", "retrofit-kotlinx-serialization"]
 
 navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-compose", "androidx-navigation-dynamic"]
 
-kotlins = ["kotlin-stdlib-jdk7", "kotlin-stdlib-jdk8", "kotlin-stdlib-root", "kotlinx-coroutines-android", "kotlinx-serialization-json"]
+kotlins = ["kotlin-stdlib-jdk7", "kotlin-stdlib-jdk8", "kotlin-stdlib-root", "kotlinx-coroutines-android", "kotlinx-serialization-json", "kotlinx-datetime"]
 
 materials = ["material-main"]
 
