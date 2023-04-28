@@ -2,6 +2,7 @@ plugins {
     id("mediproject.android.application")
     id("mediproject.android.application.compose")
     id("mediproject.android.hilt")
+
     kotlin("android")
 }
 
@@ -31,4 +32,9 @@ dependencies {
     implementation(libs.bundles.materials)
     implementation(libs.bundles.composes)
     implementation(libs.bundles.kotlins)
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
+
 }

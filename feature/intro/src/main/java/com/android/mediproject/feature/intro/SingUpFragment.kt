@@ -23,12 +23,13 @@ class SingUpFragment : BaseFragment<FragmentSingUpBinding,SignUpViewModel>(Fragm
     ) {
         binding.apply{
             viewModel.apply{
-                repeatOnStarted { eventFlow.collect{handelEvent(it)}}
+                //repeatOnStarted { eventFlow.collect{ this@SingUpFragment.handelEvent(it) }}
             }
         }
     }
-
+/**
     fun handelEvent(event : SignUpViewModel.SignUpEvent) = when(event){
         else -> {}
     }
+    **/
 }
