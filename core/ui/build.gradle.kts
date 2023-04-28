@@ -1,6 +1,8 @@
 plugins {
     id("mediproject.android.library")
     id("mediproject.android.library.compose")
+    id("mediproject.android.hilt")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -8,6 +10,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
     implementation(libs.material.main)
     implementation(libs.androidx.compose.ui.util)
     implementation(libs.androidx.compose.ui.tooling.preview)

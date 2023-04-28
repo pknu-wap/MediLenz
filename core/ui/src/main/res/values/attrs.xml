@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="Bar">
-        <attr name="showBackButton" format="boolean"/>
-        <attr name="title" format="string|reference"/>
+        <attr name="showBackButton" format="boolean" />
+        <attr name="title" format="string|reference" />
         <attr name="setTheme" format="enum">
-            <enum name="blue" value="0"/>
-            <enum name="white" value="1"/>
+            <enum name="blue" value="0" />
+            <enum name="white" value="1" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="MediSearchbar">
+        <attr name="search_hint" format="string|reference" />
+        <attr name="ai_text" format="string|reference" />
+        <attr name="search_icon" format="reference" />
+        <attr name="camera_icon" format="reference" />
+        <attr name="hint_font_size" format="dimension|reference" />
+        <attr name="ai_btn_font_size" format="dimension|reference" />
     </declare-styleable>
 </resources>

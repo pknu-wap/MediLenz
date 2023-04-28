@@ -2,6 +2,7 @@ plugins {
     id("mediproject.android.library")
     id("mediproject.android.hilt")
     id("mediproject.android.feature")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -12,4 +13,5 @@ hilt {
 }
 dependencies {
     implementation(libs.bundles.glides)
+
 }

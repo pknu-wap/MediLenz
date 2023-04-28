@@ -1,0 +1,8 @@
+<resources>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="vertical_margin_header_on_home">48dp</dimen>
+
+    // AI 검색 버튼 padding
+    <dimen name="ai_button_vetical_padding">4dp</dimen>
+    <dimen name="ai_button_horizontal_padding">8dp</dimen>
+</resources>

@@ -1,25 +1,34 @@
 package com.android.mediproject.feature.intro
 
 import MutableEventFlow
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.ui.base.BaseViewModel
-import kotlinx.coroutines.delay
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class IntroViewModel : BaseViewModel() {
+@HiltViewModel
+class IntroViewModel @Inject constructor() : BaseViewModel() {
     private val _eventFlow = MutableEventFlow<IntroEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
-    fun event(event : IntroEvent) = viewModelScope.launch{ _eventFlow.emit(event)}
-    fun nonMemberLogin(){event(IntroEvent.NonMemberLogin())}
-    fun memberLogin(){event(IntroEvent.MemberLogin())}
-    fun signUp(){event(IntroEvent.SignUp())}
+    fun event(event: IntroEvent) = viewModelScope.launch { _eventFlow.emit(event) }
+    fun nonMemberLogin() {
+        event(IntroEvent.NonMemberLogin())
+    }
+
+    fun memberLogin() {
+        event(IntroEvent.MemberLogin())
+    }
+
+    fun signUp() {
+        event(IntroEvent.SignUp())
+    }
 
     sealed class IntroEvent {
-        data class NonMemberLogin(val unit : Unit? = null) : IntroEvent()
-        data class MemberLogin(val unit : Unit? = null) : IntroEvent()
-        data class SignUp(val unit : Unit? = null) : IntroEvent()
+        data class NonMemberLogin(val unit: Unit? = null) : IntroEvent()
+        data class MemberLogin(val unit: Unit? = null) : IntroEvent()
+        data class SignUp(val unit: Unit? = null) : IntroEvent()
     }
 }

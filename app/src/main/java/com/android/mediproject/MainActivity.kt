@@ -4,7 +4,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.android.mediproject.core.ui.base.BaseActivity
 import com.android.mediproject.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity() : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     override fun afterBinding() {
         binding.apply {

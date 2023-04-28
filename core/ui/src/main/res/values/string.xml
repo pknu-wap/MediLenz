@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MEDLENS</string>
+    <string name="text_header_on_home">약을 <u>찾고</u>,\n다른사람과 <u>소통</u>을 나눠보세요!</string>
+    <string name="search_hint">의약품 명 / 고유번호 검색</string>
+
 </resources>
