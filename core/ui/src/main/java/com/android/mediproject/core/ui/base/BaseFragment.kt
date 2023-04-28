@@ -1,9 +1,11 @@
 package com.android.mediproject.core.ui.base
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
@@ -37,5 +39,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(private val 
         savedInstanceState: Bundle?
     )
 
+    fun log(str: String) = Log.e("wap", str) //for test
+    fun toast(str: String) = Toast.makeText(requireContext(), str, Toast.LENGTH_LONG).show()
 
 }

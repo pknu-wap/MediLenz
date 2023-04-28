@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Bar">
+        <attr name="showBackButton" format="boolean"/>
+        <attr name="title" format="string|reference"/>
+        <attr name="setTheme" format="enum">
+            <enum name="blue" value="0"/>
+            <enum name="white" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>

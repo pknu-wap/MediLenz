@@ -1,6 +1,7 @@
 package com.android.mediproject.feature.splash
 
 import MutableEventFlow
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.ui.base.BaseViewModel

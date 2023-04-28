@@ -2,6 +2,8 @@ plugins {
     id("mediproject.android.application")
     id("mediproject.android.application.compose")
     id("mediproject.android.hilt")
+
+    kotlin("android")
 }
 
 android {
@@ -18,14 +20,23 @@ android {
 }
 
 dependencies {
+
     implementation(project(":core:common"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:model"))
     implementation(project(":feature:interestedmedicine"))
+    implementation(project(":feature:splash"))
+    implementation(project(":feature:home"))
+    implementation(project(":feature:intro"))
+    implementation(project(":feature:mypage"))
+    implementation(project(":feature:community"))
+    implementation(project(":feature:setting"))
 
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.composes)
     implementation(libs.bundles.kotlins)
+    implementation(libs.bundles.navigations)
+    implementation(libs.bundles.workManagers)
 }

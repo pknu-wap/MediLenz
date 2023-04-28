@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/community_nav"
+    app:startDestination="@id/communityFragment">
+
+    <fragment
+        android:id="@+id/communityFragment"
+        android:name="com.android.mediproject.feature.community.CommunityFragment"
+        android:label="CommunityFragment">
+    </fragment>
+
+    <deepLink app:uri="medilens://main/community_nav" />
+</navigation>

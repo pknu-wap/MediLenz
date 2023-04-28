@@ -10,6 +10,7 @@ android {
 hilt {
     enableAggregatingTask = true
 }
+
 dependencies {
     implementation(libs.bundles.glides)
 }
