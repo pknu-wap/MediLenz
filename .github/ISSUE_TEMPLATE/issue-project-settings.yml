@@ -1,5 +1,5 @@
 name: Project-related issues Template
-description: 프로젝트 관련 라이브러리나 설정 변경 시 작성합니다.
+description: Project 관련 라이브러리나 설정 변경 시 작성 부탁드립니다 :)
 title: "[Project]: "
 labels: ["project"]
 
@@ -7,7 +7,7 @@ body:
   - type: textarea
     id: issue-contents
     attributes:
-      label: 📑작업 내용
+      label:  📑작업 내용
       description: 프로젝트 설정, 라이브러리 등 변경사항 내용 작성
       placeholder: 
     validations:
@@ -20,10 +20,10 @@ body:
       placeholder: 
     validations:
       required: true
-  - type: input
+  - type: textarea
     id: notes
     attributes:
-      label: #✔️참고 사항(Optional)
+      label: ✔️참고 사항(Optional)
       description: 참고해야할 내용을 작성
       placeholder: 
     validations:
