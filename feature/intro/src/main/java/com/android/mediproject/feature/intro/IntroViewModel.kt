@@ -1,11 +1,9 @@
 package com.android.mediproject.feature.intro
 
 import MutableEventFlow
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.ui.base.BaseViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class IntroViewModel : BaseViewModel() {

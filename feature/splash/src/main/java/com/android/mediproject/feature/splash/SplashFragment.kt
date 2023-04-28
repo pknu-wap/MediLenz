@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDeepLinkRequest
-import androidx.navigation.NavDeepLinkRequest.Builder.Companion.fromUri
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.splash.databinding.FragmentSplashBinding
@@ -29,7 +28,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>(Frag
     fun handelEvent(event : SplashViewModel.SplashEvent) = when(event){
         is SplashViewModel.SplashEvent.TimerDone -> {
             val request = NavDeepLinkRequest.Builder
-                .fromUri("medilens://main/home_nav".toUri())
+                .fromUri("medilens://main/intro_nav".toUri())
                 .build()
             findNavController().navigate(request)
         }

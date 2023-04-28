@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":feature:interestedmedicine"))
     implementation(project(":feature:splash"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:intro"))
     implementation(project(":feature:mypage"))
     implementation(project(":feature:community"))
     implementation(project(":feature:setting"))
