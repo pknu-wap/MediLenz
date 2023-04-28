@@ -60,7 +60,6 @@ class Bar @JvmOverloads constructor(
                 backButton.setImageResource(R.drawable.left_arrow_black)
             }
         }
-
         typedArray.recycle()
     }
 

@@ -20,13 +20,14 @@ android {
 }
 
 dependencies {
+
     implementation(project(":core:common"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:model"))
     implementation(project(":feature:interestedmedicine"))
     implementation(project(":feature:splash"))
-
+    implementation(project(":feature:home"))
 
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.materials)

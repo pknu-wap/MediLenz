@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MEDLENS</string>
+    <string name="home">홈</string>
+    <string name="community">커뮤니티</string>
+    <string name="my">마이</string>
+    <string name="setting">설정</string>
+
 </resources>
