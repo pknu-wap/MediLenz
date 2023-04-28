@@ -17,7 +17,7 @@ body:
     attributes:
       label: 작업 목록
       description: 작업할 목록을 체크박스로 표시
-      placeholder: - [ ] 댓글 데이터 서버에 전송하는 기능 개발(Example)
+      placeholder: - [ ] 댓글 데이터 서버에 전송하는 기능 개발
     validations:
       required: true
   - type: input
