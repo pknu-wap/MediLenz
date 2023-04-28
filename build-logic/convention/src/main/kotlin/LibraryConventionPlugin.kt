@@ -1,6 +1,5 @@
-
-import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.LibraryExtension
+import com.android.mediproject.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -9,23 +8,24 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.kotlin
 
-class AndroidFeatureConventionPlugin : Plugin<Project> {
+class LibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply {
-                apply("mediproject.android.library")
-                apply("mediproject.android.hilt")
+            with(pluginManager) {
+                apply("com.android.library")
+                apply("org.jetbrains.kotlin.android")
             }
+
             extensions.configure<LibraryExtension> {
+                configureKotlinAndroid(this)
+                defaultConfig.targetSdk = 33
             }
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
             dependencies {
-                add("implementation", project(":core:common"))
-                add("implementation", project(":core:data"))
-                add("implementation", project(":core:ui"))
-                add("implementation", libs.findLibrary(""))
+                "testImplementation"(kotlin("test"))
+                "androidTestImplementation"(kotlin("test"))
             }
         }
     }

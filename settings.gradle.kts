@@ -1,8 +1,8 @@
 pluginManagement {
     includeBuild("build-logic")
     repositories {
-        mavenCentral()
         google()
+        mavenCentral()
         gradlePluginPortal()
     }
 }
@@ -10,8 +10,8 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        mavenCentral()
         google()
+        mavenCentral()
     }
 }
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
@@ -25,3 +25,6 @@ include(":core:ui")
 include(":feature:interestedmedicine")
 include(":feature:splash")
 include(":feature:intro")
+include(":core:model")
+include(":core:network")
+include(":core:datastore")
