@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">MEDLENS</string>
-    <string name="title_activity_main">MainActivity</string>
     <!-- Strings used for fragments for navigation -->
 </resources>

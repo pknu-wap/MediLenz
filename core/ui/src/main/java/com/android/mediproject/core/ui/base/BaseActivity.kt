@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.databinding.ViewDataBinding
 
 abstract class BaseActivity<T : ViewDataBinding>(
