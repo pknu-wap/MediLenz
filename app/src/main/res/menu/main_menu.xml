@@ -9,4 +9,9 @@
         android:id="@+id/community_nav"
         android:title="@string/community"
         android:icon="@drawable/menu_selector_community_color"/>
+
+    <item
+        android:id="@+id/mypage_nav"
+        android:title="@string/myPage"
+        android:icon="@drawable/menu_selector_mypage_color"/>
 </menu>

@@ -8,9 +8,7 @@
         android:id="@+id/communityFragment"
         android:name="com.android.mediproject.feature.community.CommunityFragment"
         android:label="CommunityFragment">
-        <deepLink
-            android:id="@+id/deepLink"
-            app:uri="medilens://main/community_nav" />
     </fragment>
 
+    <deepLink app:uri="medilens://main/community_nav" />
 </navigation>
