@@ -7,7 +7,7 @@ body:
   - type: textarea
     id: issue-contents
     attributes:
-      label: 작업 내용
+      label: 📑작업 내용
       description: 프로젝트 설정, 라이브러리 등 변경사항 내용 작성
       placeholder: 
     validations:
@@ -15,7 +15,7 @@ body:
   - type: textarea
     id: task-list
     attributes:
-      label: 작업 목록
+      label: 🔲작업 목록
       description: 작업할 목록을 체크박스로 표시
       placeholder: 
     validations:
@@ -23,7 +23,7 @@ body:
   - type: input
     id: notes
     attributes:
-      label: 참고 사항(Optional)
+      label: #✔️참고 사항(Optional)
       description: 참고해야할 내용을 작성
       placeholder: 
     validations:
@@ -31,7 +31,7 @@ body:
   - type: textarea
     id: estimated-time-to-complete
     attributes:
-      label: 예상 소요 시간(Optional)
+      label: 🕜예상 소요 시간(Optional)
       description: 작업 예상 소요 시간을 작성
       placeholder: ex) 2일 or 5월 3일 까지
     validations:
