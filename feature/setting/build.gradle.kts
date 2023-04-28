@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.android.mediproject.feature.home"
+    namespace = "com.android.mediproject.feature.setting"
 }
 
 dependencies {

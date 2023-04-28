@@ -14,4 +14,9 @@
         android:id="@+id/mypage_nav"
         android:title="@string/myPage"
         android:icon="@drawable/menu_selector_mypage_color"/>
+
+    <item
+        android:id="@+id/setting_nav"
+        android:title="@string/setting"
+        android:icon="@drawable/menu_selector_setting_color"/>
 </menu>

@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":feature:home"))
     implementation(project(":feature:mypage"))
     implementation(project(":feature:community"))
+    implementation(project(":feature:setting"))
 
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.materials)

@@ -11,6 +11,4 @@ android {
 dependencies {
     implementation(project(mapOf("path" to ":core:common")))
     implementation(project(mapOf("path" to ":core:ui")))
-
-    implementation("androidx.constraintlayout:constraintlayout")
 }
