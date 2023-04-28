@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context="com.android.mediproject.feature.summaryhead.recentsearchlist.RecentSearchListFragment"
+        >
+
+        <com.android.mediproject.core.ui.base.view.HeaderForElementsView
+            android:id="@+id/header_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/recent_search"
+            app:more_title="@string/read_more"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/recent_search_chip_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_betweens_header_and_elements"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header_view"
+            >
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

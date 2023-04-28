@@ -17,4 +17,20 @@
         <attr name="hint_font_size" format="dimension|reference" />
         <attr name="ai_btn_font_size" format="dimension|reference" />
     </declare-styleable>
+
+
+    <declare-styleable name="HeaderForElementsView">
+        <attr name="header_title" format="string|reference" />
+        <attr name="header_title_color" format="color|reference" />
+        <attr name="more_title" format="string|reference" />
+        <attr name="more_color" format="color|reference" />
+        <attr name="expand_icon_color" format="color|reference" />
+        <attr name="is_expanded" format="boolean" />
+        <attr name="title_text_size" format="dimension|reference" />
+        <attr name="more_text_size" format="dimension|reference" />
+        <attr name="more_visibility" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="gone" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

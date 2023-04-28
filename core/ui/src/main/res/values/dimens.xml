@@ -5,4 +5,14 @@
     // AI 검색 버튼 padding
     <dimen name="ai_button_vetical_padding">4dp</dimen>
     <dimen name="ai_button_horizontal_padding">8dp</dimen>
+
+    // 약 검색바 padding
+    <dimen name="search_bar_horizontal_padding">12dp</dimen>
+    <dimen name="search_bar_vertical_padding">6dp</dimen>
+
+    // Divider 위아래 margin
+    <dimen name="divider_margin_vertical">15dp</dimen>
+
+    // Header와 요소 사이 margin
+    <dimen name="spacing_betweens_header_and_elements">15dp</dimen>
 </resources>

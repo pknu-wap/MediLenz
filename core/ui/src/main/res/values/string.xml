@@ -3,5 +3,9 @@
     <string name="app_name">MEDLENS</string>
     <string name="text_header_on_home">약을 <u>찾고</u>,\n다른사람과 <u>소통</u>을 나눠보세요!</string>
     <string name="search_hint">의약품 명 / 고유번호 검색</string>
+    <string name="recent_search">최근 검색 목록</string>
+    <string name="read_more">더 보기</string>
+    <string name="recent_comments">최근 댓글 목록</string>
+    <string name="penalty_list">행정 처분 목록</string>
 
 </resources>

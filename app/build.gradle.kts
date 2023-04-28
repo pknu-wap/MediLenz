@@ -13,8 +13,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     namespace = "com.android.mediproject"
+
 }
 
 dependencies {
@@ -24,6 +27,8 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":feature:interestedmedicine"))
     implementation(project(":feature:splash"))
+    implementation(project(":feature:home"))
+    implementation(project(":feature:intro"))
 
 
     implementation(libs.bundles.lifecycles)
@@ -32,4 +37,9 @@ dependencies {
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.navigations)
     implementation(libs.bundles.workManagers)
+    testImplementation("junit:junit:4.12")
+
+    androidTestImplementation(libs.bundles.testUIs)
+    testImplementation(libs.bundles.testUIs)
+    androidTestUtil(libs.androidx.test.orchestrator)
 }
