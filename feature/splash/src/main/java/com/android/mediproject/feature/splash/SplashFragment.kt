@@ -28,13 +28,10 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>(Frag
 
     fun handelEvent(event : SplashViewModel.SplashEvent) = when(event){
         is SplashViewModel.SplashEvent.TimerDone -> {
-            log("TimerDone")
             val request = NavDeepLinkRequest.Builder
                 .fromUri("medilens://main/home_nav".toUri())
                 .build()
-            log("reqestBuild")
             findNavController().navigate(request)
-            log("탐색시작")
         }
     }
 
