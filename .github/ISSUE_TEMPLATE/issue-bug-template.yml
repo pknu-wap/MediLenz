@@ -5,7 +5,7 @@ labels: ["버그"]
 
 body:
   - type: textarea
-    id: feature-contents
+    id: bug-contents
     attributes:
       label: 에러 내용
       description: 에러 내용 설명
@@ -13,7 +13,7 @@ body:
     validations:
       required: true
   - type: textarea
-    id: feature-contents
+    id: bug-cause
     attributes:
       label: 에러 원인
       description: 에러 원인 설명
@@ -29,7 +29,7 @@ body:
     validations:
       required: true
   - type: input
-    id: prepare-issue
+    id: notes
     attributes:
       label: 참고 사항(Optional)
       description: 참고해야할 내용을 작성
