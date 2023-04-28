@@ -21,7 +21,7 @@ body:
     validations:
       required: true
   - type: input
-    id: prepare-issue
+    id: notes
     attributes:
       label: 참고 사항(Optional)
       description: 참고해야할 내용을 작성
