@@ -13,6 +13,5 @@ class MainViewModel : BaseViewModel() {
     fun event(event : MainEvent) = viewModelScope.launch{ _eventFlow.emit(event)}
 
     sealed class MainEvent{
-
     }
 }
