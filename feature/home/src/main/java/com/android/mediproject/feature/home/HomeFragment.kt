@@ -1,4 +1,4 @@
-package com.android.mediporject.feature.home
+package com.android.mediproject.feature.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
