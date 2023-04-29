@@ -1,13 +1,17 @@
 package com.android.mediproject
 
+import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.android.mediproject.core.ui.base.BaseActivity
 import com.android.mediproject.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import repeatOnStarted
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(ActivityMainBinding::inflate) {
+
+    override val activityViewModel: MainViewModel by viewModels()
 
     override fun afterBinding() {
         binding.apply {
@@ -17,6 +21,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 itemIconTintList = null
                 setupWithNavController(navController)
             }
+
+            viewModel = activityViewModel.apply{
+                repeatOnStarted { eventFlow.collect{ handleEvent(it)} }
+            }
         }
     }
+
+    fun handleEvent(event : MainViewModel.MainEvent) = when(event){
+        else -> {}
+    }
+
 }
