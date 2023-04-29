@@ -54,11 +54,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="38dp"
             app:ai_text="AI검색"
-            app:camera_icon="@drawable/logo"
+            app:camera_icon="@drawable/baseline_camera_24"
             app:layout_constraintBottom_toBottomOf="@id/header_layout"
             app:layout_constraintTop_toBottomOf="@id/header_layout"
             app:search_hint="@string/search_hint"
-            app:search_icon="@drawable/logo"
+            app:search_icon="@drawable/baseline_search_24"
             />
 
         <androidx.core.widget.NestedScrollView

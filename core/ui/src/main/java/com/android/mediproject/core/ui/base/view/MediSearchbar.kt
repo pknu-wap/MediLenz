@@ -2,13 +2,16 @@ package com.android.mediproject.core.ui.base.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.TextViewCompat
 import com.android.mediproject.core.ui.R
 
 @SuppressLint("ResourceType")
@@ -27,11 +30,15 @@ class MediSearchbar constructor(
     init {
         context.theme.obtainStyledAttributes(attrs, R.styleable.MediSearchbar, 0, 0).also { typedArr ->
             try {
-                val cameraIcon = typedArr.getDrawable(R.styleable.MediSearchbar_camera_icon)
-                val searchHint = typedArr.getString(R.styleable.MediSearchbar_search_hint)
-                val aiTitle = typedArr.getString(R.styleable.MediSearchbar_ai_text)
-                val searchIcon = typedArr.getDrawable(R.styleable.MediSearchbar_search_icon)
-                val aiFontSize = typedArr.getDimension(R.styleable.MediSearchbar_ai_btn_font_size, 13f)
+                val cameraIcon = typedArr.getDrawable(R.styleable.MediSearchbar_camera_icon) ?: AppCompatResources.getDrawable(
+                    context, R.drawable.baseline_camera_24
+                )
+                val searchHint = typedArr.getString(R.styleable.MediSearchbar_search_hint) ?: context.getString(R.string.search_hint)
+                val aiTitle = typedArr.getString(R.styleable.MediSearchbar_ai_text) ?: context.getString(R.string.search_with_ai)
+                val searchIcon = typedArr.getDrawable(R.styleable.MediSearchbar_search_icon) ?: AppCompatResources.getDrawable(
+                    context, R.drawable.baseline_search_24
+                )
+                val aiFontSize = typedArr.getDimension(R.styleable.MediSearchbar_ai_btn_font_size, 12f)
                 val titleFontSize = typedArr.getDimension(R.styleable.MediSearchbar_hint_font_size, 13f)
 
                 // search btn
@@ -76,6 +83,8 @@ class MediSearchbar constructor(
                         cameraIcon?.setBounds(0, 0, this.toInt(), this.toInt())
                     }
 
+                    TextViewCompat.setCompoundDrawableTintList(this, ColorStateList.valueOf(Color.WHITE))
+                    compoundDrawablePadding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics).toInt()
                     setCompoundDrawables(cameraIcon, null, null, null)
 
                     // set
@@ -97,6 +106,8 @@ class MediSearchbar constructor(
                     textSize = titleFontSize
                     id = 10
 
+                    maxLines = 1
+                    background = null
                 }
 
                 this.apply {
