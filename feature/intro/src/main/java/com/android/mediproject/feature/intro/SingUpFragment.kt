@@ -18,7 +18,7 @@ class SingUpFragment : BaseFragment<FragmentSingUpBinding,SignUpViewModel>(Fragm
         savedInstanceState: Bundle?
     ) {
         binding.apply{
-            viewModel.apply{
+            viewModel = fragmentViewModel.apply{
                 repeatOnStarted { eventFlow.collect{ handleEvent(it) }}
             }
         }

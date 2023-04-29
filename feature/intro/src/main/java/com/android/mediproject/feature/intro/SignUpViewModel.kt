@@ -13,6 +13,5 @@ class SignUpViewModel : BaseViewModel() {
     fun event(event : SignUpEvent) = viewModelScope.launch{ _eventFlow.emit(event) }
 
     sealed class SignUpEvent{
-
     }
 }
