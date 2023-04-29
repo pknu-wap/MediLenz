@@ -1,4 +1,5 @@
 plugins {
+    id("org.jetbrains.kotlin.android")
     id("mediproject.android.application")
     id("mediproject.android.application.compose")
     id("mediproject.android.hilt")
@@ -29,16 +30,13 @@ dependencies {
     implementation(project(":feature:splash"))
     implementation(project(":feature:home"))
     implementation(project(":feature:intro"))
+    implementation(project(":feature:comments"))
+    implementation(project(":feature:search"))
 
-
-    implementation(libs.bundles.lifecycles)
-    implementation(libs.bundles.materials)
+    api(libs.bundles.materials)
     implementation(libs.bundles.composes)
     implementation(libs.bundles.kotlins)
-    implementation(libs.bundles.navigations)
     implementation(libs.bundles.workManagers)
-    testImplementation("junit:junit:4.12")
-
     androidTestImplementation(libs.bundles.testUIs)
     testImplementation(libs.bundles.testUIs)
     androidTestUtil(libs.androidx.test.orchestrator)

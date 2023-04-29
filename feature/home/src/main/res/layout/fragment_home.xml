@@ -79,7 +79,7 @@
                 <androidx.fragment.app.FragmentContainerView
                     android:layout_marginTop="36dp"
                     android:id="@+id/recent_search_list_fragment"
-                    android:name="com.android.mediproject.feature.summaryhead.recentsearchlist.RecentSearchListFragment"
+                    android:name="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
@@ -92,7 +92,7 @@
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/recent_comment_list_fragment"
-                    android:name="com.android.mediproject.feature.summaryhead.recentcommentlist.RecentCommentListFragment"
+                    android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
@@ -105,7 +105,7 @@
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/penalty_list_fragment"
-                    android:name="com.android.mediproject.feature.summaryhead.recentpenaltylist.RecentPenaltyListFragment"
+                    android:name="com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/divider_margin_vertical"

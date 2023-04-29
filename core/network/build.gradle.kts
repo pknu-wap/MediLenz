@@ -1,8 +1,9 @@
 plugins {
+    id("org.jetbrains.kotlin.android")
     id("mediproject.android.library")
     id("mediproject.android.hilt")
     id("kotlinx-serialization")
-    id("org.jetbrains.kotlin.android")
+
 }
 
 android {

@@ -33,4 +33,6 @@
             <enum name="gone" value="1" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="ButtonChip"></declare-styleable>
 </resources>

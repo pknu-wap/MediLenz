@@ -8,7 +8,7 @@
 
     // 약 검색바 padding
     <dimen name="search_bar_horizontal_padding">12dp</dimen>
-    <dimen name="search_bar_vertical_padding">6dp</dimen>
+    <dimen name="search_bar_vertical_padding">4dp</dimen>
 
     // Divider 위아래 margin
     <dimen name="divider_margin_vertical">15dp</dimen>

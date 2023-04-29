@@ -179,8 +179,6 @@ kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-p
 [bundles]
 
 composes = ["androidx-compose-bom",
-    "androidx-compose-material3",
-    "androidx-compose-material3-windowSizeClass",
     "androidx-compose-runtime-livedata",
     "androidx-compose-runtime",
     "androidx-compose-ui-tooling-preview",
@@ -202,7 +200,7 @@ navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx",
 
 kotlins = ["kotlin-stdlib-jdk7", "kotlin-stdlib-jdk8", "kotlin-stdlib-root", "kotlinx-coroutines-android", "kotlinx-serialization-json", "kotlinx-datetime"]
 
-materials = ["material-main"]
+materials = ["material-main", "androidx-compose-material3", "androidx-compose-material3-windowSizeClass"]
 
 glides = ["glide-main"]
 
