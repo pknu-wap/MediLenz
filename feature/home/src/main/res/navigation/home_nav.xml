@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.android.mediporject.feature.home.HomeFragment"
+        android:name="com.android.mediproject.feature.home.HomeFragment"
         android:label="HomeFragment" />
 
     <deepLink app:uri="medilens://main/home_nav" />

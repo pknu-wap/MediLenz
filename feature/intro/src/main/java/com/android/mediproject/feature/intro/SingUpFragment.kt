@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentSingUpBinding
+import repeatOnStarted
 
 class SingUpFragment : BaseFragment<FragmentSingUpBinding,SignUpViewModel>(FragmentSingUpBinding::inflate) {
 
@@ -17,14 +18,13 @@ class SingUpFragment : BaseFragment<FragmentSingUpBinding,SignUpViewModel>(Fragm
         savedInstanceState: Bundle?
     ) {
         binding.apply{
-            viewModel.apply{
-                //repeatOnStarted { eventFlow.collect{ this@SingUpFragment.handelEvent(it) }}
+            viewModel = fragmentViewModel.apply{
+                repeatOnStarted { eventFlow.collect{ handleEvent(it) }}
             }
         }
     }
-/**
-    fun handelEvent(event : SignUpViewModel.SignUpEvent) = when(event){
+
+    fun handleEvent(event : SignUpViewModel.SignUpEvent) = when(event){
         else -> {}
     }
-    **/
 }

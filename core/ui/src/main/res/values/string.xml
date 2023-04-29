@@ -5,5 +5,5 @@
     <string name="community">커뮤니티</string>
     <string name="myPage">마이</string>
     <string name="setting">설정</string>
-
+    <string name="hide_bottom">hideBottom</string>
 </resources>

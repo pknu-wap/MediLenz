@@ -22,11 +22,11 @@ class IntroFragment :
         savedInstanceState: Bundle?
     ) {
         binding.viewModel = fragmentViewModel.apply {
-            repeatOnStarted { eventFlow.collect { handelEvent(it) } }
+            repeatOnStarted { eventFlow.collect { handleEvent(it) } }
         }
     }
 
-    fun handelEvent(event: IntroViewModel.IntroEvent) = when (event) {
+    fun handleEvent(event: IntroViewModel.IntroEvent) = when (event) {
         is IntroViewModel.IntroEvent.NonMemberLogin -> {
             val request = NavDeepLinkRequest.Builder
                 .fromUri("medilens://main/home_nav".toUri())

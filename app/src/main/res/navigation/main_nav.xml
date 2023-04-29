@@ -7,7 +7,12 @@
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.android.mediproject.feature.splash.SplashFragment"
-        android:label="SplashFragment" />
+        android:label="SplashFragment" >
+        <argument
+            android:name="@string/hide_bottom"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
 
     <include app:graph="@navigation/home_nav"/>
     <include app:graph="@navigation/community_nav" />

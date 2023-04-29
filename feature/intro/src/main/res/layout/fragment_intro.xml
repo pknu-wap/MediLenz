@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="102dp"
             android:layout_height="128dp"
-            android:layout_marginStart="52dp"
+            android:layout_marginStart="42dp"
             android:layout_marginTop="248dp"
             android:scaleType="fitXY"
             android:src="@drawable/logo"
@@ -28,7 +28,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="166dp"
+            android:layout_marginStart="156dp"
             android:layout_marginTop="288dp"
             android:layout_marginEnd="52dp"
             android:fontFamily="@font/cafe"

@@ -20,12 +20,12 @@ class SettingFragment : BaseFragment<FragmentSettingBinding,SettingViewModel>(Fr
     ) {
         binding.apply{
             viewModel = fragmentViewModel.apply{
-                repeatOnStarted { eventFlow.collect{ handelEvent(it)} }
+                repeatOnStarted { eventFlow.collect{ handleEvent(it)} }
             }
         }
     }
 
-    fun handelEvent(event : SettingViewModel.SettingEvent) = when(event){
+    fun handleEvent(event : SettingViewModel.SettingEvent) = when(event){
         else -> {}
     }
 }

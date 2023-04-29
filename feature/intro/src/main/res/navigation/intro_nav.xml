@@ -11,11 +11,21 @@
         <action
             android:id="@+id/action_introFragment_to_singUpFragment"
             app:destination="@id/singUpFragment" />
+        <argument
+            android:name="@string/hide_bottom"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/singUpFragment"
         android:name="com.android.mediproject.feature.intro.SingUpFragment"
-        android:label="SingUpFragment" />
+        android:label="SingUpFragment">
+
+        <argument
+            android:name="@string/hide_bottom"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
 
     <deepLink app:uri="medilens://main/intro_nav" />
 </navigation>

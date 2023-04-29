@@ -1,4 +1,4 @@
-package com.android.mediporject.feature.home
+package com.android.mediproject.feature.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,12 +18,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     ) {
         binding.apply{
             viewModel = fragmentViewModel.apply{
-                repeatOnStarted { eventFlow.collect{ handelEvent(it)} }
+                repeatOnStarted { eventFlow.collect{ handleEvent(it)} }
             }
         }
     }
 
-    fun handelEvent(event : HomeViewModel.HomeEvent) = when(event){
+    fun handleEvent(event : HomeViewModel.HomeEvent) = when(event){
         else -> {}
     }
 

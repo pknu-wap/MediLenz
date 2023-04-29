@@ -5,14 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil.setContentView
 import androidx.databinding.ViewDataBinding
 
-abstract class BaseActivity<T : ViewDataBinding>(
-    val bindingFactory: (LayoutInflater) -> T
+abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
+val bindingFactory: (LayoutInflater) -> T
 ) : AppCompatActivity() {
 
     protected lateinit var binding: T
         private set
+
+    protected abstract val activityViewModel: V
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

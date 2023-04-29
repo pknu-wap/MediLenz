@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="68dp"
             android:background="@color/white"
+            android:visibility="gone"
             app:itemTextColor="@drawable/menu_selector_text_color"
             app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.android.mediporject.feature.home.HomeViewModel" />
+            type="com.android.mediproject.feature.home.HomeViewModel" />
     </data>
 
     <FrameLayout
