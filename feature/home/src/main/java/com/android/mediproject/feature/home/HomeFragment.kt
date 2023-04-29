@@ -18,12 +18,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     ) {
         binding.apply{
             viewModel = fragmentViewModel.apply{
-                repeatOnStarted { eventFlow.collect{ handelEvent(it)} }
+                repeatOnStarted { eventFlow.collect{ handleEvent(it)} }
             }
         }
     }
 
-    fun handelEvent(event : HomeViewModel.HomeEvent) = when(event){
+    fun handleEvent(event : HomeViewModel.HomeEvent) = when(event){
         else -> {}
     }
 

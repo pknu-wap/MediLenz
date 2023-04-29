@@ -11,7 +11,8 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.splash.databinding.FragmentSplashBinding
 import repeatOnStarted
 
-class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>(FragmentSplashBinding::inflate) {
+class SplashFragment :
+    BaseFragment<FragmentSplashBinding, SplashViewModel>(FragmentSplashBinding::inflate) {
 
     override val fragmentViewModel: SplashViewModel by viewModels()
 
@@ -20,12 +21,12 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>(Frag
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) {
-        binding.viewModel = fragmentViewModel.apply{
-            repeatOnStarted { eventFlow.collect{handelEvent(it)} }
+        binding.viewModel = fragmentViewModel.apply {
+            repeatOnStarted { eventFlow.collect { handleEvent(it) } }
         }
     }
 
-    fun handelEvent(event : SplashViewModel.SplashEvent) = when(event){
+    fun handleEvent(event: SplashViewModel.SplashEvent) = when (event) {
         is SplashViewModel.SplashEvent.TimerDone -> {
             val request = NavDeepLinkRequest.Builder
                 .fromUri("medilens://main/intro_nav".toUri())

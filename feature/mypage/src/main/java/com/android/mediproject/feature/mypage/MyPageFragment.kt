@@ -18,12 +18,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding,MyPageViewModel>(Fragm
     ) {
         binding.apply{
             viewModel = fragmentViewModel.apply{
-                repeatOnStarted { eventFlow.collect{ handelEvent(it)} }
+                repeatOnStarted { eventFlow.collect{ handleEvent(it)} }
             }
         }
     }
 
-    fun handelEvent(event : MyPageViewModel.MyPageEvent) = when(event){
+    fun handleEvent(event : MyPageViewModel.MyPageEvent) = when(event){
         else -> {}
     }
 }

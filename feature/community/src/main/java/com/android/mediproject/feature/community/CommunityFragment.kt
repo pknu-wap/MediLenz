@@ -19,12 +19,12 @@ class CommunityFragment :
     ) {
         binding.apply {
             viewModel = fragmentViewModel.apply {
-                repeatOnStarted { eventFlow.collect { handelEvent(it) } }
+                repeatOnStarted { eventFlow.collect {  handleEvent(it) } }
             }
         }
     }
 
-    fun handelEvent(event: CommunityViewModel.CommunityEvent) = when (event) {
+    fun handleEvent(event: CommunityViewModel.CommunityEvent) = when (event) {
         else -> {}
     }
 }
