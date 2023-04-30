@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="35dp" />
+            app:layout_constraintGuide_begin="30dp" />
 
         <com.android.mediproject.core.ui.base.view.Bar
             android:id="@+id/bar"
@@ -46,9 +46,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:redPoint="true"
-                android:layout_marginTop="172dp"
+                android:layout_marginTop="142dp"
                 app:edtHint="@string/emailHint"
                 app:title="@string/email" />
+
+            <com.android.mediproject.core.ui.base.view.Subtitle
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:redPoint="true"
+                android:layout_marginTop="30dp"
+                app:edtHint="@string/passwordHint"
+                app:title="@string/password" />
+
+            <com.android.mediproject.core.ui.base.view.Subtitle
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:redPoint="true"
+                android:layout_marginTop="30dp"
+                app:edtHint="@string/passwordHint"
+                app:title="@string/checkedPassword" />
+
+            <com.android.mediproject.core.ui.base.view.Subtitle
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:redPoint="true"
+                android:layout_marginTop="30dp"
+                app:edtHint="@string/nickNameHint"
+                app:title="@string/nickName" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,4 +13,6 @@
     <string name="nickName">닉네임</string>
     <string name="point">*</string>
     <string name="emailHint">이메일을 입력하세요.(user@medlens.com)</string>
+    <string name="passwordHint">비밀번호를 입력하세요.(영문+숫자 4~10자)</string>
+    <string name="nickNameHint">닉네임을 입력하세요.(MEDLENS)</string>
 </resources>
