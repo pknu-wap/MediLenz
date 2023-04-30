@@ -9,7 +9,7 @@
         android:name="com.android.mediproject.feature.splash.SplashFragment"
         android:label="SplashFragment" >
         <argument
-            android:name="@string/hide_bottom"
+            android:name="@string/hideBottom"
             app:argType="boolean"
             android:defaultValue="true" />
     </fragment>

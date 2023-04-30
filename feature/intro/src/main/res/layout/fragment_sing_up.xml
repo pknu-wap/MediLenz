@@ -4,24 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.intro.SignUpViewModel" />
     </data>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SingUpFragment">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="35dp" />
+
         <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:setTheme="blue"
             app:showBackButton="true"
-            app:title="홈" />
+            app:title="@string/signUp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bar"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.android.mediproject.core.ui.base.view.Subtitle
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:redPoint="true"
+                android:layout_marginTop="172dp"
+                app:edtHint="@string/emailHint"
+                app:title="@string/email" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

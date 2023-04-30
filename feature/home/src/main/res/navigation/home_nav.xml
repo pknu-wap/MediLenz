@@ -9,7 +9,7 @@
         android:name="com.android.mediproject.feature.home.HomeFragment"
         android:label="HomeFragment">
         <argument
-            android:name="@string/hide_bottom"
+            android:name="@string/hideBottom"
             app:argType="boolean"
             android:defaultValue="false" />
     </fragment>

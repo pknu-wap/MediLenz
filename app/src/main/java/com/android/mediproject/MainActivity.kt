@@ -1,6 +1,5 @@
 package com.android.mediproject
 
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.NavController
@@ -76,7 +75,7 @@ class MainActivity :
             if (arg != null) {
                 if (arg.isEmpty) {
                     bottomVisible(VISIBLE)
-                } else if (arg.getBoolean(getString(com.android.mediproject.core.ui.R.string.hide_bottom))) {
+                } else if (arg.getBoolean(getString(com.android.mediproject.core.ui.R.string.hideBottom))) {
                     bottomVisible(INVISIBLE)
                 } else {
                     bottomVisible(VISIBLE)

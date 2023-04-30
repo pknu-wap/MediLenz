@@ -12,7 +12,7 @@
             android:id="@+id/action_introFragment_to_singUpFragment"
             app:destination="@id/singUpFragment" />
         <argument
-            android:name="@string/hide_bottom"
+            android:name="@string/hideBottom"
             app:argType="boolean"
             android:defaultValue="true" />
     </fragment>
@@ -22,7 +22,7 @@
         android:label="SingUpFragment">
 
         <argument
-            android:name="@string/hide_bottom"
+            android:name="@string/hideBottom"
             app:argType="boolean"
             android:defaultValue="true" />
     </fragment>
