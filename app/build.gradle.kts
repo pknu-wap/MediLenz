@@ -21,6 +21,10 @@ android {
 
 }
 
+hilt {
+    enableAggregatingTask = true
+}
+
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:data"))
@@ -36,10 +40,12 @@ dependencies {
     implementation(project(":feature:mypage"))
     implementation(project(":feature:community"))
     implementation(project(":feature:setting"))
+    implementation(project(":feature:penalties"))
 
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.composes)
+    implementation(libs.bundles.navigations)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.workManagers)
     androidTestImplementation(libs.bundles.testUIs)

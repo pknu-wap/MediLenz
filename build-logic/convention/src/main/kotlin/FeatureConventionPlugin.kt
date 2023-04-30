@@ -18,7 +18,7 @@ class FeatureConventionPlugin : Plugin<Project> {
             dependencies {
                 "implementation"(libs.findBundle("navigations").get())
                 "implementation"(libs.findBundle("lifecycles").get())
-                "implementation"(libs.findLibrary("kotlinx.coroutines.android").get())
+                "implementation"(libs.findBundle("kotlins").get())
             }
         }
     }

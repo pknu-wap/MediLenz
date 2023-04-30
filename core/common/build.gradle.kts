@@ -8,6 +8,10 @@ android {
     namespace = "com.android.mediproject.core.common"
 }
 
+hilt {
+    enableAggregatingTask = true
+}
+
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
 }

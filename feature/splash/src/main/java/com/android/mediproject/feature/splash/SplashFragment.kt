@@ -1,10 +1,8 @@
 package com.android.mediproject.feature.splash
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.core.net.toUri
 import android.view.View
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
@@ -22,7 +20,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>(Frag
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewModel = fragmentViewModel.apply {
-            repeatOnStarted { eventFlow.collect { handelEvent(it) } }
+            repeatOnStarted { eventFlow.collect { handleEvent(it) } }
         }
     }
 

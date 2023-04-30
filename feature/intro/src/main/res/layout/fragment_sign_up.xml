@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    >
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.intro.SignUpViewModel" />
+            type="com.android.mediproject.feature.intro.SignUpViewModel"
+            />
     </data>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".SingUpFragment">
+        >
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="30dp" />
+            app:layout_constraintGuide_begin="30dp"
+            />
 
         <com.android.mediproject.core.ui.base.view.Bar
             android:id="@+id/bar"
@@ -31,58 +32,65 @@
             app:layout_constraintTop_toTopOf="parent"
             app:setTheme="blue"
             app:showBackButton="true"
-            app:title="@string/signUp" />
+            app:title="@string/signUp"
+            />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@id/bar"
-            app:layout_constraintBottom_toBottomOf="parent">
+            >
 
             <com.android.mediproject.core.ui.base.view.Subtitle
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:redPoint="true"
                 android:layout_marginTop="142dp"
                 app:edtHint="@string/emailHint"
-                app:title="@string/email" />
+                app:redPoint="true"
+                app:title="@string/email"
+                />
 
             <com.android.mediproject.core.ui.base.view.Subtitle
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:redPoint="true"
                 android:layout_marginTop="30dp"
                 app:edtHint="@string/passwordHint"
-                app:title="@string/password" />
+                app:redPoint="true"
+                app:title="@string/password"
+                />
 
             <com.android.mediproject.core.ui.base.view.Subtitle
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:redPoint="true"
                 android:layout_marginTop="30dp"
                 app:edtHint="@string/passwordHint"
-                app:title="@string/checkedPassword" />
+                app:redPoint="true"
+                app:title="@string/checkedPassword"
+                />
 
             <com.android.mediproject.core.ui.base.view.Subtitle
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:redPoint="true"
                 android:layout_marginTop="30dp"
                 app:edtHint="@string/nickNameHint"
-                app:title="@string/nickName" />
+                app:redPoint="true"
+                app:title="@string/nickName"
+                />
 
             <Button
                 android:layout_width="@dimen/loginSignUpWidth"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/radius_main_5"
                 android:backgroundTint="@color/main"
-                android:layout_marginTop="50dp"
                 android:text="완료"
+                android:textColor="@color/white"
                 android:textSize="18sp"
-                android:textColor="@color/white"/>
+                />
 
         </LinearLayout>
 

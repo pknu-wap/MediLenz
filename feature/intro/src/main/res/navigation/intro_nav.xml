@@ -7,19 +7,19 @@
     <fragment
         android:id="@+id/introFragment"
         android:name="com.android.mediproject.feature.intro.IntroFragment"
-        android:label="IntroFragment" >
+        android:label="IntroFragment">
         <action
-            android:id="@+id/action_introFragment_to_singUpFragment"
-            app:destination="@id/singUpFragment" />
+            android:id="@+id/action_introFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
         <argument
             android:name="@string/hideBottom"
             app:argType="boolean"
             android:defaultValue="true" />
     </fragment>
     <fragment
-        android:id="@+id/singUpFragment"
-        android:name="com.android.mediproject.feature.intro.SingUpFragment"
-        android:label="SingUpFragment">
+        android:id="@+id/signUpFragment"
+        android:name="com.android.mediproject.feature.intro.SignUpFragment"
+        android:label="SignUpFragment">
 
         <argument
             android:name="@string/hideBottom"
