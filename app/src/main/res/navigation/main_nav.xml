@@ -30,17 +30,17 @@
         android:id="@+id/action_to_mypage_nav"
         app:destination="@id/mypage_nav"
         app:popUpTo="@id/home_nav"
-        app:popUpToInclusive="true" />
+        app:popUpToInclusive="false" />
 
     <action
         android:id="@+id/action_to_setting_nav"
         app:destination="@id/setting_nav"
         app:popUpTo="@id/home_nav"
-        app:popUpToInclusive="true" />
+        app:popUpToInclusive="false" />
 
     <action
         android:id="@+id/action_to_community_nav"
         app:destination="@id/community_nav"
         app:popUpTo="@id/home_nav"
-        app:popUpToInclusive="true" />
+        app:popUpToInclusive="false" />
 </navigation>
