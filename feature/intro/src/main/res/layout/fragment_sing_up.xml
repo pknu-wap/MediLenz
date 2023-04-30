@@ -73,6 +73,17 @@
                 android:layout_marginTop="30dp"
                 app:edtHint="@string/nickNameHint"
                 app:title="@string/nickName" />
+
+            <Button
+                android:layout_width="@dimen/loginSignUpWidth"
+                android:layout_height="wrap_content"
+                android:background="@drawable/radius_main_5"
+                android:backgroundTint="@color/main"
+                android:layout_marginTop="50dp"
+                android:text="완료"
+                android:textSize="18sp"
+                android:textColor="@color/white"/>
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

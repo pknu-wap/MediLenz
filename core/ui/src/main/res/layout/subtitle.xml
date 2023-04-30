@@ -36,7 +36,7 @@
 
         <EditText
             android:id="@+id/subtitleEDT"
-            android:layout_width="320dp"
+            android:layout_width="@dimen/loginSignUpWidth"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/radius_gray_5"
