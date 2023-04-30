@@ -1,7 +1,7 @@
 plugins {
-    id("mediproject.android.library")
-    id("mediproject.android.hilt")
+    id("org.jetbrains.kotlin.android")
     id("mediproject.android.feature")
+
 }
 
 android {
@@ -12,5 +12,8 @@ hilt {
 }
 
 dependencies {
-    implementation(libs.bundles.glides)
+    implementation(project(":core:ui"))
+    implementation(project(":core:common"))
+    implementation(libs.bundles.uiAndroidx)
+    implementation(libs.bundles.lifecycles)
 }

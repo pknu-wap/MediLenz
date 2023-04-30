@@ -11,6 +11,7 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentIntroBinding
 import repeatOnStarted
 
+@AndroidEntryPoint
 class IntroFragment :
     BaseFragment<FragmentIntroBinding, IntroViewModel>(FragmentIntroBinding::inflate) {
 

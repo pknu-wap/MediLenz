@@ -1,11 +1,16 @@
 plugins {
+    id("org.jetbrains.kotlin.android")
     id("mediproject.android.library")
     id("mediproject.android.hilt")
     id("kotlinx-serialization")
+
 }
 
 android {
     namespace = "com.android.mediproject.core.data"
+}
+hilt {
+    enableAggregatingTask = true
 }
 
 dependencies {

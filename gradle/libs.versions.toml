@@ -33,12 +33,25 @@ androidxHiltNavigationCompose = "1.0.0"
 androidxHiltWork = "1.0.0"
 androidxHiltNavigationFragment = "1.0.0"
 androidxWindowManager = "1.0.0"
+androidXTestEspresso = "3.5.1"
+androidXTestRunner = "1.5.2"
+androidXTestRules = "1.5.0"
+androidXTestCore = "1.5.0"
+androidXTestAnnotation = "1.0.1"
+androidXTestJUnit = "1.1.5"
+
+androidXTestTruth = "1.5.0"
+androidXTestOrchestra = "1.4.2"
+
+jUnit = "4.12"
 
 material = "1.8.0"
 glide = "4.15.1"
 gms = "4.3.15"
 retrofit2 = "2.9.0"
 retrofit2KotlinxSerializationJson = "1.0.0"
+
+flexbox = "3.0.0"
 
 compileSdk = "33"
 targetSdk = "33"
@@ -111,6 +124,21 @@ androidx-concurrentfutures = { module = "androidx.concurrent:concurrent-futures-
 
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidxConstraintlayout" }
 
+# test------------------------------------------------------------------------------------------------------------------------
+androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidXTestEspresso" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidXTestRunner" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidXTestRules" }
+androidx-test-core = { module = "androidx.test:core", version.ref = "androidXTestCore" }
+androidx-test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidXTestCore" }
+androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidXTestJUnit" }
+androidx-test-junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "androidXTestJUnit" }
+androidx-test-orchestrator = { module = "androidx.test:orchestrator", version.ref = "androidXTestOrchestra" }
+androidx-test-truth = { module = "androidx.test.ext:truth", version.ref = "androidXTestTruth" }
+
+junit = { module = "junit:junit", version.ref = "jUnit" }
+
+android-flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
+
 # firebase--------------------------------------------------------------------------------------------------------------------
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
@@ -155,8 +183,6 @@ kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-p
 [bundles]
 
 composes = ["androidx-compose-bom",
-    "androidx-compose-material3",
-    "androidx-compose-material3-windowSizeClass",
     "androidx-compose-runtime-livedata",
     "androidx-compose-runtime",
     "androidx-compose-ui-tooling-preview",
@@ -178,7 +204,7 @@ navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx",
 
 kotlins = ["kotlin-stdlib-jdk7", "kotlin-stdlib-jdk8", "kotlin-stdlib-root", "kotlinx-coroutines-android", "kotlinx-serialization-json", "kotlinx-datetime"]
 
-materials = ["material-main"]
+materials = ["material-main", "androidx-compose-material3", "androidx-compose-material3-windowSizeClass"]
 
 glides = ["glide-main"]
 
@@ -192,6 +218,9 @@ rooms = ["androidx-room-ktx", "androidx-room-runtime"]
 dataStores = ["androidx-datastore-core", "androidx-datastore-preferences"]
 
 workManagers = ["androidx-work-ktx"]
+
+testUIs = ["androidx-test-espresso-core", "androidx-test-runner", "androidx-test-rules", "androidx-test-core",
+    "androidx-test-core-ktx", "androidx-test-junit", "androidx-test-junit-ktx", "androidx-test-truth", "junit"]
 
 # ------------------------------------------------------------------------------------------------------------------------
 [plugins]

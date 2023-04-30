@@ -1,6 +1,6 @@
 plugins {
-    id("mediproject.android.library")
-    id("mediproject.android.library.compose")
+    id("org.jetbrains.kotlin.android")
+    id("mediproject.android.feature")
 }
 
 android {
@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
     implementation(libs.material.main)
     implementation(libs.androidx.compose.ui.util)
     implementation(libs.androidx.compose.ui.tooling.preview)
@@ -16,4 +17,7 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
 }

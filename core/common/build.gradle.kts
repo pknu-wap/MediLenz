@@ -1,4 +1,5 @@
 plugins {
+    id("org.jetbrains.kotlin.android")
     id("mediproject.android.library")
     id("mediproject.android.hilt")
 }

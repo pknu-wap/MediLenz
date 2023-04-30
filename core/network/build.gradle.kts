@@ -1,7 +1,9 @@
 plugins {
+    id("org.jetbrains.kotlin.android")
     id("mediproject.android.library")
     id("mediproject.android.hilt")
     id("kotlinx-serialization")
+
 }
 
 android {
@@ -11,6 +13,10 @@ android {
         buildConfig = true
     }
 }
+hilt {
+    enableAggregatingTask = true
+}
+
 
 dependencies {
     implementation(project(":core:common"))
@@ -20,4 +26,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.bundles.retrofits)
     implementation(libs.kotlinx.datetime)
+
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <com.android.mediproject.core.ui.base.view.HeaderForElementsView
+            android:id="@+id/header_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/recent_search"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibility_target_view="@id/search_history_list"
+            android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
+            app:more_title="@string/read_more"
+            />
+
+        <com.google.android.flexbox.FlexboxLayout
+            app:layout_constraintTop_toBottomOf="@id/header_view"
+            android:layout_marginTop="@dimen/spacing_betweens_header_and_elements"
+            android:layout_width="match_parent"
+            app:flexWrap="wrap"
+            app:justifyContent="flex_start"
+            app:alignItems="flex_start"
+            app:alignContent="flex_start"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_history_list"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

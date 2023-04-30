@@ -1,5 +1,6 @@
 package com.android.mediproject
 
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.NavController

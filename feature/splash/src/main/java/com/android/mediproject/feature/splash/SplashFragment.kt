@@ -4,25 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.splash.databinding.FragmentSplashBinding
+import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
-class SplashFragment :
-    BaseFragment<FragmentSplashBinding, SplashViewModel>(FragmentSplashBinding::inflate) {
+@AndroidEntryPoint
+class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>(FragmentSplashBinding::inflate) {
 
     override val fragmentViewModel: SplashViewModel by viewModels()
 
-    override fun afterBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.viewModel = fragmentViewModel.apply {
-            repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+            repeatOnStarted { eventFlow.collect { handelEvent(it) } }
         }
     }
 

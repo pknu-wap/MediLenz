@@ -16,4 +16,34 @@
         <attr name="redPoint" format="boolean"/>
         <attr name="edtHint" format="string|reference"/>
     </declare-styleable>
+
+    <declare-styleable name="MediSearchbar">
+        <attr name="search_hint" format="string|reference" />
+        <attr name="ai_text" format="string|reference" />
+        <attr name="search_icon" format="reference" />
+        <attr name="camera_icon" format="reference" />
+        <attr name="hint_font_size" format="dimension|reference" />
+        <attr name="ai_btn_font_size" format="dimension|reference" />
+    </declare-styleable>
+
+
+    <declare-styleable name="HeaderForElementsView">
+        <attr name="header_title" format="string|reference" />
+        <attr name="header_title_color" format="color|reference" />
+        <attr name="more_title" format="string|reference" />
+        <attr name="more_color" format="color|reference" />
+        <attr name="expand_icon_color" format="color|reference" />
+        <attr name="is_expanded" format="boolean" />
+        <attr name="title_text_size" format="dimension|reference" />
+        <attr name="more_text_size" format="dimension|reference" />
+        <attr name="visibility_target_view" format="reference" />
+        <attr name="more_visibility" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="gone" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ButtonChip"></declare-styleable>
+
+    <declare-styleable name="SimpleCommentItemView"></declare-styleable>
 </resources>

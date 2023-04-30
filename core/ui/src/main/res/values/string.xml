@@ -15,4 +15,8 @@
     <string name="emailHint">이메일을 입력하세요.(user@medlens.com)</string>
     <string name="passwordHint">비밀번호를 입력하세요.(영문+숫자 4~10자)</string>
     <string name="nickNameHint">닉네임을 입력하세요.(MEDLENS)</string>
+    <string name="read_more">더 보기</string>
+    <string name="search_with_ai">AI 검색</string>
+    <string name="search_hint">의약품 명 / 고유번호 검색</string>
+
 </resources>

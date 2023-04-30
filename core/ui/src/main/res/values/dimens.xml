@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="loginSignUpWidth">320dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="vertical_margin_header_on_home">48dp</dimen>
+
+    // AI 검색 버튼 padding
+    <dimen name="ai_button_vetical_padding">4dp</dimen>
+    <dimen name="ai_button_horizontal_padding">8dp</dimen>
+
+    // 약 검색바 padding
+    <dimen name="search_bar_horizontal_space">12dp</dimen>
+    <dimen name="search_bar_vertical_space">5dp</dimen>
+
+    // Divider 위아래 margin
+    <dimen name="divider_margin_vertical">14dp</dimen>
+
+    // Header와 요소 사이 margin
+    <dimen name="spacing_betweens_header_and_elements">14dp</dimen>
+
+    <dimen name="dp_2">2dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
+    <dimen name="dp_16">16dp</dimen>
+    <dimen name="horizontal_margin_header_on_home">12dp</dimen>
 </resources>
