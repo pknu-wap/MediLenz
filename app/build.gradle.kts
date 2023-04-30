@@ -2,6 +2,7 @@ plugins {
     id("mediproject.android.application")
     id("mediproject.android.application.compose")
     id("mediproject.android.hilt")
+    id("androidx.navigation.safeargs.kotlin")
 
     kotlin("android")
 }

@@ -1,5 +1,6 @@
 package com.android.mediproject
 
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.NavController
@@ -13,6 +14,11 @@ import repeatOnStarted
 @AndroidEntryPoint
 class MainActivity :
     BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
+
+    companion object {
+        const val VISIBLE = 0
+        const val INVISIBLE = 1
+    }
 
     override val activityViewModel: MainViewModel by viewModels()
     private lateinit var navController: NavController
@@ -29,6 +35,7 @@ class MainActivity :
             }
 
             setDestinationListener()
+            setUpBottomNav()
 
             viewModel = activityViewModel.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
@@ -36,24 +43,55 @@ class MainActivity :
         }
     }
 
+    private fun setUpBottomNav() =
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home_nav -> true.apply {
+                    log("홈")
+                    navController.navigate(MainNavDirections.actionToHomeNav())
+                }
+
+                R.id.community_nav -> true.apply {
+                    log("커뮤니티")
+                    navController.navigate(MainNavDirections.actionToCommunityNav())
+                }
+
+                R.id.mypage_nav -> true.apply {
+                    log("마이페이지")
+                    navController.navigate(MainNavDirections.actionToMypageNav())
+                }
+
+                R.id.setting_nav -> true.apply {
+                    log("설정")
+                    navController.navigate(MainNavDirections.actionToSettingNav())
+                }
+
+                else -> false
+            }
+        }
 
     private fun setDestinationListener() =
         navController.addOnDestinationChangedListener { _, _, arg ->
             log(arg.toString())
             if (arg != null) {
                 if (arg.isEmpty) {
-                    bottomVisible(true)
+                    bottomVisible(VISIBLE)
                 } else if (arg.getBoolean(getString(com.android.mediproject.core.ui.R.string.hide_bottom))) {
-                    bottomVisible(false)
+                    bottomVisible(INVISIBLE)
+                } else {
+                    bottomVisible(VISIBLE)
                 }
             } else {
-                bottomVisible(true)
+                bottomVisible(VISIBLE)
             }
         }
 
-    private fun bottomVisible(isVisible: Boolean) {
-        binding.bottomNav.visibility = if (isVisible) View.VISIBLE
-        else View.GONE
+    private fun bottomVisible(isVisible: Int) {
+        log(isVisible.toString())
+        binding.bottomNav.visibility = when (isVisible) {
+            VISIBLE -> View.VISIBLE
+            else -> View.GONE
+        }
     }
 
     fun handleEvent(event: MainViewModel.MainEvent) = when (event) {
