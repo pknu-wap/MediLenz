@@ -33,6 +33,7 @@ class RecentPenaltyListFragment :
             this.penaltyList.adapter = penaltyListAdapter
         }
         addPenaltyItems()
+        initHeader()
     }
 
     private fun addPenaltyItems() {
@@ -42,6 +43,19 @@ class RecentPenaltyListFragment :
             }.toList().apply {
                 penaltyListAdapter.submitList(this)
             }
+        }
+    }
+
+    /**
+     * 헤더 초기화
+     *
+     * 확장 버튼 리스너, 더 보기 버튼 리스너
+     */
+    private fun initHeader() {
+        binding.headerView.setOnExpandClickListener {
+        }
+
+        binding.headerView.setOnMoreClickListener {
         }
     }
 }

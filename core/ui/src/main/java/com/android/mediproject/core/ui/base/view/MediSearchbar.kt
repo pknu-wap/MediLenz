@@ -48,6 +48,11 @@ class MediSearchbar constructor(
                 searchManualBtnView = ImageView(context).apply {
                     setImageDrawable(searchIcon)
                     isClickable = true
+                    
+                    // 투명 배경에 ripple 효과를 주기 위함
+                    val outValue = TypedValue()
+                    context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+                    setBackgroundResource(outValue.resourceId)
 
                     layoutParams =
                         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 28f, resources.displayMetrics).toInt().let { size ->

@@ -45,6 +45,13 @@ class HeaderForElementsView constructor(
         fun onExpandClick(isExpanded: Boolean)
     }
 
+    fun interface OnMoreClickListener {
+        /**
+         * 더보기 버튼 클릭 시 호출
+         */
+        fun onMoreClick()
+    }
+
     init {
         context.theme.obtainStyledAttributes(attrs, R.styleable.HeaderForElementsView, 0, 0).also { typedArr ->
             try {
@@ -164,7 +171,19 @@ class HeaderForElementsView constructor(
     /// 확장 상태에 따라 알맞은 아이콘을 가져온다.
     fun getExpandIcon() = if (expanded) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24
 
+    /**
+     * 확장 버튼 클릭 콜백 설정
+     */
     fun setOnExpandClickListener(onExpandClickListener: OnExpandClickListener) {
         this.onExpandClickListener = onExpandClickListener
+    }
+
+    /**
+     * 더보기 버튼 클릭 콜백 설정
+     */
+    fun setOnMoreClickListener(onMoreClickListener: OnMoreClickListener) {
+        moreBtnView.setOnClickListener {
+            onMoreClickListener.onMoreClick()
+        }
     }
 }

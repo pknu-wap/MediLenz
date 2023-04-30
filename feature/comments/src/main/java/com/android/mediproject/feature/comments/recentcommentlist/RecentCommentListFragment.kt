@@ -32,6 +32,7 @@ class RecentCommentListFragment :
             commentList.adapter = commentListAdapter
         }
         addCommentItems()
+        initHeader()
     }
 
     private fun addCommentItems() {
@@ -43,7 +44,21 @@ class RecentCommentListFragment :
             }
         }
     }
+
+    /**
+     * 헤더 초기화
+     *
+     * 확장 버튼 리스너, 더 보기 버튼 리스너
+     */
+    private fun initHeader() {
+        binding.headerView.setOnExpandClickListener {
+        }
+
+        binding.headerView.setOnMoreClickListener {
+        }
+    }
 }
+
 
 class RecentCommentListAdapter : RecyclerView.Adapter<RecentCommentListAdapter.RecentCommentListViewHolder>() {
 
@@ -96,4 +111,6 @@ class RecentCommentListAdapter : RecyclerView.Adapter<RecentCommentListAdapter.R
     fun submitList(list: List<Any>) {
         mDiffer.submitList(list)
     }
+
+
 }
