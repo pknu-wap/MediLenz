@@ -51,6 +51,8 @@ gms = "4.3.15"
 retrofit2 = "2.9.0"
 retrofit2KotlinxSerializationJson = "1.0.0"
 
+flexbox = "3.0.0"
+
 compileSdk = "33"
 targetSdk = "33"
 minSdk = "28"
@@ -134,6 +136,8 @@ androidx-test-orchestrator = { module = "androidx.test:orchestrator", version.re
 androidx-test-truth = { module = "androidx.test.ext:truth", version.ref = "androidXTestTruth" }
 
 junit = { module = "junit:junit", version.ref = "jUnit" }
+
+android-flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 
 # firebase--------------------------------------------------------------------------------------------------------------------
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }

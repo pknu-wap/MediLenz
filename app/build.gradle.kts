@@ -1,7 +1,6 @@
 plugins {
     id("org.jetbrains.kotlin.android")
     id("mediproject.android.application")
-    id("mediproject.android.application.compose")
     id("mediproject.android.hilt")
 }
 
@@ -33,7 +32,7 @@ dependencies {
     implementation(project(":feature:comments"))
     implementation(project(":feature:search"))
 
-    api(libs.bundles.materials)
+    implementation(libs.bundles.materials)
     implementation(libs.bundles.composes)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.workManagers)

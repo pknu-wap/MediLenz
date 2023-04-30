@@ -1,9 +1,6 @@
 plugins {
     id("org.jetbrains.kotlin.android")
-    id("mediproject.android.library")
-    id("mediproject.android.library.compose")
-    id("mediproject.android.hilt")
-
+    id("mediproject.android.feature")
 }
 
 android {
@@ -20,4 +17,7 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
 }

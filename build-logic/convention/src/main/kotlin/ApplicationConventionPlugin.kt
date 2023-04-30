@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.ApplicationExtension
+import com.android.mediproject.configureAndroidCompose
 import com.android.mediproject.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -13,6 +14,8 @@ class ApplicationConventionPlugin : Plugin<Project> {
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
+                configureAndroidCompose(this)
+
             }
 
         }

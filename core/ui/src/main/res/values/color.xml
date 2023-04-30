@@ -6,4 +6,5 @@
     <color name="background_header_on_top">#22A7CC</color>
     <color name="background_search_ai_button">#1969E8</color>
     <color name="default_ripple_color">?attr/colorControlHighlight</color>
+    <color name="button_chip_text_color">#22A7CC</color>
 </resources>

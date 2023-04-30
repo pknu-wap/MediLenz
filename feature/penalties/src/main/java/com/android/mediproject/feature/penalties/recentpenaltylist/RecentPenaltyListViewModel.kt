@@ -6,5 +6,4 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecentPenaltyListViewModel @Inject constructor() : BaseViewModel() {
-
 }

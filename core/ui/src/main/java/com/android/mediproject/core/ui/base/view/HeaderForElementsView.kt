@@ -28,6 +28,10 @@ class HeaderForElementsView constructor(
     private var expanded = true
     private var moreVisibility = View.VISIBLE
 
+    private var onExpandClickListener: OnExpandClickListener? = null
+
+    private val targetViewId: Int
+
     private val DOT = "• "
 
     fun interface OnExpandClickListener {
@@ -53,6 +57,7 @@ class HeaderForElementsView constructor(
                 val moreFontSize = typedArr.getDimension(R.styleable.HeaderForElementsView_more_text_size, 14f)
                 expanded = typedArr.getBoolean(R.styleable.HeaderForElementsView_is_expanded, expanded)
                 moreVisibility = typedArr.getInt(R.styleable.HeaderForElementsView_more_visibility, moreVisibility)
+                targetViewId = typedArr.getResourceId(R.styleable.HeaderForElementsView_visibility_target_view, -1)
 
                 // title
                 titleView = TextView(context).apply {
@@ -76,6 +81,25 @@ class HeaderForElementsView constructor(
                             context, getExpandIcon()
                         )
                     )
+                    setOnClickListener {
+                        expanded = !expanded
+                        setImageDrawable(
+                            AppCompatResources.getDrawable(
+                                context, getExpandIcon()
+                            )
+                        )
+
+                        (parent.parent as View).findViewById<View>(targetViewId).apply {
+                            if (visibility == View.VISIBLE) {
+                                visibility = View.GONE
+                            } else {
+                                visibility = View.VISIBLE
+                            }
+                        }
+
+                        onExpandClickListener?.onExpandClick(expanded)
+                    }
+
                     isClickable = true
 
                     layoutParams =
@@ -120,6 +144,8 @@ class HeaderForElementsView constructor(
                     addView(titleView)
                     addView(expandBtnView)
                     addView(moreBtnView)
+
+                    clipChildren = false
                 }
 
             } finally {
@@ -139,14 +165,6 @@ class HeaderForElementsView constructor(
     fun getExpandIcon() = if (expanded) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24
 
     fun setOnExpandClickListener(onExpandClickListener: OnExpandClickListener) {
-        expandBtnView.setOnClickListener {
-            expanded = !expanded
-            expandBtnView.setImageDrawable(
-                AppCompatResources.getDrawable(
-                    context, getExpandIcon()
-                )
-            )
-            onExpandClickListener.onExpandClick(expanded)
-        }
+        this.onExpandClickListener = onExpandClickListener
     }
 }

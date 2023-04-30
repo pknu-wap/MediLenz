@@ -16,22 +16,21 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:visibility_target_view="@id/search_history_list"
+            android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
             app:more_title="@string/read_more"
             />
 
-        <com.google.android.material.chip.ChipGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_betweens_header_and_elements"
+        <com.google.android.flexbox.FlexboxLayout
             app:layout_constraintTop_toBottomOf="@id/header_view"
-            >
-
-            <com.android.mediproject.core.ui.base.view.ButtonChip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Text"
-                />
-
-        </com.google.android.material.chip.ChipGroup>
+            android:layout_marginTop="@dimen/spacing_betweens_header_and_elements"
+            android:layout_width="match_parent"
+            app:flexWrap="wrap"
+            app:justifyContent="flex_start"
+            app:alignItems="flex_start"
+            app:alignContent="flex_start"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_history_list"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

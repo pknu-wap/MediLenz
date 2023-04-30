@@ -9,9 +9,10 @@ android {
 }
 
 dependencies {
-    implementation(project(mapOf("path" to ":core:common")))
-    implementation(project(mapOf("path" to ":core:ui")))
-
-    implementation("androidx.constraintlayout:constraintlayout")
-
+    implementation(project(":core:ui"))
+    implementation(project(":core:common"))
+    implementation(libs.bundles.glides)
+    implementation(libs.bundles.kotlins)
+    implementation(libs.bundles.materials)
+    implementation(libs.bundles.uiAndroidx)
 }

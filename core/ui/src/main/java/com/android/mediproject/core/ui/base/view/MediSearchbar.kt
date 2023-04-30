@@ -41,6 +41,9 @@ class MediSearchbar constructor(
                 val aiFontSize = typedArr.getDimension(R.styleable.MediSearchbar_ai_btn_font_size, 12f)
                 val titleFontSize = typedArr.getDimension(R.styleable.MediSearchbar_hint_font_size, 13f)
 
+                val verticalSpace = context.resources.getDimension(R.dimen.search_bar_vertical_space).toInt()
+                val horizontalSpace = context.resources.getDimension(R.dimen.search_bar_horizontal_space).toInt()
+
                 // search btn
                 searchManualBtnView = ImageView(context).apply {
                     setImageDrawable(searchIcon)
@@ -52,6 +55,7 @@ class MediSearchbar constructor(
                                 topToTop = LayoutParams.PARENT_ID
                                 bottomToBottom = LayoutParams.PARENT_ID
                                 rightToRight = LayoutParams.PARENT_ID
+                                rightMargin = horizontalSpace
                             }
                         }
                     id = 30
@@ -65,7 +69,7 @@ class MediSearchbar constructor(
                                 topToTop = LayoutParams.PARENT_ID
                                 bottomToBottom = LayoutParams.PARENT_ID
                                 rightToLeft = searchManualBtnView.id
-                                rightMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics).toInt()
+                                rightMargin = horizontalSpace
                             }
                         }
 
@@ -73,6 +77,8 @@ class MediSearchbar constructor(
                     text = aiTitle
                     setTextColor(Color.WHITE)
                     textSize = aiFontSize
+
+                    gravity = android.view.Gravity.CENTER_VERTICAL
 
                     val horizontalPadding = context.resources.getDimension(R.dimen.ai_button_horizontal_padding)
                     val verticalPadding = context.resources.getDimension(R.dimen.ai_button_vetical_padding)
@@ -100,7 +106,7 @@ class MediSearchbar constructor(
                         bottomToBottom = LayoutParams.PARENT_ID
                         rightToLeft = searchAiBtnView.id
                         leftToLeft = LayoutParams.PARENT_ID
-                        rightMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics).toInt()
+                        setMargins(horizontalSpace, verticalSpace, 0, verticalSpace)
                     }
                     hint = searchHint
                     textSize = titleFontSize
@@ -112,11 +118,7 @@ class MediSearchbar constructor(
 
                 this.apply {
                     setBackgroundResource(R.drawable.search_bar)
-                    val rootHorizontalPadding = context.resources.getDimension(R.dimen.search_bar_horizontal_padding).toInt()
-                    val rootVerticalPadding = context.resources.getDimension(R.dimen.search_bar_vertical_padding).toInt()
-                    setPadding(rootHorizontalPadding, rootVerticalPadding, rootHorizontalPadding, rootVerticalPadding)
 
-                    elevation = 4f
                     clipChildren = false
                     clipToPadding = false
 

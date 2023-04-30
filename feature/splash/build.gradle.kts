@@ -11,6 +11,8 @@ hilt {
     enableAggregatingTask = true
 }
 dependencies {
-    implementation(libs.bundles.glides)
-
+    implementation(project(":core:ui"))
+    implementation(project(":core:common"))
+    implementation(libs.bundles.uiAndroidx)
+    implementation(libs.bundles.lifecycles)
 }

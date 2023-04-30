@@ -15,10 +15,22 @@
             app:header_title="@string/penalty_list"
             app:more_title="@string/read_more"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
+            app:visibility_target_view="@id/penalty_list"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/penalty_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_betweens_header_and_elements"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/header_view"
+            tools:itemCount="5"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,11 +1,10 @@
 import com.android.build.gradle.LibraryExtension
+import com.android.mediproject.configureAndroidCompose
 import com.android.mediproject.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.kotlin
 
 class LibraryConventionPlugin : Plugin<Project> {
@@ -17,9 +16,10 @@ class LibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
+                configureAndroidCompose(this)
             }
 
-            val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+            //val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
             dependencies {
                 "testImplementation"(kotlin("test"))
