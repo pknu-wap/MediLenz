@@ -27,8 +27,11 @@ class Bar @JvmOverloads constructor(
     lateinit var bar: ConstraintLayout
 
     init {
-        val inflaterService = Context.LAYOUT_INFLATER_SERVICE as LayoutInflater
-        inflaterService.inflate(R.layout.bar, this, false)
+        val infService = Context.LAYOUT_INFLATER_SERVICE
+        val li = context.getSystemService(infService) as LayoutInflater
+        val view = li.inflate(R.layout.bar, this, false)
+        addView(view)
+
 
         backButton = findViewById<ImageView>(R.id.barBackIV)
         title = findViewById<TextView>(R.id.barTitleTV)

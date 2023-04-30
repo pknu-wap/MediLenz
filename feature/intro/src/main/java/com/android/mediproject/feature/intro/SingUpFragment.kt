@@ -18,6 +18,7 @@ class SingUpFragment : BaseFragment<FragmentSingUpBinding,SignUpViewModel>(Fragm
         savedInstanceState: Bundle?
     ) {
         binding.apply{
+            log("회원가입 진입")
             viewModel = fragmentViewModel.apply{
                 repeatOnStarted { eventFlow.collect{ handleEvent(it) }}
             }

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.intro.SignUpViewModel" />
@@ -14,6 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SingUpFragment">
+
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setTheme="blue"
+            app:showBackButton="true"
+            app:title="홈" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
