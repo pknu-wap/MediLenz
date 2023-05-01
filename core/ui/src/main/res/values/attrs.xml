@@ -17,6 +17,16 @@
         <attr name="edtHint" format="string|reference"/>
     </declare-styleable>
 
+    <declare-styleable name="IntroButton">
+        <attr name="title"/>
+        <attr name="button_icon" format="reference"/>
+        <attr name="setTitleColor" format="reference"/>
+        <attr name="setStroke" format="enum">
+            <enum name="normal" value="0"/>
+            <enum name="white" value="1"/>
+        </attr>
+    </declare-styleable>
+
     <declare-styleable name="MediSearchbar">
         <attr name="search_hint" format="string|reference" />
         <attr name="ai_text" format="string|reference" />

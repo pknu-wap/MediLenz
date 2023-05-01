@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="loginSignUpWidth">320dp</dimen>
+    <dimen name="loginSignUpWidth">325dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="vertical_margin_header_on_home">48dp</dimen>
 
