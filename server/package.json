@@ -14,7 +14,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "oracledb": "^5.5.0",
+    "sequelize": "^6.31.0",
+    "sequelize-auto": "^0.8.8"
   }
 }
