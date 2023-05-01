@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="recent_search">최근 검색 목록</string>
+    <string name="ai_search_result_fragment">ai_search_result_fragment</string>
+    <string name="manual_search_result_fragment">manual_search_result_fragment</string>
+    <string name="recent_search_history_fragment">recent_search_history_fragment</string>
 </resources>

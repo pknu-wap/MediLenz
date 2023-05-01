@@ -9,7 +9,6 @@
             name="viewModel"
             type="com.android.mediproject.feature.search.SearchMedicinesViewModel"
             />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="27dp"
-            app:ai_text="AI검색"
+            app:ai_text="@string/search_with_ai"
             app:camera_icon="@drawable/baseline_camera_24"
             app:layout_constraintBottom_toTopOf="@id/contents_fragment_container_view"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -35,12 +34,15 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/contents_fragment_container_view"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_view"
+            app:navGraph="@navigation/search_medicine_host_nav"
             />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

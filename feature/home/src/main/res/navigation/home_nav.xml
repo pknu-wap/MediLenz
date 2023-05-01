@@ -10,8 +10,8 @@
         android:label="HomeFragment">
         <argument
             android:name="@string/hideBottom"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
 
     <deepLink app:uri="medilens://main/home_nav" />

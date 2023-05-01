@@ -18,5 +18,6 @@
     <string name="read_more">더 보기</string>
     <string name="search_with_ai">AI 검색</string>
     <string name="search_hint">의약품 명 / 고유번호 검색</string>
+    <string name="search_empty_query">검색어가 비어있습니다.</string>
 
 </resources>
