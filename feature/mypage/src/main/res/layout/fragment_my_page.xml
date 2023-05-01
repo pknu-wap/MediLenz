@@ -10,83 +10,97 @@
             type="com.android.mediproject.feature.mypage.MyPageViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.android.mediproject.feature.mypage.MyPageFragment">
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-        <com.android.mediproject.core.ui.base.view.Bar
-            android:id="@+id/mypageBar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:setTheme="white"
-            app:showBackButton="false"
-            app:title="@string/myPage" />
+            android:layout_height="match_parent"
+            tools:context="com.android.mediproject.feature.mypage.MyPageFragment">
 
-        <ImageView
-            android:id="@+id/userImageIV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/default_user_image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mypageBar" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="태규안"
-            android:textColor="@color/black"
-            android:textSize="28sp"
-            app:layout_constraintBottom_toBottomOf="@id/userImageIV"
-            app:layout_constraintStart_toEndOf="@id/userImageIV"
-            app:layout_constraintTop_toTopOf="@id/userImageIV" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/dot_3_vertical"
-            app:layout_constraintBottom_toBottomOf="@id/userImageIV"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/userImageIV" />
-
-        <LinearLayout
-            android:id="@+id/favoriteMedicineListFL"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="25dp"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="15dp"
-            android:background="@drawable/rectangle_5_main"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userImageIV">
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/interestedMedicineList"
-                android:name="com.android.mediproject.feature.interestedmedicine.InterestedMedicineFragment"
+            <com.android.mediproject.core.ui.base.view.Bar
+                android:id="@+id/mypageBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:setTheme="white"
+                app:showBackButton="false"
+                app:title="@string/myPage" />
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="256dp"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/rectangle_5_main"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/favoriteMedicineListFL">
+            <ImageView
+                android:id="@+id/userImageIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/default_user_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mypageBar" />
 
-        </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="태규안"
+                android:textColor="@color/black"
+                android:textSize="28sp"
+                app:layout_constraintBottom_toBottomOf="@id/userImageIV"
+                app:layout_constraintStart_toEndOf="@id/userImageIV"
+                app:layout_constraintTop_toTopOf="@id/userImageIV" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/dot_3_vertical"
+                app:layout_constraintBottom_toBottomOf="@id/userImageIV"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/userImageIV" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/interestedMedicineListLL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/rectangle_5_main"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/userImageIV">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/interestedMedicineList"
+                    android:name="com.android.mediproject.feature.interestedmedicine.InterestedMedicineFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/myCommentsListLL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rectangle_5_main"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/interestedMedicineListLL">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/myCommentsList"
+                    android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

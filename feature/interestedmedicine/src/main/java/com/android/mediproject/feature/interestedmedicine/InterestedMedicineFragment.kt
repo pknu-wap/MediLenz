@@ -11,8 +11,10 @@ import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class InterestedMedicineFragment() : BaseFragment<FragmentInterestedMedicineBinding,InterstedMedicineViewModel>(
-    FragmentInterestedMedicineBinding::inflate) {
+class InterestedMedicineFragment() :
+    BaseFragment<FragmentInterestedMedicineBinding, InterstedMedicineViewModel>(
+        FragmentInterestedMedicineBinding::inflate
+    ) {
 
     override val fragmentViewModel: InterstedMedicineViewModel by viewModels()
 
@@ -29,11 +31,15 @@ class InterestedMedicineFragment() : BaseFragment<FragmentInterestedMedicineBind
      */
     private fun addHistoryItemChips() {
         binding.apply {
-            val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
+            val horizontalSpace =
+                resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
 
             repeat(5) {
                 this.interestedMedicineList.addView(ButtonChip<Int>(requireContext()).apply {
-                    layoutParams = FlexboxLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = FlexboxLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    ).apply {
                         setMargins(horizontalSpace, 0, horizontalSpace, 0)
                     }
 
@@ -52,11 +58,12 @@ class InterestedMedicineFragment() : BaseFragment<FragmentInterestedMedicineBind
      * 확장 버튼 리스너, 더 보기 버튼 리스너
      */
     private fun initHeader() {
-        binding.headerView.setOnExpandClickListener {
+        binding.headerView.apply {
+            setOnExpandClickListener {
+            }
+            setOnMoreClickListener {
+            }
         }
 
-        binding.headerView.setOnMoreClickListener {
-        }
     }
-
 }
