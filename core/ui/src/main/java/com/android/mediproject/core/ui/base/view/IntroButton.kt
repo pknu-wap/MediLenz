@@ -48,7 +48,7 @@ class IntroButton @JvmOverloads constructor(
 
         if (buttonImage != -1) buttonImageView.setImageResource(buttonImage)
         else buttonImageView.visibility = View.GONE
-        
+
         if(setStroke == WHITE){
             Log.d("tgyuu","white")
             introButton.setBackgroundResource(R.drawable.rectangle_5_white)
