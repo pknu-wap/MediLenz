@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -44,8 +45,10 @@ class IntroButton @JvmOverloads constructor(
 
         title.text = titleText
         title.setTextColor(titleColor)
-        buttonImageView.setImageResource(buttonImage)
 
+        if (buttonImage != -1) buttonImageView.setImageResource(buttonImage)
+        else buttonImageView.visibility = View.GONE
+        
         if(setStroke == WHITE){
             Log.d("tgyuu","white")
             introButton.setBackgroundResource(R.drawable.rectangle_5_white)

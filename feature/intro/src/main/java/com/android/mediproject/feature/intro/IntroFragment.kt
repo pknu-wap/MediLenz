@@ -31,11 +31,8 @@ class IntroFragment :
                 .build()
             findNavController().navigate(request)
         }
-
-        is IntroViewModel.IntroEvent.MemberLogin -> {}
-        is IntroViewModel.IntroEvent.SignUp -> {
-            findNavController().navigate(IntroFragmentDirections.actionIntroFragmentToSignUpFragment())
-        }
+        is IntroViewModel.IntroEvent.MemberLogin -> findNavController().navigate(IntroFragmentDirections.actionIntroFragmentToLoginFragment())
+        is IntroViewModel.IntroEvent.SignUp -> findNavController().navigate(IntroFragmentDirections.actionIntroFragmentToSignUpFragment())
     }
 
 }
