@@ -75,7 +75,7 @@
             android:layout_marginBottom="261dp"
             android:background="@color/main"
             android:onClick="@{()->viewModel.memberLogin()}"
-            app:button_icon="@drawable/mail"
+            app:button_icon="@drawable/signup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
