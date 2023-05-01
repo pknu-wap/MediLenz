@@ -16,11 +16,18 @@
         tools:context=".LoginFragment">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
+            android:id="@+id/guideline1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/loginSignUpMarginStart" />
+            app:layout_constraintGuide_begin="@dimen/loginSignUpMarginHorizontal" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/loginSignUpMarginHorizontal" />
 
         <com.android.mediproject.core.ui.base.view.Bar
             android:id="@+id/bar"
@@ -37,27 +44,27 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"
             app:edtHint="@string/emailHint"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="30dp"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintTop_toBottomOf="@id/bar"
             app:title="@string/email" />
 
         <com.android.mediproject.core.ui.base.view.Subtitle
             android:id="@+id/loginPassword"
-            android:layout_width="@dimen/loginSignUpWidth"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             app:edtHint="@string/passwordHint"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintTop_toBottomOf="@id/loginEmail"
             app:title="@string/password" />
 
         <FrameLayout
-            android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_width="110dp"
+            android:layout_height="25dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="36dp"
+            android:layout_marginEnd="43dp"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginPassword">
@@ -74,8 +81,7 @@
                 android:text="@string/rememberEmail"
                 android:textColor="@color/gray2"
                 android:textSize="16sp"
-                android:layout_gravity="center"
-                android:gravity="center" />
+                android:layout_gravity="end|center" />
         </FrameLayout>
 
 
