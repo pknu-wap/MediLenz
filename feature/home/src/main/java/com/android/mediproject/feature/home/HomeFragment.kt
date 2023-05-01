@@ -16,6 +16,7 @@ class HomeFragment() : BaseFragment<FragmentHomeBinding, HomeViewModel>(Fragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSearchBar()
+
     }
 
     /**
@@ -29,6 +30,7 @@ class HomeFragment() : BaseFragment<FragmentHomeBinding, HomeViewModel>(Fragment
         binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
             override fun onSearchQuery(query: String) {
                 toast("$query 를 검색합니다")
+           
             }
 
             override fun onEmptyQuery() {

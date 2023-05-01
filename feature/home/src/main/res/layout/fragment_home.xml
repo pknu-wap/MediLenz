@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+<layout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +27,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/header_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,6 +47,7 @@
 
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -64,11 +63,30 @@
                 >
 
                 <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/recent_search_list_fragment"
-                    android:name="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment"
+                    android:id="@+id/recent_search_list_fragment_container"
+                    android:name="androidx.navigation.fragment.NavHostFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
+                    app:defaultNavHost="false"
+                    app:navGraph="@navigation/recent_search_history_nav"
+                    />
+
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/divider_margin_vertical"
+                    />
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/recent_comment_list_fragment_container"
+                    android:name="androidx.navigation.fragment.NavHostFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:defaultNavHost="false"
+                    app:navGraph="@navigation/recent_comments_nav"
+
                     />
 
                 <com.google.android.material.divider.MaterialDivider
@@ -78,24 +96,13 @@
                     />
 
                 <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/recent_comment_list_fragment"
-                    android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/divider_margin_vertical"
-                    />
-
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/penalty_list_fragment"
-                    android:name="com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListFragment"
+                    android:id="@+id/penalty_list_fragment_container"
+                    android:name="androidx.navigation.fragment.NavHostFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/divider_margin_vertical"
+                    app:defaultNavHost="false"
+                    app:navGraph="@navigation/recent_penalties_nav"
                     />
 
             </LinearLayout>
@@ -106,7 +113,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="38dp"
-            app:ai_text="AI검색"
+            app:ai_text="@string/search_with_ai"
             app:camera_icon="@drawable/baseline_camera_24"
             app:layout_constraintBottom_toBottomOf="@id/header_layout"
             app:layout_constraintLeft_toLeftOf="parent"

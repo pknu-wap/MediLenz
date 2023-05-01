@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
 import com.android.mediproject.feature.search.databinding.FragmentRecentSearchListBinding
@@ -42,10 +43,15 @@ class RecentSearchListFragment :
                     layoutParams = FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
                         setMargins(horizontalSpace, 0, horizontalSpace, 0)
                     }
-
+                    data = it
                     setChipText("검색어 $it")
                     setOnChipClickListener {
-                        it?.apply { toast(this.toString()) }
+                        it?.apply {
+                            toast(this.toString())
+                            findNavController().apply {
+                                navigate(RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultNav())
+                            }
+                        }
                     }
                 })
             }
@@ -58,10 +64,8 @@ class RecentSearchListFragment :
      * 확장 버튼 리스너, 더 보기 버튼 리스너
      */
     private fun initHeader() {
-        binding.headerView.setOnExpandClickListener {
-        }
+        binding.headerView.setOnExpandClickListener {}
 
-        binding.headerView.setOnMoreClickListener {
-        }
+        binding.headerView.setOnMoreClickListener {}
     }
 }

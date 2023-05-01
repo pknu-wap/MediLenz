@@ -2,32 +2,25 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search_medicine_host_nav"
-    app:startDestination="@id/recentSearchListFragment">
-
-
-    <fragment
-        android:id="@+id/recentSearchListFragment"
-        android:name="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment"
-        android:label="RecentSearchListFragment">
-        <action
-            android:id="@+id/action_recentSearchListFragment_to_aiSearchResultFragment"
-            app:destination="@id/aiSearchResultFragment"
-            app:popUpTo="@id/search_medicine_host_nav" />
-        <action
-            android:id="@+id/action_recentSearchListFragment_to_manualSearchResultFragment"
-            app:destination="@id/manualSearchResultFragment"
-            app:popUpTo="@id/search_medicine_host_nav" />
-    </fragment>
-    <fragment
-        android:id="@+id/aiSearchResultFragment"
-        android:name="com.android.mediproject.feature.search.result.ai.AiSearchResultFragment"
-        android:label="AiSearchResultFragment">
-
-    </fragment>
-    <fragment
-        android:id="@+id/manualSearchResultFragment"
-        android:name="com.android.mediproject.feature.search.result.manual.ManualSearchResultFragment"
-        android:label="ManualSearchResultFragment" />
+    app:startDestination="@id/searchMedicinesFragment">
 
     <deepLink app:uri="medilens://search" />
+
+    <fragment
+        android:id="@+id/searchMedicinesFragment"
+        android:name="com.android.mediproject.feature.search.SearchMedicinesFragment"
+        android:label="SearchMedicinesFragment">
+
+
+        <action
+            android:id="@+id/action_searchMedicinesFragment_to_ai_search_result_nav"
+            app:destination="@id/ai_search_result_nav" />
+        <action
+            android:id="@+id/action_searchMedicinesFragment_to_manual_search_result_nav"
+            app:destination="@id/manual_search_result_nav" />
+    </fragment>
+    
+    <include app:graph="@navigation/manual_search_result_nav" />
+    <include app:graph="@navigation/ai_search_result_nav" />
+
 </navigation>

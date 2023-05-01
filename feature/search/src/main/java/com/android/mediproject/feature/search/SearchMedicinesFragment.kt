@@ -7,7 +7,6 @@ import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.MediSearchbar
 import com.android.mediproject.feature.search.databinding.FragmentSearchMedicinesHostBinding
-import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,9 +32,7 @@ class SearchMedicinesFragment :
         binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
             override fun onSearchQuery(query: String) {
                 toast("$query 를 검색합니다")
-                binding.contentsFragmentContainerView.apply {
-                    findNavController().navigate(RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment())
-                }
+                findNavController().navigate(SearchMedicinesFragmentDirections.actionSearchMedicinesFragmentToManualSearchResultNav())
             }
 
             override fun onEmptyQuery() {

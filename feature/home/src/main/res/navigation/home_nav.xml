@@ -12,7 +12,30 @@
             android:name="@string/hideBottom"
             android:defaultValue="false"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_homeFragment_to_recent_search_history_nav"
+            app:destination="@id/recent_search_history_nav" />
+        <action
+            android:id="@+id/action_homeFragment_to_recent_penalties_nav"
+            app:destination="@id/recent_penalties_nav" />
+        <action
+            android:id="@+id/action_homeFragment_to_recent_comments_nav"
+            app:destination="@id/recent_comments_nav" />
+        <action
+            android:id="@+id/action_homeFragment_to_ai_search_result_nav"
+            app:destination="@id/ai_search_result_nav" />
+        <action
+            android:id="@+id/action_homeFragment_to_manual_search_result_nav"
+            app:destination="@id/manual_search_result_nav" />
+
     </fragment>
 
     <deepLink app:uri="medilens://main/home_nav" />
+    <include app:graph="@navigation/manual_search_result_nav" />
+    <include app:graph="@navigation/ai_search_result_nav" />
+    <include app:graph="@navigation/recent_comments_nav" />
+    <include app:graph="@navigation/recent_penalties_nav" />
+    <include app:graph="@navigation/recent_search_history_nav" />
+
+
 </navigation>

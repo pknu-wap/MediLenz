@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":feature:community"))
     implementation(project(":feature:setting"))
     implementation(project(":feature:penalties"))
+    implementation(project(":feature:medicine"))
 
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.materials)

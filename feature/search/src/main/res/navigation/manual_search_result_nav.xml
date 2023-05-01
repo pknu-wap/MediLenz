@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/manual_search_result_nav"
+    app:startDestination="@id/manualSearchResultFragment">
+
+    <fragment
+        android:id="@+id/manualSearchResultFragment"
+        android:name="com.android.mediproject.feature.search.result.manual.ManualSearchResultFragment"
+        android:label="ManualSearchResultFragment" />
+
+    <deepLink app:uri="medilens://search/manual_result" />
+
+</navigation>
