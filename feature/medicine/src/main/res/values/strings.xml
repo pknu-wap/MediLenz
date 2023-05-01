@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_info">기본 정보</string>
+    <string name="indentifying_info">식별 정보</string>
+    <string name="precautions">주의 사항</string>
+    <string name="comment">댓글</string>
+</resources>
