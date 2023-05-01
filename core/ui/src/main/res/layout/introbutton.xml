@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <FrameLayout
         android:id="@+id/introButton"
-        android:layout_width="@dimen/loginSignUpWidth"
+        android:layout_width="match_parent"
         android:layout_height="40dp">
 
         <ImageView
