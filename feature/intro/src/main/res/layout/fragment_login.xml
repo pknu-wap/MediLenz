@@ -16,7 +16,7 @@
         tools:context=".LoginFragment">
 
         <com.android.mediproject.core.ui.base.view.Bar
-            android:id="@+id/bar"
+            android:id="@+id/loginBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bar">
+            app:layout_constraintTop_toBottomOf="@id/loginBar">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline1"
@@ -52,7 +52,7 @@
                 app:edtHint="@string/emailHint"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/guideline1"
-                app:layout_constraintTop_toBottomOf="@id/bar"
+                app:layout_constraintTop_toBottomOf="@id/loginBar"
                 app:title="@string/email" />
 
             <com.android.mediproject.core.ui.base.view.Subtitle

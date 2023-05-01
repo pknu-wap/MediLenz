@@ -1,7 +1,6 @@
 plugins {
     id("org.jetbrains.kotlin.android")
     id("mediproject.android.feature")
-
 }
 
 android {
@@ -19,5 +18,5 @@ dependencies {
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
-
+    implementation(libs.android.flexbox)
 }

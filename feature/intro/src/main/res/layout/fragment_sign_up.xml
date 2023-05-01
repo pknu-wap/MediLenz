@@ -28,7 +28,7 @@
             app:layout_constraintGuide_end="@dimen/loginSignUpMarginHorizontal" />
 
         <com.android.mediproject.core.ui.base.view.Bar
-            android:id="@+id/bar"
+            android:id="@+id/signUpBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toBottomOf="@id/bar">
+            app:layout_constraintTop_toBottomOf="@id/signUpBar">
 
             <com.android.mediproject.core.ui.base.view.Subtitle
                 android:id="@+id/signUpEmail"

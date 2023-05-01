@@ -58,7 +58,7 @@ class HeaderForElementsView constructor(
                 val title = typedArr.getString(R.styleable.HeaderForElementsView_header_title)
                 val titleColor = typedArr.getColor(R.styleable.HeaderForElementsView_header_title_color, Color.BLACK)
                 val moreTitle = typedArr.getString(R.styleable.HeaderForElementsView_more_title)
-                val moreColor = typedArr.getColor(R.styleable.HeaderForElementsView_more_color, Color.BLACK)
+                val moreColor = typedArr.getColor(R.styleable.HeaderForElementsView_more_color, R.color.gray2)
                 val iconColor = typedArr.getColor(R.styleable.HeaderForElementsView_expand_icon_color, Color.BLACK)
                 val titleFontSize = typedArr.getDimension(R.styleable.HeaderForElementsView_title_text_size, 15f)
                 val moreFontSize = typedArr.getDimension(R.styleable.HeaderForElementsView_more_text_size, 14f)
