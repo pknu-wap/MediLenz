@@ -47,7 +47,7 @@ class IntroButton @JvmOverloads constructor(
         title.setTextColor(titleColor)
 
         if (buttonImage != -1) buttonImageView.setImageResource(buttonImage)
-        else buttonImageView.visibility = View.GONE
+        else buttonImageView.visibility = View.INVISIBLE
 
         if(setStroke == WHITE){
             Log.d("tgyuu","white")
