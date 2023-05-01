@@ -80,8 +80,8 @@
                     android:id="@+id/rememberEmailCB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleX="0.90"
-                    android:scaleY="0.90" />
+                    android:scaleX="0.80"
+                    android:scaleY="0.80" />
 
                 <TextView
                     android:layout_width="wrap_content"
