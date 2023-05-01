@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.intro.IntroViewModel" />
@@ -38,90 +39,48 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/frameLayout"
-            android:layout_width="280dp"
+        <com.android.mediproject.core.ui.base.view.IntroButton
+            android:layout_width="@dimen/loginSignUpWidth"
             android:layout_height="40dp"
             android:layout_marginTop="501dp"
-            android:background="@drawable/rectangle_5"
-            android:backgroundTint="@color/nonmembers"
+            android:background="@color/nonmembers"
             android:onClick="@{()->viewModel.nonMemberLogin()}"
+            app:button_icon="@drawable/nonmember"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:setStroke="normal"
+            app:setTitleColor="@color/main"
+            app:title="@string/nonMember" />
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="20dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/nonmember" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/nonMember"
-                android:textColor="@color/main"
-                android:textSize="18sp" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="280dp"
+        <com.android.mediproject.core.ui.base.view.IntroButton
+            android:layout_width="@dimen/loginSignUpWidth"
             android:layout_height="40dp"
             android:layout_marginTop="566dp"
             android:layout_marginBottom="326dp"
-            android:background="@drawable/rectangle_5"
-            android:backgroundTint="@color/login"
+            android:background="@color/login"
             android:onClick="@{()->viewModel.memberLogin()}"
+            app:button_icon="@drawable/login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:setStroke="normal"
+            app:setTitleColor="@color/white"
+            app:title="@string/login" />
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="20dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/login" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/login"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="280dp"
+        <com.android.mediproject.core.ui.base.view.IntroButton
+            android:layout_width="@dimen/loginSignUpWidth"
             android:layout_height="40dp"
             android:layout_marginTop="631dp"
             android:layout_marginBottom="261dp"
-            android:background="@drawable/rectangle_5_white"
-            android:onClick="@{()->viewModel.signUp()}"
+            android:background="@color/main"
+            android:onClick="@{()->viewModel.memberLogin()}"
+            app:button_icon="@drawable/mail"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="20dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/mail" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/signUpFull"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-        </FrameLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:setStroke="white"
+            app:setTitleColor="@color/white"
+            app:title="@string/signUpFull" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

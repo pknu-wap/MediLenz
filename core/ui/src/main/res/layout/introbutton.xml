@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout
+        android:id="@+id/introButton"
+        android:layout_width="@dimen/loginSignUpWidth"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:id="@+id/introButtonIV"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/introButtonTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="18sp" />
+    </FrameLayout>
+
+</layout>
