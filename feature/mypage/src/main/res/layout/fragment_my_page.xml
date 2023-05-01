@@ -57,37 +57,22 @@
         <LinearLayout
             android:id="@+id/favoriteMedicineListFL"
             android:layout_width="0dp"
-            android:layout_height="167dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:layout_marginTop="25dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="15dp"
             android:background="@drawable/rectangle_5_main"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/userImageIV">
 
-            <com.android.mediproject.core.ui.base.view.HeaderForElementsView
-                android:id="@+id/header_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:header_title="@string/myFravoriteList"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:visibility_target_view="@id/search_history_list"
-                android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
-                app:more_title="@string/read_more"
-                />
-
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/myFavoriteList"
-                android:name="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment"
+                android:id="@+id/interestedMedicineList"
+                android:name="com.android.mediproject.feature.interestedmedicine.InterestedMedicineFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                />
-
-
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <FrameLayout
