@@ -82,7 +82,7 @@
                 app:title="@string/nickName" />
 
             <com.android.mediproject.core.ui.base.view.IntroButton
-                android:layout_width="@dimen/loginSignUpWidth"
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="50dp"
                 android:background="@color/main"
