@@ -2,7 +2,6 @@ package com.android.mediproject.feature.home
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -18,10 +17,15 @@ class HomeFragment() : BaseFragment<FragmentHomeBinding, HomeViewModel>(Fragment
 
     override val fragmentViewModel by viewModels<HomeViewModel>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSearchBar()
         initChildFragments()
+
     }
 
     /**
@@ -47,21 +51,20 @@ class HomeFragment() : BaseFragment<FragmentHomeBinding, HomeViewModel>(Fragment
     private fun initChildFragments() {
         // 아이템 클릭 시 처리 로직
         childFragmentManager.apply {
-            setFragmentResultListener(RecentSearchListFragment.ResultKey.SEARCH_HISTORY_QUERY_KEY.name) { _, bundle ->
-
-                bundle.apply {
-                    val result = getInt(RecentSearchListFragment.ResultKey.WORD.name)
-                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToManualSearchResultNav())
-                }
-            }
-            setFragmentResultListener(RecentCommentListFragment.ResultKey.RESULT_KEY.name) { _, bundle ->
+            setFragmentResultListener(RecentCommentListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
                 bundle.apply {
                     val result = getInt(RecentCommentListFragment.ResultKey.WORD.name)
                 }
             }
-            setFragmentResultListener(RecentPenaltyListFragment.ResultKey.RESULT_KEY.name) { _, bundle ->
+            setFragmentResultListener(RecentPenaltyListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
                 bundle.apply {
                     val result = getInt(RecentPenaltyListFragment.ResultKey.PENALTY_ID.name)
+                }
+            }
+            setFragmentResultListener(RecentSearchListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
+                bundle.apply {
+                    val result = getInt(RecentSearchListFragment.ResultKey.WORD.name)
+                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToManualSearchResultNav())
                 }
             }
         }

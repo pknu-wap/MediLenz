@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
@@ -23,7 +22,7 @@ class RecentSearchListFragment :
     BaseFragment<FragmentRecentSearchListBinding, RecentSearchListViewModel>(FragmentRecentSearchListBinding::inflate) {
 
     enum class ResultKey {
-        SEARCH_HISTORY_QUERY_KEY, WORD
+        RESULT_KEY, WORD
     }
 
     override val fragmentViewModel: RecentSearchListViewModel by viewModels()
@@ -51,8 +50,15 @@ class RecentSearchListFragment :
                     data = it
                     setChipText("검색어 $it")
                     setOnChipClickListener {
-                        it?.apply {
-                            setFragmentResult(ResultKey.SEARCH_HISTORY_QUERY_KEY.name, bundleOf(ResultKey.WORD.name to it))
+                        it?.also {
+                            parentFragmentManager.apply {
+                                setFragmentResult(
+                                    ResultKey.RESULT_KEY.name, bundleOf(
+                                        ResultKey.WORD.name to it
+                                    )
+                                )
+                            }
+
                         }
                     }
                 })

@@ -23,7 +23,7 @@ class SearchMedicinesFragment :
         initSearchBar()
 
         childFragmentManager.apply {
-            setFragmentResultListener(RecentSearchListFragment.ResultKey.SEARCH_HISTORY_QUERY_KEY.name) { _, bundle ->
+            setFragmentResultListener(RecentSearchListFragment.ResultKey.RESULT_KEY.name) { _, bundle ->
 
                 bundle.apply {
                     val result = getInt(RecentSearchListFragment.ResultKey.WORD.name)
