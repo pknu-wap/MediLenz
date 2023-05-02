@@ -7,7 +7,9 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.search"
-
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 hilt {
@@ -22,4 +24,6 @@ dependencies {
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.android.flexbox)
+
+
 }

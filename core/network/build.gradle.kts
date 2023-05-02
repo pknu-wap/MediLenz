@@ -13,6 +13,7 @@ android {
         buildConfig = true
     }
 }
+
 hilt {
     enableAggregatingTask = true
 }

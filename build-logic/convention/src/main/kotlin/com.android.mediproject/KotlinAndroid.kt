@@ -21,6 +21,8 @@ internal fun Project.configureKotlinAndroid(
             minSdk = 28
         }
 
+ 
+
         dataBinding.enable = true
         viewBinding.enable = true
 

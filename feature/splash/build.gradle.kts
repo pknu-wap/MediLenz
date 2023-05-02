@@ -6,6 +6,10 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.splash"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 hilt {
     enableAggregatingTask = true

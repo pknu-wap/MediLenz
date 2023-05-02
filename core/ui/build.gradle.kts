@@ -5,6 +5,9 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.core.ui"
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

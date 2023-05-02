@@ -19,6 +19,9 @@ android {
     }
     namespace = "com.android.mediproject"
 
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 hilt {

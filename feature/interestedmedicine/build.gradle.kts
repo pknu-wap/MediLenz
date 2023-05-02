@@ -6,6 +6,9 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.interestedmedicine"
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 hilt {
