@@ -9,14 +9,26 @@
     >
 
     <ImageView
-        android:id="@+id/imageView_medicine"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:id="@+id/imageView_captured_medicine"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/medicine_image"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toTopOf="@id/imageView_inferenced_medicine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/imageView_inferenced_medicine"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:contentDescription="@string/medicine_image"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView_captured_medicine"
         />
 
     <androidx.constraintlayout.widget.Barrier
@@ -25,7 +37,7 @@
         android:layout_height="wrap_content"
         app:barrierDirection="right"
         app:barrierMargin="8dp"
-        app:constraint_referenced_ids="imageView_medicine"
+        app:constraint_referenced_ids="imageView_captured_medicine, imageView_inferenced_medicine"
         />
 
     <TextView

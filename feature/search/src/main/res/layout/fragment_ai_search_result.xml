@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <data>
 
@@ -11,9 +13,45 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         >
 
+        <ImageView
+            android:id="@+id/captured_image_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="26dp"
+            android:background="@drawable/circle_image_background"
+            android:src="@drawable/logo"
+            app:layout_constraintBottom_toTopOf="@id/medicine_search_list_layout"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/detectioned_medicine_counts_text_view"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/detectioned_medicine_counts_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detectioned_medicine_counts"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@id/captured_image_view"
+            app:layout_constraintLeft_toRightOf="@id/captured_image_view"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/captured_image_view"
+            />
+
+
+        <include
+            android:id="@+id/medicine_search_list_layout"
+            layout="@layout/medicine_search_list_viewgroup"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/captured_image_view"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

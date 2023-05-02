@@ -22,6 +22,7 @@ internal fun Project.configureKotlinAndroid(
         }
 
         dataBinding.enable = true
+        viewBinding.enable = true
 
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_17

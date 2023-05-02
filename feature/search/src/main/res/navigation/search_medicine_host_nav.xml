@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_medicine_host_nav"
     app:startDestination="@id/searchMedicinesFragment">
 
@@ -8,6 +9,7 @@
 
     <fragment
         android:id="@+id/searchMedicinesFragment"
+        tools:layout="@layout/fragment_search_medicines_host"
         android:name="com.android.mediproject.feature.search.SearchMedicinesFragment"
         android:label="SearchMedicinesFragment">
 
@@ -19,7 +21,7 @@
             android:id="@+id/action_searchMedicinesFragment_to_manual_search_result_nav"
             app:destination="@id/manual_search_result_nav" />
     </fragment>
-    
+
     <include app:graph="@navigation/manual_search_result_nav" />
     <include app:graph="@navigation/ai_search_result_nav" />
 
