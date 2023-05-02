@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="8dp"
+    >
+
+    <ImageView
+        android:id="@+id/imageView_medicine"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="@string/medicine_image"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:barrierMargin="8dp"
+        app:constraint_referenced_ids="imageView_medicine"
+        />
+
+    <TextView
+        android:id="@+id/textView_medicine_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/medicine_name"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textView_main_ingredient"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+    <TextView
+        android:id="@+id/textView_main_ingredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/main_ingredient"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_main_effect"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+
+        app:layout_constraintTop_toBottomOf="@id/textView_medicine_name"
+        />
+
+    <TextView
+        android:id="@+id/textView_main_effect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/main_effect"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_manufacturer_name"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toBottomOf="@id/textView_main_ingredient"
+        />
+
+    <TextView
+        android:id="@+id/textView_manufacturer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/manufacturer_name"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toBottomOf="@id/textView_main_effect"
+        />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/textView_medicine_type"
+        style="@style/Widget.Material3.Chip.Assist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/medicine_type"
+        android:textColor="@color/medicine_type_chip_stroke_color"
+        android:textSize="13sp"
+        app:chipStrokeColor="@color/medicine_type_chip_stroke_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_min="wrap"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/textView_medicine_name"
+        app:layout_constraintTop_toTopOf="@id/textView_medicine_name"
+        app:layout_constraintWidth_min="wrap"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
