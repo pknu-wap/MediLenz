@@ -27,7 +27,9 @@ class SearchMedicinesFragment :
 
                 bundle.apply {
                     val result = getInt(RecentSearchListFragment.ResultKey.WORD.name)
-                    findNavController().navigate(SearchMedicinesFragmentDirections.actionSearchMedicinesFragmentToManualSearchResultNav())
+                    findNavController().apply {
+                        navigate(SearchMedicinesFragmentDirections.actionSearchMedicinesFragmentToManualSearchResultNav())
+                    }
                 }
             }
         }

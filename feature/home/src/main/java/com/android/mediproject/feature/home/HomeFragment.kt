@@ -12,19 +12,14 @@ import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListF
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment() : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHomeBinding::inflate) {
+class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHomeBinding::inflate) {
 
     override val fragmentViewModel by viewModels<HomeViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSearchBar()
         initChildFragments()
-
     }
 
     /**
@@ -32,7 +27,9 @@ class HomeFragment() : BaseFragment<FragmentHomeBinding, HomeViewModel>(Fragment
      */
     private fun initSearchBar() {
         binding.searchView.setOnBarClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchMedicineHostNav())
+            findNavController().apply {
+                navigate(HomeFragmentDirections.actionHomeFragmentToSearchMedicineHostNav())
+            }
         }
     }
 
