@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define('User', {
+    return sequelize.define('User', {
         UserId: {
             field: 'ID',
             type: DataTypes.INTEGER,
@@ -27,6 +27,14 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true,
         tableName: 'DB_USER',
         timestamps: true,
+        hooks: {
+            beforeCreate: async (user, options) => {
+                const result = await sequelize.query('SELECT USER_ID_SEQ.NEXTVAL AS ID FROM DUAL', {
+                    type: sequelize.QueryTypes.SELECT
+                });
+                // User 객체의 ID와 DB_USER의 ID 매핑
+                user.UserId = result[0].ID;
+            },
+        }
     });
-    return User;
 }
