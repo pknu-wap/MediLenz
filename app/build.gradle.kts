@@ -22,6 +22,11 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
+    lint {
+        checkDependencies = true
+        ignoreTestSources = true
+    }
 }
 
 hilt {
