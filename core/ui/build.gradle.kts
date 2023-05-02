@@ -17,4 +17,5 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.bundles.uiAndroidx)
+    implementation(libs.bundles.materials)
 }

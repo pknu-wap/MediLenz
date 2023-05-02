@@ -19,8 +19,6 @@ dependencies {
     implementation(project(":feature:search"))
     implementation(project(":feature:comments"))
     implementation(project(":feature:penalties"))
-    implementation(project(":core:common"))
-    implementation(project(":core:common"))
 
     implementation(libs.bundles.glides)
     implementation(libs.bundles.kotlins)

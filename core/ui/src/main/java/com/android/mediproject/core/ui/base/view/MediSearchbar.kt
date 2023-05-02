@@ -6,6 +6,8 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.MotionEvent
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,6 +23,7 @@ class MediSearchbar constructor(
     private val searchEditView: EditText
     private val searchManualBtnView: ImageView
     private val searchAiBtnView: TextView
+    private val isAllBtn: Boolean
 
     interface SearchQueryCallback {
         fun onSearchQuery(query: String)
@@ -40,6 +43,8 @@ class MediSearchbar constructor(
                 )
                 val aiFontSize = typedArr.getDimension(R.styleable.MediSearchbar_ai_btn_font_size, 12f)
                 val titleFontSize = typedArr.getDimension(R.styleable.MediSearchbar_hint_font_size, 13f)
+                // true시 MediSearchbar는 버튼의 기능을 하게 된다.
+                isAllBtn = typedArr.getBoolean(R.styleable.MediSearchbar_is_all_btn, false)
 
                 val verticalSpace = context.resources.getDimension(R.dimen.search_bar_vertical_space).toInt()
                 val horizontalSpace = context.resources.getDimension(R.dimen.search_bar_horizontal_space).toInt()
@@ -47,12 +52,15 @@ class MediSearchbar constructor(
                 // search btn
                 searchManualBtnView = ImageView(context).apply {
                     setImageDrawable(searchIcon)
-                    isClickable = true
-                    
-                    // 투명 배경에 ripple 효과를 주기 위함
-                    val outValue = TypedValue()
-                    context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-                    setBackgroundResource(outValue.resourceId)
+
+                    isClickable = !isAllBtn
+
+                    if (!isAllBtn) {
+                        // 투명 배경에 ripple 효과를 주기 위함
+                        val outValue = TypedValue()
+                        context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+                        setBackgroundResource(outValue.resourceId)
+                    }
 
                     layoutParams =
                         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 28f, resources.displayMetrics).toInt().let { size ->
@@ -78,7 +86,14 @@ class MediSearchbar constructor(
                             }
                         }
 
-                    isClickable = true
+                    if (isAllBtn) {
+                        visibility = View.GONE
+
+
+                    }
+
+                    isClickable = !isAllBtn
+
                     text = aiTitle
                     setTextColor(Color.WHITE)
                     textSize = aiFontSize
@@ -117,12 +132,25 @@ class MediSearchbar constructor(
                     textSize = titleFontSize
                     id = 10
 
+                    if (isAllBtn) {
+                        isEnabled = false
+                        isClickable = true
+                    }
+
                     maxLines = 1
+                    isSingleLine = true
+
                     background = null
                 }
 
                 this.apply {
-                    setBackgroundResource(R.drawable.search_bar)
+
+                    if (isAllBtn) {
+                        setBackgroundResource(R.drawable.clickable_search_bar)
+                        isClickable = true
+                    } else {
+                        setBackgroundResource(R.drawable.not_clickable_search_bar)
+                    }
 
                     clipChildren = false
                     clipToPadding = false
@@ -159,9 +187,27 @@ class MediSearchbar constructor(
     }
 
     /**
+     * 검색 바가 버튼 전용으로 설정된 경우에만 설정됩니다.
+     */
+    fun setOnBarClickListener(listener: OnClickListener) {
+        if (isAllBtn) {
+            setOnClickListener(listener)
+        }
+    }
+
+    /**
      * 버튼 클릭 시 다음 화면으로 넘어가도록 요청한다.
      */
     fun setOnSearchAiBtnClickListener(listener: OnClickListener) {
         searchAiBtnView.setOnClickListener(listener)
+    }
+
+    // edittext를 클릭시 서치바가 클릭되도록 한다.
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        return if (isAllBtn) {
+            true
+        } else {
+            super.onInterceptTouchEvent(ev)
+        }
     }
 }

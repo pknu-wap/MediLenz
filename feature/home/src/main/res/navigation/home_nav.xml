@@ -19,12 +19,16 @@
         <action
             android:id="@+id/action_homeFragment_to_manual_search_result_nav"
             app:destination="@id/manual_search_result_nav" />
-
+        <action
+            android:id="@+id/action_homeFragment_to_search_medicine_host_nav"
+            app:destination="@id/search_medicine_host_nav" />
+        
     </fragment>
 
     <deepLink app:uri="medilens://main/home_nav" />
 
     <include app:graph="@navigation/manual_search_result_nav" />
     <include app:graph="@navigation/ai_search_result_nav" />
+    <include app:graph="@navigation/search_medicine_host_nav" />
 
 </navigation>

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="title" format="string|reference"/>
+    <attr name="title" format="string|reference" />
 
     <declare-styleable name="Bar">
-        <attr name="showBackButton" format="boolean"/>
-        <attr name="title"/>
+        <attr name="showBackButton" format="boolean" />
+        <attr name="title" />
         <attr name="setTheme" format="enum">
-            <enum name="blue" value="0"/>
-            <enum name="white" value="1"/>
+            <enum name="blue" value="0" />
+            <enum name="white" value="1" />
         </attr>
     </declare-styleable>
 
     <declare-styleable name="Subtitle">
-        <attr name="title"/>
-        <attr name="redPoint" format="boolean"/>
-        <attr name="edtHint" format="string|reference"/>
+        <attr name="title" />
+        <attr name="redPoint" format="boolean" />
+        <attr name="edtHint" format="string|reference" />
     </declare-styleable>
 
     <declare-styleable name="MediSearchbar">
@@ -24,6 +24,7 @@
         <attr name="camera_icon" format="reference" />
         <attr name="hint_font_size" format="dimension|reference" />
         <attr name="ai_btn_font_size" format="dimension|reference" />
+        <attr name="is_all_btn" format="boolean" />
     </declare-styleable>
 
 

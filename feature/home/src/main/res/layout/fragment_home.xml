@@ -108,6 +108,7 @@
             android:layout_marginHorizontal="38dp"
             app:ai_text="@string/search_with_ai"
             app:camera_icon="@drawable/baseline_camera_24"
+            app:is_all_btn="true"
             app:layout_constraintBottom_toBottomOf="@id/header_layout"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
