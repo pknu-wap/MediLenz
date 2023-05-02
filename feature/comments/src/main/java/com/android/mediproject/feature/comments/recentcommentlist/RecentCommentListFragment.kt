@@ -22,6 +22,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class RecentCommentListFragment :
     BaseFragment<FragmentRecentCommentListBinding, RecentCommentListViewModel>(FragmentRecentCommentListBinding::inflate) {
+    enum class ResultKey {
+        RESULT_KEY, WORD
+    }
 
     override val fragmentViewModel: RecentCommentListViewModel by viewModels()
     private val commentListAdapter = RecentCommentListAdapter()
@@ -51,11 +54,9 @@ class RecentCommentListFragment :
      * 확장 버튼 리스너, 더 보기 버튼 리스너
      */
     private fun initHeader() {
-        binding.headerView.setOnExpandClickListener {
-        }
+        binding.headerView.setOnExpandClickListener {}
 
-        binding.headerView.setOnMoreClickListener {
-        }
+        binding.headerView.setOnMoreClickListener {}
     }
 }
 

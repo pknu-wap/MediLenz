@@ -3,8 +3,9 @@ package com.android.mediproject.feature.search.recentsearchlist
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
 import com.android.mediproject.feature.search.databinding.FragmentRecentSearchListBinding
@@ -20,6 +21,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class RecentSearchListFragment :
     BaseFragment<FragmentRecentSearchListBinding, RecentSearchListViewModel>(FragmentRecentSearchListBinding::inflate) {
+
+    enum class ResultKey {
+        SEARCH_HISTORY_QUERY_KEY, WORD
+    }
 
     override val fragmentViewModel: RecentSearchListViewModel by viewModels()
 
@@ -47,10 +52,7 @@ class RecentSearchListFragment :
                     setChipText("검색어 $it")
                     setOnChipClickListener {
                         it?.apply {
-                            toast(this.toString())
-                            findNavController().apply {
-                                navigate(RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultNav())
-                            }
+                            setFragmentResult(ResultKey.SEARCH_HISTORY_QUERY_KEY.name, bundleOf(ResultKey.WORD.name to it))
                         }
                     }
                 })

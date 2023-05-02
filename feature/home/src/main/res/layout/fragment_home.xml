@@ -63,13 +63,11 @@
                 >
 
                 <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/recent_search_list_fragment_container"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
+                    android:id="@+id/recent_search_list_fragment"
+                    android:name="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
-                    app:defaultNavHost="false"
-                    app:navGraph="@navigation/recent_search_history_nav"
                     />
 
 
@@ -80,13 +78,10 @@
                     />
 
                 <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/recent_comment_list_fragment_container"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
+                    android:id="@+id/recent_comment_list_fragment"
+                    android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:defaultNavHost="false"
-                    app:navGraph="@navigation/recent_comments_nav"
-
                     />
 
                 <com.google.android.material.divider.MaterialDivider
@@ -97,12 +92,10 @@
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/penalty_list_fragment_container"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
+                    android:name="com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/divider_margin_vertical"
-                    app:defaultNavHost="false"
-                    app:navGraph="@navigation/recent_penalties_nav"
                     />
 
             </LinearLayout>

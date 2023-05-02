@@ -2,11 +2,13 @@ package com.android.mediproject.feature.search
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.MediSearchbar
 import com.android.mediproject.feature.search.databinding.FragmentSearchMedicinesHostBinding
+import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,6 +21,16 @@ class SearchMedicinesFragment :
         super.onViewCreated(view, savedInstanceState)
         // contents_fragment_container_view 에 최근 검색 목록과 검색 결과 목록 화면 두 개를 띄운다.
         initSearchBar()
+
+        childFragmentManager.apply {
+            setFragmentResultListener(RecentSearchListFragment.ResultKey.SEARCH_HISTORY_QUERY_KEY.name) { _, bundle ->
+
+                bundle.apply {
+                    val result = getInt(RecentSearchListFragment.ResultKey.WORD.name)
+                    findNavController().navigate(SearchMedicinesFragmentDirections.actionSearchMedicinesFragmentToManualSearchResultNav())
+                }
+            }
+        }
     }
 
     /**
