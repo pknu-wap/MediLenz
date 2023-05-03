@@ -29,9 +29,10 @@ class SettingBar @JvmOverloads constructor(
         arrow = findViewById<ImageView>(R.id.settingBarIV)
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingBar)
+        val arrowVisible = typedArray.getBoolean(R.styleable.SettingBar_showArrow, true)
 
         title.text = typedArray.getString(R.styleable.SettingBar_title) ?: ""
-        arrow.visibility = when (typedArray.getBoolean(R.styleable.SettingBar_showArrow, true)) {
+        arrow.visibility = when (arrowVisible) {
             true -> View.VISIBLE
             else -> View.INVISIBLE
         }

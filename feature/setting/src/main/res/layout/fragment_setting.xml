@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.setting.SettingViewModel" />
@@ -38,8 +37,34 @@
                 android:layout_height="wrap_content"
                 app:showArrow="true"
                 app:title="@string/notice"/>
+
+            <com.android.mediproject.core.ui.base.view.SettingBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:showArrow="true"
+                android:layout_marginTop="25dp"
+                app:title="@string/introduce"/>
+
+            <com.android.mediproject.core.ui.base.view.SettingBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:showArrow="true"
+                android:layout_marginTop="25dp"
+                app:title="@string/policy"/>
+
+            <com.android.mediproject.core.ui.base.view.SettingBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:showArrow="true"
+                android:layout_marginTop="25dp"
+                app:title="@string/privacy"/>
+
+            <com.android.mediproject.core.ui.base.view.SettingBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:showArrow="true"
+                android:layout_marginTop="25dp"
+                app:title="@string/communicate"/>
         </LinearLayout>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
