@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.home"
-    
+
     buildFeatures {
         buildConfig = true
     }
@@ -20,6 +20,7 @@ hilt {
 dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
+    implementation(project(":core:model"))
     implementation(project(":feature:search"))
     implementation(project(":feature:comments"))
     implementation(project(":feature:penalties"))

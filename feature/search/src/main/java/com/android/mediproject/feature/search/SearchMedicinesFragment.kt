@@ -5,6 +5,10 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.common.util.decodeFromjsonString
+import com.android.mediproject.core.common.util.encodeToJsonString
+import com.android.mediproject.core.model.searchmedicines.SearchQuery
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.MediSearchbar
 import com.android.mediproject.feature.search.databinding.FragmentSearchMedicinesBinding
@@ -12,6 +16,8 @@ import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListF
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import repeatOnStarted
 
 @AndroidEntryPoint
@@ -27,11 +33,15 @@ class SearchMedicinesFragment :
         // contents_fragment_container_view 에 최근 검색 목록과 검색 결과 목록 화면 두 개를 띄운다.
         initSearchBar()
 
+        Json.decodeFromString<SearchQuery>(" ").also {
+        }
+
         arguments?.apply {
-            getString("searchWord")?.apply {
-                binding.searchView.searchWithQuery(this)
+            getString("SearchQuery")?.decodeFromjsonString(SearchQuery)?.also {
+                binding.searchView.searchWithQuery(query = it)
             }
         }
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnStarted {
@@ -54,12 +64,15 @@ class SearchMedicinesFragment :
                     ) { _, bundle ->
 
                         bundle.apply {
-                            getString(RecentSearchListFragment.ResultKey.WORD.name)?.apply {
-                                binding.searchView.searchWithQuery(this)
+                            getString(RecentSearchListFragment.ResultKey.WORD.name).also {
+                                Bundle().apply {
+                                    SearchQuery(it).encodeToJsonString().apply {
+                                        putString("SearchQuery", this)
+                                    }
+                                    findNavController().navigate(R.id.action_recentSearchListFragment_to_manualSearchResultFragment, this)
+                                }
                             }
 
-                            binding.contentsFragmentContainerView.findNavController()
-                                .navigate(RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment())
                         }
                     }
                 }
@@ -75,7 +88,7 @@ class SearchMedicinesFragment :
 
         binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
             override fun onSearchQuery(query: String) {
-
+                fragmentViewModel.searchMedicines(query)
             }
 
             override fun onEmptyQuery() {

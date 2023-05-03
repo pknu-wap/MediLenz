@@ -30,12 +30,6 @@
         android:label="SearchMedicinesFragment"
         tools:layout="@layout/fragment_search_medicines">
 
-        <argument
-            android:name="SearchQuery"
-            app:argType="string"
-            app:nullable="true" />
-
-
     </fragment>
 
     <include app:graph="@navigation/search_medicines_nav" />

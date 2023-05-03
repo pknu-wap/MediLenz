@@ -179,6 +179,8 @@ material-main = { module = "com.google.android.material:material", version.ref =
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
+kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+
 # 라이브러리들을 묶어서 한번에 선언------------------------------------------------------------------------------------------------------------------------
 [bundles]
 
@@ -202,7 +204,8 @@ retrofits = ["retrofit-core", "retrofit-kotlinx-serialization"]
 
 navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-compose", "androidx-navigation-dynamic"]
 
-kotlins = ["kotlin-stdlib-jdk7", "kotlin-stdlib-jdk8", "kotlin-stdlib-root", "kotlinx-coroutines-android", "kotlinx-serialization-json", "kotlinx-datetime"]
+kotlins = ["kotlin-stdlib-jdk7", "kotlin-stdlib-jdk8", "kotlin-stdlib-root", "kotlinx-coroutines-android", "kotlinx-serialization-json",
+    "kotlinx-datetime", "kotlin-reflection"]
 
 materials = ["material-main", "androidx-compose-material3", "androidx-compose-material3-windowSizeClass"]
 
@@ -237,3 +240,5 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 # for Navigation
 nav-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidxNavigation" }
+
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

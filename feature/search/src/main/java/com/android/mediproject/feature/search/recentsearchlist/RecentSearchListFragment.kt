@@ -43,11 +43,11 @@ class RecentSearchListFragment :
             val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
 
             repeat(5) {
-                this.searchHistoryList.addView(ButtonChip<Int>(requireContext()).apply {
+                this.searchHistoryList.addView(ButtonChip<String>(requireContext()).apply {
                     layoutParams = FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
                         setMargins(horizontalSpace, 0, horizontalSpace, 0)
                     }
-                    data = it
+                    data = it.toString()
                     setChipText("검색어 $it")
                     setOnChipClickListener {
                         it?.also {
