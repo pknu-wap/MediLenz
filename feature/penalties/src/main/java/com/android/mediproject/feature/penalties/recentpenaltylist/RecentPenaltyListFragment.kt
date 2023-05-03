@@ -34,7 +34,7 @@ class RecentPenaltyListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            this.penaltyList.adapter = penaltyListAdapter
+            // this.penaltyList.adapter = penaltyListAdapter
         }
         addPenaltyItems()
         initHeader()

@@ -27,7 +27,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
      */
     private fun initSearchBar() {
         binding.searchView.setOnBarClickListener {
-            HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment(SearchQuery = null, goToManualSearchResult = false).apply {
+            HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment(SearchQuery = null).apply {
                 findNavController().navigate(this)
             }
         }
@@ -49,7 +49,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
             setFragmentResultListener(RecentSearchListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
                 bundle.apply {
                     val result = getString(RecentSearchListFragment.ResultKey.WORD.name)
-                    HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment(SearchQuery = result, goToManualSearchResult = false)
+                    HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment(SearchQuery = result)
                         .apply {
                             findNavController().navigate(this)
                         }

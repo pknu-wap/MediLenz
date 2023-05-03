@@ -118,17 +118,18 @@
                 android:layout_marginTop="18dp"
                 android:background="@color/white"
                 app:tabGravity="fill"
+                app:tabTextColor="@color/black"
                 app:tabIndicatorColor="@color/design_default_color_primary"
-                app:tabMode="fixed"
                 />
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/content_fragment_container_view"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/content_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
+            android:orientation="horizontal"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             />
 

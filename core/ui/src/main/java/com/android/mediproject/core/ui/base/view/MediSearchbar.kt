@@ -187,6 +187,14 @@ class MediSearchbar constructor(
     }
 
     /**
+     * 매개변수로 받은 검색어를 검색창에 입력하고 검색 버튼을 클릭합니다.
+     */
+    fun searchWithQuery(query: String) {
+        searchEditView.setText(query)
+        searchManualBtnView.callOnClick()
+    }
+
+    /**
      * 검색 바가 버튼 전용으로 설정된 경우에만 설정됩니다.
      */
     fun setOnBarClickListener(listener: OnClickListener) {

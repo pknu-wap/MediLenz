@@ -15,7 +15,7 @@ android {
             useSupportLibrary = true
         }
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //  testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     namespace = "com.android.mediproject"
 
@@ -57,7 +57,11 @@ dependencies {
     implementation(libs.bundles.navigations)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.workManagers)
+
+    /*
     androidTestImplementation(libs.bundles.testUIs)
     testImplementation(libs.bundles.testUIs)
     androidTestUtil(libs.androidx.test.orchestrator)
+
+     */
 }

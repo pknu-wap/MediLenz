@@ -7,6 +7,7 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfoBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.Tab
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,14 +22,30 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
     // 탭 레이아웃 초기화
     private fun initTabs() {
-        listOf(
-            getString(R.string.default_info), getString(R.string.indentifying_info), getString(R.string.precautions), getString(
-                R.string.comment
-            )
-        ).map {
-            Tab().apply {
-                text = it
-                binding.tabLayout.addTab(this)
+
+        binding.apply {
+            contentViewpager.adapter = MedicineInfoPageAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+            
+            resources.getStringArray(R.array.medicine_info_tab).also { tabTextList ->
+                TabLayoutMediator(tabLayout, contentViewpager) { tab, position ->
+                    when (position) {
+                        0 -> {
+                            tab.text = tabTextList[0]
+                        }
+
+                        1 -> {
+                            tab.text = tabTextList[1]
+                        }
+
+                        2 -> {
+                            tab.text = tabTextList[2]
+                        }
+
+                        3 -> {
+                            tab.text = tabTextList[2]
+                        }
+                    }
+                }.attach()
             }
         }
 
@@ -44,7 +61,6 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             override fun onTabReselected(tab: Tab?) {
                 TODO("Not yet implemented")
             }
-
         })
     }
 }

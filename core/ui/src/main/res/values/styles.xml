@@ -17,4 +17,12 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Chip.Selectable" parent="Widget.Material3.Chip.Filter">
+        <item name="chipStrokeColor">@color/blue_chip</item>
+        <item name="chipBackgroundColor">@color/filter_chip_background</item>
+        <item name="android:textColor">@color/filter_chip_text</item>
+        <item name="chipCornerRadius">36dp</item>
+    </style>
+
 </resources>

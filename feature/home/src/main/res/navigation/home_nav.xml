@@ -34,10 +34,7 @@
             android:name="SearchQuery"
             app:argType="string"
             app:nullable="true" />
-        <argument
-            android:name="goToManualSearchResult"
-            android:defaultValue="false"
-            app:argType="boolean" />
+
 
     </fragment>
 

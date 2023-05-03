@@ -1,29 +1,23 @@
 package com.android.mediproject.feature.search
 
+import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchMedicinesViewModel @Inject constructor() : BaseViewModel() {
+    private val _searchWord = MutableSharedFlow<String>(replay = 1)
+    val searchWord: SharedFlow<String> = _searchWord
 
-    private val _searchWord = MutableStateFlow("")
-    val searchWord
-        get() = _searchWord.asStateFlow()
-
-    private val _goToManualSearchResult = MutableStateFlow(false)
-    val goToManualSearchResult
-        get() = _goToManualSearchResult.asStateFlow()
-
-    /**
-     * 검색어와 검색 결과 화면으로 진입할지 여부를 초기화합니다.
-     */
-    fun init(searchWord: String?, goToManualSearchResult: Boolean) {
-        searchWord?.let {
-            _searchWord.value = it
+    fun searchMedicines(query: String) {
+        viewModelScope.launch {
+            _searchWord.emit(query)
+            
         }
-        _goToManualSearchResult.value = goToManualSearchResult
     }
+
 }
