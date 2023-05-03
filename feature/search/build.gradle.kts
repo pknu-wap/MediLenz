@@ -25,5 +25,4 @@ dependencies {
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.android.flexbox)
 
-
 }

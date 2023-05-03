@@ -32,7 +32,7 @@ class RecentCommentListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            commentList.adapter = commentListAdapter
+            // commentList.adapter = commentListAdapter
         }
         addCommentItems()
         initHeader()

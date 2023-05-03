@@ -21,15 +21,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
 
-                <data android:scheme="medilens" />
-                <data android:host="search" />
-
-                <data android:host="search/ai_result" />
-
-                <data android:host="search/manual_result" />
-
-                <data android:host="search/my_history" />
             </intent-filter>
+
+            <nav-graph android:value="@navigation/home_nav" />
+            <nav-graph android:value="@navigation/community_nav" />
+            <nav-graph android:value="@navigation/intro_nav" />
+            <nav-graph android:value="@navigation/mypage_nav" />
+            <nav-graph android:value="@navigation/setting_nav" />
+            <nav-graph android:value="@navigation/search_medicines_nav" />
         </activity>
     </application>
 
