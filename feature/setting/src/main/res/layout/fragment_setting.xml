@@ -24,7 +24,7 @@
             app:showBackButton="false"
             app:title="@string/setting" />
 
-        
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
