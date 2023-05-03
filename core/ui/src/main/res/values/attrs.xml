@@ -27,6 +27,11 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="SettingBar">
+        <attr name="title"/>
+        <attr name="showArrow" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="MediSearchbar">
         <attr name="search_hint" format="string|reference" />
         <attr name="ai_text" format="string|reference" />
