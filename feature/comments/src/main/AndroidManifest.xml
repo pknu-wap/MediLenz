@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.android.mediproject.feature.comments" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.android.mediproject.feature.comments">
+
+    <application android:theme="@style/Theme.MediProject" />
+
+</manifest>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp"
+        >
+
+        <ImageView
+            android:id="@+id/userProfileImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/logo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/userNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:ellipsize="marquee"
+            android:maxLines="1"
+            android:text="userName"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/userProfileImageView"
+            app:layout_constraintLeft_toRightOf="@id/userProfileImageView"
+            app:layout_constraintRight_toLeftOf="@id/likeButton"
+            app:layout_constraintTop_toTopOf="@id/userProfileImageView"
+            />
+
+        <ImageView
+            android:id="@+id/replyButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?attr/selectableItemBackground"
+            android:backgroundTint="@color/replyButtonColor"
+            android:clickable="true"
+            android:contentDescription="@string/replyComment"
+            android:src="@drawable/outline_add_comment_24"
+            app:layout_constraintBottom_toBottomOf="@id/userProfileImageView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/userProfileImageView"
+            />
+
+        <ImageView
+            android:id="@+id/likeButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:backgroundTint="@color/likeButtonColor"
+            android:clickable="true"
+            android:contentDescription="@string/likeComment"
+            android:src="@drawable/outline_thumb_up_24"
+            app:layout_constraintBottom_toBottomOf="@id/userProfileImageView"
+            app:layout_constraintRight_toLeftOf="@id/replyButton"
+            app:layout_constraintTop_toTopOf="@id/userProfileImageView"
+            />
+
+        <TextView
+            android:id="@+id/commentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:text="comment"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            app:layout_constraintTop_toBottomOf="@id/userProfileImageView"
+            />
+
+        <TextView
+            android:id="@+id/dateTimeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="dateTime"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/commentTextView"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

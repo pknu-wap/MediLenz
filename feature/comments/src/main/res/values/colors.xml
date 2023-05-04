@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="replyButtonColor">#808080</color>
+    <color name="likeButtonColor">#808080</color>
+</resources>
