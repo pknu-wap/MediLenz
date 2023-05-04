@@ -45,4 +45,7 @@ class Subtitle @JvmOverloads constructor(
 
         typedArray.recycle()
     }
+
+    //EditText에 적은 값을 불러오는 함수
+    fun getValue() : String = inputData.text.toString()
 }
