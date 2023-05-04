@@ -28,7 +28,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding,LoginViewModel>(Fragment
         is LoginViewModel.LoginEvent.Login -> {
             val id = binding.loginEmail.getValue()
             val password = binding.loginPassword.getValue()
-            log(id + password) }
+            log("아이디 : "+id +" 비밀번호 : "+password) }
+
         is LoginViewModel.LoginEvent.SignUp -> {
             log("회원가입")
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment()) }

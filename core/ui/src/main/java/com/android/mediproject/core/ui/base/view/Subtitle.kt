@@ -1,6 +1,7 @@
 package com.android.mediproject.core.ui.base.view
 
 import android.content.Context
+import android.text.InputType
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,11 @@ class Subtitle @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    companion object{
+        const val NORMAL = 0
+        const val PASSWORD = 1
+    }
 
     lateinit var title : TextView
     lateinit var redPoint : TextView
@@ -35,12 +41,17 @@ class Subtitle @JvmOverloads constructor(
         val titleText = typedArray.getString(R.styleable.Subtitle_title) ?: ""
         val point = typedArray.getBoolean(R.styleable.Subtitle_redPoint, true)
         val hintText = typedArray.getString(R.styleable.Subtitle_edtHint) ?: ""
+        val dataType = typedArray.getInt(R.styleable.Subtitle_dataType,NORMAL)
 
         title.text = titleText
         inputData.hint = hintText
         redPoint.visibility = when(point){
             true -> View.VISIBLE
             else -> View.INVISIBLE
+        }
+
+        if(dataType == PASSWORD) {
+            inputData.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
 
         typedArray.recycle()

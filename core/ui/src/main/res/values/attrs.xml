@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="title" format="string|reference"/>
+    <attr name="title" format="string|reference" />
 
     <declare-styleable name="Bar">
-        <attr name="showBackButton" format="boolean"/>
-        <attr name="title"/>
+        <attr name="showBackButton" format="boolean" />
+        <attr name="title" />
         <attr name="setTheme" format="enum">
-            <enum name="blue" value="0"/>
-            <enum name="white" value="1"/>
+            <enum name="blue" value="0" />
+            <enum name="white" value="1" />
         </attr>
     </declare-styleable>
 
     <declare-styleable name="Subtitle">
-        <attr name="title"/>
-        <attr name="redPoint" format="boolean"/>
-        <attr name="edtHint" format="string|reference"/>
+        <attr name="title" />
+        <attr name="redPoint" format="boolean" />
+        <attr name="edtHint" format="string|reference" />
+        <attr name="dataType" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="password" value="1" />
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="IntroButton">
-        <attr name="title"/>
-        <attr name="button_icon" format="reference"/>
-        <attr name="setTitleColor" format="reference"/>
+        <attr name="title" />
+        <attr name="button_icon" format="reference" />
+        <attr name="setTitleColor" format="reference" />
         <attr name="setStroke" format="enum">
-            <enum name="normal" value="0"/>
-            <enum name="white" value="1"/>
+            <enum name="normal" value="0" />
+            <enum name="white" value="1" />
         </attr>
     </declare-styleable>
 
     <declare-styleable name="SettingBar">
-        <attr name="title"/>
-        <attr name="showArrow" format="boolean"/>
+        <attr name="title" />
+        <attr name="showArrow" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="MediSearchbar">
