@@ -33,8 +33,6 @@ class LoginFragment :
             //Todo
         }
 
-        is LoginViewModel.LoginEvent.SignUp -> {
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
-        }
+        is LoginViewModel.LoginEvent.SignUp -> findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
     }
 }
