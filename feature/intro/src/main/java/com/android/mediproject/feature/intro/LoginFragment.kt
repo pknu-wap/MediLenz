@@ -25,7 +25,7 @@ class LoginFragment :
         }
     }
 
-    fun handleEvent(event: LoginViewModel.LoginEvent) = when (event) {
+    private fun handleEvent(event: LoginViewModel.LoginEvent) = when (event) {
         is LoginViewModel.LoginEvent.Login -> {
             val id = binding.loginEmail.getValue()
             val password = binding.loginPassword.getValue()

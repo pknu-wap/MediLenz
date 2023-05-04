@@ -24,7 +24,7 @@ class IntroFragment :
         }
     }
 
-    fun handleEvent(event: IntroViewModel.IntroEvent) = when (event) {
+    private fun handleEvent(event: IntroViewModel.IntroEvent) = when (event) {
         is IntroViewModel.IntroEvent.NonMemberLogin -> {
             val request = NavDeepLinkRequest.Builder
                 .fromUri("medilens://main/home_nav".toUri())

@@ -23,7 +23,9 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(Frag
         }
     }
 
-    fun handleEvent(event: SignUpViewModel.SignUpEvent) = when (event) {
-        else -> {}
+    private fun handleEvent(event: SignUpViewModel.SignUpEvent) = when (event) {
+        is SignUpViewModel.SignUpEvent.SignUpComplete -> {
+
+        }
     }
 }
