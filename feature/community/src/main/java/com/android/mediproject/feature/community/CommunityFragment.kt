@@ -20,7 +20,7 @@ class CommunityFragment :
         }
     }
 
-    fun handleEvent(event: CommunityViewModel.CommunityEvent) = when (event) {
+    private fun handleEvent(event: CommunityViewModel.CommunityEvent) = when (event) {
         else -> {}
     }
 }

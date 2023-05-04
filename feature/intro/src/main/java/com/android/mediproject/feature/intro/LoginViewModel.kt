@@ -15,7 +15,11 @@ class LoginViewModel @Inject constructor() : BaseViewModel() {
 
     fun event(event: LoginEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
-    sealed class LoginEvent {
+    fun login() = event(LoginEvent.Login())
+    fun signUp() = event(LoginEvent.SignUp())
 
+    sealed class LoginEvent {
+        data class Login(val unit: Unit? = null) : LoginEvent()
+        data class SignUp(val unit: Unit? = null) : LoginEvent()
     }
 }

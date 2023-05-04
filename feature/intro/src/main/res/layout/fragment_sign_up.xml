@@ -59,6 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                app:dataType="password"
                 app:edtHint="@string/passwordHint"
                 app:redPoint="true"
                 app:title="@string/password" />
@@ -68,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                app:dataType="password"
                 app:edtHint="@string/passwordHint"
                 app:redPoint="true"
                 app:title="@string/checkedPassword" />
@@ -86,6 +88,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="50dp"
                 android:background="@color/main"
+                android:onClick="@{()->viewModel.signUpComplete()}"
                 app:setStroke="normal"
                 app:setTitleColor="@color/white"
                 app:title="완료" />
