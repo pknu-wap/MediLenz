@@ -1,23 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.setting.SettingViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SettingFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/settingBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setTheme="white"
+            app:showBackButton="false"
+            app:title="@string/setting" />
 
-    </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/settingBar">
+
+            <com.android.mediproject.core.ui.base.view.SettingBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.notice()}"
+                app:showArrow="true"
+                app:title="@string/notice" />
+
+            <com.android.mediproject.core.ui.base.view.SettingBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:onClick="@{() -> viewModel.introduce()}"
+                app:showArrow="true"
+                app:title="@string/introduce" />
+
+            <com.android.mediproject.core.ui.base.view.SettingBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:onClick="@{() -> viewModel.policy()}"
+                app:showArrow="true"
+                app:title="@string/policy" />
+
+            <com.android.mediproject.core.ui.base.view.SettingBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:onClick="@{() -> viewModel.privacy()}"
+                app:showArrow="true"
+                app:title="@string/privacy" />
+
+            <com.android.mediproject.core.ui.base.view.SettingBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:onClick="@{() -> viewModel.communicate()}"
+                app:showArrow="true"
+                app:title="@string/communicate" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
