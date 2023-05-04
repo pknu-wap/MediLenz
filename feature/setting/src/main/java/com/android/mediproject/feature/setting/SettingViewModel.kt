@@ -10,9 +10,13 @@ class SettingViewModel : BaseViewModel() {
     private val _eventFlow = MutableEventFlow<SettingEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
-    fun event(event : SettingEvent) = viewModelScope.launch{ _eventFlow.emit(event)}
-
-    sealed class SettingEvent{
-
+    fun event(event: SettingEvent) = viewModelScope.launch { _eventFlow.emit(event) }
+    
+    sealed class SettingEvent {
+        data class Notice(val unit : Unit? = null) : SettingEvent()
+        data class Introduce(val unit : Unit? = null) : SettingEvent()
+        data class Policy(val unit : Unit? = null) : SettingEvent()
+        data class Privacy(val unit : Unit? = null) : SettingEvent()
+        data class Communicate(val unit : Unit? = null) : SettingEvent()
     }
 }
