@@ -1,5 +1,7 @@
 package com.android.mediproject.feature.setting
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -20,11 +22,20 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, SettingViewModel>(F
         }
     }
 
-    fun handleEvent(event: SettingViewModel.SettingEvent) = when (event) {
-        is SettingViewModel.SettingEvent.Notice -> { log("공지사항")}
-        is SettingViewModel.SettingEvent.Privacy -> { log("개인정보처리방침")}
-        is SettingViewModel.SettingEvent.Policy -> { log("정책") }
-        is SettingViewModel.SettingEvent.Communicate -> { log("문의/소통하기") }
-        is SettingViewModel.SettingEvent.Introduce -> { log("서비스 소개") }
+    fun handleEvent(event: SettingViewModel.SettingEvent) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        when (event) {
+            is SettingViewModel.SettingEvent.Notice -> { log("공지사항")
+                intent.setData(Uri.parse("https://www.notion.so/c4f400e9e9ed46b19a20375028c3a0df"))}
+            is SettingViewModel.SettingEvent.Privacy -> { log("개인정보처리방침")
+                intent.setData(Uri.parse("https://www.notion.so/95b9e085523b4a21ae2624f7813bf5d1"))}
+            is SettingViewModel.SettingEvent.Policy -> { log("이용약관")
+                intent.setData(Uri.parse("https://www.notion.so/78f48ae1e85942c2bda087529717ca91"))}
+            is SettingViewModel.SettingEvent.Communicate -> { log("문의/소통하기")
+                intent.setData(Uri.parse("https://www.notion.so/b8f23da7037d4f148e83a4c464b6b88c"))}
+            is SettingViewModel.SettingEvent.Introduce -> { log("서비스 소개")
+                intent.setData(Uri.parse("https://www.notion.so/e689497e3321452ab9826768a038681c"))}
+        }
+        startActivity(intent)
     }
 }
