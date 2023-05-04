@@ -24,7 +24,7 @@ class SettingFragment :
         }
     }
 
-    fun handleEvent(event: SettingViewModel.SettingEvent) {
+    private fun handleEvent(event: SettingViewModel.SettingEvent) {
         val intent = Intent(Intent.ACTION_VIEW)
         when (event) {
             is SettingViewModel.SettingEvent.Notice -> intent.setData("https://www.notion.so/c4f400e9e9ed46b19a20375028c3a0df".toUri())
