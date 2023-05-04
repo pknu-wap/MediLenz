@@ -14,6 +14,7 @@ class IntroViewModel @Inject constructor() : BaseViewModel() {
     val eventFlow = _eventFlow.asEventFlow()
 
     fun event(event : IntroEvent) = viewModelScope.launch{ _eventFlow.emit(event)}
+
     fun nonMemberLogin(){event(IntroEvent.NonMemberLogin())}
     fun memberLogin(){event(IntroEvent.MemberLogin())}
     fun signUp(){event(IntroEvent.SignUp())}

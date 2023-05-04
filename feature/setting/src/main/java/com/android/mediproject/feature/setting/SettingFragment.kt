@@ -21,6 +21,10 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, SettingViewModel>(F
     }
 
     fun handleEvent(event: SettingViewModel.SettingEvent) = when (event) {
-        else -> {}
+        is SettingViewModel.SettingEvent.Notice -> { log("공지사항")}
+        is SettingViewModel.SettingEvent.Privacy -> { log("개인정보처리방침")}
+        is SettingViewModel.SettingEvent.Policy -> { log("정책") }
+        is SettingViewModel.SettingEvent.Communicate -> { log("문의/소통하기") }
+        is SettingViewModel.SettingEvent.Introduce -> { log("서비스 소개") }
     }
 }

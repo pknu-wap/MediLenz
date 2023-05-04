@@ -36,14 +36,15 @@
             <com.android.mediproject.core.ui.base.view.SettingBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.notice()}"
                 app:showArrow="true"
-                android:onClick="@{}"
                 app:title="@string/notice" />
 
             <com.android.mediproject.core.ui.base.view.SettingBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
+                android:onClick="@{() -> viewModel.introduce()}"
                 app:showArrow="true"
                 app:title="@string/introduce" />
 
@@ -51,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
+                android:onClick="@{() -> viewModel.policy()}"
                 app:showArrow="true"
                 app:title="@string/policy" />
 
@@ -58,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
+                android:onClick="@{() -> viewModel.privacy()}"
                 app:showArrow="true"
                 app:title="@string/privacy" />
 
@@ -65,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
+                android:onClick="@{() -> viewModel.communicate()}"
                 app:showArrow="true"
                 app:title="@string/communicate" />
         </LinearLayout>
