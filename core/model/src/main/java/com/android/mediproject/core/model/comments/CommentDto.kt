@@ -7,7 +7,8 @@ import kotlinx.datetime.LocalDateTime
  *
  * @property userId 회원 id
  * @property userName 회원 명
- * @property subordination 댓글 종속성
+ * @property isReply 댓글 여부(false -> 댓글, true -> 답글)
+ * @property subordination 댓글 종속성(-1 -> 댓글, 0 이상 -> 대상 유저 id)
  * @property content 댓글 내용
  * @property createdAt 작성 시각
  * @property updatedAt 수정 시각
@@ -15,7 +16,8 @@ import kotlinx.datetime.LocalDateTime
 data class CommentDto(
     val userId: Int,
     val userName: String,
-    val subordination: Int,
+    val isReply: Boolean = false,
+    val subordinationId: Int = -1,
     val content: String,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,

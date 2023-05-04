@@ -37,7 +37,9 @@ class CommentItemView(
 
         id = R.id.commentItemView
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        setPadding(dpToPx(context, 12), dpToPx(context, 4), dpToPx(context, 12), dpToPx(context, 4))
+        dpToPx(context, 11).apply {
+            setPadding(this, this, this, this)
+        }
 
         userProfileImageView = ImageView(context).apply {
             id = R.id.userProfileImageView
@@ -181,6 +183,16 @@ class CommentItemView(
 
     }
 
+    /**
+     * 뷰 배경을 댓글 종속성에 따라 지정합니다.
+     */
+    private fun setCommentBackground(isReply: Boolean) {
+        setBackgroundResource(
+            if (isReply) R.drawable.reply_background
+            else R.drawable.comment_background
+        )
+    }
+
 
     /**
      * 댓글 정보를 뷰에 적용합니다.
@@ -192,6 +204,8 @@ class CommentItemView(
             userNameTextView.text = userName
             commentTextView.text = content
             dateTimeTextView.text = createdAt.toJavaLocalDateTime().format(dateTimeFormatter)
+
+            setCommentBackground(isReply)
         }
     }
 }

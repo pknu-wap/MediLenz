@@ -2,4 +2,5 @@
 <resources>
     <color name="replyButtonColor">#808080</color>
     <color name="likeButtonColor">#808080</color>
+    <color name="replyBackground">#F1F1F1</color>
 </resources>
