@@ -1,23 +1,20 @@
 package com.android.mediproject.feature.search
 
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.SavedStateHandle
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchMedicinesViewModel @Inject constructor() : BaseViewModel() {
-    private val _searchWord = MutableSharedFlow<String>(replay = 1)
-    val searchWord: SharedFlow<String> = _searchWord
+class SearchMedicinesViewModel @Inject constructor(private val savedStateHandle: SavedStateHandle) : BaseViewModel() {
+    private val _searchQuerySavedState = savedStateHandle.getStateFlow(SEARCH_QUERY_KEY, "")
+    val searchQuery: StateFlow<String> = _searchQuerySavedState
 
     fun searchMedicines(query: String) {
-        viewModelScope.launch {
-            _searchWord.emit(query)
-            
-        }
+        savedStateHandle[SEARCH_QUERY_KEY] = query
     }
 
 }
+
+private const val SEARCH_QUERY_KEY = "searchQuery"

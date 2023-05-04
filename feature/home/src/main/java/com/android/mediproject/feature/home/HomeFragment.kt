@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.common.util.encodeToJsonString
-import com.android.mediproject.core.model.searchmedicines.SearchQuery
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment
 import com.android.mediproject.feature.home.databinding.FragmentHomeBinding
@@ -30,9 +28,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     private fun initSearchBar() {
         binding.searchView.setOnBarClickListener {
             Bundle().apply {
-                SearchQuery(null).encodeToJsonString().apply {
-                    putString("SearchQuery", this)
-                }
+                putString("searchQuery", null)
                 findNavController().navigate(R.id.action_homeFragment_to_searchMedicinesFragment, this)
             }
         }
@@ -55,9 +51,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
                 bundle.apply {
                     getString(RecentSearchListFragment.ResultKey.WORD.name).also {
                         Bundle().apply {
-                            SearchQuery(it).encodeToJsonString().apply {
-                                putString("SearchQuery", this)
-                            }
+                            putString("searchQuery", it)
                             findNavController().navigate(R.id.action_homeFragment_to_searchMedicinesFragment, this)
                         }
                     }
