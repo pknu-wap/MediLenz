@@ -17,7 +17,7 @@ class LoginViewModel @Inject constructor() : BaseViewModel() {
 
     fun login() = event(LoginEvent.Login())
     fun signUp() = event(LoginEvent.SignUp())
-    
+
     sealed class LoginEvent {
         data class Login(val unit: Unit? = null) : LoginEvent()
         data class SignUp(val unit: Unit? = null) : LoginEvent()
