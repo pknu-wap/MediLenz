@@ -3,6 +3,6 @@
     <string name="notice">공지사항</string>
     <string name="introduce">서비스 소개</string>
     <string name="policy">서비스 이용약관</string>
-    <string name="privacy">개인정보처리방침</string>
+    <string name="privacy">개인정보 처리방침</string>
     <string name="communicate">문의/소통하기</string>
 </resources>
