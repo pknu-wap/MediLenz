@@ -7,7 +7,9 @@ const output = {
 
 // POST
 const process = {
-    
+    register: (req, res) => {
+        res.send("sign-up");
+    }
 }
 
 // PUT
