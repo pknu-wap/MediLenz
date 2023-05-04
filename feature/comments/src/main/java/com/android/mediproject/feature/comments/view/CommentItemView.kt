@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import com.android.mediproject.core.common.uiutil.dpToPx
 import com.android.mediproject.core.model.comments.CommentDto
 import com.android.mediproject.feature.comments.R
+import kotlinx.datetime.toJavaLocalDateTime
 import java.time.format.DateTimeFormatter
 
 class CommentItemView(
@@ -22,6 +23,7 @@ class CommentItemView(
 
     companion object {
         private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+
     }
 
     private val userProfileImageView: ImageView
@@ -180,14 +182,16 @@ class CommentItemView(
     }
 
 
-    /*
-    fun1 : set profileimage, username, comment, datetime
+    /**
+     * 댓글 정보를 뷰에 적용합니다.
+     *
+     * @param comment 댓글 정보
      */
     fun setComment(comment: CommentDto) {
         comment.apply {
             userNameTextView.text = userName
             commentTextView.text = content
-            dateTimeTextView.text = dateTime
+            dateTimeTextView.text = createdAt.toJavaLocalDateTime().format(dateTimeFormatter)
         }
     }
 }
