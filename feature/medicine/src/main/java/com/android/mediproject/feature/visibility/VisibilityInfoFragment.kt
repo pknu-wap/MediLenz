@@ -1,9 +1,8 @@
-package com.android.mediproject.feature.medicine
+package com.android.mediproject.feature.visibility
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.feature.medicine.MedicineInfoViewModel
 import com.android.mediproject.feature.medicine.databinding.FragmentVisibilityInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,12 +19,4 @@ class VisibilityInfoFragment : BaseFragment<FragmentVisibilityInfoBinding, Medic
 
     override val fragmentViewModel: MedicineInfoViewModel by viewModels(ownerProducer = { requireParentFragment() })
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-    }
 }

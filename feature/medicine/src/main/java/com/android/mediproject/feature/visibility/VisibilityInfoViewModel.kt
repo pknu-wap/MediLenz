@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.medicine
+package com.android.mediproject.feature.visibility
 
 import androidx.lifecycle.SavedStateHandle
 import com.android.mediproject.core.ui.base.BaseViewModel

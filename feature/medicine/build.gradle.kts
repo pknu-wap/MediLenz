@@ -19,6 +19,7 @@ hilt {
 dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
+    implementation(project(":core:model"))
     implementation(project(":feature:comments"))
     implementation(project(":feature:search"))
     implementation(project(":feature:penalties"))
