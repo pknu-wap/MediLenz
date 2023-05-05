@@ -1,15 +1,18 @@
-package com.android.mediproject.feature.medicine
+package com.android.mediproject.feature.main
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfoBinding
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.Tab
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 약 정보 화면
+ *
+ */
 @AndroidEntryPoint
 class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineInfoViewModel>(FragmentMedicineInfoBinding::inflate) {
 
@@ -20,14 +23,21 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
         initTabs()
     }
 
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        binding.tabLayout.getTabAt(0)?.select()
+    }
+
     // 탭 레이아웃 초기화
     private fun initTabs() {
 
         binding.apply {
-            contentViewpager.adapter = MedicineInfoPageAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
-            
-            resources.getStringArray(R.array.medicine_info_tab).also { tabTextList ->
-                TabLayoutMediator(tabLayout, contentViewpager) { tab, position ->
+            contentViewPager.adapter = MedicineInfoPageAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+
+            // 탭 레이아웃에 탭 추가
+            resources.getStringArray(R.array.medicineInfoTab).also { tabTextList ->
+                TabLayoutMediator(tabLayout, contentViewPager) { tab, position ->
                     when (position) {
                         0 -> {
                             tab.text = tabTextList[0]
@@ -42,25 +52,13 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                         }
 
                         3 -> {
-                            tab.text = tabTextList[2]
+                            tab.text = tabTextList[3]
                         }
                     }
                 }.attach()
             }
         }
 
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: Tab?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onTabUnselected(tab: Tab?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onTabReselected(tab: Tab?) {
-                TODO("Not yet implemented")
-            }
-        })
     }
+
 }

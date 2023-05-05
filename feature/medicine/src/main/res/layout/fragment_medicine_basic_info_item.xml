@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="viewModel"
+            name="fragmentViewModel"
             type="com.android.mediproject.feature.basicinfo.host.MedicineBasicInfoViewModel"
             />
     </data>

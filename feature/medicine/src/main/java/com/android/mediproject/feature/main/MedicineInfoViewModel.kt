@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.medicine
+package com.android.mediproject.feature.main
 
 import MutableEventFlow
 import androidx.lifecycle.viewModelScope
@@ -14,6 +14,10 @@ class MedicineInfoViewModel @Inject constructor() : BaseViewModel() {
 
     private val _visibilityInfo = MutableEventFlow<MedicineVisibilityDto>(replay = 1)
     val visibilityInfo = _visibilityInfo.asEventFlow()
+
+    init {
+        loadVisibilityInfo()
+    }
 
     fun loadVisibilityInfo() {
         viewModelScope.launch {

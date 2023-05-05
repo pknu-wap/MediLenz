@@ -7,6 +7,11 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineBasicInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 의약품 기본정보 화면
+ *
+ * chip을 눌러서 효능효과, 용법용량, 의약품 정보를 볼 수 있다.
+ */
 @AndroidEntryPoint
 class MedicineBasicInfoFragment :
     BaseFragment<FragmentMedicineBasicInfoBinding, MedicineBasicInfoViewModel>(FragmentMedicineBasicInfoBinding::inflate) {

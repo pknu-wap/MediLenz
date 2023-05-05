@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.android.mediproject.feature.comments.commentsofamedicine.MedicineCommentsViewModel"
-            />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="24dp"
         android:clipChildren="false"
+        android:paddingHorizontal="24dp"
         >
 
         <androidx.recyclerview.widget.RecyclerView
@@ -21,21 +13,21 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:clipChildren="false"
-            android:scrollbars="vertical"
             android:orientation="vertical"
+            android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/commentInputView"
+            app:layout_constraintTop_toTopOf="parent"
             />
 
         <include
-            layout="@layout/view_comment_input"
             android:id="@+id/commentInputView"
+            layout="@layout/view_comment_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="47dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/commentsRecyclerView"
-            android:layout_marginBottom="47dp"
             />
 
 

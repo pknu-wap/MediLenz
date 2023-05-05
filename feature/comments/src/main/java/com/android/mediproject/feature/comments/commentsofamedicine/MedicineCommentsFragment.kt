@@ -12,7 +12,7 @@ class MedicineCommentsFragment :
     BaseFragment<FragmentMedicineCommentsBinding, MedicineCommentsViewModel>(FragmentMedicineCommentsBinding::inflate) {
 
     override val fragmentViewModel: MedicineCommentsViewModel by viewModels()
-    
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -20,7 +20,13 @@ class MedicineCommentsFragment :
         val commentsAdapter = CommentsAdapter()
 
         binding.apply {
-
+            commentInputView.sendBtn.setOnClickListener {
+                commentInputView.commentInput.text?.toString()?.also { comment ->
+                    fragmentViewModel.apply {
+                        sendComment(comment)
+                    }
+                }
+            }
         }
 
     }

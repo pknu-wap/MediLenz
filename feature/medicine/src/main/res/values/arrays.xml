@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="medicine_info_tab">
+
+    <string-array name="medicineInfoTab">
         <item>@string/default_info</item>
         <item>@string/visibility_info</item>
         <item>@string/precautions</item>

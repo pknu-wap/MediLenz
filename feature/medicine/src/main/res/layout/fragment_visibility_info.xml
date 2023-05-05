@@ -7,7 +7,7 @@
 
         <variable
             name="fragmentViewModel"
-            type="com.android.mediproject.feature.medicine.MedicineInfoViewModel"
+            type="com.android.mediproject.feature.main.MedicineInfoViewModel"
             />
 
     </data>
@@ -27,7 +27,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
-                app:values="@{fragmentViewModel.visibilityInfo}"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

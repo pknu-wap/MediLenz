@@ -6,4 +6,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MedicineCommentsViewModel @Inject constructor() : BaseViewModel() {
+    
+    fun sendComment(comment: String) {
+        TODO("Not yet implemented")
+    }
 }

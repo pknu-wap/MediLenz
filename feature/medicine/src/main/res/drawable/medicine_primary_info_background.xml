@@ -3,7 +3,8 @@
     android:shape="rectangle">
     <corners android:radius="@dimen/medicine_primary_info_corner_radius" />
     <gradient
-        android:endColor="#1969E8"
+        android:endColor="#D71969E8"
         android:startColor="#4D4AE0"
-        android:type="linear" />
+        android:type="linear"
+        android:angle="120"/>
 </shape>
