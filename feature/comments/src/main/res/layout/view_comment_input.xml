@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/comment_input_background"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp"
+    >
+
+    <EditText
+        android:id="@+id/commentInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/commentInputHint"
+        android:textColorHint="@color/black"
+        android:textSize="14sp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toStartOf="@+id/sendBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:inputType="text"
+        />
+
+    <ImageButton
+        android:id="@+id/sendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:tint="@color/sendButtonBackground"
+        android:padding="4dp"
+        android:src="@drawable/outline_send_24"
+        app:layout_constraintBottom_toBottomOf="@+id/commentInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/commentInput"
+        app:layout_constraintTop_toTopOf="@+id/commentInput"
+        android:contentDescription="@string/sendButtonContentDescription"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

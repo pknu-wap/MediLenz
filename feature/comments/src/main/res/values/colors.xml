@@ -3,4 +3,6 @@
     <color name="replyButtonColor">#808080</color>
     <color name="likeButtonColor">#808080</color>
     <color name="replyBackground">#F1F1F1</color>
+    <color name="commentInputBackground">#F1F1F1</color>
+    <color name="sendButtonBackground">#787878</color>
 </resources>
