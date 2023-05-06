@@ -8,5 +8,6 @@ interface MedicineApprovalRepository {
     fun getMedicineApprovalList(
         itemName: String?,
         entpName: String?,
+        medicationType: String?,
     ): Flow<PagingData<Item>>
 }

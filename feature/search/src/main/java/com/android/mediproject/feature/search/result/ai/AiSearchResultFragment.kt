@@ -20,7 +20,7 @@ class AiSearchResultFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
 
-            medicineSearchListLayout.filterButton.setOnClickListener { it ->
+            medicineSearchListLayout.filterBtn.setOnClickListener { it ->
                 MediPopupMenu.showMenu(
                     it, R.menu.search_result_list_filter_menu
                 ) { menuItem ->

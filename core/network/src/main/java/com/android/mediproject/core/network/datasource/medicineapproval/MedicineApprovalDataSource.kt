@@ -14,6 +14,7 @@ interface MedicineApprovalDataSource {
     suspend fun getMedicineApprovalList(
         itemName: String?,
         entpName: String?,
+        medicationType: String?,
         pageNo: Int,
     ): MedicineApprovalListResponse
 }

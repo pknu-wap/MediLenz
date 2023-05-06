@@ -1,6 +1,7 @@
 plugins {
-    id("org.jetbrains.kotlin.android")
+    id(libs.plugins.kotlin.android.get().pluginId)
     id("mediproject.android.feature")
+    id(libs.plugins.ksp.get().pluginId)
 }
 
 android {

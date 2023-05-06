@@ -46,6 +46,7 @@ interface MedicineApprovalNetworkApi {
         @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("item_name") itemName: String?,
         @Query("entp_name") entpName: String?,
+        @Query("spclty_pblc") medicationType: String?,
         @Query("pageNo") pageNo: Int,
         @Query("type") type: String = "json",
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE

@@ -6,6 +6,7 @@ kotlinCompilerExtension = "1.4.6"
 kotlinxCoroutines = "1.7.0"
 kotlinxSerializationJson = "1.5.0"
 kotlinxDateTime = "0.4.0"
+ksp = "1.8.20-1.0.11"
 
 androidGradlePlugin = "8.0.1"
 androidDesugarJdkLibs = "2.0.3"
@@ -180,13 +181,14 @@ okhttp-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor
 
 # glide--------------------------------------------------------------------------------------------------------------
 glide-main = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
-glide-compilerKapt = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 
 # material--------------------------------------------------------------------------------------------------------------
 material-main = { module = "com.google.android.material:material", version.ref = "material" }
 
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
@@ -251,3 +253,6 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 nav-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidxNavigation" }
 
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

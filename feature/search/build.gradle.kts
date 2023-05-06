@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("mediproject.android.feature")
     id("androidx.navigation.safeargs.kotlin")
-
+    id(libs.plugins.ksp.get().pluginId)
 }
 
 android {
@@ -27,5 +27,5 @@ dependencies {
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.android.flexbox)
     implementation(libs.androidx.paging.runtime)
-
+    ksp(libs.glide.ksp)
 }

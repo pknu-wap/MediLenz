@@ -14,7 +14,10 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
 
 
     override suspend fun getMedicineApprovalList(
-        itemName: String?, entpName: String?, pageNo: Int
-    ): MedicineApprovalListResponse = medicineApprovalNetworkApi.getApprovalList(itemName = itemName, entpName = entpName, pageNo = pageNo)
+        itemName: String?, entpName: String?, medicationType: String?, pageNo: Int
+    ): MedicineApprovalListResponse = medicineApprovalNetworkApi.getApprovalList(
+        itemName = itemName, entpName = entpName, pageNo =
+        pageNo, medicationType = medicationType
+    )
 
 }

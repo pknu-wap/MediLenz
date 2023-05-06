@@ -13,9 +13,11 @@ class GetMedicineApprovalListUseCase @Inject constructor(
     operator fun invoke(
         itemName: String?,
         entpName: String?,
+        medicationType: String?,
     ) = medicineApprovalRepository.getMedicineApprovalList(
         itemName = itemName,
         entpName = entpName,
+        medicationType = medicationType,
     ).let { pager ->
         pager.map { pagingData ->
             pagingData.map { item ->
