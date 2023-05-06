@@ -39,7 +39,7 @@ class SearchMedicinesViewModel @Inject constructor(
 
                 _searchResult.value = UiState.Success(result)
             } catch (e: Exception) {
-                _searchResult.value = UiState.Error(e.message ?: "Unknown Error")
+                _searchResult.value = UiState.Error(e.message ?: "데이터 로드 실패")
             }
         }
     }

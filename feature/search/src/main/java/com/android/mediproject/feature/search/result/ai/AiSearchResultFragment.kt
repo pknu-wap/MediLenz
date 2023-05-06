@@ -15,12 +15,10 @@ class AiSearchResultFragment :
 
     override val fragmentViewModel: AiSearchResultViewModel by viewModels()
 
-    private val searchResultListAdapter = SearchResultListAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            medicineSearchListLayout.manualSearchResultRecyclerView.adapter = searchResultListAdapter
 
             medicineSearchListLayout.filterButton.setOnClickListener { it ->
                 MediPopupMenu.showMenu(

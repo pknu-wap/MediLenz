@@ -26,11 +26,12 @@ class ManualSearchResultFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            val searchResultListAdapter = ApprovedMedicinesAdapter()
+            val searchResultListAdapter = ApprovedMedicinesAdapter().also { adapter ->
+                adapter.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { adapter::retry },
+                    footer = PagingLoadStateAdapter { adapter::retry })
+            }
             medicineSearchListLayout.manualSearchResultRecyclerView.adapter = searchResultListAdapter
 
-            searchResultListAdapter.apply {
-            }
 
             viewLifecycleOwner.repeatOnStarted {
                 searchMedicinesViewModel.searchResult.collect { state ->
@@ -52,10 +53,7 @@ class ManualSearchResultFragment :
                         }
                     }
                 }
-
-                searchResultListAdapter.loadStateFlow.collectLatest { loadStates ->
-                    
-                }
+                
             }
 
             medicineSearchListLayout.filterButton.setOnClickListener { it ->

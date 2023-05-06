@@ -7,12 +7,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.MediSearchbar
 import com.android.mediproject.feature.search.databinding.FragmentSearchMedicinesBinding
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -37,9 +39,12 @@ class SearchMedicinesFragment :
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                fragmentViewModel.searchQuery.collect { medicines ->
-                    if (medicines.isNotEmpty()) binding.contentsFragmentContainerView.findNavController()
-                        .navigate(RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment())
+                fragmentViewModel.searchResult.collectLatest { state ->
+                    if (state == UiState.isLoading) {
+
+                        binding.contentsFragmentContainerView.findNavController()
+                            .navigate(RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment())
+                    }
                 }
             }
         }

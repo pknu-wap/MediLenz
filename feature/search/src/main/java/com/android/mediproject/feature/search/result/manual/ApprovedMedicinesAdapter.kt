@@ -48,6 +48,7 @@ class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, Ap
         }
     }
 
+
 }
 
 object MedicineComparator : DiffUtil.ItemCallback<ApprovedMedicineItemDto>() {

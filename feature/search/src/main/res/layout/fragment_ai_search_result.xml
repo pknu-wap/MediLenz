@@ -21,7 +21,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginRight="25dp"
-            android:layout_marginBottom="26dp"
+            android:layout_marginBottom="25dp"
             android:background="@drawable/circle_image_background"
             android:src="@drawable/logo"
             app:layout_constraintBottom_toTopOf="@id/medicine_search_list_layout"
