@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     id("org.jetbrains.kotlin.android")
     id("mediproject.android.feature")
@@ -9,6 +11,13 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+
+    defaultConfig {
+        val properties = Properties()
+        properties.load(project.rootProject.file("/apikey.properties").bufferedReader())
+        buildConfigField("String", "DATA_GO_KR_SERVICE_KEY", "\"${properties["dataGoKrServiceKey"]}\"")
+
     }
 }
 

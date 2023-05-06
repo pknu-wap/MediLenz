@@ -1,5 +1,6 @@
 package com.android.mediproject.core.network.module
 
+import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -42,10 +43,11 @@ interface MedicineApprovalNetworkApi {
 
     @GET(value = APPROVAL_LIST_URL)
     suspend fun getApprovalList(
-        @Query("serviceKey") serviceKey: String? = "",
+        @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("item_name") itemName: String?,
         @Query("entp_name") entpName: String?,
         @Query("pageNo") pageNo: Int,
+        @Query("type") type: String = "json",
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
     ): MedicineApprovalListResponse
 }

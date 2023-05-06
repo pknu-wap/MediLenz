@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.listfilter.MediPopupMenu
 import com.android.mediproject.feature.search.R
@@ -33,7 +34,12 @@ class ManualSearchResultFragment :
         }
 
         binding.apply {
+            medicineSearchListLayout.manualSearchResultRecyclerView.addItemDecoration(
+                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+            )
+
             medicineSearchListLayout.manualSearchResultRecyclerView.adapter = searchResultListAdapter
+
             medicineSearchListLayout.filterButton.setOnClickListener { it ->
                 MediPopupMenu.showMenu(
                     it, R.menu.search_result_list_filter_menu

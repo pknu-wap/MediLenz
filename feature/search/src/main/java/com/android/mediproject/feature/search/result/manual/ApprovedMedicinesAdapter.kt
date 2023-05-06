@@ -27,11 +27,12 @@ class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, Ap
             binding.apply {
                 this@ViewHolder.item = item
 
-                textViewMedicineName.text = item.itemName
-                textViewMainIngredient.text = item.itemIngrName
-                textViewManufacturerName.text = item.entpName
-                textViewMedicineType.text = item.prductType
-                Glide.with(imageViewMedicine.context).load(item.bigPrdtImgUrl).into(imageViewMedicine)
+                medicineNameTextView.text = item.itemName
+                ingredientTextView.text = item.itemIngrName
+                manufacturerTextView.text = item.entpName
+                effectTextView.text = item.spcltyPblc
+
+                Glide.with(medicineImgView.context).load(item.bigPrdtImgUrl).into(medicineImgView)
             }
         }
 
