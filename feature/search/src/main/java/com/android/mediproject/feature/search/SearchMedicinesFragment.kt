@@ -3,11 +3,7 @@ package com.android.mediproject.feature.search
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
-import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.MediSearchbar
 import com.android.mediproject.feature.search.databinding.FragmentSearchMedicinesBinding
@@ -15,7 +11,7 @@ import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListF
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import repeatOnStarted
 
 @AndroidEntryPoint
 class SearchMedicinesFragment :
@@ -36,14 +32,18 @@ class SearchMedicinesFragment :
             }
         }
 
+        viewLifecycleOwner.repeatOnStarted {
+            fragmentViewModel.searchQuery.collectLatest { query ->
+                if (query.isNotEmpty()) {
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                fragmentViewModel.searchResult.collectLatest { state ->
-                    if (state == UiState.isLoading) {
+                    binding.contentsFragmentContainerView.findNavController().also { navController ->
+                        navController.currentDestination?.also { currentDestination ->
+                            if (currentDestination.id == R.id.manualSearchResultFragment) navController.navigate(R.id.action_manualSearchResultFragment_self)
+                            else navController.navigate(
+                                RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment()
+                            )
 
-                        binding.contentsFragmentContainerView.findNavController()
-                            .navigate(RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment())
+                        }
                     }
                 }
             }

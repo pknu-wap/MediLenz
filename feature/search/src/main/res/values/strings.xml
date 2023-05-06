@@ -10,8 +10,5 @@
     <string name="main_effect">주요 효능</string>
     <string name="manufacturer_name">제조사</string>
     <string name="medicine_type">의약품 종류</string>
-    <string name="option_show_all_medicines">모두 보기</string>
-    <string name="option_show_only_generic_medicines">일반 의약품만 보기</string>
-    <string name="option_show_only_specialty_medicines">전문 의약품만 보기</string>
-    <string name="detectioned_medicine_counts">개의 의약품이\n검색되었습니다</string>
+
 </resources>

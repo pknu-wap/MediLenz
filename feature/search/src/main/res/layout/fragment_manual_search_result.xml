@@ -3,14 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <data>
-
-        <variable
-            name="fragmentViewModel"
-            type="com.android.mediproject.feature.search.result.manual.ManualSearchResultViewModel"
-            />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -20,4 +20,9 @@
     <string name="search_hint">의약품 명 / 고유번호 검색</string>
     <string name="search_empty_query">검색어가 비어있습니다.</string>
 
+    <string name="option_show_all_medicines">모두 보기</string>
+    <string name="option_show_only_generic_medicines">일반 의약품만 보기</string>
+    <string name="option_show_only_specialty_medicines">전문 의약품만 보기</string>
+    <string name="detectioned_medicine_counts">개의 의약품이\n검색되었습니다</string>
+
 </resources>

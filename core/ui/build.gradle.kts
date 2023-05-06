@@ -10,6 +10,10 @@ android {
     }
 }
 
+hilt {
+    enableAggregatingTask = true
+}
+
 dependencies {
     implementation(project(":core:common"))
     implementation(libs.material.main)

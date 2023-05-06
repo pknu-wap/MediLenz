@@ -47,5 +47,5 @@ data class ApprovedMedicineItemDto(
     val cancelName: String? = null,
     val ediCode: String? = null,
     val bizrno: String? = null,
-    val onClick: ((ApprovedMedicineItemDto) -> Unit)? = null,
+    var onClick: ((ApprovedMedicineItemDto) -> Unit)? = null,
 )

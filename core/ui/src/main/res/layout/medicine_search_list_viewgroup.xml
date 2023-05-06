@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/medicine_search_list_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,13 +13,14 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:drawableRight="@drawable/baseline_expand_more_24"
-            android:paddingHorizontal="4dp"
-            android:paddingVertical="2dp"
-            android:text="전문 의약품"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="3dp"
+            android:text="@string/option_show_all_medicines"
             android:textSize="13sp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:drawableRightCompat="@drawable/baseline_expand_more_24"
             />
 
         <androidx.recyclerview.widget.RecyclerView

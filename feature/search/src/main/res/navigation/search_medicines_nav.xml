@@ -15,7 +15,7 @@
         <action
             android:id="@+id/action_recentSearchListFragment_to_manualSearchResultFragment"
             app:destination="@id/manualSearchResultFragment" />
-    
+
     </fragment>
 
     <fragment
@@ -24,6 +24,11 @@
         android:label="ManualSearchResultFragment"
         tools:layout="@layout/fragment_manual_search_result">
         <deepLink app:uri="medilens://main/search/manual_search_result" />
+        <action
+            android:id="@+id/action_manualSearchResultFragment_self"
+            app:destination="@id/manualSearchResultFragment"
+            app:popUpTo="@id/manualSearchResultFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
