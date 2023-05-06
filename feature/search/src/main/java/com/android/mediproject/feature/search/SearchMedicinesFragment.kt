@@ -10,7 +10,6 @@ import com.android.mediproject.feature.search.databinding.FragmentSearchMedicine
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
 
 @AndroidEntryPoint
@@ -33,9 +32,8 @@ class SearchMedicinesFragment :
         }
 
         viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.searchQuery.collectLatest { query ->
-                if (query.isNotEmpty()) {
-
+            fragmentViewModel.searchQuery.collect { query ->
+                if (query.isNotBlank()) {
                     binding.contentsFragmentContainerView.findNavController().also { navController ->
                         navController.currentDestination?.also { currentDestination ->
                             if (currentDestination.id == R.id.manualSearchResultFragment) navController.navigate(R.id.action_manualSearchResultFragment_self)
