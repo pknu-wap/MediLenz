@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.android.mediproject.core.data"
+    namespace = "com.android.mediproject.core.domain"
 
     buildFeatures {
         buildConfig = true
@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:model"))
     implementation(project(":core:network"))
+    implementation(project(":core:data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.serialization.json)

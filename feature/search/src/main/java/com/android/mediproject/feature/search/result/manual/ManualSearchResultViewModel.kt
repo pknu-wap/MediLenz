@@ -6,5 +6,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ManualSearchResultViewModel @Inject constructor() : BaseViewModel() {
-    // TODO: Implement the ViewModel
+
+
 }

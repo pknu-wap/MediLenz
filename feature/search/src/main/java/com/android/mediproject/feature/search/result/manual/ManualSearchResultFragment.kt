@@ -2,14 +2,17 @@ package com.android.mediproject.feature.search.result.manual
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.listfilter.MediPopupMenu
 import com.android.mediproject.feature.search.R
+import com.android.mediproject.feature.search.SearchMedicinesViewModel
 import com.android.mediproject.feature.search.databinding.FragmentManualSearchResultBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import repeatOnStarted
 
 @AndroidEntryPoint
 class ManualSearchResultFragment :
@@ -17,12 +20,43 @@ class ManualSearchResultFragment :
 
     override val fragmentViewModel: ManualSearchResultViewModel by viewModels()
 
-    private val searchResultListAdapter = SearchResultListAdapter()
+    private val searchMedicinesViewModel by viewModels<SearchMedicinesViewModel>({ requireParentFragment() })
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            // medicineSearchListLayout.manualSearchResultRecyclerView.adapter = searchResultListAdapter
+            val searchResultListAdapter = ApprovedMedicinesAdapter()
+            medicineSearchListLayout.manualSearchResultRecyclerView.adapter = searchResultListAdapter
+
+            searchResultListAdapter.apply {
+            }
+
+            viewLifecycleOwner.repeatOnStarted {
+                searchMedicinesViewModel.searchResult.collect { state ->
+                    when (state) {
+                        is UiState.isInitial -> {
+                        }
+
+                        is UiState.isLoading -> {
+                        }
+
+                        is UiState.Success -> {
+                            state.data.collectLatest {
+                                searchResultListAdapter.submitData(it)
+                            }
+                        }
+
+                        is UiState.Error -> {
+                            Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                searchResultListAdapter.loadStateFlow.collectLatest { loadStates ->
+                    
+                }
+            }
 
             medicineSearchListLayout.filterButton.setOnClickListener { it ->
                 MediPopupMenu.showMenu(
@@ -43,38 +77,4 @@ class ManualSearchResultFragment :
             }
         }
     }
-}
-
-class SearchResultListAdapter : RecyclerView.Adapter<SearchResultListAdapter.SearchResultViewHolder>() {
-
-    /*
-    private val asyncDiffer = AsyncListDiffer(this, object : DiffUtil.ItemCallback<SearchResultItem>() {
-        override fun areItemsTheSame(oldItem: SearchResultItem, newItem: SearchResultItem): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: SearchResultItem, newItem: SearchResultItem): Boolean {
-            return oldItem == newItem
-        }
-    })
-
-     */
-
-    class SearchResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
-        TODO()
-    }
-
-    override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
-        TODO()
-    }
-
-    override fun getItemCount(): Int {
-        TODO()
-    }
-
-
 }

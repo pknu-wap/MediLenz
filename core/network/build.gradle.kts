@@ -1,7 +1,6 @@
 plugins {
     id("org.jetbrains.kotlin.android")
-    id("mediproject.android.library")
-    id("mediproject.android.hilt")
+    id("mediproject.android.feature")
     id("kotlinx-serialization")
 
 }
@@ -25,7 +24,10 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.paging.runtime)
     implementation(libs.bundles.retrofits)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.okhttp.logginginterceptor)
+    implementation(libs.okhttp)
 
 }
