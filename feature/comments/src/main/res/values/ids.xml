@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="commentItemView" type="id" />
+    <item name="userProfileImageView" type="id" />
+    <item name="userNameTextView" type="id" />
+    <item name="replyButton" type="id" />
+    <item name="likeButton" type="id" />
+    <item name="commentTextView" type="id" />
+    <item name="dateTimeTextView" type="id" />
+</resources>

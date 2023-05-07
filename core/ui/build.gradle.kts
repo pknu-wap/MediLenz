@@ -1,10 +1,18 @@
 plugins {
-    id("org.jetbrains.kotlin.android")
+    id(libs.plugins.kotlin.android.get().pluginId)
     id("mediproject.android.feature")
+    id(libs.plugins.ksp.get().pluginId)
 }
 
 android {
     namespace = "com.android.mediproject.core.ui"
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+hilt {
+    enableAggregatingTask = true
 }
 
 dependencies {
@@ -16,8 +24,6 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.recyclerview)
+    implementation(libs.bundles.uiAndroidx)
+    implementation(libs.bundles.materials)
 }

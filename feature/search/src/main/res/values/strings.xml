@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="recent_search">최근 검색 목록</string>
+    <string name="ai_search_result_fragment">ai_search_result_fragment</string>
+    <string name="manual_search_result_fragment">manual_search_result_fragment</string>
+    <string name="recent_search_history_fragment">recent_search_history_fragment</string>
+    <string name="medicine_image">의약품 이미지</string>
+    <string name="medicine_name">의약품 명</string>
+    <string name="main_ingredient">주요 성분</string>
+    <string name="main_effect">주요 효능</string>
+    <string name="manufacturer_name">제조사</string>
+    <string name="medicine_type">의약품 종류</string>
+
 </resources>

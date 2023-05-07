@@ -11,8 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MainActivity :
-    BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
 
     companion object {
         const val VISIBLE = 0
@@ -24,8 +23,7 @@ class MainActivity :
 
     override fun afterBinding() {
         binding.apply {
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
             navController = navHostFragment.navController
 
             bottomNav.apply {
@@ -34,7 +32,7 @@ class MainActivity :
             }
 
             setDestinationListener()
-            setUpBottomNav()
+            // setUpBottomNav()
 
             viewModel = activityViewModel.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
@@ -42,13 +40,12 @@ class MainActivity :
         }
     }
 
-
-    private fun setUpBottomNav() =
-        binding.bottomNav.setOnItemSelectedListener { item ->
+    /*
+        private fun setUpBottomNav() = binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home_nav -> true.apply {
                     log("홈")
-                    navController.navigate(MainNavDirections.actionToHomeNav())
+                    // navController.navigate(MainNavDirections.actionToHomeNav())
                 }
 
                 R.id.community_nav -> true.apply {
@@ -58,7 +55,7 @@ class MainActivity :
 
                 R.id.mypage_nav -> true.apply {
                     log("마이페이지")
-                    navController.navigate(MainNavDirections.actionToMypageNav())
+                    //navController.navigate(MainNavDirections.actionToMypageNav())
                 }
 
                 R.id.setting_nav -> true.apply {
@@ -70,21 +67,22 @@ class MainActivity :
             }
         }
 
-    private fun setDestinationListener() =
-        navController.addOnDestinationChangedListener { _, _, arg ->
-            log(arg.toString())
-            if (arg != null) {
-                if (arg.isEmpty) {
-                    bottomVisible(VISIBLE)
-                } else if (arg.getBoolean(getString(com.android.mediproject.core.ui.R.string.hideBottom))) {
-                    bottomVisible(INVISIBLE)
-                } else {
-                    bottomVisible(VISIBLE)
-                }
+     */
+
+    private fun setDestinationListener() = navController.addOnDestinationChangedListener { _, _, arg ->
+        log(arg.toString())
+        if (arg != null) {
+            if (arg.isEmpty) {
+                bottomVisible(VISIBLE)
+            } else if (arg.getBoolean(getString(com.android.mediproject.core.ui.R.string.hideBottom))) {
+                bottomVisible(INVISIBLE)
             } else {
                 bottomVisible(VISIBLE)
             }
+        } else {
+            bottomVisible(VISIBLE)
         }
+    }
 
     private fun bottomVisible(isVisible: Int) {
         log(isVisible.toString())

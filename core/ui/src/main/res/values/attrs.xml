@@ -43,6 +43,7 @@
         <attr name="camera_icon" format="reference" />
         <attr name="hint_font_size" format="dimension|reference" />
         <attr name="ai_btn_font_size" format="dimension|reference" />
+        <attr name="is_all_btn" format="boolean" />
     </declare-styleable>
 
 

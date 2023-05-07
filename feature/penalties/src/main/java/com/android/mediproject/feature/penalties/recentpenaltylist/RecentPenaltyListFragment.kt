@@ -24,13 +24,17 @@ import dagger.hilt.android.AndroidEntryPoint
 class RecentPenaltyListFragment :
     BaseFragment<FragmentRecentPenaltyListBinding, RecentPenaltyListViewModel>(FragmentRecentPenaltyListBinding::inflate) {
 
+    enum class ResultKey {
+        RESULT_KEY, PENALTY_ID
+    }
+
     override val fragmentViewModel: RecentPenaltyListViewModel by viewModels()
     private val penaltyListAdapter = PenaltyListAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            this.penaltyList.adapter = penaltyListAdapter
+            // this.penaltyList.adapter = penaltyListAdapter
         }
         addPenaltyItems()
         initHeader()

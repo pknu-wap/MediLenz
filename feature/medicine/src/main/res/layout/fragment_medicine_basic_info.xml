@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/medicine_basic_info_chip_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:singleLine="true"
+            app:singleSelection="true"
+            >
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/efficacy_effect_chip"
+                style="@style/Chip.Selectable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/efficacy_effect"
+                />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/medicine_info_chip"
+                style="@style/Chip.Selectable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/medicine_info"
+                />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/dosage_chip"
+                style="@style/Chip.Selectable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dosage"
+                />
+
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/medicine_basic_info_viewpager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/medicine_basic_info_chip_group"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -19,6 +19,7 @@ class FeatureConventionPlugin : Plugin<Project> {
                 "implementation"(libs.findBundle("navigations").get())
                 "implementation"(libs.findBundle("lifecycles").get())
                 "implementation"(libs.findBundle("kotlins").get())
+                "kapt"(libs.findLibrary("androidx.lifecycle.compilerKapt").get())
             }
         }
     }

@@ -6,7 +6,9 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.penalties"
-
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 hilt {
@@ -20,4 +22,6 @@ dependencies {
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
+
+
 }

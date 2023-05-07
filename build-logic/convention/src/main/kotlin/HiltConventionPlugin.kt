@@ -17,7 +17,7 @@ class HiltConventionPlugin : Plugin<Project> {
                 "implementation"(libs.findBundle("hilts").get())
                 "kapt"(libs.findLibrary("androidx.hilt.work.compilerKapt").get())
                 "kapt"(libs.findLibrary("androidx.hilt.compilerKapt").get())
-                "androidTestImplementation"(libs.findLibrary("androidx.hilt.android.testingAndroidTestImplementation").get())
+                //"androidTestImplementation"(libs.findLibrary("androidx.hilt.android.testingAndroidTestImplementation").get())
             }
         }
     }

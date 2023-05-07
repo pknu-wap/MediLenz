@@ -3,6 +3,7 @@ package com.android.mediproject.feature.search.recentsearchlist
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
@@ -19,6 +20,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class RecentSearchListFragment :
     BaseFragment<FragmentRecentSearchListBinding, RecentSearchListViewModel>(FragmentRecentSearchListBinding::inflate) {
+
+    enum class ResultKey {
+        RESULT_KEY, WORD
+    }
 
     override val fragmentViewModel: RecentSearchListViewModel by viewModels()
 
@@ -38,14 +43,23 @@ class RecentSearchListFragment :
             val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
 
             repeat(5) {
-                this.searchHistoryList.addView(ButtonChip<Int>(requireContext()).apply {
+                this.searchHistoryList.addView(ButtonChip<String>(requireContext()).apply {
                     layoutParams = FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
                         setMargins(horizontalSpace, 0, horizontalSpace, 0)
                     }
-
+                    data = it.toString()
                     setChipText("검색어 $it")
                     setOnChipClickListener {
-                        it?.apply { toast(this.toString()) }
+                        it?.also {
+                            parentFragmentManager.apply {
+                                setFragmentResult(
+                                    ResultKey.RESULT_KEY.name, bundleOf(
+                                        ResultKey.WORD.name to it
+                                    )
+                                )
+                            }
+
+                        }
                     }
                 })
             }
@@ -58,10 +72,8 @@ class RecentSearchListFragment :
      * 확장 버튼 리스너, 더 보기 버튼 리스너
      */
     private fun initHeader() {
-        binding.headerView.setOnExpandClickListener {
-        }
+        binding.headerView.setOnExpandClickListener {}
 
-        binding.headerView.setOnMoreClickListener {
-        }
+        binding.headerView.setOnMoreClickListener {}
     }
 }

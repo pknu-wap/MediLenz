@@ -15,9 +15,19 @@ android {
             useSupportLibrary = true
         }
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //  testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     namespace = "com.android.mediproject"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    lint {
+        checkDependencies = true
+        ignoreTestSources = true
+    }
+
 
 }
 
@@ -41,6 +51,7 @@ dependencies {
     implementation(project(":feature:community"))
     implementation(project(":feature:setting"))
     implementation(project(":feature:penalties"))
+    implementation(project(":feature:medicine"))
 
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.materials)
@@ -48,7 +59,11 @@ dependencies {
     implementation(libs.bundles.navigations)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.workManagers)
+
+    /*
     androidTestImplementation(libs.bundles.testUIs)
     testImplementation(libs.bundles.testUIs)
     androidTestUtil(libs.androidx.test.orchestrator)
+
+     */
 }

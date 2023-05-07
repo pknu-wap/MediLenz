@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="commentReplyArrowIconSize">17dp</dimen>
+    <dimen name="commentReplyContentLeftSpace">23dp</dimen>
+    <dimen name="commentReplyViewLeftPadding">34dp</dimen>
+    <dimen name="commentLayoutHorizontalPadding">11dp</dimen>
+    <dimen name="commentLayoutVerticalPadding">11dp</dimen>
+</resources>
