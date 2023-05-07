@@ -19,7 +19,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(Frag
         }
     }
 
-    fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
+    private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
         else -> {}
     }
 }

@@ -19,6 +19,8 @@ hilt {
 dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
+    implementation(project(":feature:interestedmedicine"))
+    implementation(project(":feature:comments"))
     implementation(libs.bundles.glides)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.materials)

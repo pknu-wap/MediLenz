@@ -2,4 +2,5 @@
 <resources>
     <color name="nonmembers">#EAFDFC</color>
     <color name="login">#73CBDE</color>
+    <color name="gray2">#6D6767</color>
 </resources>

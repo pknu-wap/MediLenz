@@ -7,8 +7,7 @@
         android:id="@+id/bar"
         android:layout_width="match_parent"
         android:layout_height="51dp"
-        android:background="@color/main"
-        android:orientation="horizontal">
+        android:background="@color/main">
 
         <ImageView
             android:id="@+id/barBackIV"
@@ -26,7 +25,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="39dp"
-            android:text=""
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"

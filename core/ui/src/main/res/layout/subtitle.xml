@@ -36,7 +36,7 @@
 
         <EditText
             android:id="@+id/subtitleEDT"
-            android:layout_width="@dimen/loginSignUpWidth"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/radius_gray_5"
@@ -44,6 +44,7 @@
             android:textColorHint="@color/gray"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/subtitleLL" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

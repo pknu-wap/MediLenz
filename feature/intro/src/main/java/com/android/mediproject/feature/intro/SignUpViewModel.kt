@@ -16,7 +16,9 @@ class SignUpViewModel @Inject constructor() : BaseViewModel() {
 
     fun event(event: SignUpEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
-    sealed class SignUpEvent {
+    fun signUpComplete() = event(SignUpEvent.SignUpComplete())
 
+    sealed class SignUpEvent {
+        data class SignUpComplete(val unit : Unit? = null) : SignUpEvent()
     }
 }

@@ -43,9 +43,9 @@ class Bar @JvmOverloads constructor(
         val titleText = typedArray.getString(R.styleable.Bar_title) ?: ""
         val barTheme = typedArray.getInt(R.styleable.Bar_setTheme, BLUE)
 
-        backButton.visibility = when (backButtonVisible) {
-            true -> View.VISIBLE
-            else -> View.GONE
+        when (backButtonVisible) {
+            true -> backButton.visibility = View.VISIBLE
+            else -> backButton.visibility = View.GONE
         }
 
         title.text = titleText

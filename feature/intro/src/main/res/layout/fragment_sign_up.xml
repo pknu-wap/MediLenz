@@ -1,97 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.intro.SignUpViewModel"
-            />
+            type="com.android.mediproject.feature.intro.SignUpViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
+            android:id="@+id/guideline1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="30dp"
-            />
+            app:layout_constraintGuide_begin="@dimen/loginSignUpMarginHorizontal" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/loginSignUpMarginHorizontal" />
 
         <com.android.mediproject.core.ui.base.view.Bar
-            android:id="@+id/bar"
+            android:id="@+id/signUpBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:setTheme="blue"
             app:showBackButton="true"
-            app:title="@string/signUp"
-            />
+            app:title="@string/signUp" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/bar"
-            >
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/signUpBar">
 
             <com.android.mediproject.core.ui.base.view.Subtitle
-                android:layout_width="wrap_content"
+                android:id="@+id/signUpEmail"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="142dp"
                 app:edtHint="@string/emailHint"
                 app:redPoint="true"
-                app:title="@string/email"
-                />
+                app:title="@string/email" />
 
             <com.android.mediproject.core.ui.base.view.Subtitle
-                android:layout_width="wrap_content"
+                android:id="@+id/signUpPassword"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                app:dataType="password"
                 app:edtHint="@string/passwordHint"
                 app:redPoint="true"
-                app:title="@string/password"
-                />
+                app:title="@string/password" />
 
             <com.android.mediproject.core.ui.base.view.Subtitle
-                android:layout_width="wrap_content"
+                android:id="@+id/signUpPasswordCheck"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                app:dataType="password"
                 app:edtHint="@string/passwordHint"
                 app:redPoint="true"
-                app:title="@string/checkedPassword"
-                />
+                app:title="@string/checkedPassword" />
 
             <com.android.mediproject.core.ui.base.view.Subtitle
-                android:layout_width="wrap_content"
+                android:id="@+id/signUpNickName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 app:edtHint="@string/nickNameHint"
                 app:redPoint="true"
-                app:title="@string/nickName"
-                />
+                app:title="@string/nickName" />
 
-            <Button
-                android:layout_width="@dimen/loginSignUpWidth"
-                android:layout_height="wrap_content"
+            <com.android.mediproject.core.ui.base.view.IntroButton
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/radius_main_5"
-                android:backgroundTint="@color/main"
-                android:text="완료"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                />
-
+                android:background="@color/main"
+                android:onClick="@{()->viewModel.signUpComplete()}"
+                app:setStroke="normal"
+                app:setTitleColor="@color/white"
+                app:title="완료" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
