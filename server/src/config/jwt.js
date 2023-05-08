@@ -52,7 +52,7 @@ const verifyRefreshToken = (req, res, next) => {
     jwt.verify(token, process.env.JWT_REFRESH_TOKEN_SECRETKEY, (err, data) => { // verifing token
         if (err) {
             console.log(err)
-            res.sendStatus(403); // 403 forbidden
+            res.sendStatus(403); // 403 forbidden 
         }
         req.verifiedToken = data;
         next();
