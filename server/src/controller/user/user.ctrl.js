@@ -7,8 +7,10 @@ const output = {
 
 // POST
 const process = {
+    // Sign-up
+    // [POST] /user/register
     register: (req, res) => {
-        res.send("sign-up");
+        
     }
 }
 

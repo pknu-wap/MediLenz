@@ -13,6 +13,7 @@ server
    ├─ config
    ├─ controller
    ├─ routes
-   └─ models
+   ├─ models
+   └─ service
 
 ```
