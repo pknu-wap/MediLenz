@@ -46,10 +46,10 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 ![image](https://user-images.githubusercontent.com/48265129/234879804-42a22684-4534-421f-b71f-c83122e8e613.png)
 
 ## Members
-
+ #### 아래의 프로필 이미지를 클릭하시면 저희 팀원들의 커밋 내역을 확인하실 수 있습니다! 😀
 | [@ho-sick99](https://github.com/ho-sick99) | [@pknujsp](https://github.com/pknujsp) | [@tgyuuAn](https://github.com/tgyuuAn) | [@winocreative](https://github.com/winocreative) |
 | :---: | :---: | :---: | :---: |
-| <img src="https://avatars.githubusercontent.com/u/83945722?s=64&v=4" width="64" height="64"> | <img src="https://avatars.githubusercontent.com/u/48265129?s=64&v=4" width="64" height="64"> | <img src="https://avatars.githubusercontent.com/u/116813010?s=64&v=4" width="64" height="64"> | <img src="https://avatars.githubusercontent.com/u/26576118?s=64&v=4" width="64" height="64"> |
+| <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/server_develop?author=ho-sick99"><img src="https://avatars.githubusercontent.com/u/83945722?s=64&v=4" width="64" height="64"></a> | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/android_develop?author=pknujsp"><img src="https://avatars.githubusercontent.com/u/48265129?s=64&v=4" width="64" height="64"></a> | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/android_develop?author=tgyuuAn"><img src="https://avatars.githubusercontent.com/u/116813010?s=64&v=4" width="64" height="64"></a> | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/server_develop?author=winocreative"><img src="https://avatars.githubusercontent.com/u/26576118?s=64&v=4" width="64" height="64"></a> |
 
 
 ## Git Flow
