@@ -17,8 +17,11 @@ import javax.inject.Inject
 class RecallSuspensionViewModel @Inject constructor(getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase) : BaseViewModel() {
 
     private lateinit var _recallDisposalList: Flow<PagingData<RecallSuspensionListItemDto>>
-    val recallDisposalList = _recallDisposalList
+    val recallDisposalList by lazy { _recallDisposalList }
 
+    /**
+     * 회수 폐기 공고 목록을 로드
+     */
     init {
         viewModelScope.launch {
             _recallDisposalList = getRecallSuspensionInfoUseCase.getRecallDisposalList(

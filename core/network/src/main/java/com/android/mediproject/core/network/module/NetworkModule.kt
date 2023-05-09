@@ -43,3 +43,5 @@ object NetworkModule {
             Json.asConverterFactory("application/json".toMediaType()),
         )
 }
+
+const val DATA_GO_KR_BASEURL = "https://apis.data.go.kr/1471000/"

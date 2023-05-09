@@ -6,6 +6,11 @@
         android:icon="@drawable/menu_selector_home_color" />
 
     <item
+        android:id="@id/news_nav"
+        android:title="@string/news"
+        android:icon="@drawable/menu_selector_news_color" />
+
+    <item
         android:id="@id/community_nav"
         android:title="@string/community"
         android:icon="@drawable/menu_selector_community_color" />

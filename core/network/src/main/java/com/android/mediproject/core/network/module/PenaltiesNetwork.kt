@@ -32,9 +32,9 @@ object PenaltiesNetwork {
     fun providesPenaltiesNetworkApi(okHttpCallFactory: Call.Factory): PenaltiesNetworkApi =
         Retrofit.Builder().callFactory(okHttpCallFactory).addConverterFactory(
             Json.asConverterFactory("application/json".toMediaType())
-        ).baseUrl("").build().create(PenaltiesNetworkApi::class.java)
+        ).baseUrl(DATA_GO_KR_BASEURL).build().create(PenaltiesNetworkApi::class.java)
 
-    
+
     @Provides
     @Singleton
     fun providesRecallSuspensionDataSource(

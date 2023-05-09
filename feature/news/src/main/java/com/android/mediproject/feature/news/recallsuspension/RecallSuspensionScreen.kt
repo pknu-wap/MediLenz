@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.news.recallsuspension
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,10 +16,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,6 +33,10 @@ import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItem
 import kotlinx.datetime.toJavaLocalDate
 import java.time.format.DateTimeFormatter
 
+
+/**
+ * 회수 폐기 목록 표시
+ */
 @Preview
 @Composable
 fun RecallDisposalScreen(viewModel: RecallSuspensionViewModel = hiltViewModel()) {
@@ -43,7 +49,7 @@ fun RecallDisposalScreen(viewModel: RecallSuspensionViewModel = hiltViewModel())
             )
         ) { index ->
             list[index]?.let { ListItem(it) }
-            if (index < list.itemCount - 1) Divider(color = Black, thickness = 0.5.dp, modifier = Modifier.padding(horizontal = 16.dp))
+            if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
         }
 
         when (list.loadState.append) {
@@ -62,13 +68,18 @@ fun RecallDisposalScreen(viewModel: RecallSuspensionViewModel = hiltViewModel())
     }
 }
 
+/**
+ * 회수 폐기 목록 아이템
+ *
+ * @param recallSuspensionListItemDto 회수 폐기 목록 아이템
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 24.dp, vertical = 9.dp),
         shape = RectangleShape,
         onClick = {
             recallSuspensionListItemDto.onClick?.invoke(recallSuspensionListItemDto)
@@ -77,11 +88,20 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = CenterVertically,
+            ) {
                 Text(
                     text = recallSuspensionListItemDto.product,
-                    style = MaterialTheme.typography.titleMedium, fontSize = 14.sp,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 14.sp,
                     color = Color.Black,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .weight(1f),
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
                 Text(
                     text = recallSuspensionListItemDto.let {
@@ -89,13 +109,14 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
                         else it.rtrlCommandDt
                     }!!.toJavaLocalDate().format(dateFormat),
                     fontSize = 12.sp,
+                    modifier = Modifier.align(Alignment.CenterVertically),
                     color = Color.Gray,
+                    maxLines = 1,
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = recallSuspensionListItemDto.rtrvlResn, fontSize = 12.sp,
-                color = Color.Gray,
+                text = recallSuspensionListItemDto.rtrvlResn, fontSize = 12.sp, color = Color.Gray, maxLines = 1
             )
         }
     }

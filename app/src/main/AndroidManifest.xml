@@ -29,6 +29,7 @@
             <nav-graph android:value="@navigation/mypage_nav" />
             <nav-graph android:value="@navigation/setting_nav" />
             <nav-graph android:value="@navigation/search_medicines_nav" />
+            <nav-graph android:value="@navigation/news_nav" />
         </activity>
     </application>
 

@@ -8,7 +8,6 @@ import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItem
 import com.android.mediproject.core.model.remote.recall.toDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.toLocalDate
 import javax.inject.Inject
 
 class GetRecallSuspensionInfoUseCase @Inject constructor(
@@ -19,16 +18,8 @@ class GetRecallSuspensionInfoUseCase @Inject constructor(
     ): Flow<PagingData<RecallSuspensionListItemDto>> =
         recallSuspensionRepository.getRecallDisposalList().let { pager ->
             pager.map { pagingData ->
-                pagingData.map { item ->
-                    RecallSuspensionListItemDto(
-                        enfrcYn = item.enfrcYn,
-                        entrps = item.entrps,
-                        itemSeq = item.itemSeq,
-                        product = item.product,
-                        recallCommandDate = item.recallCommandDate?.toLocalDate(),
-                        rtrlCommandDt = item.rtrlCommandDt?.toLocalDate(),
-                        rtrvlResn = item.rtrvlResn
-                    )
+                pagingData.map {
+                    it.toDto()
                 }
             }
         }

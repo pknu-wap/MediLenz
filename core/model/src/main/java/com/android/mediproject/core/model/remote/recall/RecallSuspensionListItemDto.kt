@@ -1,7 +1,10 @@
 package com.android.mediproject.core.model.remote.recall
 
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toLocalDate
+import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 /**
@@ -33,8 +36,15 @@ fun RecallSuspensionListResponse.Body.Item.Item.toDto(): RecallSuspensionListIte
         entrps = entrps ?: "",
         itemSeq = itemSeq ?: "",
         product = product ?: "",
-        recallCommandDate = recallCommandDate?.toLocalDate(),
-        rtrlCommandDt = rtrlCommandDt?.toLocalDate(),
+        recallCommandDate = recallCommandDate?.let {
+            java.time.LocalDate.parse(it.toString(), dateFormatter).toKotlinLocalDate()
+        },
+        rtrlCommandDt = rtrlCommandDt?.let {
+            LocalDateTime.parse(it.toString(), dateTimeFormatter).toKotlinLocalDateTime().date
+        },
         rtrvlResn = rtrvlResn ?: ""
     )
 }
+
+private val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
