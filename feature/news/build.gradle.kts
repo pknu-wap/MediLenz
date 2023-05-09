@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
+    implementation(libs.androidx.paging.compose)
 
     implementation(libs.androidx.paging.runtime)
 
