@@ -19,6 +19,6 @@ class NewsFragment : BaseFragment<FragmentNewsBinding, NewsViewModel>(FragmentNe
             composeView.setContent {
                 NewsScreen()
             }
-        } 의약품 회수 폐기
+        }
     }
 }

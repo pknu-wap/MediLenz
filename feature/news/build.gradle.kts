@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.bundles.navigations)
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.composes)
+    implementation(libs.kotlinx.datetime)
     kapt(libs.androidx.lifecycle.compilerKapt)
     ksp(libs.glide.ksp)
 }
