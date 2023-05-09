@@ -33,14 +33,15 @@ const createUser = async (email, password, nickname) => {
     }
 
     try {
-        const user = await models.User.create({ // insert new User into DB
+        const user = await User.create({ // insert new User into DB
             EMAIL: email,
-            Password: password,
+            PASSWORD: password,
             NICKNAME: nickname
         });
+        console.log(user)
         const response = responseMsg.SIGNUP_SUCCESS;
-        response.accessToken = createAccessToken(user.EMAIL, user.NICKNAME); // generate access token
-        response.refreshToken = createRefreshToken(user.EMAIL, user.NICKNAME); // generate refresh token
+        response.accessToken = createAccessToken(user.USERID, user.EMAIL, user.NICKNAME); // generate access token
+        response.refreshToken = createRefreshToken(user.USERID, user.EMAIL, user.NICKNAME); // generate refresh token
 
         return {
             code: 201,
