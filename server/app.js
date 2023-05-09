@@ -3,6 +3,7 @@
 // 모듈
 const express = require("express");
 const app = express();
+const bodyParser = require('body-parser');
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -10,6 +11,7 @@ dotenv.config();
 const home = require("./src/routes/home");
 
 // 미들웨어
+app.use(bodyParser.json());
 app.use("/", home);
 
 module.exports = app;
