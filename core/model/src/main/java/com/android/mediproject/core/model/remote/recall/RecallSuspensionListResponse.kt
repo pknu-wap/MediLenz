@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.remote.recalldisposal
+package com.android.mediproject.core.model.remote.recall
 
 
 import kotlinx.serialization.SerialName
@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
  *
  */
 @Serializable
-data class RecallDisposalResponse(
+data class RecallSuspensionListResponse(
     @SerialName("body") val body: Body?,
     @SerialName("header") val header: Header?
 ) {

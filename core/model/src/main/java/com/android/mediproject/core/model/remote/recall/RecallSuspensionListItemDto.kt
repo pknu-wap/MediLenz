@@ -1,5 +1,6 @@
-package com.android.mediproject.core.model.remote.recalldisposal
+package com.android.mediproject.core.model.remote.recall
 
+import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
 
@@ -16,18 +17,19 @@ import kotlinx.datetime.toLocalDate
  * @property rtrvlResn 폐기 사유
  *
  */
-data class RecallDisposalItemDto(
+data class RecallSuspensionListItemDto(
     val enfrcYn: String?, // N
     val entrps: String?, // 동국제약(주)
     val itemSeq: String?, // 201208461
     val product: String?, // 니자틴캡슐(니자티딘)
     val recallCommandDate: LocalDate?, // 20230504
     val rtrlCommandDt: LocalDate?, // 20230503000000
-    val rtrvlResn: String? // 안정성 시험결과 NDMA 기준 초과에 따른 사전예방적 조치로 시중 유통품에 대해 영업자회수
+    val rtrvlResn: String? // 안정성 시험결과 NDMA 기준 초과에 따른 사전예방적 조치로 시중 유통품에 대해 영업자회수,
+    var onClick: ((RecallSuspensionListItemDto) -> Unit)? = null
 )
 
-fun RecallDisposalResponse.Body.Item.Item.toDto(): RecallDisposalItemDto {
-    return RecallDisposalItemDto(
+fun RecallSuspensionListResponse.Body.Item.Item.toDto(): RecallSuspensionListItemDto {
+    return RecallSuspensionListItemDto(
         enfrcYn = enfrcYn,
         entrps = entrps,
         itemSeq = itemSeq,
