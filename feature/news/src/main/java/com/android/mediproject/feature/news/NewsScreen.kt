@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.android.mediproject.feature.news.adminaction.AdminActionScreen
 import com.android.mediproject.feature.news.recallsuspension.RecallDisposalScreen
 
 /**
@@ -41,18 +41,11 @@ fun NewsScreen() {
     var selectedChip by remember { mutableStateOf(ChipType.RECALLS_SUSPENSION) }
 
     Column {
-        Text(
-            text = stringResource(id = com.android.mediproject.core.ui.R.string.news),
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(top = 16.dp, start = 24.dp, end = 24.dp)
-        )
-
         ChipGroup(selectedChip, onChipSelected = { chip ->
             selectedChip = chip
         })
         if (selectedChip == ChipType.RECALLS_SUSPENSION) RecallDisposalScreen()
-        else Text(text = "AdminAction")
-
+        else AdminActionScreen()
     }
 }
 
@@ -72,7 +65,7 @@ fun ChipGroup(selectedChip: ChipType, onChipSelected: (ChipType) -> Unit) {
             isSelected = selectedChip == ChipType.RECALLS_SUSPENSION,
             type = ChipType.RECALLS_SUSPENSION
         ) {
-            onChipSelected(if (selectedChip == ChipType.RECALLS_SUSPENSION) ChipType.RECALLS_SUSPENSION else ChipType.ADMIN_ACTION)
+            onChipSelected(ChipType.RECALLS_SUSPENSION)
         }
         Spacer(Modifier.width(8.dp))
         CustomFilterChip(
@@ -80,7 +73,7 @@ fun ChipGroup(selectedChip: ChipType, onChipSelected: (ChipType) -> Unit) {
             isSelected = selectedChip == ChipType.ADMIN_ACTION,
             type = ChipType.ADMIN_ACTION
         ) {
-            onChipSelected(if (selectedChip == ChipType.RECALLS_SUSPENSION) ChipType.RECALLS_SUSPENSION else ChipType.ADMIN_ACTION)
+            onChipSelected(ChipType.ADMIN_ACTION)
         }
     }
 }

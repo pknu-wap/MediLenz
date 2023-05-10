@@ -4,8 +4,9 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse.Body.Item.Item
+import javax.inject.Inject
 
-class RecallSuspensionListDataSourceImpl(
+class RecallSuspensionListDataSourceImpl @Inject constructor(
     private val recallSuspensionDataSource: RecallSuspensionDataSource,
 ) : PagingSource<Int, Item>() {
 

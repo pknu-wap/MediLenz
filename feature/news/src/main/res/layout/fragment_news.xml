@@ -8,11 +8,23 @@
         tools:context=".NewsFragment"
         >
 
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:showBackButton="false"
+            app:setTheme="white"
+            app:title="@string/news"
+            />
+
         <androidx.compose.ui.platform.ComposeView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:id="@+id/composeView"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bar"
             app:layout_constraintBottom_toBottomOf="parent"
             />
 

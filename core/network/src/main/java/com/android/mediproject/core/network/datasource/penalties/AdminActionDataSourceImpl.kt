@@ -7,6 +7,7 @@ import com.android.mediproject.core.model.remote.adminaction.AdminActionListResp
 import com.android.mediproject.core.network.module.PenaltiesNetworkApi
 import javax.inject.Inject
 
+
 class AdminActionDataSourceImpl @Inject constructor(
     private val penaltiesNetworkApi: PenaltiesNetworkApi,
 ) : PagingSource<Int, AdminActionListResponse.Body.Item>() {
@@ -26,21 +27,19 @@ class AdminActionDataSourceImpl @Inject constructor(
                 pageNo = currentPage
             )
 
-            response.header.let { header ->
-                if (header.resultCode == "00") {
-                    val nextKey = response.body.let { body ->
-                        if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
-                        else currentPage + 1
-                    }
-
-                    PagingSource.LoadResult.Page(
-                        data = response.body.items ?: emptyList(),
-                        prevKey = null,
-                        nextKey = nextKey,
-                    )
-                } else {
-                    PagingSource.LoadResult.Error(Throwable(header.resultMsg))
+            if (response.isSuccess()) {
+                val nextKey = response.body.let { body ->
+                    if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
+                    else currentPage + 1
                 }
+
+                PagingSource.LoadResult.Page(
+                    data = response.body.items,
+                    prevKey = null,
+                    nextKey = nextKey,
+                )
+            } else {
+                PagingSource.LoadResult.Error(Throwable(response.header?.resultMsg ?: ""))
             }
 
         } catch (e: Exception) {

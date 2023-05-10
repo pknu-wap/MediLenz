@@ -76,7 +76,7 @@ interface PenaltiesNetworkApi {
     /**
      * 행정 처분 목록조회
      */
-    @GET(value = "MdcinRtrvlSleStpgeInfoService03/getMdcinRtrvlSleStpgelList02")
+    @GET(value = "MdcinExaathrService04/getMdcinExaathrList04")
     suspend fun getAdminActionList(
         @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int,

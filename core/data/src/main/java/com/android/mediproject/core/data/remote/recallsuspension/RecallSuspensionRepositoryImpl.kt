@@ -13,26 +13,19 @@ import javax.inject.Inject
 
 class RecallSuspensionRepositoryImpl @Inject constructor(
     private val recallSuspensionDataSource: RecallSuspensionDataSource,
-) :
-    RecallSuspensionRepository {
+    private val recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl,
+) : RecallSuspensionRepository {
 
-    override suspend fun getRecallDisposalList(): Flow<PagingData<RecallSuspensionListResponse.Body.Item.Item>> = Pager(
-        config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE),
-        pagingSourceFactory = {
-            RecallSuspensionListDataSourceImpl(
-                recallSuspensionDataSource
-            )
-        }
-    ).flow
+    override suspend fun getRecallDisposalList(): Flow<PagingData<RecallSuspensionListResponse.Body.Item.Item>> =
+        Pager(config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE), pagingSourceFactory = {
+            recallSuspensionListDataSource
+        }).flow
 
     override suspend fun getDetailRecallSuspension(
-        company: String?,
-        product: String?
+        company: String?, product: String?
     ): Result<DetailRecallSuspensionResponse.Body.Item.Item> {
         return recallSuspensionDataSource.getDetailRecallSuspensionInfo(
-            pageNo = 1,
-            company = company,
-            product = product
+            pageNo = 1, company = company, product = product
         )
     }
 }

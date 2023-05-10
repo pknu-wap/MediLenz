@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.news.recallsuspension
+package com.android.mediproject.feature.news.adminaction
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,19 +29,19 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItemDto
+import com.android.mediproject.core.model.remote.adminaction.AdminActionListItemDto
 import kotlinx.datetime.toJavaLocalDate
 import java.time.format.DateTimeFormatter
 
 
 /**
- * 회수 폐기 목록 표시
+ * 행정 처분 목록 표시
  */
 @Preview
 @Composable
-fun RecallDisposalScreen(viewModel: RecallSuspensionViewModel = hiltViewModel()) {
+fun AdminActionScreen(viewModel: AdminActionViewModel = hiltViewModel()) {
 
-    val list = viewModel.recallDisposalList.collectAsLazyPagingItems()
+    val list = viewModel.adminActionList.collectAsLazyPagingItems()
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(
@@ -53,14 +53,7 @@ fun RecallDisposalScreen(viewModel: RecallSuspensionViewModel = hiltViewModel())
         }
 
         when (list.loadState.append) {
-            is LoadState.NotLoading -> {
-                item {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator()
-                    }
-                }
-            }
-
+            is LoadState.NotLoading -> Unit
             is LoadState.Loading -> {
                 item {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -76,20 +69,18 @@ fun RecallDisposalScreen(viewModel: RecallSuspensionViewModel = hiltViewModel())
 }
 
 /**
- * 회수 폐기 목록 아이템
- *
- * @param recallSuspensionListItemDto 회수 폐기 목록 아이템
+ * 행정 처분 목록 아이템
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
+fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 9.dp),
         shape = RectangleShape,
         onClick = {
-            recallSuspensionListItemDto.onClick?.invoke(recallSuspensionListItemDto)
+            adminActionListItemDto.onClick?.invoke(adminActionListItemDto)
         },
     ) {
         Column(
@@ -100,7 +91,7 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
                 verticalAlignment = CenterVertically,
             ) {
                 Text(
-                    text = recallSuspensionListItemDto.product,
+                    text = adminActionListItemDto.eNTPNAME,
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 14.sp,
                     color = Color.Black,
@@ -111,10 +102,7 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
                     maxLines = 1
                 )
                 Text(
-                    text = recallSuspensionListItemDto.let {
-                        if (it.recallCommandDate != null) it.recallCommandDate
-                        else it.rtrlCommandDt
-                    }!!.toJavaLocalDate().format(dateFormat),
+                    text = adminActionListItemDto.lASTSETTLEDATE.toJavaLocalDate().format(dateFormat),
                     fontSize = 12.sp,
                     modifier = Modifier.align(Alignment.CenterVertically),
                     color = Color.Gray,
@@ -123,7 +111,11 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = recallSuspensionListItemDto.rtrvlResn, fontSize = 12.sp, color = Color.Gray, maxLines = 1
+                text = adminActionListItemDto.eXPOSECONT, fontSize = 12.sp, color = Color.Gray, maxLines = 1
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = adminActionListItemDto.aDMDISPSNAME, fontSize = 12.sp, color = Color.Gray, maxLines = 1
             )
         }
     }
