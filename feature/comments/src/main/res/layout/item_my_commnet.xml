@@ -5,9 +5,12 @@
     <data>
 
         <variable
-            name="commnet"
+            name="myCommnet"
             type="com.android.mediproject.core.model.comments.MyCommentDto" />
 
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.feature.comments.mycommnetsllist.MyCommentsListAdapterViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +21,7 @@
             android:id="@+id/myCommnetsItemTitleTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="타이레놀"
+            android:text="@{myCommnet.medicineName}"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="머리아플 때 먹으니까 짱 좋던데요...?"
+            android:text="@{myCommnet.content}"
             android:textColor="@color/gray2"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,9 +58,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="2"
+                android:text="@{String.valueOf(myCommnet.replyCount)}"
                 android:textColor="@color/main"
-                android:textSize="10sp" />
+                android:textSize="@dimen/myCommentItemTextSize" />
 
             <View
                 android:layout_width="0.5dp"
@@ -69,11 +72,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="2023-03-30 22:48"
+                android:text="@{String.valueOf(myCommnet.createdAt)}"
                 android:textColor="@color/gray"
-                android:textSize="10sp" />
-
-
+                android:textSize="@dimen/myCommentItemTextSize" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
