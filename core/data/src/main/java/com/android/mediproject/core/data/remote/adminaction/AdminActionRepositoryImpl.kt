@@ -5,16 +5,16 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.model.remote.adminaction.AdminActionListResponse
-import com.android.mediproject.core.network.datasource.penalties.AdminActionDataSourceImpl
+import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AdminActionRepositoryImpl @Inject constructor(
-    private val adminActionDataSourceImpl: AdminActionDataSourceImpl,
+    private val adminActionListDataSource: AdminActionListDataSourceImpl,
 ) : AdminActionRepository {
     override suspend fun getAdminActionList(): Flow<PagingData<AdminActionListResponse.Body.Item>> =
         Pager(config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5), pagingSourceFactory = {
-            adminActionDataSourceImpl
+            adminActionListDataSource
         }).flow
 
 }

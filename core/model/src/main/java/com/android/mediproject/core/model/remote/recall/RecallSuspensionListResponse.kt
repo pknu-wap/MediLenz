@@ -1,6 +1,7 @@
 package com.android.mediproject.core.model.remote.recall
 
 
+import com.android.mediproject.core.model.DataGoKrBaseResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,8 +15,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RecallSuspensionListResponse(
     @SerialName("body") val body: Body?,
-    @SerialName("header") val header: Header?
-) {
+) : DataGoKrBaseResponse() {
 
     @Serializable
     data class Body(
@@ -56,11 +56,4 @@ data class RecallSuspensionListResponse(
             )
         }
     }
-
-
-    @Serializable
-    data class Header(
-        @SerialName("resultCode") val resultCode: String, // 00
-        @SerialName("resultMsg") val resultMsg: String // NORMAL SERVICE.
-    )
 }

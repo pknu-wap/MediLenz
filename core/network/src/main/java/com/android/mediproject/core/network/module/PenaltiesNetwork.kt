@@ -9,6 +9,8 @@ import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionRe
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
 import com.android.mediproject.core.network.datasource.penalties.RecallSuspensionDataSource
 import com.android.mediproject.core.network.datasource.penalties.RecallSuspensionDataSourceImpl
+import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionDataSource
+import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionDataSourceImpl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -41,6 +43,11 @@ object PenaltiesNetwork {
         @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, penaltiesNetworkApi: PenaltiesNetworkApi
     ): RecallSuspensionDataSource = RecallSuspensionDataSourceImpl(ioDispatcher, penaltiesNetworkApi)
 
+    @Provides
+    @Singleton
+    fun providesAdminActionDataSource(
+        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, penaltiesNetworkApi: PenaltiesNetworkApi
+    ): AdminActionDataSource = AdminActionDataSourceImpl(ioDispatcher, penaltiesNetworkApi)
 }
 
 

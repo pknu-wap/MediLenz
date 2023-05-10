@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-open class DataGoKrBaseResponse(
+abstract class DataGoKrBaseResponse(
 ) {
     @SerialName("header") val header: Header? = null
 
@@ -14,7 +14,17 @@ open class DataGoKrBaseResponse(
         @SerialName("resultMsg") val resultMsg: String // NORMAL SERVICE.
     )
 
-    fun isSuccess() = header?.let { header ->
-        header.resultCode == "00"
-    } ?: false
+    fun isSuccess(): DataGoKrResult = header?.let { header ->
+        if (header.resultCode == "00") {
+            DataGoKrResult.isSuccess
+        } else {
+            DataGoKrResult.isFailure(header.resultMsg)
+        }
+    } ?: DataGoKrResult.isFailure("Server Response Failed")
+
+}
+
+sealed class DataGoKrResult(val failedMessage: String) {
+    object isSuccess : DataGoKrResult("")
+    class isFailure(failedMessage: String) : DataGoKrResult(failedMessage)
 }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +29,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItemDto
+import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import kotlinx.datetime.toJavaLocalDate
 import java.time.format.DateTimeFormatter
 
@@ -53,21 +53,14 @@ fun RecallDisposalScreen(viewModel: RecallSuspensionViewModel = hiltViewModel())
         }
 
         when (list.loadState.append) {
-            is LoadState.NotLoading -> {
-                item {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator()
-                    }
-                }
+            is LoadState.NotLoading -> item {
+                CenterProgressIndicator(showOfItem = false)
             }
 
-            is LoadState.Loading -> {
-                item {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator()
-                    }
-                }
+            is LoadState.Loading -> item {
+                CenterProgressIndicator(showOfItem = true)
             }
+
 
             is LoadState.Error -> TODO()
             else -> TODO()

@@ -21,29 +21,24 @@ class RecallSuspensionListDataSourceImpl @Inject constructor(
         val currentPage = params.key ?: 1
 
         return try {
-            val response = recallSuspensionDataSource.getRecallSuspensionList(currentPage)
-
-            response.header?.let { header ->
-                if (header.resultCode == "00") {
+            recallSuspensionDataSource.getRecallSuspensionList(currentPage).let { result ->
+                result.fold(onSuccess = { response ->
                     val nextKey = response.body?.let { body ->
                         if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
                         else currentPage + 1
                     }
 
-                    PagingSource.LoadResult.Page(
+                    LoadResult.Page(
                         data = response.body?.items?.map { item ->
                             item.item
                         } ?: emptyList(),
                         prevKey = null,
                         nextKey = nextKey,
                     )
-                } else {
-                    PagingSource.LoadResult.Error(Throwable(header.resultMsg))
-                }
-            } ?: kotlin.run {
-                PagingSource.LoadResult.Error(Throwable("header is null"))
+                }, onFailure = { throwable ->
+                    PagingSource.LoadResult.Error(throwable)
+                })
             }
-
         } catch (e: Exception) {
             PagingSource.LoadResult.Error(e)
         }
