@@ -73,7 +73,11 @@ class SearchMedicinesFragment :
      * 검색바 검색 가능하도록 설정하고, 검색버튼과 AI검색 버튼이 동작하도록 초기화합니다.
      */
     private fun initSearchBar() {
-        binding.searchView.setOnSearchAiBtnClickListener {}
+        binding.searchView.setOnSearchAiBtnClickListener {
+            binding.contentsFragmentContainerView.findNavController().also { navController ->
+                navController.navigate(R.id.medicinesDetectorFragment)
+            }
+        }
 
         binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
             override fun onSearchQuery(query: String) {
