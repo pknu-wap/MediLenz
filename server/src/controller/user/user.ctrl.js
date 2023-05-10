@@ -2,11 +2,10 @@
 
 const { responseFormat } = require("../../config/response")
 const responseMsg = require("../../config/responseMsg");
-const { login, createUser } = require("../../service/userService");
+const { login, createUser, reissueToken } = require("../../service/userService");
 
 // GET
 const output = {
-    //
 }
 
 // POST
@@ -31,6 +30,13 @@ const process = {
             return res.status(result.code).send(result.response);
         }
         const result = await createUser(email, password, nickname); // create user
+        return res.status(result.code).send(result.response);
+    },
+    // Reissuing token
+    // [POST] /user/reissue
+    reissue: (req, res) => {
+        const { userId } = req.verifiedToken;
+        const result = reissueToken(userId); // reissuing token
         return res.status(result.code).send(result.response);
     }
 }

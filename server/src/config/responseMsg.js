@@ -4,6 +4,7 @@ module.exports = {
     // Success
     SIGNIN_SUCCESS: { message: "login success" },
     SIGNUP_SUCCESS: { message: "new user created" },
+    REISSUE_SUCCESS: { message: "reissued tokens" },
 
     // Request error
     JWT_INVALID_FORMAT: { message: "token is empty or sent format is wrong" },
