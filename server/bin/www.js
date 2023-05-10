@@ -23,8 +23,13 @@ app.listen(PORT, async () => {
 
   // Find all users
   const users = await models.User.findAll();
-  console.log(users.every(user => user instanceof User)); // true
+  console.log(users.every(user => user instanceof models.User)); // true
   console.log("All users:", JSON.stringify(users, null, 2));
+  console.log("All medicines:", JSON.stringify(await models.Medicine.findAll(), null, 2));
+  console.log("All likes:", JSON.stringify(await models.Like.findAll(), null, 2));
+  console.log("All comments:", JSON.stringify(await models.Comment.findAll(), null, 2));
+  console.log("All recent browses:", JSON.stringify(await models.RecentBrowsed.findAll(), null, 2));
+  console.log("All favorite medicines:", JSON.stringify(await models.FavoriteMedicine.findAll(), null, 2));
 
   // // model auto generation test
   // auto.run((err) => {
