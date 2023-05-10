@@ -15,13 +15,11 @@ class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, Ap
 
     class ViewHolder(private val binding: ManualMedicineItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private var item: ApprovedMedicineItemDto? = null
-
         private val glide: RequestManager = Glide.with(binding.root)
 
         init {
             binding.root.setOnClickListener {
-                item?.apply {
+                binding.item?.apply {
                     onClick?.invoke(this)
                 }
             }
@@ -29,12 +27,7 @@ class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, Ap
 
         fun bind(item: ApprovedMedicineItemDto) {
             binding.apply {
-                this@ViewHolder.item = item
-
-                medicineNameTextView.text = item.itemName
-                ingredientTextView.text = item.itemIngrName
-                manufacturerTextView.text = item.entpName
-                medicineTypeTextView.text = item.spcltyPblc
+                this.item = item
 
                 // 메모리 캐시 사용
                 glide.load(item.bigPrdtImgUrl)
@@ -55,8 +48,6 @@ class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, Ap
             holder.bind(this)
         }
     }
-
-
 }
 
 object MedicineComparator : DiffUtil.ItemCallback<ApprovedMedicineItemDto>() {

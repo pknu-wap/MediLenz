@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="fragmentViewModel"
+            name="viewModel"
             type="com.android.mediproject.feature.main.MedicineInfoViewModel"
             />
 
@@ -20,7 +20,7 @@
         >
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/top_app_bar"
+            android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -43,7 +43,7 @@
                     >
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/medicine_primary_info_viewgroup"
+                        android:id="@+id/medicinePrimaryInfoViewgroup"
                         android:layout_width="match_parent"
                         android:layout_height="185dp"
                         android:layout_marginHorizontal="19dp"
@@ -56,7 +56,7 @@
                         >
 
                         <ImageView
-                            android:id="@+id/medicine_image_view"
+                            android:id="@+id/medicineImageView"
                             android:layout_width="match_parent"
                             android:layout_height="120dp"
                             android:src="@drawable/logo"
@@ -66,34 +66,34 @@
                             />
 
                         <TextView
-                            android:id="@+id/medicine_kor_name"
+                            android:id="@+id/medicineKorName"
                             style="@style/TextAppearance.Material3.LabelLarge"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:text="콘트라브 서방정"
                             android:textColor="@color/white"
-                            app:layout_constraintBottom_toTopOf="@id/medicine_eng_name"
+                            app:layout_constraintBottom_toTopOf="@id/medicineEngName"
                             app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/medicine_image_view"
+                            app:layout_constraintTop_toBottomOf="@id/medicineImageView"
                             app:layout_constraintVertical_chainStyle="packed"
                             />
 
                         <TextView
-                            android:id="@+id/medicine_eng_name"
+                            android:id="@+id/medicineEngName"
                             style="@style/TextAppearance.Material3.LabelMedium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:text="Contrav ERTab."
-                            android:textColor="@color/medicine_eng_name"
+                            android:textColor="@color/medicineEngName"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintLeft_toLeftOf="@id/medicine_kor_name"
-                            app:layout_constraintTop_toBottomOf="@id/medicine_kor_name"
+                            app:layout_constraintLeft_toLeftOf="@id/medicineKorName"
+                            app:layout_constraintTop_toBottomOf="@id/medicineKorName"
                             />
 
                         <ImageView
-                            android:id="@+id/interest_btn"
+                            android:id="@+id/interestBtn"
                             android:layout_width="42dp"
                             android:layout_height="42dp"
                             android:layout_marginRight="16dp"
@@ -101,7 +101,7 @@
                             android:src="@drawable/round_star_border_24"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/medicine_image_view"
+                            app:layout_constraintTop_toBottomOf="@id/medicineImageView"
                             app:tint="@color/gray"
                             />
 
@@ -112,7 +112,7 @@
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"

@@ -9,7 +9,7 @@
         >
 
         <include
-            android:id="@+id/medicine_search_list_layout"
+            android:id="@+id/searchListViewGroup"
             layout="@layout/medicine_search_list_viewgroup"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

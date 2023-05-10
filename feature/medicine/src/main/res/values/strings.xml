@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="default_info">기본 정보</string>
-    <string name="indentifying_info">식별 정보</string>
+    <string name="defaultInfo">기본 정보</string>
+    <string name="indentifyingInfo">식별 정보</string>
     <string name="precautions">주의 사항</string>
     <string name="comment">댓글</string>
-    <string name="efficacy_effect">효능 효과</string>
+    <string name="efficacyEffect">효능 효과</string>
     <string name="dosage">용법 용량</string>
-    <string name="medicine_info">의약품 정보</string>
-    <string name="visibility_info">식별 정보</string>
+    <string name="medicineInfo">의약품 정보</string>
+    <string name="visibilityInfo">식별 정보</string>
 
     <string name="medicineInfoTitle">의약품 정보</string>
     <string name="companyInfoTitle">업체 정보</string>

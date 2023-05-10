@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/option_show_only_specialty_medicines"
+    <item android:id="@+id/listOnlySpecialtyMedicines"
         android:title="@string/option_show_only_specialty_medicines" />
-    <item android:id="@+id/option_show_only_generic_medicines"
+    <item android:id="@+id/listOnlyGenericMedicines"
         android:title="@string/option_show_only_generic_medicines" />
-    <item android:id="@+id/option_show_all_medicines"
+    <item android:id="@+id/listAllMedicines"
         android:title="@string/option_show_all_medicines" />
 </menu>

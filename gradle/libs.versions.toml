@@ -12,6 +12,7 @@ androidGradlePlugin = "8.0.1"
 androidDesugarJdkLibs = "2.0.3"
 
 # androidx
+androidXPagingCompose = "1.0.0-alpha19"
 androidxCore = "1.10.0"
 androidxActivity = "1.7.1"
 androidxFragment = "1.5.7"
@@ -100,7 +101,7 @@ androidx-fragment = { group = "androidx.fragment", name = "fragment-ktx", versio
 androidx-activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidxActivity" }
 
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "androidXPaging" }
-# androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "androidxActivity" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "androidXPagingCompose" }
 
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDatastore" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }
