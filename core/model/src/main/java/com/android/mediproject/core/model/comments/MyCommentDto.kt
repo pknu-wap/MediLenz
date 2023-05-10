@@ -16,7 +16,7 @@ data class MyCommentDto(
     val commentId: Int,
     val medicineName : String,
     val content: String,
-    val createdAt: LocalDateTime,
+    val createdAt: String,
     val replyCount : Int,
     var onClick : ((MyCommentDto)->Unit)? = null,
 )
