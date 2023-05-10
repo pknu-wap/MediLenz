@@ -7,7 +7,7 @@
         >
 
         <com.android.mediproject.core.ui.base.view.Bar
-            android:id="@+id/bar"
+            android:id="@+id/newsBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
