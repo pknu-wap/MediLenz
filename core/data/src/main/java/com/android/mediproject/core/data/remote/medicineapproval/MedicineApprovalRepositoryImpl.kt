@@ -25,7 +25,7 @@ class MedicineApprovalRepositoryImpl @Inject constructor(private val medicineApp
      *
      */
     override fun getMedicineApprovalList(itemName: String?, entpName: String?, medicationType: String?): Flow<PagingData<Item>> = Pager(
-        config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE),
+        config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5),
         pagingSourceFactory = {
             MedicineApprovalListDataSourceImpl(
                 medicineApprovalDataSource, itemName, entpName, medicationType

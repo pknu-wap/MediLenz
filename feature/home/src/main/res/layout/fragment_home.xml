@@ -9,13 +9,14 @@
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/header_layout"
+            android:id="@+id/headerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background_header_on_top"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
             <ImageView
                 android:layout_width="108dp"
@@ -23,22 +24,24 @@
                 android:layout_marginLeft="12dp"
                 android:src="@drawable/medlens_text_logo"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
             <TextView
-                android:id="@+id/header_text"
+                android:id="@+id/headerText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="50dp"
                 android:layout_marginTop="69dp"
                 android:layout_marginBottom="58dp"
-                android:text="@string/text_header_on_home"
+                android:text="@string/headerTextOnHome"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -50,45 +53,52 @@
             android:fillViewport="true"
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header_layout">
+            app:layout_constraintTop_toBottomOf="@id/headerLayout"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipChildren="false"
                 android:orientation="vertical"
-                android:paddingHorizontal="20dp">
+                android:paddingHorizontal="20dp"
+                >
 
                 <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/recent_search_list_fragment"
+                    android:id="@+id/recentSearchListFragment"
                     android:name="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp" />
+                    android:layout_marginTop="40dp"
+                    />
 
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/divider_margin_vertical" />
+                    android:layout_marginVertical="@dimen/divider_margin_vertical"
+                    />
 
                 <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/recent_comment_list_fragment"
+                    android:id="@+id/recentCommentListFragment"
                     android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/divider_margin_vertical" />
+                    android:layout_marginVertical="@dimen/divider_margin_vertical"
+                    />
 
                 <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/penalty_list_fragment_container"
+                    android:id="@+id/recentPenaltyListFragment"
                     android:name="com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/divider_margin_vertical" />
+                    android:layout_marginBottom="@dimen/divider_margin_vertical"
+                    />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
@@ -98,15 +108,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="38dp"
-            app:ai_text="@string/search_with_ai"
+            app:ai_text="@string/searchWithAi"
             app:camera_icon="@drawable/baseline_camera_24"
             app:is_all_btn="true"
-            app:layout_constraintBottom_toBottomOf="@id/header_layout"
+            app:layout_constraintBottom_toBottomOf="@id/headerLayout"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header_layout"
-            app:search_hint="@string/search_hint"
-            app:search_icon="@drawable/baseline_search_24" />
+            app:layout_constraintTop_toBottomOf="@id/headerLayout"
+            app:search_hint="@string/searchHint"
+            app:search_icon="@drawable/baseline_search_24"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
