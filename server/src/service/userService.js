@@ -1,7 +1,7 @@
 "use strict";
 
 const { User } = require("../models/index");
-const { response } = require("../config/response");
+const { responseFormat } = require("../config/response");
 const responseMsg = require("../config/responseMsg");
 const { createAccessToken, createRefreshToken } = require("../config/jwt");
 
@@ -14,16 +14,16 @@ const login = async (email, password) => {
         }
     });
     if (!userInfo) { // if user not exists
-        return response(404, responseMsg.SIGNIN_USER_NOT_FOUND);
+        return responseFormat(404, responseMsg.SIGNIN_USER_NOT_FOUND);
     }
     if (password != userInfo.PASSWORD) { // password mismatch
-        return response(401, responseMsg.SIGNIN_PASSWORD_MISMATCH);
+        return responseFormat(401, responseMsg.SIGNIN_PASSWORD_MISMATCH);
     }
     const response = responseMsg.SIGNIN_SUCCESS;
     response.accessToken = createAccessToken(userInfo.USERID); // generate access token
     response.refreshToken = createRefreshToken(userInfo.USERID); // generate refresh token
 
-    return response(200, response);
+    return responseFormat(200, response);
 }
 
 // duplicate check
@@ -41,11 +41,11 @@ const createUser = async (email, password, nickname) => {
     // duplicate check
     let checkParam = "EMAIL"
     if (await duplicateCheck({ [checkParam]: email })) { // email
-        return response(409, responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam));
+        return responseFormat(409, responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam));
     }
     checkParam = "NICKNAME";
     if (await duplicateCheck({ [checkParam]: nickname })) { // nickname
-        return response(409, responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam));
+        return responseFormat(409, responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam));
     }
 
     try {
@@ -58,11 +58,11 @@ const createUser = async (email, password, nickname) => {
         response.accessToken = createAccessToken(user.USERID); // generate access token
         response.refreshToken = createRefreshToken(user.USERID); // generate refresh token
 
-        return response(201, response);
+        return responseFormat(201, response);
     }
     catch (err) {
         console.log(err);
-        return response(500, responseMsg.SIGNUP_INTERNAL_SERVER_ERROR);
+        return responseFormat(500, responseMsg.SIGNUP_INTERNAL_SERVER_ERROR);
     }
 }
 

@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = {
-    response: (code, response) => {
+    responseFormat: (code, response) => {
         return {
             code,
             response

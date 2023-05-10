@@ -1,5 +1,6 @@
 "use strict";
 
+const { responseFormat } = require("../../config/response")
 const responseMsg = require("../../config/responseMsg");
 const { login, createUser } = require("../../service/userService");
 
@@ -15,9 +16,10 @@ const process = {
     login: async (req, res) => {
         const { email, password } = req.body;
         if (!(email, password)) { // parameter check
-            res.status(400).send(responseMsg.SIGNIN_BAD_REQUEST);
+            const result = responseFormat(400, responseMsg.SIGNIN_BAD_REQUEST);
+            return res.status(result.code).send(result.response);
         }
-        const result = await login(email, password);
+        const result = await login(email, password); // access to account
         return res.status(result.code).send(result.response);
     },
     // Sign-up
@@ -25,7 +27,8 @@ const process = {
     register: async (req, res) => {
         const { email, password, nickname } = req.body;
         if (!(email && password && nickname)) { // parameter check
-            res.status(400).send(responseMsg.SIGNUP_BAD_REQUEST);
+            const result = responseFormat(400, responseMsg.SIGNUP_BAD_REQUEST);
+            return res.status(result.code).send(result.response);
         }
         const result = await createUser(email, password, nickname); // create user
         return res.status(result.code).send(result.response);
