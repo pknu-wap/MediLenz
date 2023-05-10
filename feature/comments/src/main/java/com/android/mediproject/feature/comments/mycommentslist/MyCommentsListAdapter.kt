@@ -28,7 +28,7 @@ class MyCommentsViewHolder(
 }
 
 
-class MyCommentsListAdapter() : ListAdapter<MyCommentDto, MyCommentsViewHolder>(diffUtil) {
+class MyCommentsListAdapter : ListAdapter<MyCommentDto, MyCommentsViewHolder>(diffUtil) {
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<MyCommentDto>() {
