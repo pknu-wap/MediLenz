@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="commnet"
             type="com.android.mediproject.core.model.comments.MyCommentDto" />
@@ -39,8 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
-            android:orientation="horizontal"
             android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/myCommnetsItemCommnetTV">
 
@@ -53,10 +54,25 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:text="2"
                 android:textColor="@color/main"
-                android:textSize="10sp"
-                android:layout_marginStart="5dp"/>
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:background="@color/gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="2023-03-30 22:48"
+                android:textColor="@color/gray"
+                android:textSize="10sp" />
+
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

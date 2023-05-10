@@ -1,7 +1,9 @@
 package com.android.mediproject.feature.comments.mycommnetsllist
 
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class MyCommnetsListAdapter(){
-    //Todo
+class
+
+class MyCommnetsListAdapter : ListAdapter() {
 }
