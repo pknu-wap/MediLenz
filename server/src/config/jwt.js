@@ -1,17 +1,19 @@
-const jwt = require('jsonwebtoken');
+"use strict";
 
+const jwt = require('jsonwebtoken');
+const responseMsg = require("./responseMsg");
 const AUTHORIZATION_HEADER = 'Authorization'
 
 // generate access token
-const createAccessToken = (userId, email, nickname) => {
-    return jwt.sign({ userId, email, nickname }, process.env.JWT_ACCESS_TOKEN_SECRETKEY, {
+const createAccessToken = (userId) => {
+    return jwt.sign({ userId }, process.env.JWT_ACCESS_TOKEN_SECRETKEY, {
         expiresIn: "30m"
     })
 }
 
 // generate refresh token
-const createRefreshToken = (userId, email, nickname) => {
-    return jwt.sign({ userId, email, nickname }, process.env.JWT_REFRESH_TOKEN_SECRETKEY, {
+const createRefreshToken = (userId) => {
+    return jwt.sign({ userId }, process.env.JWT_REFRESH_TOKEN_SECRETKEY, {
         expiresIn: "180d"
     })
 }
@@ -29,13 +31,12 @@ const resolveToken = (req) => {
 const verifyAccessToken = (req, res, next) => {
     const token = resolveToken(req); // parsing token
     if (token) { // if token does not exist
-        console.log("token is empty or sent format is wrong")
-        return res.sendStatus(401); // 401 unauthorized
+        return res.sendStatus(401).send(responseMsg.JWT_INVALID_FORMAT); // 401 unauthorized
     }
     jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRETKEY, (err, data) => { // verifing token
         if (err) {
             console.log(err)
-            res.sendStatus(403); // 403 forbidden
+            res.sendStatus(401).send(err); // 401 unauthorized
         }
         req.verifiedToken = data;
         next();
@@ -46,13 +47,12 @@ const verifyAccessToken = (req, res, next) => {
 const verifyRefreshToken = (req, res, next) => {
     const token = resolveToken(req); // parsing token
     if (token) { // if token does not exist
-        console.log("token is empty or sent format is wrong")
-        return res.sendStatus(401); // 401 unauthorized
+        return res.sendStatus(401).send(responseMsg.JWT_INVALID_FORMAT); // 401 unauthorized
     }
     jwt.verify(token, process.env.JWT_REFRESH_TOKEN_SECRETKEY, (err, data) => { // verifing token
         if (err) {
             console.log(err)
-            res.sendStatus(403); // 403 forbidden 
+            res.sendStatus(401).send(err); // 401 unauthorized
         }
         req.verifiedToken = data;
         next();
