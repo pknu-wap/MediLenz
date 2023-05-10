@@ -19,7 +19,7 @@ class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, Ap
 
         init {
             binding.root.setOnClickListener {
-                binding.item.apply {
+                binding.item?.apply {
                     onClick?.invoke(this)
                 }
             }

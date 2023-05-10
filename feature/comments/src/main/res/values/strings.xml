@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="recent_comments">최근 댓글 목록</string>
+    <string name="recentComments">최근 댓글 목록</string>
     <string name="replyComment">답글 달기</string>
     <string name="likeComment">좋아요</string>
     <string name="commentInputHint">댓글 내용을 입력하세요</string>

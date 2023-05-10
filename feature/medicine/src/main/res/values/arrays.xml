@@ -2,8 +2,8 @@
 <resources>
 
     <string-array name="medicineInfoTab">
-        <item>@string/default_info</item>
-        <item>@string/visibility_info</item>
+        <item>@string/defaultInfo</item>
+        <item>@string/visibilityInfo</item>
         <item>@string/precautions</item>
         <item>@string/comment</item>
     </string-array>
