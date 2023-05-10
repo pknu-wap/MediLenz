@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="myCommnet"
             type="com.android.mediproject.core.model.comments.MyCommentDto" />
@@ -15,7 +14,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{()->viewModel.}">
 
         <TextView
             android:id="@+id/myCommnetsItemTitleTV"

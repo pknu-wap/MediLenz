@@ -9,16 +9,26 @@ import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.feature.comments.databinding.ItemMyCommnetBinding
 
 class MyCommentsViewHolder(
-    private val binding: ItemMyCommnetBinding,
-    private val adapterViewModel: MyCommentsListAdapterViewModel
+    private val binding: ItemMyCommnetBinding
 ) : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        binding.apply {
+            root.setOnClickListener {
+                myCommnet?.apply {
+                    onClick?.invoke(this)
+                }
+            }
+        }
+    }
+
     fun bind(myComment: MyCommentDto) {
         binding.myCommnet = myComment
-        binding.viewModel = adapterViewModel
     }
 }
 
-class MyCommentsListAdapter(private val adapterViewModel : MyCommentsListAdapterViewModel) : ListAdapter<MyCommentDto, MyCommentsViewHolder>(diffUtil) {
+
+class MyCommentsListAdapter() : ListAdapter<MyCommentDto, MyCommentsViewHolder>(diffUtil) {
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<MyCommentDto>() {
