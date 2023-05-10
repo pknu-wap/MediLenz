@@ -2,9 +2,14 @@
 
 module.exports = {
     // Success
+    SIGNIN_SUCCESS: { message: "login success" },
     SIGNUP_SUCCESS: { message: "new user created" },
 
     // Request error
+    JWT_INVALID_FORMAT: { message: "token is empty or sent format is wrong" },
+    SIGNIN_BAD_REQUEST: { message: "paramter must include 'email(string), password(string)'" },
+    SIGNIN_USER_NOT_FOUND: { message: "user not found" },
+    SIGNIN_PASSWORD_MISMATCH: { message: "password mismatch" },
     SIGNUP_BAD_REQUEST: { message: "paramter must include 'email(string), password(string), nickname(string)'" },
 
     // Response error

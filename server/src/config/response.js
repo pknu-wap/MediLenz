@@ -1,10 +1,10 @@
 "use strict";
 
 module.exports = {
-    response: (code, message) => {
+    response: (code, response) => {
         return {
             code,
-            message
+            response
         }
     }
 }

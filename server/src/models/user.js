@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         EMAIL: {
             field: 'EMAIL',
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         PASSWORD: {
             field: 'PASSWORD',
@@ -20,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
         NICKNAME: {
             field: 'NICKNAME',
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true
         }
     }, {
         underscored: true,
