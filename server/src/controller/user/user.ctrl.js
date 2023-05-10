@@ -15,7 +15,7 @@ const process = {
     // [POST] /user/login 
     login: async (req, res) => {
         const { email, password } = req.body;
-        if (!(email, password)) { // parameter check
+        if (!(email && password)) { // parameter check
             const result = responseFormat(400, responseMsg.SIGNIN_BAD_REQUEST);
             return res.status(result.code).send(result.response);
         }
