@@ -52,7 +52,7 @@ class SearchMedicinesFragment :
         super.onStart()
 
         binding.apply {
-            childFragmentManager.findFragmentById(R.id.contents_fragment_container_view)?.also { navHostFragment ->
+            childFragmentManager.findFragmentById(R.id.contentsFragmentContainerView)?.also { navHostFragment ->
                 navHostFragment.childFragmentManager.apply {
                     setFragmentResultListener(
                         RecentSearchListFragment.ResultKey.RESULT_KEY.name, navHostFragment.viewLifecycleOwner

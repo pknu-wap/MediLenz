@@ -37,30 +37,30 @@ class ManualSearchResultFragment :
         }
 
         binding.apply {
-            medicineSearchListLayout.searchResultRecyclerView.addItemDecoration(
+            searchListViewGroup.searchResultRecyclerView.addItemDecoration(
                 DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
                     setDrawable(resources.getDrawable(com.android.mediproject.core.ui.R.drawable.divider, null))
                 }
             )
 
-            medicineSearchListLayout.searchResultRecyclerView.adapter = searchResultListAdapter
+            searchListViewGroup.searchResultRecyclerView.adapter = searchResultListAdapter
 
-            medicineSearchListLayout.filterBtn.setOnClickListener { it ->
+            searchListViewGroup.filterBtn.setOnClickListener { it ->
                 MediPopupMenu.showMenu(
                     it, R.menu.search_result_list_filter_menu
                 ) { menuItem ->
-                    medicineSearchListLayout.filterBtn.text = menuItem.title
+                    searchListViewGroup.menuItem = menuItem
 
                     when (menuItem.itemId) {
-                        R.id.option_show_only_specialty_medicines -> {
+                        R.id.listOnlySpecialtyMedicines -> {
                             fragmentViewModel.searchMedicinesByMedicationType(MedicationType.SPECIALTY)
                         }
 
-                        R.id.option_show_only_generic_medicines -> {
+                        R.id.listOnlyGenericMedicines -> {
                             fragmentViewModel.searchMedicinesByMedicationType(MedicationType.GENERAL)
                         }
 
-                        R.id.option_show_all_medicines -> {
+                        R.id.listAllMedicines -> {
                             fragmentViewModel.searchMedicinesByMedicationType(null)
                         }
                     }

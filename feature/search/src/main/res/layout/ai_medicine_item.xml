@@ -9,26 +9,26 @@
     >
 
     <ImageView
-        android:id="@+id/imageView_captured_medicine"
+        android:id="@+id/capturedImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:contentDescription="@string/medicine_image"
+        android:contentDescription="@string/medicineImage"
         android:src="@drawable/logo"
-        app:layout_constraintBottom_toTopOf="@id/imageView_inferenced_medicine"
+        app:layout_constraintBottom_toTopOf="@id/inferedImageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
 
     <ImageView
-        android:id="@+id/imageView_inferenced_medicine"
+        android:id="@+id/inferedImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:contentDescription="@string/medicine_image"
+        android:contentDescription="@string/medicineImage"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView_captured_medicine"
+        app:layout_constraintTop_toBottomOf="@id/capturedImageView"
         />
 
     <androidx.constraintlayout.widget.Barrier
@@ -37,77 +37,77 @@
         android:layout_height="wrap_content"
         app:barrierDirection="right"
         app:barrierMargin="8dp"
-        app:constraint_referenced_ids="imageView_captured_medicine, imageView_inferenced_medicine"
+        app:constraint_referenced_ids="capturedImageView, inferedImageView"
         />
 
     <TextView
-        android:id="@+id/textView_medicine_name"
+        android:id="@+id/medicineNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="@string/medicine_name"
+        android:text="@string/medicineName"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView_main_ingredient"
+        app:layout_constraintBottom_toTopOf="@+id/mainIngredientTextView"
         app:layout_constraintStart_toEndOf="@id/barrier"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         />
 
     <TextView
-        android:id="@+id/textView_main_ingredient"
+        android:id="@+id/mainIngredientTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="@string/main_ingredient"
+        android:text="@string/mainIngredient"
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_main_effect"
+        app:layout_constraintBottom_toTopOf="@+id/mainEffectTextView"
         app:layout_constraintStart_toEndOf="@id/barrier"
 
-        app:layout_constraintTop_toBottomOf="@id/textView_medicine_name"
+        app:layout_constraintTop_toBottomOf="@id/medicineNameTextView"
         />
 
     <TextView
-        android:id="@+id/textView_main_effect"
+        android:id="@+id/mainEffectTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="@string/main_effect"
+        android:text="@string/mainEffect"
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_manufacturer_name"
+        app:layout_constraintBottom_toTopOf="@+id/companyNameTextView"
         app:layout_constraintStart_toEndOf="@id/barrier"
-        app:layout_constraintTop_toBottomOf="@id/textView_main_ingredient"
+        app:layout_constraintTop_toBottomOf="@id/mainIngredientTextView"
         />
 
     <TextView
-        android:id="@+id/textView_manufacturer_name"
+        android:id="@+id/companyNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/manufacturer_name"
+        android:text="@string/companyName"
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/barrier"
-        app:layout_constraintTop_toBottomOf="@id/textView_main_effect"
+        app:layout_constraintTop_toBottomOf="@id/mainEffectTextView"
         />
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/textView_medicine_type"
+        android:id="@+id/medicineTypeTextView"
         style="@style/Widget.Material3.Chip.Assist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/medicine_type"
-        android:textColor="@color/medicine_type_chip_stroke_color"
+        android:text="@string/medicineType"
+        android:textColor="@color/medicineTypeChipStrokeColor"
         android:textSize="13sp"
-        app:chipStrokeColor="@color/medicine_type_chip_stroke_color"
+        app:chipStrokeColor="@color/medicineTypeChipStrokeColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_min="wrap"
         app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toEndOf="@id/textView_medicine_name"
-        app:layout_constraintTop_toTopOf="@id/textView_medicine_name"
+        app:layout_constraintStart_toEndOf="@id/medicineNameTextView"
+        app:layout_constraintTop_toTopOf="@id/medicineNameTextView"
         app:layout_constraintWidth_min="wrap"
         />
 
