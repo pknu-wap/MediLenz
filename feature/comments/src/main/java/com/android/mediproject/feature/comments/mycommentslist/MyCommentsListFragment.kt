@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.comments.mycommnetsllist
+package com.android.mediproject.feature.comments.mycommentslist
 
 import android.os.Bundle
 import android.view.View
@@ -16,6 +16,8 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding,MyComm
             viewModel = fragmentViewModel.apply{
 
             }
+
+
         }
     }
 }

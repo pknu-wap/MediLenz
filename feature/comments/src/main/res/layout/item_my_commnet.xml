@@ -6,16 +6,11 @@
         <variable
             name="myCommnet"
             type="com.android.mediproject.core.model.comments.MyCommentDto" />
-
-        <variable
-            name="viewModel"
-            type="com.android.mediproject.feature.comments.mycommnetsllist.MyCommentsListAdapterViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="@{()->viewModel.}">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/myCommnetsItemTitleTV"

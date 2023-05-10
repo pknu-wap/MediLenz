@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.comments.mycommnetsllist
+package com.android.mediproject.feature.comments.mycommentslist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
