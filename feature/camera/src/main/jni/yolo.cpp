@@ -26,7 +26,7 @@ static float intersection_area(const Object &a, const Object &b) {
     return inter.area();
 }
 
-static void qsort_descent_inplace(std::vector <Object> &faceobjects, int left, int right) {
+static void qsort_descent_inplace(std::vector<Object> &faceobjects, int left, int right) {
     int i = left;
     int j = right;
     float p = faceobjects[(left + right) / 2].prob;
@@ -60,14 +60,14 @@ static void qsort_descent_inplace(std::vector <Object> &faceobjects, int left, i
     }
 }
 
-static void qsort_descent_inplace(std::vector <Object> &faceobjects) {
+static void qsort_descent_inplace(std::vector<Object> &faceobjects) {
     if (faceobjects.empty())
         return;
 
     qsort_descent_inplace(faceobjects, 0, faceobjects.size() - 1);
 }
 
-static void nms_sorted_bboxes(const std::vector <Object> &faceobjects, std::vector<int> &picked, float nms_threshold) {
+static void nms_sorted_bboxes(const std::vector<Object> &faceobjects, std::vector<int> &picked, float nms_threshold) {
     picked.clear();
 
     const int n = faceobjects.size();
@@ -98,7 +98,7 @@ static void nms_sorted_bboxes(const std::vector <Object> &faceobjects, std::vect
 }
 
 static void
-generate_grids_and_stride(const int target_w, const int target_h, std::vector<int> &strides, std::vector <GridAndStride> &grid_strides) {
+generate_grids_and_stride(const int target_w, const int target_h, std::vector<int> &strides, std::vector<GridAndStride> &grid_strides) {
     for (int i = 0; i < (int) strides.size(); i++) {
         int stride = strides[i];
         int num_grid_w = target_w / stride;
@@ -116,7 +116,7 @@ generate_grids_and_stride(const int target_w, const int target_h, std::vector<in
 }
 
 static void
-generate_proposals(std::vector <GridAndStride> grid_strides, const ncnn::Mat &pred, float prob_threshold, std::vector <Object> &objects) {
+generate_proposals(std::vector<GridAndStride> grid_strides, const ncnn::Mat &pred, float prob_threshold, std::vector<Object> &objects) {
     const int num_points = grid_strides.size();
     const int num_class = 1;
     const int reg_max_1 = 16;
@@ -215,8 +215,8 @@ Yolo::load(AAssetManager *mgr, const char *modeltype, int _target_size, const fl
     yolo.opt.blob_allocator = &blob_pool_allocator;
     yolo.opt.workspace_allocator = &workspace_pool_allocator;
 
-    yolo.load_param(mgr, "medi.param");
-    yolo.load_model(mgr, "medi.bin");
+    yolo.load_param(mgr, "medicinesdetector.param");
+    yolo.load_model(mgr, "medicinesdetector.bin");
 
     target_size = _target_size;
     mean_vals[0] = _mean_vals[0];
@@ -229,7 +229,7 @@ Yolo::load(AAssetManager *mgr, const char *modeltype, int _target_size, const fl
     return 0;
 }
 
-int Yolo::detect(const cv::Mat &rgb, std::vector <Object> &objects, float prob_threshold, float nms_threshold) {
+int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects, float prob_threshold, float nms_threshold) {
     int width = rgb.cols;
     int height = rgb.rows;
 
@@ -261,13 +261,13 @@ int Yolo::detect(const cv::Mat &rgb, std::vector <Object> &objects, float prob_t
 
     ex.input("images", in_pad);
 
-    std::vector <Object> proposals;
+    std::vector<Object> proposals;
 
     ncnn::Mat out;
     ex.extract("output0", out);
 
     std::vector<int> strides = {8, 16, 32}; // might have stride=64
-    std::vector <GridAndStride> grid_strides;
+    std::vector<GridAndStride> grid_strides;
     generate_grids_and_stride(in_pad.w, in_pad.h, strides, grid_strides);
 
     generate_proposals(grid_strides, out, prob_threshold, proposals);
@@ -318,7 +318,7 @@ static const int color = 255;
 static const cv::Scalar detectedRectColor(color, color, color);
 
 
-int Yolo::draw(cv::Mat &rgb, const std::vector <Object> &objects) {
+int Yolo::draw(cv::Mat &rgb, const std::vector<Object> &objects) {
     if (objects.empty())
         return 0;
 

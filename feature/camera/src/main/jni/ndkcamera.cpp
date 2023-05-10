@@ -102,27 +102,27 @@ static void onImageAvailable(void *context, AImageReader *reader) {
 }
 
 static void onSessionActive(void *context, ACameraCaptureSession *session) {
-    __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onSessionActive %p", session);
+    //  __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onSessionActive %p", session);
 }
 
 static void onSessionReady(void *context, ACameraCaptureSession *session) {
-    __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onSessionReady %p", session);
+    // __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onSessionReady %p", session);
 }
 
 static void onSessionClosed(void *context, ACameraCaptureSession *session) {
-    __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onSessionClosed %p", session);
+    // __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onSessionClosed %p", session);
 }
 
 void onCaptureFailed(void *context, ACameraCaptureSession *session, ACaptureRequest *request, ACameraCaptureFailure *failure) {
-    __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onCaptureFailed %p %p %p", session, request, failure);
+    // __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onCaptureFailed %p %p %p", session, request, failure);
 }
 
 void onCaptureSequenceCompleted(void *context, ACameraCaptureSession *session, int sequenceId, int64_t frameNumber) {
-    __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onCaptureSequenceCompleted %p %d %ld", session, sequenceId, frameNumber);
+    //  __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onCaptureSequenceCompleted %p %d %lld", session, sequenceId, frameNumber);
 }
 
 void onCaptureSequenceAborted(void *context, ACameraCaptureSession *session, int sequenceId) {
-    __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onCaptureSequenceAborted %p %d", session, sequenceId);
+    //  __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onCaptureSequenceAborted %p %d", session, sequenceId);
 }
 
 void onCaptureCompleted(void *context, ACameraCaptureSession *session, ACaptureRequest *request, const ACameraMetadata *result) {
@@ -375,8 +375,7 @@ NdkCameraWindow::NdkCameraWindow() : NdkCamera() {
     accelerometer_orientation = 0;
 
     // sensor
-    sensor_manager = ASensorManager_getInstance();
-
+    sensor_manager = ASensorManager_getInstanceForPackage("com.android.mediproject");
     accelerometer_sensor = ASensorManager_getDefaultSensor(sensor_manager, ASENSOR_TYPE_ACCELEROMETER);
 }
 

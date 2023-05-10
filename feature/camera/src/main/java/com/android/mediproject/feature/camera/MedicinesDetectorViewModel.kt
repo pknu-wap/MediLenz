@@ -18,7 +18,7 @@ import javax.inject.Inject
 class MedicinesDetectorViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
-    
+
     private val yolo = MutableStateFlow(Yolo()).asStateFlow()
 
     fun loadModel(assetManager: AssetManager) {

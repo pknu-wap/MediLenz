@@ -15,9 +15,6 @@
         <action
             android:id="@+id/action_recentSearchListFragment_to_manualSearchResultFragment"
             app:destination="@id/manualSearchResultFragment" />
-        <action
-            android:id="@+id/action_recentSearchListFragment_to_medicinesDetectorFragment"
-            app:destination="@id/medicinesDetectorFragment" />
 
     </fragment>
 
@@ -32,9 +29,6 @@
             app:destination="@id/manualSearchResultFragment"
             app:popUpTo="@id/manualSearchResultFragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_manualSearchResultFragment_to_medicinesDetectorFragment"
-            app:destination="@id/medicinesDetectorFragment" />
     </fragment>
 
     <fragment
@@ -50,15 +44,5 @@
             app:popUpTo="@id/aiSearchResultFragment"
             app:popUpToInclusive="true" />
 
-    </fragment>
-    <fragment
-        android:id="@+id/medicinesDetectorFragment"
-        android:name="com.android.mediproject.feature.camera.MedicinesDetectorFragment"
-        android:label="MedicinesDetectorFragment">
-        <action
-            android:id="@+id/action_medicinesDetectorFragment_to_aiSearchResultFragment"
-            app:popUpTo="@id/recentSearchListFragment"
-            app:popUpToInclusive="true"
-            app:destination="@id/aiSearchResultFragment" />
     </fragment>
 </navigation>

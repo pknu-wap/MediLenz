@@ -22,42 +22,39 @@ class MedicinesDetectorFragment :
 
     override val fragmentViewModel: MedicinesDetectorViewModel by viewModels()
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                initializeCamera()
-            } else {
-                findNavController().popBackStack()
-            }
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            initializeCamera()
+        } else {
+            findNavController().popBackStack()
         }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
 
         when {
             ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
+                requireContext(), Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
                 initializeCamera()
             }
 
-            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
-            -> {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.cameraPermission))
-                    .setMessage(getString(R.string.cameraPermissionMessage))
-                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.cameraPermission))
+                    .setMessage(getString(R.string.cameraPermissionMessage)).setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                         dialog.dismiss()
                         requestPermissionLauncher.launch(
                             Manifest.permission.CAMERA
                         )
-                    }
-                    .setNegativeButton(getString(R.string.close)) { _, _ -> }
-                    .setCancelable(false)
-                    .show()
+                    }.setNegativeButton(getString(R.string.close)) { _, _ -> }.setCancelable(false).show()
             }
 
             else -> {
@@ -73,7 +70,6 @@ class MedicinesDetectorFragment :
         binding.apply {
             val surfaceHolder = object : SurfaceHolder.Callback2 {
                 override fun surfaceCreated(holder: SurfaceHolder) {
-                    TODO("Not yet implemented")
                 }
 
                 override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -81,30 +77,27 @@ class MedicinesDetectorFragment :
                 }
 
                 override fun surfaceDestroyed(holder: SurfaceHolder) {
-                    TODO("Not yet implemented")
                 }
 
                 override fun surfaceRedrawNeeded(holder: SurfaceHolder) {
-                    TODO("Not yet implemented")
                 }
             }
 
             surfaceView.holder.setFormat(PixelFormat.RGBA_8888)
             surfaceView.holder.addCallback(surfaceHolder)
 
+            fragmentViewModel.loadModel(requireContext().assets)
+            fragmentViewModel.openCamera()
+
             detectionBtn.setOnClickListener {
                 fragmentViewModel.closeCamera()
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.checkCountsOfMedicines))
+                MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.checkCountsOfMedicines))
                     .setMessage(getString(R.string.checkCountsOfMedicinesMessage))
                     .setPositiveButton(getString(R.string.search)) { dialog, _ ->
                         dialog.dismiss()
-                    }
-                    .setNegativeButton(getString(R.string.close)) { _, _ -> }
-                    .setOnDismissListener {
+                    }.setNegativeButton(getString(R.string.close)) { _, _ -> }.setOnDismissListener {
                         fragmentViewModel.openCamera()
-                    }
-                    .show()
+                    }.show()
             }
         }
     }
@@ -114,7 +107,6 @@ class MedicinesDetectorFragment :
         requireActivity().apply {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
-        fragmentViewModel.openCamera()
     }
 
     override fun onPause() {

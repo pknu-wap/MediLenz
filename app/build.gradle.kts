@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":feature:penalties"))
     implementation(project(":feature:medicine"))
     implementation(project(":feature:news"))
+    implementation(project(":feature:camera"))
 
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.materials)

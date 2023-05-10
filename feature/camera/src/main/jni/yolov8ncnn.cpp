@@ -141,9 +141,10 @@ JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
     g_camera = 0;
 }
 
-// public native boolean loadModel(AssetManager mgr, int modelid, int cpugpu);
+
+extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_tencent_yolov8ncnn_Yolov8Ncnn_loadModel(JNIEnv *env, jobject thiz, jobject assetManager, jint modelid, jint cpugpu) {
+Java_com_android_mediproject_feature_camera_ai_Yolo_loadModel(JNIEnv *env, jobject thiz, jobject assetManager, jint modelid, jint cpugpu) {
     if (modelid < 0 || modelid > 6 || cpugpu < 0 || cpugpu > 1) {
         return JNI_FALSE;
     }
@@ -189,28 +190,27 @@ Java_com_tencent_yolov8ncnn_Yolov8Ncnn_loadModel(JNIEnv *env, jobject thiz, jobj
 
     return JNI_TRUE;
 }
-
-// public native boolean openCamera(int facing);
-JNIEXPORT jboolean JNICALL Java_com_tencent_yolov8ncnn_Yolov8Ncnn_openCamera(JNIEnv *env, jobject thiz, jint facing) {
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_android_mediproject_feature_camera_ai_Yolo_openCamera(JNIEnv *env, jobject thiz, jint facing) {
     g_camera->open((int) facing);
 
     return JNI_TRUE;
 }
-
-// public native boolean closeCamera();
-JNIEXPORT jboolean JNICALL Java_com_tencent_yolov8ncnn_Yolov8Ncnn_closeCamera(JNIEnv *env, jobject thiz) {
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_android_mediproject_feature_camera_ai_Yolo_closeCamera(JNIEnv *env, jobject thiz) {
     g_camera->close();
 
     return JNI_TRUE;
 }
-
-// public native boolean setOutputWindow(Surface surface);
-JNIEXPORT jboolean JNICALL Java_com_tencent_yolov8ncnn_Yolov8Ncnn_setOutputWindow(JNIEnv *env, jobject thiz, jobject surface) {
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_android_mediproject_feature_camera_ai_Yolo_setOutputWindow(JNIEnv *env, jobject thiz, jobject surface) {
     ANativeWindow *win = ANativeWindow_fromSurface(env, surface);
 
     g_camera->set_window(win);
 
     return JNI_TRUE;
 }
-
 }

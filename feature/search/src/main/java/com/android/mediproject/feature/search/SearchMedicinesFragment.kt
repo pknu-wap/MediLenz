@@ -2,8 +2,10 @@ package com.android.mediproject.feature.search
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.MediSearchbar
 import com.android.mediproject.feature.search.databinding.FragmentSearchMedicinesBinding
@@ -74,19 +76,17 @@ class SearchMedicinesFragment :
      */
     private fun initSearchBar() {
         binding.searchView.setOnSearchAiBtnClickListener {
-            binding.contentsFragmentContainerView.findNavController().also { navController ->
-                navController.navigate(R.id.medicinesDetectorFragment)
-            }
+            findNavController().navigate("medilens://camera/detector".toUri())
+
+            binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
+                override fun onSearchQuery(query: String) {
+                    fragmentViewModel.searchMedicines(query)
+                }
+
+                override fun onEmptyQuery() {
+                    toast(getString(com.android.mediproject.core.ui.R.string.search_empty_query))
+                }
+            })
         }
-
-        binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
-            override fun onSearchQuery(query: String) {
-                fragmentViewModel.searchMedicines(query)
-            }
-
-            override fun onEmptyQuery() {
-                toast(getString(com.android.mediproject.core.ui.R.string.search_empty_query))
-            }
-        })
     }
 }
