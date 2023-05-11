@@ -22,7 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:setTheme="white"
-            app:showBackButton="false"
+            app:showBackButton="true"
             app:title="@string/interestedMedicine" />
 
         <androidx.recyclerview.widget.RecyclerView

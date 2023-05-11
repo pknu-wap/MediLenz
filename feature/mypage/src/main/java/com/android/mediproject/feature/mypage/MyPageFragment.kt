@@ -9,7 +9,8 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import repeatOnStarted
 
-class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(FragmentMyPageBinding::inflate) {
+class MyPageFragment :
+    BaseFragment<FragmentMyPageBinding, MyPageViewModel>(FragmentMyPageBinding::inflate) {
     override val fragmentViewModel: MyPageViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -18,20 +19,11 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(Frag
             viewModel = fragmentViewModel.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
             }
-
-            //forTest
-            myCommentsList.setOnClickListener {
-                findNavController().navigate("medilens://main/commnets_nav/myCommnetsListFragment".toUri())
-            }
-
-            //forTest
-            interestedMedicineList.setOnClickListener {
-                findNavController().navigate("medilens://main/moreInterestedMedicine_nav".toUri())
-            }
         }
     }
 
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
-        else -> {}
+        is MyPageViewModel.MyPageEvent.MyCommentsList -> findNavController().navigate("medilens://main/comments_nav/myCommentsListFragment".toUri())
+        is MyPageViewModel.MyPageEvent.InterestedMedicineList -> findNavController().navigate("medilens://main/moreInterestedMedicine_nav".toUri())
     }
 }
