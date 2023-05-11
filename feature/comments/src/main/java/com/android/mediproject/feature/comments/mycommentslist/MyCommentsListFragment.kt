@@ -14,7 +14,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
     FragmentMyCommnetsListBinding::inflate
 ) {
     override val fragmentViewModel: MyCommentsListViewModel by viewModels()
-    private val myCommnetsListAdapter: MyCommentsListAdapter by lazy { MyCommentsListAdapter() }
+    private val myCommentsListAdapter: MyCommentsListAdapter by lazy { MyCommentsListAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,14 +25,14 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
             }
 
             myCommentsListRV.apply {
-                adapter = myCommnetsListAdapter
+                adapter = myCommentsListAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
             }
 
 
         }
 
-        myCommnetsListAdapter.submitList(
+        myCommentsListAdapter.submitList(
             mutableListOf(
                 MyCommentDto(
                     12345,
