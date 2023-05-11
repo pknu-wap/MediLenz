@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="item"
             type="com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto" />
@@ -17,9 +18,9 @@
             android:id="@+id/medicineImgView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:scaleType="fitXY"
             android:background="@drawable/circle_image_background"
             android:contentDescription="@string/medicineImage"
+            android:scaleType="fitCenter"
             android:src="@drawable/logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
