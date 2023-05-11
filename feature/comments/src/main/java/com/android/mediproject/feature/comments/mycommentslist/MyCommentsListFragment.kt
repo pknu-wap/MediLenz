@@ -35,6 +35,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
 
         }
 
+        //for Test
         myCommentsListAdapter.submitList(
             mutableListOf(
                 MyCommentDto(
