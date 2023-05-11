@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.ui.base.BaseViewModel
+import com.android.mediproject.feature.camera.ai.DetectedObject
 import com.android.mediproject.feature.camera.ai.Yolo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,6 +25,13 @@ class MedicinesDetectorViewModel @Inject constructor(
     fun loadModel(assetManager: AssetManager) {
         viewModelScope.launch(ioDispatcher) {
             yolo.value.loadModel(assetManager)
+        }
+    }
+
+    fun getDetectedObjects(): Array<DetectedObject> {
+        return yolo.value.detectedObjects().let { detectedObjects ->
+            val size = detectedObjects.size
+            detectedObjects
         }
     }
 

@@ -9,6 +9,7 @@ class Yolo {
     external fun openCamera(facing: Int): Boolean
     external fun closeCamera(): Boolean
     external fun setOutputWindow(surface: Surface?): Boolean
+    external fun detectedObjects(): Array<DetectedObject>
 
     companion object {
         init {
@@ -16,3 +17,6 @@ class Yolo {
         }
     }
 }
+
+
+data class DetectedObject(private val matrix: ByteArray)

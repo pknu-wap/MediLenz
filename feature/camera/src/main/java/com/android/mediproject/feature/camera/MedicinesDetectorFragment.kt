@@ -90,6 +90,7 @@ class MedicinesDetectorFragment :
             fragmentViewModel.openCamera()
 
             detectionBtn.setOnClickListener {
+                toast((fragmentViewModel.getDetectedObjects().size).toString())
                 fragmentViewModel.closeCamera()
                 MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.checkCountsOfMedicines))
                     .setMessage(getString(R.string.checkCountsOfMedicinesMessage))
