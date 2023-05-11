@@ -31,6 +31,7 @@
             <nav-graph android:value="@navigation/search_medicines_nav" />
             <nav-graph android:value="@navigation/news_nav" />
             <nav-graph android:value="@navigation/comments_nav" />
+
         </activity>
     </application>
 

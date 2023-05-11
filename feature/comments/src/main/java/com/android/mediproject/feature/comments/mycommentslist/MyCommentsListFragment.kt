@@ -3,6 +3,7 @@ package com.android.mediproject.feature.comments.mycommentslist
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -28,6 +29,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
                 adapter = myCommentsListAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
                 addItemDecoration(MyCommentsListDecoration(requireContext()))
+                addItemDecoration(DividerItemDecoration(requireContext(),1))
             }
 
 
