@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.interestedmedicine.moreinterestedmedicine.MoreInterestedMedicineViewModel" />
@@ -32,8 +31,6 @@
             android:layout_marginHorizontal="15dp"
             android:layout_marginTop="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/interestedMedicineListBar"/>
-
-
+            app:layout_constraintTop_toBottomOf="@id/interestedMedicineListBar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
