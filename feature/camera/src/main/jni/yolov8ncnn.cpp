@@ -1,3 +1,5 @@
+#pragma once
+
 #include <android/asset_manager_jni.h>
 #include <android/native_window_jni.h>
 #include <android/native_window.h>
@@ -19,11 +21,84 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "convertimage.h"
 
 #if __ARM_NEON
+
 #include <arm_neon.h>
+
 #endif // __ARM_NEON
+
+
+static const std::string base64_chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz"
+        "0123456789+/";
+
+static inline bool is_base64(unsigned char c) {
+    return (isalnum(c) || (c == '+') || (c == '/'));
+}
+
+
+static std::string base64_encode(uchar const *bytes_to_encode, unsigned int in_len) {
+    std::string ret;
+
+    int i = 0;
+    int j = 0;
+    unsigned char char_array_3[3];
+    unsigned char char_array_4[4];
+
+    while (in_len--) {
+        char_array_3[i++] = *(bytes_to_encode++);
+        if (i == 3) {
+            char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
+            char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
+            char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
+            char_array_4[3] = char_array_3[2] & 0x3f;
+
+            for (i = 0; (i < 4); i++) {
+                ret += base64_chars[char_array_4[i]];
+            }
+            i = 0;
+        }
+    }
+
+    if (i) {
+        for (j = i; j < 3; j++) {
+            char_array_3[j] = '\0';
+        }
+
+        char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
+        char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
+        char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
+        char_array_4[3] = char_array_3[2] & 0x3f;
+
+        for (j = 0; (j < i + 1); j++) {
+            ret += base64_chars[char_array_4[j]];
+        }
+
+        while ((i++ < 3)) {
+            ret += '=';
+        }
+    }
+
+    return ret;
+}
+
+
+static std::string mat2str(const cv::Mat &m) {
+    std::vector<uchar> buf;
+
+    if (m.isContinuous()) {
+        buf.assign(m.data, m.data + m.total() * m.elemSize());
+    } else {
+        for (int i = 0; i < m.rows; ++i) {
+            buf.insert(buf.end(), m.ptr<uchar>(i), m.ptr<uchar>(i) + m.cols * m.elemSize());
+        }
+    }
+    uchar *result = reinterpret_cast<uchar *> (&buf[0]);
+
+    return base64_encode(result, buf.size());
+}
 
 static int draw_unsupported(cv::Mat &rgb) {
     const char text[] = "unsupported";
@@ -99,15 +174,13 @@ public:
     virtual void on_image_render(cv::Mat &rgb) const;
 };
 
-
-std::vector <Object> detectedObjects;
+std::vector<Object> detectedObjects;
 cv::Mat *currentRgb;
-
 
 void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
     {
         ncnn::MutexLockGuard g(lock);
-        std::vector <Object> objs;
+        std::vector<Object> objs;
 
         if (g_yolo) {
             g_yolo->detect(rgb, objs);
@@ -123,26 +196,48 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
     // draw_fps(rgb);
 }
 
+// return detectedObjects;
+extern "C"
+JNIEXPORT jobjectArray JNICALL
+Java_com_android_mediproject_feature_camera_ai_Yolo_detectedObjects(JNIEnv *env, jobject thiz) {
+    if (detectedObjects.empty()) {
+        return nullptr;
+    }
+
+    jobjectArray objectArray = env->NewObjectArray(detectedObjects.size(),
+                                                   env->FindClass("com/android/mediproject/feature/camera/ai/DetectedObject"), nullptr);
+
+    for (int i = 0; i < detectedObjects.size(); i++) {
+        const Object &detectedObject = detectedObjects[i];
+        cv::Mat croppedMat = currentRgb->operator()(detectedObject.rect);
+
+        std::string base64String = mat2str(croppedMat);
+
+        jstring base64StringJ = env->NewStringUTF(base64String.c_str());
+
+        jclass detectedObjectClass = env->FindClass("com/android/mediproject/feature/camera/ai/DetectedObject");
+        jmethodID constructor = env->GetMethodID(detectedObjectClass, "<init>", "(Ljava/lang/String;)V");
+        jobject resultEntity = env->NewObject(detectedObjectClass, constructor, base64StringJ);
+
+        env->SetObjectArrayElement(objectArray, i, resultEntity);
+    }
+
+    return objectArray;
+}
 
 static MyNdkCamera *g_camera = 0;
 
+extern "C" {
 
-extern "C"
-JNIEXPORT jint
-JNI_OnLoad(JavaVM
-* vm ,
-void *reserved
-) {
-__android_log_print(ANDROID_LOG_DEBUG,
-"ncnn" , "JNI_OnLoad" );
+JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+    __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "JNI_OnLoad");
 
-g_camera = new MyNdkCamera;
+    g_camera = new MyNdkCamera;
 
-return
-JNI_VERSION_1_4;
+    return JNI_VERSION_1_4;
 }
-extern "C"
-JNIEXPORT void JNI_OnUnload(JavaVM * vm, void * reserved) {
+
+JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
     __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "JNI_OnUnload");
 
     {
@@ -156,10 +251,9 @@ JNIEXPORT void JNI_OnUnload(JavaVM * vm, void * reserved) {
     g_camera = 0;
 }
 
-extern "C"
-JNIEXPORT jboolean
 
-JNICALL
+extern "C"
+JNIEXPORT jboolean JNICALL
 Java_com_android_mediproject_feature_camera_ai_Yolo_loadModel(JNIEnv *env, jobject thiz, jobject assetManager, jint modelid, jint cpugpu) {
     if (modelid < 0 || modelid > 6 || cpugpu < 0 || cpugpu > 1) {
         return JNI_FALSE;
@@ -206,31 +300,22 @@ Java_com_android_mediproject_feature_camera_ai_Yolo_loadModel(JNIEnv *env, jobje
 
     return JNI_TRUE;
 }
-
 extern "C"
-JNIEXPORT jboolean
-
-JNICALL
+JNIEXPORT jboolean JNICALL
 Java_com_android_mediproject_feature_camera_ai_Yolo_openCamera(JNIEnv *env, jobject thiz, jint facing) {
     g_camera->open((int) facing);
 
     return JNI_TRUE;
 }
-
 extern "C"
-JNIEXPORT jboolean
-
-JNICALL
+JNIEXPORT jboolean JNICALL
 Java_com_android_mediproject_feature_camera_ai_Yolo_closeCamera(JNIEnv *env, jobject thiz) {
     g_camera->close();
 
     return JNI_TRUE;
 }
-
 extern "C"
-JNIEXPORT jboolean
-
-JNICALL
+JNIEXPORT jboolean JNICALL
 Java_com_android_mediproject_feature_camera_ai_Yolo_setOutputWindow(JNIEnv *env, jobject thiz, jobject surface) {
     ANativeWindow *win = ANativeWindow_fromSurface(env, surface);
 
@@ -238,35 +323,4 @@ Java_com_android_mediproject_feature_camera_ai_Yolo_setOutputWindow(JNIEnv *env,
 
     return JNI_TRUE;
 }
-
-extern "C"
-JNIEXPORT jobjectArray
-
-JNICALL
-Java_com_android_mediproject_feature_camera_ai_Yolo_detectedObjects(JNIEnv *env, jobject thiz) {
-    if (detectedObjects.empty()) {
-        return nullptr;
-    }
-
-    jobjectArray objectArray = env->NewObjectArray(detectedObjects.size(),
-                                                   env->FindClass("com/android/mediproject/feature/camera/ai/DetectedObject"), nullptr);
-
-    ImagemConverter::imagemConverter;
-
-    for (int i = 0; i < detectedObjects.size(); i++) {
-        const Object &detectedObject = detectedObjects[i];
-        cv::Mat croppedMat = currentRgb->operator()(detectedObject.rect);
-
-        std::string base64String = imagemConverter.mat2str(croppedMat);
-
-        jstring base64StringJ = env->NewStringUTF(base64String.c_str());
-
-        jclass detectedObjectClass = env->FindClass("com/android/mediproject/feature/camera/ai/DetectedObject");
-        jmethodID constructor = env->GetMethodID(detectedObjectClass, "<init>", "(Ljava/lang/String;)V");
-        jobject resultEntity = env->NewObject(detectedObjectClass, constructor, base64StringJ);
-
-        env->SetObjectArrayElement(objectArray, i, resultEntity);
-    }
-
-    return objectArray;
 }

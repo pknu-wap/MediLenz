@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
 
     <data>
 
@@ -16,7 +16,6 @@
         android:layout_height="72dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        app:byteArray="@{detectedObject.matrix}"
         />
 
 </layout>

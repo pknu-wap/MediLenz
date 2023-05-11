@@ -13,12 +13,21 @@ android {
 
     externalNativeBuild {
         cmake {
-            version = "3.10.2"
+            version = "3.22.1"
             path = file("src/main/jni/CMakeLists.txt")
         }
     }
 
-    ndkVersion = "21.3.6528147"
+    defaultConfig {
+
+        ndk {
+            version = "25.2.9519653"
+            abiFilters += listOf(
+                "armeabi-v7a", "arm64-v8a"
+            )
+        }
+    }
+
 }
 
 hilt {
