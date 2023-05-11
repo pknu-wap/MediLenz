@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.interestedmedicine
+package com.android.mediproject.feature.interestedmedicine.moreinterestedmedicine
 
 import com.android.mediproject.core.ui.base.BaseViewModel
 

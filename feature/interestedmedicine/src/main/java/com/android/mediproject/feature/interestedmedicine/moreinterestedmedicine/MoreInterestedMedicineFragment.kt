@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.interestedmedicine
+package com.android.mediproject.feature.interestedmedicine.moreinterestedmedicine
 
 import android.os.Bundle
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.interestedmedicine.databinding.FragmentMoreInterestedMedicineBinding
 
-class MoreInterestedMedicineFragment : BaseFragment<FragmentMoreInterestedMedicineBinding,MoreInterestedMedicineViewModel>(FragmentMoreInterestedMedicineBinding::inflate) {
+class MoreInterestedMedicineFragment : BaseFragment<FragmentMoreInterestedMedicineBinding, MoreInterestedMedicineViewModel>(FragmentMoreInterestedMedicineBinding::inflate) {
     override val fragmentViewModel: MoreInterestedMedicineViewModel by viewModels()
     private val moreInterestedMedicineAdapter: MoreInterestedMeidicneAdapter by lazy { MoreInterestedMeidicneAdapter() }
 
@@ -19,7 +19,7 @@ class MoreInterestedMedicineFragment : BaseFragment<FragmentMoreInterestedMedici
             interestedMedicineListRV.apply{
                 adapter = moreInterestedMedicineAdapter
                 layoutManager = LinearLayoutManager(requireContext())
-                addItemDecoration(MyCommentsListDecoration(requireContext()))
+                addItemDecoration(MoreInterestedMedcineDecoration(requireContext()))
                 addItemDecoration(DividerItemDecoration(requireContext(), 1))
             }
 

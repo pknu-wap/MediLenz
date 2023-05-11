@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.interestedmedicine
+package com.android.mediproject.feature.interestedmedicine.moreinterestedmedicine
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

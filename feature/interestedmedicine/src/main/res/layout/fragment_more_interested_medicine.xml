@@ -7,13 +7,13 @@
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.interestedmedicine.MoreInterestedMedicineViewModel" />
+            type="com.android.mediproject.feature.interestedmedicine.moreinterestedmedicine.MoreInterestedMedicineViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MoreInterestedMedicineFragment">
+        tools:context=".moreinterestedmedicine.MoreInterestedMedicineFragment">
 
         <com.android.mediproject.core.ui.base.view.Bar
             android:id="@+id/interestedMedicineListBar"
