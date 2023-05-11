@@ -9,7 +9,7 @@ class Yolo {
     external fun openCamera(facing: Int): Boolean
     external fun closeCamera(): Boolean
     external fun setOutputWindow(surface: Surface?): Boolean
-    external fun detectedObjects(): Array<DetectedObject>
+    external fun detectedObjects(): Array<DetectedObject>?
 
     companion object {
         init {

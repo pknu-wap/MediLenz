@@ -15,6 +15,7 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import repeatOnStarted
 
 @AndroidEntryPoint
 class MedicinesDetectorFragment :
@@ -90,15 +91,24 @@ class MedicinesDetectorFragment :
             fragmentViewModel.openCamera()
 
             detectionBtn.setOnClickListener {
-                toast((fragmentViewModel.getDetectedObjects().size).toString())
-                fragmentViewModel.closeCamera()
-                MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.checkCountsOfMedicines))
-                    .setMessage(getString(R.string.checkCountsOfMedicinesMessage))
-                    .setPositiveButton(getString(R.string.search)) { dialog, _ ->
-                        dialog.dismiss()
-                    }.setNegativeButton(getString(R.string.close)) { _, _ -> }.setOnDismissListener {
+                fragmentViewModel.getDetectedObjects()
+            }
+            
+            viewLifecycleOwner.repeatOnStarted {
+                fragmentViewModel.detectedObjects.collect { objs ->
+                    if (objs.isNotEmpty()) {
+                        MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.checkCountsOfMedicines))
+                            .setMessage("$this.size ${getString(R.string.checkCountsOfMedicinesMessage)}")
+                            .setPositiveButton(getString(R.string.search)) { dialog, _ ->
+                                dialog.dismiss()
+                            }.setNegativeButton(getString(R.string.close)) { _, _ -> }.setOnDismissListener {
+                                fragmentViewModel.openCamera()
+                            }.show()
+                    } else {
+                        toast(getString(R.string.noMedicinesDetected))
                         fragmentViewModel.openCamera()
-                    }.show()
+                    }
+                }
             }
         }
     }

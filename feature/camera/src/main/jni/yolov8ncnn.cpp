@@ -127,6 +127,10 @@ extern "C"
 JNIEXPORT jobjectArray JNICALL
 Java_com_android_mediproject_feature_camera_ai_Yolo_detectedObjects(JNIEnv *env, jobject thiz) {
 
+    if (detectedObjects.size() == 0) {
+        return NULL;
+    }
+
     jobjectArray objectArray = env->NewObjectArray(detectedObjects.size(),
                                                    env->FindClass("com/android/mediproject/feature/camera/ai/DetectedObject"), NULL);
 
@@ -146,6 +150,7 @@ Java_com_android_mediproject_feature_camera_ai_Yolo_detectedObjects(JNIEnv *env,
         env->SetObjectArrayElement(objectArray, i, resultEntity);
         delete[]_data;
     }
+
 
     return objectArray;
 }

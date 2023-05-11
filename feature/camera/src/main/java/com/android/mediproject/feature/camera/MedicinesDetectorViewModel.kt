@@ -21,6 +21,8 @@ class MedicinesDetectorViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val yolo = MutableStateFlow(Yolo()).asStateFlow()
+    private val _detactedObjects = MutableStateFlow(emptyArray<DetectedObject>())
+    val detectedObjects = _detactedObjects.asStateFlow()
 
     fun loadModel(assetManager: AssetManager) {
         viewModelScope.launch(ioDispatcher) {
@@ -28,10 +30,16 @@ class MedicinesDetectorViewModel @Inject constructor(
         }
     }
 
-    fun getDetectedObjects(): Array<DetectedObject> {
-        return yolo.value.detectedObjects().let { detectedObjects ->
-            val size = detectedObjects.size
-            detectedObjects
+    fun getDetectedObjects() {
+        viewModelScope.launch(ioDispatcher) {
+            val result = yolo.value.detectedObjects()
+            yolo.value.closeCamera()
+
+            if (result == null) {
+                _detactedObjects.value = emptyArray()
+            } else {
+                _detactedObjects.value = result
+            }
         }
     }
 
