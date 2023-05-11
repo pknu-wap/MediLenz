@@ -3,8 +3,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <com.android.mediproject.core.ui.base.view.Bar
             android:id="@+id/newsBar"
@@ -15,16 +14,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:setTheme="white"
             app:showBackButton="false"
-            app:title="@string/news"
-            />
+            app:title="@string/news" />
 
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/composeView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bar"
-            />
+            app:layout_constraintTop_toBottomOf="@id/newsBar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
