@@ -27,6 +27,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
             myCommentsListRV.apply {
                 adapter = myCommentsListAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
+                addItemDecoration(MyCommentsListDecoration(requireContext()))
             }
 
 
