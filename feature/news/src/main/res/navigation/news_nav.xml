@@ -9,6 +9,7 @@
         android:name="com.android.mediproject.feature.news.NewsFragment"
         android:label="NewsFragment" />
 
+
     <deepLink app:uri="medilens://main/news_nav" />
 
 </navigation>

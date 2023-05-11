@@ -11,4 +11,5 @@
     </fragment>
 
     <deepLink app:uri="medilens://main/community_nav" />
+
 </navigation>

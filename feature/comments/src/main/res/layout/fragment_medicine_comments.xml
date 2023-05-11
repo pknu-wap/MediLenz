@@ -5,8 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
-        android:paddingHorizontal="24dp"
-        >
+        android:paddingHorizontal="24dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/commentsRecyclerView"
@@ -17,8 +16,7 @@
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/commentInputView"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             android:id="@+id/commentInputView"
@@ -27,8 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="47dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/commentsRecyclerView"
-            />
+            app:layout_constraintTop_toBottomOf="@id/commentsRecyclerView" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
