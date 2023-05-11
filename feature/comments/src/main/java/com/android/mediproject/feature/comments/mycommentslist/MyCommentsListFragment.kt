@@ -29,10 +29,8 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
                 adapter = myCommentsListAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
                 addItemDecoration(MyCommentsListDecoration(requireContext()))
-                addItemDecoration(DividerItemDecoration(requireContext(),1))
+                addItemDecoration(DividerItemDecoration(requireContext(), 1))
             }
-
-
         }
 
         //for Test
@@ -43,15 +41,18 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
                     "타이레놀",
                     "머리아플 때 먹으니까 짱 좋던데요..?",
                     "2023-03-30 22:48",
-                    2
-                ),
+                    2,
+                    { comment ->
+                        log(comment.medicineName + "을 누르셨습니다.") })
+                ,
                 MyCommentDto(
                     12346,
                     "코메키나",
                     "저 같은 비염환자들한테 딱 입니다. 시험칠 때 필수...!!",
                     "2023-03-30 22:48",
-                    3
-                ),
+                    3,
+                    { comment ->
+                        log(comment.medicineName + "을 누르셨습니다.") })
             )
         )
     }

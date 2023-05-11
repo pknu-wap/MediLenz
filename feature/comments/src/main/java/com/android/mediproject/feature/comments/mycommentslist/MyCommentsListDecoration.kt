@@ -1,7 +1,6 @@
 package com.android.mediproject.feature.comments.mycommentslist
 
 import android.content.Context
-import android.graphics.Canvas
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
