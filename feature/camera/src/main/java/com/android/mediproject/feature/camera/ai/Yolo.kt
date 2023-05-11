@@ -18,5 +18,6 @@ class Yolo {
     }
 }
 
-
-data class DetectedObject(val matrix: ByteArray)
+data class DetectedObject(val base64: String) {
+    var onClicked: ((DetectedObject) -> Unit)? = null
+}

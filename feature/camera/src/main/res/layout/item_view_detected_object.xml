@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="detectedObject"
+            type="com.android.mediproject.feature.camera.ai.DetectedObject"
+            />
+    </data>
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/detectedObjectImageView"
+        android:layout_width="72dp"
+        android:layout_margin="8dp"
+        android:layout_height="72dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        app:byteArray="@{detectedObject.matrix}"
+        />
+
+</layout>

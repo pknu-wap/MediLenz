@@ -1,13 +1,14 @@
 package com.android.mediproject.feature.camera
 
 import android.content.res.AssetManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.SurfaceHolder
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.ui.base.BaseViewModel
+import com.android.mediproject.feature.camera.ai.DetectedObject
 import com.android.mediproject.feature.camera.ai.Yolo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,6 +18,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.io.encoding.ExperimentalEncodingApi
+
 
 @HiltViewModel
 class MedicinesDetectorViewModel @Inject constructor(
@@ -24,7 +27,7 @@ class MedicinesDetectorViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val yolo = MutableStateFlow(Yolo()).asStateFlow()
-    private val _detactedObjects = MutableSharedFlow<List<Bitmap>>(replay = 1)
+    private val _detactedObjects = MutableSharedFlow<List<DetectedObject>>(replay = 1, extraBufferCapacity = 1)
     val detectedObjects = _detactedObjects.asSharedFlow()
 
     fun loadModel(assetManager: AssetManager) {
@@ -36,6 +39,7 @@ class MedicinesDetectorViewModel @Inject constructor(
     /**
      * 검출된 객체를 가져오고 비트맵으로 변환한다.
      */
+    @OptIn(ExperimentalEncodingApi::class)
     fun getDetectedObjects() {
         viewModelScope.launch(ioDispatcher) {
             val result = yolo.value.detectedObjects()
@@ -45,10 +49,15 @@ class MedicinesDetectorViewModel @Inject constructor(
                 _detactedObjects.emit(emptyList())
             } else {
                 // to Bitmap
-                result.map { obj ->
-                    BitmapFactory.decodeByteArray(obj.matrix, 0, obj.matrix.size)
-                }.apply {
-                    _detactedObjects.emit(this)
+                result.apply {
+
+                    val bitmap = this.first().base64.let {
+                        val decodedString: ByteArray = Base64.decode(it, Base64.DEFAULT)
+                        BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size).apply {
+                            val size = this.colorSpace
+                        }
+                    }
+                    _detactedObjects.emit(this.toList())
                 }
             }
         }

@@ -12,7 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.feature.camera.ai.images.ImageListAdapter
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
+import com.android.mediproject.feature.camera.databinding.ViewDetectedObjectsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
@@ -103,7 +105,11 @@ class MedicinesDetectorFragment :
                                 dialog.dismiss()
                             }.setNegativeButton(getString(R.string.close)) { _, _ -> }.setOnDismissListener {
                                 fragmentViewModel.openCamera()
-                            }.show()
+                            }.setView(ViewDetectedObjectsBinding.inflate(layoutInflater).also { recyclerView ->
+                                recyclerView.detectedObjectsRecyclerView.adapter = ImageListAdapter().apply {
+                                    submitList(objs.toList())
+                                }
+                            }.root).setCancelable(false).show()
                     } else {
                         toast(getString(R.string.noMedicinesDetected))
                         fragmentViewModel.openCamera()
