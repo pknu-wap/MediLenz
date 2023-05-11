@@ -19,6 +19,7 @@
             android:id="@+id/action_introFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.android.mediproject.feature.intro.SignUpFragment"

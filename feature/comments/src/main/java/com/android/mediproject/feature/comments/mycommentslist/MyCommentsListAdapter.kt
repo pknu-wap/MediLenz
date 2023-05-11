@@ -15,7 +15,7 @@ class MyCommentsViewHolder(
     init {
         binding.apply {
             root.setOnClickListener {
-                myCommnet?.apply {
+                myComment?.apply {
                     onClick?.invoke(this)
                 }
             }
@@ -23,7 +23,7 @@ class MyCommentsViewHolder(
     }
 
     fun bind(myComment: MyCommentDto) {
-        binding.myCommnet = myComment
+        binding.myComment = myComment
     }
 }
 

@@ -20,16 +20,6 @@
     <include app:graph="@navigation/intro_nav" />
     <include app:graph="@navigation/home_nav" />
     <include app:graph="@navigation/news_nav" />
+    <include app:graph="@navigation/comments_nav" />
 
-    <action
-        android:id="@+id/action_to_setting_nav"
-        app:destination="@id/setting_nav"
-        app:popUpTo="@id/home_nav"
-        app:popUpToInclusive="false" />
-
-    <action
-        android:id="@+id/action_to_community_nav"
-        app:destination="@id/community_nav"
-        app:popUpTo="@id/home_nav"
-        app:popUpToInclusive="false" />
 </navigation>

@@ -14,9 +14,9 @@ import kotlinx.datetime.LocalDateTime
 
 data class MyCommentDto(
     val commentId: Int,
-    val medicineName : String,
+    val medicineName: String,
     val content: String,
     val createdAt: String,
-    val replyCount : Int,
-    var onClick : ((MyCommentDto)->Unit)? = null,
+    val replyCount: Int,
+    var onClick: ((MyCommentDto) -> Unit)? = null,
 )
