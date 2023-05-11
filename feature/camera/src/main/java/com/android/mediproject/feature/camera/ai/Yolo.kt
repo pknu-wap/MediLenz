@@ -19,4 +19,4 @@ class Yolo {
 }
 
 
-data class DetectedObject(private val matrix: ByteArray)
+data class DetectedObject(val matrix: ByteArray)

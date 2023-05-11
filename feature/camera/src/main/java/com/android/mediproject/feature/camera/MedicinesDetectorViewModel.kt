@@ -1,16 +1,19 @@
 package com.android.mediproject.feature.camera
 
 import android.content.res.AssetManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.SurfaceHolder
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.camera.ai.DetectedObject
 import com.android.mediproject.feature.camera.ai.Yolo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,8 +24,8 @@ class MedicinesDetectorViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val yolo = MutableStateFlow(Yolo()).asStateFlow()
-    private val _detactedObjects = MutableStateFlow(emptyArray<DetectedObject>())
-    val detectedObjects = _detactedObjects.asStateFlow()
+    private val _detactedObjects = MutableSharedFlow<List<Bitmap>>(replay = 1)
+    val detectedObjects = _detactedObjects.asSharedFlow()
 
     fun loadModel(assetManager: AssetManager) {
         viewModelScope.launch(ioDispatcher) {
@@ -30,15 +33,23 @@ class MedicinesDetectorViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 검출된 객체를 가져오고 비트맵으로 변환한다.
+     */
     fun getDetectedObjects() {
         viewModelScope.launch(ioDispatcher) {
             val result = yolo.value.detectedObjects()
             yolo.value.closeCamera()
 
             if (result == null) {
-                _detactedObjects.value = emptyArray()
+                _detactedObjects.emit(emptyList())
             } else {
-                _detactedObjects.value = result
+                // to Bitmap
+                result.map { obj ->
+                    BitmapFactory.decodeByteArray(obj.matrix, 0, obj.matrix.size)
+                }.apply {
+                    _detactedObjects.emit(this)
+                }
             }
         }
     }

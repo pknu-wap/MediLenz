@@ -102,7 +102,6 @@ std::vector<Object> detectedObjects;
 cv::Mat *currentRgb;
 
 void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
-    // nanodet
     {
         ncnn::MutexLockGuard g(lock);
         std::vector<Object> objs;
@@ -126,7 +125,6 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
 extern "C"
 JNIEXPORT jobjectArray JNICALL
 Java_com_android_mediproject_feature_camera_ai_Yolo_detectedObjects(JNIEnv *env, jobject thiz) {
-
     if (detectedObjects.size() == 0) {
         return NULL;
     }
@@ -139,9 +137,20 @@ Java_com_android_mediproject_feature_camera_ai_Yolo_detectedObjects(JNIEnv *env,
 
         jbyteArray resultImage = env->NewByteArray(croppedMat.total() * 4);
         jbyte *_data = new jbyte[croppedMat.total() * 4];
-        memcpy(_data, croppedMat.data, croppedMat.total() * 4);
 
-        env->SetByteArrayRegion(resultImage, 0, croppedMat.total() * 4, _data);
+        std::vector<uchar> byteArray;
+        croppedMat.copyTo(byteArray);
+
+        for (int y = 0; y < croppedMat.rows; y++) {
+            for (int x = 0; x < croppedMat.cols; x++) {
+                int index = y * croppedMat.cols + x;
+                _data[index] = byteArray[index * 3] / 255.0f;
+                _data[index + croppedMat.cols] = byteArray[index * 3 + 1] / 255.0f;
+                _data[index + 2 * croppedMat.cols] = byteArray[index * 3 + 2] / 255.0f;
+            }
+        }
+
+        env->SetByteArrayRegion(resultImage, 0, croppedMat.total() * 3, _data);
 
         jclass detectedObjectClass = env->FindClass("com/android/mediproject/feature/camera/ai/DetectedObject");
         jmethodID constructor = env->GetMethodID(detectedObjectClass, "<init>", "([B)V");

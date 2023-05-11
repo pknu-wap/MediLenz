@@ -93,12 +93,12 @@ class MedicinesDetectorFragment :
             detectionBtn.setOnClickListener {
                 fragmentViewModel.getDetectedObjects()
             }
-            
+
             viewLifecycleOwner.repeatOnStarted {
                 fragmentViewModel.detectedObjects.collect { objs ->
                     if (objs.isNotEmpty()) {
                         MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.checkCountsOfMedicines))
-                            .setMessage("$this.size ${getString(R.string.checkCountsOfMedicinesMessage)}")
+                            .setMessage("${objs.size} ${getString(R.string.checkCountsOfMedicinesMessage)}")
                             .setPositiveButton(getString(R.string.search)) { dialog, _ ->
                                 dialog.dismiss()
                             }.setNegativeButton(getString(R.string.close)) { _, _ -> }.setOnDismissListener {
