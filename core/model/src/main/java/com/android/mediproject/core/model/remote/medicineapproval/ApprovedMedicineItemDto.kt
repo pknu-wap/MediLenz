@@ -25,6 +25,7 @@ package com.android.mediproject.core.model.remote.medicineapproval
  * @property ediCode EDI코드
  * @property bizrno 사업자등록번호
  */
+
 data class ApprovedMedicineItemDto(
     val itemSeq: String? = null,
     val itemName: String? = null,
