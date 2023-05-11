@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="item"
             type="com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp">
+        android:background="?attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/medicineImgView"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:scaleType="fitXY"
             android:background="@drawable/circle_image_background"
             android:contentDescription="@string/medicineImage"
             android:src="@drawable/logo"

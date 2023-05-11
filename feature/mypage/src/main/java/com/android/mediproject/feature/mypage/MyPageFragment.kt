@@ -19,8 +19,14 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(Frag
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
             }
 
+            //forTest
             myCommentsList.setOnClickListener {
                 findNavController().navigate("medilens://main/commnets_nav/myCommnetsListFragment".toUri())
+            }
+
+            //forTest
+            interestedMedicineList.setOnClickListener {
+                findNavController().navigate("medilens://main/moreInterestedMedicine_nav".toUri())
             }
         }
     }

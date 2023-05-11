@@ -1,6 +1,8 @@
 <resources>
     <string name="interestedMedicineList">즐겨찾기 목록</string>
     <string name="interestedMedicine">즐겨찾기</string>
+    <string name="medicineImage">의약품 이미지</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
