@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="myComment"
             type="com.android.mediproject.core.model.comments.MyCommentDto" />
@@ -36,7 +37,6 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal"
@@ -52,6 +52,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="5dp"
                 android:text="@{String.valueOf(myComment.replyCount)}"
                 android:textColor="@color/main"
@@ -66,6 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="5dp"
                 android:text="@{myComment.createdAt}"
                 android:textColor="@color/gray"

@@ -6,5 +6,5 @@
     <dimen name="commentLayoutHorizontalPadding">11dp</dimen>
     <dimen name="commentLayoutVerticalPadding">11dp</dimen>
 
-    <dimen name="myCommentItemTextSize">10sp</dimen>
+    <dimen name="myCommentItemTextSize">12sp</dimen>
 </resources>
