@@ -2,7 +2,6 @@ package com.android.mediproject.feature.camera
 
 import android.content.res.AssetManager
 import android.graphics.BitmapFactory
-import android.util.Base64
 import android.view.SurfaceHolder
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
@@ -18,6 +17,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 
@@ -49,30 +49,32 @@ class MedicinesDetectorViewModel @Inject constructor(
                 _detactedObjects.emit(emptyList())
             } else {
                 // to Bitmap
-                result.apply {
-
-                    val bitmap = this.first().base64.let {
-                        val decodedString: ByteArray = Base64.decode(it, Base64.DEFAULT)
-                        BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size).apply {
-                            val size = this.colorSpace
-                        }
-                    }
-                    _detactedObjects.emit(this.toList())
-                }
+                result.map { detectedObject ->
+                    var decodedBytes: ByteArray? = Base64.decode(
+                        detectedObject.base64.subSequence(0, detectedObject.base64.length), 0, detectedObject.base64.length
+                    )
+                    detectedObject.bitmap =
+                        BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes!!.size, BitmapFactory.Options().apply {
+                            inPreferredConfig = android.graphics.Bitmap.Config.ARGB_8888
+                            outWidth = detectedObject.width
+                            outHeight = detectedObject.height
+                        })
+                    decodedBytes = null
+                }.also { _detactedObjects.emit(result.toList()) }
             }
         }
     }
 
     fun surfaceCreated(holder: SurfaceHolder) {
-        viewModelScope.launch { yolo.value.setOutputWindow(holder.surface) }
+        viewModelScope.launch(ioDispatcher) { yolo.value.setOutputWindow(holder.surface) }
     }
 
     fun openCamera() {
-        viewModelScope.launch { yolo.value.openCamera(1) }
+        viewModelScope.launch(ioDispatcher) { yolo.value.openCamera(1) }
     }
 
     fun closeCamera() {
-        viewModelScope.launch { yolo.value.closeCamera() }
+        viewModelScope.launch(ioDispatcher) { yolo.value.closeCamera() }
     }
 
     override fun onCleared() {

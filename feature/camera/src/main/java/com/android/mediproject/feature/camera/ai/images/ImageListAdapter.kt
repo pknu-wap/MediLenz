@@ -24,6 +24,7 @@ class ImageListAdapter : ListAdapter<DetectedObject, ViewHolder>(Diff) {
 class ViewHolder(private val binding: ItemViewDetectedObjectBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(detectedObject: DetectedObject) {
         binding.detectedObject = detectedObject
+        binding.detectedObjectImageView.setImageBitmap(detectedObject.bitmap)
     }
 }
 

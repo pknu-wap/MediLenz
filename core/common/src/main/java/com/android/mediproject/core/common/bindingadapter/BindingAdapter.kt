@@ -1,14 +1,15 @@
 package com.android.mediproject.core.common.bindingadapter
 
+import android.graphics.Bitmap
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 
 object BitmapBindingAdapter {
-    @BindingAdapter("app:byteArray")
+    @BindingAdapter("app:bitmap")
     @JvmStatic
-    fun loadImage(imageView: ImageView, byteArray: ByteArray) {
-        Glide.with(imageView.context).load(byteArray).skipMemoryCache(false).into(imageView)
+    fun loadImage(imageView: ImageView, bitmap: Bitmap) {
+        Glide.with(imageView.context).load(bitmap).skipMemoryCache(false).into(imageView)
     }
 }
 

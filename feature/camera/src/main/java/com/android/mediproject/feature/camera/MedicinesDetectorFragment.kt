@@ -99,17 +99,20 @@ class MedicinesDetectorFragment :
             viewLifecycleOwner.repeatOnStarted {
                 fragmentViewModel.detectedObjects.collect { objs ->
                     if (objs.isNotEmpty()) {
+                        val listBinding = ViewDetectedObjectsBinding.inflate(layoutInflater)
+
                         MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.checkCountsOfMedicines))
-                            .setMessage("${objs.size} ${getString(R.string.checkCountsOfMedicinesMessage)}")
-                            .setPositiveButton(getString(R.string.search)) { dialog, _ ->
+                            .setView(listBinding.root).setPositiveButton(getString(R.string.search)) { dialog, _ ->
                                 dialog.dismiss()
-                            }.setNegativeButton(getString(R.string.close)) { _, _ -> }.setOnDismissListener {
+                            }.setMessage("${objs.size} ${getString(R.string.checkCountsOfMedicinesMessage)}")
+                            .setNegativeButton(getString(R.string.close)) { _, _ -> }.setOnDismissListener {
                                 fragmentViewModel.openCamera()
-                            }.setView(ViewDetectedObjectsBinding.inflate(layoutInflater).also { recyclerView ->
-                                recyclerView.detectedObjectsRecyclerView.adapter = ImageListAdapter().apply {
-                                    submitList(objs.toList())
+                            }.setCancelable(false).create().apply {
+                                show()
+                                listBinding.detectedObjectsRecyclerView.adapter = ImageListAdapter().apply {
+                                    submitList(objs)
                                 }
-                            }.root).setCancelable(false).show()
+                            }
                     } else {
                         toast(getString(R.string.noMedicinesDetected))
                         fragmentViewModel.openCamera()
@@ -118,6 +121,7 @@ class MedicinesDetectorFragment :
             }
         }
     }
+
 
     override fun onStart() {
         super.onStart()

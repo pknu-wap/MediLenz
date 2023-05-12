@@ -1,6 +1,7 @@
 package com.android.mediproject.feature.camera.ai
 
 import android.content.res.AssetManager
+import android.graphics.Bitmap
 import android.view.Surface
 
 
@@ -18,6 +19,7 @@ class Yolo {
     }
 }
 
-data class DetectedObject(val base64: String) {
+data class DetectedObject(val base64: String, val width: Int, val height: Int) {
     var onClicked: ((DetectedObject) -> Unit)? = null
+    var bitmap: Bitmap? = null
 }

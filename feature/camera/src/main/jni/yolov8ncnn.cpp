@@ -1,5 +1,3 @@
-#pragma once
-
 #include <android/asset_manager_jni.h>
 #include <android/native_window_jni.h>
 #include <android/native_window.h>
@@ -21,6 +19,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include <opencv2/highgui.hpp>
 
 #if __ARM_NEON
 
@@ -33,11 +32,6 @@ static const std::string base64_chars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         "abcdefghijklmnopqrstuvwxyz"
         "0123456789+/";
-
-static inline bool is_base64(unsigned char c) {
-    return (isalnum(c) || (c == '+') || (c == '/'));
-}
-
 
 static std::string base64_encode(uchar const *bytes_to_encode, unsigned int in_len) {
     std::string ret;
@@ -85,38 +79,28 @@ static std::string base64_encode(uchar const *bytes_to_encode, unsigned int in_l
 }
 
 
-static std::string mat2str(const cv::Mat &m) {
-    std::vector<uchar> buf;
+static std::string mat2str(const cv::Mat &image) {
+    /*
+    auto *img_data = new std::vector<uchar>();
+    img_data->assign(image.datastart, image.dataend);
+    std::string result = base64_encode(*img_data);
+    delete img_data;
 
-    if (m.isContinuous()) {
-        buf.assign(m.data, m.data + m.total() * m.elemSize());
-    } else {
-        for (int i = 0; i < m.rows; ++i) {
-            buf.insert(buf.end(), m.ptr<uchar>(i), m.ptr<uchar>(i) + m.cols * m.elemSize());
-        }
-    }
+    return result;
+
+    */
+
+    int params[3] = {0};
+    params[0] = CV_IMWRITE_JPEG_QUALITY;
+    params[1] = 100;
+
+    std::vector<uchar> buf;
+    bool code = cv::imencode(".jpg", image, buf, std::vector<int>(params, params + 2));
     uchar *result = reinterpret_cast<uchar *> (&buf[0]);
 
     return base64_encode(result, buf.size());
 }
 
-static int draw_unsupported(cv::Mat &rgb) {
-    const char text[] = "unsupported";
-
-    int baseLine = 0;
-    cv::Size label_size = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 1.0, 1, &baseLine);
-
-    int y = (rgb.rows - label_size.height) / 2;
-    int x = (rgb.cols - label_size.width) / 2;
-
-    cv::rectangle(rgb, cv::Rect(cv::Point(x, y), cv::Size(label_size.width, label_size.height + baseLine)),
-                  cv::Scalar(255, 255, 255), -1);
-
-    cv::putText(rgb, text, cv::Point(x, y + label_size.height),
-                cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 0, 0));
-
-    return 0;
-}
 
 static int draw_fps(cv::Mat &rgb) {
     // resolve moving average
@@ -189,7 +173,7 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
             currentRgb = &rgb;
             detectedObjects = objs;
         } else {
-            draw_unsupported(rgb);
+
         }
     }
 
@@ -208,16 +192,22 @@ Java_com_android_mediproject_feature_camera_ai_Yolo_detectedObjects(JNIEnv *env,
                                                    env->FindClass("com/android/mediproject/feature/camera/ai/DetectedObject"), nullptr);
 
     for (int i = 0; i < detectedObjects.size(); i++) {
-        const Object &detectedObject = detectedObjects[i];
-        cv::Mat croppedMat = currentRgb->operator()(detectedObject.rect);
+        cv::Mat croppedMat = currentRgb->operator()(detectedObjects[i].rect);
+        cv::Mat croppedMat2;
 
-        std::string base64String = mat2str(croppedMat);
+        cv::cvtColor(croppedMat, croppedMat2, cv::COLOR_BGR2RGB);
+        std::string base64String = mat2str(croppedMat2);
+
+        __android_log_print(ANDROID_LOG_DEBUG, "base64", "base64String: %s", base64String.c_str());
 
         jstring base64StringJ = env->NewStringUTF(base64String.c_str());
+        jint width = detectedObjects[i].rect.width;
+        jint height = detectedObjects[i].rect.height;
 
         jclass detectedObjectClass = env->FindClass("com/android/mediproject/feature/camera/ai/DetectedObject");
-        jmethodID constructor = env->GetMethodID(detectedObjectClass, "<init>", "(Ljava/lang/String;)V");
-        jobject resultEntity = env->NewObject(detectedObjectClass, constructor, base64StringJ);
+        jmethodID constructor = env->GetMethodID(detectedObjectClass, "<init>", "(Ljava/lang/String;II)V");
+        jobject resultEntity = env->NewObject(detectedObjectClass, constructor, base64StringJ,
+                                              width, height);
 
         env->SetObjectArrayElement(objectArray, i, resultEntity);
     }
