@@ -34,7 +34,6 @@ class ViewHolder(private val binding: ItemViewDetectedObjectBinding) : RecyclerV
 
     fun bind(detectedObject: DetectedObject) {
         binding.detectedObject = detectedObject
-        binding.detectedObjectImageView.setImageBitmap(detectedObject.bitmap)
     }
 }
 
