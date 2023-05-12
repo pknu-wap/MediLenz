@@ -1,14 +1,15 @@
 package com.android.mediproject.feature.camera
 
 import android.content.res.AssetManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.SurfaceHolder
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.camera.ai.DetectedObject
-import com.android.mediproject.feature.camera.ai.Yolo
+import com.android.mediproject.feature.camera.aimodel.DetectedObject
+import com.android.mediproject.feature.camera.aimodel.Yolo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,6 +31,9 @@ class MedicinesDetectorViewModel @Inject constructor(
     private val _detactedObjects = MutableSharedFlow<List<DetectedObject>>(replay = 1, extraBufferCapacity = 1)
     val detectedObjects = _detactedObjects.asSharedFlow()
 
+    private val _detectedImage = MutableSharedFlow<Bitmap>(replay = 1, extraBufferCapacity = 1)
+    val detectedImage = _detectedImage.asSharedFlow()
+
     fun loadModel(assetManager: AssetManager) {
         viewModelScope.launch(ioDispatcher) {
             yolo.value.loadModel(assetManager)
@@ -42,25 +46,20 @@ class MedicinesDetectorViewModel @Inject constructor(
     @OptIn(ExperimentalEncodingApi::class)
     fun getDetectedObjects() {
         viewModelScope.launch(ioDispatcher) {
-            val result = yolo.value.detectedObjects()
-            yolo.value.closeCamera()
+            val img = yolo.value.getCurrentImage()
+            val objects = yolo.value.detectedObjects()
 
-            if (result == null) {
+            yolo.value.closeCamera()
+            _detectedImage.emit(toBitmap(img.base64, img.width, img.height))
+
+            if (objects == null) {
                 _detactedObjects.emit(emptyList())
             } else {
                 // to Bitmap
-                result.map { detectedObject ->
-                    var decodedBytes: ByteArray? = Base64.decode(
-                        detectedObject.base64.subSequence(0, detectedObject.base64.length), 0, detectedObject.base64.length
-                    )
-                    detectedObject.bitmap =
-                        BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes!!.size, BitmapFactory.Options().apply {
-                            inPreferredConfig = android.graphics.Bitmap.Config.ARGB_8888
-                            outWidth = detectedObject.width
-                            outHeight = detectedObject.height
-                        })
-                    decodedBytes = null
-                }.also { _detactedObjects.emit(result.toList()) }
+                objects.forEach { detectedObject ->
+                    detectedObject.bitmap = toBitmap(detectedObject.base64, detectedObject.width, detectedObject.height)
+                }
+                _detactedObjects.emit(objects.toList())
             }
         }
     }
@@ -79,5 +78,25 @@ class MedicinesDetectorViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
+    }
+
+    fun clear() {
+        //  _detactedObjects.resetReplayCache()
+        //  _detectedImage.resetReplayCache()
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    private fun toBitmap(base64: String, width: Int, height: Int): Bitmap {
+        var decodedBytes: ByteArray? = Base64.decode(
+            base64.subSequence(0, base64.length), 0, base64.length
+        )
+        val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes!!.size, BitmapFactory.Options().apply {
+            inPreferredConfig = android.graphics.Bitmap.Config.ARGB_8888
+            outWidth = width
+            outHeight = height
+        })
+
+        decodedBytes = null
+        return bitmap
     }
 }

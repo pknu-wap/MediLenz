@@ -20,7 +20,7 @@
     <include app:graph="@navigation/intro_nav" />
     <include app:graph="@navigation/home_nav" />
     <include app:graph="@navigation/news_nav" />
-
+    <include app:graph="@navigation/camera_nav" />
 
     <action
         android:id="@+id/action_to_setting_nav"

@@ -80,16 +80,6 @@ static std::string base64_encode(uchar const *bytes_to_encode, unsigned int in_l
 
 
 static std::string mat2str(const cv::Mat &image) {
-    /*
-    auto *img_data = new std::vector<uchar>();
-    img_data->assign(image.datastart, image.dataend);
-    std::string result = base64_encode(*img_data);
-    delete img_data;
-
-    return result;
-
-    */
-
     int params[3] = {0};
     params[0] = CV_IMWRITE_JPEG_QUALITY;
     params[1] = 100;
@@ -158,8 +148,12 @@ public:
     virtual void on_image_render(cv::Mat &rgb) const;
 };
 
-std::vector<Object> detectedObjects;
-cv::Mat *currentRgb;
+static std::vector<cv::Rect_<float>> *finalDetectedObjects;
+static cv::Mat *finalRgb;
+
+static std::vector<Object> detectedObjects;
+static cv::Mat *currentRgb;
+
 
 void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
     {
@@ -183,28 +177,29 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
 // return detectedObjects;
 extern "C"
 JNIEXPORT jobjectArray JNICALL
-Java_com_android_mediproject_feature_camera_ai_Yolo_detectedObjects(JNIEnv *env, jobject thiz) {
-    if (detectedObjects.empty()) {
+Java_com_android_mediproject_feature_camera_aimodel_Yolo_detectedObjects(JNIEnv *env, jobject thiz) {
+    if (finalDetectedObjects == nullptr || finalRgb == nullptr) {
         return nullptr;
     }
 
-    jobjectArray objectArray = env->NewObjectArray(detectedObjects.size(),
-                                                   env->FindClass("com/android/mediproject/feature/camera/ai/DetectedObject"), nullptr);
+    jobjectArray objectArray = env->NewObjectArray(finalDetectedObjects->size(),
+                                                   env->FindClass("com/android/mediproject/feature/camera/aimodel/DetectedObject"),
+                                                   nullptr);
 
-    for (int i = 0; i < detectedObjects.size(); i++) {
-        cv::Mat croppedMat = currentRgb->operator()(detectedObjects[i].rect);
+    __android_log_print(ANDROID_LOG_DEBUG, "finalDetectedObjects", "finalDetectedObjects size: %d", finalDetectedObjects->size());
+
+    for (int i = 0; i < finalDetectedObjects->size(); i++) {
+        cv::Mat croppedMat = finalRgb->operator()(finalDetectedObjects->at(i));
         cv::Mat croppedMat2;
 
         cv::cvtColor(croppedMat, croppedMat2, cv::COLOR_BGR2RGB);
         std::string base64String = mat2str(croppedMat2);
 
-        __android_log_print(ANDROID_LOG_DEBUG, "base64", "base64String: %s", base64String.c_str());
-
         jstring base64StringJ = env->NewStringUTF(base64String.c_str());
-        jint width = detectedObjects[i].rect.width;
-        jint height = detectedObjects[i].rect.height;
+        jint width = finalDetectedObjects->at(i).width;
+        jint height = finalDetectedObjects->at(i).height;
 
-        jclass detectedObjectClass = env->FindClass("com/android/mediproject/feature/camera/ai/DetectedObject");
+        jclass detectedObjectClass = env->FindClass("com/android/mediproject/feature/camera/aimodel/DetectedObject");
         jmethodID constructor = env->GetMethodID(detectedObjectClass, "<init>", "(Ljava/lang/String;II)V");
         jobject resultEntity = env->NewObject(detectedObjectClass, constructor, base64StringJ,
                                               width, height);
@@ -244,7 +239,8 @@ JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_android_mediproject_feature_camera_ai_Yolo_loadModel(JNIEnv *env, jobject thiz, jobject assetManager, jint modelid, jint cpugpu) {
+Java_com_android_mediproject_feature_camera_aimodel_Yolo_loadModel(JNIEnv *env, jobject thiz, jobject assetManager, jint modelid,
+                                                                   jint cpugpu) {
     if (modelid < 0 || modelid > 6 || cpugpu < 0 || cpugpu > 1) {
         return JNI_FALSE;
     }
@@ -292,25 +288,62 @@ Java_com_android_mediproject_feature_camera_ai_Yolo_loadModel(JNIEnv *env, jobje
 }
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_android_mediproject_feature_camera_ai_Yolo_openCamera(JNIEnv *env, jobject thiz, jint facing) {
+Java_com_android_mediproject_feature_camera_aimodel_Yolo_openCamera(JNIEnv *env, jobject thiz, jint facing) {
     g_camera->open((int) facing);
 
     return JNI_TRUE;
 }
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_android_mediproject_feature_camera_ai_Yolo_closeCamera(JNIEnv *env, jobject thiz) {
+Java_com_android_mediproject_feature_camera_aimodel_Yolo_closeCamera(JNIEnv *env, jobject thiz) {
     g_camera->close();
 
     return JNI_TRUE;
 }
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_android_mediproject_feature_camera_ai_Yolo_setOutputWindow(JNIEnv *env, jobject thiz, jobject surface) {
+Java_com_android_mediproject_feature_camera_aimodel_Yolo_setOutputWindow(JNIEnv *env, jobject thiz, jobject surface) {
     ANativeWindow *win = ANativeWindow_fromSurface(env, surface);
 
     g_camera->set_window(win);
 
     return JNI_TRUE;
 }
+}
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_android_mediproject_feature_camera_aimodel_Yolo_getCurrentImage(JNIEnv *env, jobject thiz) {
+    if (currentRgb != nullptr) {
+        delete finalRgb;
+    }
+    if (finalDetectedObjects != nullptr) {
+        delete finalDetectedObjects;
+    }
+
+    finalRgb = new cv::Mat();
+    currentRgb->copyTo(*finalRgb);
+    finalDetectedObjects = new std::vector<cv::Rect_<float>>();
+
+    for (int i = 0; i < detectedObjects.size(); i++) {
+        finalDetectedObjects->push_back(detectedObjects[i].rect);
+    }
+
+    __android_log_print(ANDROID_LOG_DEBUG, "detectedObjects", "detectedObjects size: %d", detectedObjects.size());
+
+    __android_log_print(ANDROID_LOG_DEBUG, "finalDetectedObjects", "finalDetectedObjects size: %d", finalDetectedObjects->size());
+
+
+    cv::cvtColor(*finalRgb, *finalRgb, cv::COLOR_BGR2RGB);
+    std::string base64String = mat2str(*finalRgb);
+
+    jstring base64 = env->NewStringUTF(base64String.c_str());
+    jint width = finalRgb->cols;
+    jint height = finalRgb->rows;
+
+    jclass detectedObjectClass = env->FindClass("com/android/mediproject/feature/camera/aimodel/DetectedImage");
+    jmethodID constructor = env->GetMethodID(detectedObjectClass, "<init>", "(Ljava/lang/String;II)V");
+    jobject resultEntity = env->NewObject(detectedObjectClass, constructor, base64,
+                                          width, height);
+
+    return resultEntity;
 }

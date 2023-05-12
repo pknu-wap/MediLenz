@@ -9,21 +9,20 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.camera.ai.images.ImageListAdapter
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
-import com.android.mediproject.feature.camera.databinding.ViewDetectedObjectsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
 
 @AndroidEntryPoint
 class MedicinesDetectorFragment :
     BaseFragment<FragmentMedicinesDetectorBinding, MedicinesDetectorViewModel>(FragmentMedicinesDetectorBinding::inflate) {
 
-    override val fragmentViewModel: MedicinesDetectorViewModel by viewModels()
+    override val fragmentViewModel: MedicinesDetectorViewModel by activityViewModels()
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -41,7 +40,6 @@ class MedicinesDetectorFragment :
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-
 
         when {
             ContextCompat.checkSelfPermission(
@@ -93,32 +91,22 @@ class MedicinesDetectorFragment :
             fragmentViewModel.openCamera()
 
             detectionBtn.setOnClickListener {
+                viewLifecycleOwner.repeatOnStarted {
+                    fragmentViewModel.detectedObjects.collectLatest { objs ->
+                        if (objs.isNotEmpty()) {
+                            findNavController().navigate(
+                                MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment(false)
+                            )
+                        } else {
+                            toast(getString(R.string.noMedicinesDetected))
+                            fragmentViewModel.openCamera()
+                        }
+                    }
+                }
+
                 fragmentViewModel.getDetectedObjects()
             }
 
-            viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.detectedObjects.collect { objs ->
-                    if (objs.isNotEmpty()) {
-                        val listBinding = ViewDetectedObjectsBinding.inflate(layoutInflater)
-
-                        MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.checkCountsOfMedicines))
-                            .setView(listBinding.root).setPositiveButton(getString(R.string.search)) { dialog, _ ->
-                                dialog.dismiss()
-                            }.setMessage("${objs.size} ${getString(R.string.checkCountsOfMedicinesMessage)}")
-                            .setNegativeButton(getString(R.string.close)) { _, _ -> }.setOnDismissListener {
-                                fragmentViewModel.openCamera()
-                            }.setCancelable(false).create().apply {
-                                show()
-                                listBinding.detectedObjectsRecyclerView.adapter = ImageListAdapter().apply {
-                                    submitList(objs)
-                                }
-                            }
-                    } else {
-                        toast(getString(R.string.noMedicinesDetected))
-                        fragmentViewModel.openCamera()
-                    }
-                }
-            }
         }
     }
 
@@ -136,5 +124,10 @@ class MedicinesDetectorFragment :
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
         fragmentViewModel.closeCamera()
+    }
+
+    override fun onDestroy() {
+        fragmentViewModel.clear()
+        super.onDestroy()
     }
 }

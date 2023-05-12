@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.camera.ai
+package com.android.mediproject.feature.camera.aimodel
 
 import android.content.res.AssetManager
 import android.graphics.Bitmap
@@ -11,6 +11,7 @@ class Yolo {
     external fun closeCamera(): Boolean
     external fun setOutputWindow(surface: Surface?): Boolean
     external fun detectedObjects(): Array<DetectedObject>?
+    external fun getCurrentImage(): DetectedImage
 
     companion object {
         init {
@@ -19,7 +20,10 @@ class Yolo {
     }
 }
 
+
 data class DetectedObject(val base64: String, val width: Int, val height: Int) {
-    var onClicked: ((DetectedObject) -> Unit)? = null
+    var onClicked: (() -> Unit)? = null
     var bitmap: Bitmap? = null
 }
+
+data class DetectedImage(val base64: String, val width: Int, val height: Int)

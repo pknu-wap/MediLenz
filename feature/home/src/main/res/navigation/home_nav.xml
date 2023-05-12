@@ -36,19 +36,5 @@
     </fragment>
 
     <include app:graph="@navigation/search_medicines_nav" />
-    <fragment
-        android:id="@+id/medicinesDetectorFragment"
-        android:name="com.android.mediproject.feature.camera.MedicinesDetectorFragment"
-        android:label="MedicinesDetectorFragment"
-        tools:layout="@layout/fragment_medicines_detector">
-
-        <deepLink app:uri="medilens://camera/detector" />
-
-
-        <argument
-            android:name="@string/hideBottom"
-            android:defaultValue="true"
-            app:argType="boolean" />
-    </fragment>
 
 </navigation>

@@ -7,7 +7,7 @@
 
         <variable
             name="detectedObject"
-            type="com.android.mediproject.feature.camera.ai.DetectedObject"
+            type="com.android.mediproject.feature.camera.aimodel.DetectedObject"
             />
     </data>
 
@@ -19,6 +19,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
+        android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge"
         >
@@ -27,9 +28,8 @@
             android:id="@+id/detectedObjectImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="true"
-            android:src="@drawable/medilenz_original_logo"
             android:scaleType="centerCrop"
+            android:src="@drawable/medilenz_original_logo"
             />
     </com.google.android.material.carousel.MaskableFrameLayout>
 </layout>

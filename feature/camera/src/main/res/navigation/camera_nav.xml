@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/camera_nav"
+    app:startDestination="@id/medicinesDetectorFragment">
+
+    <fragment
+        android:id="@+id/medicinesDetectorFragment"
+        android:name="com.android.mediproject.feature.camera.MedicinesDetectorFragment"
+        android:label="MedicinesDetectorFragment">
+
+        <argument
+            android:name="@string/hideBottom"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
+        <deepLink
+            app:uri="medilens://main/camera_nav"
+            app:action="@string/hideBottom" />
+
+        <action
+            android:id="@+id/action_medicinesDetectorFragment_to_confirmDialogFragment"
+            app:destination="@id/confirmDialogFragment" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/confirmDialogFragment"
+        android:name="com.android.mediproject.feature.camera.confirmdialog.ConfirmDialogFragment"
+        android:label="ConfirmDialogFragment">
+        <argument
+            android:name="@string/hideBottom"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_confirmDialogFragment_to_detailDialogFragment"
+            app:destination="@id/detailDialogFragment" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/detailDialogFragment"
+        android:name="com.android.mediproject.feature.camera.imagedialog.DetectedImageFragment"
+        android:label="DetectedImageFragment">
+
+
+        <argument
+            android:name="@string/hideBottom"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </dialog>
+
+</navigation>

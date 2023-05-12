@@ -76,17 +76,17 @@ class SearchMedicinesFragment :
      */
     private fun initSearchBar() {
         binding.searchView.setOnSearchAiBtnClickListener {
-            findNavController().navigate("medilens://camera/detector".toUri())
-
-            binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
-                override fun onSearchQuery(query: String) {
-                    fragmentViewModel.searchMedicines(query)
-                }
-
-                override fun onEmptyQuery() {
-                    toast(getString(com.android.mediproject.core.ui.R.string.search_empty_query))
-                }
-            })
+            findNavController().navigate("medilens://main/camera_nav".toUri())
         }
+
+        binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
+            override fun onSearchQuery(query: String) {
+                fragmentViewModel.searchMedicines(query)
+            }
+
+            override fun onEmptyQuery() {
+                toast(getString(com.android.mediproject.core.ui.R.string.search_empty_query))
+            }
+        })
     }
 }
