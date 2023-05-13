@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.feature.camera.MedicinesDetectorViewModel"
+            />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -60,6 +68,7 @@
             android:layout_marginBottom="26dp"
             android:background="@drawable/detection_button_background"
             android:contentDescription="@string/search_with_ai"
+            android:onClick="@{() ->  viewModel.retrieveObjects()}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="8dp"
             android:src="@drawable/baseline_search_24"

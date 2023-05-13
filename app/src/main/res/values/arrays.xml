@@ -5,5 +5,9 @@
         <item>@id/medicinesDetectorFragment</item>
         <item>@id/confirmDialogFragment</item>
         <item>@id/detectedImageFragment</item>
+        <item>@id/splashFragment</item>
+        <item>@id/loginFragment</item>
+        <item>@id/signUpFragment</item>
+        <item>@id/introFragment</item>
     </array>
 </resources>

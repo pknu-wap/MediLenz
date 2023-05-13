@@ -154,20 +154,20 @@ static cv::Mat *finalRgb;
 static std::vector<Object> detectedObjects;
 static cv::Mat *currentRgb;
 
+static std::vector<Object> objs;
+
 
 void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
     {
         ncnn::MutexLockGuard g(lock);
-        std::vector<Object> objs;
 
         if (g_yolo) {
+            objs.clear();
             g_yolo->detect(rgb, objs);
             g_yolo->draw(rgb, objs);
 
             currentRgb = &rgb;
             detectedObjects = objs;
-        } else {
-
         }
     }
 

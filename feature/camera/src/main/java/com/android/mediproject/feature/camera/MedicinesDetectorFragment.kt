@@ -16,6 +16,7 @@ import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetec
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import repeatOnStarted
 
 @AndroidEntryPoint
@@ -36,10 +37,7 @@ class MedicinesDetectorFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
+        binding.viewModel = fragmentViewModel
 
         when {
             ContextCompat.checkSelfPermission(
@@ -64,6 +62,42 @@ class MedicinesDetectorFragment :
                 )
             }
         }
+
+
+        viewLifecycleOwner.repeatOnStarted {
+            /**
+             * Collecting the detected objects from the camera preview
+             *
+             * If the detected objects are not empty, then navigate to the [ConfirmDialogFragment]
+             *
+             * If the detected objects are empty, then show a toast and open the camera again
+             *
+             */
+            launch {
+                fragmentViewModel.detectedObjects.collectLatest { objs ->
+                    if (objs.isNotEmpty()) {
+                        findNavController().navigate(
+                            MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment()
+                        )
+                    } else {
+                        toast(getString(R.string.noMedicinesDetected))
+                        fragmentViewModel.openCamera()
+                    }
+                }
+            }
+
+            launch {
+                fragmentViewModel.loadedModel.collectLatest { isLoaded ->
+                    if (isLoaded) {
+                        fragmentViewModel.openCamera()
+                        activity?.apply {
+                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
 
@@ -87,40 +121,15 @@ class MedicinesDetectorFragment :
             surfaceView.holder.setFormat(PixelFormat.RGBA_8888)
             surfaceView.holder.addCallback(surfaceHolder)
 
+            // Load the model from the assets folder
             fragmentViewModel.loadModel(requireContext().assets)
-            fragmentViewModel.openCamera()
-
-            detectionBtn.setOnClickListener {
-                viewLifecycleOwner.repeatOnStarted {
-                    fragmentViewModel.detectedObjects.collectLatest { objs ->
-                        if (objs.isNotEmpty()) {
-                            findNavController().navigate(
-                                MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment(false)
-                            )
-                        } else {
-                            toast(getString(R.string.noMedicinesDetected))
-                            fragmentViewModel.openCamera()
-                        }
-                    }
-                }
-
-                fragmentViewModel.getDetectedObjects()
-            }
-
         }
     }
 
-
-    override fun onStart() {
-        super.onStart()
-        requireActivity().apply {
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
-    }
 
     override fun onPause() {
         super.onPause()
-        requireActivity().apply {
+        activity?.apply {
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
         fragmentViewModel.closeCamera()
@@ -130,4 +139,5 @@ class MedicinesDetectorFragment :
         fragmentViewModel.clear()
         super.onDestroy()
     }
+
 }

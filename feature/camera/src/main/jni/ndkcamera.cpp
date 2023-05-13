@@ -146,7 +146,7 @@ NdkCamera::NdkCamera() {
 
     // setup imagereader and its surface
     {
-        AImageReader_new(640, 640, AIMAGE_FORMAT_YUV_420_888, /*maxImages*/2, &image_reader);
+        AImageReader_new(640, 640, AIMAGE_FORMAT_YUV_420_888, /*maxImages*/3, &image_reader);
 
         AImageReader_ImageListener listener;
         listener.context = this;
@@ -336,18 +336,15 @@ void NdkCamera::on_image(const unsigned char *nv21, int nv21_width, int nv21_hei
             w = nv21_width;
             h = nv21_height;
             rotate_type = camera_facing == 0 ? 2 : 1;
-        }
-        if (camera_orientation == 90) {
+        } else if (camera_orientation == 90) {
             w = nv21_height;
             h = nv21_width;
             rotate_type = camera_facing == 0 ? 5 : 6;
-        }
-        if (camera_orientation == 180) {
+        } else if (camera_orientation == 180) {
             w = nv21_width;
             h = nv21_height;
             rotate_type = camera_facing == 0 ? 4 : 3;
-        }
-        if (camera_orientation == 270) {
+        } else if (camera_orientation == 270) {
             w = nv21_height;
             h = nv21_width;
             rotate_type = camera_facing == 0 ? 7 : 8;
@@ -431,7 +428,7 @@ void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv
                 float acceleration_x = e[num_event - 1].acceleration.x;
                 float acceleration_y = e[num_event - 1].acceleration.y;
                 float acceleration_z = e[num_event - 1].acceleration.z;
-//                 __android_log_print(ANDROID_LOG_WARN, "NdkCameraWindow", "x = %f, y = %f, z = %f", x, y, z);
+
 
                 if (acceleration_y > 7) {
                     accelerometer_orientation = 0;
@@ -489,8 +486,13 @@ void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv
             nv21_roi_y = roi_y;
             nv21_roi_w = roi_w;
             nv21_roi_h = roi_h;
-        }
-        if (final_orientation == 90 || final_orientation == 270) {
+
+            if (final_orientation == 0) {
+                rotate_type = 1;
+            } else {
+                rotate_type = 3;
+            }
+        } else if (final_orientation == 90 || final_orientation == 270) {
             if (win_w * nv21_width > win_h * nv21_height) {
                 roi_w = nv21_height;
                 roi_h = (nv21_height * win_h / win_w) / 2 * 2;
@@ -507,88 +509,28 @@ void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv
             nv21_roi_y = roi_x;
             nv21_roi_w = roi_h;
             nv21_roi_h = roi_w;
-        }
 
-        if (camera_facing == 0) {
-            if (camera_orientation == 0 && accelerometer_orientation == 0) {
-                rotate_type = 2;
-            }
-            if (camera_orientation == 0 && accelerometer_orientation == 90) {
-                rotate_type = 7;
-            }
-            if (camera_orientation == 0 && accelerometer_orientation == 180) {
-                rotate_type = 4;
-            }
-            if (camera_orientation == 0 && accelerometer_orientation == 270) {
-                rotate_type = 5;
-            }
-            if (camera_orientation == 90 && accelerometer_orientation == 0) {
-                rotate_type = 5;
-            }
-            if (camera_orientation == 90 && accelerometer_orientation == 90) {
-                rotate_type = 2;
-            }
-            if (camera_orientation == 90 && accelerometer_orientation == 180) {
-                rotate_type = 7;
-            }
-            if (camera_orientation == 90 && accelerometer_orientation == 270) {
-                rotate_type = 4;
-            }
-            if (camera_orientation == 180 && accelerometer_orientation == 0) {
-                rotate_type = 4;
-            }
-            if (camera_orientation == 180 && accelerometer_orientation == 90) {
-                rotate_type = 5;
-            }
-            if (camera_orientation == 180 && accelerometer_orientation == 180) {
-                rotate_type = 2;
-            }
-            if (camera_orientation == 180 && accelerometer_orientation == 270) {
-                rotate_type = 7;
-            }
-            if (camera_orientation == 270 && accelerometer_orientation == 0) {
-                rotate_type = 7;
-            }
-            if (camera_orientation == 270 && accelerometer_orientation == 90) {
-                rotate_type = 4;
-            }
-            if (camera_orientation == 270 && accelerometer_orientation == 180) {
-                rotate_type = 5;
-            }
-            if (camera_orientation == 270 && accelerometer_orientation == 270) {
-                rotate_type = 2;
-            }
-        } else {
-            if (final_orientation == 0) {
-                rotate_type = 1;
-            }
             if (final_orientation == 90) {
                 rotate_type = 6;
-            }
-            if (final_orientation == 180) {
-                rotate_type = 3;
-            }
-            if (final_orientation == 270) {
+            } else {
                 rotate_type = 8;
             }
         }
+
 
         if (accelerometer_orientation == 0) {
             render_w = roi_w;
             render_h = roi_h;
             render_rotate_type = 1;
-        }
-        if (accelerometer_orientation == 90) {
+        } else if (accelerometer_orientation == 90) {
             render_w = roi_h;
             render_h = roi_w;
             render_rotate_type = 8;
-        }
-        if (accelerometer_orientation == 180) {
+        } else if (accelerometer_orientation == 180) {
             render_w = roi_w;
             render_h = roi_h;
             render_rotate_type = 3;
-        }
-        if (accelerometer_orientation == 270) {
+        } else if (accelerometer_orientation == 270) {
             render_w = roi_h;
             render_h = roi_w;
             render_rotate_type = 6;
@@ -630,8 +572,7 @@ void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv
 
             int x = 0;
 #if __ARM_NEON
-            for (; x + 7 < render_w; x += 8)
-            {
+            for (; x + 7 < render_w; x += 8) {
                 uint8x8x3_t _rgb = vld3_u8(ptr);
                 uint8x8x4_t _rgba;
                 _rgba.val[0] = _rgb.val[0];

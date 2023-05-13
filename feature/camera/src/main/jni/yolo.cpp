@@ -8,6 +8,9 @@
 
 #include "cpu.h"
 
+static const float prob_threshold = 0.4f;
+static const float nms_threshold = 0.45f;
+
 static float fast_exp(float x) {
     union {
         uint32_t i;
@@ -67,7 +70,7 @@ static void qsort_descent_inplace(std::vector<Object> &faceobjects) {
     qsort_descent_inplace(faceobjects, 0, faceobjects.size() - 1);
 }
 
-static void nms_sorted_bboxes(const std::vector<Object> &faceobjects, std::vector<int> &picked, float nms_threshold) {
+static void nms_sorted_bboxes(const std::vector<Object> &faceobjects, std::vector<int> &picked) {
     picked.clear();
 
     const int n = faceobjects.size();
@@ -97,12 +100,18 @@ static void nms_sorted_bboxes(const std::vector<Object> &faceobjects, std::vecto
     }
 }
 
+static const std::vector<int> strides = {8, 16, 32};
+
 static void
-generate_grids_and_stride(const int target_w, const int target_h, std::vector<int> &strides, std::vector<GridAndStride> &grid_strides) {
-    for (int i = 0; i < (int) strides.size(); i++) {
+generate_grids_and_stride(const int target_w, const int target_h, std::vector<GridAndStride> &grid_strides) {
+    int num_grid_w = 0;
+    int num_grid_h = 0;
+
+    for (int i = 0; i < 3; i++) {
         int stride = strides[i];
-        int num_grid_w = target_w / stride;
-        int num_grid_h = target_h / stride;
+        num_grid_w = target_w / stride;
+        num_grid_h = target_h / stride;
+
         for (int g1 = 0; g1 < num_grid_h; g1++) {
             for (int g0 = 0; g0 < num_grid_w; g0++) {
                 GridAndStride gs;
@@ -116,7 +125,7 @@ generate_grids_and_stride(const int target_w, const int target_h, std::vector<in
 }
 
 static void
-generate_proposals(std::vector<GridAndStride> grid_strides, const ncnn::Mat &pred, float prob_threshold, std::vector<Object> &objects) {
+generate_proposals(std::vector<GridAndStride> grid_strides, const ncnn::Mat &pred, std::vector<Object> &objects) {
     const int num_points = grid_strides.size();
     const int num_class = 1;
     const int reg_max_1 = 16;
@@ -229,7 +238,8 @@ Yolo::load(AAssetManager *mgr, const char *modeltype, int _target_size, const fl
     return 0;
 }
 
-int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects, float prob_threshold, float nms_threshold) {
+
+int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects) {
     int width = rgb.cols;
     int height = rgb.rows;
 
@@ -266,18 +276,18 @@ int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects, float prob_th
     ncnn::Mat out;
     ex.extract("output0", out);
 
-    std::vector<int> strides = {8, 16, 32}; // might have stride=64
+// might have stride=64
     std::vector<GridAndStride> grid_strides;
-    generate_grids_and_stride(in_pad.w, in_pad.h, strides, grid_strides);
+    generate_grids_and_stride(in_pad.w, in_pad.h, grid_strides);
 
-    generate_proposals(grid_strides, out, prob_threshold, proposals);
+    generate_proposals(grid_strides, out, proposals);
 
     // sort all proposals by score from highest to lowest
     qsort_descent_inplace(proposals);
 
     // apply nms with nms_threshold
     std::vector<int> picked;
-    nms_sorted_bboxes(proposals, picked, nms_threshold);
+    nms_sorted_bboxes(proposals, picked);
 
     int count = picked.size();
 

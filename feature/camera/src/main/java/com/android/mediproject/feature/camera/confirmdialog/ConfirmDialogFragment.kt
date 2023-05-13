@@ -85,7 +85,7 @@ class ConfirmDialogFragment : DialogFragment() {
     }
 
     private fun onDetectedObjectClicked() {
-        findNavController().navigate(ConfirmDialogFragmentDirections.actionConfirmDialogFragmentToDetailDialogFragment(false))
+        findNavController().navigate(ConfirmDialogFragmentDirections.actionConfirmDialogFragmentToDetectedImageFragment())
     }
 
     override fun isCancelable(): Boolean = false

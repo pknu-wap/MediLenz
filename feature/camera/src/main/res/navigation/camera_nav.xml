@@ -27,10 +27,7 @@
         android:id="@+id/confirmDialogFragment"
         android:name="com.android.mediproject.feature.camera.confirmdialog.ConfirmDialogFragment"
         android:label="ConfirmDialogFragment">
-        <argument
-            android:name="@string/hideBottom"
-            android:defaultValue="false"
-            app:argType="boolean" />
+
         <action
             android:id="@+id/action_confirmDialogFragment_to_detectedImageFragment"
             app:destination="@id/detectedImageFragment" />
@@ -42,10 +39,6 @@
         android:label="DetectedImageFragment">
 
 
-        <argument
-            android:name="@string/hideBottom"
-            android:defaultValue="false"
-            app:argType="boolean" />
     </dialog>
 
 </navigation>
