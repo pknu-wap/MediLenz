@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
@@ -26,7 +25,6 @@ class DetectedImageFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = super.onCreateDialog(savedInstanceState).let { dialog ->
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         dialog.setCanceledOnTouchOutside(false)
         dialog.setCancelable(false)
