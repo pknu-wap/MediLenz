@@ -31,7 +31,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
                 setupWithNavController(navController)
             }
             R.array.hideBottomNavDestinationIds
-            setDestinationListener2()
+            setDestinationListener()
 
             viewModel = activityViewModel.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
@@ -63,7 +63,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
      *
      * argument 를 통해 bottomNav 를 숨길지 말지 결정한다.
      */
-    private fun setDestinationListener2() = navController.addOnDestinationChangedListener { _, destination, arg ->
+    private fun setDestinationListener() = navController.addOnDestinationChangedListener { _, destination, arg ->
         log(arg.toString())
         if (destination.id in hideBottomNavDestinationIds) {
             bottomVisible(INVISIBLE)
