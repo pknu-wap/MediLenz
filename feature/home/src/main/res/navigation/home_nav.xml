@@ -30,6 +30,9 @@
         android:label="SearchMedicinesFragment"
         tools:layout="@layout/fragment_search_medicines">
 
+        <action
+            android:id="@+id/action_searchMedicinesFragment_to_medicinesDetectorFragment"
+            app:destination="@id/medicinesDetectorFragment" />
     </fragment>
 
     <include app:graph="@navigation/search_medicines_nav" />

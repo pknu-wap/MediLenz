@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":feature:search"))
     implementation(project(":feature:comments"))
     implementation(project(":feature:penalties"))
+    implementation(project(":feature:camera"))
 
     implementation(libs.bundles.glides)
     implementation(libs.bundles.kotlins)

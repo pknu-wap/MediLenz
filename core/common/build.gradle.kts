@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("mediproject.android.feature")
     id("kotlinx-serialization")
+    id(libs.plugins.ksp.get().pluginId)
 }
 
 android {
@@ -31,4 +32,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlin.reflection)
+    implementation(libs.bundles.glides)
+    ksp(libs.glide.ksp)
 }

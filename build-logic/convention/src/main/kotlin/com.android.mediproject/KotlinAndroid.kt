@@ -21,7 +21,7 @@ internal fun Project.configureKotlinAndroid(
             minSdk = 28
         }
 
- 
+
 
         dataBinding.enable = true
         viewBinding.enable = true
@@ -41,6 +41,7 @@ internal fun Project.configureKotlinAndroid(
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=kotlinx.coroutines.FlowPreview",
                 "-opt-in=kotlin.Experimental",
+                "-Xdebug"
             )
 
             jvmTarget = JavaVersion.VERSION_17.toString()

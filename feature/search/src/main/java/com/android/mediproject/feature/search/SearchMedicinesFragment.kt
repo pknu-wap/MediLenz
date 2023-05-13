@@ -2,8 +2,10 @@ package com.android.mediproject.feature.search
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.MediSearchbar
 import com.android.mediproject.feature.search.databinding.FragmentSearchMedicinesBinding
@@ -73,7 +75,9 @@ class SearchMedicinesFragment :
      * 검색바 검색 가능하도록 설정하고, 검색버튼과 AI검색 버튼이 동작하도록 초기화합니다.
      */
     private fun initSearchBar() {
-        binding.searchView.setOnSearchAiBtnClickListener {}
+        binding.searchView.setOnSearchAiBtnClickListener {
+            findNavController().navigate("medilens://main/camera_nav".toUri())
+        }
 
         binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
             override fun onSearchQuery(query: String) {

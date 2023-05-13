@@ -63,7 +63,6 @@ class RecentCommentListFragment :
 
 class RecentCommentListAdapter : RecyclerView.Adapter<RecentCommentListAdapter.RecentCommentListViewHolder>() {
 
-
     private val mDiffer = AsyncListDiffer<Any>(this, object : DiffUtil.ItemCallback<Any>(
     ) {
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {

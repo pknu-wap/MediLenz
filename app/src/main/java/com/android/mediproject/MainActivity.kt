@@ -30,8 +30,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
                 itemIconTintList = null
                 setupWithNavController(navController)
             }
-
-            setDestinationListener()
+            R.array.hideBottomNavDestinationIds
+            //setDestinationListener()
+            setDestinationListener2()
             // setUpBottomNav()
 
             viewModel = activityViewModel.apply {
@@ -69,6 +70,17 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
 
      */
 
+    private val hideBottomNavDestinationIds: Set<Int> by lazy {
+        resources.obtainTypedArray(R.array.hideBottomNavDestinationIds).let { typedArray ->
+            val destinationIds = mutableSetOf<Int>()
+            for (i in 0 until typedArray.length()) {
+                destinationIds.add(typedArray.getResourceId(i, 0))
+            }
+            typedArray.recycle()
+            destinationIds
+        }
+    }
+
     private fun setDestinationListener() = navController.addOnDestinationChangedListener { _, _, arg ->
         log(arg.toString())
         if (arg != null) {
@@ -79,6 +91,26 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
             } else {
                 bottomVisible(VISIBLE)
             }
+        } else {
+            bottomVisible(VISIBLE)
+        }
+    }
+
+    /**
+     * <2번째 방법>
+     *
+     * 1번째 방법은 nav_graph.xml 에서 destination 에서 argument 를 추가해주고
+     *
+     * 2번째 방법은 navController.addOnDestinationChangedListener 에서
+     *
+     * destination.id 를 통해 destination 을 구분하고
+     *
+     * argument 를 통해 bottomNav 를 숨길지 말지 결정한다.
+     */
+    private fun setDestinationListener2() = navController.addOnDestinationChangedListener { _, destination, arg ->
+        log(arg.toString())
+        if (destination.id in hideBottomNavDestinationIds) {
+            bottomVisible(INVISIBLE)
         } else {
             bottomVisible(VISIBLE)
         }
