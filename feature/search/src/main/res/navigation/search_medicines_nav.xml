@@ -45,5 +45,6 @@
             app:popUpToInclusive="true" />
 
     </fragment>
-    <deepLink app:uri="medilens://main/search/ai_search_result" />
+
+    <deepLink app:uri="medilens://main/search/search_medicines" />
 </navigation>
