@@ -9,15 +9,6 @@
         android:name="com.android.mediproject.feature.camera.MedicinesDetectorFragment"
         android:label="MedicinesDetectorFragment">
 
-        <argument
-            android:name="@string/hideBottom"
-            android:defaultValue="false"
-            app:argType="boolean" />
-
-        <deepLink
-            app:uri="medilens://main/camera_nav"
-            app:action="@string/hideBottom" />
-
         <action
             android:id="@+id/action_medicinesDetectorFragment_to_confirmDialogFragment"
             app:destination="@id/confirmDialogFragment" />
@@ -40,5 +31,7 @@
 
 
     </dialog>
+
+    <deepLink app:uri="medilens://main/camera_nav" />
 
 </navigation>

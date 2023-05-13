@@ -13,7 +13,7 @@ androidDesugarJdkLibs = "2.0.3"
 
 # androidx
 androidXPagingCompose = "1.0.0-alpha19"
-androidxCore = "1.10.0"
+androidxCore = "1.10.1"
 androidxActivity = "1.7.1"
 androidxFragment = "1.5.7"
 androidxNavigation = "2.5.3"
@@ -56,6 +56,7 @@ glide = "4.15.1"
 gms = "4.3.15"
 retrofit2 = "2.9.0"
 retrofit2KotlinxSerializationJson = "1.0.0"
+androidArchLifecycle = "1.0.0"
 
 okhttp3 = "4.10.0"
 
@@ -197,7 +198,8 @@ okhttp-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor
 
 # glide--------------------------------------------------------------------------------------------------------------
 glide-main = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
-glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
+glide-kapt = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+glide-kapt-arch = { module = "android.arch.lifecycle:compiler", version.ref = "androidArchLifecycle" }
 
 # material--------------------------------------------------------------------------------------------------------------
 material-main = { module = "com.google.android.material:material", version.ref = "material" }
@@ -239,6 +241,8 @@ kotlins = ["kotlin-stdlib-jdk7", "kotlin-stdlib-jdk8", "kotlin-stdlib-root", "ko
 materials = ["material-main", "androidx-compose-material3", "androidx-compose-material3-windowSizeClass"]
 
 glides = ["glide-main"]
+
+glides-kapt = ["glide-kapt"]
 
 firebases = ["firebase-bom", "firebase-crashlytics"]
 

@@ -7,16 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto
 import com.android.mediproject.feature.search.databinding.ManualMedicineItemBinding
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, ApprovedMedicinesAdapter.ViewHolder>(MedicineComparator) {
 
     class ViewHolder(private val binding: ManualMedicineItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        private val glide: RequestManager = Glide.with(binding.root)
-
         init {
             binding.root.setOnClickListener {
                 binding.item?.apply {
@@ -28,11 +22,7 @@ class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, Ap
         fun bind(item: ApprovedMedicineItemDto) {
             binding.apply {
                 this.item = item
-
-                // 메모리 캐시 사용
-                glide.load(item.bigPrdtImgUrl)
-                    .override(medicineImgView.width).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false)
-                    .into(medicineImgView)
+                executePendingBindings()
             }
         }
 

@@ -31,9 +31,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
                 setupWithNavController(navController)
             }
             R.array.hideBottomNavDestinationIds
-            //setDestinationListener()
             setDestinationListener2()
-            // setUpBottomNav()
 
             viewModel = activityViewModel.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
@@ -41,34 +39,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         }
     }
 
-    /*
-        private fun setUpBottomNav() = binding.bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.home_nav -> true.apply {
-                    log("홈")
-                    // navController.navigate(MainNavDirections.actionToHomeNav())
-                }
-
-                R.id.community_nav -> true.apply {
-                    log("커뮤니티")
-                    navController.navigate(MainNavDirections.actionToCommunityNav())
-                }
-
-                R.id.mypage_nav -> true.apply {
-                    log("마이페이지")
-                    //navController.navigate(MainNavDirections.actionToMypageNav())
-                }
-
-                R.id.setting_nav -> true.apply {
-                    log("설정")
-                    navController.navigate(MainNavDirections.actionToSettingNav())
-                }
-
-                else -> false
-            }
-        }
-
-     */
 
     private val hideBottomNavDestinationIds: Set<Int> by lazy {
         resources.obtainTypedArray(R.array.hideBottomNavDestinationIds).let { typedArray ->
@@ -81,20 +51,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         }
     }
 
-    private fun setDestinationListener() = navController.addOnDestinationChangedListener { _, _, arg ->
-        log(arg.toString())
-        if (arg != null) {
-            if (arg.isEmpty) {
-                bottomVisible(VISIBLE)
-            } else if (arg.getBoolean(getString(com.android.mediproject.core.ui.R.string.hideBottom))) {
-                bottomVisible(INVISIBLE)
-            } else {
-                bottomVisible(VISIBLE)
-            }
-        } else {
-            bottomVisible(VISIBLE)
-        }
-    }
 
     /**
      * <2번째 방법>

@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("mediproject.android.feature")
     id("androidx.navigation.safeargs.kotlin")
-    id(libs.plugins.ksp.get().pluginId)
+    id(libs.plugins.kapt.get().pluginId)
 }
 
 android {
@@ -22,12 +22,13 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
     implementation(project(":feature:camera"))
-    
+
     implementation(libs.bundles.glides)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.android.flexbox)
     implementation(libs.androidx.paging.runtime)
-    ksp(libs.glide.ksp)
+    kapt(libs.bundles.glides.kapt)
+
 }

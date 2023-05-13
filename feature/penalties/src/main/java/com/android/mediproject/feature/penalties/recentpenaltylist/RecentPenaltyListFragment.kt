@@ -36,7 +36,7 @@ class RecentPenaltyListFragment :
         binding.apply {
             // this.penaltyList.adapter = penaltyListAdapter
         }
-        addPenaltyItems()
+        // addPenaltyItems()
         initHeader()
     }
 

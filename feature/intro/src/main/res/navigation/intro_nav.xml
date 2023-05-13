@@ -11,10 +11,7 @@
         <action
             android:id="@+id/action_introFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
-        <argument
-            android:name="@string/hideBottom"
-            android:defaultValue="true"
-            app:argType="boolean" />
+
         <action
             android:id="@+id/action_introFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -25,20 +22,14 @@
         android:name="com.android.mediproject.feature.intro.SignUpFragment"
         android:label="SignUpFragment">
 
-        <argument
-            android:name="@string/hideBottom"
-            android:defaultValue="true"
-            app:argType="boolean" />
+
     </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.android.mediproject.feature.intro.LoginFragment"
         android:label="LoginFragment">
-        <argument
-            android:name="@string/hideBottom"
-            android:defaultValue="true"
-            app:argType="boolean" />
+
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />

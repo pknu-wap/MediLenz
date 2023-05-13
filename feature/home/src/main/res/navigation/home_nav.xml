@@ -11,12 +11,6 @@
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home">
 
-        <argument
-            android:name="@string/hideBottom"
-            android:defaultValue="false"
-            app:argType="boolean" />
-
-        <deepLink app:uri="medilens://main/home_nav" />
 
         <action
             android:id="@+id/action_homeFragment_to_searchMedicinesFragment"
@@ -36,5 +30,5 @@
     </fragment>
 
     <include app:graph="@navigation/search_medicines_nav" />
-
+    <deepLink app:uri="medilens://main/home_nav" />
 </navigation>

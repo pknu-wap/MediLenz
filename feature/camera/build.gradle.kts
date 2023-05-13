@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("mediproject.android.feature")
     id("androidx.navigation.safeargs.kotlin")
-    id(libs.plugins.ksp.get().pluginId)
+    id(libs.plugins.kapt.get().pluginId)
 }
 
 android {
@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
     implementation(libs.bundles.glides)
+    kapt(libs.bundles.glides.kapt)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
@@ -50,10 +51,5 @@ dependencies {
     implementation(libs.bundles.navigations)
     implementation(libs.bundles.lifecycles)
     implementation(libs.kotlinx.datetime)
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 
-    kapt(libs.androidx.lifecycle.compilerKapt)
-    ksp(libs.glide.ksp)
 }

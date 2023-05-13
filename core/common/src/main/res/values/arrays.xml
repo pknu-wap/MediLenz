@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="medicationTypes">
+
+        <item>@string/all</item>
+        <item>@string/specialtyMedication</item>
+        <item>@string/generalMedication</item>
+    </string-array>
+
+</resources>

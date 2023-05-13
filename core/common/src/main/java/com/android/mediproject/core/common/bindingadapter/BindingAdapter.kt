@@ -2,21 +2,37 @@ package com.android.mediproject.core.common.bindingadapter
 
 import android.graphics.Bitmap
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
+import com.android.mediproject.core.common.R
+import com.android.mediproject.core.common.constant.MedicationType
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.module.AppGlideModule
+
+@GlideModule
+class GlideAppModule : AppGlideModule()
 
 object BitmapBindingAdapter {
-    @BindingAdapter("app:bitmap")
+    @BindingAdapter("bitmap")
     @JvmStatic
-    fun loadImage(imageView: ImageView, bitmap: Bitmap) {
-        Glide.with(imageView.context).load(bitmap).skipMemoryCache(false).into(imageView)
+    fun loadBitmapImage(imageView: ImageView, bitmap: Bitmap) {
+        GlideApp.with(imageView.context).load(bitmap).skipMemoryCache(false).into(imageView)
     }
 }
 
 object ImgUrlBindingAdapter {
-    @BindingAdapter("app:imgUrl")
+    @BindingAdapter("imgUrl")
     @JvmStatic
-    fun loadImage(imageView: ImageView, imgUrl: String) {
-        Glide.with(imageView.context).load(imgUrl).skipMemoryCache(false).into(imageView)
+    fun loadUrlImage(imageView: ImageView, imgUrl: String) {
+        GlideApp.with(imageView.context).load(imgUrl).skipMemoryCache(false).into(imageView)
+    }
+}
+
+object BindingAdapter {
+    @JvmStatic
+    @BindingAdapter("medicationTypeText")
+    fun setStatusText(textView: TextView, type: MedicationType) {
+        val arr = textView.context.resources.getStringArray(R.array.medicationTypes)
+        textView.text = arr[type.ordinal]
     }
 }

@@ -24,7 +24,7 @@
             android:layout_marginBottom="25dp"
             android:background="@drawable/circle_image_background"
             android:src="@drawable/logo"
-            app:layout_constraintBottom_toTopOf="@id/searchListViewGroup"
+
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/detectionedCountsTextView"
@@ -43,15 +43,6 @@
             app:layout_constraintTop_toTopOf="@id/capturedImageView"
             />
 
-
-        <include
-            android:id="@+id/searchListViewGroup"
-            layout="@layout/medicine_search_list_viewgroup"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/capturedImageView"
-            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

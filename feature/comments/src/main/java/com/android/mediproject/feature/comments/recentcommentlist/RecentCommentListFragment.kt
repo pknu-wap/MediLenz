@@ -27,26 +27,17 @@ class RecentCommentListFragment :
     }
 
     override val fragmentViewModel: RecentCommentListViewModel by viewModels()
-    private val commentListAdapter = RecentCommentListAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+            //  val commentListAdapter = RecentCommentListAdapter()
             // commentList.adapter = commentListAdapter
         }
-        addCommentItems()
+        // addCommentItems()
         initHeader()
     }
 
-    private fun addCommentItems() {
-        binding.apply {
-            (0..4).map {
-                it
-            }.toList().apply {
-                commentListAdapter.submitList(this)
-            }
-        }
-    }
 
     /**
      * 헤더 초기화
@@ -66,11 +57,11 @@ class RecentCommentListAdapter : RecyclerView.Adapter<RecentCommentListAdapter.R
     private val mDiffer = AsyncListDiffer<Any>(this, object : DiffUtil.ItemCallback<Any>(
     ) {
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-            TODO("Not yet implemented")
+            TODO()
         }
 
         override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-            TODO("Not yet implemented")
+            TODO()
         }
     })
 
