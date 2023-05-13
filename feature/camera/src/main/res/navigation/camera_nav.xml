@@ -32,12 +32,12 @@
             android:defaultValue="false"
             app:argType="boolean" />
         <action
-            android:id="@+id/action_confirmDialogFragment_to_detailDialogFragment"
-            app:destination="@id/detailDialogFragment" />
+            android:id="@+id/action_confirmDialogFragment_to_detectedImageFragment"
+            app:destination="@id/detectedImageFragment" />
     </dialog>
 
     <dialog
-        android:id="@+id/detailDialogFragment"
+        android:id="@+id/detectedImageFragment"
         android:name="com.android.mediproject.feature.camera.imagedialog.DetectedImageFragment"
         android:label="DetectedImageFragment">
 

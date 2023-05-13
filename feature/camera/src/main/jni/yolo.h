@@ -27,9 +27,9 @@ public:
     int load(AAssetManager *mgr, const char *modeltype, int target_size, const float *mean_vals, const float *norm_vals, bool use_gpu =
     true);
 
-    int detect(const cv::Mat &rgb, std::vector <Object> &objects, float prob_threshold = 0.45f, float nms_threshold = 0.35f);
+    int detect(const cv::Mat &rgb, std::vector<Object> &objects, float prob_threshold = 0.45f, float nms_threshold = 0.4f);
 
-    int draw(cv::Mat &rgb, const std::vector <Object> &objects);
+    int draw(cv::Mat &rgb, const std::vector<Object> &objects);
 
 private:
     ncnn::Net yolo;
