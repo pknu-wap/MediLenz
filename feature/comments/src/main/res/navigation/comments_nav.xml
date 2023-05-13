@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/recent_comments_nav"
+    android:id="@+id/comments_nav"
     app:startDestination="@id/recentCommentListFragment">
 
     <fragment
         android:id="@+id/recentCommentListFragment"
         android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
         android:label="RecentCommentListFragment" />
+
+    <fragment
+        android:id="@+id/myCommentsListFragment"
+        android:name="com.android.mediproject.feature.comments.mycommentslist.MyCommentsListFragment"
+        android:label="MyCommentsListFragment" >
+
+        <deepLink app:uri="medilens://main/comments_nav/myCommentsListFragment" />
+    </fragment>
+
+    <deepLink app:uri="medilens://main/comments_nav" />
+
 </navigation>

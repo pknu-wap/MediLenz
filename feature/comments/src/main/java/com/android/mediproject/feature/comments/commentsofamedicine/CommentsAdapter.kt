@@ -30,12 +30,12 @@ class CommentsAdapter : RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>
                     safeItem.onClickReply(safeItem.commentId)
                 }
             }
-            view.setOnLikeClickListener() { commentId ->
+            view.setOnLikeClickListener { commentId ->
                 item?.let { safeItem ->
                     safeItem.onClickLike(safeItem.commentId)
                 }
             }
-            view.setOnDeleteClickListener() { commentId ->
+            view.setOnDeleteClickListener { commentId ->
 
             }
         }
