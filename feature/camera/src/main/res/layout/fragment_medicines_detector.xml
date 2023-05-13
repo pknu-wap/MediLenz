@@ -31,7 +31,7 @@
             app:layout_constraintBottom_toBottomOf="@id/title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/logo"
-
+            android:contentDescription="@string/back"
             />
 
         <ImageView
@@ -68,7 +68,7 @@
             android:contentDescription="@string/search_with_ai"
             android:onClick="@{() ->  viewModel.retrieveObjects()}"
             android:paddingHorizontal="32dp"
-            android:paddingVertical="8dp"
+            android:paddingVertical="9dp"
             android:src="@drawable/baseline_search_24"
             app:layout_constraintBottom_toTopOf="@id/detectionDescription"
             app:layout_constraintEnd_toEndOf="parent"

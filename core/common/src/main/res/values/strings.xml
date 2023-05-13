@@ -5,4 +5,5 @@
     <string name="specialtyMedication">전문 의약품</string>
     <string name="generalMedication">일반 의약품</string>
     <string name="all">모두</string>
+    <string name="back">뒤로 가기</string>
 </resources>

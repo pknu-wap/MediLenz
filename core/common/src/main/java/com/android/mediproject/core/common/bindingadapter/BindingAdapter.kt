@@ -12,27 +12,23 @@ import com.bumptech.glide.module.AppGlideModule
 @GlideModule
 class GlideAppModule : AppGlideModule()
 
-object BitmapBindingAdapter {
-    @BindingAdapter("bitmap")
-    @JvmStatic
-    fun loadBitmapImage(imageView: ImageView, bitmap: Bitmap) {
-        GlideApp.with(imageView.context).load(bitmap).skipMemoryCache(false).into(imageView)
-    }
-}
-
-object ImgUrlBindingAdapter {
-    @BindingAdapter("imgUrl")
-    @JvmStatic
-    fun loadUrlImage(imageView: ImageView, imgUrl: String) {
-        GlideApp.with(imageView.context).load(imgUrl).skipMemoryCache(false).into(imageView)
-    }
-}
-
 object BindingAdapter {
     @JvmStatic
     @BindingAdapter("medicationTypeText")
     fun setStatusText(textView: TextView, type: MedicationType) {
         val arr = textView.context.resources.getStringArray(R.array.medicationTypes)
         textView.text = arr[type.ordinal]
+    }
+
+    @BindingAdapter("img")
+    @JvmStatic
+    fun loadImage(imageView: ImageView, img: String) {
+        GlideApp.with(imageView.context).load(img).skipMemoryCache(false).into(imageView)
+    }
+
+    @BindingAdapter("img")
+    @JvmStatic
+    fun loadImage(imageView: ImageView, img: Bitmap) {
+        GlideApp.with(imageView.context).load(img).skipMemoryCache(false).into(imageView)
     }
 }

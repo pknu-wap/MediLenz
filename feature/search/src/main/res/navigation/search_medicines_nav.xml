@@ -37,7 +37,7 @@
         android:label="AiSearchResultFragment"
         tools:layout="@layout/fragment_ai_search_result">
 
-        <deepLink app:uri="medilens://main/search/ai_search_result" />
+
         <action
             android:id="@+id/action_aiSearchResultFragment_self"
             app:destination="@id/aiSearchResultFragment"
@@ -45,5 +45,5 @@
             app:popUpToInclusive="true" />
 
     </fragment>
-
+    <deepLink app:uri="medilens://main/search/ai_search_result" />
 </navigation>

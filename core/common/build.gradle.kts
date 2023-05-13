@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlin.reflection)
     implementation(libs.bundles.glides)
+    implementation(libs.lottie)
     kapt(libs.bundles.glides.kapt)
 
 }
