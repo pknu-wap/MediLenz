@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
     implementation(project(":core:model"))
+    implementation(project(":core:domain"))
     implementation(project(":feature:comments"))
     implementation(project(":feature:search"))
     implementation(project(":feature:penalties"))
