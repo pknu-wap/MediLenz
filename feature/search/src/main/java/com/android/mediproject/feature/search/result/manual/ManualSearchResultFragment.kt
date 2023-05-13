@@ -4,9 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.mediproject.core.common.constant.MedicationType
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -17,6 +14,7 @@ import com.android.mediproject.feature.search.databinding.FragmentManualSearchRe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import repeatOnStarted
 
 @AndroidEntryPoint
 class ManualSearchResultFragment :
@@ -37,19 +35,19 @@ class ManualSearchResultFragment :
         }
 
         binding.apply {
-            searchListViewGroup.searchResultRecyclerView.addItemDecoration(
+            viewModel = fragmentViewModel
+            searchResultRecyclerView.addItemDecoration(
                 DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
                     setDrawable(resources.getDrawable(com.android.mediproject.core.ui.R.drawable.divider, null))
                 }
             )
 
-            searchListViewGroup.searchResultRecyclerView.adapter = searchResultListAdapter
+            searchResultRecyclerView.adapter = searchResultListAdapter
 
-            searchListViewGroup.filterBtn.setOnClickListener { it ->
+            filterBtn.setOnClickListener { it ->
                 MediPopupMenu.showMenu(
                     it, R.menu.search_result_list_filter_menu
                 ) { menuItem ->
-                    searchListViewGroup.menuItem = menuItem
 
                     when (menuItem.itemId) {
                         R.id.listOnlySpecialtyMedicines -> {
@@ -61,7 +59,7 @@ class ManualSearchResultFragment :
                         }
 
                         R.id.listAllMedicines -> {
-                            fragmentViewModel.searchMedicinesByMedicationType(null)
+                            fragmentViewModel.searchMedicinesByMedicationType(MedicationType.ALL)
                         }
                     }
                     true
@@ -69,20 +67,18 @@ class ManualSearchResultFragment :
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // 검색 결과를 수신하면 리스트에 표시한다.
-                launch {
-                    fragmentViewModel.searchResultFlow.collect {
-                        searchResultListAdapter.submitData(lifecycle, it)
-                    }
+        viewLifecycleOwner.repeatOnStarted {
+            // 검색 결과를 수신하면 리스트에 표시한다.
+            launch {
+                fragmentViewModel.searchResultFlow.collect {
+                    searchResultListAdapter.submitData(lifecycle, it)
                 }
+            }
 
-                // 검색어가 변경되면 검색을 다시 수행한다.
-                launch {
-                    searchMedicinesViewModel.searchQuery.first().also { query ->
-                        fragmentViewModel.searchMedicinesByItemName(query)
-                    }
+            // 검색어가 변경되면 검색을 다시 수행한다.
+            launch {
+                searchMedicinesViewModel.searchQuery.first().also { query ->
+                    fragmentViewModel.searchMedicinesByItemName(query)
                 }
             }
         }

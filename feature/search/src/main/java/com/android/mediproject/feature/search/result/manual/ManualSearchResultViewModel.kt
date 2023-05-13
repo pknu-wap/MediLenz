@@ -10,8 +10,9 @@ import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedici
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -32,22 +33,27 @@ class ManualSearchResultViewModel @Inject constructor(
     private val getMedicineApprovalListUseCase: GetMedicineApprovalListUseCase,
 ) : BaseViewModel() {
 
-    private val _searchParameter = MutableSharedFlow<SearchParameter>(replay = 1)
-    val searchParameter = _searchParameter.asSharedFlow()
+    private val _searchParameter =
+        MutableStateFlow<SearchParameter>(SearchParameter(itemName = null, entpName = null, medicationType = MedicationType.ALL))
+    val searchParameter = _searchParameter.asStateFlow()
 
     val searchResultFlow: Flow<PagingData<ApprovedMedicineItemDto>> = searchParameter.flatMapLatest { parameter ->
-        getMedicineApprovalListUseCase.invoke(
-            itemName = parameter.itemName,
-            entpName = parameter.entpName,
-            medicationType = parameter.medicationType?.description,
-        ).let { pager ->
-            pager.map { pagingData ->
-                pagingData.map { item ->
-                    item.onClick = this@ManualSearchResultViewModel::openMedicineInfo
-                    item
+        if (parameter.itemName != null || parameter.entpName != null) {
+            getMedicineApprovalListUseCase.invoke(
+                itemName = parameter.itemName,
+                entpName = parameter.entpName,
+                medicationType = parameter.medicationType.description,
+            ).let { pager ->
+                pager.map { pagingData ->
+                    pagingData.map { item ->
+                        item.onClick = this@ManualSearchResultViewModel::openMedicineInfo
+                        item
+                    }
                 }
-            }
-        }.cachedIn(viewModelScope)
+            }.cachedIn(viewModelScope)
+        } else {
+            emptyFlow<PagingData<ApprovedMedicineItemDto>>().cachedIn(viewModelScope)
+        }
     }
 
     /**
@@ -58,7 +64,7 @@ class ManualSearchResultViewModel @Inject constructor(
             val newSearchParameter = if (_searchParameter.replayCache.isNotEmpty()) {
                 _searchParameter.replayCache.first().copy(itemName = itemName, entpName = null)
             } else {
-                SearchParameter(itemName = itemName, entpName = null, medicationType = null)
+                SearchParameter(itemName = itemName, entpName = null, medicationType = MedicationType.ALL)
             }
             _searchParameter.emit(newSearchParameter)
         }
@@ -72,7 +78,7 @@ class ManualSearchResultViewModel @Inject constructor(
             val newSearchParameter = if (_searchParameter.replayCache.isNotEmpty()) {
                 _searchParameter.replayCache.first().copy(itemName = null, entpName = entpName)
             } else {
-                SearchParameter(itemName = null, entpName = entpName, medicationType = null)
+                SearchParameter(itemName = null, entpName = entpName, medicationType = MedicationType.ALL)
             }
             _searchParameter.emit(newSearchParameter)
         }
@@ -82,7 +88,7 @@ class ManualSearchResultViewModel @Inject constructor(
     /**
      * 의약품 유형으로 검색
      */
-    fun searchMedicinesByMedicationType(medicationType: MedicationType?) {
+    fun searchMedicinesByMedicationType(medicationType: MedicationType) {
 
         viewModelScope.launch {
             _searchParameter.emit(_searchParameter.replayCache.first().copy(medicationType = medicationType))
@@ -101,5 +107,5 @@ class ManualSearchResultViewModel @Inject constructor(
 data class SearchParameter(
     val itemName: String?,
     val entpName: String?,
-    val medicationType: MedicationType?,
+    val medicationType: MedicationType,
 ) : Serializable

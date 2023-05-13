@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="dummyDosage">1. 성인 및 6세 이상의 소아\n\n: 세티리진염산염으로서 1일 1회 10mg 취침 전에 경구 투여하십시오. [복용하십시오.]\n\n2. 이상반응에 민감한 환자의 경우는 5mg씩을 아침, 저녁에 투여하십시오.\n\n3. 연령[나이], 증상에 따라 적절히 증감하십시오.\n\n4. 신장애[신장장애] 환자\n\n: 투여 간격은 환자의 신기능에 따라 조절되어야 합니다. 다음 표를 참조하여 용량을 조절합니다. 이 용량 표를 사용하기 위해서는 mL/min 단위의 크레아티닌 청소율 (CLcr)이 필요합니다. CLcr (mL/min)은 다음 공식을 이용하여 혈청 크레아티닌 (mg/dL) 측정치로부터 계산됩니다 :</string>
+
+    <string name="specialtyMedication">전문 의약품</string>
+    <string name="generalMedication">일반 의약품</string>
+    <string name="all">모두</string>
 </resources>

@@ -12,6 +12,7 @@ import com.android.mediproject.feature.camera.aimodel.DetectedObject
 import com.android.mediproject.feature.camera.aimodel.Yolo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -34,17 +35,17 @@ class MedicinesDetectorViewModel @Inject constructor(
      * 검출된 객체를 가져오는데 사용되는 SharedFlow
      *
      */
-    private val _detactedObjects = MutableSharedFlow<List<DetectedObject>>(replay = 0, extraBufferCapacity = 1)
+    private val _detactedObjects = MutableSharedFlow<List<DetectedObject>>(replay = 1, extraBufferCapacity = 1, BufferOverflow.DROP_OLDEST)
     val detectedObjects = _detactedObjects.asSharedFlow()
 
     /**
      * 검출된 이미지를 가져오는데 사용되는 SharedFlow
      *
      */
-    private val _detectedImage = MutableSharedFlow<Bitmap>(replay = 0, extraBufferCapacity = 1)
+    private val _detectedImage = MutableSharedFlow<Bitmap>(replay = 1, extraBufferCapacity = 1, BufferOverflow.DROP_OLDEST)
     val detectedImage = _detectedImage.asSharedFlow()
 
-    private val _loadedModel = MutableSharedFlow<Boolean>(replay = 1)
+    private val _loadedModel = MutableSharedFlow<Boolean>(replay = 1, extraBufferCapacity = 1, BufferOverflow.DROP_OLDEST)
     val loadedModel = _loadedModel.asSharedFlow()
 
     /**

@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("mediproject.android.feature")
     id("androidx.navigation.safeargs.kotlin")
-    id(libs.plugins.ksp.get().pluginId)
+    id(libs.plugins.kapt.get().pluginId)
 }
 
 android {
@@ -33,6 +33,5 @@ dependencies {
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.composes)
     implementation(libs.kotlinx.datetime)
-    kapt(libs.androidx.lifecycle.compilerKapt)
-    ksp(libs.glide.ksp)
+    kapt(libs.bundles.glides.kapt)
 }

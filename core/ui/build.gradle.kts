@@ -1,7 +1,7 @@
 plugins {
     id(libs.plugins.kotlin.android.get().pluginId)
     id("mediproject.android.feature")
-    id(libs.plugins.ksp.get().pluginId)
+    id(libs.plugins.kapt.get().pluginId)
 }
 
 android {
@@ -21,6 +21,10 @@ dependencies {
 
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.bundles.materials)
+    implementation(libs.bundles.glides)
 
     implementation(libs.bundles.composes)
+
+    kapt(libs.bundles.glides.kapt)
+
 }

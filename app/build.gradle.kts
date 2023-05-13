@@ -3,6 +3,7 @@ plugins {
     id("mediproject.android.application")
     id("mediproject.android.hilt")
     id("androidx.navigation.safeargs.kotlin")
+    id(libs.plugins.kapt.get().pluginId)
 }
 
 android {
@@ -48,7 +49,7 @@ dependencies {
     implementation(project(":feature:comments"))
     implementation(project(":feature:search"))
     implementation(project(":feature:mypage"))
-    implementation(project(":feature:community"))
+
     implementation(project(":feature:setting"))
     implementation(project(":feature:penalties"))
     implementation(project(":feature:medicine"))
@@ -61,6 +62,8 @@ dependencies {
     implementation(libs.bundles.navigations)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.workManagers)
+    implementation(libs.bundles.glides)
+    kapt(libs.bundles.glides.kapt)
 
     /*
     androidTestImplementation(libs.bundles.testUIs)
