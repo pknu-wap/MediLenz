@@ -51,4 +51,14 @@ interface MedicineApprovalNetworkApi {
         @Query("type") type: String = "json",
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
     ): MedicineApprovalListResponse
+
+
+    @GET(value = APPROVAL_DETAIL_URL)
+    suspend fun getMedicineDetailInfo(
+        @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
+        @Query("item_name") itemName: String,
+        @Query("pageNo") pageNo: Int = 1,
+        @Query("type") type: String = "json",
+        @Query("numOfRows") numOfRows: Int = 100
+    ): MedicineApprovalListResponse
 }

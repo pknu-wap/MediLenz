@@ -9,9 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchMedicinesViewModel @Inject constructor(
-
-) : BaseViewModel() {
+class SearchMedicinesViewModel @Inject constructor() : BaseViewModel() {
 
     private val _searchQuery = MutableStateFlow<String>("")
     val searchQuery = _searchQuery.asStateFlow()
