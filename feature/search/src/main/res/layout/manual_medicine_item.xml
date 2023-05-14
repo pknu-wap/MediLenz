@@ -5,8 +5,7 @@
 
         <variable
             name="item"
-            type="com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto"
-            />
+            type="com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,8 +14,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        >
+        android:paddingVertical="8dp">
 
         <ImageView
             android:id="@+id/medicineImgView"
@@ -24,11 +22,10 @@
             android:layout_height="60dp"
             android:background="@drawable/circle_image_background"
             android:contentDescription="@string/medicineImage"
-            app:imgUrl="@{item.bigPrdtImgUrl}"
+            app:img="@{item.bigPrdtImgUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier"
@@ -36,8 +33,7 @@
             android:layout_height="wrap_content"
             app:barrierDirection="right"
             app:barrierMargin="10dp"
-            app:constraint_referenced_ids="medicineImgView"
-            />
+            app:constraint_referenced_ids="medicineImgView" />
 
         <TextView
             android:id="@+id/medicineNameTextView"
@@ -56,8 +52,7 @@
             app:layout_constraintEnd_toStartOf="@id/medicineTypeTextView"
             app:layout_constraintStart_toEndOf="@id/barrier"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            />
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/ingredientTextView"
@@ -74,8 +69,7 @@
             app:layout_constraintBottom_toTopOf="@+id/effectTextView"
             app:layout_constraintEnd_toStartOf="@id/medicineTypeTextView"
             app:layout_constraintStart_toEndOf="@id/barrier"
-            app:layout_constraintTop_toBottomOf="@id/medicineNameTextView"
-            />
+            app:layout_constraintTop_toBottomOf="@id/medicineNameTextView" />
 
         <TextView
             android:id="@+id/effectTextView"
@@ -87,8 +81,7 @@
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/manufacturerTextView"
             app:layout_constraintStart_toEndOf="@id/barrier"
-            app:layout_constraintTop_toBottomOf="@id/ingredientTextView"
-            />
+            app:layout_constraintTop_toBottomOf="@id/ingredientTextView" />
 
         <TextView
             android:id="@+id/manufacturerTextView"
@@ -99,22 +92,20 @@
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/barrier"
-            app:layout_constraintTop_toBottomOf="@id/effectTextView"
-            />
+            app:layout_constraintTop_toBottomOf="@id/effectTextView" />
 
         <TextView
             android:id="@+id/medicineTypeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/medicine_type_background"
+            android:maxLines="1"
             android:text="@{item.spcltyPblc}"
             android:textColor="@color/medicineType"
             android:textSize="11sp"
-            android:maxLines="1"
             app:layout_constraintLeft_toRightOf="@id/medicineNameTextView"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
