@@ -72,9 +72,15 @@ minSdk = "28"
 firebaseCrashlytics = "2.9.4"
 firebaseBom = "31.2.3"
 
+googleAutoService = "1.0.1"
+googleAutoServiceAnnotation = "1.0.1"
+kotlinPoet = "1.13.2"
+googleAutoCommon = "1.2.1"
+
 # 라이브러리 의존성------------------------------------------------------------------------------------------------------------------------
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
+
 
 # androidX--------------------------------------------------------------------------------------------------------------------
 
@@ -208,6 +214,11 @@ lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
 # material--------------------------------------------------------------------------------------------------------------
 material-main = { module = "com.google.android.material:material", version.ref = "material" }
+
+google-autoservice = { module = "com.google.auto.service:auto-service", version.ref = "googleAutoService" }
+google-autoservice-annotation = { module = "com.google.auto.service:auto-service-annotations", version.ref = "googleAutoServiceAnnotation" }
+kotlin-poet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinPoet" }
+google-autocommon = { module = "com.google.auto:auto-common", version.ref = "googleAutoCommon" }
 
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
