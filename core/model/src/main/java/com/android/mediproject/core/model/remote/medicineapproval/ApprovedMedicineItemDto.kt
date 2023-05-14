@@ -50,3 +50,27 @@ data class ApprovedMedicineItemDto(
     val bizrno: String? = null,
     var onClick: ((ApprovedMedicineItemDto) -> Unit)? = null,
 )
+
+fun Item.toDto() = ApprovedMedicineItemDto(
+    itemSeq = itemSeq,
+    itemName = itemName,
+    itemEngName = itemEngName,
+    entpName = entpName,
+    entpEngName = entpEngName,
+    entpSeq = entpSeq,
+    entpNo = entpNo,
+    itemPermitDate = itemPermitDate,
+    induty = induty,
+    prdlstStdrCode = prdlstStdrCode,
+    spcltyPblc = spcltyPblc,
+    prductType = prductType,
+    prductPrmisnNo = prductPrmisnNo,
+    itemIngrName = itemIngrName,
+    itemIngrCnt = itemIngrCnt,
+    bigPrdtImgUrl = bigPrdtImgUrl,
+    permitKindCode = permitKindCode,
+    cancelDate = cancelDate,
+    cancelName = cancelName,
+    ediCode = ediCode,
+    bizrno = bizrno,
+)

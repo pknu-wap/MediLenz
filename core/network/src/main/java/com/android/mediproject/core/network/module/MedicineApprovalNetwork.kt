@@ -108,7 +108,7 @@ interface DataGoKrNetworkApi {
     @GET(value = "MdcinRtrvlSleStpgeInfoService03/getMdcinRtrvlSleStpgeItem02")
     suspend fun getDetailRecallSuspensionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int,
+        @Query("pageNo") pageNo: Int = 1,
         @Query("type") type: String = "json",
         @Query("Entrps") company: String?,
         @Query("Prduct") product: String?,

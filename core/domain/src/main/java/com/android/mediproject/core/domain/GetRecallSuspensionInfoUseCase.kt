@@ -15,23 +15,17 @@ class GetRecallSuspensionInfoUseCase @Inject constructor(
 ) {
 
     suspend fun getRecallDisposalList(
-    ): Flow<PagingData<RecallSuspensionListItemDto>> =
-        recallSuspensionRepository.getRecallDisposalList().let { pager ->
-            pager.map { pagingData ->
-                pagingData.map {
-                    it.toDto()
-                }
+    ): Flow<PagingData<RecallSuspensionListItemDto>> = recallSuspensionRepository.getRecallDisposalList().let { pager ->
+        pager.map { pagingData ->
+            pagingData.map {
+                it.toDto()
             }
         }
+    }
 
     suspend fun getDetailRecallSuspension(
         company: String?, product: String?
-    ): Result<DetailRecallSuspensionItemDto> = recallSuspensionRepository.getDetailRecallSuspension(company, product).let { it ->
-        if (it.isSuccess)
-            it.getOrNull()?.toDto()?.let { dto ->
-                Result.success(dto)
-            } ?: Result.failure(Throwable("Failed"))
-        else
-            Result.failure(Throwable("Failed"))
+    ): Result<DetailRecallSuspensionItemDto> = recallSuspensionRepository.getDetailRecallSuspension(company, product).map {
+        it.toDto()
     }
 }

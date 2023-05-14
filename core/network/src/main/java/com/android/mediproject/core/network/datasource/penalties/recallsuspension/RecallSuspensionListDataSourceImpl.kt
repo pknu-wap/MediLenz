@@ -22,7 +22,7 @@ class RecallSuspensionListDataSourceImpl @Inject constructor(
 
         return try {
             recallSuspensionDataSource.getRecallSuspensionList(currentPage).fold(onSuccess = { response ->
-                val nextKey = response.body?.let { body ->
+                val nextKey = response.body.let { body ->
                     if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
                     else currentPage + 1
                 }

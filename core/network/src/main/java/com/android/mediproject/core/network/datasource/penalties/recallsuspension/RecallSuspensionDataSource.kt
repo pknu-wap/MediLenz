@@ -19,7 +19,6 @@ interface RecallSuspensionDataSource {
      * @param product 제품명
      */
     suspend fun getDetailRecallSuspensionInfo(
-        pageNo: Int,
         company: String?,
         product: String?,
     ): Result<DetailRecallSuspensionResponse>

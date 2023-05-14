@@ -24,12 +24,18 @@ class MedicineApprovalRepositoryImpl @Inject constructor(private val medicineApp
      * @param entpName 업체명
      *
      */
-    override fun getMedicineApprovalList(itemName: String?, entpName: String?, medicationType: String?): Flow<PagingData<Item>> = Pager(
-        config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5),
-        pagingSourceFactory = {
-            MedicineApprovalListDataSourceImpl(
-                medicineApprovalDataSource, itemName, entpName, medicationType
-            )
+    override suspend fun getMedicineApprovalList(itemName: String?, entpName: String?, medicationType: String?): Flow<PagingData<Item>> =
+        Pager(
+            config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5),
+            pagingSourceFactory = {
+                MedicineApprovalListDataSourceImpl(
+                    medicineApprovalDataSource, itemName, entpName, medicationType
+                )
+            }
+        ).flow
+
+    override suspend fun getMedicineDetailInfo(itemName: String) =
+        medicineApprovalDataSource.getMedicineDetailInfo(itemName).map {
+            it.body.items.first()
         }
-    ).flow
 }

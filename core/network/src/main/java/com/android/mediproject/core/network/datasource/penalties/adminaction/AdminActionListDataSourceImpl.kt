@@ -18,7 +18,7 @@ class AdminActionListDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): PagingSource.LoadResult<Int, AdminActionListResponse.Body.Item> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AdminActionListResponse.Body.Item> {
         val currentPage = params.key ?: 1
 
         return try {
