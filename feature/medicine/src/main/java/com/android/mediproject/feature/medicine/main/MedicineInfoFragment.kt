@@ -66,7 +66,9 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
-
+        nagArgs.apply {
+            fragmentViewModel.loadMedicineDetails(medicineName)
+        }
     }
 
     // 탭 레이아웃 초기화

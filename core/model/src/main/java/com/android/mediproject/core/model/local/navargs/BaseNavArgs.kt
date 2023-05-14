@@ -1,29 +1,39 @@
 package com.android.mediproject.core.model.local.navargs
 
+import android.os.Bundle
 import androidx.navigation.NavArgs
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
 
 abstract class BaseNavArgs : NavArgs {
+    @Suppress("CAST_NEVER_SUCCEEDS")
+    fun toBundle(): Bundle {
+        val result = Bundle()
+        toMap().forEach { (key, value) ->
+            result.putString(key, value)
+        }
+        return result
+    }
 
-    open fun fromBundle(bundle: android.os.Bundle): BaseNavArgs {
-        val thisClass = BaseNavArgs::class
+    companion object {
+        @JvmStatic
+        fun fromBundle(bundle: Bundle): BaseNavArgs {
+            val kClass = this::class.class
+            bundle.classLoader = kClass.java.classLoader
 
-        return thisClass.memberProperties.map {
-            it.name
-        }.map { propertyName ->
-            if (!bundle.containsKey(propertyName)) {
-                throw IllegalArgumentException("$propertyName 를 찾을 수 없습니다!")
-            } else {
-                bundle.getString(propertyName, "")
+            val constructor = kClass.primaryConstructor!!
+            val args = constructor.parameters.map { parameter ->
+                bundle.getString(parameter.name, "")
             }
-        }.toTypedArray().let {
-            thisClass.primaryConstructor!!.call(*it)
+            return constructor.call(*args.toTypedArray())
         }
     }
 
-    open fun toMap(): Map<String, String> = BaseNavArgs::class.memberProperties.associate { property ->
-        property.name to property.get(this).toString()
+
+    fun toMap(): Map<String, String> = this::class.memberProperties.let { properties ->
+        properties.associate { property ->
+            property.name to property.getter.call(this).toString()
+        }
     }
 
 }
