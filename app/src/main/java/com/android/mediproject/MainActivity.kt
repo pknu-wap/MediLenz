@@ -76,7 +76,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
 
     private fun bottomVisible(isVisible: Int) {
         log(isVisible.toString())
-        binding.bottomNav.visibility = when (isVisible) {
+        binding.mainCL.visibility = when (isVisible) {
             VISIBLE -> View.VISIBLE
             else -> View.GONE
         }
