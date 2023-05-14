@@ -65,14 +65,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        arguments?.getString("medicineName")?.let { medicineName ->
-            // fragmentViewModel.loadMedicineDetails(medicineName)
-        }
 
-
-        nagArgs.apply {
-            fragmentViewModel.loadMedicineDetails(medicineName)
-        }
 
     }
 

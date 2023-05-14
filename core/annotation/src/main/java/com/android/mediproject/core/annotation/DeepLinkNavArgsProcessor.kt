@@ -1,28 +1,29 @@
 package com.android.mediproject.core.annotation
 
-// Annotation Processor Module
 import com.google.auto.service.AutoService
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeSpec
+import java.util.concurrent.Flow
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Filer
 import javax.annotation.processing.ProcessingEnvironment
-import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
 import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.TypeElement
-import javax.lang.model.util.Elements
+import javax.lang.model.element.VariableElement
 
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
-@AutoService(Processor::class)
+@SupportedSourceVersion(SourceVersion.RELEASE_17)
+@AutoService(Flow.Processor::class)
 class DeepLinkNavArgsProcessor : AbstractProcessor() {
-
     private lateinit var filer: Filer
-    private lateinit var elementUtils: Elements
 
     override fun init(processingEnv: ProcessingEnvironment) {
         super.init(processingEnv)
         filer = processingEnv.filer
-        elementUtils = processingEnv.elementUtils
     }
 
     override fun getSupportedAnnotationTypes(): Set<String> {
@@ -34,9 +35,43 @@ class DeepLinkNavArgsProcessor : AbstractProcessor() {
     }
 
     override fun process(set: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
-        // 여기에서 어노테이션을 붙인 클래스를 찾아서 새로운 클래스를 생성하는 로직이 필요합니다.
-        // JavaPoet 라이브러리를 사용하여 새 클래스를 생성할 수 있습니다.
-        // 이 예제에서는 로직을 생략하였습니다.
+        roundEnv.getElementsAnnotatedWith(DeepLinkNavArgs::class.java)
+            .forEach { element ->
+                if (element is TypeElement) {
+                    val className = element.simpleName.toString()
+                    val packageName = processingEnv.elementUtils.getPackageOf(element).toString()
+                    val newClassName = "Final$className"
+
+                    // class 생성
+                    val classBuilder = TypeSpec.classBuilder(newClassName)
+                        .addModifiers(KModifier.PUBLIC, KModifier.FINAL).addSuperinterface(NavArgs::class)
+
+                    // 모든 속성을 NonNull Val로 설정
+                    element.enclosedElements.filter { it.kind.isField }.forEach { field ->
+                        val fieldName = field.simpleName.toString()
+                        val fieldType = (field as VariableElement).asType()
+
+                        // NonNull 타입으로 바꾸기
+                        val nonNullFieldType = fieldType.toString().removeSuffix("?")
+
+                        val propertySpec = PropertySpec.builder(
+                            fieldName,
+                            ClassName.bestGuess(nonNullFieldType),
+                            KModifier.PUBLIC, KModifier.FINAL
+                        ).build()
+
+                        classBuilder.addProperty(propertySpec)
+                    }
+
+                    // Java 파일 생성
+                    val fileSpec = FileSpec.builder(packageName, newClassName)
+                        .addType(classBuilder.build())
+                        .build()
+
+                    fileSpec.writeTo(filer)
+                }
+            }
+
         return true
     }
 }

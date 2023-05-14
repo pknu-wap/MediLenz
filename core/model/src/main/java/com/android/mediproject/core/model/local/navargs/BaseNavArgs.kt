@@ -23,7 +23,7 @@ abstract class BaseNavArgs : NavArgs {
     }
 
     open fun toMap(): Map<String, String> = BaseNavArgs::class.memberProperties.associate { property ->
-        property.name to (property.get(this).toString() ?: "")
+        property.name to property.get(this).toString()
     }
 
 }
