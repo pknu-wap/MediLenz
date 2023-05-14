@@ -1,5 +1,6 @@
 package com.android.mediproject.core.model.remote.medicineapproval
 
+import com.android.mediproject.core.model.DataGoKrBaseResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,20 +13,14 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class MedicineApprovalListResponse(
-    @SerialName("body") val body: Body?, @SerialName("header") val header: Header
-)
+    @SerialName("body") val body: Body
+) : DataGoKrBaseResponse()
 
 @Serializable
 data class Body(
     @SerialName("items") val items: List<Item>, @SerialName("numOfRows") val numOfRows: Int, // 15
     @SerialName("pageNo") val pageNo: Int, // 1
     @SerialName("totalCount") val totalCount: Int // 245
-)
-
-@Serializable
-data class Header(
-    @SerialName("resultCode") val resultCode: String, // 00
-    @SerialName("resultMsg") val resultMsg: String // NORMAL SERVICE.
 )
 
 /**

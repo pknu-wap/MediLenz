@@ -6,8 +6,8 @@ import androidx.paging.PagingData
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
-import com.android.mediproject.core.network.datasource.penalties.RecallSuspensionDataSource
-import com.android.mediproject.core.network.datasource.penalties.RecallSuspensionListDataSourceImpl
+import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
+import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionListDataSourceImpl
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

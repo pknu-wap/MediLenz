@@ -1,6 +1,7 @@
 package com.android.mediproject.core.network.datasource.medicineapproval
 
 import com.android.mediproject.core.model.remote.medicineapproval.MedicineApprovalListResponse
+import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetailInfoResponse
 
 interface MedicineApprovalDataSource {
 
@@ -16,5 +17,9 @@ interface MedicineApprovalDataSource {
         entpName: String?,
         medicationType: String?,
         pageNo: Int,
-    ): MedicineApprovalListResponse
+    ): Result<MedicineApprovalListResponse>
+
+    suspend fun getMedicineDetailInfo(
+        itemName: String,
+    ): Result<MedicineDetailInfoResponse>
 }

@@ -1,4 +1,4 @@
-package com.android.mediproject.core.network.datasource.penalties
+package com.android.mediproject.core.network.datasource.penalties.recallsuspension
 
 import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
@@ -22,5 +22,5 @@ interface RecallSuspensionDataSource {
         pageNo: Int,
         company: String?,
         product: String?,
-    ): Result<DetailRecallSuspensionResponse.Body.Item.Item>
+    ): Result<DetailRecallSuspensionResponse>
 }

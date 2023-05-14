@@ -1,4 +1,4 @@
-package com.android.mediproject.core.network.datasource.penalties
+package com.android.mediproject.core.network.datasource.penalties.recallsuspension
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -21,26 +21,24 @@ class RecallSuspensionListDataSourceImpl @Inject constructor(
         val currentPage = params.key ?: 1
 
         return try {
-            recallSuspensionDataSource.getRecallSuspensionList(currentPage).let { result ->
-                result.fold(onSuccess = { response ->
-                    val nextKey = response.body?.let { body ->
-                        if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
-                        else currentPage + 1
-                    }
+            recallSuspensionDataSource.getRecallSuspensionList(currentPage).fold(onSuccess = { response ->
+                val nextKey = response.body?.let { body ->
+                    if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
+                    else currentPage + 1
+                }
 
-                    LoadResult.Page(
-                        data = response.body?.items?.map { item ->
-                            item.item
-                        } ?: emptyList(),
-                        prevKey = null,
-                        nextKey = nextKey,
-                    )
-                }, onFailure = { throwable ->
-                    PagingSource.LoadResult.Error(throwable)
-                })
-            }
+                LoadResult.Page(
+                    data = response.body.items.map { item ->
+                        item.item
+                    }.toList(),
+                    prevKey = null,
+                    nextKey = nextKey,
+                )
+            }, onFailure = {
+                LoadResult.Error(it)
+            })
         } catch (e: Exception) {
-            PagingSource.LoadResult.Error(e)
+            LoadResult.Error(e)
         }
     }
 }
