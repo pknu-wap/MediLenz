@@ -11,7 +11,9 @@ class MainViewModel : BaseViewModel() {
     val eventFlow = _eventFlow.asEventFlow()
 
     fun event(event : MainEvent) = viewModelScope.launch{ _eventFlow.emit(event)}
+    fun aicamera() = event(MainEvent.AICamera())
 
     sealed class MainEvent{
+        data class AICamera(val unit : Unit? = null) : MainEvent()
     }
 }
