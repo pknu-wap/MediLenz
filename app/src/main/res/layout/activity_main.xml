@@ -31,19 +31,22 @@
             android:id="@+id/mainCL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <com.google.android.material.bottomappbar.BottomAppBar
                 android:id="@+id/bottomAppBar"
+                style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:layout_gravity="bottom"
-                android:backgroundTint="@color/white"
+                app:backgroundTint="@color/white"
                 app:contentInsetEnd="0dp"
                 app:contentInsetStart="0dp"
                 app:fabAlignmentMode="center"
-                app:fabCradleMargin="5dp"
-                app:fabCradleRoundedCornerRadius="10dp">
+                app:fabCradleMargin="10dp"
+                app:fabCradleRoundedCornerRadius="10dp"
+                app:fabCradleVerticalOffset="8dp">
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/bottomNav"
@@ -58,12 +61,15 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/cameraFAB"
+                style="@style/Widget.MaterialComponents.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/camera"
                 android:clickable="true"
                 android:src="@drawable/camera"
-                app:layout_anchor="@id/bottomAppBar" />
+                app:backgroundTint="@color/main"
+                app:fabCustomSize="70dp"
+                app:layout_anchor="@id/bottomAppBar"
+                app:maxImageSize="40dp" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
