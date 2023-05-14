@@ -10,67 +10,56 @@
             type="com.android.mediproject.MainViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@id/mainCL"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/main_nav"
             tools:layout="@layout/fragment_splash" />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/mainCL"
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="68dp"
+            android:layout_gravity="bottom"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:backgroundTint="@color/white"
+            app:contentInsetEnd="0dp"
+            app:contentInsetStart="0dp"
+            app:fabAlignmentMode="center"
+            app:fabCradleMargin="10dp"
+            app:fabCradleRoundedCornerRadius="10dp">
 
-            <com.google.android.material.bottomappbar.BottomAppBar
-                android:id="@+id/bottomAppBar"
-                style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottomNav"
                 android:layout_width="match_parent"
-                android:layout_height="68dp"
-                android:layout_gravity="bottom"
-                app:backgroundTint="@color/white"
-                app:contentInsetEnd="0dp"
-                app:contentInsetStart="0dp"
-                app:fabAlignmentMode="center"
-                app:fabCradleMargin="10dp"
-                app:fabCradleRoundedCornerRadius="10dp"
-                app:fabCradleVerticalOffset="8dp">
-
-                <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/bottomNav"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    app:itemTextColor="@drawable/menu_selector_text_color"
-                    app:labelVisibilityMode="labeled"
-                    app:menu="@menu/main_menu" />
-            </com.google.android.material.bottomappbar.BottomAppBar>
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                app:itemTextColor="@drawable/menu_selector_text_color"
+                app:labelVisibilityMode="labeled"
+                app:menu="@menu/main_menu" />
+        </com.google.android.material.bottomappbar.BottomAppBar>
 
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/cameraFAB"
-                style="@style/Widget.MaterialComponents.FloatingActionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:src="@drawable/camera"
-                app:backgroundTint="@color/main"
-                app:fabCustomSize="70dp"
-                app:layout_anchor="@id/bottomAppBar"
-                app:maxImageSize="40dp" />
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/cameraFAB"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/camera"
+            android:visibility="gone"
+            app:backgroundTint="@color/main"
+            app:fabCustomSize="70dp"
+            app:layout_anchor="@id/bottomAppBar"
+            app:maxImageSize="38dp" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -11,7 +11,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
+class MainActivity :
+    BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
 
     companion object {
         const val VISIBLE = 0
@@ -23,7 +24,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
 
     override fun afterBinding() {
         binding.apply {
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
             navController = navHostFragment.navController
 
             bottomNav.apply {
@@ -65,18 +67,23 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
      *
      * argument 를 통해 bottomNav 를 숨길지 말지 결정한다.
      */
-    private fun setDestinationListener() = navController.addOnDestinationChangedListener { _, destination, arg ->
-        log(arg.toString())
-        if (destination.id in hideBottomNavDestinationIds) {
-            bottomVisible(INVISIBLE)
-        } else {
-            bottomVisible(VISIBLE)
+    private fun setDestinationListener() =
+        navController.addOnDestinationChangedListener { _, destination, arg ->
+            log(arg.toString())
+            if (destination.id in hideBottomNavDestinationIds) {
+                bottomVisible(INVISIBLE)
+            } else {
+                bottomVisible(VISIBLE)
+            }
         }
-    }
 
     private fun bottomVisible(isVisible: Int) {
         log(isVisible.toString())
-        binding.mainCL.visibility = when (isVisible) {
+        binding.cameraFAB.visibility = when (isVisible) {
+            VISIBLE -> View.VISIBLE
+            else -> View.GONE
+        }
+        binding.bottomAppBar.visibility = when (isVisible) {
             VISIBLE -> View.VISIBLE
             else -> View.GONE
         }
