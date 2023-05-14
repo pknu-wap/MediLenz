@@ -29,6 +29,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
             bottomNav.apply {
                 itemIconTintList = null
                 setupWithNavController(navController)
+                background = null
+                menu.getItem(2).isEnabled = false
             }
             R.array.hideBottomNavDestinationIds
             setDestinationListener()
