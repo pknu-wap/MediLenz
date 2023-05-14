@@ -4,7 +4,6 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.android.mediproject.core.ui.base.BaseActivity
