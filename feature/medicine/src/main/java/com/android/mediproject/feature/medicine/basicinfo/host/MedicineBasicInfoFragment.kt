@@ -1,9 +1,10 @@
-package com.android.mediproject.feature.basicinfo.host
+package com.android.mediproject.feature.medicine.basicinfo.host
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineBasicInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +18,8 @@ class MedicineBasicInfoFragment :
     BaseFragment<FragmentMedicineBasicInfoBinding, MedicineBasicInfoViewModel>(FragmentMedicineBasicInfoBinding::inflate) {
 
     override val fragmentViewModel: MedicineBasicInfoViewModel by viewModels()
+
+    private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>({ requireParentFragment() })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

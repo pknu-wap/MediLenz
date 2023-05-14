@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.main.MedicineInfoViewModel"
+            type="com.android.mediproject.feature.medicine.main.MedicineInfoViewModel"
             />
 
     </data>
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             >
 
-            <com.android.mediproject.feature.visibility.MedicineVisibilityInfoView
+            <com.android.mediproject.feature.medicine.visibility.MedicineVisibilityInfoView
                 android:id="@+id/medicineVisibilityInfoView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

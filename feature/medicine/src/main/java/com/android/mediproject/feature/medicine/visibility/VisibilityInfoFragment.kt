@@ -1,8 +1,8 @@
-package com.android.mediproject.feature.visibility
+package com.android.mediproject.feature.medicine.visibility
 
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.main.MedicineInfoViewModel
+import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import com.android.mediproject.feature.medicine.databinding.FragmentVisibilityInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 

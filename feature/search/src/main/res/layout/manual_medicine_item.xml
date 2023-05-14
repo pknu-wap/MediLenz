@@ -24,7 +24,7 @@
             android:layout_height="60dp"
             android:background="@drawable/circle_image_background"
             android:contentDescription="@string/medicineImage"
-            app:imgUrl="@{item.bigPrdtImgUrl}"
+            img="@{item.bigPrdtImgUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

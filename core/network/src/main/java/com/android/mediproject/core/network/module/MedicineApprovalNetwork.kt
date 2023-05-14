@@ -70,9 +70,9 @@ interface DataGoKrNetworkApi {
     @GET(value = "DrugPrdtPrmsnInfoService04/getDrugPrdtPrmsnInq04")
     suspend fun getApprovalList(
         @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("item_name") itemName: String?,
-        @Query("entp_name") entpName: String?,
-        @Query("spclty_pblc") medicationType: String?,
+        @Query("item_name", encoded = true) itemName: String?,
+        @Query("entp_name", encoded = true) entpName: String?,
+        @Query("spclty_pblc", encoded = true) medicationType: String?,
         @Query("pageNo") pageNo: Int,
         @Query("type") type: String = "json",
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
@@ -82,7 +82,7 @@ interface DataGoKrNetworkApi {
     @GET(value = "DrugPrdtPrmsnInfoService04/getDrugPrdtPrmsnDtlInq03")
     suspend fun getMedicineDetailInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("item_name") itemName: String,
+        @Query("item_name", encoded = true) itemName: String,
         @Query("pageNo") pageNo: Int = 1,
         @Query("type") type: String = "json",
         @Query("numOfRows") numOfRows: Int = 100
@@ -110,8 +110,8 @@ interface DataGoKrNetworkApi {
         @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = 1,
         @Query("type") type: String = "json",
-        @Query("Entrps") company: String?,
-        @Query("Prduct") product: String?,
+        @Query("Entrps", encoded = true) company: String?,
+        @Query("Prduct", encoded = true) product: String?,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
     ): Response<DetailRecallSuspensionResponse>
 
@@ -123,7 +123,7 @@ interface DataGoKrNetworkApi {
         @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int,
         @Query("type") type: String = "json",
-        @Query("order") order: String = "Y",
+        @Query("order", encoded = true) order: String = "Y",
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
     ): Response<AdminActionListResponse>
 }

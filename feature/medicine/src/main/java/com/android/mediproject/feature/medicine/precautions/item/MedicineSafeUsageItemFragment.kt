@@ -1,11 +1,11 @@
-package com.android.mediproject.feature.precautions.item
+package com.android.mediproject.feature.medicine.precautions.item
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineSafeUseItemBinding
-import com.android.mediproject.feature.precautions.host.MedicinePrecautionsViewModel
+import com.android.mediproject.feature.medicine.precautions.host.MedicinePrecautionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**

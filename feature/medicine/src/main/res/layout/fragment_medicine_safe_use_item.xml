@@ -5,7 +5,7 @@
 
         <variable
             name="fragmentViewModel"
-            type="com.android.mediproject.feature.precautions.host.MedicinePrecautionsViewModel"
+            type="com.android.mediproject.feature.medicine.precautions.host.MedicinePrecautionsViewModel"
             />
     </data>
 

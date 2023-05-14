@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.visibility
+package com.android.mediproject.feature.medicine.visibility
 
 import android.content.Context
 import android.graphics.Canvas

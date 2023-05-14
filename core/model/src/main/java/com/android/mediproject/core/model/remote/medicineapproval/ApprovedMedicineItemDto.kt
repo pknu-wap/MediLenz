@@ -28,7 +28,7 @@ package com.android.mediproject.core.model.remote.medicineapproval
 
 data class ApprovedMedicineItemDto(
     val itemSeq: String? = null,
-    val itemName: String? = null,
+    val itemName: String,
     val itemEngName: String? = null,
     val entpName: String? = null,
     val entpEngName: String? = null,
@@ -53,7 +53,7 @@ data class ApprovedMedicineItemDto(
 
 fun Item.toDto() = ApprovedMedicineItemDto(
     itemSeq = itemSeq,
-    itemName = itemName,
+    itemName = itemName ?: "",
     itemEngName = itemEngName,
     entpName = entpName,
     entpEngName = entpEngName,

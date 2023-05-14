@@ -2,7 +2,6 @@ package com.android.mediproject.core.model.remote.medicinedetailinfo
 
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.format.DateTimeFormatter
 
@@ -51,51 +50,53 @@ import java.time.format.DateTimeFormatter
  * @param udDocData UD 문서 데이터입니다.
  * @param uDDOCID UD 문서의 식별자(ID)입니다.
  * @param validTerm 유효 기간입니다. 제조일로부터의 개월 수를 나타냅니다.
+ * @param imgUrl 이미지 URL
  */
 @Serializable
 data class MedicineDetatilInfoDto(
-    @SerialName("ATC_CODE") val atcCode: String?,
-    @SerialName("BAR_CODE") val barCode: String?,
-    @SerialName("BIZRNO") val businessRegistrationNumber: String?,
-    @SerialName("CANCEL_DATE") val cancelDate: LocalDate?,
-    @SerialName("CANCEL_NAME") val cancelName: String?,
-    @SerialName("CHANGE_DATE") val changeDate: LocalDate?,
-    @SerialName("CHART") val chart: String?,
-    @SerialName("CNSGN_MANUF") val consignmentManufacturer: String?,
-    @SerialName("DOC_TEXT") val docText: String?,
-    @SerialName("EDI_CODE") val ediCode: String?,
-    @SerialName("EE_DOC_DATA") val eeDocData: String?,
-    @SerialName("EE_DOC_ID") val eeDocId: String?,
-    @SerialName("ENTP_ENG_NAME") val entpEnglishName: String?,
-    @SerialName("ENTP_NAME") val entpName: String?,
-    @SerialName("ENTP_NO") val entpNumber: String?,
-    @SerialName("ETC_OTC_CODE") val etcOtcCode: String?,
-    @SerialName("GBN_NAME") val gbnName: String?,
-    @SerialName("INDUTY_TYPE") val industryType: String?,
-    @SerialName("INGR_NAME") val ingredientName: String?,
-    @SerialName("INSERT_FILE") val insertFileUrl: String?,
-    @SerialName("ITEM_ENG_NAME") val itemEnglishName: String?,
-    @SerialName("ITEM_NAME") val itemName: String?,
-    @SerialName("ITEM_PERMIT_DATE") val itemPermitDate: LocalDate?,
-    @SerialName("ITEM_SEQ") val itemSequence: String?,
-    @SerialName("MAIN_INGR_ENG") val mainIngredientEnglish: String?,
-    @SerialName("MAIN_ITEM_INGR") val mainItemIngredient: String?,
-    @SerialName("MAKE_MATERIAL_FLAG") val makeMaterialFlag: String?,
-    @SerialName("MATERIAL_NAME") val materialName: String?,
-    @SerialName("NARCOTIC_KIND_CODE") val narcoticKindCode: String?,
-    @SerialName("NB_DOC_DATA") val nbDocData: String?,
-    @SerialName("NB_DOC_ID") val nbDocId: String?,
-    @SerialName("NEWDRUG_CLASS_NAME") val newDrugClassName: String?,
-    @SerialName("PACK_UNIT") val packUnit: String?,
-    @SerialName("PERMIT_KIND_NAME") val permitKindName: String?,
-    @SerialName("PN_DOC_DATA") val pnDocData: String?,
-    @SerialName("REEXAM_DATE") val reexamDate: LocalDate?,
-    @SerialName("REEXAM_TARGET") val reexamTarget: String?,
-    @SerialName("STORAGE_METHOD") val storageMethod: String?,
-    @SerialName("TOTAL_CONTENT") val totalContent: String?,
-    @SerialName("UD_DOC_DATA") val udDocData: String?,
-    @SerialName("UD_DOC_ID") val uDDOCID: String?,
-    @SerialName("VALID_TERM") val validTerm: String?
+    val atcCode: String?,
+    val barCode: String?,
+    val businessRegistrationNumber: String?,
+    val cancelDate: LocalDate?,
+    val cancelName: String?,
+    val changeDate: LocalDate?,
+    val chart: String?,
+    val consignmentManufacturer: String?,
+    val docText: String?,
+    val ediCode: String?,
+    val eeDocData: String?,
+    val eeDocId: String?,
+    val entpEnglishName: String?,
+    val entpName: String?,
+    val entpNumber: String?,
+    val etcOtcCode: String?,
+    val gbnName: String?,
+    val industryType: String?,
+    val ingredientName: String?,
+    val insertFileUrl: String?,
+    val itemEnglishName: String?,
+    val itemName: String?,
+    val itemPermitDate: LocalDate?,
+    val itemSequence: String?,
+    val mainIngredientEnglish: String?,
+    val mainItemIngredient: String?,
+    val makeMaterialFlag: String?,
+    val materialName: String?,
+    val narcoticKindCode: String?,
+    val nbDocData: String?,
+    val nbDocId: String?,
+    val newDrugClassName: String?,
+    val packUnit: String?,
+    val permitKindName: String?,
+    val pnDocData: String?,
+    val reexamDate: LocalDate?,
+    val reexamTarget: String?,
+    val storageMethod: String?,
+    val totalContent: String?,
+    val udDocData: String?,
+    val uDDOCID: String?,
+    val validTerm: String?,
+    val imgUrl: String?
 )
 
 fun MedicineDetailInfoResponse.Body.Item.toDto() = MedicineDetatilInfoDto(
@@ -140,7 +141,8 @@ fun MedicineDetailInfoResponse.Body.Item.toDto() = MedicineDetatilInfoDto(
     totalContent = totalContent,
     udDocData = udDocData,
     uDDOCID = uDDOCID,
-    validTerm = validTerm
+    validTerm = validTerm,
+    imgUrl = null
 )
 
 private fun String?.toLocalDate(): LocalDate? = this?.let {

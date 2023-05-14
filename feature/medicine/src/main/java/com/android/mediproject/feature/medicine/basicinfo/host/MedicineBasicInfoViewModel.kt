@@ -1,8 +1,8 @@
-package com.android.mediproject.feature.precautions.host
+package com.android.mediproject.feature.medicine.basicinfo.host
 
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MedicinePrecautionsViewModel @Inject constructor() : BaseViewModel() {}
+class MedicineBasicInfoViewModel @Inject constructor() : BaseViewModel() {}

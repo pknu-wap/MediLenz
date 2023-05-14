@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.precautions.host
+package com.android.mediproject.feature.medicine.precautions.host
 
 import android.os.Bundle
 import android.view.View

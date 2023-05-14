@@ -1,16 +1,16 @@
-package com.android.mediproject.feature.precautions.item
+package com.android.mediproject.feature.medicine.basicinfo.item
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.basicinfo.host.MedicineBasicInfoViewModel
-import com.android.mediproject.feature.medicine.databinding.FragmentMedicinePrecautionsItemBinding
+import com.android.mediproject.feature.medicine.basicinfo.host.MedicineBasicInfoViewModel
+import com.android.mediproject.feature.medicine.databinding.FragmentMedicineBasicInfoItemBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MedicinePrecautionsItemFragment :
-    BaseFragment<FragmentMedicinePrecautionsItemBinding, MedicineBasicInfoViewModel>(FragmentMedicinePrecautionsItemBinding::inflate) {
+class MedicineBasicInfoItemFragment :
+    BaseFragment<FragmentMedicineBasicInfoItemBinding, MedicineBasicInfoViewModel>(FragmentMedicineBasicInfoItemBinding::inflate) {
 
     override val fragmentViewModel: MedicineBasicInfoViewModel by viewModels(ownerProducer = { requireParentFragment() })
 

@@ -1,11 +1,16 @@
 package com.android.mediproject.feature.search.result.manual
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.paging.map
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.mediproject.core.common.constant.MedicationType
+import com.android.mediproject.core.common.util.toUri
+import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.listfilter.MediPopupMenu
 import com.android.mediproject.feature.search.R
@@ -25,23 +30,19 @@ class ManualSearchResultFragment :
     override val fragmentViewModel: ManualSearchResultViewModel by viewModels()
 
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val searchResultListAdapter = ApprovedMedicinesAdapter().also { adapter ->
-            adapter.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { adapter::retry },
-                footer = PagingLoadStateAdapter { adapter::retry })
-        }
-
         binding.apply {
-            viewModel = fragmentViewModel
-            searchResultRecyclerView.addItemDecoration(
-                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-                    setDrawable(resources.getDrawable(com.android.mediproject.core.ui.R.drawable.divider, null))
-                }
-            )
+            val searchResultListAdapter = ApprovedMedicinesAdapter().also { adapter ->
+                adapter.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { adapter::retry },
+                    footer = PagingLoadStateAdapter { adapter::retry })
+            }
 
+            viewModel = fragmentViewModel
+            searchResultRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                setDrawable(ContextCompat.getDrawable(requireContext(), com.android.mediproject.core.ui.R.drawable.divider)!!)
+            })
             searchResultRecyclerView.adapter = searchResultListAdapter
 
             filterBtn.setOnClickListener { it ->
@@ -65,22 +66,46 @@ class ManualSearchResultFragment :
                     true
                 }
             }
-        }
 
-        viewLifecycleOwner.repeatOnStarted {
-            // 검색 결과를 수신하면 리스트에 표시한다.
-            launch {
-                fragmentViewModel.searchResultFlow.collect {
-                    searchResultListAdapter.submitData(lifecycle, it)
+            viewLifecycleOwner.repeatOnStarted {
+                // 검색 결과를 수신하면 리스트에 표시한다.
+                launch {
+                    fragmentViewModel.searchResultFlow.collect {
+                        it.let { pager ->
+                            pager.map { item ->
+                                item.onClick = this@ManualSearchResultFragment::openMedicineInfo
+                                item
+                            }
+                        }.also { pagingData ->
+                            searchResultListAdapter.submitData(pagingData)
+                        }
+                    }
+                }
+
+                // 검색어가 변경되면 검색을 다시 수행한다.
+                launch {
+                    searchMedicinesViewModel.searchQuery.first().also { query ->
+                        fragmentViewModel.searchMedicinesByItemName(query)
+                    }
                 }
             }
-
-            // 검색어가 변경되면 검색을 다시 수행한다.
-            launch {
-                searchMedicinesViewModel.searchQuery.first().also { query ->
-                    fragmentViewModel.searchMedicinesByItemName(query)
-                }
-            }
         }
+
+    }
+
+    private fun openMedicineInfo(approvedMedicineItemDto: ApprovedMedicineItemDto) {
+        FragmentNavigatorExtras()
+
+        activity?.findNavController(com.android.mediproject.core.common.R.id.fragmentContainerView)?.navigate(
+            "medilens://search/medicine/medicine_detail_nav".toUri(
+                mapOf(
+                    "medicineName" to approvedMedicineItemDto.itemName,
+                    "imgUrl" to (approvedMedicineItemDto.bigPrdtImgUrl ?: ""),
+                    "entpName" to (approvedMedicineItemDto.entpName ?: ""),
+                    "itemSequence" to (approvedMedicineItemDto.itemSeq ?: ""),
+                )
+            )
+        )
+
     }
 }
