@@ -2,6 +2,11 @@ package com.android.mediproject.core.common.util
 
 import android.net.Uri
 import androidx.core.net.toUri
+import androidx.navigation.NavArgument
+import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.NavType
+import com.android.mediproject.core.model.local.navargs.BaseNavArgs
 
 /**
  * Uri Builder
@@ -11,8 +16,10 @@ import androidx.core.net.toUri
  * @param parameter Uri에 들어갈 파라미터
  * @return Uri
  */
-infix fun String.toUri(parameter: Map<String, String>): Uri = StringBuilder(this).let { uri ->
-    parameter.filter { it.value.isNotEmpty() }.also { map ->
+private fun toDeepUrl(deepLinkUrl: String, parameter: BaseNavArgs): Uri = StringBuilder(deepLinkUrl).let { uri ->
+    parameter.toMap().takeIf {
+        it.isNotEmpty()
+    }?.also { map ->
         uri.append("?")
         map.onEachIndexed { index, entry ->
             uri.append("${entry.key}=${entry.value}")
@@ -20,4 +27,28 @@ infix fun String.toUri(parameter: Map<String, String>): Uri = StringBuilder(this
         }
     }
     uri.toString().toUri()
+}
+
+/**
+ * NavController를 확장하는 함수입니다.
+ *
+ * DeepLink를 통해 Navigation을 수행합니다.
+ *
+ * @param deepLinkUrl DeepLink Url
+ * @param parameter DeepLink에 들어갈 파라미터
+ */
+fun NavController.navigateByDeepLink(deepLinkUrl: String, parameter: BaseNavArgs) {
+    toDeepUrl(deepLinkUrl, parameter).also { finalUri ->
+        graph.matchDeepLink(NavDeepLinkRequest(finalUri, null, null))?.also { deepLinkMatch ->
+            parameter.toMap().takeIf {
+                it.isNotEmpty()
+            }?.forEach { (key, value) ->
+                deepLinkMatch.destination.addArgument(
+                    key, NavArgument.Builder().setType(NavType.StringType).setIsNullable(false).setDefaultValue(value).build()
+                )
+            }
+        }
+    }
+
+    this.navigate(deepLinkUrl.toUri())
 }
