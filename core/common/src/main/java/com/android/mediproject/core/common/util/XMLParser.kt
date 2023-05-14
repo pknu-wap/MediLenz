@@ -1,5 +1,6 @@
 package com.android.mediproject.core.common.util
 
+import android.text.Html
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.xml.sax.InputSource
@@ -8,7 +9,7 @@ import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 
 
-private val factory = DocumentBuilderFactory.newInstance()
+private val factory by lazy { DocumentBuilderFactory.newInstance() }
 
 /**
  * XML 파싱
@@ -17,22 +18,22 @@ private val factory = DocumentBuilderFactory.newInstance()
  * @return XML 파싱 결과
  *
  */
-fun String.parseXmlString(xml: String): XMLParsedResult {
+fun String.parseXmlString(): XMLParsedResult {
     val dBuilder: DocumentBuilder = factory.newDocumentBuilder()
-    val xmlInput = InputSource(StringReader(xml.trim()))
+    val xmlInput = InputSource(StringReader(this))
     val doc = dBuilder.parse(xmlInput)
 
     doc.documentElement.normalize()
 
-    return getElementsByTagName(doc.documentElement, "DOC").let { docs ->
-        val docElement = docs.first()
+    return doc.getElementsByTagName("DOC").let { docs ->
+        val docElement = docs.item(0) as Element
         val title = docElement.getAttribute("title")
 
         getElementsByTagName(docElement, "SECTION").first().let { section ->
             getElementsByTagName(section, "ARTICLE").map { article ->
                 val articleTitle = article.getAttribute("title")
                 getElementsByTagName(article, "PARAGRAPH").map { paragraph ->
-                    paragraph.textContent.trim()
+                    Html.fromHtml(paragraph.textContent.trim(), Html.FROM_HTML_MODE_COMPACT).toString()
                 }.toList().let { paragraphContents ->
                     XMLParsedResult.Article(
                         title = articleTitle,
