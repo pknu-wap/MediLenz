@@ -64,6 +64,7 @@ class MedicineInfoViewModel @Inject constructor(
                     BasicInfoType.EFFICACY_EFFECT -> success.data.eeDocData
                     BasicInfoType.DOSAGE -> success.data.udDocData
                     BasicInfoType.MEDICINE_INFO -> success.data
+                    BasicInfoType.PRECAUTIONS -> success.data.nbDocData
                 }
             }
         } ?: return null
@@ -85,5 +86,5 @@ data class MedicinePrimaryInfoDto(
 
 @Parcelize
 enum class BasicInfoType : Parcelable {
-    EFFICACY_EFFECT, DOSAGE, MEDICINE_INFO
+    EFFICACY_EFFECT, DOSAGE, MEDICINE_INFO, PRECAUTIONS
 }

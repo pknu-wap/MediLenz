@@ -24,8 +24,9 @@ class DosageInfoItemFragment : BaseMedicineInfoItemFragment<FragmentDosageInfoIt
                 it.let {
                     val stringBuilder = StringBuilder()
                     it.articleList.forEach { article ->
-                        article.contentList.forEach { content ->
+                        article.contentList.forEachIndexed { index, content ->
                             stringBuilder.append(content)
+                            if (index != article.contentList.size - 1) stringBuilder.append("\n")
                         }
                     }
 

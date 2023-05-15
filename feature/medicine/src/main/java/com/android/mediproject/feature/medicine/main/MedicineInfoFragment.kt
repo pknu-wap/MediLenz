@@ -33,6 +33,21 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
         binding.viewModel = fragmentViewModel
 
+        binding.apply {
+            viewModel = fragmentViewModel
+            // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
+            topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+                log("verticalOffset : $verticalOffset, appBarLayout.totalScrollRange : ${appBarLayout.totalScrollRange}")
+                medicinePrimaryInfoViewgroup.alpha = 1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
+                    if (this == -1.0f) {
+                        medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
+                    } else if (this > -0.8f) {
+                        medicinePrimaryInfoViewgroup.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+
         viewLifecycleOwner.repeatOnStarted {
             fragmentViewModel.medicineDetails.collect {
                 when (it) {

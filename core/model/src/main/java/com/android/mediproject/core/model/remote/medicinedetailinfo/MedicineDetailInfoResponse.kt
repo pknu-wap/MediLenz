@@ -98,7 +98,7 @@ data class MedicineDetailInfoResponse(
             @SerialName("MAKE_MATERIAL_FLAG") val makeMaterialFlag: String?,
             @SerialName("MATERIAL_NAME") val materialName: String?,
             @SerialName("NARCOTIC_KIND_CODE") val narcoticKindCode: String?,
-            @SerialName("NB_DOC_DATA") val nbDocData: String?,
+            @SerialName("NB_DOC_DATA") val nbDocData: String,
             @SerialName("NB_DOC_ID") val nbDocId: String?,
             @SerialName("NEWDRUG_CLASS_NAME") val newDrugClassName: String?,
             @SerialName("PACK_UNIT") val packUnit: String?,

@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter
  * @param changeDate 변경일자
  * @param chart 성상
  * @param consignmentManufacturer 제조및수입사
- * @param docText 효능효과
+ * @param docText ?
  * @param ediCode EDI코드
  * @param eeDocData 의약품 효능효과
  * @param eeDocId 의약품 효능효과 문서의 식별자(ID)입니다.
@@ -38,7 +38,7 @@ import java.time.format.DateTimeFormatter
  * @param makeMaterialFlag 제조재료 플래그입니다. 완제의약품을 나타냅니다.
  * @param materialName 재료 이름입니다.
  * @param narcoticKindCode 마약 종류 코드입니다.
- * @param nbDocData NB 문서 데이터입니다.
+ * @param nbDocData 사용 상의 주의사항
  * @param nbDocId NB 문서의 식별자(ID)입니다.
  * @param newDrugClassName 새로운 약물 분류 이름입니다.
  * @param packUnit 패키지 단위입니다.
@@ -48,7 +48,7 @@ import java.time.format.DateTimeFormatter
  * @param reexamTarget 재심사 대상입니다.
  * @param storageMethod 저장 방법입니다.
  * @param totalContent 총 함량입니다.
- * @param udDocData UD 문서 데이터입니다.
+ * @param udDocData 용법 용량
  * @param uDDOCID UD 문서의 식별자(ID)입니다.
  * @param validTerm 유효 기간입니다. 제조일로부터의 개월 수를 나타냅니다.
  */
@@ -82,7 +82,7 @@ data class MedicineDetatilInfoDto(
     val makeMaterialFlag: String?,
     val materialName: String?,
     val narcoticKindCode: String?,
-    val nbDocData: XMLParsedResult?,
+    val nbDocData: XMLParsedResult,
     val nbDocId: String?,
     val newDrugClassName: String?,
     val packUnit: String?,
@@ -127,7 +127,7 @@ fun MedicineDetailInfoResponse.Body.Item.toDto() = MedicineDetatilInfoDto(
     makeMaterialFlag = makeMaterialFlag,
     materialName = materialName,
     narcoticKindCode = narcoticKindCode,
-    nbDocData = nbDocData?.parseXmlString(),
+    nbDocData = nbDocData.parseXmlString(),
     nbDocId = nbDocId,
     newDrugClassName = newDrugClassName,
     packUnit = packUnit,

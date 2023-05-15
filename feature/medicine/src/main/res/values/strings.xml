@@ -93,6 +93,7 @@
     <string name="dummyCombinationProhibitionContents">골수억제, 설사 등 이상반응 증가, Itraconazole 투여 중 및 종료 후 2주 간 해당 성분 투여 금기</string>
     <string name="ingredientName">성분</string>
     <string name="loadingMedicineDetails">상세 정보를 불러오는 중입니다</string>
+    <string name="interestBtn">즐겨찾기 버튼</string>
 
 
 </resources>
