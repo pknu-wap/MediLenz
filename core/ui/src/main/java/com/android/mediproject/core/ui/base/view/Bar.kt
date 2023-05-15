@@ -21,7 +21,8 @@ class Bar @JvmOverloads constructor(
     companion object {
         const val BLUE = 0
         const val WHITE = 1
-        const val HOME = 2
+        const val HOME_BLUE = 2
+        const val HOME_WHITE = 3
     }
 
     lateinit var backButton: ImageView
@@ -69,10 +70,19 @@ class Bar @JvmOverloads constructor(
                 backButton.setImageResource(R.drawable.left_arrow_black)
             }
 
-            HOME -> {
+            HOME_BLUE -> {
                 bar.setBackgroundColor(ContextCompat.getColor(context, R.color.main))
                 backButton.visibility = View.GONE
                 title.visibility = View.GONE
+                logo.setImageResource(com.android.mediproject.core.common.R.drawable.medilenz_white_logo)
+                logo.visibility = View.VISIBLE
+            }
+
+            HOME_WHITE -> {
+                bar.setBackgroundColor(ContextCompat.getColor(context, R.color.main))
+                backButton.visibility = View.GONE
+                title.visibility = View.GONE
+                logo.setImageResource(com.android.mediproject.core.common.R.drawable.medilenz_original_logo)
                 logo.visibility = View.VISIBLE
             }
         }
