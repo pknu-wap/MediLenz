@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.medicine.basicinfo.item
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,26 +51,15 @@ abstract class BaseMedicineInfoItemFragment<T : ViewDataBinding, E : Any>(inflat
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        arguments?.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                getParcelable("basicInfoType", BasicInfoType::class.java)
-            } else {
-                getParcelable("basicInfoType") as BasicInfoType?
-            }?.let { basicInfoType ->
-                fragmentViewModel.setBasicInfoType(basicInfoType)
-            }
-        }
-
     }
 
     protected val collectingData: Flow<E> by lazy {
         channelFlow<E> {
             fragmentViewModel.basicInfoType.collectLatest { type ->
-                _medicineInfoViewModel.getDetailInfo(type).let { detailInfo ->
-                    detailInfo as E
-                }.apply {
-                    send(this)
+                _medicineInfoViewModel.getDetailInfo(type)?.let { detailInfo ->
+                    send(detailInfo as E)
+                } ?: run {
+                    send(null as E)
                 }
             }
         }

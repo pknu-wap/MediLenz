@@ -8,6 +8,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
 
+/**
+ * 효능 효과 정보
+ *
+ */
 @AndroidEntryPoint
 class EfficacyEffectItemFragment : BaseMedicineInfoItemFragment<FragmentEfficacyInfoItemBinding, XMLParsedResult>(
     FragmentEfficacyInfoItemBinding::inflate
@@ -22,7 +26,16 @@ class EfficacyEffectItemFragment : BaseMedicineInfoItemFragment<FragmentEfficacy
 
         viewLifecycleOwner.repeatOnStarted {
             collectingData.collectLatest {
-                binding.contentsTextView.text = it.title
+                it.let {
+                    val stringBuilder = StringBuilder()
+                    it.articleList.forEach { article ->
+                        article.contentList.forEach { content ->
+                            stringBuilder.append(content)
+                        }
+                    }
+
+                    binding.contentsTextView.text = stringBuilder.toString()
+                }
             }
         }
 

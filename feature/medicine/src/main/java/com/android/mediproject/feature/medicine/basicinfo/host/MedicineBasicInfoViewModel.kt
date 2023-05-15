@@ -14,8 +14,4 @@ class MedicineBasicInfoViewModel @Inject constructor(
 
     val basicInfoType: StateFlow<BasicInfoType> =
         savedStateHandle.getStateFlow<BasicInfoType>("basicInfoType", BasicInfoType.EFFICACY_EFFECT)
-
-    fun setBasicInfoType(basicInfoType: BasicInfoType) {
-        //savedStateHandle["basicInfoType"] = basicInfoType
-    }
 }

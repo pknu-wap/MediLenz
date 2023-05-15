@@ -57,16 +57,16 @@ class MedicineInfoViewModel @Inject constructor(
     }
 
 
-    fun getDetailInfo(type: BasicInfoType): Any {
-        medicineDetails.value.let {
+    fun getDetailInfo(type: BasicInfoType): Any? {
+        medicineDetails.value.takeIf { it is UiState.Success }?.let {
             (it as UiState.Success).let { success ->
                 return when (type) {
                     BasicInfoType.EFFICACY_EFFECT -> success.data.eeDocData
                     BasicInfoType.DOSAGE -> success.data.udDocData
-                    BasicInfoType.MEDICINE_INFO -> success.data.ingredientName
+                    BasicInfoType.MEDICINE_INFO -> success.data
                 }
             }
-        }
+        } ?: return null
     }
 
 }

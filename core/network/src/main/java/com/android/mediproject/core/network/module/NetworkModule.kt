@@ -14,11 +14,51 @@ import java.security.KeyStore
 import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import java.time.Duration
+import javax.inject.Inject
 import javax.inject.Singleton
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
+@Module
+@InstallIn(SingletonComponent::class)
+class CertificateHelper @Inject constructor(@ApplicationContext context: Context) {
+    
+    lateinit var tmf: TrustManagerFactory
+    lateinit var sslContext: SSLContext
+
+    init {
+        lazy {
+            try {
+                context.resources.openRawResource(R.raw.gsrsaovsslca2018).use { caInput ->
+                    val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
+                    val ca: Certificate = cf.generateCertificate(caInput)
+                    println("ca = ${(ca as X509Certificate).subjectDN}")
+
+                    val keyStoreType = KeyStore.getDefaultType()
+                    val keyStore = KeyStore.getInstance(keyStoreType)
+                    with(keyStore) {
+                        load(null, null)
+                        keyStore.setCertificateEntry("ca", ca)
+                    }
+
+                    val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
+                    tmf = TrustManagerFactory.getInstance(tmfAlgorithm).apply {
+                        init(keyStore)
+                    }
+
+                    sslContext = SSLContext.getInstance("TLS").apply {
+                        init(null, tmf.trustManagers, java.security.SecureRandom())
+                    }
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+}
 
 @Module(includes = [MedicineApprovalNetwork::class])
 @InstallIn(SingletonComponent::class)
@@ -26,47 +66,21 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
-
-        var tmf: TrustManagerFactory? = null
-        var sslContext: SSLContext? = null
-
-        try {
-            context.resources.openRawResource(R.raw.gsrsaovsslca2018).use { caInput ->
-                val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
-                val ca: Certificate = cf.generateCertificate(caInput)
-                println("ca = ${(ca as X509Certificate).subjectDN}")
-
-                val keyStoreType = KeyStore.getDefaultType()
-                val keyStore = KeyStore.getInstance(keyStoreType)
-                with(keyStore) {
-                    load(null, null)
-                    keyStore.setCertificateEntry("ca", ca)
-                }
-
-                val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
-                tmf = TrustManagerFactory.getInstance(tmfAlgorithm).apply {
-                    init(keyStore)
-                }
-
-                sslContext = SSLContext.getInstance("TLS").apply {
-                    init(null, tmf!!.trustManagers, java.security.SecureRandom())
-                }
-            }
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
+    fun providesOkHttpClient(certificateHelper: CertificateHelper): OkHttpClient {
         return OkHttpClient.Builder().run {
             addInterceptor(HttpLoggingInterceptor().apply {
                 if (BuildConfig.DEBUG) {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
             })
-            sslSocketFactory(
-                sslContext!!.socketFactory, tmf!!.trustManagers[0] as X509TrustManager
-            )
+            readTimeout(Duration.ofSeconds(6))
+            connectTimeout(Duration.ofSeconds(5))
+            writeTimeout(Duration.ofSeconds(5))
+            certificateHelper.apply {
+                sslSocketFactory(
+                    sslContext.socketFactory, tmf.trustManagers[0] as X509TrustManager
+                )
+            }
             build()
         }
     }

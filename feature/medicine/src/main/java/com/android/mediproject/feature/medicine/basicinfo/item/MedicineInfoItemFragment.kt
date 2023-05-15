@@ -1,61 +1,44 @@
 package com.android.mediproject.feature.medicine.basicinfo.item
 
-import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.View
-import androidx.fragment.app.viewModels
-import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.medicine.basicinfo.host.MedicineBasicInfoViewModel
+import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetatilInfoDto
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfoItemBinding
-import com.android.mediproject.feature.medicine.main.BasicInfoType
-import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MedicineInfoItemFragment :
-    BaseFragment<FragmentMedicineInfoItemBinding, MedicineBasicInfoViewModel>(FragmentMedicineInfoItemBinding::inflate) {
+class MedicineInfoItemFragment : BaseMedicineInfoItemFragment<FragmentMedicineInfoItemBinding, MedicineDetatilInfoDto>(
+    FragmentMedicineInfoItemBinding::inflate
+) {
 
-    override val fragmentViewModel: MedicineBasicInfoViewModel by viewModels()
+    companion object : MedicineInfoItemFragmentFactory by BaseMedicineInfoItemFragment.Companion
 
-    private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>(ownerProducer = {
-        requireParentFragment().requireParentFragment()
-    })
+    override
 
-    companion object {
-        fun newInstance(basicInfoType: BasicInfoType): MedicineInfoItemFragment {
-            val args = Bundle().apply {
-                putParcelable("basicInfoType", basicInfoType)
-            }
-            val fragment = MedicineInfoItemFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.basicInfoType.collect { uiState ->
-                binding.contentsTextView.text = medicineInfoViewModel.getDetailInfo(uiState).let { detailInfo ->
-                    detailInfo as String
+            collectingData.collectLatest {
+                val stringBuilder = StringBuilder()
+                with(it) {
+                    stringBuilder.append("<h1>의약품 정보</h1>").append("<p><b>의약품 이름:</b> $itemName</p>")
+                        .append("<p><b>의약품 영문 이름:</b> $itemEnglishName</p>").append("<p><b>의약품 시퀀스 번호:</b> $itemSequence</p>")
+                        .append("<p><b>의약품 허가 날짜:</b> $itemPermitDate</p>").append("<p><b>제조사 이름:</b> $entpName</p>")
+                        .append("<p><b>제조사 영문 이름:</b> $entpEnglishName</p>").append("<p><b>제조및수입사:</b> $consignmentManufacturer</p>")
+                        .append("<p><b>성분 이름:</b> $ingredientName</p>").append("<p><b>주성분의 영문 이름:</b> $mainIngredientEnglish</p>")
+                        .append("<p><b>총 함량:</b> $totalContent</p>").append("<p><b>저장 방법:</b> $storageMethod</p>")
+                        .append("<p><b>유효 기간:</b> $validTerm</p>").append("<p><b>패키지 단위:</b> $packUnit</p>")
                 }
+
+                val htmlText = stringBuilder.toString()
+                binding.contentsTextView.text = Html.fromHtml(htmlText, Html.FROM_HTML_MODE_LEGACY)
             }
         }
-
-        arguments?.apply {
-            this.let {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    it.getParcelable("basicInfoType", BasicInfoType::class.java)
-                } else {
-                    it.getParcelable("basicInfoType") as BasicInfoType?
-                }?.let { basicInfoType ->
-                    fragmentViewModel.setBasicInfoType(basicInfoType)
-                }
-            }
-        }
-
 
     }
+
 }

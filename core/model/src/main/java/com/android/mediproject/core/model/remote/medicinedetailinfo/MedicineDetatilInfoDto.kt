@@ -51,7 +51,6 @@ import java.time.format.DateTimeFormatter
  * @param udDocData UD 문서 데이터입니다.
  * @param uDDOCID UD 문서의 식별자(ID)입니다.
  * @param validTerm 유효 기간입니다. 제조일로부터의 개월 수를 나타냅니다.
- * @param imgUrl 이미지 URL
  */
 data class MedicineDetatilInfoDto(
     val atcCode: String?,
