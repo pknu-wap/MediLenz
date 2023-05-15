@@ -76,6 +76,7 @@ class Bar @JvmOverloads constructor(
                 logo.visibility = View.VISIBLE
             }
         }
+
         typedArray.recycle()
     }
 

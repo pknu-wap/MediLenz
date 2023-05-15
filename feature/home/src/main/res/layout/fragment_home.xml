@@ -24,13 +24,12 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:layout_width="108dp"
+                <com.android.mediproject.core.ui.base.view.Bar
+                    android:id="@+id/homeBar"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:src="@drawable/medlens_text_logo"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:setTheme="home" />
 
                 <TextView
                     android:id="@+id/headerText"
