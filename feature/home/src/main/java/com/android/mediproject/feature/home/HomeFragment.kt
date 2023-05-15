@@ -31,7 +31,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
              * headerLayout의 부모뷰인 ConstrainyLayout도 wrap_content라서 UNSPECIFED모드로 측정해주어야 합니다.
              * 다른 모드들은 전부 0으로 측정됩니다.
              */
-            
+
             headerLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
             val initialHeight = (headerLayout.measuredHeight*1.2).toFloat()
             log(initialHeight.toString())
