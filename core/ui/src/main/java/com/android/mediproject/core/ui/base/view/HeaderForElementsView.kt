@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.adapters.ImageViewBindingAdapter.setImageDrawable
 import com.android.mediproject.core.ui.R
 
 /**
@@ -65,6 +66,7 @@ class HeaderForElementsView constructor(
                 expanded = typedArr.getBoolean(R.styleable.HeaderForElementsView_is_expanded, expanded)
                 moreVisibility = typedArr.getInt(R.styleable.HeaderForElementsView_more_visibility, moreVisibility)
                 targetViewId = typedArr.getResourceId(R.styleable.HeaderForElementsView_visibility_target_view, -1)
+                expandBtnView = ImageView(context)
 
                 // title
                 titleView = TextView(context).apply {
@@ -77,12 +79,31 @@ class HeaderForElementsView constructor(
                     textSize = titleFontSize
                     setTextColor(titleColor)
                     id = 10
+
+                    setOnClickListener {
+                        expanded = !expanded
+                        expandBtnView.setImageDrawable(
+                            AppCompatResources.getDrawable(
+                                context, getExpandIcon()
+                            )
+                        )
+
+                        (parent.parent as View).findViewById<View>(targetViewId).apply {
+                            if (visibility == View.VISIBLE) {
+                                visibility = View.GONE
+                            } else {
+                                visibility = View.VISIBLE
+                            }
+                        }
+
+                        onExpandClickListener?.onExpandClick(expanded)
+                    }
                 }
 
                 setTitle(title!!)
 
                 // 확장 버튼
-                expandBtnView = ImageView(context).apply {
+                expandBtnView.apply {
                     setImageDrawable(
                         AppCompatResources.getDrawable(
                             context, getExpandIcon()
@@ -125,6 +146,8 @@ class HeaderForElementsView constructor(
                     context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
                     setBackgroundResource(outValue.resourceId)
                 }
+
+
 
                 // 더 보기 버튼
                 moreBtnView = TextView(context).apply {
