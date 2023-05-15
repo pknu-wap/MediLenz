@@ -31,7 +31,7 @@
             android:inputType="text"
             android:maxLines="2"
             android:textSize="14sp"
-            android:paddingVertical="12dp"
+            android:paddingVertical="14dp"
             android:textAppearance="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense"
             android:textColorHint="@color/black"
             />

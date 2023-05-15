@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineBasicInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,6 +33,9 @@ class MedicineBasicInfoFragment :
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        binding.efficacyEffectChip.isChecked = true
+
+        binding.apply {
+            medicineBasicInfoChipGroup.takeIf { it.checkedChipId == View.NO_ID }?.check(R.id.efficacyEffectChip)
+        }
     }
 }

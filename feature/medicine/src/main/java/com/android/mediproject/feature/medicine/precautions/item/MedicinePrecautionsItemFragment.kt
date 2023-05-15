@@ -10,9 +10,11 @@ import com.android.mediproject.feature.medicine.databinding.FragmentMedicinePrec
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import com.android.mediproject.feature.medicine.precautions.item.precautions.PrecautionsListAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
 
+/**
+ * 의약품 사용 상 주의사항 Fragment
+ */
 @AndroidEntryPoint
 class MedicinePrecautionsItemFragment :
     BaseFragment<FragmentMedicinePrecautionsItemBinding, MedicineInfoViewModel>(FragmentMedicinePrecautionsItemBinding::inflate) {
@@ -23,7 +25,7 @@ class MedicinePrecautionsItemFragment :
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.medicineDetails.collectLatest {
+            fragmentViewModel.medicineDetails.collect {
                 if (it is UiState.Success) addPrecautions(it.data.nbDocData)
             }
         }

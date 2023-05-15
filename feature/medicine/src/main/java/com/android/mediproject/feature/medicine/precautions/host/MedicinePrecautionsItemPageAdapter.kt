@@ -14,7 +14,7 @@ class MedicinePrecautionsItemPageAdapter(
         MedicinePrecautionsItemFragment(), MedicineSafeUsageItemFragment()
     )
 
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = fragments.size
 
     override fun createFragment(position: Int) = fragments[position]
 

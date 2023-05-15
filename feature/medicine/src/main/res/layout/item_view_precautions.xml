@@ -29,7 +29,7 @@
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             />
-        
+
 
         <TextView
             android:id="@+id/contentsTextView"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="4dp"
-            android:lineSpacingMultiplier="1.05"
+            android:lineSpacingMultiplier="1.15"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/titleTextView"
             />
