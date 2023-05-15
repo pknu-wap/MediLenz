@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import com.android.mediproject.core.ui.R
 
 class Bar @JvmOverloads constructor(
@@ -47,6 +48,8 @@ class Bar @JvmOverloads constructor(
             true -> backButton.visibility = View.VISIBLE
             else -> backButton.visibility = View.GONE
         }
+
+        backButton.setOnClickListener { findNavController().popBackStack() }
 
         title.text = titleText
 
