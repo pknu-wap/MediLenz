@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:visibility="gone"
-            android:src="@drawable/medlens_text_logo"
+            android:src="@drawable/medilenz_white_logo"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
