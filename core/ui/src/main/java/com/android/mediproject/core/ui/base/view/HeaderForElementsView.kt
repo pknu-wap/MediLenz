@@ -78,7 +78,7 @@ class HeaderForElementsView constructor(
                     }
                     textSize = titleFontSize
                     setTextColor(titleColor)
-                    id = 10
+                    id = 1
 
                     setOnClickListener {
                         expanded = !expanded
