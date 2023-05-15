@@ -7,21 +7,21 @@
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.medicine.basicinfo.host.MedicineBasicInfoViewModel"
+            type="com.android.mediproject.feature.medicine.main.MedicineInfoViewModel"
             />
+
     </data>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingHorizontal="16dp"
         >
 
         <TextView
             android:id="@+id/contentsTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
-            android:text="@string/dummyDosage"
             app:layout_constraintTop_toTopOf="parent"
             />
 

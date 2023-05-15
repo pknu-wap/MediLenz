@@ -9,7 +9,7 @@ import com.android.mediproject.feature.medicine.databinding.FragmentMedicineBasi
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MedicineBasicInfoItemFragment :
+class DosageInfoItemFragment :
     BaseFragment<FragmentMedicineBasicInfoItemBinding, MedicineBasicInfoViewModel>(FragmentMedicineBasicInfoItemBinding::inflate) {
 
     override val fragmentViewModel: MedicineBasicInfoViewModel by viewModels(ownerProducer = { requireParentFragment() })

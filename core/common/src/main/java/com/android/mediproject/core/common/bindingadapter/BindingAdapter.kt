@@ -31,4 +31,6 @@ object BindingAdapter {
     fun loadImage(imageView: ImageView, img: Bitmap) {
         GlideApp.with(imageView.context).load(img).skipMemoryCache(false).into(imageView)
     }
+
+
 }

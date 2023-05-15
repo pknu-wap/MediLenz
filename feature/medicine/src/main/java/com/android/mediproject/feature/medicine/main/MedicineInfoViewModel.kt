@@ -58,6 +58,14 @@ class MedicineInfoViewModel @Inject constructor(
     val medicineDetailsDto = if (medicineDetails.value is UiState.Success) (medicineDetails.value as UiState.Success).data
     else null
 
+    fun getDetailInfo(type: BasicInfoType): Any? {
+        return when (type) {
+            BasicInfoType.EFFICACY_EFFECT -> medicineDetailsDto?.eeDocData
+            BasicInfoType.DOSAGE -> medicineDetailsDto?.udDocData
+            BasicInfoType.MEDICINE_INFO -> medicineDetailsDto?.ingredientName
+        }
+    }
+
 }
 
 /**
@@ -71,3 +79,7 @@ class MedicineInfoViewModel @Inject constructor(
 data class MedicinePrimaryInfoDto(
     val medicineName: String, val imgUrl: String, val entpName: String, val itemSequence: String, val medicineEngName: String
 )
+
+enum class BasicInfoType {
+    EFFICACY_EFFECT, DOSAGE, MEDICINE_INFO
+}
