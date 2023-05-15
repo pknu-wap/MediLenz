@@ -22,6 +22,4 @@ hilt {
 dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
-    implementation(project(":core:annotation"))
-    kapt(project(":core:annotation"))
 }

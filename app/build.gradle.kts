@@ -43,8 +43,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:model"))
-    kapt(project(":core:annotation"))
-    compileOnly(project(":core:annotation"))
+
 
     implementation(project(":feature:interestedmedicine"))
     implementation(project(":feature:splash"))
@@ -68,7 +67,7 @@ dependencies {
     implementation(libs.bundles.workManagers)
     implementation(libs.bundles.glides)
     kapt(libs.bundles.glides.kapt)
-    
+
     /*
     androidTestImplementation(libs.bundles.testUIs)
     testImplementation(libs.bundles.testUIs)
