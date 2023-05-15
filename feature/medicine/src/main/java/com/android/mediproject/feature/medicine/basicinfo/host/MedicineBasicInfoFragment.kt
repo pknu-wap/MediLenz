@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineBasicInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,12 +18,6 @@ class MedicineBasicInfoFragment :
 
     override val fragmentViewModel: MedicineBasicInfoViewModel by viewModels()
 
-    private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>({ requireParentFragment() })
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -32,9 +25,7 @@ class MedicineBasicInfoFragment :
             medicineBasicInfoViewpager.adapter = MedicineBasicInfoItemPageAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
 
             medicineBasicInfoChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-                checkedIds.firstOrNull()?.let { checkedId ->
-                    medicineBasicInfoViewpager.setCurrentItem(checkedId, true)
-                }
+                medicineBasicInfoViewpager.setCurrentItem(group.indexOfChild(group.findViewById(checkedIds.first())), true)
             }
         }
     }

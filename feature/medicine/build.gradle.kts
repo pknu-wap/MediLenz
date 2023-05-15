@@ -3,6 +3,7 @@ plugins {
     id("mediproject.android.feature")
     id("androidx.navigation.safeargs.kotlin")
     id(libs.plugins.kapt.get().pluginId)
+    id(libs.plugins.kotlin.parcelize.get().pluginId)
 }
 
 android {

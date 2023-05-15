@@ -79,7 +79,7 @@ data class MedicineDetailInfoResponse(
             @SerialName("CNSGN_MANUF") val consignmentManufacturer: String?,
             @SerialName("DOC_TEXT") val docText: String?,
             @SerialName("EDI_CODE") val ediCode: String?,
-            @SerialName("EE_DOC_DATA") val eeDocData: String?,
+            @SerialName("EE_DOC_DATA") val eeDocData: String,
             @SerialName("EE_DOC_ID") val eeDocId: String?,
             @SerialName("ENTP_ENG_NAME") val entpEnglishName: String?,
             @SerialName("ENTP_NAME") val entpName: String?,
@@ -87,7 +87,7 @@ data class MedicineDetailInfoResponse(
             @SerialName("ETC_OTC_CODE") val etcOtcCode: String?,
             @SerialName("GBN_NAME") val gbnName: String?,
             @SerialName("INDUTY_TYPE") val industryType: String?,
-            @SerialName("INGR_NAME") val ingredientName: String?,
+            @SerialName("INGR_NAME") val ingredientName: String,
             @SerialName("INSERT_FILE") val insertFileUrl: String?,
             @SerialName("ITEM_ENG_NAME") val itemEnglishName: String?,
             @SerialName("ITEM_NAME") val itemName: String?,
@@ -108,7 +108,7 @@ data class MedicineDetailInfoResponse(
             @SerialName("REEXAM_TARGET") val reexamTarget: String?,
             @SerialName("STORAGE_METHOD") val storageMethod: String?,
             @SerialName("TOTAL_CONTENT") val totalContent: String?,
-            @SerialName("UD_DOC_DATA") val udDocData: String?,
+            @SerialName("UD_DOC_DATA") val udDocData: String,
             @SerialName("UD_DOC_ID") val uDDOCID: String?,
             @SerialName("VALID_TERM") val validTerm: String?
         )

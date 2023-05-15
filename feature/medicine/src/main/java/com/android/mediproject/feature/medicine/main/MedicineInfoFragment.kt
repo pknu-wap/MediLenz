@@ -30,7 +30,6 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initTabs()
 
         binding.viewModel = fragmentViewModel
 
@@ -38,7 +37,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             fragmentViewModel.medicineDetails.collect {
                 when (it) {
                     is UiState.Success -> {
-                        binding.tabLayout.getTabAt(0)?.select()
+                        initTabs()
                         dialog?.dismiss()
                     }
 
@@ -62,17 +61,13 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                 }
             }
         }
-    }
-
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
 
         nagArgs.apply {
             fragmentViewModel.setMedicinePrimaryInfo(this)
             fragmentViewModel.loadMedicineDetails(medicineName)
         }
     }
+
 
     // 탭 레이아웃 초기화
     private fun initTabs() {
@@ -83,23 +78,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             // 탭 레이아웃에 탭 추가
             resources.getStringArray(R.array.medicineInfoTab).also { tabTextList ->
                 TabLayoutMediator(tabLayout, contentViewPager) { tab, position ->
-                    when (position) {
-                        0 -> {
-                            tab.text = tabTextList[0]
-                        }
-
-                        1 -> {
-                            tab.text = tabTextList[1]
-                        }
-
-                        2 -> {
-                            tab.text = tabTextList[2]
-                        }
-
-                        3 -> {
-                            tab.text = tabTextList[3]
-                        }
-                    }
+                    tab.text = tabTextList[position]
                 }.attach()
             }
         }

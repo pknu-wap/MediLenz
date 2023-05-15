@@ -6,7 +6,7 @@
     </style>
 
     <style name="Theme.MediProject" parent="Theme.Material3.Light.NoActionBar">
-        
+
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
@@ -21,6 +21,7 @@
         <item name="chipBackgroundColor">@color/filter_chip_background</item>
         <item name="android:textColor">@color/filter_chip_text</item>
         <item name="chipCornerRadius">36dp</item>
+        <item name="chipIconVisible">false</item>
     </style>
 
 </resources>

@@ -1,8 +1,9 @@
 package com.android.mediproject.feature.medicine.visibility
 
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import com.android.mediproject.feature.medicine.databinding.FragmentVisibilityInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,8 +16,14 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 
 @AndroidEntryPoint
-class VisibilityInfoFragment : BaseFragment<FragmentVisibilityInfoBinding, MedicineInfoViewModel>(FragmentVisibilityInfoBinding::inflate) {
+class VisibilityInfoFragment :
+    BaseFragment<FragmentVisibilityInfoBinding, VisibilityInfoViewModel>(FragmentVisibilityInfoBinding::inflate) {
 
-    override val fragmentViewModel: MedicineInfoViewModel by viewModels(ownerProducer = { requireParentFragment() })
+    override val fragmentViewModel: VisibilityInfoViewModel by viewModels()
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
 
 }

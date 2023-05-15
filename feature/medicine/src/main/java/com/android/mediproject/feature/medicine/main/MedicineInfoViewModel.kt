@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.medicine.main
 
+import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.viewmodel.UiState
@@ -11,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,14 +57,15 @@ class MedicineInfoViewModel @Inject constructor(
     }
 
 
-    val medicineDetailsDto = if (medicineDetails.value is UiState.Success) (medicineDetails.value as UiState.Success).data
-    else null
-
-    fun getDetailInfo(type: BasicInfoType): Any? {
-        return when (type) {
-            BasicInfoType.EFFICACY_EFFECT -> medicineDetailsDto?.eeDocData
-            BasicInfoType.DOSAGE -> medicineDetailsDto?.udDocData
-            BasicInfoType.MEDICINE_INFO -> medicineDetailsDto?.ingredientName
+    fun getDetailInfo(type: BasicInfoType): Any {
+        medicineDetails.value.let {
+            (it as UiState.Success).let { success ->
+                return when (type) {
+                    BasicInfoType.EFFICACY_EFFECT -> success.data.eeDocData
+                    BasicInfoType.DOSAGE -> success.data.udDocData
+                    BasicInfoType.MEDICINE_INFO -> success.data.ingredientName
+                }
+            }
         }
     }
 
@@ -80,6 +83,7 @@ data class MedicinePrimaryInfoDto(
     val medicineName: String, val imgUrl: String, val entpName: String, val itemSequence: String, val medicineEngName: String
 )
 
-enum class BasicInfoType {
+@Parcelize
+enum class BasicInfoType : Parcelable {
     EFFICACY_EFFECT, DOSAGE, MEDICINE_INFO
 }
