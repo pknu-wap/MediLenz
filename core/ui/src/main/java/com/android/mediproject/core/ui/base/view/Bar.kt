@@ -79,7 +79,7 @@ class Bar @JvmOverloads constructor(
             }
 
             HOME_WHITE -> {
-                bar.setBackgroundColor(ContextCompat.getColor(context, R.color.main))
+                bar.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
                 backButton.visibility = View.GONE
                 title.visibility = View.GONE
                 logo.setImageResource(com.android.mediproject.core.common.R.drawable.medilenz_original_logo)

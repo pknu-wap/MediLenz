@@ -25,11 +25,19 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.android.mediproject.core.ui.base.view.Bar
-                    android:id="@+id/homeBar"
+                    android:id="@+id/homeBar1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"
                     app:setTheme="home_blue"/>
+
+                <com.android.mediproject.core.ui.base.view.Bar
+                    android:id="@+id/homeBar2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:setTheme="home_white"/>
 
                 <TextView
                     android:id="@+id/headerText"
