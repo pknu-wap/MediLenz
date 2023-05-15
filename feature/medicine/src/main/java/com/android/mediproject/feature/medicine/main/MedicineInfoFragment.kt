@@ -32,6 +32,8 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
         super.onViewCreated(view, savedInstanceState)
         initTabs()
 
+        binding.viewModel = fragmentViewModel
+
         viewLifecycleOwner.repeatOnStarted {
             fragmentViewModel.medicineDetails.collect {
                 when (it) {
@@ -67,6 +69,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
         super.onViewStateRestored(savedInstanceState)
 
         nagArgs.apply {
+            fragmentViewModel.setMedicinePrimaryInfo(this)
             fragmentViewModel.loadMedicineDetails(medicineName)
         }
     }

@@ -1,25 +1,17 @@
 plugins {
     id(libs.plugins.kotlin.android.get().pluginId)
-    id("mediproject.android.feature")
-    id("kotlinx-serialization")
-    id(libs.plugins.kapt.get().pluginId)
+    id(libs.plugins.kotlin.serialization.get().pluginId)
+    id("mediproject.android.library")
+    id(libs.plugins.nav.safeargs.kotlin.get().pluginId)
 }
 
 android {
     namespace = "com.android.mediproject.core.model"
-
-    buildFeatures {
-        buildConfig = true
-    }
 }
-
-hilt {
-    enableAggregatingTask = true
-}
-
-
 
 dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlin.reflection)
+    implementation(libs.androidx.navigation.ui.ktx)
 }

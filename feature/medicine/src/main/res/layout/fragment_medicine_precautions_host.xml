@@ -4,6 +4,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         >
 
         <com.google.android.material.chip.ChipGroup
@@ -13,6 +14,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:singleLine="true"
             app:singleSelection="true"
+            android:paddingHorizontal="16dp"
+
             >
 
             <com.google.android.material.chip.Chip

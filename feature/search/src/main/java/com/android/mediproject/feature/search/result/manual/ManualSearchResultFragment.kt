@@ -100,6 +100,7 @@ class ManualSearchResultFragment :
                 imgUrl = approvedMedicineItemDto.bigPrdtImgUrl ?: "",
                 entpName = approvedMedicineItemDto.entpName ?: "",
                 itemSequence = approvedMedicineItemDto.itemSeq ?: "",
+                medicineEngName = approvedMedicineItemDto.itemEngName ?: ""
             )
         )
 

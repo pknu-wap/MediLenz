@@ -12,6 +12,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:singleLine="true"
+            android:paddingHorizontal="16dp"
             app:singleSelection="true"
             >
 

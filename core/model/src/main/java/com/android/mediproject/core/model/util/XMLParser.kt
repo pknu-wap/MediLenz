@@ -1,4 +1,5 @@
-package com.android.mediproject.core.common.util
+package com.android.mediproject.core.model.util
+
 
 import android.text.Html
 import org.w3c.dom.Element
@@ -22,7 +23,6 @@ fun String.parseXmlString(): XMLParsedResult {
     val dBuilder: DocumentBuilder = factory.newDocumentBuilder()
     val xmlInput = InputSource(StringReader(this))
     val doc = dBuilder.parse(xmlInput)
-
     doc.documentElement.normalize()
 
     return doc.getElementsByTagName("DOC").let { docs ->

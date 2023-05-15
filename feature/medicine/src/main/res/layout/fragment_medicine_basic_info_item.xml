@@ -20,6 +20,7 @@
             android:id="@+id/contentsTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
             android:text="@string/dummyDosage"
             app:layout_constraintTop_toTopOf="parent"
             />

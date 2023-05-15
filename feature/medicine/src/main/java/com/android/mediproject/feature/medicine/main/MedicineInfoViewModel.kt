@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
+import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetatilInfoDto
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,10 @@ class MedicineInfoViewModel @Inject constructor(
     val medicineDetails get() = _medicineDetails.asStateFlow()
 
     val medicineName = savedStateHandle.getStateFlow("medicineName", "")
+    private val _medicinePrimaryInfo = MutableStateFlow<MedicinePrimaryInfoDto?>(null)
+
+    val medicinePrimaryInfo get() = _medicinePrimaryInfo.asStateFlow()
+
 
     fun loadMedicineDetails(medicineName: String) {
         viewModelScope.launch {
@@ -37,10 +42,32 @@ class MedicineInfoViewModel @Inject constructor(
         }
     }
 
+    fun setMedicinePrimaryInfo(medicineArgs: MedicineInfoArgs) {
+        viewModelScope.launch {
+            _medicinePrimaryInfo.value = MedicinePrimaryInfoDto(
+                medicineName = medicineArgs.medicineName,
+                imgUrl = medicineArgs.imgUrl,
+                entpName = medicineArgs.entpName,
+                itemSequence = medicineArgs.itemSequence,
+                medicineEngName = medicineArgs.medicineEngName
+            )
+        }
+    }
 
-    val medicineDetailsDto = if (medicineDetails.value is UiState.Success)
-        (medicineDetails.value as UiState.Success).data
-    else
-        null
+
+    val medicineDetailsDto = if (medicineDetails.value is UiState.Success) (medicineDetails.value as UiState.Success).data
+    else null
 
 }
+
+/**
+ * 약 핵심 정보
+ *
+ * @property medicineName 약 이름
+ * @property imgUrl 약 이미지 URL
+ * @property entpName 약 제조사
+ * @property itemSequence 약 품목기준코드
+ */
+data class MedicinePrimaryInfoDto(
+    val medicineName: String, val imgUrl: String, val entpName: String, val itemSequence: String, val medicineEngName: String
+)

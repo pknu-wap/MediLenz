@@ -1,8 +1,9 @@
 package com.android.mediproject.core.model.remote.medicinedetailinfo
 
+import com.android.mediproject.core.model.util.XMLParsedResult
+import com.android.mediproject.core.model.util.parseXmlString
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.serialization.Serializable
 import java.time.format.DateTimeFormatter
 
 /**
@@ -52,7 +53,6 @@ import java.time.format.DateTimeFormatter
  * @param validTerm 유효 기간입니다. 제조일로부터의 개월 수를 나타냅니다.
  * @param imgUrl 이미지 URL
  */
-@Serializable
 data class MedicineDetatilInfoDto(
     val atcCode: String?,
     val barCode: String?,
@@ -64,7 +64,7 @@ data class MedicineDetatilInfoDto(
     val consignmentManufacturer: String?,
     val docText: String?,
     val ediCode: String?,
-    val eeDocData: String?,
+    val eeDocData: XMLParsedResult?,
     val eeDocId: String?,
     val entpEnglishName: String?,
     val entpName: String?,
@@ -83,20 +83,19 @@ data class MedicineDetatilInfoDto(
     val makeMaterialFlag: String?,
     val materialName: String?,
     val narcoticKindCode: String?,
-    val nbDocData: String?,
+    val nbDocData: XMLParsedResult?,
     val nbDocId: String?,
     val newDrugClassName: String?,
     val packUnit: String?,
     val permitKindName: String?,
-    val pnDocData: String?,
+    val pnDocData: XMLParsedResult?,
     val reexamDate: LocalDate?,
     val reexamTarget: String?,
     val storageMethod: String?,
     val totalContent: String?,
-    val udDocData: String?,
+    val udDocData: XMLParsedResult?,
     val uDDOCID: String?,
     val validTerm: String?,
-    val imgUrl: String?
 )
 
 fun MedicineDetailInfoResponse.Body.Item.toDto() = MedicineDetatilInfoDto(
@@ -110,7 +109,7 @@ fun MedicineDetailInfoResponse.Body.Item.toDto() = MedicineDetatilInfoDto(
     consignmentManufacturer = consignmentManufacturer,
     docText = docText,
     ediCode = ediCode,
-    eeDocData = eeDocData,
+    eeDocData = eeDocData?.parseXmlString(),
     eeDocId = eeDocId,
     entpEnglishName = entpEnglishName,
     entpName = entpName,
@@ -129,20 +128,19 @@ fun MedicineDetailInfoResponse.Body.Item.toDto() = MedicineDetatilInfoDto(
     makeMaterialFlag = makeMaterialFlag,
     materialName = materialName,
     narcoticKindCode = narcoticKindCode,
-    nbDocData = nbDocData,
+    nbDocData = nbDocData?.parseXmlString(),
     nbDocId = nbDocId,
     newDrugClassName = newDrugClassName,
     packUnit = packUnit,
     permitKindName = permitKindName,
-    pnDocData = pnDocData,
+    pnDocData = pnDocData?.parseXmlString(),
     reexamDate = reexamDate.toLocalDate(),
     reexamTarget = reexamTarget,
     storageMethod = storageMethod,
     totalContent = totalContent,
-    udDocData = udDocData,
+    udDocData = udDocData?.parseXmlString(),
     uDDOCID = uDDOCID,
     validTerm = validTerm,
-    imgUrl = null
 )
 
 private fun String?.toLocalDate(): LocalDate? = this?.let {

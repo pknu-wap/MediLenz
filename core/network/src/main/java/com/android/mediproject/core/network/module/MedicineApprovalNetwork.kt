@@ -22,8 +22,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.serialization.json.Json
-import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.GET
@@ -38,8 +38,8 @@ object MedicineApprovalNetwork {
 
     @Provides
     @Singleton
-    fun providesDataGoKrNetworkApi(okHttpCallFactory: Call.Factory): DataGoKrNetworkApi =
-        Retrofit.Builder().callFactory(okHttpCallFactory).addConverterFactory(
+    fun providesDataGoKrNetworkApi(okHttpClient: OkHttpClient): DataGoKrNetworkApi =
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(
             Json.asConverterFactory("application/json".toMediaType())
         ).baseUrl(DATA_GO_KR_BASEURL).build().create(DataGoKrNetworkApi::class.java)
 
