@@ -20,6 +20,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
         super.onViewCreated(view, savedInstanceState)
         initSearchBar()
         initChildFragments()
+
+        binding.apply{
+            homeBar1.bringToFront()
+            homeBar2.bringToFront()
+
+
+            /**
+             * 일반 적인 경우에는 emasredHeight로 그냥 측정되지만, 현재 headerLayout에 크기가 wrap_content이며,
+             * headerLayout의 부모뷰인 ConstrainyLayout도 wrap_content라서 UNSPECIFED모드로 측정해주어야 합니다.
+             * 다른 모드들은 전부 0으로 측정됩니다.
+             */
+            
+            headerLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+            val initialHeight = (headerLayout.measuredHeight*1.2).toFloat()
+            log(initialHeight.toString())
+
+            scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                log(scrollY.toString())
+                log((scrollY/initialHeight).toString())
+                binding.homeBar2.alpha = (scrollY/initialHeight)
+            }
+        }
     }
 
     /**
