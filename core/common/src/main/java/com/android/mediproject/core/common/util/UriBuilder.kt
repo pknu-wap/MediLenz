@@ -16,8 +16,8 @@ import com.android.mediproject.core.model.local.navargs.BaseNavArgs
  * @param parameter Uri에 들어갈 파라미터
  * @return Uri
  */
-private fun toDeepUrl(deepLinkUrl: String, parameter: BaseNavArgs): Uri = StringBuilder(deepLinkUrl).let { uri ->
-    parameter.toMap().takeIf {
+private fun toDeepUrl(deepLinkUrl: String, parameter: Map<String, String>): Uri = StringBuilder(deepLinkUrl).let { uri ->
+    parameter.takeIf {
         it.isNotEmpty()
     }?.also { map ->
         uri.append("?")
@@ -38,9 +38,10 @@ private fun toDeepUrl(deepLinkUrl: String, parameter: BaseNavArgs): Uri = String
  * @param parameter DeepLink에 들어갈 파라미터
  */
 fun NavController.navigateByDeepLink(deepLinkUrl: String, parameter: BaseNavArgs) {
-    toDeepUrl(deepLinkUrl, parameter).also { finalUri ->
+    val parameterMap = parameter.toMap()
+    toDeepUrl(deepLinkUrl, parameterMap).also { finalUri ->
         graph.matchDeepLink(NavDeepLinkRequest(finalUri, null, null))?.also { deepLinkMatch ->
-            parameter.toMap().takeIf {
+            parameterMap.takeIf {
                 it.isNotEmpty()
             }?.forEach { (key, value) ->
                 deepLinkMatch.destination.addArgument(

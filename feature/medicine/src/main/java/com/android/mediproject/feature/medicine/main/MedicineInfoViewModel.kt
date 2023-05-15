@@ -38,9 +38,9 @@ class MedicineInfoViewModel @Inject constructor(
     }
 
 
-    val medicineDetailsDto = if (medicineDetails.value is UiState.Success) {
+    val medicineDetailsDto = if (medicineDetails.value is UiState.Success)
         (medicineDetails.value as UiState.Success).data
-    } else {
+    else
         null
-    }
+
 }
