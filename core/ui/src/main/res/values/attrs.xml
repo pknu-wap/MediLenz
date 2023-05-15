@@ -8,6 +8,7 @@
         <attr name="setTheme" format="enum">
             <enum name="blue" value="0" />
             <enum name="white" value="1" />
+            <enum name="home" value="2" />
         </attr>
     </declare-styleable>
 

@@ -21,11 +21,13 @@ class Bar @JvmOverloads constructor(
     companion object {
         const val BLUE = 0
         const val WHITE = 1
+        const val HOME = 2
     }
 
     lateinit var backButton: ImageView
     lateinit var title: TextView
     lateinit var bar: ConstraintLayout
+    lateinit var logo : ImageView
 
     init {
         val infService = Context.LAYOUT_INFLATER_SERVICE
@@ -37,6 +39,7 @@ class Bar @JvmOverloads constructor(
         backButton = findViewById<ImageView>(R.id.barBackIV)
         title = findViewById<TextView>(R.id.barTitleTV)
         bar = findViewById<ConstraintLayout>(R.id.bar)
+        logo = findViewById<ImageView>(R.id.barLogoIV)
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.Bar)
 
@@ -64,6 +67,13 @@ class Bar @JvmOverloads constructor(
                 bar.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
                 title.setTextColor(ContextCompat.getColor(context, R.color.black))
                 backButton.setImageResource(R.drawable.left_arrow_black)
+            }
+
+            HOME -> {
+                bar.setBackgroundColor(ContextCompat.getColor(context, R.color.main))
+                backButton.visibility = View.GONE
+                title.visibility = View.GONE
+                logo.visibility = View.VISIBLE
             }
         }
         typedArray.recycle()
