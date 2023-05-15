@@ -12,32 +12,43 @@ import com.android.mediproject.feature.medicine.basicinfo.host.MedicineBasicInfo
 import com.android.mediproject.feature.medicine.main.BasicInfoType
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import repeatOnStarted
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlin.reflect.KClass
+import kotlin.reflect.full.createInstance
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
+
+interface MedicineInfoItemFragmentFactory {
+    fun <T : BaseMedicineInfoItemFragment<*, *>> newInstance(basicInfoType: BasicInfoType, fragmentClass: KClass<T>): T
+}
 
 abstract class BaseMedicineInfoItemFragment<T : ViewDataBinding, E : Any>(inflate: Inflate<T>) :
     BaseFragment<T, MedicineBasicInfoViewModel>(inflate) {
 
     override val fragmentViewModel: MedicineBasicInfoViewModel by viewModels()
 
-    protected val medicineInfoViewModel by viewModels<MedicineInfoViewModel>(ownerProducer = {
-        requireParentFragment().let {
-            it.requireParentFragment()
-        }
+    private val _medicineInfoViewModel by viewModels<MedicineInfoViewModel>(ownerProducer = {
+        requireParentFragment().requireParentFragment()
     })
 
-    companion object Instance {
+    protected val medicineInfoViewModel get() = _medicineInfoViewModel
 
-        inline fun <reified T : BaseMedicineInfoItemFragment<*, *>> newInstance(basicInfoType: BasicInfoType): T {
-            val fragment = T::class.java.newInstance()
+
+    companion object : MedicineInfoItemFragmentFactory {
+
+        @JvmStatic
+        override fun <T : BaseMedicineInfoItemFragment<*, *>> newInstance(
+            basicInfoType: BasicInfoType, fragmentClass: KClass<T>
+        ): T {
+            val fragment = fragmentClass.createInstance()
             fragment.arguments = Bundle().apply {
                 putParcelable("basicInfoType", basicInfoType)
             }
             return fragment
         }
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,17 +65,17 @@ abstract class BaseMedicineInfoItemFragment<T : ViewDataBinding, E : Any>(inflat
 
     }
 
-    val collectingData: Flow<E> by lazy {
-        flow {
-            viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.basicInfoType.collect { uiState ->
-                    medicineInfoViewModel.getDetailInfo(uiState).let { detailInfo ->
-                        detailInfo as E
-                    }.apply {
-                        emit(this)
-                    }
+    protected val collectingData: Flow<E> by lazy {
+        channelFlow<E> {
+            fragmentViewModel.basicInfoType.collectLatest { type ->
+                _medicineInfoViewModel.getDetailInfo(type).let { detailInfo ->
+                    detailInfo as E
+                }.apply {
+                    send(this)
                 }
             }
         }
     }
+
+
 }
