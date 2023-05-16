@@ -7,6 +7,7 @@ import com.android.mediproject.feature.medicine.databinding.FragmentDosageInfoIt
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
+import java.lang.ref.WeakReference
 
 @AndroidEntryPoint
 class DosageInfoItemFragment : BaseMedicineInfoItemFragment<FragmentDosageInfoItemBinding, XMLParsedResult>(
@@ -15,23 +16,29 @@ class DosageInfoItemFragment : BaseMedicineInfoItemFragment<FragmentDosageInfoIt
 
     companion object : MedicineInfoItemFragmentFactory by BaseMedicineInfoItemFragment.Companion
 
-    override
-    fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.repeatOnStarted {
             collectingData.collectLatest {
-                it.let {
-                    val stringBuilder = StringBuilder()
-                    it.articleList.forEach { article ->
-                        article.contentList.forEachIndexed { index, content ->
-                            stringBuilder.append(content)
-                            if (index != article.contentList.size - 1) stringBuilder.append("\n")
-                        }
-                    }
+                if (it.articleList.isNotEmpty()) {
+                    val stringBuilder = WeakReference<StringBuilder>(StringBuilder())
 
-                    binding.contentsTextView.text = stringBuilder.toString()
+                    stringBuilder.get()?.let { builder ->
+                        it.articleList.forEachIndexed { _, article ->
+                            builder.append(article.title)
+                            article.contentList.forEachIndexed { index, content ->
+                                builder.append(content)
+                                if (index != article.contentList.size - 1) builder.append("\n")
+                            }
+                            builder.append("\n")
+                        }
+
+                        binding.contentsTextView.text = builder.toString()
+                        builder.clear()
+                    }
                 }
+
             }
         }
 

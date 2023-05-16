@@ -2,7 +2,10 @@ package com.android.mediproject.feature.medicine.main
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup.LayoutParams
+import android.view.ViewTreeObserver
 import androidx.appcompat.app.AlertDialog
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.android.mediproject.core.common.dialog.showLoadingDialog
@@ -11,6 +14,7 @@ import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfoBinding
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
@@ -35,17 +39,34 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
         binding.apply {
             viewModel = fragmentViewModel
-            // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
-            topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-                log("verticalOffset : $verticalOffset, appBarLayout.totalScrollRange : ${appBarLayout.totalScrollRange}")
-                medicinePrimaryInfoViewgroup.alpha = 1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
-                    if (this == -1.0f) {
-                        medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
-                    } else if (this > -0.8f) {
-                        medicinePrimaryInfoViewgroup.visibility = View.VISIBLE
+            root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+
+                    val viewPagerHeight = rootLayout.height - topAppBar.height
+                    contentViewPager.layoutParams =
+                        CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, viewPagerHeight).apply {
+                            behavior = AppBarLayout.ScrollingViewBehavior()
+                        }
+
+                    // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
+                    topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+                        medicinePrimaryInfoViewgroup.alpha =
+                            1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
+                                if (this == -1.0f) medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
+                                else if (this > -0.8f) medicinePrimaryInfoViewgroup.visibility = View.VISIBLE
+                            }
+
+                        contentViewPager.layoutParams =
+                            CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, (viewPagerHeight - verticalOffset)).apply {
+                                behavior = AppBarLayout.ScrollingViewBehavior()
+                            }
                     }
+
+                    root.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 }
-            }
+            })
+
+
         }
 
         viewLifecycleOwner.repeatOnStarted {
