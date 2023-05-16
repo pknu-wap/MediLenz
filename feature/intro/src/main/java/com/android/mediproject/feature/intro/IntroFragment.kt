@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentIntroBinding

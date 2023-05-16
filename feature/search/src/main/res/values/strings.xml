@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="recentSearch">최근 검색 목록</string>
+    <string name="medicineSearch">의약품 검색</string>
 
     <string name="medicineImage">의약품 이미지</string>
     <string name="medicineName">의약품 명</string>
