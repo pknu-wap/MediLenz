@@ -5,10 +5,13 @@ import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.model.remote.adminaction.AdminActionListResponse
+import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
 import com.android.mediproject.core.model.remote.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
+import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
+import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSourceImpl
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionDataSource
@@ -63,13 +66,17 @@ object MedicineApprovalNetwork {
         @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, dataGoKrNetworkApi: DataGoKrNetworkApi
     ): MedicineApprovalDataSource = MedicineApprovalDataSourceImpl(ioDispatcher, dataGoKrNetworkApi)
 
+    @Provides
+    @Singleton
+    fun providesGranuleIdentificationDataSource(): GranuleIdentificationDataSource = GranuleIdentificationDataSourceImpl()
+
 }
 
 interface DataGoKrNetworkApi {
 
     @GET(value = "DrugPrdtPrmsnInfoService04/getDrugPrdtPrmsnInq04")
     suspend fun getApprovalList(
-        @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
+        @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("item_name", encoded = true) itemName: String?,
         @Query("entp_name", encoded = true) entpName: String?,
         @Query("spclty_pblc", encoded = true) medicationType: String?,
@@ -93,7 +100,7 @@ interface DataGoKrNetworkApi {
      */
     @GET(value = "MdcinRtrvlSleStpgeInfoService03/getMdcinRtrvlSleStpgelList02")
     suspend fun getRecallSuspensionList(
-        @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
+        @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int,
         @Query("type") type: String = "json",
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
@@ -107,7 +114,7 @@ interface DataGoKrNetworkApi {
      */
     @GET(value = "MdcinRtrvlSleStpgeInfoService03/getMdcinRtrvlSleStpgeItem02")
     suspend fun getDetailRecallSuspensionInfo(
-        @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
+        @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = 1,
         @Query("type") type: String = "json",
         @Query("Entrps", encoded = true) company: String?,
@@ -120,10 +127,28 @@ interface DataGoKrNetworkApi {
      */
     @GET(value = "MdcinExaathrService04/getMdcinExaathrList04")
     suspend fun getAdminActionList(
-        @Query("serviceKey", encoded = true) serviceKey: String? = BuildConfig.DATA_GO_KR_SERVICE_KEY,
+        @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int,
         @Query("type") type: String = "json",
         @Query("order", encoded = true) order: String = "Y",
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
     ): Response<AdminActionListResponse>
+
+    /**
+     * 의약품 낱알 식별 정보 조회
+     *
+     * @param itemName 의약품명
+     * @param entpName 업체명
+     * @param itemSeq 품목기준코드
+     */
+    @GET(value = "MdcinGrnIdntfcInfoService01/getMdcinGrnIdntfcInfoList01")
+    suspend fun getGranuleIdentificationInfo(
+        @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
+        @Query("pageNo") pageNo: String = "1",
+        @Query("item_name") itemName: String?,
+        @Query("entp_name") entpName: String?,
+        @Query("item_seq") itemSeq: String?,
+        @Query("type") type: String = "json",
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
+    ): Response<GranuleIdentificationInfoResponse>
 }

@@ -2,6 +2,8 @@ package com.android.mediproject.core.data.remote.di
 
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepository
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepositoryImpl
+import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepository
+import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepositoryImpl
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepositoryImpl
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepository
@@ -37,5 +39,9 @@ object RepositoryModule {
     fun providesAdminActionRepository(
         adminActionDataSource: AdminActionListDataSourceImpl
     ): AdminActionRepository = AdminActionRepositoryImpl(adminActionDataSource)
+
+    @Provides
+    @Singleton
+    fun providesGranuleIdentificationRepository(): GranuleIdentificationRepository = GranuleIdentificationRepositoryImpl()
 
 }
