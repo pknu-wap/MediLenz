@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             app:setTheme="white"
             app:showBackButton="true"
-            app:title="의약품 검색" />
+            app:title="@string/medicineSearch" />
 
         <com.android.mediproject.core.ui.base.view.MediSearchbar
             android:id="@+id/searchView"

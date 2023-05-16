@@ -21,11 +21,14 @@ class Bar @JvmOverloads constructor(
     companion object {
         const val BLUE = 0
         const val WHITE = 1
+        const val HOME_BLUE = 2
+        const val HOME_WHITE = 3
     }
 
     lateinit var backButton: ImageView
     lateinit var title: TextView
     lateinit var bar: ConstraintLayout
+    lateinit var logo : ImageView
 
     init {
         val infService = Context.LAYOUT_INFLATER_SERVICE
@@ -37,6 +40,7 @@ class Bar @JvmOverloads constructor(
         backButton = findViewById<ImageView>(R.id.barBackIV)
         title = findViewById<TextView>(R.id.barTitleTV)
         bar = findViewById<ConstraintLayout>(R.id.bar)
+        logo = findViewById<ImageView>(R.id.barLogoIV)
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.Bar)
 
@@ -65,7 +69,24 @@ class Bar @JvmOverloads constructor(
                 title.setTextColor(ContextCompat.getColor(context, R.color.black))
                 backButton.setImageResource(R.drawable.left_arrow_black)
             }
+
+            HOME_BLUE -> {
+                bar.setBackgroundColor(ContextCompat.getColor(context, R.color.main))
+                backButton.visibility = View.GONE
+                title.visibility = View.GONE
+                logo.setImageResource(com.android.mediproject.core.common.R.drawable.medilenz_white_logo)
+                logo.visibility = View.VISIBLE
+            }
+
+            HOME_WHITE -> {
+                bar.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                backButton.visibility = View.GONE
+                title.visibility = View.GONE
+                logo.setImageResource(com.android.mediproject.core.common.R.drawable.medilenz_original_logo)
+                logo.visibility = View.VISIBLE
+            }
         }
+
         typedArray.recycle()
     }
 

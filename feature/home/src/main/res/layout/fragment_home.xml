@@ -1,124 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/root_layout"
+    <data>
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.feature.home.HomeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/headerLayout"
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/homeBar1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_header_on_top"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            >
+            app:setTheme="home_blue" />
 
-            <ImageView
-                android:layout_width="108dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:src="@drawable/medlens_text_logo"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-
-            <TextView
-                android:id="@+id/headerText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="50dp"
-                android:layout_marginTop="69dp"
-                android:layout_marginBottom="58dp"
-                android:text="@string/headerTextOnHome"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/homeBar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setTheme="home_white" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:fillViewport="true"
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headerLayout"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipChildren="false"
-                android:orientation="vertical"
-                android:paddingHorizontal="20dp"
-                >
+                android:layout_height="wrap_content">
 
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/recentSearchListFragment"
-                    android:name="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/headerLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    />
+                    android:background="@color/main"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/headerText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="69dp"
+                        android:layout_marginBottom="58dp"
+                        android:text="@string/headerTextOnHome"
+                        android:textColor="@color/white"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                <com.google.android.material.divider.MaterialDivider
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/divider_margin_vertical"
-                    />
+                    android:clipChildren="false"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/headerLayout">
 
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/recentCommentListFragment"
-                    android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/recentSearchListFragment"
+                        android:name="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="@dimen/divider_margin_vertical" />
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/recentCommentListFragment"
+                        android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="@dimen/divider_margin_vertical" />
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/recentPenaltyListFragment"
+                        android:name="com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/divider_margin_vertical" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="700dp"
+                        android:layout_margin="@dimen/divider_margin_vertical"
+                        android:gravity="center"
+                        android:text="스크롤 테스트용 블럭입니다."
+                        android:textColor="@color/main"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <com.android.mediproject.core.ui.base.view.MediSearchbar
+                    android:id="@+id/search_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/divider_margin_vertical"
-                    />
-
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/recentPenaltyListFragment"
-                    android:name="com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/divider_margin_vertical"
-                    />
-
-            </LinearLayout>
+                    android:layout_marginHorizontal="38dp"
+                    app:ai_text="@string/searchWithAi"
+                    app:camera_icon="@drawable/baseline_camera_24"
+                    app:is_all_btn="true"
+                    app:layout_constraintBottom_toBottomOf="@id/headerLayout"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/headerLayout"
+                    app:search_hint="@string/searchHint"
+                    app:search_icon="@drawable/baseline_search_24" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-
-        <com.android.mediproject.core.ui.base.view.MediSearchbar
-            android:id="@+id/search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="38dp"
-            app:ai_text="@string/searchWithAi"
-            app:camera_icon="@drawable/baseline_camera_24"
-            app:is_all_btn="true"
-            app:layout_constraintBottom_toBottomOf="@id/headerLayout"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headerLayout"
-            app:search_hint="@string/searchHint"
-            app:search_icon="@drawable/baseline_search_24"
-            />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>
