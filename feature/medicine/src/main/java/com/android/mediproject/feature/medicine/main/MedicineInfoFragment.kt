@@ -5,7 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.android.mediproject.core.common.dialog.ProgressDialog
+import com.android.mediproject.core.common.dialog.showLoadingDialog
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -63,9 +63,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                     is UiState.Loading -> {
                         fragmentViewModel.medicineName.value.let { medicineName ->
                             val msg = "$medicineName ${getString(R.string.loadingMedicineDetails)}"
-                            dialog = ProgressDialog.createDialog(requireActivity(), msg).also { dialog ->
-                                dialog.show()
-                            }
+                            dialog = showLoadingDialog(requireActivity(), msg)
                         }
                     }
 

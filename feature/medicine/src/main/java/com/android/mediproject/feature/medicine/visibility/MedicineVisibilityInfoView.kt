@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.android.mediproject.core.common.uiutil.dpToPx
 import com.android.mediproject.core.common.uiutil.spToPx
-import com.android.mediproject.core.model.medicine.MedicineVisibilityDto
+import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoDto
 import com.android.mediproject.feature.medicine.R
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -54,7 +54,7 @@ class MedicineVisibilityInfoView(context: Context, attributeSet: AttributeSet) :
                             reader.readText()
                         }.also { jsonStr ->
                             val json = Json { ignoreUnknownKeys = true }
-                            json.decodeFromString<MedicineVisibilityDto>(jsonStr).apply {
+                            json.decodeFromString<GranuleIdentificationInfoDto>(jsonStr).apply {
                                 setData(this)
                             }
                         }
@@ -69,7 +69,7 @@ class MedicineVisibilityInfoView(context: Context, attributeSet: AttributeSet) :
     }
 
 
-    private fun setData(medicineVisibilityDto: MedicineVisibilityDto) {
+    private fun setData(medicineVisibilityDto: GranuleIdentificationInfoDto) {
 
         dataMap = mutableMapOf<String, List<Pair<String, String>>>().apply {
             // 그룹 1: 의약품 정보
@@ -84,7 +84,7 @@ class MedicineVisibilityInfoView(context: Context, attributeSet: AttributeSet) :
             // 그룹 2: 업체 정보
             context.resources.getStringArray(R.array.companyInfo).also {
                 this[context.getString(R.string.companyInfoTitle)] = listOf(
-                    it[0] to medicineVisibilityDto.entpSeq, it[1] to medicineVisibilityDto.entpName, it[2] to medicineVisibilityDto.bizrno
+                    it[0] to medicineVisibilityDto.entpSeq, it[1] to medicineVisibilityDto.entpName, it[2] to medicineVisibilityDto.bizrNo
                 )
             }
 
@@ -101,16 +101,16 @@ class MedicineVisibilityInfoView(context: Context, attributeSet: AttributeSet) :
             context.resources.getStringArray(R.array.miscInfo).also {
                 this[context.getString(R.string.miscInfoTitle)] = listOf(
                     it[0] to medicineVisibilityDto.formCodeName,
-                    it[1] to medicineVisibilityDto.itemPermitDate,
-                    it[2] to medicineVisibilityDto.changeDate
+                    it[1] to medicineVisibilityDto.itemPermitDate.toString(),
+                    it[2] to medicineVisibilityDto.changeDate.toString()
                 )
             }
 
             // 그룹 5: 인쇄 및 이미지 정보
             context.resources.getStringArray(R.array.printAndImageInfo).also {
                 this[context.getString(R.string.printAndImageInfoTitle)] = listOf(
-                    it[0] to medicineVisibilityDto.printFront,
-                    it[1] to medicineVisibilityDto.printBack,
+                    it[0] to (medicineVisibilityDto.printFront ?: "없음"),
+                    it[1] to (medicineVisibilityDto.printBack ?: "없음"),
                     it[2] to medicineVisibilityDto.markCodeFrontAnal,
                     it[3] to medicineVisibilityDto.markCodeBackAnal,
                     it[4] to medicineVisibilityDto.markCodeFrontImg,
@@ -131,19 +131,19 @@ class MedicineVisibilityInfoView(context: Context, attributeSet: AttributeSet) :
                 this[context.getString(R.string.medicineShapeInfoTitle)] = listOf(
                     it[0] to medicineVisibilityDto.drugShape,
                     it[1] to medicineVisibilityDto.colorClass1,
-                    it[2] to medicineVisibilityDto.colorClass2,
+                    it[2] to (medicineVisibilityDto.colorClass2 ?: "없음"),
                 )
             }
 
             // 그룹 8: 구분선 정보
             context.resources.getStringArray(R.array.lineInfo).also {
                 this[context.getString(R.string.lineInfoTitle)] = listOf(
-                    it[0] to medicineVisibilityDto.lineFront,
-                    it[1] to medicineVisibilityDto.lineBack,
+                    it[0] to (medicineVisibilityDto.lineFront ?: "없음"),
+                    it[1] to (medicineVisibilityDto.lineBack ?: "없음"),
                     it[2] to medicineVisibilityDto.lengLong,
                     it[3] to medicineVisibilityDto.lengShort,
-                    it[4] to medicineVisibilityDto.thick,
-                    it[5] to medicineVisibilityDto.imgRegistTs,
+                    it[4] to (medicineVisibilityDto.thick ?: "없음"),
+                    it[5] to medicineVisibilityDto.imgRegistTs.toString(),
                 )
             }
 

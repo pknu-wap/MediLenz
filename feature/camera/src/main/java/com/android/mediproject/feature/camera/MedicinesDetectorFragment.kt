@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.common.dialog.ProgressDialog
+import com.android.mediproject.core.common.dialog.showLoadingDialog
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -110,10 +110,8 @@ class MedicinesDetectorFragment :
     private fun initializeCamera() {
         binding.apply {
 
-            dialog = ProgressDialog.createDialog(requireActivity(), getString(R.string.loadingAiModels)).apply {
-                show()
-            }
-
+            dialog = showLoadingDialog(requireActivity(), getString(R.string.loadingAiModels))
+            
             val surfaceHolder = object : SurfaceHolder.Callback2 {
                 override fun surfaceCreated(holder: SurfaceHolder) {
                 }

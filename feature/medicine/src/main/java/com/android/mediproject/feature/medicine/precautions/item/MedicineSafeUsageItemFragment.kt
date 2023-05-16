@@ -3,10 +3,15 @@ package com.android.mediproject.feature.medicine.precautions.item
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineSafeUseItemBinding
-import com.android.mediproject.feature.medicine.precautions.host.MedicinePrecautionsViewModel
+import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import repeatOnStarted
 
 /**
  *
@@ -42,12 +47,46 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class MedicineSafeUsageItemFragment :
-    BaseFragment<FragmentMedicineSafeUseItemBinding, MedicinePrecautionsViewModel>(FragmentMedicineSafeUseItemBinding::inflate) {
+    BaseFragment<FragmentMedicineSafeUseItemBinding, MedicineSafeUsageViewModel>(FragmentMedicineSafeUseItemBinding::inflate) {
 
-    override val fragmentViewModel: MedicinePrecautionsViewModel by viewModels()
+    override val fragmentViewModel: MedicineSafeUsageViewModel by viewModels()
+
+    private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>({
+        requireParentFragment().requireParentFragment()
+    })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.repeatOnStarted {
+            launch {
+                fragmentViewModel.elderlyCaution.collect {
+                    when (it) {
+                        is UiState.Success -> {
+                            binding.elderlyCaution.title.text = getString(R.string.elderlyCaution)
+                            binding.elderlyCaution.description.text = it.data.prohibitionContent ?: "정보가 없습니다."
+                        }
+
+                        else -> {}
+                    }
+                }
+            }
+
+            launch {
+                medicineInfoViewModel.medicineDetails.collectLatest {
+                    when (it) {
+                        is UiState.Success -> {
+                            it.data.also { medicineInfo ->
+                                fragmentViewModel.getElderlyCaution(itemName = null, itemSeq = medicineInfo.itemSequence)
+                            }
+                        }
+
+                        else -> {}
+                    }
+                }
+            }
+        }
+
     }
 
 }

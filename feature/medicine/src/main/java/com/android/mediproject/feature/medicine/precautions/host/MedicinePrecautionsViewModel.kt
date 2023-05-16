@@ -5,4 +5,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MedicinePrecautionsViewModel @Inject constructor() : BaseViewModel() {}
+class MedicinePrecautionsViewModel @Inject constructor(
+
+) : BaseViewModel() {
+
+
+}
