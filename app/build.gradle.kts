@@ -37,10 +37,13 @@ hilt {
 }
 
 dependencies {
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+
     implementation(project(":core:common"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:model"))
+
 
     implementation(project(":feature:interestedmedicine"))
     implementation(project(":feature:splash"))

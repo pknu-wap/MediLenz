@@ -1,47 +1,87 @@
 package com.android.mediproject.core.network.module
 
+import android.content.Context
 import com.android.mediproject.core.network.BuildConfig
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.android.mediproject.core.network.R
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
-import okhttp3.Call
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
+import java.security.KeyStore
+import java.security.cert.Certificate
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
+import java.time.Duration
+import javax.inject.Inject
 import javax.inject.Singleton
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
-@Module(includes = [MedicineApprovalNetwork::class, PenaltiesNetwork::class])
+@Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
-    private val contentType = "application/json".toMediaType()
+class CertificateHelper @Inject constructor(@ApplicationContext context: Context) {
 
+    lateinit var tmf: TrustManagerFactory
+    lateinit var sslContext: SSLContext
 
-    /**
-     * 요청 및 응답 정보를 기록하는 OkHttp 인터셉터를 추가한다.
-     */
-    @Provides
-    @Singleton
-    fun provideOkHttpCallFactory(): Call.Factory = OkHttpClient.Builder().addInterceptor(
-        HttpLoggingInterceptor().apply {
-            if (BuildConfig.DEBUG) {
-                level = HttpLoggingInterceptor.Level.BODY
+    init {
+        try {
+            context.resources.openRawResource(R.raw.gsrsaovsslca2018).use { caInput ->
+                val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
+                val ca: Certificate = cf.generateCertificate(caInput)
+                println("ca = ${(ca as X509Certificate).subjectDN}")
+
+                val keyStoreType = KeyStore.getDefaultType()
+                val keyStore = KeyStore.getInstance(keyStoreType)
+                with(keyStore) {
+                    load(null, null)
+                    keyStore.setCertificateEntry("ca", ca)
+                }
+
+                val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
+                tmf = TrustManagerFactory.getInstance(tmfAlgorithm).apply {
+                    init(keyStore)
+                }
+
+                sslContext = SSLContext.getInstance("TLS").apply {
+                    init(null, tmf.trustManagers, java.security.SecureRandom())
+                }
             }
-        },
-    ).build()
 
-    /**
-     * Retrofit Builder를 제공한다.
-     */
-    @Provides
-    @Singleton
-    fun provideRetrofitBuilder(okHttpCallFactory: Call.Factory): Retrofit.Builder =
-        Retrofit.Builder().callFactory(okHttpCallFactory).addConverterFactory(
-            Json.asConverterFactory("application/json".toMediaType()),
-        )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }
 
-const val DATA_GO_KR_BASEURL = "https://apis.data.go.kr/1471000/"
+@Module(includes = [MedicineApprovalNetwork::class])
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+
+    @Provides
+    @Singleton
+    fun providesOkHttpClient(certificateHelper: CertificateHelper): OkHttpClient {
+        return OkHttpClient.Builder().run {
+            addInterceptor(HttpLoggingInterceptor().apply {
+                if (BuildConfig.DEBUG) {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            })
+            readTimeout(Duration.ofSeconds(10))
+            connectTimeout(Duration.ofSeconds(7))
+            writeTimeout(Duration.ofSeconds(7))
+            certificateHelper.apply {
+                sslSocketFactory(
+                    sslContext.socketFactory, tmf.trustManagers[0] as X509TrustManager
+                )
+            }
+            build()
+        }
+    }
+
+
+}

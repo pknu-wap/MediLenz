@@ -28,7 +28,7 @@ package com.android.mediproject.core.model.remote.medicineapproval
 
 data class ApprovedMedicineItemDto(
     val itemSeq: String? = null,
-    val itemName: String? = null,
+    val itemName: String,
     val itemEngName: String? = null,
     val entpName: String? = null,
     val entpEngName: String? = null,
@@ -49,4 +49,28 @@ data class ApprovedMedicineItemDto(
     val ediCode: String? = null,
     val bizrno: String? = null,
     var onClick: ((ApprovedMedicineItemDto) -> Unit)? = null,
+)
+
+fun Item.toDto() = ApprovedMedicineItemDto(
+    itemSeq = itemSeq,
+    itemName = itemName ?: "",
+    itemEngName = itemEngName,
+    entpName = entpName,
+    entpEngName = entpEngName,
+    entpSeq = entpSeq,
+    entpNo = entpNo,
+    itemPermitDate = itemPermitDate,
+    induty = induty,
+    prdlstStdrCode = prdlstStdrCode,
+    spcltyPblc = spcltyPblc,
+    prductType = prductType,
+    prductPrmisnNo = prductPrmisnNo,
+    itemIngrName = itemIngrName,
+    itemIngrCnt = itemIngrCnt,
+    bigPrdtImgUrl = bigPrdtImgUrl,
+    permitKindCode = permitKindCode,
+    cancelDate = cancelDate,
+    cancelName = cancelName,
+    ediCode = ediCode,
+    bizrno = bizrno,
 )

@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class RecallSuspensionListResponse(
-    @SerialName("body") val body: Body?,
+    @SerialName("body") val body: Body,
 ) : DataGoKrBaseResponse() {
 
     @Serializable

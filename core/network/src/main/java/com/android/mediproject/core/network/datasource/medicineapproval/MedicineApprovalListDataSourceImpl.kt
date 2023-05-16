@@ -23,29 +23,23 @@ class MedicineApprovalListDataSourceImpl(
         val currentPage = params.key ?: 1
 
         return try {
-            val response = medicineApprovalDataSource.getMedicineApprovalList(
+            medicineApprovalDataSource.getMedicineApprovalList(
                 itemName = itemName,
                 entpName = entpName,
                 medicationType = medicationType,
                 pageNo = currentPage,
-            )
-
-            response.header.let {
-                if (it.resultCode == "00") {
-                    val nextKey = response.body?.let { body ->
-                        if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
-                        else currentPage + 1
-                    }
-
-                    LoadResult.Page(
-                        data = response.body?.items ?: emptyList(),
-                        prevKey = null,
-                        nextKey = nextKey,
-                    )
-                } else {
-                    LoadResult.Error(Throwable(it.resultMsg))
+            ).fold(onSuccess = {
+                val nextKey = it.body.let { body ->
+                    if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
+                    else currentPage + 1
                 }
-            }
+
+                LoadResult.Page(
+                    data = it.body.items,
+                    prevKey = null,
+                    nextKey = nextKey,
+                )
+            }, onFailure = { LoadResult.Error(it) })
 
         } catch (e: Exception) {
             LoadResult.Error(e)

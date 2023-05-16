@@ -7,9 +7,9 @@ import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprova
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepository
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepositoryImpl
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
-import com.android.mediproject.core.network.datasource.penalties.RecallSuspensionDataSource
-import com.android.mediproject.core.network.datasource.penalties.RecallSuspensionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
+import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
+import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionListDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

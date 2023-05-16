@@ -3,7 +3,6 @@ package com.android.mediproject.feature.search.result.manual
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.android.mediproject.core.common.constant.MedicationType
 import com.android.mediproject.core.domain.GetMedicineApprovalListUseCase
 import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.io.Serializable
 import javax.inject.Inject
@@ -43,14 +41,7 @@ class ManualSearchResultViewModel @Inject constructor(
                 itemName = parameter.itemName,
                 entpName = parameter.entpName,
                 medicationType = parameter.medicationType.description,
-            ).let { pager ->
-                pager.map { pagingData ->
-                    pagingData.map { item ->
-                        item.onClick = this@ManualSearchResultViewModel::openMedicineInfo
-                        item
-                    }
-                }
-            }.cachedIn(viewModelScope)
+            ).cachedIn(viewModelScope)
         } else {
             emptyFlow<PagingData<ApprovedMedicineItemDto>>().cachedIn(viewModelScope)
         }
@@ -95,12 +86,6 @@ class ManualSearchResultViewModel @Inject constructor(
         }
     }
 
-    /**
-     * 약 정보 화면으로 이동
-     */
-    fun openMedicineInfo(approvedMedicineItemDto: ApprovedMedicineItemDto) {
-
-    }
 
 }
 

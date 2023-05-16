@@ -3,6 +3,7 @@ plugins {
     id("mediproject.android.feature")
     id("androidx.navigation.safeargs.kotlin")
     id(libs.plugins.kapt.get().pluginId)
+    id(libs.plugins.kotlin.parcelize.get().pluginId)
 }
 
 android {
@@ -21,6 +22,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
     implementation(project(":core:model"))
+    implementation(project(":core:domain"))
     implementation(project(":feature:comments"))
     implementation(project(":feature:search"))
     implementation(project(":feature:penalties"))

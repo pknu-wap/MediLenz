@@ -2,4 +2,5 @@
 <resources>
     <item name="progressBar" type="id" />
     <item name="progressText" type="id" />
+    <item name="fragmentContainerView" type="id" />
 </resources>

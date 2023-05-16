@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("mediproject.android.feature")
     id("kotlinx-serialization")
-
+    id(libs.plugins.kapt.get().pluginId)
 }
 
 android {
@@ -29,5 +29,6 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.okhttp.logginginterceptor)
     implementation(libs.okhttp)
-
+    kapt(libs.androidx.hilt.compilerKapt)
+    kapt(libs.androidx.hilt.work.compilerKapt)
 }

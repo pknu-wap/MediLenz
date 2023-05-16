@@ -20,5 +20,6 @@
     <include app:graph="@navigation/comments_nav" />
     <include app:graph="@navigation/interestedmedicine_nav" />
     <include app:graph="@navigation/camera_nav" />
+    <include app:graph="@navigation/medicine_details_nav" />
 
 </navigation>

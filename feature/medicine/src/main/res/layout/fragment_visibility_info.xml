@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.main.MedicineInfoViewModel"
+            type="com.android.mediproject.feature.medicine.visibility.VisibilityInfoViewModel"
             />
 
     </data>
@@ -17,19 +15,13 @@
         android:layout_height="match_parent"
         >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <com.android.mediproject.feature.medicine.visibility.MedicineVisibilityInfoView
+            android:id="@+id/medicineVisibilityInfoView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            />
 
-            <com.android.mediproject.feature.visibility.MedicineVisibilityInfoView
-                android:id="@+id/medicineVisibilityInfoView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 

@@ -36,6 +36,10 @@ gradlePlugin {
             id = "mediproject.android.application.compose"
             implementationClass = "ComposeApplicationConventionPlugin"
         }
+        register("androidFeatureCompose") {
+            id = "mediproject.android.feature.compose"
+            implementationClass = "ComposeFeatureConventionPlugin"
+        }
         register("androidFeature") {
             id = "mediproject.android.feature"
             implementationClass = "FeatureConventionPlugin"

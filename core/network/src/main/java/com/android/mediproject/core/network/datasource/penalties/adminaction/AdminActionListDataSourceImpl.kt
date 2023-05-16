@@ -18,28 +18,26 @@ class AdminActionListDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): PagingSource.LoadResult<Int, AdminActionListResponse.Body.Item> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AdminActionListResponse.Body.Item> {
         val currentPage = params.key ?: 1
 
         return try {
-            adminActionDataSource.getAdminActionList(currentPage).let { result ->
-                result.fold(onSuccess = { response ->
-                    val nextKey = response.body?.let { body ->
-                        if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
-                        else currentPage + 1
-                    }
-                    LoadResult.Page(
-                        data = response.body?.items ?: emptyList(),
-                        prevKey = null,
-                        nextKey = nextKey,
-                    )
-                }, onFailure = { throwable ->
-                    PagingSource.LoadResult.Error(throwable)
-                })
-            }
+            adminActionDataSource.getAdminActionList(currentPage).fold(onSuccess = { response ->
+                val nextKey = response.body.let { body ->
+                    if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
+                    else currentPage + 1
+                }
+                LoadResult.Page(
+                    data = response.body.items,
+                    prevKey = null,
+                    nextKey = nextKey,
+                )
+            }, onFailure = {
+                LoadResult.Error(it)
+            })
 
         } catch (e: Exception) {
-            PagingSource.LoadResult.Error(e)
+            LoadResult.Error(e)
         }
     }
 }
