@@ -10,6 +10,8 @@ import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprova
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepositoryImpl
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepository
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepositoryImpl
+import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
+import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
@@ -44,10 +46,13 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesGranuleIdentificationRepository(): GranuleIdentificationRepository = GranuleIdentificationRepositoryImpl()
+    fun providesGranuleIdentificationRepository(
+        granuleIdentificationDataSource: GranuleIdentificationDataSource
+    ): GranuleIdentificationRepository = GranuleIdentificationRepositoryImpl(granuleIdentificationDataSource)
 
     @Provides
     @Singleton
-    fun providesElderlyCautionRepository(): ElderlyCautionRepository = ElderlyCautionRepositoryImpl()
+    fun providesElderlyCautionRepository(elderlyCautionDataSource: ElderlyCautionDataSource): ElderlyCautionRepository =
+        ElderlyCautionRepositoryImpl(elderlyCautionDataSource)
 
 }

@@ -6,20 +6,17 @@ import com.android.mediproject.core.network.module.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onResponse
 import javax.inject.Inject
 
-class ElderlyCautionDataSourceImpl : ElderlyCautionDataSource {
+class ElderlyCautionDataSourceImpl @Inject constructor(private val dataGoKrNetworkApi: DataGoKrNetworkApi) : ElderlyCautionDataSource {
 
-    @Inject
-    private lateinit var dataGoKrNetworkApi: DataGoKrNetworkApi
 
     override suspend fun getElderlyCaution(itemName: String?, itemSeq: String?): Result<ElderlyCautionResponse> =
-        dataGoKrNetworkApi.getElderlyCaution(itemName = itemName, itemSeq = itemSeq).onResponse()
-            .fold(onSuccess = { response ->
-                response.isSuccess().let {
-                    if (it == DataGoKrResult.isSuccess) Result.success(response)
-                    else Result.failure(Throwable(it.failedMessage))
-                }
-            }, onFailure = {
-                Result.failure(it)
-            })
+        dataGoKrNetworkApi.getElderlyCaution(itemName = itemName, itemSeq = itemSeq).onResponse().fold(onSuccess = { response ->
+            response.isSuccess().let {
+                if (it == DataGoKrResult.isSuccess) Result.success(response)
+                else Result.failure(Throwable(it.failedMessage))
+            }
+        }, onFailure = {
+            Result.failure(it)
+        })
 
 }

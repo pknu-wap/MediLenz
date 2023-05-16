@@ -4,9 +4,10 @@ import com.android.mediproject.core.model.remote.granule.GranuleIdentificationIn
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
 import javax.inject.Inject
 
-class GranuleIdentificationRepositoryImpl : GranuleIdentificationRepository {
+class GranuleIdentificationRepositoryImpl @Inject constructor(
+    private val dataSource: GranuleIdentificationDataSource
+) : GranuleIdentificationRepository {
 
-    @Inject private lateinit var dataSource: GranuleIdentificationDataSource
 
     override suspend fun getGranuleIdentificationInfo(
         itemName: String?, entpName: String?, itemSeq: String?

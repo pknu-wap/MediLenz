@@ -29,7 +29,7 @@ class VisibilityInfoFragment :
     override val fragmentViewModel: VisibilityInfoViewModel by viewModels()
 
     private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>({
-        requireParentFragment().requireParentFragment()
+        requireParentFragment()
     })
 
     private var dialog: AlertDialog? = null
@@ -37,17 +37,22 @@ class VisibilityInfoFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dialog = showLoadingDialog(requireActivity(), null)
 
         viewLifecycleOwner.repeatOnStarted {
+
+            launch {
+                fragmentViewModel.granuleTextTags.collect {
+                    binding.medicineVisibilityInfoView.text = it
+                    dialog?.dismiss()
+                }
+            }
 
             launch {
 
                 fragmentViewModel.granuleIdentification.collect {
                     when (it) {
                         is UiState.Success -> {
-                            binding.data = it.data
-                            dialog?.dismiss()
+                            fragmentViewModel.createDataTags(requireContext())
                         }
 
                         else -> {}
@@ -59,11 +64,9 @@ class VisibilityInfoFragment :
                 medicineInfoViewModel.medicineDetails.collectLatest {
                     when (it) {
                         is UiState.Success -> {
-                            it.data.also { medicineInfo ->
-                                fragmentViewModel.getGranuleIdentificationInfo(
-                                    itemName = null, entpName = null, itemSeq = medicineInfo.itemSequence
-                                )
-                            }
+                            fragmentViewModel.getGranuleIdentificationInfo(
+                                itemName = null, entpName = null, itemSeq = it.data.itemSequence
+                            )
                         }
 
                         else -> {}
@@ -72,6 +75,11 @@ class VisibilityInfoFragment :
             }
 
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog = showLoadingDialog(requireActivity(), null)
     }
 
 }

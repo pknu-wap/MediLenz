@@ -6,9 +6,8 @@ import com.android.mediproject.core.network.module.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onResponse
 import javax.inject.Inject
 
-class GranuleIdentificationDataSourceImpl : GranuleIdentificationDataSource {
-
-    @Inject private lateinit var networkApi: DataGoKrNetworkApi
+class GranuleIdentificationDataSourceImpl @Inject constructor(private val networkApi: DataGoKrNetworkApi) :
+    GranuleIdentificationDataSource {
 
     override suspend fun getGranuleIdentificationInfo(
         itemName: String?,

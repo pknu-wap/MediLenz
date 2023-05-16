@@ -71,11 +71,13 @@ object MedicineApprovalNetwork {
 
     @Provides
     @Singleton
-    fun providesGranuleIdentificationDataSource(): GranuleIdentificationDataSource = GranuleIdentificationDataSourceImpl()
+    fun providesGranuleIdentificationDataSource(dataGoKrNetworkApi: DataGoKrNetworkApi): GranuleIdentificationDataSource =
+        GranuleIdentificationDataSourceImpl(dataGoKrNetworkApi)
 
     @Provides
     @Singleton
-    fun providesElderlyCautionDataSource(): ElderlyCautionDataSource = ElderlyCautionDataSourceImpl()
+    fun providesElderlyCautionDataSource(dataGoKrNetworkApi: DataGoKrNetworkApi): ElderlyCautionDataSource =
+        ElderlyCautionDataSourceImpl(dataGoKrNetworkApi)
 
 }
 

@@ -5,25 +5,31 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import java.lang.ref.WeakReference
 
+fun showLoadingDialog(context: Context, textMessage: String?): AlertDialog? {
 
-fun showLoadingDialog(context: Context, textMessage: String?): AlertDialog {
+    val progressIndicatorWeak = WeakReference<ProgressIndicator>(ProgressIndicator(context, null, textMessage))
+    var progressIndicator = progressIndicatorWeak.get()
 
-    val progressIndicator = ProgressIndicator(context, null, textMessage)
-    return AlertDialog.Builder(context).setView(progressIndicator).setCancelable(false).create().let {
-        it.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        //width : 70% of screen, height : wrap content
-        it.window?.attributes = it.window?.attributes?.apply {
-            width = (context.resources.displayMetrics.widthPixels * 0.7).toInt()
-            height = ViewGroup.LayoutParams.WRAP_CONTENT
+    val dialogReference = WeakReference(progressIndicator?.let {
+        AlertDialog.Builder(context).setView(progressIndicator).setCancelable(false).create().also {
+            it.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            //width : 70% of screen, height : wrap content
+            it.window?.attributes = it.window?.attributes?.apply {
+                width = (context.resources.displayMetrics.widthPixels * 0.7).toInt()
+                height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+            it.setCanceledOnTouchOutside(false)
         }
-        it.setCanceledOnTouchOutside(false)
-        val weakReference = WeakReference(it)
+    })
 
-        it.setOnDismissListener {
-            weakReference.clear()
+    return dialogReference.get()?.also { dialog ->
+        dialog.setOnDismissListener {
+            progressIndicatorWeak.clear()
+            dialogReference.clear()
+            progressIndicator = null
         }
 
-        it.show()
-        it
+        dialog.show()
     }
+
 }
