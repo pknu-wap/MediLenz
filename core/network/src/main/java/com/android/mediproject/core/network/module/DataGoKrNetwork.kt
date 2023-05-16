@@ -5,11 +5,14 @@ import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.model.remote.adminaction.AdminActionListResponse
+import com.android.mediproject.core.model.remote.elderlycaution.ElderlyCautionResponse
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
 import com.android.mediproject.core.model.remote.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
+import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
+import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSourceImpl
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSourceImpl
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
@@ -70,6 +73,10 @@ object MedicineApprovalNetwork {
     @Singleton
     fun providesGranuleIdentificationDataSource(): GranuleIdentificationDataSource = GranuleIdentificationDataSourceImpl()
 
+    @Provides
+    @Singleton
+    fun providesElderlyCautionDataSource(): ElderlyCautionDataSource = ElderlyCautionDataSourceImpl()
+
 }
 
 interface DataGoKrNetworkApi {
@@ -81,7 +88,7 @@ interface DataGoKrNetworkApi {
         @Query("entp_name", encoded = true) entpName: String?,
         @Query("spclty_pblc", encoded = true) medicationType: String?,
         @Query("pageNo") pageNo: Int,
-        @Query("type") type: String = "json",
+        @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
     ): Response<MedicineApprovalListResponse>
 
@@ -91,7 +98,7 @@ interface DataGoKrNetworkApi {
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("item_name", encoded = true) itemName: String,
         @Query("pageNo") pageNo: Int = 1,
-        @Query("type") type: String = "json",
+        @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = 100
     ): Response<MedicineDetailInfoResponse>
 
@@ -102,7 +109,7 @@ interface DataGoKrNetworkApi {
     suspend fun getRecallSuspensionList(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int,
-        @Query("type") type: String = "json",
+        @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
     ): Response<RecallSuspensionListResponse>
 
@@ -116,7 +123,7 @@ interface DataGoKrNetworkApi {
     suspend fun getDetailRecallSuspensionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = 1,
-        @Query("type") type: String = "json",
+        @Query("type") type: String = JSON,
         @Query("Entrps", encoded = true) company: String?,
         @Query("Prduct", encoded = true) product: String?,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
@@ -129,7 +136,7 @@ interface DataGoKrNetworkApi {
     suspend fun getAdminActionList(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int,
-        @Query("type") type: String = "json",
+        @Query("type") type: String = JSON,
         @Query("order", encoded = true) order: String = "Y",
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
     ): Response<AdminActionListResponse>
@@ -148,7 +155,47 @@ interface DataGoKrNetworkApi {
         @Query("item_name") itemName: String?,
         @Query("entp_name") entpName: String?,
         @Query("item_seq") itemSeq: String?,
-        @Query("type") type: String = "json",
+        @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
     ): Response<GranuleIdentificationInfoResponse>
+
+
+    /**
+     * DUR 병용금기 목록 조회
+     *
+     * @param itemName 의약품명
+     * @param itemSeq 품목기준코드
+     *
+     */
+    @GET(value = "DURIrdntInfoService02/getUsjntTabooInfoList01")
+    suspend fun getCombinationContraindications(
+        @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
+        @Query("pageNo") pageNo: String = "1",
+        @Query("typeName") typeName: String = "병용금기",
+        @Query("itemName") itemName: String?,
+        @Query("itemSeq") itemSeq: String?,
+        @Query("type") type: String = JSON,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
+    ): Response<GranuleIdentificationInfoResponse>
+
+
+    /**
+     * DUR 노인 주의 정보 조회
+     *
+     * @param itemName 의약품명
+     * @param itemSeq 품목기준코드
+     *
+     */
+    @GET(value = "DURPrdlstInfoService02/getOdsnAtentInfoList2")
+    suspend fun getElderlyCaution(
+        @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
+        @Query("pageNo") pageNo: String = "1",
+        @Query("typeName") typeName: String = "노인주의",
+        @Query("itemName") itemName: String?,
+        @Query("itemSeq") itemSeq: String?,
+        @Query("type") type: String = JSON,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
+    ): Response<ElderlyCautionResponse>
 }
+
+private const val JSON = "json"
