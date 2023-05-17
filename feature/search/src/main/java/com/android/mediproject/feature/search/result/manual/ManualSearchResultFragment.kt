@@ -34,6 +34,11 @@ class ManualSearchResultFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
+            searchResultRecyclerView.apply {
+                setHasFixedSize(true)
+                itemAnimator = null
+            }
+
             val searchResultListAdapter = ApprovedMedicinesAdapter().also { adapter ->
                 adapter.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { adapter::retry },
                     footer = PagingLoadStateAdapter { adapter::retry })

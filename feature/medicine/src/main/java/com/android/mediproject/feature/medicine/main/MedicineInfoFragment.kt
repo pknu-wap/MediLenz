@@ -35,13 +35,12 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = fragmentViewModel
-
         binding.apply {
             viewModel = fragmentViewModel
             root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
 
+                    // coordinatorlayout으로 인해 viewpager의 높이가 휴대폰 화면 하단을 벗어나 버리는 현상을 방지하기 위해 사용
                     val viewPagerHeight = rootLayout.height - topAppBar.height
                     contentViewPager.layoutParams =
                         CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, viewPagerHeight).apply {
@@ -50,12 +49,14 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
                     // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
                     topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+                        // 스크롤 할 때 마다 medicinePrimaryInfoViewgroup의 투명도 조정
                         medicinePrimaryInfoViewgroup.alpha =
                             1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
                                 if (this == -1.0f) medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
                                 else if (this > -0.8f) medicinePrimaryInfoViewgroup.visibility = View.VISIBLE
                             }
 
+                        // 스크롤 할 때 마다 viewpager의 높이를 조정
                         contentViewPager.layoutParams =
                             CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, (viewPagerHeight - verticalOffset)).apply {
                                 behavior = AppBarLayout.ScrollingViewBehavior()
@@ -78,7 +79,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                     }
 
                     is UiState.Error -> {
-
+                        dialog?.dismiss()
                     }
 
                     is UiState.Loading -> {
@@ -88,9 +89,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                         }
                     }
 
-                    is UiState.Initial -> {
-
-                    }
+                    else -> Unit
 
                 }
             }

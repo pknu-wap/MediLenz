@@ -64,7 +64,7 @@ class MedicineSafeUsageItemFragment :
                     when (it) {
                         is UiState.Success -> {
                             binding.elderlyCaution.title.text = getString(R.string.elderlyCaution)
-                            binding.elderlyCaution.description.text = it.data.prohibitionContent ?: "정보가 없습니다."
+                            binding.elderlyCaution.description.text = it.data.prohibitionContent
                         }
 
                         else -> {}

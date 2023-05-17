@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.medicine.visibility.VisibilityInfoViewModel"
+            type="com.android.mediproject.feature.medicine.granule.GranuleInfoViewModel"
             />
     </data>
 
@@ -16,11 +16,12 @@
         >
 
         <TextView
-            android:id="@+id/medicineVisibilityInfoView"
+            android:id="@+id/granuleInfoTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:text="@{viewModel.granuleTextTags}"
+            android:bufferType="spannable"
+            asyncText="@{viewModel.granuleTextTags}"
             />
 
 

@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.medicine.visibility
+package com.android.mediproject.feature.medicine.granule
 
 import android.os.Bundle
 import android.view.View
@@ -7,7 +7,7 @@ import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.dialog.showLoadingDialog
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.medicine.databinding.FragmentVisibilityInfoBinding
+import com.android.mediproject.feature.medicine.databinding.FragmentGranuleInfoBinding
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -21,12 +21,11 @@ import repeatOnStarted
  *
  * 상세 정보를 보기 위한 또는 버튼이 제공됩니다.
  */
-
 @AndroidEntryPoint
-class VisibilityInfoFragment :
-    BaseFragment<FragmentVisibilityInfoBinding, VisibilityInfoViewModel>(FragmentVisibilityInfoBinding::inflate) {
+class GranuleInfoFragment :
+    BaseFragment<FragmentGranuleInfoBinding, GranuleInfoViewModel>(FragmentGranuleInfoBinding::inflate) {
 
-    override val fragmentViewModel: VisibilityInfoViewModel by viewModels()
+    override val fragmentViewModel: GranuleInfoViewModel by viewModels()
 
     private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>({
         requireParentFragment()
@@ -37,15 +36,7 @@ class VisibilityInfoFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         viewLifecycleOwner.repeatOnStarted {
-
-            launch {
-                fragmentViewModel.granuleTextTags.collect {
-                    binding.medicineVisibilityInfoView.text = it
-                    dialog?.dismiss()
-                }
-            }
 
             launch {
 
@@ -53,6 +44,7 @@ class VisibilityInfoFragment :
                     when (it) {
                         is UiState.Success -> {
                             fragmentViewModel.createDataTags(requireContext())
+                            dialog?.dismiss()
                         }
 
                         else -> {}

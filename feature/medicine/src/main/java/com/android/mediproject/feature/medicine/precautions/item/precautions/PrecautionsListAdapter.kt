@@ -11,6 +11,11 @@ import com.android.mediproject.feature.medicine.databinding.ItemViewPrecautionsB
 import java.lang.ref.WeakReference
 
 class PrecautionsListAdapter : ListAdapter<XMLParsedResult.Article, ViewHolder>(Diff) {
+
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(ItemViewPrecautionsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 

@@ -1,8 +1,8 @@
-package com.android.mediproject.feature.medicine.visibility
+package com.android.mediproject.feature.medicine.granule
 
 import android.content.Context
 import android.text.Html
-import android.text.Spanned
+import androidx.core.text.toSpannable
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class VisibilityInfoViewModel @Inject constructor(
+class GranuleInfoViewModel @Inject constructor(
     private val getGranuleIdentificationUseCase: GetGranuleIdentificationUseCase,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel() {
@@ -28,7 +28,7 @@ class VisibilityInfoViewModel @Inject constructor(
     private val _granuleIdentification = MutableStateFlow<UiState<GranuleIdentificationInfoDto>>(UiState.Loading)
     val granuleIdentification get() = _granuleIdentification.asStateFlow()
 
-    private val _granuleTextTags = MutableStateFlow<Spanned>(Html.fromHtml("", Html.FROM_HTML_MODE_COMPACT))
+    private val _granuleTextTags = MutableStateFlow(Html.fromHtml("", Html.FROM_HTML_MODE_COMPACT).toSpannable())
     val granuleTextTags get() = _granuleTextTags.asStateFlow()
 
     fun getGranuleIdentificationInfo(
@@ -130,9 +130,9 @@ class VisibilityInfoViewModel @Inject constructor(
                                             }
                                             builder.append("<br>")
                                         }
-                                        _granuleTextTags.value = Html.fromHtml(builder.toString(), Html.FROM_HTML_MODE_COMPACT)
+                                        _granuleTextTags.value =
+                                            Html.fromHtml(builder.toString(), Html.FROM_HTML_MODE_COMPACT).toSpannable()
                                     }
-
                                     builder?.clear()
                                     builder = null
                                 }
