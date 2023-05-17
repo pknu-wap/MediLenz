@@ -1,7 +1,7 @@
 package com.android.mediproject.core.common.bindingadapter
 
 import android.graphics.Bitmap
-import android.text.Spannable
+import android.text.Spanned
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.PrecomputedTextCompat
@@ -38,7 +38,7 @@ object BindingAdapter {
 
     @BindingAdapter("asyncText")
     @JvmStatic
-    fun setAsyncText(textView: TextView, text: Spannable) {
+    fun setAsyncText(textView: TextView, text: Spanned) {
         val precomputedText = PrecomputedTextCompat.create(text, TextViewCompat.getTextMetricsParams(textView))
         TextViewCompat.setPrecomputedText(textView, precomputedText)
     }

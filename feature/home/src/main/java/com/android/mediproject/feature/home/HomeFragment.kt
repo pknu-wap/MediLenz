@@ -21,10 +21,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
         initSearchBar()
         initChildFragments()
 
-        binding.apply{
+        binding.apply {
+            viewModel = fragmentViewModel
+
             homeBar1.bringToFront()
             homeBar2.bringToFront()
-
 
             /**
              * 일반 적인 경우에는 emasredHeight로 그냥 측정되지만, 현재 headerLayout에 크기가 wrap_content이며,
@@ -33,14 +34,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
              */
 
             headerLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-            val initialHeight = (headerLayout.measuredHeight*1.2).toFloat()
+            val initialHeight = (headerLayout.measuredHeight * 1.2).toFloat()
             log(initialHeight.toString())
 
             scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
                 log(scrollY.toString())
-                log((scrollY/initialHeight).toString())
-                binding.homeBar2.alpha = (scrollY/initialHeight)
+                log((scrollY / initialHeight).toString())
+                binding.homeBar2.alpha = (scrollY / initialHeight)
             }
+
+            fragmentViewModel.createHeaderText(getString(R.string.headerTextOnHome))
         }
     }
 
