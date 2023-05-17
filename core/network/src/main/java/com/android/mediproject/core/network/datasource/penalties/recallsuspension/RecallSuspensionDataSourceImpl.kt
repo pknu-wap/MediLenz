@@ -15,19 +15,18 @@ class RecallSuspensionDataSourceImpl @Inject constructor(
 
     override suspend fun getDetailRecallSuspensionInfo(
         company: String?, product: String?
-    ) = dataGoKrNetworkApi.getDetailRecallSuspensionInfo(company = company, product = product).onResponse()
-        .fold(onSuccess = { response ->
-            response.isSuccess().let {
-                if (it == DataGoKrResult.isSuccess) Result.success(response)
-                else Result.failure(Throwable(it.failedMessage))
-            }
-        }, onFailure = {
-            Result.failure(it)
-        })
+    ) = dataGoKrNetworkApi.getDetailRecallSuspensionInfo(company = company, product = product).onResponse().fold(onSuccess = { response ->
+        response.isSuccess().let {
+            if (it == DataGoKrResult.isSuccess) Result.success(response)
+            else Result.failure(Throwable(it.failedMessage))
+        }
+    }, onFailure = {
+        Result.failure(it)
+    })
 
 
-    override suspend fun getRecallSuspensionList(pageNo: Int) =
-        dataGoKrNetworkApi.getRecallSuspensionList(pageNo = pageNo).onResponse().fold(onSuccess = { response ->
+    override suspend fun getRecallSuspensionList(pageNo: Int, numOfRows: Int) =
+        dataGoKrNetworkApi.getRecallSuspensionList(pageNo = pageNo, numOfRows = numOfRows).onResponse().fold(onSuccess = { response ->
             response.isSuccess().let {
                 if (it == DataGoKrResult.isSuccess) Result.success(response)
                 else Result.failure(Throwable(it.failedMessage))

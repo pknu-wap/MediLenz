@@ -5,20 +5,19 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.android.mediproject.feature.summaryhead.recentsearchlist.RecentCommentListFragment"
         >
 
         <com.android.mediproject.core.ui.base.view.HeaderForElementsView
             android:id="@+id/headerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:header_title="@string/penaltyList"
-            app:more_title="@string/read_more"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
-            app:visibility_target_view="@id/penaltyList"
+            app:header_title="@string/penaltyList"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:more_title="@string/read_more"
+            app:visibility_target_view="@id/penaltyList"
             />
 
         <androidx.recyclerview.widget.RecyclerView
