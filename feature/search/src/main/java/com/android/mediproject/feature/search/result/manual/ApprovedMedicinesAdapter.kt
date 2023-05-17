@@ -9,7 +9,7 @@ import com.android.mediproject.core.common.bindingadapter.GlideApp
 import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto
 import com.android.mediproject.feature.search.databinding.ManualMedicineItemBinding
 
-class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, ApprovedMedicinesAdapter.ViewHolder>(MedicineComparator) {
+class ApprovedMedicinesAdapter : PagingDataAdapter<ApprovedMedicineItemDto, ApprovedMedicinesAdapter.ViewHolder>(MedicineComparator) {
 
     init {
         setHasStableIds(true)
@@ -43,10 +43,9 @@ class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, Ap
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position)?.apply {
-            holder.bind(this)
-        }
+        getItem(position)?.let { holder.bind(it) }
     }
+
 }
 
 object MedicineComparator : DiffUtil.ItemCallback<ApprovedMedicineItemDto>() {

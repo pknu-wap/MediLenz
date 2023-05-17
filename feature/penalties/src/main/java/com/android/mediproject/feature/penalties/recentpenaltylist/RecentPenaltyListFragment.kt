@@ -2,7 +2,9 @@ package com.android.mediproject.feature.penalties.recentpenaltylist
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.penalties.databinding.FragmentRecentPenaltyListBinding
@@ -58,6 +60,8 @@ class RecentPenaltyListFragment :
     private fun initHeader() {
         binding.headerView.setOnExpandClickListener {}
 
-        binding.headerView.setOnMoreClickListener {}
+        binding.headerView.setOnMoreClickListener {
+            findNavController().navigate("medilens://main/news_nav".toUri())
+        }
     }
 }

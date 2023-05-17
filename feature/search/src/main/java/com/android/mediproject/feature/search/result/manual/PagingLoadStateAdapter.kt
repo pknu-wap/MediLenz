@@ -1,45 +1,25 @@
 package com.android.mediproject.feature.search.result.manual
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.ui.databinding.LoadStateItemBinding
+import com.android.mediproject.core.ui.base.view.LoadStateViewHolder
+import com.android.mediproject.core.ui.base.view.LoadingState
 
 class PagingLoadStateAdapter(
     private val retry: () -> Unit
 ) : LoadStateAdapter<LoadStateViewHolder>() {
 
-
-    override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) = holder.bind(loadState)
-
-    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder = LoadStateViewHolder(
-        LoadStateItemBinding.inflate(
-            LayoutInflater.from(parent.context), null, false
-        ), retry
-    )
-}
-
-class LoadStateViewHolder(private val binding: LoadStateItemBinding, private val retry: () -> Unit) : RecyclerView.ViewHolder(
-    binding.root
-) {
-
     init {
-        binding.retryButton.setOnClickListener {
-            retry.invoke()
-        }
+        setHasStableIds(true)
     }
 
-    fun bind(loadState: LoadState) {
-        binding.apply {
-            if (loadState is LoadState.Error)
-                errorTextView.text = loadState.error.localizedMessage
-
-            progressBar.isVisible = loadState is LoadState.Loading
-            retryButton.isVisible = loadState is LoadState.Error
-            errorTextView.isVisible = loadState is LoadState.Error
-        }
+    override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) = when (loadState) {
+        is LoadState.Loading -> holder.setLoadingState(LoadingState.Loading)
+        is LoadState.Error -> holder.setLoadingState(LoadingState.Error(loadState.error.message ?: ""))
+        is LoadState.NotLoading -> holder.setLoadingState(LoadingState.NotLoading)
     }
+
+    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder =
+        LoadStateViewHolder(parent.context, retry)
 }

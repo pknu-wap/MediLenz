@@ -34,20 +34,23 @@ class ManualSearchResultFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
+            viewModel = fragmentViewModel
+
             searchResultRecyclerView.apply {
                 setHasFixedSize(true)
+                setItemViewCacheSize(8)
                 itemAnimator = null
+                addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                    setDrawable(ContextCompat.getDrawable(requireContext(), com.android.mediproject.core.ui.R.drawable.divider)!!)
+                })
             }
 
-            val searchResultListAdapter = ApprovedMedicinesAdapter().also { adapter ->
-                adapter.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { adapter::retry },
-                    footer = PagingLoadStateAdapter { adapter::retry })
+            val searchResultListAdapter = ApprovedMedicinesAdapter().also {
+                it.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { it.retry() },
+                    footer = PagingLoadStateAdapter { it.retry() })
             }
 
-            viewModel = fragmentViewModel
-            searchResultRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-                setDrawable(ContextCompat.getDrawable(requireContext(), com.android.mediproject.core.ui.R.drawable.divider)!!)
-            })
+
             searchResultRecyclerView.adapter = searchResultListAdapter
 
             filterBtn.setOnClickListener { it ->
@@ -56,17 +59,11 @@ class ManualSearchResultFragment :
                 ) { menuItem ->
 
                     when (menuItem.itemId) {
-                        R.id.listOnlySpecialtyMedicines -> {
-                            fragmentViewModel.searchMedicinesByMedicationType(MedicationType.SPECIALTY)
-                        }
+                        R.id.listOnlySpecialtyMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.SPECIALTY)
 
-                        R.id.listOnlyGenericMedicines -> {
-                            fragmentViewModel.searchMedicinesByMedicationType(MedicationType.GENERAL)
-                        }
+                        R.id.listOnlyGenericMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.GENERAL)
 
-                        R.id.listAllMedicines -> {
-                            fragmentViewModel.searchMedicinesByMedicationType(MedicationType.ALL)
-                        }
+                        R.id.listAllMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.ALL)
                     }
                     true
                 }
