@@ -8,21 +8,17 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.basicinfo.host.MedicineBasicInfoViewModel
-import com.android.mediproject.feature.medicine.main.BasicInfoType
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
 interface MedicineInfoItemFragmentFactory {
-    fun <T : BaseMedicineInfoItemFragment<*, *>> newInstance(basicInfoType: BasicInfoType, fragmentClass: KClass<T>): T
+    fun <T : BaseMedicineInfoItemFragment<*>> newInstance(fragmentClass: KClass<T>): T
 }
 
-abstract class BaseMedicineInfoItemFragment<T : ViewDataBinding, E : Any>(inflate: Inflate<T>) :
+abstract class BaseMedicineInfoItemFragment<T : ViewDataBinding>(inflate: Inflate<T>) :
     BaseFragment<T, MedicineBasicInfoViewModel>(inflate) {
 
     override val fragmentViewModel: MedicineBasicInfoViewModel by viewModels()
@@ -37,14 +33,10 @@ abstract class BaseMedicineInfoItemFragment<T : ViewDataBinding, E : Any>(inflat
     companion object : MedicineInfoItemFragmentFactory {
 
         @JvmStatic
-        override fun <T : BaseMedicineInfoItemFragment<*, *>> newInstance(
-            basicInfoType: BasicInfoType, fragmentClass: KClass<T>
+        override fun <T : BaseMedicineInfoItemFragment<*>> newInstance(
+            fragmentClass: KClass<T>
         ): T {
-            val fragment = fragmentClass.createInstance()
-            fragment.arguments = Bundle().apply {
-                putParcelable("basicInfoType", basicInfoType)
-            }
-            return fragment
+            return fragmentClass.createInstance()
         }
     }
 
@@ -52,18 +44,5 @@ abstract class BaseMedicineInfoItemFragment<T : ViewDataBinding, E : Any>(inflat
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
-
-    protected val collectingData: Flow<E> by lazy {
-        channelFlow<E> {
-            fragmentViewModel.basicInfoType.collectLatest { type ->
-                _medicineInfoViewModel.getDetailInfo(type)?.let { detailInfo ->
-                    send(detailInfo as E)
-                } ?: run {
-                    send(null as E)
-                }
-            }
-        }
-    }
-
 
 }

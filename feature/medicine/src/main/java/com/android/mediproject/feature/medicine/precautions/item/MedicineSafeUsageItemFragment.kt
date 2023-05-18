@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineSafeUseItemBinding
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,7 +62,7 @@ class MedicineSafeUsageItemFragment :
                 fragmentViewModel.elderlyCaution.collect {
                     when (it) {
                         is UiState.Success -> {
-                            binding.elderlyCaution.title.text = getString(R.string.elderlyCaution)
+                            binding.elderlyCaution.title.text = getString(com.android.mediproject.core.common.R.string.elderlyCaution)
                             binding.elderlyCaution.description.text = it.data.prohibitionContent
                         }
 

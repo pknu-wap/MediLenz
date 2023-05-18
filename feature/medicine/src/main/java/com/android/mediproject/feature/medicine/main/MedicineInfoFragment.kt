@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewTreeObserver
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.android.mediproject.core.common.dialog.LoadingDialog
@@ -49,7 +50,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                         medicinePrimaryInfoViewgroup.alpha =
                             1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
                                 if (this == -1.0f) medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
-                                else if (this > -0.8f) medicinePrimaryInfoViewgroup.visibility = View.VISIBLE
+                                else if (this > -0.8f) medicinePrimaryInfoViewgroup.isVisible = true
                             }
 
                         // 스크롤 할 때 마다 viewpager의 높이를 조정
@@ -70,8 +71,8 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             fragmentViewModel.medicineDetails.collect {
                 when (it) {
                     is UiState.Success -> {
-                        initTabs()
                         LoadingDialog.dismiss()
+                        initTabs()
                     }
 
                     is UiState.Error -> {
@@ -85,7 +86,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                         }
                     }
 
-                    else -> Unit
+                    is UiState.Initial -> {}
 
                 }
             }

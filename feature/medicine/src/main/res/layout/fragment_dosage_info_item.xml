@@ -22,6 +22,7 @@
             android:id="@+id/contentsTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:bufferType="spannable"
             app:layout_constraintTop_toTopOf="parent"
             />
 

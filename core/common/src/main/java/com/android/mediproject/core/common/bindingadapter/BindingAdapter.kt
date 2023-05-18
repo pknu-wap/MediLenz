@@ -38,8 +38,10 @@ object BindingAdapter {
 
     @BindingAdapter("asyncText")
     @JvmStatic
-    fun setAsyncText(textView: TextView, text: Spanned) {
-        val precomputedText = PrecomputedTextCompat.create(text, TextViewCompat.getTextMetricsParams(textView))
-        TextViewCompat.setPrecomputedText(textView, precomputedText)
+    fun setAsyncText(textView: TextView, text: Spanned?) {
+        if (text != null) {
+            val precomputedText = PrecomputedTextCompat.create(text, TextViewCompat.getTextMetricsParams(textView))
+            TextViewCompat.setPrecomputedText(textView, precomputedText)
+        }
     }
 }

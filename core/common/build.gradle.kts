@@ -36,5 +36,6 @@ dependencies {
     implementation(libs.bundles.glides)
     implementation(libs.lottie)
     kapt(libs.bundles.glides.kapt)
+    kapt(libs.androidx.hilt.compilerKapt)
     implementation(libs.androidx.paging.runtime)
 }

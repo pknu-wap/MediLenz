@@ -9,9 +9,7 @@ object LoadingDialog {
     private var dialog: AlertDialog? = null
 
     fun showLoadingDialog(context: Context, textMessage: String?) {
-
         dismiss()
-
         AlertDialog.Builder(context).setView(ProgressIndicator(context, null, textMessage)).setCancelable(false).create().also {
             it.window?.setBackgroundDrawableResource(android.R.color.transparent)
             it.window?.attributes = it.window?.attributes?.apply {
@@ -19,10 +17,7 @@ object LoadingDialog {
                 height = ViewGroup.LayoutParams.WRAP_CONTENT
             }
             it.setCanceledOnTouchOutside(false)
-            it.setOnDismissListener {
-                dialog = null
-            }
-
+            dialog = it
             it.show()
         }
 

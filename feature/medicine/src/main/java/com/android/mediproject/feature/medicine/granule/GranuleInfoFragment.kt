@@ -3,14 +3,12 @@ package com.android.mediproject.feature.medicine.granule
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.databinding.FragmentGranuleInfoBinding
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import repeatOnStarted
 
 /**
@@ -21,8 +19,7 @@ import repeatOnStarted
  * 상세 정보를 보기 위한 또는 버튼이 제공됩니다.
  */
 @AndroidEntryPoint
-class GranuleInfoFragment :
-    BaseFragment<FragmentGranuleInfoBinding, GranuleInfoViewModel>(FragmentGranuleInfoBinding::inflate) {
+class GranuleInfoFragment : BaseFragment<FragmentGranuleInfoBinding, GranuleInfoViewModel>(FragmentGranuleInfoBinding::inflate) {
 
     override val fragmentViewModel: GranuleInfoViewModel by viewModels()
 
@@ -34,42 +31,23 @@ class GranuleInfoFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.viewModel = fragmentViewModel
+
         viewLifecycleOwner.repeatOnStarted {
-
-            launch {
-
-                fragmentViewModel.granuleIdentification.collect {
-                    when (it) {
-                        is UiState.Success -> {
-                            fragmentViewModel.createDataTags(requireContext())
-                            LoadingDialog.dismiss()
-                        }
-
-                        else -> {}
+            medicineInfoViewModel.medicineDetails.collectLatest {
+                when (it) {
+                    is UiState.Success -> {
+                        fragmentViewModel.getGranuleIdentificationInfo(
+                            itemName = null, entpName = null, itemSeq = it.data.itemSequence, requireContext()
+                        )
                     }
-                }
-            }
 
-            launch {
-                medicineInfoViewModel.medicineDetails.collectLatest {
-                    when (it) {
-                        is UiState.Success -> {
-                            fragmentViewModel.getGranuleIdentificationInfo(
-                                itemName = null, entpName = null, itemSeq = it.data.itemSequence
-                            )
-                        }
-
-                        else -> {}
-                    }
+                    else -> {}
                 }
             }
 
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        LoadingDialog.showLoadingDialog(requireActivity(), null)
-    }
 
 }

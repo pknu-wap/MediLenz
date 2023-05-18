@@ -24,7 +24,6 @@ class ViewHolder(private val binding: ItemViewPrecautionsBinding) : RecyclerView
         binding.apply {
             this.precaution = text
             executePendingBindings()
-
         }
     }
 }
@@ -35,6 +34,6 @@ object Diff : DiffUtil.ItemCallback<Spanned>() {
     }
 
     override fun areContentsTheSame(oldItem: Spanned, newItem: Spanned): Boolean {
-        return oldItem.hashCode() == newItem.hashCode()
+        return oldItem.contentEquals(newItem)
     }
 }
