@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewTreeObserver
-import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.android.mediproject.core.common.dialog.showLoadingDialog
+import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -28,8 +27,6 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
     override val fragmentViewModel: MedicineInfoViewModel by viewModels()
 
-    private var dialog: AlertDialog? = null
-
     private val nagArgs: MedicineInfoArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,10 +39,9 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
                     // coordinatorlayout으로 인해 viewpager의 높이가 휴대폰 화면 하단을 벗어나 버리는 현상을 방지하기 위해 사용
                     val viewPagerHeight = rootLayout.height - topAppBar.height
-                    contentViewPager.layoutParams =
-                        CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, viewPagerHeight).apply {
-                            behavior = AppBarLayout.ScrollingViewBehavior()
-                        }
+                    contentViewPager.layoutParams = CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, viewPagerHeight).apply {
+                        behavior = AppBarLayout.ScrollingViewBehavior()
+                    }
 
                     // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
                     topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
@@ -75,17 +71,17 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                 when (it) {
                     is UiState.Success -> {
                         initTabs()
-                        dialog?.dismiss()
+                        LoadingDialog.dismiss()
                     }
 
                     is UiState.Error -> {
-                        dialog?.dismiss()
+                        LoadingDialog.dismiss()
                     }
 
                     is UiState.Loading -> {
                         fragmentViewModel.medicineName.value.let { medicineName ->
                             val msg = "$medicineName ${getString(R.string.loadingMedicineDetails)}"
-                            dialog = showLoadingDialog(requireActivity(), msg)
+                            LoadingDialog.showLoadingDialog(requireActivity(), msg)
                         }
                     }
 

@@ -8,11 +8,10 @@ import android.view.SurfaceHolder
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.common.dialog.showLoadingDialog
+import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -27,7 +26,6 @@ class MedicinesDetectorFragment :
 
     override val fragmentViewModel: MedicinesDetectorViewModel by activityViewModels()
 
-    private var dialog: AlertDialog? = null
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -99,7 +97,7 @@ class MedicinesDetectorFragment :
                         }
                     }
 
-                    dialog?.dismiss()
+                    LoadingDialog.dismiss()
                 }
             }
         }
@@ -110,8 +108,8 @@ class MedicinesDetectorFragment :
     private fun initializeCamera() {
         binding.apply {
 
-            dialog = showLoadingDialog(requireActivity(), getString(R.string.loadingAiModels))
-            
+            LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.loadingAiModels))
+
             val surfaceHolder = object : SurfaceHolder.Callback2 {
                 override fun surfaceCreated(holder: SurfaceHolder) {
                 }

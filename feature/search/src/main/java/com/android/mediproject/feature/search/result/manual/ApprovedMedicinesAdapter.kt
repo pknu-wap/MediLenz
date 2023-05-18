@@ -11,9 +11,6 @@ import com.android.mediproject.feature.search.databinding.ManualMedicineItemBind
 
 class ApprovedMedicinesAdapter : PagingDataAdapter<ApprovedMedicineItemDto, ApprovedMedicinesAdapter.ViewHolder>(MedicineComparator) {
 
-    init {
-        setHasStableIds(true)
-    }
 
     class ViewHolder(val binding: ManualMedicineItemBinding) : RecyclerView.ViewHolder(binding.root) {
         init {

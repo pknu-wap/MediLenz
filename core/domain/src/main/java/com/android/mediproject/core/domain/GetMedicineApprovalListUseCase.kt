@@ -2,6 +2,8 @@ package com.android.mediproject.core.domain
 
 import androidx.paging.map
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
+import com.android.mediproject.core.model.constants.MedicationType
+import com.android.mediproject.core.model.parameters.ApprovalListSearchParameter
 import com.android.mediproject.core.model.remote.medicineapproval.toDto
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -11,13 +13,12 @@ class GetMedicineApprovalListUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(
-        itemName: String?,
-        entpName: String?,
-        medicationType: String?,
+        parameter: ApprovalListSearchParameter
     ) = medicineApprovalRepository.getMedicineApprovalList(
-        itemName = itemName,
-        entpName = entpName,
-        medicationType = medicationType,
+        itemName = parameter.itemName, entpName = parameter.entpName, medicationType = when (parameter.medicationType) {
+            MedicationType.ALL -> null
+            else -> parameter.medicationType.description
+        }
     ).let { pager ->
         pager.map { pagingData ->
             pagingData.map { item ->

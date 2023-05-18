@@ -10,9 +10,6 @@ class PagingLoadStateAdapter(
     private val retry: () -> Unit
 ) : LoadStateAdapter<LoadStateViewHolder>() {
 
-    init {
-        setHasStableIds(true)
-    }
 
     override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) = when (loadState) {
         is LoadState.Loading -> holder.setLoadingState(LoadingState.Loading)

@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
@@ -85,18 +86,12 @@ class HeaderForElementsView constructor(
                     setOnClickListener {
                         setExpand(!expanded)
                     }
-                    setTitle(title)
-
                 }
+                setTitle(title)
 
 
                 // 확장 버튼
                 expandBtnView = ImageView(context).apply {
-                    setImageDrawable(
-                        AppCompatResources.getDrawable(
-                            context, getExpandIcon()
-                        )
-                    )
                     setOnClickListener {
                         setExpand(!expanded)
                     }
@@ -122,18 +117,21 @@ class HeaderForElementsView constructor(
 
 
                 CircularProgressIndicator(context).apply {
-                    val size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14f, resources.displayMetrics).toInt()
-                    layoutParams = ConstraintLayout.LayoutParams(size, size).apply {
-                        topToTop = LayoutParams.PARENT_ID
-                        bottomToBottom = LayoutParams.PARENT_ID
-                        leftToRight = expandBtnView.id
-                    }
+                    layoutParams =
+                        ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                            topToTop = LayoutParams.PARENT_ID
+                            bottomToBottom = LayoutParams.PARENT_ID
+                            leftToRight = expandBtnView.id
+                        }
                     id = R.id.indicator
 
                     isIndeterminate = true
-                    trackThickness = 3
-                }
+                    trackThickness = 5
 
+                    indicatorSize = titleFontSize.toInt() * 3
+
+                    this@HeaderForElementsView.addView(this)
+                }
 
                 // 더 보기 버튼
                 moreBtnView = TextView(context).apply {
@@ -156,15 +154,13 @@ class HeaderForElementsView constructor(
                     setBackgroundResource(outValue.resourceId)
                 }
 
-                this.apply {
+                apply {
                     addView(titleView)
                     addView(expandBtnView)
                     addView(moreBtnView)
 
                     clipChildren = false
                 }
-
-                onIndicatorVisibilityChanged(GONE)
 
             } finally {
                 typedArr.recycle()
@@ -180,8 +176,6 @@ class HeaderForElementsView constructor(
         }
     }
 
-    /// 확장 상태에 따라 알맞은 아이콘을 가져온다.
-    private fun getExpandIcon() = if (expanded) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24
 
     /**
      * 확장 버튼 클릭 콜백 설정
@@ -200,34 +194,51 @@ class HeaderForElementsView constructor(
     }
 
 
-    override fun onIndicatorVisibilityChanged(visibility: Int) {
-        findViewById<CircularProgressIndicator>(R.id.indicator).apply {
-            setVisibility(visibility)
-            when (visibility) {
-                View.VISIBLE -> show()
-                View.GONE -> hide()
-            }
-        }
-    }
-
+    /**
+     * 확장 버튼 클릭 시 호출
+     *
+     * @param expanded 확장 여부
+     *
+     */
     fun setExpand(expanded: Boolean) {
         this.expanded = expanded
         expandBtnView.setImageDrawable(
             AppCompatResources.getDrawable(
-                context, getExpandIcon()
+                context, if (expanded) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24
             )
         )
 
-        (parent.parent as View).findViewById<View>(targetViewId).apply {
-            visibility = if (visibility == View.VISIBLE) View.GONE
-            else View.VISIBLE
+        takeIf { targetViewId != -1 }?.let {
+            (parent.parent as View).findViewById<View>(targetViewId)?.apply {
+                visibility = if (expanded) View.VISIBLE
+                else View.GONE
+            }
         }
 
         onExpandClickListener?.onExpandClick(expanded)
     }
+
+    override fun onIndicatorVisibilityChanged(visibility: Boolean) {
+        findViewById<CircularProgressIndicator>(R.id.indicator)?.apply {
+
+            val visible = if (visibility) View.VISIBLE else View.GONE
+            setVisibility(visible)
+            when (visibility) {
+                true -> {
+                    show()
+                    expandBtnView.visibility = View.GONE
+                }
+
+                false -> {
+                    hide()
+                    expandBtnView.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
 }
 
-
 fun interface OnIndicatorVisibilityChangedListener {
-    fun onIndicatorVisibilityChanged(visibility: Int)
+    fun onIndicatorVisibilityChanged(visibility: Boolean)
 }

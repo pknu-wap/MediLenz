@@ -10,9 +10,6 @@ import com.android.mediproject.feature.medicine.databinding.ItemViewPrecautionsB
 
 class PrecautionsListAdapter : ListAdapter<Spanned, ViewHolder>(Diff) {
 
-    init {
-        setHasStableIds(true)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(ItemViewPrecautionsBinding.inflate(LayoutInflater.from(parent.context), parent, false))

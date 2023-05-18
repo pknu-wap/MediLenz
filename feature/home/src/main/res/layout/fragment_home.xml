@@ -71,7 +71,7 @@
                         android:lineSpacingMultiplier="1.2"
                         android:text="@{viewModel.headerText}"
                         android:textColor="@color/white"
-                        android:textSize="24sp"
+                        android:textSize="23sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"

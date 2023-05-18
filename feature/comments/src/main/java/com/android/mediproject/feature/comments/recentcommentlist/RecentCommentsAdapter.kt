@@ -9,9 +9,6 @@ import com.android.mediproject.core.ui.base.view.SimpleListItemView
 
 class RecentCommentsAdapter : ListAdapter<CommentDto, RecentCommentsAdapter.RecentCommentListViewHolder>(AsyncDiffer) {
 
-    init {
-        setHasStableIds(true)
-    }
 
     class RecentCommentListViewHolder(private val view: SimpleListItemView<CommentDto>) : RecyclerView.ViewHolder(view) {
 

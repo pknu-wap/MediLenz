@@ -2,9 +2,8 @@ package com.android.mediproject.feature.medicine.granule
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.common.dialog.showLoadingDialog
+import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.databinding.FragmentGranuleInfoBinding
@@ -31,7 +30,6 @@ class GranuleInfoFragment :
         requireParentFragment()
     })
 
-    private var dialog: AlertDialog? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +42,7 @@ class GranuleInfoFragment :
                     when (it) {
                         is UiState.Success -> {
                             fragmentViewModel.createDataTags(requireContext())
-                            dialog?.dismiss()
+                            LoadingDialog.dismiss()
                         }
 
                         else -> {}
@@ -71,7 +69,7 @@ class GranuleInfoFragment :
 
     override fun onStart() {
         super.onStart()
-        dialog = showLoadingDialog(requireActivity(), null)
+        LoadingDialog.showLoadingDialog(requireActivity(), null)
     }
 
 }

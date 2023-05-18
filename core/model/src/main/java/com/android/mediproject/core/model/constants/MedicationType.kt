@@ -1,4 +1,4 @@
-package com.android.mediproject.core.common.constant
+package com.android.mediproject.core.model.constants
 
 /**
  * 약품 타입

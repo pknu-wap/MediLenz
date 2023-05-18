@@ -32,8 +32,8 @@ class RecentPenaltyListFragment :
 
         initHeader()
         binding.apply {
-            binding.headerView.onIndicatorVisibilityChanged(View.VISIBLE)
-
+            headerView.onIndicatorVisibilityChanged(true)
+            headerView.setExpand(false)
             penaltyList.setHasFixedSize(true)
 
             val penaltyListAdapter = PenaltyListAdapter()
@@ -50,7 +50,7 @@ class RecentPenaltyListFragment :
 
                         is UiState.Success -> {
                             penaltyListAdapter.submitList(uiState.data)
-                            binding.headerView.onIndicatorVisibilityChanged(View.GONE)
+                            binding.headerView.onIndicatorVisibilityChanged(false)
                             binding.headerView.setExpand(true)
                         }
                     }

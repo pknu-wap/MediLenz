@@ -8,6 +8,7 @@ import com.android.mediproject.core.model.remote.medicineapproval.Item
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalListDataSourceImpl
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class MedicineApprovalRepositoryImpl @Inject constructor(private val medicineApprovalDataSource: MedicineApprovalDataSource) :
@@ -25,17 +26,18 @@ class MedicineApprovalRepositoryImpl @Inject constructor(private val medicineApp
      *
      */
     override suspend fun getMedicineApprovalList(itemName: String?, entpName: String?, medicationType: String?): Flow<PagingData<Item>> =
-        Pager(
-            config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5),
-            pagingSourceFactory = {
+        if (itemName == null && entpName == null) {
+            emptyFlow()
+        } else {
+            Pager(config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5), pagingSourceFactory = {
                 MedicineApprovalListDataSourceImpl(
                     medicineApprovalDataSource, itemName, entpName, medicationType
                 )
-            }
-        ).flow
-
-    override suspend fun getMedicineDetailInfo(itemName: String) =
-        medicineApprovalDataSource.getMedicineDetailInfo(itemName).map {
-            it.body.items.first()
+            }).flow
         }
+
+
+    override suspend fun getMedicineDetailInfo(itemName: String) = medicineApprovalDataSource.getMedicineDetailInfo(itemName).map {
+        it.body.items.first()
+    }
 }

@@ -8,7 +8,7 @@ import androidx.core.text.PrecomputedTextCompat
 import androidx.core.widget.TextViewCompat
 import androidx.databinding.BindingAdapter
 import com.android.mediproject.core.common.R
-import com.android.mediproject.core.common.constant.MedicationType
+import com.android.mediproject.core.model.constants.MedicationType
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
 
