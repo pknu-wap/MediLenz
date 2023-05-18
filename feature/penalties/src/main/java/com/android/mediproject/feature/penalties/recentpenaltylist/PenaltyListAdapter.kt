@@ -15,12 +15,15 @@ class PenaltyListAdapter : ListAdapter<RecallSuspensionListItemDto, PenaltyListA
         private var item: RecallSuspensionListItemDto? = null
 
         init {
+            view.setTitleColor(Color.BLACK)
+            view.setContentTextColor(Color.BLACK)
+            view.setChipStrokeColor(android.R.color.black)
+
             view.setOnItemClickListener {
                 it?.apply {
                     onClick?.invoke(this)
                 }
             }
-
         }
 
         fun bind(data: RecallSuspensionListItemDto) {
@@ -28,20 +31,14 @@ class PenaltyListAdapter : ListAdapter<RecallSuspensionListItemDto, PenaltyListA
             view.setTitle(data.product)
             view.setContent(data.rtrvlResn)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PenaltyViewHolder =
-        PenaltyViewHolder(SimpleListItemView<RecallSuspensionListItemDto>(parent.context).apply {
-            setTitleColor(Color.BLACK)
-            setContentTextColor(Color.BLACK)
-            setChipStrokeColor(Color.BLACK)
-        })
+        PenaltyViewHolder(SimpleListItemView<RecallSuspensionListItemDto>(parent.context))
 
     override fun onBindViewHolder(holder: PenaltyViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
-
 }
 
 object Diff : DiffUtil.ItemCallback<RecallSuspensionListItemDto>() {

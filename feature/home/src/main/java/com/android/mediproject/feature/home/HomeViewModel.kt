@@ -21,8 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
-    private val savedStateHandle: SavedStateHandle
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher, private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
     private val _eventFlow = MutableEventFlow<HomeEvent>()
     val eventFlow = _eventFlow.asEventFlow()
@@ -36,22 +35,21 @@ class HomeViewModel @Inject constructor(
     fun createHeaderText(text: String) = viewModelScope.launch(defaultDispatcher) {
         SpannableStringBuilder(text).apply {
             val underline1Idx = "찾고".let {
-                text.indexOf(it) to it.length
+                val startIdx = text.indexOf(it)
+                startIdx to startIdx + 2
             }
             val underline2Idx = "소통".let {
-                text.indexOf(it) to it.length
+                val startIdx = text.indexOf(it)
+                startIdx to startIdx + 2
             }
 
-            val bold = StyleSpan(Typeface.BOLD)
-            val sizeUp = RelativeSizeSpan(1.2f)
+            setSpan(UnderlineSpan(), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+            setSpan(StyleSpan(Typeface.BOLD), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+            setSpan(RelativeSizeSpan(1.2f), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
 
-            setSpan(UnderlineSpan(), underline1Idx.first, underline1Idx.second, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            setSpan(bold, underline1Idx.first, underline1Idx.second, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            setSpan(sizeUp, underline1Idx.first, underline1Idx.second, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-            setSpan(UnderlineSpan(), underline2Idx.first, underline2Idx.second, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            setSpan(bold, underline2Idx.first, underline2Idx.second, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            setSpan(sizeUp, underline2Idx.first, underline2Idx.second, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(UnderlineSpan(), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+            setSpan(StyleSpan(Typeface.BOLD), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+            setSpan(RelativeSizeSpan(1.2f), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
 
             savedStateHandle["headerText"] = this
         }

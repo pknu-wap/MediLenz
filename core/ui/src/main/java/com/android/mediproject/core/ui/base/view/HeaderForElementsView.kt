@@ -11,8 +11,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.adapters.ImageViewBindingAdapter.setImageDrawable
 import com.android.mediproject.core.ui.R
+import com.google.android.material.progressindicator.CircularProgressIndicator
+
+
+private const val DOT_CHAR = "• "
 
 /**
  * • 추천 검색어  와 같이 아래에 목록으로된 데이터가 나올때 헤더로 사용될 뷰
@@ -22,7 +25,7 @@ import com.android.mediproject.core.ui.R
 @SuppressLint("ResourceType")
 class HeaderForElementsView constructor(
     context: Context, attrs: AttributeSet
-) : ConstraintLayout(context, attrs) {
+) : ConstraintLayout(context, attrs), OnIndicatorVisibilityChangedListener {
     private val expandBtnView: ImageView
     private val moreBtnView: TextView
     private val titleView: TextView
@@ -33,7 +36,6 @@ class HeaderForElementsView constructor(
 
     private val targetViewId: Int
 
-    private val DOT = "• "
 
     fun interface OnExpandClickListener {
         /**
@@ -56,7 +58,7 @@ class HeaderForElementsView constructor(
     init {
         context.theme.obtainStyledAttributes(attrs, R.styleable.HeaderForElementsView, 0, 0).also { typedArr ->
             try {
-                val title = typedArr.getString(R.styleable.HeaderForElementsView_header_title)
+                val title = typedArr.getString(R.styleable.HeaderForElementsView_header_title) ?: ""
                 val titleColor = typedArr.getColor(R.styleable.HeaderForElementsView_header_title_color, Color.BLACK)
                 val moreTitle = typedArr.getString(R.styleable.HeaderForElementsView_more_title)
                 val moreColor = typedArr.getColor(R.styleable.HeaderForElementsView_more_color, R.color.gray2)
@@ -66,7 +68,7 @@ class HeaderForElementsView constructor(
                 expanded = typedArr.getBoolean(R.styleable.HeaderForElementsView_is_expanded, expanded)
                 moreVisibility = typedArr.getInt(R.styleable.HeaderForElementsView_more_visibility, moreVisibility)
                 targetViewId = typedArr.getResourceId(R.styleable.HeaderForElementsView_visibility_target_view, -1)
-                expandBtnView = ImageView(context)
+
 
                 // title
                 titleView = TextView(context).apply {
@@ -81,51 +83,22 @@ class HeaderForElementsView constructor(
                     id = 1
 
                     setOnClickListener {
-                        expanded = !expanded
-                        expandBtnView.setImageDrawable(
-                            AppCompatResources.getDrawable(
-                                context, getExpandIcon()
-                            )
-                        )
-
-                        (parent.parent as View).findViewById<View>(targetViewId).apply {
-                            if (visibility == View.VISIBLE) {
-                                visibility = View.GONE
-                            } else {
-                                visibility = View.VISIBLE
-                            }
-                        }
-
-                        onExpandClickListener?.onExpandClick(expanded)
+                        setExpand(!expanded)
                     }
+                    setTitle(title)
+
                 }
 
-                setTitle(title!!)
 
                 // 확장 버튼
-                expandBtnView.apply {
+                expandBtnView = ImageView(context).apply {
                     setImageDrawable(
                         AppCompatResources.getDrawable(
                             context, getExpandIcon()
                         )
                     )
                     setOnClickListener {
-                        expanded = !expanded
-                        setImageDrawable(
-                            AppCompatResources.getDrawable(
-                                context, getExpandIcon()
-                            )
-                        )
-
-                        (parent.parent as View).findViewById<View>(targetViewId).apply {
-                            if (visibility == View.VISIBLE) {
-                                visibility = View.GONE
-                            } else {
-                                visibility = View.VISIBLE
-                            }
-                        }
-
-                        onExpandClickListener?.onExpandClick(expanded)
+                        setExpand(!expanded)
                     }
 
                     isClickable = true
@@ -147,6 +120,19 @@ class HeaderForElementsView constructor(
                     setBackgroundResource(outValue.resourceId)
                 }
 
+
+                CircularProgressIndicator(context).apply {
+                    val size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14f, resources.displayMetrics).toInt()
+                    layoutParams = ConstraintLayout.LayoutParams(size, size).apply {
+                        topToTop = LayoutParams.PARENT_ID
+                        bottomToBottom = LayoutParams.PARENT_ID
+                        leftToRight = expandBtnView.id
+                    }
+                    id = R.id.indicator
+
+                    isIndeterminate = true
+                    trackThickness = 3
+                }
 
 
                 // 더 보기 버튼
@@ -178,6 +164,8 @@ class HeaderForElementsView constructor(
                     clipChildren = false
                 }
 
+                onIndicatorVisibilityChanged(GONE)
+
             } finally {
                 typedArr.recycle()
             }
@@ -186,13 +174,14 @@ class HeaderForElementsView constructor(
 
     }
 
-    @SuppressLint("SetTextI18n")
     fun setTitle(title: String) {
-        titleView.text = DOT + title
+        "$DOT_CHAR  $title".apply {
+            titleView.text = this
+        }
     }
 
     /// 확장 상태에 따라 알맞은 아이콘을 가져온다.
-    fun getExpandIcon() = if (expanded) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24
+    private fun getExpandIcon() = if (expanded) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24
 
     /**
      * 확장 버튼 클릭 콜백 설정
@@ -209,4 +198,36 @@ class HeaderForElementsView constructor(
             onMoreClickListener.onMoreClick()
         }
     }
+
+
+    override fun onIndicatorVisibilityChanged(visibility: Int) {
+        findViewById<CircularProgressIndicator>(R.id.indicator).apply {
+            setVisibility(visibility)
+            when (visibility) {
+                View.VISIBLE -> show()
+                View.GONE -> hide()
+            }
+        }
+    }
+
+    fun setExpand(expanded: Boolean) {
+        this.expanded = expanded
+        expandBtnView.setImageDrawable(
+            AppCompatResources.getDrawable(
+                context, getExpandIcon()
+            )
+        )
+
+        (parent.parent as View).findViewById<View>(targetViewId).apply {
+            visibility = if (visibility == View.VISIBLE) View.GONE
+            else View.VISIBLE
+        }
+
+        onExpandClickListener?.onExpandClick(expanded)
+    }
+}
+
+
+fun interface OnIndicatorVisibilityChangedListener {
+    fun onIndicatorVisibilityChanged(visibility: Int)
 }

@@ -2,7 +2,6 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
@@ -17,6 +16,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:more_title="@string/read_more"
+            app:is_expanded="false"
             app:visibility_target_view="@id/penaltyList"
             />
 
@@ -28,7 +28,6 @@
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/headerView"
-            tools:itemCount="5"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

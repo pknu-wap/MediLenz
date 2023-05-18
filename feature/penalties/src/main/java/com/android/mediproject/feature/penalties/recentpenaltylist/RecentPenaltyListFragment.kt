@@ -29,26 +29,35 @@ class RecentPenaltyListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.apply {
-            penaltyList.setHasFixedSize(true)
-            val penaltyListAdapter = PenaltyListAdapter()
 
+        initHeader()
+        binding.apply {
+            binding.headerView.onIndicatorVisibilityChanged(View.VISIBLE)
+
+            penaltyList.setHasFixedSize(true)
+
+            val penaltyListAdapter = PenaltyListAdapter()
             penaltyList.adapter = penaltyListAdapter
 
             viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.recallDisposalList.collect {
-                    when (it) {
-                        is UiState.Success -> {
-                            penaltyListAdapter.submitList(it.data)
-                        }
+                fragmentViewModel.recallDisposalList.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Error -> {}
 
-                        else -> {}
+                        is UiState.Initial -> {}
+
+                        is UiState.Loading -> {}
+
+                        is UiState.Success -> {
+                            penaltyListAdapter.submitList(uiState.data)
+                            binding.headerView.onIndicatorVisibilityChanged(View.GONE)
+                            binding.headerView.setExpand(true)
+                        }
                     }
                 }
             }
 
         }
-        initHeader()
     }
 
 

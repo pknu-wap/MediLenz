@@ -21,9 +21,7 @@ import javax.inject.Inject
  * 수동 검색 결과 ViewModel
  *
  * @property getMedicineApprovalListUseCase 약품 목록 조회 UseCase
- * @property stateHandle 상태 저장소
  * @property _searchParameter 검색 파라미터
- * @property _searchQuery 검색어 Flow
  * @property searchResultFlow 검색 결과 Flow
  */
 @HiltViewModel
@@ -31,8 +29,7 @@ class ManualSearchResultViewModel @Inject constructor(
     private val getMedicineApprovalListUseCase: GetMedicineApprovalListUseCase,
 ) : BaseViewModel() {
 
-    private val _searchParameter =
-        MutableStateFlow<SearchParameter>(SearchParameter(itemName = null, entpName = null, medicationType = MedicationType.ALL))
+    private val _searchParameter = MutableStateFlow(SearchParameter(itemName = null, entpName = null, medicationType = MedicationType.ALL))
     val searchParameter = _searchParameter.asStateFlow()
 
     val searchResultFlow: Flow<PagingData<ApprovedMedicineItemDto>> = searchParameter.flatMapLatest { parameter ->

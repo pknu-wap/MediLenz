@@ -49,8 +49,7 @@ class ManualSearchResultFragment :
                 it.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { it.retry() },
                     footer = PagingLoadStateAdapter { it.retry() })
             }
-
-
+            
             searchResultRecyclerView.adapter = searchResultListAdapter
 
             filterBtn.setOnClickListener { it ->

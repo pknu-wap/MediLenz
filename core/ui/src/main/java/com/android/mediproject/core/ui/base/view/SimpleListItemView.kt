@@ -2,9 +2,12 @@ package com.android.mediproject.core.ui.base.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.android.mediproject.core.ui.R
 
@@ -38,12 +41,13 @@ class SimpleListItemView<T> : ConstraintLayout {
         }
         get() = _data
 
-    @SuppressLint("ResourceType") private val chip = ButtonChip<Any>(context).apply {
+    @SuppressLint("ResourceType") private val chip = ButtonChip<T>(context).apply {
         layoutParams = ConstraintLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
             topToTop = LayoutParams.PARENT_ID
             bottomToBottom = LayoutParams.PARENT_ID
             leftToLeft = LayoutParams.PARENT_ID
         }
+        textSize = 13f
         isClickable = false
         id = 10
     }
@@ -56,10 +60,11 @@ class SimpleListItemView<T> : ConstraintLayout {
             rightToRight = LayoutParams.PARENT_ID
             leftMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
         }
+        ellipsize = TextUtils.TruncateAt.MARQUEE
         isClickable = false
         maxLines = 1
         textAlignment = TEXT_ALIGNMENT_VIEW_START
-        textSize = 13f
+        textSize = 12f
         id = 20
     }
 
@@ -92,27 +97,27 @@ class SimpleListItemView<T> : ConstraintLayout {
     }
 
     fun setTitle(text: String): SimpleListItemView<T> {
-        this.chip.setChipText(text)
+        chip.setChipText(text)
         return this
     }
 
     fun setContent(text: String): SimpleListItemView<T> {
-        this.textView.text = text
+        textView.text = text
         return this
     }
 
-    fun setTitleColor(color: Int): SimpleListItemView<T> {
-        this.chip.setTextColor(color)
+    fun setTitleColor(@ColorInt color: Int): SimpleListItemView<T> {
+        chip.setTextColor(color)
         return this
     }
 
-    fun setChipStrokeColor(color: Int): SimpleListItemView<T> {
-        this.chip.setChipStrokeColorResource(color)
+    fun setChipStrokeColor(@ColorRes color: Int): SimpleListItemView<T> {
+        chip.setChipStrokeColorResource(color)
         return this
     }
 
-    fun setContentTextColor(color: Int): SimpleListItemView<T> {
-        this.textView.setTextColor(color)
+    fun setContentTextColor(@ColorInt color: Int): SimpleListItemView<T> {
+        textView.setTextColor(color)
         return this
     }
 

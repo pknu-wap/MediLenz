@@ -16,22 +16,7 @@ class MedicineCommentsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val commentsAdapter = CommentsAdapter()
-
-        binding.apply {
-            commentInputView.sendBtn.setOnClickListener {
-                commentInputView.commentInput.text?.toString()?.also { comment ->
-                    fragmentViewModel.apply {
-                        sendComment(comment)
-                    }
-                }
-            }
-        }
-
+        
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-    }
 }

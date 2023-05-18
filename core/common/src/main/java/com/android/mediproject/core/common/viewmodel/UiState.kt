@@ -12,6 +12,6 @@ package com.android.mediproject.core.common.viewmodel
 sealed class UiState<out T> {
     object Initial : UiState<Nothing>()
     object Loading : UiState<Nothing>()
-    data class Success<T>(val data: T) : UiState<T>()
+    data class Success<out R>(val data: R) : UiState<R>()
     data class Error(val message: String) : UiState<Nothing>()
 }
