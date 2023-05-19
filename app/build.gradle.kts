@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.workManagers)
     implementation(libs.bundles.glides)
+    implementation(libs.androidx.splash)
     kapt(libs.bundles.glides.kapt)
 
     /*
