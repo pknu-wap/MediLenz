@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/deleteMyComment"
+        android:title="@string/deleteMyComment" />
+    <item android:id="@+id/editMyComment"
+        android:title="@string/editMyComment" />
+</menu>
