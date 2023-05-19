@@ -161,17 +161,18 @@ class MedicineInfoMapper @Inject constructor() {
             }
         }.let { dataMap ->
             val builder = WeakReference(StringBuilder())
-            builder.get()?.let { builder ->
+            val result = builder.get()?.let { builder ->
                 dataMap.forEach { (title, data) ->
                     builder.append("<p><b>$title</b></p>")
                     data.forEach { (key, value) ->
                         builder.append("<p><b>$key:</b> $value</p>")
                     }
                 }
-            }
-            dataMap.clear()
-            val result = Html.fromHtml(builder.toString(), Html.FROM_HTML_MODE_COMPACT).toSpanned()
+                Html.fromHtml(builder.toString(), Html.FROM_HTML_MODE_COMPACT).toSpanned()
+            } ?: "".toSpanned()
+
             builder.clear()
+            dataMap.clear()
             result
         }
 

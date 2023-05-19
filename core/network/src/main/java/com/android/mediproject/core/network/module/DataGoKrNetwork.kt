@@ -5,12 +5,15 @@ import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.model.remote.adminaction.AdminActionListResponse
+import com.android.mediproject.core.model.remote.dur.DurResponse
 import com.android.mediproject.core.model.remote.elderlycaution.ElderlyCautionResponse
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
 import com.android.mediproject.core.model.remote.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
+import com.android.mediproject.core.network.datasource.dur.DurDataSource
+import com.android.mediproject.core.network.datasource.dur.DurDataSourceImpl
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSourceImpl
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
@@ -78,6 +81,10 @@ object MedicineApprovalNetwork {
     @Singleton
     fun providesElderlyCautionDataSource(dataGoKrNetworkApi: DataGoKrNetworkApi): ElderlyCautionDataSource =
         ElderlyCautionDataSourceImpl(dataGoKrNetworkApi)
+
+    @Provides
+    @Singleton
+    fun providesDurDataSource(dataGoKrNetworkApi: DataGoKrNetworkApi): DurDataSource = DurDataSourceImpl(dataGoKrNetworkApi)
 
 }
 
@@ -198,6 +205,23 @@ interface DataGoKrNetworkApi {
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
     ): Response<ElderlyCautionResponse>
+
+    /**
+     * DUR 정보 조회
+     *
+     * @param itemName 의약품명
+     * @param itemSeq 품목기준코드
+     *
+     */
+    @GET(value = "DURPrdlstInfoService02/getDurPrdlstInfoList2")
+    suspend fun getDur(
+        @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
+        @Query("pageNo") pageNo: String = "1",
+        @Query("itemName") itemName: String?,
+        @Query("itemSeq") itemSeq: String?,
+        @Query("type") type: String = JSON,
+        @Query("numOfRows") numOfRows: Int = 1
+    ): Response<DurResponse>
 }
 
 private const val JSON = "json"

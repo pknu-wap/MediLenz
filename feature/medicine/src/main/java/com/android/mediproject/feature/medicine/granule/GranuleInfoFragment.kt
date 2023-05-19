@@ -8,7 +8,6 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.databinding.FragmentGranuleInfoBinding
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
 
 /**
@@ -34,7 +33,7 @@ class GranuleInfoFragment : BaseFragment<FragmentGranuleInfoBinding, GranuleInfo
         binding.viewModel = fragmentViewModel
 
         viewLifecycleOwner.repeatOnStarted {
-            medicineInfoViewModel.medicineDetails.collectLatest {
+            medicineInfoViewModel.medicineDetails.collect {
                 when (it) {
                     is UiState.Success -> {
                         fragmentViewModel.getGranuleIdentificationInfo(

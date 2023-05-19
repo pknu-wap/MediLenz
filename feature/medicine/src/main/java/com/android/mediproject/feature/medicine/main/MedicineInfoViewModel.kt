@@ -13,8 +13,13 @@ import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
@@ -26,26 +31,20 @@ class MedicineInfoViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
 ) : BaseViewModel() {
 
-    private val _medicineDetails = MutableStateFlow<UiState<MedicineDetatilInfoDto>>(UiState.Loading)
-    val medicineDetails get() = _medicineDetails.asStateFlow()
-
-    val medicineName = savedStateHandle.getStateFlow("medicineName", "")
     private val _medicinePrimaryInfo = MutableStateFlow<MedicinePrimaryInfoDto?>(null)
-
     val medicinePrimaryInfo get() = _medicinePrimaryInfo.asStateFlow()
 
-
-    fun loadMedicineDetails(medicineName: String) {
-        viewModelScope.launch {
-            getMedicineDetailsUseCase.invoke(medicineName).map { result ->
-                result.fold(onSuccess = {
-                    _medicineDetails.value = UiState.Success(it)
-                }, onFailure = {
-                    _medicineDetails.value = UiState.Error(it.message ?: "failed")
-                })
+    val medicineDetails: StateFlow<UiState<MedicineDetatilInfoDto>> = medicinePrimaryInfo.flatMapLatest { primaryInfo ->
+        if (primaryInfo == null) {
+            flowOf(UiState.Initial)
+        } else {
+            getMedicineDetailsUseCase.invoke(itemName = primaryInfo.medicineName).map { result ->
+                result.fold(onSuccess = { UiState.Success(it) }, onFailure = { UiState.Error(it.message ?: "faileds") })
             }
         }
-    }
+    }.stateIn(
+        viewModelScope, started = SharingStarted.WhileSubscribed(5000L), initialValue = UiState.Loading
+    )
 
     fun setMedicinePrimaryInfo(medicineArgs: MedicineInfoArgs) {
         viewModelScope.launch {
@@ -58,7 +57,6 @@ class MedicineInfoViewModel @Inject constructor(
             )
         }
     }
-
 
 }
 
