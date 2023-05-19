@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 스플래쉬 API는 31버전 이상부터 적용되서 버전에 대응할 수 있도록 따로 style.xml을 파야합니다.  -->
+        <style name="Theme.App.Starting" parent="Theme.MediProject">
+            <item name="android:windowSplashScreenBackground">@color/main</item>
+        </style>
 
-    <style name="Theme.App.Starting" parent="Theme.MediProject">
-        <item name="android:windowSplashScreenBackground">@color/main</item>
-    </style>
 </resources>
