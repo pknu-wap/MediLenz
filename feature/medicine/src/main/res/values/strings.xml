@@ -29,6 +29,7 @@
     <string name="ingredientName">성분</string>
     <string name="loadingMedicineDetails">상세 정보를 불러오는 중입니다</string>
     <string name="interestBtn">즐겨찾기 버튼</string>
+    <string name="loadingSafeUsage">안전 사용 정보를 불러오는 중입니다</string>
 
 
 </resources>

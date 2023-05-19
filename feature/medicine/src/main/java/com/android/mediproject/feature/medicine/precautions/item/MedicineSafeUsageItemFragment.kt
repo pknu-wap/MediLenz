@@ -3,12 +3,13 @@ package com.android.mediproject.feature.medicine.precautions.item
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineSafeUseItemBinding
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import repeatOnStarted
 
@@ -57,26 +58,31 @@ class MedicineSafeUsageItemFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.viewModel = fragmentViewModel
+
         viewLifecycleOwner.repeatOnStarted {
+
             launch {
-                fragmentViewModel.elderlyCaution.collect {
+                fragmentViewModel.dur.collect {
                     when (it) {
                         is UiState.Success -> {
-                            binding.elderlyCaution.title.text = getString(com.android.mediproject.core.common.R.string.elderlyCaution)
-                            binding.elderlyCaution.description.text = it.data.prohibitionContent
+                            LoadingDialog.dismiss()
                         }
 
-                        else -> {}
+                        else -> {
+                            LoadingDialog.dismiss()
+                        }
                     }
                 }
             }
 
             launch {
-                medicineInfoViewModel.medicineDetails.collectLatest {
+                medicineInfoViewModel.medicineDetails.collect {
                     when (it) {
                         is UiState.Success -> {
                             it.data.also { medicineInfo ->
-                                fragmentViewModel.getElderlyCaution(itemName = null, itemSeq = medicineInfo.itemSequence)
+                                LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.loadingSafeUsage))
+                                fragmentViewModel.loadDur(itemName = null, itemSeq = medicineInfo.itemSequence)
                             }
                         }
 
