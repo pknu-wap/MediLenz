@@ -10,14 +10,16 @@
     windowSplashScreenIconBackgroundColor : 스플래시 화면 중앙 logo이미지의 배경색 상입니다.
     windowSplashScreenBrandingImage : 스플래시 화면 하단에 위치하는 브랜딩 이미지 입니다.
     windowSplashScreenAnimationDuration : 스플래시 화면이 지속되는 시간입니다.
+    postSplashScreenTheme : 스플래쉬 테마 이후로 적용될 기본 테마입니다.
           -->
 
-    <style name="Theme.App.Starting" parent="Theme.MediProject">
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="android:windowSplashScreenBackground">@color/main</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo</item>
         <item name="android:windowSplashScreenIconBackgroundColor">@color/main</item>
         <item name="android:windowSplashScreenBrandingImage">@drawable/medilenz_white_logo</item>
         <item name="android:windowSplashScreenAnimationDuration">2000</item>
+        <item name="postSplashScreenTheme">@style/Theme.MediProject</item>
     </style>
 
 </resources>
