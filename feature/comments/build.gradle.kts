@@ -1,7 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.android")
     id("mediproject.android.feature")
-    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {

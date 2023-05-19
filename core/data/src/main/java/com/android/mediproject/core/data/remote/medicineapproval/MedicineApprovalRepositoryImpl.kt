@@ -9,6 +9,7 @@ import com.android.mediproject.core.network.datasource.medicineapproval.Medicine
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalListDataSourceImpl
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class MedicineApprovalRepositoryImpl @Inject constructor(private val medicineApprovalDataSource: MedicineApprovalDataSource) :
@@ -37,7 +38,8 @@ class MedicineApprovalRepositoryImpl @Inject constructor(private val medicineApp
         }
 
 
-    override suspend fun getMedicineDetailInfo(itemName: String) = medicineApprovalDataSource.getMedicineDetailInfo(itemName).map {
-        it.body.items.first()
-    }
+    override suspend fun getMedicineDetailInfo(itemName: String) =
+        medicineApprovalDataSource.getMedicineDetailInfo(itemName).map { result ->
+            result.fold(onSuccess = { Result.success(it.body.items.first()) }, onFailure = { Result.failure(it) })
+        }
 }

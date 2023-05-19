@@ -1,6 +1,5 @@
 import com.android.build.gradle.LibraryExtension
 import com.android.mediproject.configureAndroidCompose
-import com.android.mediproject.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -18,7 +17,6 @@ class ComposeFeatureConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<LibraryExtension> {
-                configureKotlinAndroid(this)
                 configureAndroidCompose(this)
             }
 

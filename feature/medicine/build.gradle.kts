@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.android")
+
     id("mediproject.android.feature")
     id("androidx.navigation.safeargs.kotlin")
     id(libs.plugins.kapt.get().pluginId)
@@ -32,5 +32,6 @@ dependencies {
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
+    implementation(libs.androidx.asynclayoutinflater)
 
 }

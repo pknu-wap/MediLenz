@@ -39,9 +39,11 @@ class MedicinePrecautionsViewModel @Inject constructor(
                     if (article.contentList.isNotEmpty()) builder.append("<b>${article.title}</b><br>")
                     else builder.append("<b>${article.title}</b><br><br>")
 
-                    builder.append(article.contentList)
+                    article.contentList.forEach { content ->
+                        builder.append("$content<br>")
+                    }
 
-                    if (article.contentList.isNotEmpty()) builder.append("<br><br>")
+                    if (article.contentList.isNotEmpty()) builder.append("<br>")
                 }
                 list.add(Html.fromHtml(builder.toString(), Html.FROM_HTML_MODE_COMPACT))
                 builder.clear()

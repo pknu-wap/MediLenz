@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
-    id("org.jetbrains.kotlin.android")
+
     id("mediproject.android.feature")
     id("kotlinx-serialization")
     id(libs.plugins.kapt.get().pluginId)

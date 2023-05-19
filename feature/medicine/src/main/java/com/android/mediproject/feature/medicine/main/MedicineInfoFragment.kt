@@ -17,6 +17,7 @@ import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfo
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
 
 /**
@@ -34,10 +35,10 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
+            root.touchables.forEach { it.isEnabled = false }
             viewModel = fragmentViewModel
             root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
-
                     // coordinatorlayout으로 인해 viewpager의 높이가 휴대폰 화면 하단을 벗어나 버리는 현상을 방지하기 위해 사용
                     val viewPagerHeight = rootLayout.height - topAppBar.height
                     contentViewPager.layoutParams = CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, viewPagerHeight).apply {
@@ -61,9 +62,10 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                     }
 
                     root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                    root.touchables.forEach { it.isEnabled = true }
                 }
             })
-
 
         }
 
@@ -71,8 +73,8 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             fragmentViewModel.medicineDetails.collect {
                 when (it) {
                     is UiState.Success -> {
-                        LoadingDialog.dismiss()
                         initTabs()
+                        LoadingDialog.dismiss()
                     }
 
                     is UiState.Error -> {
@@ -80,9 +82,10 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                     }
 
                     is UiState.Loading -> {
-                        fragmentViewModel.medicineName.value.let { medicineName ->
-                            val msg = "$medicineName ${getString(R.string.loadingMedicineDetails)}"
-                            LoadingDialog.showLoadingDialog(requireActivity(), msg)
+                        fragmentViewModel.medicineName.collectLatest { medicineName ->
+                            LoadingDialog.showLoadingDialog(
+                                requireActivity(), "$medicineName\n${getString(R.string.loadingMedicineDetails)}"
+                            )
                         }
                     }
 

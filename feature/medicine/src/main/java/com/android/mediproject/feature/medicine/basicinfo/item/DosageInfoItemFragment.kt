@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import com.android.mediproject.feature.medicine.databinding.FragmentDosageInfoItemBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
 
 @AndroidEntryPoint
@@ -18,7 +17,7 @@ class DosageInfoItemFragment : BaseMedicineInfoItemFragment<FragmentDosageInfoIt
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.repeatOnStarted {
-            medicineInfoViewModel.retriveDosage().collectLatest {
+            fragmentViewModel.dosage.collect {
                 binding.contentsTextView.text = it
             }
         }

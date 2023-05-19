@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import com.android.mediproject.feature.medicine.databinding.FragmentEfficacyInfoItemBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
 
 /**
@@ -24,7 +23,7 @@ class EfficacyEffectItemFragment : BaseMedicineInfoItemFragment<FragmentEfficacy
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.repeatOnStarted {
-            medicineInfoViewModel.retrieveEfficacyEffect().collectLatest {
+            fragmentViewModel.efficacyEffect.collect {
                 binding.contentsTextView.text = it
             }
         }

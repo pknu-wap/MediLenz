@@ -3,6 +3,7 @@ package com.android.mediproject.feature.medicine.granule
 import android.content.Context
 import android.text.Spanned
 import androidx.lifecycle.viewModelScope
+import com.android.mediproject.core.common.mapper.MedicineInfoMapper
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
@@ -18,27 +19,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GranuleInfoViewModel @Inject constructor(
+    private val medicineInfoMapper: MedicineInfoMapper,
     private val getGranuleIdentificationUseCase: GetGranuleIdentificationUseCase,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
 ) : BaseViewModel() {
 
-    private val _granuleIdentification = MutableStateFlow<UiState<GranuleIdentificationInfoDto>>(UiState.Loading)
-    val granuleIdentification get() = _granuleIdentification.asStateFlow()
-
+    private val granuleIdentification = MutableStateFlow<UiState<GranuleIdentificationInfoDto>>(UiState.Loading)
     private val _granuleTextTags = MutableStateFlow<Spanned?>(null)
     val granuleTextTags get() = _granuleTextTags.asStateFlow()
 
     fun getGranuleIdentificationInfo(
         itemName: String?, entpName: String?, itemSeq: String?, context: Context
-    ) = viewModelScope.launch {
-        _granuleIdentification.value = UiState.Loading
+    ) = viewModelScope.launch(defaultDispatcher) {
+        granuleIdentification.value = UiState.Loading
         getGranuleIdentificationUseCase(itemName, entpName, itemSeq).fold(onSuccess = {
-            _granuleIdentification.value = UiState.Success(it)
-
-            launch(defaultDispatcher) {
-                _granuleTextTags.value = getGranuleIdentificationUseCase.createDataTags(context, it)
-            }
-        }, onFailure = { _granuleIdentification.value = UiState.Error(it.message ?: "failed") })
+            _granuleTextTags.value = medicineInfoMapper.toGranuleInfo(context, it)
+            granuleIdentification.value = UiState.Success(it)
+        }, onFailure = { granuleIdentification.value = UiState.Error(it.message ?: "failed") })
     }
 
 }

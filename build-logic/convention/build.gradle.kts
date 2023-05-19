@@ -9,9 +9,16 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+}
+
 dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
+    //compileOnly(libs.ksp.gradle.plugin)
 }
 
 gradlePlugin {
@@ -32,10 +39,6 @@ gradlePlugin {
             id = "mediproject.android.application"
             implementationClass = "ApplicationConventionPlugin"
         }
-        register("androidApplicationCompose") {
-            id = "mediproject.android.application.compose"
-            implementationClass = "ComposeApplicationConventionPlugin"
-        }
         register("androidFeatureCompose") {
             id = "mediproject.android.feature.compose"
             implementationClass = "ComposeFeatureConventionPlugin"
@@ -43,6 +46,10 @@ gradlePlugin {
         register("androidFeature") {
             id = "mediproject.android.feature"
             implementationClass = "FeatureConventionPlugin"
+        }
+        register("kotlinJvm") {
+            id = "mediproject.kotlin.jvm"
+            implementationClass = "JvmLibraryConventionPlugin"
         }
     }
 }

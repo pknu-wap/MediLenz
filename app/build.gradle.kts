@@ -1,9 +1,8 @@
 plugins {
-    id("org.jetbrains.kotlin.android")
+
     id("mediproject.android.application")
     id("mediproject.android.hilt")
     id("androidx.navigation.safeargs.kotlin")
-    id(libs.plugins.kapt.get().pluginId)
 }
 
 android {

@@ -1,7 +1,5 @@
 plugins {
-    id(libs.plugins.kotlin.android.get().pluginId)
     id("mediproject.android.feature.compose")
-    id(libs.plugins.kapt.get().pluginId)
 }
 
 android {

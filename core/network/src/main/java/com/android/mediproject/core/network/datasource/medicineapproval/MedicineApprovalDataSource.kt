@@ -2,6 +2,7 @@ package com.android.mediproject.core.network.datasource.medicineapproval
 
 import com.android.mediproject.core.model.remote.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetailInfoResponse
+import kotlinx.coroutines.flow.Flow
 
 interface MedicineApprovalDataSource {
 
@@ -21,5 +22,5 @@ interface MedicineApprovalDataSource {
 
     suspend fun getMedicineDetailInfo(
         itemName: String,
-    ): Result<MedicineDetailInfoResponse>
+    ): Flow<Result<MedicineDetailInfoResponse>>
 }

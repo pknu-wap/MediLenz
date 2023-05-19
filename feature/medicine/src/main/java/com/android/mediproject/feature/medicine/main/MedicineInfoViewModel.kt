@@ -1,12 +1,8 @@
 package com.android.mediproject.feature.medicine.main
 
 import android.os.Parcelable
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import androidx.core.text.toSpanned
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.android.mediproject.core.common.mapper.MedicineInfoMapper
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
@@ -16,10 +12,9 @@ import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDeta
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
@@ -28,7 +23,6 @@ import javax.inject.Inject
 class MedicineInfoViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
     private val savedStateHandle: SavedStateHandle,
-    private val medicineInfoMapper: MedicineInfoMapper,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
 ) : BaseViewModel() {
 
@@ -43,13 +37,11 @@ class MedicineInfoViewModel @Inject constructor(
 
     fun loadMedicineDetails(medicineName: String) {
         viewModelScope.launch {
-            savedStateHandle["medicineName"] = medicineName
-
-            getMedicineDetailsUseCase.invoke(medicineName).also { result ->
-                result.fold(onSuccess = { medicineDetails ->
-                    _medicineDetails.value = UiState.Success(medicineDetails)
-                }, onFailure = { throwable ->
-                    _medicineDetails.value = UiState.Error(throwable.message ?: "오류가 발생했습니다.")
+            getMedicineDetailsUseCase.invoke(medicineName).map { result ->
+                result.fold(onSuccess = {
+                    _medicineDetails.value = UiState.Success(it)
+                }, onFailure = {
+                    _medicineDetails.value = UiState.Error(it.message ?: "failed")
                 })
             }
         }
@@ -68,46 +60,6 @@ class MedicineInfoViewModel @Inject constructor(
     }
 
 
-    fun retriveDosage(): Flow<Spanned> = flow {
-        viewModelScope.launch(defaultDispatcher) {
-            medicineDetails.value.run {
-                if (this is UiState.Success) {
-                    medicineInfoMapper.toDosageInfo(this.data.udDocData)
-                } else {
-                    SpannableStringBuilder("").toSpanned()
-                }
-            }.also {
-                emit(it)
-            }
-        }
-    }
-
-    fun retrieveEfficacyEffect(): Flow<Spanned> = flow {
-        viewModelScope.launch(defaultDispatcher) {
-            medicineDetails.value.run {
-                if (this is UiState.Success) {
-                    emit(medicineInfoMapper.toEfficacyEffect(this.data.eeDocData))
-                } else {
-                    emit(SpannableStringBuilder("").toSpanned())
-                }
-            }
-        }
-    }
-
-
-    fun retrieveMedicineInfo(): Flow<Spanned> = flow {
-        viewModelScope.launch(defaultDispatcher) {
-            medicineDetails.value.run {
-                if (this is UiState.Success) {
-                    medicineInfoMapper.toMedicineInfo(this.data)
-                } else {
-                    SpannableStringBuilder("").toSpanned()
-                }
-            }.also {
-                emit(it)
-            }
-        }
-    }
 }
 
 /**
