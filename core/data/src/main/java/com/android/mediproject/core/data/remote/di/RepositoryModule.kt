@@ -2,6 +2,8 @@ package com.android.mediproject.core.data.remote.di
 
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepository
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepositoryImpl
+import com.android.mediproject.core.data.remote.comments.CommentsRepository
+import com.android.mediproject.core.data.remote.comments.CommentsRepositoryImpl
 import com.android.mediproject.core.data.remote.dur.DurRepository
 import com.android.mediproject.core.data.remote.dur.DurRepositoryImpl
 import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRepository
@@ -12,6 +14,7 @@ import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprova
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepositoryImpl
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepository
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepositoryImpl
+import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.dur.DurDataSource
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
@@ -61,4 +64,9 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun providesDurRepository(durDataSource: DurDataSource): DurRepository = DurRepositoryImpl(durDataSource)
+
+
+    @Provides
+    @Singleton
+    fun providesCommentsRepository(commentsDataSource: CommentsDataSource): CommentsRepository = CommentsRepositoryImpl(commentsDataSource)
 }

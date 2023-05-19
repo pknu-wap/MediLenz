@@ -17,9 +17,9 @@ class RecentCommentsAdapter : ListAdapter<CommentDto, RecentCommentsAdapter.Rece
         init {
             view.setOnItemClickListener {
                 item?.apply {
-                    onClickDelete(commentId)
-                    onClickLike(commentId)
-                    onClickReply(commentId)
+                    onClickDelete?.invoke(commentId)
+                    onClickLike?.invoke(commentId)
+                    onClickReply?.invoke(commentId)
                 }
             }
         }

@@ -10,5 +10,7 @@
         android:label="MedicineInfoFragment" />
 
     <deepLink app:uri="medilens://search/medicine/medicine_detail_nav" />
-    
+    <include app:graph="@navigation/host_comments_nav" />
+
+
 </navigation>
