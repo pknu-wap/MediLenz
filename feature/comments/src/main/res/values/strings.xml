@@ -9,4 +9,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="editMyComment">댓글 수정</string>
+    <string name="commentEditInputHint">수정할 댓글 내용을 입력하세요</string>
+    <string name="apply">등록</string>
+    <string name="cancel">취소</string>
+    <string name="more">더보기</string>
 </resources>

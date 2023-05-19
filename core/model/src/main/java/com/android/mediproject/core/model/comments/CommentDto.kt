@@ -17,6 +17,8 @@ import kotlinx.datetime.LocalDateTime
  * @property onClickReply 답글 달기 버튼 클릭 시 실행되는 람다 함수
  * @property onClickDelete 댓글 삭제 버튼 클릭 시 실행되는 람다 함수
  * @property onClickLike 댓글 좋아요 버튼 클릭 시 실행되는 람다 함수
+ * @property onClickEdit 댓글 수정 버튼 클릭 시 실행되는 람다 함수
+ * @property onClickReplyEdited 답글 수정 버튼 클릭 시 실행되는 람다 함수
  */
 data class CommentDto(
     val commentId: Int,
@@ -30,6 +32,9 @@ data class CommentDto(
     val onClickReply: (Int) -> Unit,
     val onClickDelete: (Int) -> Unit,
     val onClickLike: (Int) -> Unit,
+    val onClickEdit: (Int) -> Unit,
+    val onClickReplyEdited: (CommentDto) -> Unit,
+    val onClickEditCancel: (Int) -> Unit,
 )
 
 /*

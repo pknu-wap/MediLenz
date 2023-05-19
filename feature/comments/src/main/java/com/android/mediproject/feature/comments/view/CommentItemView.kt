@@ -20,13 +20,14 @@ class CommentItemView(
 ) : ConstraintLayout(context, null) {
 
     companion object {
-        private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        private val dateTimeFormatter by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm") }
     }
 
     private val userProfileImageView: ImageView
     private val userNameTextView: TextView
     private val replyButton: ImageView
     private val likeButton: ImageView
+    private val moreButton: ImageView
     private val commentTextView: TextView
     private val dateTimeTextView: TextView
 
@@ -52,12 +53,28 @@ class CommentItemView(
             setImageResource(com.android.mediproject.core.ui.R.drawable.logo)
         }
 
-        replyButton = ImageView(context).apply {
-            id = R.id.replyButton
+        moreButton = ImageView(context).apply {
+            id = R.id.moreButton
             layoutParams = ConstraintLayout.LayoutParams(dpToPx(context, 24), dpToPx(context, 24)).apply {
                 endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
                 topToTop = userProfileImageView.id
                 bottomToBottom = userProfileImageView.id
+            }
+
+            setBackgroundResource(selectableBackgroundValue)
+            backgroundTintList = ContextCompat.getColorStateList(context, R.color.moreButtonColor)
+            isClickable = true
+            contentDescription = context.getString(R.string.more)
+            setImageResource(com.android.mediproject.core.ui.R.drawable.baseline_more_vert_24)
+        }
+
+        replyButton = ImageView(context).apply {
+            id = R.id.replyButton
+            layoutParams = ConstraintLayout.LayoutParams(dpToPx(context, 24), dpToPx(context, 24)).apply {
+                endToStart = moreButton.id
+                topToTop = userProfileImageView.id
+                bottomToBottom = userProfileImageView.id
+                marginEnd = dpToPx(context, 16)
             }
 
             setBackgroundResource(selectableBackgroundValue)
@@ -191,6 +208,15 @@ class CommentItemView(
      */
     fun setOnDeleteClickListener(onDeleteClickListener: OnClickListener) {
         TODO()
+    }
+
+    /**
+     * 더 보기 버튼
+     */
+    fun setOnMoreClickListener(onMoreClickListener: OnClickListener) {
+        moreButton.setOnClickListener {
+            onMoreClickListener.onClick(it)
+        }
     }
 
 }

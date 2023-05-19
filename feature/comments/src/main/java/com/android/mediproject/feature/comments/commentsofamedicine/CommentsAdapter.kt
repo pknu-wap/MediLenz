@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.model.comments.CommentDto
+import com.android.mediproject.feature.comments.databinding.ItemViewCommentEditBinding
 import com.android.mediproject.feature.comments.view.CommentItemView
 
 
@@ -36,6 +37,7 @@ class CommentsViewHolder(private val view: CommentItemView) : RecyclerView.ViewH
         view.setOnDeleteClickListener { commentId ->
 
         }
+
     }
 
     fun bind(commentDto: CommentDto) {
@@ -51,5 +53,31 @@ class Diff : DiffUtil.ItemCallback<CommentDto>() {
 
     override fun areContentsTheSame(oldItem: CommentDto, newItem: CommentDto): Boolean {
         return oldItem == newItem
+    }
+}
+
+class CommentEditViewHolder(private val binding: ItemViewCommentEditBinding) : RecyclerView.ViewHolder(binding.root) {
+    init {
+        binding.apply {
+            commentEditButton.setOnClickListener {
+                takeIf { !binding.commentInput.text.isNullOrBlank() && commentDto != null }?.apply {
+                    commentDto?.apply {
+                        onClickReplyEdited(copy(content = binding.commentInput.text.toString()))
+                    }
+                }
+            }
+
+            cancelButton.setOnClickListener {
+                commentDto?.apply {
+                    onClickEditCancel(absoluteAdapterPosition)
+                }
+            }
+        }
+
+        fun bind(commentDto: CommentDto) {
+            binding.commentDto = commentDto
+            binding.executePendingBindings()
+        }
+
     }
 }

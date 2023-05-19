@@ -7,4 +7,5 @@
     <item name="likeButton" type="id" />
     <item name="commentTextView" type="id" />
     <item name="dateTimeTextView" type="id" />
+    <item name="moreButton" type="id" />
 </resources>
