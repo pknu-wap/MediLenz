@@ -43,7 +43,7 @@ androidXTestAnnotation = "1.0.1"
 androidXTestJUnit = "1.1.5"
 androidXPaging = "3.1.1"
 
-androidXSplashScreen = "1.0.1-alpha01"
+androidXSplashScreen = "1.0.1"
 
 androidXTestTruth = "1.5.0"
 androidXTestOrchestra = "1.4.2"
