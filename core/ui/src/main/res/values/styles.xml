@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ButtonChip" parent="@style/Widget.Material3.Chip.Assist">
-    </style>
+    <style name="ButtonChip" parent="@style/Widget.Material3.Chip.Assist"></style>
 
-    <style name="Theme.MediProject" parent="Theme.Material3.Light.NoActionBar">
-    </style>
+    <style name="Theme.MediProject" parent="Theme.Material3.Light.NoActionBar"></style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowIsFloating">false</item>
@@ -22,5 +20,22 @@
         <item name="checkedIconVisible">false</item>
         <item name="closeIconVisible">false</item>
     </style>
+
+    <!--
+    windowSplashScreenBackGround : 스플래시 화면의 전체 배경 색상입니다.
+    windowSplashScreenAnimatedIcon : 스플래시 화면 중앙에 위치하는 logo이미지 입니다. 넣지 않으면 기존 앱 아이콘 화면이 뜹니다.
+    windowSplashScreenIconBackgroundColor : 스플래시 화면 중앙 logo이미지의 배경색 상입니다.
+    windowSplashScreenBrandingImage : 스플래시 화면 하단에 위치하는 브랜딩 이미지 입니다.
+    windowSplashScreenAnimationDuration : 스플래시 화면이 지속되는 시간입니다.
+    postSplashScreenTheme : 스플래쉬 테마 이후로 적용될 기본 테마입니다. ** 필수입니다.
+      -->
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/main</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.MediProject</item>
+    </style>
+
 
 </resources>

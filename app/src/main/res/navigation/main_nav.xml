@@ -2,14 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_nav"
-    app:startDestination="@id/splashFragment">
-
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.android.mediproject.feature.splash.SplashFragment"
-        android:label="SplashFragment">
-
-    </fragment>
+    app:startDestination="@id/intro_nav">
 
 
     <include app:graph="@navigation/mypage_nav" />
