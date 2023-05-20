@@ -31,6 +31,7 @@ class MainActivity :
 
     override fun afterBinding() {
 
+        //SDK 31이상일 때 Splash가 소소하게 사라지는 이펙트 입니다. 추후 걸리적거리면 삭제해도 됌
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             splashScreen.setOnExitAnimationListener { splashScreenView ->
                 ObjectAnimator.ofFloat(splashScreenView, View.ALPHA, 1f, 0f).run {

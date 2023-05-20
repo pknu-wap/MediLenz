@@ -36,5 +36,5 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
         <item name="postSplashScreenTheme">@style/Theme.MediProject</item>
     </style>
-    
+
 </resources>
