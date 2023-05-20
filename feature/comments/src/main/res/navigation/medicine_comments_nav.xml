@@ -7,7 +7,13 @@
     <fragment
         android:id="@+id/medicineCommentsFragment"
         android:name="com.android.mediproject.feature.comments.commentsofamedicine.MedicineCommentsFragment"
-        android:label="MedicineCommentsFragment" />
+        android:label="MedicineCommentsFragment">
+
+
+        <argument
+            android:name="medicineItemSeq"
+            app:argType="string" />
+    </fragment>
 
     <deepLink app:uri="medilens://main/medicinecomments_nav" />
 </navigation>

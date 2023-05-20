@@ -9,6 +9,7 @@ import com.android.mediproject.feature.comments.CommentActionType
 import com.android.mediproject.feature.comments.R
 import com.android.mediproject.feature.comments.databinding.FragmentMedicineCommentsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import repeatOnStarted
 
 @AndroidEntryPoint
@@ -20,7 +21,7 @@ class MedicineCommentsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         binding.apply {
             viewModel = fragmentViewModel
 
@@ -32,44 +33,55 @@ class MedicineCommentsFragment :
                     getString(R.string.emptyComments)
                 )
             }
-            pagingListView.pagingList.setItemViewCacheSize(3)
-            pagingListView.pagingList.adapter = adapter
+            pagingListView.pagingList.apply {
+                this.adapter = adapter
+            }
 
             viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.action.collect { action ->
-                    when (action.commentActionType) {
-                        CommentActionType.EDIT -> {
-                            // 댓글 수정
-                            adapter.notifyItemChanged(action.position)
-                        }
 
-                        CommentActionType.DELETE -> {
-                            // 댓글 삭제
-                            adapter.notifyItemRemoved(action.position)
-                        }
+                launch {
+                    fragmentViewModel.action.collect { action ->
+                        when (action.commentActionType) {
+                            CommentActionType.EDIT -> {
+                                // 댓글 수정
+                                adapter.notifyItemChanged(action.position)
+                            }
 
-                        CommentActionType.REPLY -> {
-                            // 댓글 답글
-                        }
+                            CommentActionType.DELETE -> {
+                                // 댓글 삭제
+                                adapter.notifyItemRemoved(action.position)
+                            }
 
-                        CommentActionType.LIKE -> {
-                            // 댓글 좋아요
-                        }
+                            CommentActionType.REPLY -> {
+                                // 댓글 답글
+                            }
 
-                        CommentActionType.CANCEL_EDIT -> {
-                            // 댓글 수정 취소
-                            adapter.notifyItemChanged(action.position)
-                        }
+                            CommentActionType.LIKE -> {
+                                // 댓글 좋아요
+                            }
 
-                        CommentActionType.APPLYED_EDITED_COMMENT -> {
-                            // 댓글 수정 적용
-                            toast(getString(R.string.successAddComment))
-                        }
+                            CommentActionType.CANCEL_EDIT -> {
+                                // 댓글 수정 취소
+                                adapter.notifyItemChanged(action.position)
+                            }
 
-                        CommentActionType.APPLYED_NEW_COMMENT -> {
-                            // 댓글 추가
-                            toast(getString(R.string.successAddComment))
+                            CommentActionType.APPLYED_EDITED_COMMENT -> {
+                                // 댓글 수정 적용
+                                toast(getString(R.string.successAddComment))
+                            }
+
+                            CommentActionType.APPLYED_NEW_COMMENT -> {
+                                // 댓글 추가
+                                toast(getString(R.string.successAddComment))
+                            }
                         }
+                    }
+                }
+
+
+                launch {
+                    fragmentViewModel.comments.collect {
+                        adapter.submitData(it)
                     }
                 }
             }

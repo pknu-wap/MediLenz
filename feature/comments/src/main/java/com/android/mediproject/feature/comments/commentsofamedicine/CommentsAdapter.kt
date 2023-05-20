@@ -16,8 +16,13 @@ import com.android.mediproject.feature.comments.view.CommentItemView
 class CommentsAdapter : PagingDataAdapter<CommentDto, BaseCommentViewHolder>(Diff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = viewType.let {
         when (it) {
-            0 -> CommentsViewHolder(CommentItemView(parent.context))
-            1 -> CommentEditViewHolder(ItemViewCommentEditBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            CommentType.COMMENT.ordinal -> CommentsViewHolder(CommentItemView(parent.context))
+            CommentType.EDITING.ordinal -> CommentEditViewHolder(
+                ItemViewCommentEditBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
@@ -28,14 +33,18 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, BaseCommentViewHolder>(Dif
         }
     }
 
+    override fun onViewRecycled(holder: BaseCommentViewHolder) {
+        super.onViewRecycled(holder)
+        // holder.fixBind()
+    }
 
     /**
      * 현재 댓글 수정 상태이면 1, 아니면 0 반환
      */
     override fun getItemViewType(position: Int): Int {
         return getItem(position)?.let {
-            if (it.isEditing) 1 else 0
-        } ?: 0
+            if (it.isEditing) CommentType.EDITING.ordinal else CommentType.COMMENT.ordinal
+        } ?: CommentType.COMMENT.ordinal
     }
 }
 
@@ -80,6 +89,12 @@ class CommentsViewHolder(private val view: CommentItemView) : BaseCommentViewHol
         item = commentDto
         view.setComment(commentDto)
     }
+
+    override fun fixBind() {
+        item?.also {
+            view.setComment(it)
+        }
+    }
 }
 
 
@@ -113,10 +128,16 @@ class CommentEditViewHolder(private val binding: ItemViewCommentEditBinding) : B
         binding.commentDto = commentDto
         binding.executePendingBindings()
     }
+
+    override fun fixBind() {
+
+    }
 }
 
 abstract class BaseCommentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     open fun bind(commentDto: CommentDto) {}
+
+    open fun fixBind() {}
 }
 
 object Diff : DiffUtil.ItemCallback<CommentDto>() {
@@ -125,4 +146,8 @@ object Diff : DiffUtil.ItemCallback<CommentDto>() {
 
     override fun areContentsTheSame(oldItem: CommentDto, newItem: CommentDto): Boolean = oldItem == newItem
 
+}
+
+enum class CommentType {
+    COMMENT, EDITING
 }

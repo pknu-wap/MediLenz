@@ -36,35 +36,37 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
         binding.apply {
 
             viewModel = fragmentViewModel
-            rootLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    if (rootLayout.measuredHeight == 0 || rootLayout.measuredWidth == 0) return
+            rootLayout.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    if (rootLayout.measuredHeight > 0 && rootLayout.measuredWidth > 0) {
+                        rootLayout.viewTreeObserver.removeOnPreDrawListener(this)
 
-                    rootLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        // coordinatorlayout으로 인해 viewpager의 높이가 휴대폰 화면 하단을 벗어나 버리는 현상을 방지하기 위해 사용
+                        val viewPagerHeight = rootLayout.height - topAppBar.height
+                        contentViewPager.layoutParams = CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, viewPagerHeight).apply {
+                            behavior = AppBarLayout.ScrollingViewBehavior()
+                        }
 
-                    // coordinatorlayout으로 인해 viewpager의 높이가 휴대폰 화면 하단을 벗어나 버리는 현상을 방지하기 위해 사용
-                    val viewPagerHeight = rootLayout.height - topAppBar.height
-                    contentViewPager.layoutParams = CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, viewPagerHeight).apply {
-                        behavior = AppBarLayout.ScrollingViewBehavior()
+                        topAppBar.removeOnOffsetChangedListener(null)
+                        // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
+                        topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+                            // 스크롤 할 때 마다 medicinePrimaryInfoViewgroup의 투명도 조정
+                            medicinePrimaryInfoViewgroup.alpha =
+                                1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
+                                    if (this == -1.0f) medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
+                                    else if (this > -0.8f) medicinePrimaryInfoViewgroup.isVisible = true
+                                }
+
+                            // 스크롤 할 때 마다 viewpager의 높이를 조정
+                            contentViewPager.layoutParams =
+                                CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, (viewPagerHeight - verticalOffset)).apply {
+                                    behavior = AppBarLayout.ScrollingViewBehavior()
+                                }
+                        }
+
                     }
 
-                    topAppBar.removeOnOffsetChangedListener(null)
-                    // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
-                    topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-                        // 스크롤 할 때 마다 medicinePrimaryInfoViewgroup의 투명도 조정
-                        medicinePrimaryInfoViewgroup.alpha =
-                            1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
-                                if (this == -1.0f) medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
-                                else if (this > -0.8f) medicinePrimaryInfoViewgroup.isVisible = true
-                            }
-
-                        // 스크롤 할 때 마다 viewpager의 높이를 조정
-                        contentViewPager.layoutParams =
-                            CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, (viewPagerHeight - verticalOffset)).apply {
-                                behavior = AppBarLayout.ScrollingViewBehavior()
-                            }
-                    }
-
+                    return true
                 }
             })
 

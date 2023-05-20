@@ -5,11 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil.setContentView
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.databinding.ViewDataBinding
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
-val bindingFactory: (LayoutInflater) -> T
+    val bindingFactory: (LayoutInflater) -> T
 ) : AppCompatActivity() {
 
     protected lateinit var binding: T
@@ -19,6 +19,7 @@ val bindingFactory: (LayoutInflater) -> T
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         binding = bindingFactory(layoutInflater)
         setContentView(binding.root)
         binding.lifecycleOwner = this

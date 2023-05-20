@@ -25,7 +25,7 @@ class CommentsListDataSourceImpl(
                 itemSeq
             ).fold(onSuccess = {
                 val nextKey = it.let { body ->
-                    if (body.count() < AWS_LOAD_PAGE_SIZE) null
+                    if (body.count() <= AWS_LOAD_PAGE_SIZE) null
                     else currentPage + 1
                 }
 

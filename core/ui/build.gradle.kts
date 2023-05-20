@@ -22,6 +22,7 @@ dependencies {
     implementation(libs.bundles.glides)
 
     implementation(libs.bundles.composes)
+    implementation(libs.androidx.splash)
 
     kapt(libs.bundles.glides.kapt)
 
