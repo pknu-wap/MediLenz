@@ -1,8 +1,14 @@
 package com.android.mediproject
 
+import android.animation.ObjectAnimator
+import android.os.Build
 import android.view.View
+import android.view.ViewTreeObserver
+import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
+import androidx.core.animation.doOnEnd
 import androidx.core.net.toUri
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -24,6 +30,18 @@ class MainActivity :
     private lateinit var navController: NavController
 
     override fun afterBinding() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            splashScreen.setOnExitAnimationListener { splashScreenView ->
+                ObjectAnimator.ofFloat(splashScreenView, View.ALPHA, 1f, 0f).run {
+                    interpolator = AnticipateInterpolator()
+                    duration = 1000L
+                    doOnEnd { splashScreenView.remove() }
+                    start()
+                }
+            }
+        }
+
         binding.apply {
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -42,6 +60,10 @@ class MainActivity :
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
             }
         }
+    }
+
+    override fun setSplash(){
+        installSplashScreen()
     }
 
 
