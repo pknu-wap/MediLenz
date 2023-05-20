@@ -35,7 +35,10 @@ class MedicineCommentsViewModel @Inject constructor(
 
     private val myUserId = savedStateHandle.getStateFlow("myUserId", -1)
 
-    private val _action = MutableSharedFlow<CommentAction>(replay = 0, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _action = MutableSharedFlow<CommentAction>(
+        replay = 0, onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        extraBufferCapacity = 1
+    )
 
     private val medicindItemSeq = savedStateHandle.getStateFlow("medicineItemSeq", "")
 

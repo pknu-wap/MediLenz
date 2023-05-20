@@ -5,9 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
-import com.android.mediproject.core.common.util.navigateByDeepLink
-import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.feature.medicine.databinding.FragmentCommentsHostBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,18 +22,11 @@ class HostCommentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (childFragmentManager.findFragmentById(binding.commentsFragmentContainerView.id) as NavHostFragment).apply {
-            navController.navigateByDeepLink(
-                "medilens://main/comments_nav/medicineCommentsFragment", MedicineBasicInfoArgs(
-                    medicineName = "", itemSequence = ""
-                )
-            )
-        }
     }
 
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 }

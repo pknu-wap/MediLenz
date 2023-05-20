@@ -1,8 +1,5 @@
 plugins {
-
     id("mediproject.android.feature")
-    id("androidx.navigation.safeargs.kotlin")
-    id(libs.plugins.kapt.get().pluginId)
     id(libs.plugins.kotlin.parcelize.get().pluginId)
 }
 
@@ -25,6 +22,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":feature:search"))
     implementation(project(":feature:penalties"))
+    implementation(project(":feature:comments"))
 
     implementation(libs.bundles.glides)
     kapt(libs.bundles.glides.kapt)

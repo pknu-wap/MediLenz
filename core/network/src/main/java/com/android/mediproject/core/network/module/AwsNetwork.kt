@@ -20,7 +20,7 @@ object AwsNetwork {
     @Singleton
     fun providesAwsNetworkApi(okHttpClient: OkHttpClient): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
         Json.asConverterFactory("application/json".toMediaType())
-    ).baseUrl("").build().create(AwsNetworkApi::class.java)
+    ).baseUrl(DATA_GO_KR_BASEURL).build().create(AwsNetworkApi::class.java)
 
     @Provides
     @Singleton
