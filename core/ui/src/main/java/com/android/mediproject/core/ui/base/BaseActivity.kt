@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.databinding.ViewDataBinding
 
@@ -18,6 +19,7 @@ val bindingFactory: (LayoutInflater) -> T
     protected abstract val activityViewModel: V
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setSplash()
         super.onCreate(savedInstanceState)
         binding = bindingFactory(layoutInflater)
         setContentView(binding.root)
@@ -26,6 +28,8 @@ val bindingFactory: (LayoutInflater) -> T
     }
 
     abstract fun afterBinding()
+
+    open fun setSplash(){}
 
     fun log(str: String) = Log.e("wap", str) //for test
 

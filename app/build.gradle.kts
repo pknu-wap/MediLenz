@@ -46,7 +46,6 @@ dependencies {
 
 
     implementation(project(":feature:interestedmedicine"))
-    implementation(project(":feature:splash"))
     implementation(project(":feature:home"))
     implementation(project(":feature:intro"))
     implementation(project(":feature:comments"))
@@ -66,6 +65,7 @@ dependencies {
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.workManagers)
     implementation(libs.bundles.glides)
+    implementation(libs.androidx.splash)
     kapt(libs.bundles.glides.kapt)
 
     /*

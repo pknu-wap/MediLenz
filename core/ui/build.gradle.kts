@@ -22,7 +22,7 @@ dependencies {
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.glides)
-
+    implementation(libs.androidx.splash)
     implementation(libs.bundles.composes)
 
     kapt(libs.bundles.glides.kapt)
