@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -9,10 +11,18 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.nav.safeargs.kotlin) apply false
     alias(libs.plugins.kapt) apply false
+    //alias(libs.plugins.ksp) apply false
 }
+
 
 gradle.projectsEvaluated {
     tasks.withType<JavaCompile>().configureEach {
         options.compilerArgs = options.compilerArgs + "-Xmaxerrs" + "1000"
+    }
+
+    tasks.withType<KotlinCompile>().configureEach {
+        kotlinOptions {
+            //languageVersion = "2.0"
+        }
     }
 }

@@ -1,7 +1,6 @@
 plugins {
-    id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.kotlin.serialization.get().pluginId)
     id("mediproject.android.library")
+    id(libs.plugins.kotlin.serialization.get().pluginId)
     id(libs.plugins.nav.safeargs.kotlin.get().pluginId)
 }
 

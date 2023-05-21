@@ -76,7 +76,7 @@ data class MedicineDetatilInfoDto(
     val itemEnglishName: String?,
     val itemName: String?,
     val itemPermitDate: LocalDate?,
-    val itemSequence: String?,
+    val itemSequence: String,
     val mainIngredientEnglish: String?,
     val mainItemIngredient: String?,
     val makeMaterialFlag: String?,

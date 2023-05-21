@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
-    id("org.jetbrains.kotlin.android")
+
     id("mediproject.android.feature")
     id("kotlinx-serialization")
     id(libs.plugins.kapt.get().pluginId)
@@ -36,5 +36,6 @@ dependencies {
     implementation(libs.bundles.glides)
     implementation(libs.lottie)
     kapt(libs.bundles.glides.kapt)
-
+    kapt(libs.androidx.hilt.compilerKapt)
+    implementation(libs.androidx.paging.runtime)
 }

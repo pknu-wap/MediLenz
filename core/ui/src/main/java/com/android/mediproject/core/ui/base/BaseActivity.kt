@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil.setContentView
 import androidx.databinding.ViewDataBinding
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
-val bindingFactory: (LayoutInflater) -> T
+    val bindingFactory: (LayoutInflater) -> T
 ) : AppCompatActivity() {
 
     protected lateinit var binding: T
@@ -29,7 +29,9 @@ val bindingFactory: (LayoutInflater) -> T
 
     abstract fun afterBinding()
 
+
     open fun setSplash(){}
+
 
     fun log(str: String) = Log.e("wap", str) //for test
 

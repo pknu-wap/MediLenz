@@ -2,15 +2,19 @@ package com.android.mediproject.feature.medicine.main
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.view.ViewGroup.LayoutParams
+import android.view.ViewTreeObserver
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.android.mediproject.core.common.dialog.ProgressDialog
+import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfoBinding
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
@@ -24,28 +28,48 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
     override val fragmentViewModel: MedicineInfoViewModel by viewModels()
 
-    private var dialog: AlertDialog? = null
-
     private val nagArgs: MedicineInfoArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = fragmentViewModel
-
         binding.apply {
+
             viewModel = fragmentViewModel
-            // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
-            topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-                log("verticalOffset : $verticalOffset, appBarLayout.totalScrollRange : ${appBarLayout.totalScrollRange}")
-                medicinePrimaryInfoViewgroup.alpha = 1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
-                    if (this == -1.0f) {
-                        medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
-                    } else if (this > -0.8f) {
-                        medicinePrimaryInfoViewgroup.visibility = View.VISIBLE
+            rootLayout.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    if (rootLayout.measuredHeight > 0 && rootLayout.measuredWidth > 0) {
+                        rootLayout.viewTreeObserver.removeOnPreDrawListener(this)
+
+                        // coordinatorlayout으로 인해 viewpager의 높이가 휴대폰 화면 하단을 벗어나 버리는 현상을 방지하기 위해 사용
+                        val viewPagerHeight = rootLayout.height - topAppBar.height
+                        contentViewPager.layoutParams = CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, viewPagerHeight).apply {
+                            behavior = AppBarLayout.ScrollingViewBehavior()
+                        }
+
+                        topAppBar.removeOnOffsetChangedListener(null)
+                        // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
+                        topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+                            // 스크롤 할 때 마다 medicinePrimaryInfoViewgroup의 투명도 조정
+                            medicinePrimaryInfoViewgroup.alpha =
+                                1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
+                                    if (this == -1.0f) medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
+                                    else if (this > -0.8f) medicinePrimaryInfoViewgroup.isVisible = true
+                                }
+
+                            // 스크롤 할 때 마다 viewpager의 높이를 조정
+                            contentViewPager.layoutParams =
+                                CoordinatorLayout.LayoutParams(LayoutParams.MATCH_PARENT, (viewPagerHeight - verticalOffset)).apply {
+                                    behavior = AppBarLayout.ScrollingViewBehavior()
+                                }
+                        }
+
                     }
+
+                    return true
                 }
-            }
+            })
+
         }
 
         viewLifecycleOwner.repeatOnStarted {
@@ -53,25 +77,22 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                 when (it) {
                     is UiState.Success -> {
                         initTabs()
-                        dialog?.dismiss()
+                        LoadingDialog.dismiss()
                     }
 
                     is UiState.Error -> {
-
+                        LoadingDialog.dismiss()
                     }
 
                     is UiState.Loading -> {
-                        fragmentViewModel.medicineName.value.let { medicineName ->
-                            val msg = "$medicineName ${getString(R.string.loadingMedicineDetails)}"
-                            dialog = ProgressDialog.createDialog(requireActivity(), msg).also { dialog ->
-                                dialog.show()
+                        fragmentViewModel.medicinePrimaryInfo.value.let { medicinePrimaryInfo ->
+                            medicinePrimaryInfo?.apply {
+                                LoadingDialog.showLoadingDialog(requireContext(), medicineName)
                             }
                         }
                     }
 
-                    is UiState.Initial -> {
-
-                    }
+                    is UiState.Initial -> {}
 
                 }
             }
@@ -79,7 +100,6 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
         nagArgs.apply {
             fragmentViewModel.setMedicinePrimaryInfo(this)
-            fragmentViewModel.loadMedicineDetails(medicineName)
         }
     }
 

@@ -1,73 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="fragmentViewModel"
-            type="com.android.mediproject.feature.medicine.precautions.host.MedicinePrecautionsViewModel"
+            name="viewModel"
+            type="com.android.mediproject.feature.medicine.precautions.item.MedicineSafeUsageViewModel"
             />
     </data>
 
-    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/safeUsageRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/gray"
-            android:dividerPadding="12dp"
-            android:orientation="vertical"
-            android:showDividers="middle"
-            >
-
-            <include
-                android:id="@+id/combinationProhibition"
-                layout="@layout/item_view_safe_use_with_list"
-                />
-
-            <include
-                android:id="@+id/pregnancyProhibition"
-                layout="@layout/item_view_safe_use_without_list"
-                />
-
-            <include
-                android:id="@+id/specificAgeGroupProhibition"
-                layout="@layout/item_view_safe_use_without_list"
-                />
-
-            <include
-                android:id="@+id/doseCaution"
-                layout="@layout/item_view_safe_use_without_list"
-                />
-
-            <include
-                android:id="@+id/durationOfUseCaution"
-                layout="@layout/item_view_safe_use_without_list"
-                />
-
-            <include
-                android:id="@+id/elderlyCaution"
-                layout="@layout/item_view_safe_use_without_list"
-                />
-
-            <include
-                android:id="@+id/efficacyGroupDuplicationCaution"
-                layout="@layout/item_view_safe_use_without_list"
-                />
-
-            <include
-                android:id="@+id/divisionCaution"
-                layout="@layout/item_view_safe_use_without_list"
-                />
-
-            <include
-                android:id="@+id/additiveCaution"
-                layout="@layout/item_view_safe_use_without_list"
-                />
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+        />
 </layout>

@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.feature.comments.commentsofamedicine.MedicineCommentsViewModel"
+            />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -8,27 +16,70 @@
         android:paddingHorizontal="24dp"
         >
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/commentsRecyclerView"
+        <include
+            android:id="@+id/pagingListView"
+            layout="@layout/viewgroup_paging_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:clipChildren="false"
-            android:orientation="vertical"
-            android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/commentInputView"
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <include
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/commentInputView"
-            layout="@layout/view_comment_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="47dp"
+            android:background="@drawable/comment_input_background"
+            android:paddingHorizontal="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            >
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:endIconMode="clear_text"
+                app:expandedHintEnabled="false"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/sendBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/commentInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/commentInputHint"
+                    android:inputType="text"
+                    android:maxLines="2"
+                    android:paddingVertical="14dp"
+                    android:textAppearance="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense"
+                    android:textColorHint="@color/black"
+                    android:textSize="14sp"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/sendBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/sendButtonContentDescription"
+                android:padding="4dp"
+                android:src="@drawable/outline_send_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/sendButtonBackground"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

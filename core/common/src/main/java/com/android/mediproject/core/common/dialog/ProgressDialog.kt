@@ -4,19 +4,28 @@ import android.content.Context
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 
-object ProgressDialog {
+object LoadingDialog {
 
-    fun createDialog(context: Context, textMessage: String?): AlertDialog {
-        val progressIndicator = ProgressIndicator(context, null, textMessage)
-        return AlertDialog.Builder(context).setView(progressIndicator).setCancelable(false).create().let {
+    private var dialog: AlertDialog? = null
+
+    fun showLoadingDialog(context: Context, textMessage: String?) {
+        dismiss()
+        AlertDialog.Builder(context).setView(ProgressIndicator(context, null, textMessage)).setCancelable(false).create().also {
             it.window?.setBackgroundDrawableResource(android.R.color.transparent)
-            //width : 70% of screen, height : wrap content
             it.window?.attributes = it.window?.attributes?.apply {
                 width = (context.resources.displayMetrics.widthPixels * 0.7).toInt()
                 height = ViewGroup.LayoutParams.WRAP_CONTENT
             }
             it.setCanceledOnTouchOutside(false)
-            it
+            dialog = it
+            it.show()
         }
+
+    }
+
+
+    fun dismiss() {
+        dialog?.dismiss()
+        dialog = null
     }
 }

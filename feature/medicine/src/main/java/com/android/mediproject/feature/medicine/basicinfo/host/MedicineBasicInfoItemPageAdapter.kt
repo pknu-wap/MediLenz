@@ -19,9 +19,9 @@ class MedicineBasicInfoItemPageAdapter(
     )
 
     override fun createFragment(position: Int) = when (position) {
-        0 -> EfficacyEffectItemFragment.newInstance(infoTypes[position], EfficacyEffectItemFragment::class)
-        1 -> MedicineInfoItemFragment.newInstance(infoTypes[position], MedicineInfoItemFragment::class)
-        2 -> DosageInfoItemFragment.newInstance(infoTypes[position], DosageInfoItemFragment::class)
+        0 -> EfficacyEffectItemFragment.newInstance(EfficacyEffectItemFragment::class)
+        1 -> MedicineInfoItemFragment.newInstance(MedicineInfoItemFragment::class)
+        2 -> DosageInfoItemFragment.newInstance(DosageInfoItemFragment::class)
         else -> throw IllegalStateException("Invalid position $position")
     }
 

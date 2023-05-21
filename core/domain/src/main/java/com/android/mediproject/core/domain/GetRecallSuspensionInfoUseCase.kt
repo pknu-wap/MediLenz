@@ -23,6 +23,14 @@ class GetRecallSuspensionInfoUseCase @Inject constructor(
         }
     }
 
+    suspend fun getRecentRecallDisposalList(
+        pageNo: Int = 1, numOfRows: Int = 15
+    ): Result<List<RecallSuspensionListItemDto>> = recallSuspensionRepository.getRecentRecallDisposalList(pageNo, numOfRows).map {
+        it.map { item ->
+            item.toDto()
+        }
+    }
+
     suspend fun getDetailRecallSuspension(
         company: String?, product: String?
     ): Result<DetailRecallSuspensionItemDto> = recallSuspensionRepository.getDetailRecallSuspension(company, product).map {

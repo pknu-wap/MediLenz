@@ -2,10 +2,22 @@ package com.android.mediproject.core.data.remote.di
 
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepository
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepositoryImpl
+import com.android.mediproject.core.data.remote.comments.CommentsRepository
+import com.android.mediproject.core.data.remote.comments.CommentsRepositoryImpl
+import com.android.mediproject.core.data.remote.dur.DurRepository
+import com.android.mediproject.core.data.remote.dur.DurRepositoryImpl
+import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRepository
+import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRepositoryImpl
+import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepository
+import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepositoryImpl
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepositoryImpl
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepository
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepositoryImpl
+import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
+import com.android.mediproject.core.network.datasource.dur.DurDataSource
+import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
+import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
@@ -38,4 +50,23 @@ object RepositoryModule {
         adminActionDataSource: AdminActionListDataSourceImpl
     ): AdminActionRepository = AdminActionRepositoryImpl(adminActionDataSource)
 
+    @Provides
+    @Singleton
+    fun providesGranuleIdentificationRepository(
+        granuleIdentificationDataSource: GranuleIdentificationDataSource
+    ): GranuleIdentificationRepository = GranuleIdentificationRepositoryImpl(granuleIdentificationDataSource)
+
+    @Provides
+    @Singleton
+    fun providesElderlyCautionRepository(elderlyCautionDataSource: ElderlyCautionDataSource): ElderlyCautionRepository =
+        ElderlyCautionRepositoryImpl(elderlyCautionDataSource)
+
+    @Provides
+    @Singleton
+    fun providesDurRepository(durDataSource: DurDataSource): DurRepository = DurRepositoryImpl(durDataSource)
+
+
+    @Provides
+    @Singleton
+    fun providesCommentsRepository(commentsDataSource: CommentsDataSource): CommentsRepository = CommentsRepositoryImpl(commentsDataSource)
 }

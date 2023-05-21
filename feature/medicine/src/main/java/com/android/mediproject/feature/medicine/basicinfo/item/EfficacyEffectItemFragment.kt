@@ -2,10 +2,8 @@ package com.android.mediproject.feature.medicine.basicinfo.item
 
 import android.os.Bundle
 import android.view.View
-import com.android.mediproject.core.model.util.XMLParsedResult
 import com.android.mediproject.feature.medicine.databinding.FragmentEfficacyInfoItemBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
 
 /**
@@ -13,7 +11,7 @@ import repeatOnStarted
  *
  */
 @AndroidEntryPoint
-class EfficacyEffectItemFragment : BaseMedicineInfoItemFragment<FragmentEfficacyInfoItemBinding, XMLParsedResult>(
+class EfficacyEffectItemFragment : BaseMedicineInfoItemFragment<FragmentEfficacyInfoItemBinding>(
     FragmentEfficacyInfoItemBinding::inflate
 ) {
 
@@ -25,17 +23,8 @@ class EfficacyEffectItemFragment : BaseMedicineInfoItemFragment<FragmentEfficacy
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.repeatOnStarted {
-            collectingData.collectLatest {
-                it.let {
-                    val stringBuilder = StringBuilder()
-                    it.articleList.forEach { article ->
-                        article.contentList.forEach { content ->
-                            stringBuilder.append(content)
-                        }
-                    }
-
-                    binding.contentsTextView.text = stringBuilder.toString()
-                }
+            fragmentViewModel.efficacyEffect.collect {
+                binding.contentsTextView.text = it
             }
         }
 

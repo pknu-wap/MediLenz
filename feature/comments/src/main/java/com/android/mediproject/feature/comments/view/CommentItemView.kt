@@ -17,47 +17,68 @@ import java.time.format.DateTimeFormatter
 
 class CommentItemView(
     context: Context
-) : ConstraintLayout(context, null) {
+) : ConstraintLayout(context) {
 
     companion object {
-        private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        private val dateTimeFormatter by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm") }
     }
 
     private val userProfileImageView: ImageView
     private val userNameTextView: TextView
     private val replyButton: ImageView
     private val likeButton: ImageView
+    private val moreButton: ImageView
     private val commentTextView: TextView
     private val dateTimeTextView: TextView
 
 
     init {
-
         val selectableBackgroundValue = TypedValue().apply {
             context.theme.resolveAttribute(androidx.appcompat.R.attr.selectableItemBackground, this, true)
         }.resourceId
 
+        val dp24 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, resources.displayMetrics).toInt()
+        val dp16 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics).toInt()
+        val dp11 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 11f, resources.displayMetrics).toInt()
+        val dp4 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics).toInt()
+
         id = R.id.commentItemView
-        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        dpToPx(context, 11).apply {
-            setPadding(this, this, this, this)
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
+            setMargins(0, dp4, 0, dp4)
         }
+        setPadding(dp11, dp11, dp11, dp11)
 
         userProfileImageView = ImageView(context).apply {
             id = R.id.userProfileImageView
-            layoutParams = ConstraintLayout.LayoutParams(dpToPx(context, 24), dpToPx(context, 24)).apply {
-                leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
-                topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            layoutParams = LayoutParams(dp24, dp24).apply {
+                leftToLeft = LayoutParams.PARENT_ID
+                topToTop = LayoutParams.PARENT_ID
             }
             setImageResource(com.android.mediproject.core.ui.R.drawable.logo)
         }
 
-        replyButton = ImageView(context).apply {
-            id = R.id.replyButton
-            layoutParams = ConstraintLayout.LayoutParams(dpToPx(context, 24), dpToPx(context, 24)).apply {
-                endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+        moreButton = ImageView(context).apply {
+            id = R.id.moreButton
+            layoutParams = LayoutParams(dp24, dp24).apply {
+                rightToRight = LayoutParams.PARENT_ID
                 topToTop = userProfileImageView.id
                 bottomToBottom = userProfileImageView.id
+            }
+
+            setBackgroundResource(selectableBackgroundValue)
+            backgroundTintList = ContextCompat.getColorStateList(context, R.color.moreButtonColor)
+            isClickable = true
+            contentDescription = context.getString(R.string.more)
+            setImageResource(com.android.mediproject.core.ui.R.drawable.baseline_more_vert_24)
+        }
+
+        replyButton = ImageView(context).apply {
+            id = R.id.replyButton
+            layoutParams = LayoutParams(dp24, dp24).apply {
+                rightToLeft = moreButton.id
+                topToTop = userProfileImageView.id
+                bottomToBottom = userProfileImageView.id
+                rightMargin = dp16
             }
 
             setBackgroundResource(selectableBackgroundValue)
@@ -69,12 +90,6 @@ class CommentItemView(
 
         likeButton = ImageView(context).apply {
             id = R.id.likeButton
-            layoutParams = ConstraintLayout.LayoutParams(dpToPx(context, 24), dpToPx(context, 24)).apply {
-                endToStart = replyButton.id
-                topToTop = userProfileImageView.id
-                bottomToBottom = userProfileImageView.id
-                marginEnd = dpToPx(context, 16)
-            }
             setBackgroundResource(selectableBackgroundValue)
             backgroundTintList = ContextCompat.getColorStateList(context, R.color.likeButtonColor)
             isClickable = true
@@ -84,20 +99,13 @@ class CommentItemView(
 
         userNameTextView = TextView(context).apply {
             id = R.id.userNameTextView
-            layoutParams = ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
-                startToEnd = userProfileImageView.id
-                topToTop = userProfileImageView.id
-                bottomToBottom = userProfileImageView.id
-                endToStart = likeButton.id
-                marginStart = dpToPx(context, 7)
-            }
 
-            ellipsize = TextUtils.TruncateAt.MARQUEE
+            ellipsize = TextUtils.TruncateAt.END
             maxLines = 1
             text = "userName"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             setTextColor(Color.BLACK)
-            gravity = Gravity.START
+            gravity = Gravity.LEFT
         }
 
         commentTextView = TextView(context).apply {
@@ -106,11 +114,9 @@ class CommentItemView(
                 ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
                     .apply {
                         topToBottom = userProfileImageView.id
-                        startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-                        endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-                        topMargin = dpToPx(context, 9)
+                        topMargin = 6.dpToPx(context)
                     }
-            setPadding(0, dpToPx(context, 9), 0, 0)
+            setPadding(0, 9.dpToPx(context), 0, 0)
             text = "comment"
             setTextColor(Color.BLACK)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
@@ -122,20 +128,31 @@ class CommentItemView(
                 ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
                     .apply {
                         topToBottom = commentTextView.id
-                        startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-                        endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-                        topMargin = dpToPx(context, 4)
+                        topMargin = 4.dpToPx(context)
                     }
-            setPadding(0, dpToPx(context, 4), 0, 0)
+            setPadding(0, 4.dpToPx(context), 0, 0)
             text = "dateTime"
             setTextColor(Color.GRAY)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
         }
 
+        addView(moreButton)
         addView(userProfileImageView)
-        addView(userNameTextView)
+        addView(userNameTextView, ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
+            leftToRight = userProfileImageView.id
+            topToTop = userProfileImageView.id
+            bottomToBottom = userProfileImageView.id
+            rightToLeft = likeButton.id
+            marginStart = 7.dpToPx(context)
+        })
         addView(replyButton)
-        addView(likeButton)
+        addView(likeButton, LayoutParams(dp24, dp24).apply {
+            rightToLeft = replyButton.id
+            topToTop = userProfileImageView.id
+            bottomToBottom = userProfileImageView.id
+            leftToRight = userNameTextView.id
+            rightMargin = dp16
+        })
         addView(commentTextView)
         addView(dateTimeTextView)
     }
@@ -191,6 +208,15 @@ class CommentItemView(
      */
     fun setOnDeleteClickListener(onDeleteClickListener: OnClickListener) {
         TODO()
+    }
+
+    /**
+     * 더 보기 버튼
+     */
+    fun setOnMoreClickListener(onMoreClickListener: OnClickListener) {
+        moreButton.setOnClickListener {
+            onMoreClickListener.onClick(it)
+        }
     }
 
 }

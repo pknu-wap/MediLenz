@@ -92,7 +92,7 @@ data class MedicineDetailInfoResponse(
             @SerialName("ITEM_ENG_NAME") val itemEnglishName: String?,
             @SerialName("ITEM_NAME") val itemName: String?,
             @SerialName("ITEM_PERMIT_DATE") val itemPermitDate: String?,
-            @SerialName("ITEM_SEQ") val itemSequence: String?,
+            @SerialName("ITEM_SEQ") val itemSequence: String,
             @SerialName("MAIN_INGR_ENG") val mainIngredientEnglish: String?,
             @SerialName("MAIN_ITEM_INGR") val mainItemIngredient: String?,
             @SerialName("MAKE_MATERIAL_FLAG") val makeMaterialFlag: String?,

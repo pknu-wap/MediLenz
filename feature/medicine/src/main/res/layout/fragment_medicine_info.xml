@@ -13,8 +13,10 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         >
 
         <com.google.android.material.appbar.AppBarLayout
@@ -36,6 +38,7 @@
                 app:collapsedTitleTextColor="@color/white"
                 app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
                 app:expandedTitleTextColor="@android:color/transparent"
+                app:expandedTitleMarginBottom="0dp"
                 >
 
                 <androidx.constraintlayout.widget.ConstraintLayout

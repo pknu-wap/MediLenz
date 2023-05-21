@@ -9,6 +9,10 @@ interface RecallSuspensionRepository {
     suspend fun getRecallDisposalList(
     ): Flow<PagingData<RecallSuspensionListResponse.Body.Item.Item>>
 
+    suspend fun getRecentRecallDisposalList(
+        pageNo: Int = 1, numOfRows: Int = 15
+    ): Result<List<RecallSuspensionListResponse.Body.Item.Item>>
+
     suspend fun getDetailRecallSuspension(
         company: String?, product: String?
     ): Result<DetailRecallSuspensionResponse.Body.Item.Item>
