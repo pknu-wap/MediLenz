@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('RecentBrowsed', {
+module.exports = function (sequelize, DataTypes) {
+    const RecentBrowsed = sequelize.define('RecentBrowsed', {
         ID: {
             field: 'ID',
             type: DataTypes.INTEGER,
@@ -25,12 +25,17 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'DB_RECENT_BROWSED',
         timestamps: true,
         hooks: {
-            beforeCreate: async (data, options) => { // sequence to data id mapping
+            beforeCreate: async (recentBrowsed, options) => { // sequence to data id mapping
                 const result = await sequelize.query('SELECT RECENT_BROWSED_SEQ.NEXTVAL AS ID FROM DUAL', {
                     type: sequelize.QueryTypes.SELECT
                 });
-                data.ID = result[0].ID; // data 객체의 ID와 DB_RECENT_BROWSED의 ID 매핑
+                recentBrowsed.ID = result[0].ID; // data 객체의 ID와 DB_RECENT_BROWSED의 ID 매핑
             },
         }
     });
+
+    RecentBrowsed.associate = function (models) {
+        RecentBrowsed.belongsTo(models.User, {foreignKey: 'USERID', sourceKey: 'ID'});
+    }
+    return RecentBrowsed;
 }

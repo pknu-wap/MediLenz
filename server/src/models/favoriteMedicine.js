@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('FavoriteMedicine', {
+module.exports = function (sequelize, DataTypes) {
+    const FavoriteMedicine = sequelize.define('FavoriteMedicine', {
         ID: {
             field: 'ID',
             type: DataTypes.INTEGER,
@@ -25,12 +25,18 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'DB_FAVORITE_MEDICINE',
         timestamps: true,
         hooks: {
-            beforeCreate: async (data, options) => { // sequence to data id mapping
+            beforeCreate: async (favoriteMedicine, options) => { // sequence to data id mapping
                 const result = await sequelize.query('SELECT FAVORITE_MEDICINE_ID_SEQ.NEXTVAL AS ID FROM DUAL', {
                     type: sequelize.QueryTypes.SELECT
                 });
-                data.ID = result[0].ID; // data 객체의 ID와 DB_FAVORITE_MEDICINE의 ID 매핑
+                favoriteMedicine.ID = result[0].ID; // data 객체의 ID와 DB_FAVORITE_MEDICINE의 ID 매핑
             },
         }
     });
+
+    FavoriteMedicine.associate = function (models) {
+        FavoriteMedicine.belongsTo(models.User, {foreignKey: 'USERID', sourceKey: 'ID'});
+        FavoriteMedicine.belongsTo(models.Medicine, {foreignKey: 'MEDICINEID', sourceKey: 'ID'});
+    }
+    return FavoriteMedicine;
 }
