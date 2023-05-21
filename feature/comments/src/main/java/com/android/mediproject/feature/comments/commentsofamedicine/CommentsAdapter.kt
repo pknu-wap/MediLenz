@@ -33,11 +33,6 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, BaseCommentViewHolder>(Dif
         }
     }
 
-    override fun onViewRecycled(holder: BaseCommentViewHolder) {
-        super.onViewRecycled(holder)
-        // holder.fixBind()
-    }
-
     /**
      * 현재 댓글 수정 상태이면 1, 아니면 0 반환
      */
