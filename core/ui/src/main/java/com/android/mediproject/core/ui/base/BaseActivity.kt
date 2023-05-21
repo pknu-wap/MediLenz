@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.databinding.ViewDataBinding
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
@@ -18,8 +17,8 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
     protected abstract val activityViewModel: V
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setSplash()
         super.onCreate(savedInstanceState)
-        installSplashScreen()
         binding = bindingFactory(layoutInflater)
         setContentView(binding.root)
         binding.lifecycleOwner = this
@@ -27,6 +26,8 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
     }
 
     abstract fun afterBinding()
+
+    open fun setSplash() {}
 
     fun log(str: String) = Log.e("wap", str) //for test
 
