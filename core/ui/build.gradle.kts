@@ -20,7 +20,7 @@ dependencies {
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.glides)
-
+    implementation(libs.androidx.splash)
     implementation(libs.bundles.composes)
     implementation(libs.androidx.splash)
 
