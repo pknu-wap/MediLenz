@@ -8,7 +8,7 @@ const { createAccessToken, createRefreshToken } = require("../config/jwt");
 // sign-in
 const login = async (email, password) => {
     const userInfo = await User.findOne({
-        attributes: ["USERID", "PASSWORD"],
+        attributes: ["ID", "PASSWORD"],
         where: {
             EMAIL: email
         }
@@ -20,8 +20,8 @@ const login = async (email, password) => {
         return responseFormat(401, responseMsg.SIGNIN_PASSWORD_MISMATCH);
     }
     const response = responseMsg.SIGNIN_SUCCESS;
-    response.accessToken = createAccessToken(userInfo.USERID); // generate access token
-    response.refreshToken = createRefreshToken(userInfo.USERID); // generate refresh token
+    response.accessToken = createAccessToken(userInfo.ID); // generate access token
+    response.refreshToken = createRefreshToken(userInfo.ID); // generate refresh token
 
     return responseFormat(200, response);
 }
@@ -55,8 +55,8 @@ const createUser = async (email, password, nickname) => {
             NICKNAME: nickname
         });
         const response = responseMsg.SIGNUP_SUCCESS;
-        response.accessToken = createAccessToken(user.USERID); // generate access token
-        response.refreshToken = createRefreshToken(user.USERID); // generate refresh token
+        response.accessToken = createAccessToken(user.ID); // generate access token
+        response.refreshToken = createRefreshToken(user.ID); // generate refresh token
 
         return responseFormat(201, response);
     }
