@@ -5,6 +5,15 @@ const { responseFormat } = require("../config/response");
 const responseMsg = require("../config/responseMsg");
 const { createAccessToken, createRefreshToken } = require("../config/jwt");
 
+// sign-in response format
+const loginResponseFormat = (message, access_token = null, refresh_token = null) => {
+    return {
+        message,
+        access_token,
+        refresh_token
+    }
+}
+
 // sign-in
 const login = async (email, password) => {
     const userInfo = await User.findOne({
@@ -14,16 +23,17 @@ const login = async (email, password) => {
         }
     });
     if (!userInfo) { // if user not exists
-        return responseFormat(404, responseMsg.SIGNIN_USER_NOT_FOUND);
+        return responseFormat(404, loginResponseFormat(responseMsg.SIGNIN_USER_NOT_FOUND));
     }
     if (password != userInfo.PASSWORD) { // password mismatch
-        return responseFormat(401, responseMsg.SIGNIN_PASSWORD_MISMATCH);
+        return responseFormat(401, loginResponseFormat(responseMsg.SIGNIN_PASSWORD_MISMATCH));
     }
-    const response = responseMsg.SIGNIN_SUCCESS;
-    response.accessToken = createAccessToken(userInfo.ID); // generate access token
-    response.refreshToken = createRefreshToken(userInfo.ID); // generate refresh token
+  
+    const message = responseMsg.SIGNIN_SUCCESS; // generate response message
+    const accessToken = createAccessToken(userInfo.USERID); // generate access token
+    const refreshToken = createRefreshToken(userInfo.USERID); // generate refresh token
 
-    return responseFormat(200, response);
+    return responseFormat(200, loginResponseFormat(message, accessToken, refreshToken));
 }
 
 // duplicate check

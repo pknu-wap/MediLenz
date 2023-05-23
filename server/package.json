@@ -22,5 +22,9 @@
     "oracledb": "^5.5.0",
     "sequelize": "^6.31.0",
     "sequelize-auto": "^0.8.8"
+  },
+  "devDependencies": {
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3"
   }
 }
