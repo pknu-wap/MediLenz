@@ -6,6 +6,8 @@ import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.AccessTokenResponse
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
+import com.android.mediproject.core.network.datasource.sign.SignDataSource
+import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -34,6 +36,10 @@ object AwsNetwork {
     @Provides
     @Singleton
     fun providesCommentsDataSource(awsNetworkApi: AwsNetworkApi): CommentsDataSource = CommentsDataSourceImpl(awsNetworkApi)
+
+    @Provides
+    @Singleton
+    fun providesSignDataSource(awsNetworkApi: AwsNetworkApi): SignDataSource = SignDataSourceImpl(awsNetworkApi)
 }
 
 interface AwsNetworkApi {

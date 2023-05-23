@@ -46,6 +46,10 @@ androidXAsynclayoutinflater = "1.1.0-alpha01"
 
 androidXSplashScreen = "1.0.1"
 
+protocolBuffer = "3.23.1"
+protoBufGradlePlugin = "0.9.3"
+googleOssPlugin = "0.10.6"
+
 androidXTestTruth = "1.5.0"
 androidXTestOrchestra = "1.4.2"
 
@@ -122,8 +126,8 @@ androidx-activity = { group = "androidx.activity", name = "activity-ktx", versio
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "androidXPaging" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "androidXPagingCompose" }
 
-androidx-datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDatastore" }
-androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidxDatastore" }
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "androidxDatastore" }
 
 # 미사용
 # androidx-window-manager = { module = "androidx.window:window", version.ref = "androidxWindowManager" }
@@ -231,6 +235,10 @@ ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devt
 
 kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
+google-protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protocolBuffer" }
+google-protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protocolBuffer" }
+google-oss-licenses-plugin = { module = "com.google.android.gms:oss-licenses-plugin", version.ref = "googleOssPlugin" }
+
 # 라이브러리들을 묶어서 한번에 선언------------------------------------------------------------------------------------------------------------------------
 [bundles]
 
@@ -272,7 +280,7 @@ hilts = ["androidx-hilt-navigation-compose", "androidx-hilt-android", "androidx-
 
 rooms = ["androidx-room-ktx", "androidx-room-runtime"]
 
-dataStores = ["androidx-datastore-core", "androidx-datastore-preferences"]
+dataStores = ["androidx-datastore-preferences", "androidx-datastore"]
 
 workManagers = ["androidx-work-ktx"]
 
@@ -299,3 +307,4 @@ kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+protobuf = { id = "com.google.protobuf", version.ref = "protoBufGradlePlugin" }
