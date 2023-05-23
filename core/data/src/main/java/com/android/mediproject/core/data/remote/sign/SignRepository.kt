@@ -3,6 +3,8 @@ package com.android.mediproject.core.data.remote.sign
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.AccessTokenResponse
+import com.android.mediproject.core.model.remote.token.ConnectionTokenDto
+import com.android.mediproject.core.model.remote.token.TokenState
 import kotlinx.coroutines.flow.Flow
 
 interface SignRepository {
@@ -14,4 +16,8 @@ interface SignRepository {
     suspend fun refreshToken(refreshToken: String): Flow<Result<AccessTokenResponse>>
 
     suspend fun signOut(): Flow<Result<Unit>>
+
+    suspend fun getSavedTokens(): Flow<TokenState<ConnectionTokenDto>>
+
+    suspend fun saveTokens(connectionTokenDto: ConnectionTokenDto)
 }

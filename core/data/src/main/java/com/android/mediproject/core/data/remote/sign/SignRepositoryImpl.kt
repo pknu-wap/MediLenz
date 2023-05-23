@@ -1,14 +1,17 @@
 package com.android.mediproject.core.data.remote.sign
 
+import com.android.mediproject.core.datastore.TokenDataSource
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.AccessTokenResponse
+import com.android.mediproject.core.model.remote.token.ConnectionTokenDto
+import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SignRepositoryImpl @Inject constructor(
-    private val awsDataSource: SignDataSource
+    private val awsDataSource: SignDataSource, private val connectionTokenDataSource: TokenDataSource
 ) : SignRepository {
     override suspend fun signIn(email: String, password: String): Flow<Result<SignInResponse>> {
         TODO("Not yet implemented")
@@ -24,6 +27,12 @@ class SignRepositoryImpl @Inject constructor(
 
     override suspend fun signOut(): Flow<Result<Unit>> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun getSavedTokens(): Flow<TokenState<ConnectionTokenDto>> = connectionTokenDataSource.tokens
+
+    override suspend fun saveTokens(connectionTokenDto: ConnectionTokenDto) {
+        connectionTokenDataSource.updateTokens(connectionTokenDto)
     }
 
 
