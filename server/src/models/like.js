@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('Like', {
+module.exports = function (sequelize, DataTypes) {
+    const Like = sequelize.define('Like', {
         ID: {
             field: 'ID',
             type: DataTypes.INTEGER,
@@ -24,12 +24,17 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true,
         tableName: 'DB_LIKE',
         hooks: {
-            beforeCreate: async (data, options) => { // sequence to data id mapping
+            beforeCreate: async (like, options) => { // sequence to data id mapping
                 const result = await sequelize.query('SELECT LIKE_ID_SEQ.NEXTVAL AS ID FROM DUAL', {
                     type: sequelize.QueryTypes.SELECT
                 });
-                data.ID = result[0].ID; // data 객체의 ID와 DB_LIKE의 ID 매핑
+                like.ID = result[0].ID; // data 객체의 ID와 DB_LIKE의 ID 매핑
             },
         }
     });
+    Like.associate = function (models) {
+        Like.belongsTo(models.User, {foreignKey: 'USERID', sourceKey: 'ID'});
+        Like.belongsTo(models.Comment, {foreignKey: 'COMMENTID', sourceKey: 'ID'});
+    }
+    return Like;
 }

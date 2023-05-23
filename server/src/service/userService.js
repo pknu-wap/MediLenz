@@ -17,7 +17,7 @@ const loginResponseFormat = (message, access_token = null, refresh_token = null)
 // sign-in
 const login = async (email, password) => {
     const userInfo = await User.findOne({
-        attributes: ["USERID", "PASSWORD"],
+        attributes: ["ID", "PASSWORD"],
         where: {
             EMAIL: email
         }
@@ -28,6 +28,7 @@ const login = async (email, password) => {
     if (password != userInfo.PASSWORD) { // password mismatch
         return responseFormat(401, loginResponseFormat(responseMsg.SIGNIN_PASSWORD_MISMATCH));
     }
+  
     const message = responseMsg.SIGNIN_SUCCESS; // generate response message
     const accessToken = createAccessToken(userInfo.USERID); // generate access token
     const refreshToken = createRefreshToken(userInfo.USERID); // generate refresh token
@@ -64,8 +65,8 @@ const createUser = async (email, password, nickname) => {
             NICKNAME: nickname
         });
         const response = responseMsg.SIGNUP_SUCCESS;
-        response.accessToken = createAccessToken(user.USERID); // generate access token
-        response.refreshToken = createRefreshToken(user.USERID); // generate refresh token
+        response.accessToken = createAccessToken(user.ID); // generate access token
+        response.refreshToken = createRefreshToken(user.ID); // generate refresh token
 
         return responseFormat(201, response);
     }
