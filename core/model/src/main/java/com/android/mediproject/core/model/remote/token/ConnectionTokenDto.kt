@@ -1,21 +1,25 @@
 package com.android.mediproject.core.model.remote.token
 
+import java.time.LocalDateTime
+
+
+/**
+ * 토큰 정보를 담는 데이터 클래스
+ *
+ * @property accessToken
+ * @property refreshToken
+ * @property userEmail
+ * @property expirationDateTime
+ */
 data class ConnectionTokenDto(
-    private val _accessToken: CharArray,
-    private val _refreshToken: CharArray,
-    private val _userId: CharArray,
+    val accessToken: CharArray,
+    val refreshToken: CharArray,
+    val userEmail: CharArray,
+    val expirationDateTime: LocalDateTime,
 ) {
 
-    val accessToken: String
-
-    val refreshToken: String
-
-    val userId: String
-
-    init {
-        accessToken = _accessToken.toStr()
-        refreshToken = _refreshToken.toStr()
-        userId = _userId.toStr()
+    private fun CharArray.toStr(): String {
+        return this.joinToString("")
     }
 
     override fun equals(other: Any?): Boolean {
@@ -24,21 +28,21 @@ data class ConnectionTokenDto(
 
         other as ConnectionTokenDto
 
-        if (!_accessToken.contentEquals(other._accessToken)) return false
-        if (!_refreshToken.contentEquals(other._refreshToken)) return false
-        if (!_userId.contentEquals(other._userId)) return false
+        if (!accessToken.contentEquals(other.accessToken)) return false
+        if (!refreshToken.contentEquals(other.refreshToken)) return false
+        if (!userEmail.contentEquals(other.userEmail)) return false
+        if (expirationDateTime != other.expirationDateTime) return false
+
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = _accessToken.contentHashCode()
-        result = 31 * result + _refreshToken.contentHashCode()
-        result = 31 * result + _userId.contentHashCode()
-        return result
-    }
+        var result = accessToken.contentHashCode()
+        result = 31 * result + refreshToken.contentHashCode()
+        result = 31 * result + userEmail.contentHashCode()
+        result = 31 * result + expirationDateTime.hashCode()
 
-    private fun CharArray.toStr(): String {
-        return this.joinToString("")
+        return result
     }
 }

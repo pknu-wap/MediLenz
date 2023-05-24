@@ -47,14 +47,14 @@ interface AwsNetworkApi {
     @POST(value = "user/register")
     suspend fun signUp(
         @Field("email") email: String,
-        @Field("password") password: String, @Field("email") nickname: String,
+        @Field("password") password: String, @Field("nickname") nickname: String,
     ): Response<SignUpResponse>
 
     @FormUrlEncoded
     @POST(value = "user/login")
     suspend fun signIn(
         @Field("email") email: String,
-        @Field("password") password: String,
+        @Field("password") password: String
     ): Response<SignInResponse>
 
 

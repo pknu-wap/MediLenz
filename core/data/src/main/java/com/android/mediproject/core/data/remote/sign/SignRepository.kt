@@ -1,23 +1,21 @@
 package com.android.mediproject.core.data.remote.sign
 
-import com.android.mediproject.core.model.remote.sign.SignInResponse
-import com.android.mediproject.core.model.remote.sign.SignUpResponse
-import com.android.mediproject.core.model.remote.token.AccessTokenResponse
+import com.android.mediproject.core.model.parameters.SignInParameter
+import com.android.mediproject.core.model.parameters.SignUpParameter
 import com.android.mediproject.core.model.remote.token.ConnectionTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import kotlinx.coroutines.flow.Flow
 
 interface SignRepository {
 
-    suspend fun signIn(email: String, password: String): Flow<Result<SignInResponse>>
+    suspend fun signIn(signInParameter: SignInParameter): Flow<Result<Unit>>
 
-    suspend fun signUp(email: String, password: String, nickname: String): Flow<Result<SignUpResponse>>
+    suspend fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>>
 
-    suspend fun refreshToken(refreshToken: String): Flow<Result<AccessTokenResponse>>
+    suspend fun reissueToken(): Flow<Result<Unit>>
 
-    suspend fun signOut(): Flow<Result<Unit>>
+    suspend fun signOut()
 
     suspend fun getSavedTokens(): Flow<TokenState<ConnectionTokenDto>>
 
-    suspend fun saveTokens(connectionTokenDto: ConnectionTokenDto)
 }

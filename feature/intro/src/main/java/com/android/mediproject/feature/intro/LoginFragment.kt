@@ -19,20 +19,20 @@ class LoginFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            viewModel = fragmentViewModel.apply {
-                repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+            viewLifecycleOwner.repeatOnStarted {
+
             }
         }
     }
 
-    private fun handleEvent(event: LoginViewModel.LoginEvent) = when (event) {
-        is LoginViewModel.LoginEvent.Login -> {
+    private fun handleEvent(event: LoginViewModel.SignEvent) = when (event) {
+        is LoginViewModel.SignEvent.SignIn -> {
             val id = binding.loginEmail.getValue()
             val password = binding.loginPassword.getValue()
-            log("아이디 : " + id + " 비밀번호 : " + password)
+            //log("아이디 : " + id + " 비밀번호 : " + password)
             //Todo
         }
 
-        is LoginViewModel.LoginEvent.SignUp -> findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
+        is LoginViewModel.SignEvent.SignUp -> findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
     }
 }
