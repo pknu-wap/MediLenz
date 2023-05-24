@@ -11,7 +11,7 @@ dotenv.config();
 const home = require("./src/routes/home");
 
 // 미들웨어
-app.use(bodyParser.json());
+app.use(bodyParser.json()); //use body-parser
 app.use("/", home);
 
 module.exports = app;
