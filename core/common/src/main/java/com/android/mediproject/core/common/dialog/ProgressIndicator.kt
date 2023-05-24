@@ -1,6 +1,7 @@
 package com.android.mediproject.core.common.dialog
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -21,26 +22,31 @@ class ProgressIndicator(context: Context, attrs: AttributeSet?, textMessage: Str
         id = R.id.progressBar
     }
 
-    private val textView = TextView(context).apply {
+    private val textView = TextView(context).also { textView ->
         textMessage?.apply {
-            text = this
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
-            typeface = Typeface.create("sans-serif-thin", Typeface.NORMAL)
-        } ?: kotlin.run { visibility = GONE }
+            textView.text = this
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+            textView.typeface = Typeface.create("sans-serif-condensed", Typeface.NORMAL)
+            textView.setTextColor(Color.parseColor("#a3a3a6"))
+        } ?: run { textView.visibility = GONE }
 
-        gravity = Gravity.CENTER_HORIZONTAL
-        id = R.id.progressText
+        textView.gravity = Gravity.CENTER_HORIZONTAL
+        textView.id = R.id.progressText
     }
 
     init {
         background = ContextCompat.getDrawable(context, R.drawable.progress_background)
 
-        addView(lottie, LayoutParams(LayoutParams.MATCH_PARENT, dpToPx(context, 30)).apply {
+        addView(lottie, LayoutParams(LayoutParams.WRAP_CONTENT, dpToPx(context, 30)).apply {
             topToTop = LayoutParams.PARENT_ID
+            startToStart = LayoutParams.PARENT_ID
+            endToEnd = LayoutParams.PARENT_ID
         })
-        addView(textView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
+        addView(textView, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
             topToBottom = lottie.id
             topMargin = dpToPx(context, 16)
+            startToStart = LayoutParams.PARENT_ID
+            endToEnd = LayoutParams.PARENT_ID
         })
 
         lottie.playAnimation()

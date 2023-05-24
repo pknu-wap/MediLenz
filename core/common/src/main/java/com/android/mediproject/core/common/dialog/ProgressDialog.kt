@@ -13,7 +13,7 @@ object LoadingDialog {
         AlertDialog.Builder(context).setView(ProgressIndicator(context, null, textMessage)).setCancelable(false).create().also {
             it.window?.setBackgroundDrawableResource(android.R.color.transparent)
             it.window?.attributes = it.window?.attributes?.apply {
-                width = (context.resources.displayMetrics.widthPixels * 0.7).toInt()
+                width = ViewGroup.LayoutParams.WRAP_CONTENT
                 height = ViewGroup.LayoutParams.WRAP_CONTENT
             }
             it.setCanceledOnTouchOutside(false)

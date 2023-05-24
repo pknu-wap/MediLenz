@@ -4,4 +4,6 @@
     <string name="signUp">회원가입</string>
     <string name="login">로그인</string>
     <string name="rememberEmail">아이디 저장</string>
+    <string name="signing">로그인 중</string>
+    <string name="signInRegexError">이메일 또는 비밀번호 형식이 잘못되었습니다.</string>
 </resources>
