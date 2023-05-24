@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -36,6 +37,7 @@ class MediSearchbar constructor(
                 val cameraIcon = typedArr.getDrawable(R.styleable.MediSearchbar_camera_icon) ?: AppCompatResources.getDrawable(
                     context, R.drawable.baseline_camera_24
                 )
+                val imeOptions = typedArr.getInt(R.styleable.MediSearchbar_ime_options, EditorInfo.IME_ACTION_NONE)
                 val searchHint = typedArr.getString(R.styleable.MediSearchbar_search_hint) ?: context.getString(R.string.search_hint)
                 val aiTitle = typedArr.getString(R.styleable.MediSearchbar_ai_text) ?: context.getString(R.string.search_with_ai)
                 val searchIcon = typedArr.getDrawable(R.styleable.MediSearchbar_search_icon) ?: AppCompatResources.getDrawable(
@@ -135,6 +137,16 @@ class MediSearchbar constructor(
                     if (isAllBtn) {
                         isEnabled = false
                         isClickable = true
+                    }
+
+                    this.imeOptions = imeOptions
+
+                    setOnEditorActionListener { v, actionId, event ->
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                            searchManualBtnView.callOnClick()
+                            return@setOnEditorActionListener true
+                        }
+                        false
                     }
 
                     maxLines = 1

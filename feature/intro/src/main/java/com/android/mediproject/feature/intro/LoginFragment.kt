@@ -92,7 +92,7 @@ class LoginFragment @Inject constructor(
 
     private fun addDelayTextWatcher(editText: EditText) {
         mainScope.launch(context = defaultDispatcher + Job()) {
-            editText.delayTextChangedCallback().debounce(450).onEach { seq ->
+            editText.delayTextChangedCallback().debounce(500L).onEach { seq ->
                 binding.loginBtn.isEnabled = !seq.isNullOrEmpty()
             }.launchIn(this)
         }
