@@ -6,7 +6,7 @@ const responseMsg = require("../config/responseMsg");
 const { createAccessToken, createRefreshToken } = require("../config/jwt");
 
 // sign-in response format
-const loginResponseFormat = (message, access_token = null, refresh_token = null) => {
+const tokenResponseFormat = (message, access_token = null, refresh_token = null) => {
     return {
         message,
         access_token,
@@ -23,17 +23,17 @@ const login = async (email, password) => {
         }
     });
     if (!userInfo) { // if user not exists
-        return responseFormat(404, loginResponseFormat(responseMsg.SIGNIN_USER_NOT_FOUND));
+        return responseFormat(404, tokenResponseFormat(responseMsg.SIGNIN_USER_NOT_FOUND));
     }
     if (password != userInfo.PASSWORD) { // password mismatch
-        return responseFormat(401, loginResponseFormat(responseMsg.SIGNIN_PASSWORD_MISMATCH));
+        return responseFormat(401, tokenResponseFormat(responseMsg.SIGNIN_PASSWORD_MISMATCH));
     }
   
     const message = responseMsg.SIGNIN_SUCCESS; // generate response message
     const accessToken = createAccessToken(userInfo.USERID); // generate access token
     const refreshToken = createRefreshToken(userInfo.USERID); // generate refresh token
 
-    return responseFormat(200, loginResponseFormat(message, accessToken, refreshToken));
+    return responseFormat(200, tokenResponseFormat(message, accessToken, refreshToken));
 }
 
 // duplicate check
@@ -51,11 +51,11 @@ const createUser = async (email, password, nickname) => {
     // duplicate check
     let checkParam = "EMAIL"
     if (await duplicateCheck({ [checkParam]: email })) { // email
-        return responseFormat(409, responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam));
+        return responseFormat(409, tokenResponseFormat(responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam)));
     }
     checkParam = "NICKNAME";
     if (await duplicateCheck({ [checkParam]: nickname })) { // nickname
-        return responseFormat(409, responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam));
+        return responseFormat(409, tokenResponseFormat(responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam)));
     }
 
     try {
@@ -64,15 +64,17 @@ const createUser = async (email, password, nickname) => {
             PASSWORD: password,
             NICKNAME: nickname
         });
-        const response = responseMsg.SIGNUP_SUCCESS;
-        response.accessToken = createAccessToken(user.ID); // generate access token
-        response.refreshToken = createRefreshToken(user.ID); // generate refresh token
+      
+        const message = responseMsg.SIGNUP_SUCCESS; // generate response message
+        const accessToken = createAccessToken(user.ID); // generate access token
+        const refreshToken = createRefreshToken(user.ID); // generate refresh token
 
-        return responseFormat(201, response);
+        return responseFormat(201, tokenResponseFormat(message, accessToken, refreshToken));
+
     }
     catch (err) {
         console.log(err);
-        return responseFormat(500, responseMsg.SIGNUP_INTERNAL_SERVER_ERROR);
+        return responseFormat(500, tokenResponseFormat(responseMsg.SIGNUP_INTERNAL_SERVER_ERROR));
     }
 }
 
