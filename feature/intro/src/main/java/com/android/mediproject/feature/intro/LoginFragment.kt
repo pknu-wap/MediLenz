@@ -9,19 +9,13 @@ import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
-import com.android.mediproject.core.common.util.delayTextChangedCallback
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import repeatOnStarted
 import javax.inject.Inject
 
@@ -43,7 +37,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
                 fragmentViewModel.signIn(binding.loginEmail.getEditable(), binding.loginPassword.getEditable())
             }
 
-            loginBtn.isEnabled = false
+            loginBtn.isEnabled = true
 
             addDelayTextWatcher(loginEmail.inputData)
             addDelayTextWatcher(loginPassword.inputData)
@@ -93,6 +87,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
     }
 
     private fun addDelayTextWatcher(editText: EditText) {
+        /*
         mainScope.launch(context = defaultDispatcher + Job()) {
             editText.delayTextChangedCallback().debounce(500L).onEach { seq ->
                 mainScope.launch {
@@ -100,5 +95,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
                 }
             }.launchIn(this)
         }
+
+         */
     }
 }

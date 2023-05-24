@@ -53,8 +53,8 @@ interface AwsNetworkApi {
     @FormUrlEncoded
     @POST(value = "user/login")
     suspend fun signIn(
-        @Field("email") email: String,
-        @Field("password") password: String
+        @Field("email", encoded = true) email: String,
+        @Field("password", encoded = true) password: String
     ): Response<SignInResponse>
 
 

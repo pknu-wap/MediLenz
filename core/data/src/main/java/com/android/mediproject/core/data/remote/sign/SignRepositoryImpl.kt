@@ -11,6 +11,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.lastOrNull
@@ -49,11 +50,13 @@ class SignRepositoryImpl @Inject constructor(
                 // 토큰 저장
                 connectionTokenDataSource.updateTokens(dto)
                 // 로그인 성공
-                trySend(Result.success(Unit))
+                Result.success(Unit)
             }, onFailure = { throwable ->
                 // 로그인 실패
-                trySend(Result.failure(throwable))
+                Result.failure(throwable)
             })
+        }.collectLatest {
+            trySend(it)
         }
     }
 
@@ -70,11 +73,13 @@ class SignRepositoryImpl @Inject constructor(
                 // 토큰 저장
                 connectionTokenDataSource.updateTokens(dto)
                 // 회원가입 성공
-                trySend(Result.success(Unit))
+                Result.success(Unit)
             }, onFailure = { throwable ->
                 // 회원가입 실패
-                trySend(Result.failure(throwable))
+                Result.failure(throwable)
             })
+        }.collectLatest {
+            trySend(it)
         }
     }
 
@@ -91,7 +96,7 @@ class SignRepositoryImpl @Inject constructor(
     /**
      * 서버에 새로운 토큰을 요청한다.
      */
-    private suspend fun reissueToken(connectionTokenDto: ConnectionTokenDto): Flow<Result<Unit>> =
+    private suspend fun reissueToken(connectionTokenDto: ConnectionTokenDto): Flow<Result<Unit>> = channelFlow {
         signDataSource.reissueTokens(connectionTokenDto.refreshToken, connectionTokenDto.userEmail).map { result ->
             result.fold(onSuccess = { dto ->
                 // 새로운 토큰 저장
@@ -102,8 +107,11 @@ class SignRepositoryImpl @Inject constructor(
                 // 새로운 토큰 발급 실패
                 Result.failure(throwable)
             })
+        }.collectLatest {
+            trySend(it)
         }
 
+    }
 
     /**
      * 저장된 토큰 정보를 삭제한다.

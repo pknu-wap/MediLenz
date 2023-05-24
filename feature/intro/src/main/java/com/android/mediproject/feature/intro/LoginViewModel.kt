@@ -4,6 +4,8 @@ import MutableEventFlow
 import android.text.Editable
 import androidx.lifecycle.viewModelScope
 import asEventFlow
+import com.android.mediproject.core.common.network.Dispatcher
+import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.model.parameters.SignInParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -13,6 +15,7 @@ import com.android.mediproject.feature.intro.SignInState.SignOut
 import com.android.mediproject.feature.intro.SignInState.Signing
 import com.android.mediproject.feature.intro.SignInState.SuccessSignIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -20,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val signUseCase: SignUseCase
+    private val signUseCase: SignUseCase, @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel() {
 
     private val _signInEvent = MutableStateFlow<SignInState>(SignOut)
@@ -47,7 +50,7 @@ class LoginViewModel @Inject constructor(
      * 3. 로그인 결과 이벤트 발생
      */
     fun signIn(emailEditable: Editable, passwordEditable: Editable) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             // 이메일 또는 비밀번호 형식 오류 검사
             if (!emailEditable.matches(Regex(emailReg))) {
                 _signInEvent.value = RegexError
