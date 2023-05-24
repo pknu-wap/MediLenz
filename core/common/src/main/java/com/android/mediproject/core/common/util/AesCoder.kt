@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.lang.ref.WeakReference
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -27,13 +26,12 @@ class AesCoder @Inject constructor(@ApplicationContext context: Context) {
             context.packageManager.getPackageInfo(context.packageName, 0)
         }
 
-        WeakReference(packageInfo.firstInstallTime.hashCode().toString().substring(0, 32)).apply {
-            get()?.also {
-                secretKey = SecretKeySpec(it.toByteArray(charset("UTF-8")), "AES")
-                ivParameterSpec = IvParameterSpec(it.encodeToByteArray(0, 16))
-            }
-            clear()
+        var key: String? = "${packageInfo.firstInstallTime}".repeat(4).substring(0, 32)
+        key?.apply {
+            secretKey = SecretKeySpec(toByteArray(charset("UTF-8")), "AES")
+            ivParameterSpec = IvParameterSpec(encodeToByteArray(0, 16))
         }
+        key = null
     }
 
     /**

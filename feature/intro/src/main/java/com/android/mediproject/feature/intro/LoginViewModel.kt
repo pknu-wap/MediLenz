@@ -34,6 +34,8 @@ class LoginViewModel @Inject constructor(
     fun login() = event(SignEvent.SignIn())
     fun signUp() = event(SignEvent.SignUp())
 
+    private val emailReg = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$"
+
     /**
      * 로그인 요청
      *
@@ -47,10 +49,10 @@ class LoginViewModel @Inject constructor(
     fun signIn(emailEditable: Editable, passwordEditable: Editable) {
         viewModelScope.launch {
             // 이메일 또는 비밀번호 형식 오류 검사
-            if (!emailEditable.matches(Regex("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"))) {
+            if (!emailEditable.matches(Regex(emailReg))) {
                 _signInEvent.value = RegexError
                 return@launch
-            } else if (!passwordEditable.matches(Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{4,16}$"))) {
+            } else if (passwordEditable.length !in 4..16) {
                 _signInEvent.value = RegexError
                 return@launch
             }

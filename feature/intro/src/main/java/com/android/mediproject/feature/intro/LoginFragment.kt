@@ -13,6 +13,7 @@ import com.android.mediproject.core.common.util.delayTextChangedCallback
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -23,13 +24,14 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import repeatOnStarted
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
-class LoginFragment @Inject constructor(
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineContext
-) : BaseFragment<FragmentLoginBinding, LoginViewModel>(FragmentLoginBinding::inflate) {
+class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(FragmentLoginBinding::inflate) {
     override val fragmentViewModel: LoginViewModel by viewModels()
+
+    @Inject
+    @Dispatcher(MediDispatchers.Default)
+    lateinit var defaultDispatcher: CoroutineDispatcher
 
     private val mainScope = MainScope()
 
@@ -93,7 +95,9 @@ class LoginFragment @Inject constructor(
     private fun addDelayTextWatcher(editText: EditText) {
         mainScope.launch(context = defaultDispatcher + Job()) {
             editText.delayTextChangedCallback().debounce(500L).onEach { seq ->
-                binding.loginBtn.isEnabled = !seq.isNullOrEmpty()
+                mainScope.launch {
+                    binding.loginBtn.isEnabled = !seq.isNullOrEmpty()
+                }
             }.launchIn(this)
         }
     }
