@@ -1,8 +1,7 @@
 plugins {
-
     id("mediproject.android.library")
     id("mediproject.android.hilt")
-
+    alias(libs.plugins.protobuf)
 }
 
 android {
@@ -12,10 +11,24 @@ android {
         buildConfig = true
     }
 }
-hilt {
-    enableAggregatingTask = true
-}
 
+protobuf {
+    protoc {
+        artifact = libs.google.protobuf.protoc.get().toString()
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("java") {
+                    option("lite")
+                }
+                register("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
 
 dependencies {
     implementation(project(":core:common"))
@@ -23,5 +36,5 @@ dependencies {
 
     implementation(libs.bundles.dataStores)
     implementation(libs.kotlinx.coroutines.android)
-
+    implementation(libs.google.protobuf.kotlin.lite)
 }

@@ -9,4 +9,5 @@ annotation class Dispatcher(val mediDispatcher: MediDispatchers)
 enum class MediDispatchers {
     Default,
     IO,
+    Main,
 }

@@ -14,6 +14,9 @@ import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprova
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepositoryImpl
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepository
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepositoryImpl
+import com.android.mediproject.core.data.remote.sign.SignRepository
+import com.android.mediproject.core.data.remote.sign.SignRepositoryImpl
+import com.android.mediproject.core.datastore.TokenDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.dur.DurDataSource
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
@@ -22,6 +25,7 @@ import com.android.mediproject.core.network.datasource.medicineapproval.Medicine
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionListDataSourceImpl
+import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -69,4 +73,10 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun providesCommentsRepository(commentsDataSource: CommentsDataSource): CommentsRepository = CommentsRepositoryImpl(commentsDataSource)
+
+
+    @Provides
+    @Singleton
+    fun providesSignRepository(signDataSource: SignDataSource, connectionTokenDataSource: TokenDataSource): SignRepository =
+        SignRepositoryImpl(signDataSource, connectionTokenDataSource)
 }

@@ -6,6 +6,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.common.uiutil.hideKeyboard
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.MediSearchbar
 import com.android.mediproject.feature.search.databinding.FragmentSearchMedicinesBinding
@@ -81,6 +82,7 @@ class SearchMedicinesFragment :
 
         binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
             override fun onSearchQuery(query: String) {
+                hideKeyboard()
                 fragmentViewModel.searchMedicines(query)
             }
 

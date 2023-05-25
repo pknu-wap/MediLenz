@@ -42,6 +42,7 @@
             app:layout_goneMarginTop="30dp"
             app:search_hint="@string/search_hint"
             app:search_icon="@drawable/baseline_search_24"
+            app:ime_options="actionSearch"
             />
 
         <androidx.fragment.app.FragmentContainerView
