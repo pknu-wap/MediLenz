@@ -27,7 +27,7 @@ class ProgressIndicator(context: Context, attrs: AttributeSet?, textMessage: Str
             textView.text = this
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             textView.typeface = Typeface.create("sans-serif-condensed", Typeface.NORMAL)
-            textView.setTextColor(Color.parseColor("#a3a3a6"))
+            textView.setTextColor(Color.DKGRAY)
         } ?: run { textView.visibility = GONE }
 
         textView.gravity = Gravity.CENTER_HORIZONTAL
@@ -37,7 +37,7 @@ class ProgressIndicator(context: Context, attrs: AttributeSet?, textMessage: Str
     init {
         background = ContextCompat.getDrawable(context, R.drawable.progress_background)
 
-        addView(lottie, LayoutParams(LayoutParams.WRAP_CONTENT, dpToPx(context, 30)).apply {
+        addView(lottie, LayoutParams(LayoutParams.WRAP_CONTENT, dpToPx(context, 31)).apply {
             topToTop = LayoutParams.PARENT_ID
             startToStart = LayoutParams.PARENT_ID
             endToEnd = LayoutParams.PARENT_ID

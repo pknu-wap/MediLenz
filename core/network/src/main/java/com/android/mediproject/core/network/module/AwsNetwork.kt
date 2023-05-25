@@ -8,6 +8,8 @@ import com.android.mediproject.core.network.datasource.comments.CommentsDataSour
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
+import com.android.mediproject.core.network.parameter.SignInRequestParameter
+import com.android.mediproject.core.network.parameter.SignUpRequestParameter
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -18,8 +20,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
+import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
 import javax.inject.Singleton
@@ -43,22 +44,17 @@ object AwsNetwork {
 }
 
 interface AwsNetworkApi {
-    @FormUrlEncoded
     @POST(value = "user/register")
     suspend fun signUp(
-        @Field("email") email: String,
-        @Field("password") password: String, @Field("nickname") nickname: String,
+        @Body signUpRequestParameter: SignUpRequestParameter
     ): Response<SignUpResponse>
 
-    @FormUrlEncoded
     @POST(value = "user/login")
     suspend fun signIn(
-        @Field("email", encoded = true) email: String,
-        @Field("password", encoded = true) password: String
+        @Body signInRequestParameter: SignInRequestParameter
     ): Response<SignInResponse>
 
 
-    @FormUrlEncoded
     @POST(value = "user/reissue")
     suspend fun reissueTokens(
         @Header("authorization") refreshToken: String,

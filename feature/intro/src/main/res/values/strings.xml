@@ -6,4 +6,11 @@
     <string name="rememberEmail">아이디 저장</string>
     <string name="signing">로그인 중</string>
     <string name="signInRegexError">이메일 또는 비밀번호 형식이 잘못되었습니다.</string>
+    <string name="signInSuccess">로그인 성공</string>
+    <string name="signInFailed">로그인 실패</string>
+    <string name="signOutSuccess">로그아웃 되었습니다</string>
+    <string name="signUpFailed">회원가입 실패</string>
+    <string name="signUpSuccess">회원가입 성공</string>
+    <string name="signingUp">회원가입 처리 중</string>
+    <string name="signUpPasswordError">비밀번호가 일치하지 않습니다</string>
 </resources>

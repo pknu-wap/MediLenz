@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AccessTokenResponse(
-    @SerialName("accessToken") val accessToken: String?,
-    @SerialName("refreshToken") val refreshToken: String?,
+    @SerialName("access_token") val accessToken: String?,
+    @SerialName("refresh_token") val refreshToken: String?,
     @SerialName("message") val message: String,
 )

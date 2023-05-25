@@ -2,10 +2,14 @@ package com.android.mediproject.feature.intro
 
 import MutableEventFlow
 import android.text.Editable
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.util.AesCoder
+import com.android.mediproject.core.common.util.isEmailValid
+import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.model.parameters.SignInParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -17,14 +21,29 @@ import com.android.mediproject.feature.intro.SignInState.SuccessSignIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val signUseCase: SignUseCase, @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    private val signUseCase: SignUseCase,
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    private val savedStateHandle: SavedStateHandle,
+    private val aesCoder: AesCoder
 ) : BaseViewModel() {
+
+    private val _savedEmail = savedStateHandle.getStateFlow("savedEmail", "")
+    val savedEmail = _savedEmail.flatMapLatest {
+        if (it.isEmpty()) emptyFlow()
+        else flowOf(aesCoder.decode(it))
+    }.flowOn(ioDispatcher).stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = CharArray(0))
 
     private val _signInEvent = MutableStateFlow<SignInState>(SignOut)
     val signInEvent = _signInEvent.asStateFlow()
@@ -37,7 +56,6 @@ class LoginViewModel @Inject constructor(
     fun login() = event(SignEvent.SignIn())
     fun signUp() = event(SignEvent.SignUp())
 
-    private val emailReg = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$"
 
     /**
      * 로그인 요청
@@ -49,13 +67,13 @@ class LoginViewModel @Inject constructor(
      * 2. 로그인
      * 3. 로그인 결과 이벤트 발생
      */
-    fun signIn(emailEditable: Editable, passwordEditable: Editable) {
+    fun signIn(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) {
         viewModelScope.launch(ioDispatcher) {
             // 이메일 또는 비밀번호 형식 오류 검사
-            if (!emailEditable.matches(Regex(emailReg))) {
+            if (!isEmailValid(emailEditable)) {
                 _signInEvent.value = RegexError
                 return@launch
-            } else if (passwordEditable.length !in 4..16) {
+            } else if (isPasswordValid(passwordEditable)) {
                 _signInEvent.value = RegexError
                 return@launch
             }
@@ -77,6 +95,7 @@ class LoginViewModel @Inject constructor(
             // 로그인
             signUseCase.signIn(SignInParameter(email, password)).collect { result ->
                 result.fold(onSuccess = {
+                    savedStateHandle["savedEmail"] = aesCoder.encode(email)
                     _signInEvent.value = SuccessSignIn
                 }, onFailure = {
                     _signInEvent.value = FailedSignIn(it.message ?: "로그인 실패")

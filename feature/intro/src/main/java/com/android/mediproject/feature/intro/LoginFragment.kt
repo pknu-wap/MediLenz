@@ -4,18 +4,26 @@ package com.android.mediproject.feature.intro
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.util.delayTextChangedCallback
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import repeatOnStarted
 import javax.inject.Inject
 
@@ -23,18 +31,19 @@ import javax.inject.Inject
 class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(FragmentLoginBinding::inflate) {
     override val fragmentViewModel: LoginViewModel by viewModels()
 
-    @Inject
-    @Dispatcher(MediDispatchers.Default)
-    lateinit var defaultDispatcher: CoroutineDispatcher
+    @Inject @Dispatcher(MediDispatchers.Default) lateinit var defaultDispatcher: CoroutineDispatcher
 
     private val mainScope = MainScope()
+    private val jobs = mutableListOf<Job>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
             loginBtn.setOnClickListener {
-                fragmentViewModel.signIn(binding.loginEmail.getEditable(), binding.loginPassword.getEditable())
+                fragmentViewModel.signIn(
+                    binding.loginEmail.getEditable(), binding.loginPassword.getEditable(), binding.rememberEmailCB.isChecked
+                )
             }
 
             loginBtn.isEnabled = true
@@ -53,11 +62,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
                         is SignInState.SuccessSignIn -> {
                             // 로그인 성공
                             LoadingDialog.dismiss()
+                            toast(getString(R.string.signInSuccess))
+                            findNavController().navigate(
+                                "medilens://main/home_nav".toUri(),
+                                NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
+                            )
                         }
 
                         is SignInState.FailedSignIn -> {
                             // 로그인 실패
                             LoadingDialog.dismiss()
+                            toast(getString(R.string.signInFailed))
                         }
 
                         is SignInState.RegexError -> {
@@ -66,7 +81,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
                         }
 
                         is SignInState.SignOut -> {
-                            // 로그아웃
+                            // 로그아웃 상태
                         }
                     }
                 }
@@ -74,9 +89,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        viewLifecycleOwner.repeatOnStarted {
+            fragmentViewModel.savedEmail.collectLatest {
+                if (it.isNotEmpty()) {
+                    binding.rememberEmailCB.isChecked = true
+                    binding.loginEmail.inputData.setText(it, 0, it.size)
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
         mainScope.cancel()
+        jobs.forEach { it.cancel() }
+        super.onDestroyView()
     }
 
     private fun handleEvent(event: LoginViewModel.SignEvent) = when (event) {
@@ -87,15 +115,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
     }
 
     private fun addDelayTextWatcher(editText: EditText) {
-        /*
-        mainScope.launch(context = defaultDispatcher + Job()) {
+        mainScope.launch(context = defaultDispatcher + Job().apply {
+            jobs.add(this)
+        }) {
             editText.delayTextChangedCallback().debounce(500L).onEach { seq ->
                 mainScope.launch {
                     binding.loginBtn.isEnabled = !seq.isNullOrEmpty()
                 }
             }.launchIn(this)
         }
-
-         */
     }
 }
