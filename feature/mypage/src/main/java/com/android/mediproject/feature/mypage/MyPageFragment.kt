@@ -25,5 +25,7 @@ class MyPageFragment :
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
         is MyPageViewModel.MyPageEvent.MyCommentsList -> findNavController().navigate("medilens://main/comments_nav/myCommentsListFragment".toUri())
         is MyPageViewModel.MyPageEvent.InterestedMedicineList -> findNavController().navigate("medilens://main/moreInterestedMedicine_nav".toUri())
+        is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
+        is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
     }
 }

@@ -22,6 +22,7 @@
         android:name="com.android.mediproject.feature.intro.SignUpFragment"
         android:label="SignUpFragment">
 
+        <deepLink app:uri="medilens://main/intro_nav/signUp" />
 
     </fragment>
 
@@ -33,6 +34,8 @@
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+
+        <deepLink app:uri="medilens://main/intro_nav/login" />
     </fragment>
 
     <deepLink app:uri="medilens://main/intro_nav" />
