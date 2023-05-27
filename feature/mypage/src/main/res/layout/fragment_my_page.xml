@@ -28,13 +28,29 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:setTheme="white"
                 app:showBackButton="false"
-                app:title="@string/myPage" />
+                app:title="@string/myPage">
+
+            </com.android.mediproject.core.ui.base.view.Bar>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mypageBar">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineVertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineHorizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.35" />
 
                 <ImageView
                     android:id="@+id/guestUserImageIV"
@@ -53,9 +69,45 @@
                     android:text="@string/guestMode"
                     android:textColor="@color/black"
                     android:textSize="28sp"
-                    app:layout_constraintBottom_toBottomOf="@id/userImageIV"
-                    app:layout_constraintStart_toEndOf="@id/userImageIV"
-                    app:layout_constraintTop_toTopOf="@id/userImageIV" />
+                    app:layout_constraintBottom_toBottomOf="@id/guestUserImageIV"
+                    app:layout_constraintStart_toEndOf="@id/guestUserImageIV"
+                    app:layout_constraintTop_toTopOf="@id/guestUserImageIV" />
+
+                <TextView
+                    android:id="@+id/guestTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:text="로그인하여 다른 사용자들과 \n소통을 즐겨보세요!"
+                    android:textColor="@color/black"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/guidelineHorizontal" />
+
+                <Button
+                    android:id="@+id/loginBTN"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="로그인"
+                    app:layout_constraintEnd_toEndOf="@id/guidelineVertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/guestTV" />
+
+                <Button
+                    android:id="@+id/signUpBTN"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="30dp"
+                    android:text="회원가입"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/guidelineVertical"
+                    app:layout_constraintTop_toBottomOf="@id/guestTV" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -140,6 +192,7 @@
                         android:onClick="@{()->viewModel.myCommentList()}" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
