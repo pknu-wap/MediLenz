@@ -9,71 +9,6 @@
     <string name="medicineInfo">의약품 정보</string>
     <string name="visibilityInfo">식별 정보</string>
 
-    <string name="medicineInfoTitle">의약품 정보</string>
-    <string name="companyInfoTitle">업체 정보</string>
-    <string name="classificationInfoTitle">의약품 분류 정보</string>
-    <string name="miscInfoTitle">기타 정보</string>
-    <string name="printAndImageInfoTitle">인쇄 및 이미지 정보</string>
-    <string name="medicineImageInfoTitle">의약품 이미지 정보</string>
-    <string name="medicineShapeInfoTitle">의약품 형태 정보</string>
-    <string name="lineInfoTitle">구분선 정보</string>
-
-    <!-- 의약품 정보 -->
-    <string name="itemSeqTitle">의약품 코드</string>
-    <string name="itemNameTitle">의약품 이름</string>
-    <string name="itemEngNameTitle">의약품 영문 이름</string>
-
-    <!-- 업체 정보 -->
-    <string name="entpSeqTitle">업체 코드</string>
-    <string name="entpNameTitle">업체 이름</string>
-    <string name="bizrnoTitle">업체 번호</string>
-
-    <!-- 의약품 분류 정보 -->
-    <string name="classNoTitle">의약품 분류 코드</string>
-    <string name="classNameTitle">의약품 분류 이름</string>
-    <string name="etcOtcNameTitle">의약품 유형 정보</string>
-
-    <!-- 기타 정보 -->
-    <string name="formCodeNameTitle">제형 정보</string>
-    <string name="itemPermitDateTitle">의약품 허가 일자</string>
-    <string name="changeDateTitle">정보 변경 일자</string>
-
-    <!-- 인쇄 및 이미지 정보 -->
-    <string name="printFrontTitle">앞면 인쇄 정보</string>
-    <string name="printBackTitle">뒷면 인쇄 정보</string>
-    <string name="markCodeFrontAnalTitle">앞면 분석용 인쇄 정보</string>
-    <string name="markCodeBackAnalTitle">뒷면 분석용 인쇄 정보</string>
-    <string name="markCodeFrontImgTitle">앞면 이미지 정보</string>
-    <string name="markCodeBackImgTitle">뒷면 이미지 정보</string>
-
-    <!-- 의약품 이미지 정보 -->
-    <string name="chartTitle">의약품의 캡슐 형태 및 색상 정보</string>
-    <string name="itemImageTitle">의약품 이미지 URL</string>
-
-    <!--의약품 형태 정보 -->
-    <string name="medicineShapeTitle">의약품의 형태 정보</string>
-    <string name="colorClass1Title">색상 정보 1</string>
-    <string name="colorClass2Title">색상 정보 2</string>
-
-    <!-- 구분선 정보 -->
-    <string name="lineFrontTitle">앞면 구분선 정보</string>
-    <string name="lineBackTitle">뒷면 구분선 정보</string>
-    <string name="lengLongTitle">긴 변의 길이</string>
-    <string name="lengShortTitle">짧은 변의 길이</string>
-    <string name="thickTitle">두께</string>
-    <string name="imgRegistTsTitle">이미지 등록 일시</string>
-    <string name="safeUseOfMedicine">안전 사용</string>
-
-    <!-- 안전 사용 아이템 제목 -->
-    <string name="combinationProhibition">병용 금기</string>
-    <string name="specificAgeGroupProhibition">특정 연령대 금기</string>
-    <string name="pregnancyProhibition">임부 금기</string>
-    <string name="doseCaution">용량 주의</string>
-    <string name="durationOfUseCaution">투여기간 주의</string>
-    <string name="elderlyCaution">노인 주의</string>
-    <string name="efficacyGroupDuplicationCaution">효능군 중복</string>
-    <string name="divisionCaution">분할 주의</string>
-    <string name="additiveCaution">첨가제 주의</string>
 
     <string name="combinationProhibitionDescription">두 가지 이상의 의약품을 함께 사용할 때 치료효과의 변화 또는 심각한 부작용 발생 등의 우려가 있어 동시에 사용하지 않아야 하는 의약품의 조합</string>
     <string name="specificAgeGroupProhibitionDescription">소아, 노인 등 특정한 연령대의 환자가 사용함에 있어 안전성이 확보되지 않았거나 심각한 부작용 발생 등의 우려가 있어 사용하지 않아야 하는 의약품</string>
@@ -94,6 +29,7 @@
     <string name="ingredientName">성분</string>
     <string name="loadingMedicineDetails">상세 정보를 불러오는 중입니다</string>
     <string name="interestBtn">즐겨찾기 버튼</string>
+    <string name="loadingSafeUsage">안전 사용 정보를 불러오는 중입니다</string>
 
 
 </resources>

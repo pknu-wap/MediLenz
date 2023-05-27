@@ -17,14 +17,14 @@ class Subtitle @JvmOverloads constructor(
     @AttrRes defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    companion object{
+    companion object {
         const val NORMAL = 0
         const val PASSWORD = 1
     }
 
-    lateinit var title : TextView
-    lateinit var redPoint : TextView
-    lateinit var inputData : EditText
+    lateinit var title: TextView
+    lateinit var redPoint: TextView
+    lateinit var inputData: EditText
 
     init {
         val infService = Context.LAYOUT_INFLATER_SERVICE
@@ -41,16 +41,16 @@ class Subtitle @JvmOverloads constructor(
         val titleText = typedArray.getString(R.styleable.Subtitle_title) ?: ""
         val point = typedArray.getBoolean(R.styleable.Subtitle_redPoint, true)
         val hintText = typedArray.getString(R.styleable.Subtitle_edtHint) ?: ""
-        val dataType = typedArray.getInt(R.styleable.Subtitle_dataType,NORMAL)
+        val dataType = typedArray.getInt(R.styleable.Subtitle_dataType, NORMAL)
 
         title.text = titleText
         inputData.hint = hintText
-        redPoint.visibility = when(point){
+        redPoint.visibility = when (point) {
             true -> View.VISIBLE
             else -> View.INVISIBLE
         }
 
-        if(dataType == PASSWORD) {
+        if (dataType == PASSWORD) {
             inputData.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
 
@@ -58,5 +58,7 @@ class Subtitle @JvmOverloads constructor(
     }
 
     //EditText에 적은 값을 불러오는 함수
-    fun getValue() : String = inputData.text.toString()
+    fun getValue(): String = inputData.text.toString()
+
+    fun getEditable() = inputData.text
 }

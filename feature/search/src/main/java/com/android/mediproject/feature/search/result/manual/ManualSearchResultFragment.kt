@@ -7,8 +7,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.paging.map
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.android.mediproject.core.common.constant.MedicationType
+import com.android.mediproject.core.common.paging.setOnStateChangedListener
 import com.android.mediproject.core.common.util.navigateByDeepLink
+import com.android.mediproject.core.model.constants.MedicationType
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -17,6 +18,7 @@ import com.android.mediproject.feature.search.R
 import com.android.mediproject.feature.search.SearchMedicinesViewModel
 import com.android.mediproject.feature.search.databinding.FragmentManualSearchResultBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import repeatOnStarted
@@ -34,16 +36,28 @@ class ManualSearchResultFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            val searchResultListAdapter = ApprovedMedicinesAdapter().also { adapter ->
-                adapter.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { adapter::retry },
-                    footer = PagingLoadStateAdapter { adapter::retry })
+            viewModel = fragmentViewModel
+
+            val searchResultListAdapter = ApprovedMedicinesAdapter().also {
+                it.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { it.retry() },
+                    footer = PagingLoadStateAdapter { it.retry() })
+
+                it.setOnStateChangedListener(
+                    pagingListViewGroup.messageTextView,
+                    pagingListViewGroup.pagingList,
+                    pagingListViewGroup.progressIndicator,
+                    getString(R.string.searchResultIsEmpty)
+                )
             }
 
-            viewModel = fragmentViewModel
-            searchResultRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-                setDrawable(ContextCompat.getDrawable(requireContext(), com.android.mediproject.core.ui.R.drawable.divider)!!)
-            })
-            searchResultRecyclerView.adapter = searchResultListAdapter
+            pagingListViewGroup.pagingList.apply {
+                setHasFixedSize(true)
+                setItemViewCacheSize(8)
+                addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                    setDrawable(ContextCompat.getDrawable(requireContext(), com.android.mediproject.core.ui.R.drawable.divider)!!)
+                })
+                adapter = searchResultListAdapter
+            }
 
             filterBtn.setOnClickListener { it ->
                 MediPopupMenu.showMenu(
@@ -51,17 +65,11 @@ class ManualSearchResultFragment :
                 ) { menuItem ->
 
                     when (menuItem.itemId) {
-                        R.id.listOnlySpecialtyMedicines -> {
-                            fragmentViewModel.searchMedicinesByMedicationType(MedicationType.SPECIALTY)
-                        }
+                        R.id.listOnlySpecialtyMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.SPECIALTY)
 
-                        R.id.listOnlyGenericMedicines -> {
-                            fragmentViewModel.searchMedicinesByMedicationType(MedicationType.GENERAL)
-                        }
+                        R.id.listOnlyGenericMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.GENERAL)
 
-                        R.id.listAllMedicines -> {
-                            fragmentViewModel.searchMedicinesByMedicationType(MedicationType.ALL)
-                        }
+                        R.id.listAllMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.ALL)
                     }
                     true
                 }
@@ -70,7 +78,7 @@ class ManualSearchResultFragment :
             viewLifecycleOwner.repeatOnStarted {
                 // 검색 결과를 수신하면 리스트에 표시한다.
                 launch {
-                    fragmentViewModel.searchResultFlow.collect {
+                    fragmentViewModel.searchResultFlow.collectLatest {
                         it.let { pager ->
                             pager.map { item ->
                                 item.onClick = this@ManualSearchResultFragment::openMedicineInfo

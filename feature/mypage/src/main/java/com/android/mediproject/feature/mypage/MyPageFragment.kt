@@ -25,7 +25,7 @@ class MyPageFragment :
         binding.apply {
 
             //글자 Span 적용
-            val span = SpannableStringBuilder(binding.guestTV.text.toString()).apply {
+            val span = SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
                 setSpan(
                     ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.main)),
                     15,

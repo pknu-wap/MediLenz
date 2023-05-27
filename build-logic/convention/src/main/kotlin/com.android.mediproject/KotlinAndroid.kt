@@ -5,20 +5,27 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionAware
+import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.provideDelegate
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *>,
 ) {
 
+    val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
     commonExtension.apply {
-        compileSdk = 33
+        compileSdk = libs.findVersion("compileSdk").get().toString().toInt()
+
 
         defaultConfig {
-            minSdk = 28
+            minSdk = libs.findVersion("minSdk").get().toString().toInt()
         }
 
         dataBinding.enable = true
@@ -30,6 +37,31 @@ internal fun Project.configureKotlinAndroid(
             isCoreLibraryDesugaringEnabled = true
         }
 
+    }
+
+    configureKotlin()
+
+    dependencies {
+        add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
+    }
+}
+
+fun CommonExtension<*, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
+    (this as ExtensionAware).extensions.configure("kotlinOptions", block)
+}
+
+internal fun Project.configureKotlinJvm() {
+    extensions.configure<JavaPluginExtension> {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    configureKotlin()
+}
+
+private fun Project.configureKotlin() {
+    // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
+    tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
             val warningsAsErrors: String? by project
             allWarningsAsErrors = warningsAsErrors.toBoolean()
@@ -43,17 +75,8 @@ internal fun Project.configureKotlinAndroid(
             )
 
             jvmTarget = JavaVersion.VERSION_17.toString()
+
+
         }
-
     }
-
-    val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
-    dependencies {
-        add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
-    }
-}
-
-fun CommonExtension<*, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
-    (this as ExtensionAware).extensions.configure("kotlinOptions", block)
 }

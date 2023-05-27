@@ -5,12 +5,14 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.android.mediproject.core.common.bindingadapter.GlideApp
 import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto
 import com.android.mediproject.feature.search.databinding.ManualMedicineItemBinding
 
-class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, ApprovedMedicinesAdapter.ViewHolder>(MedicineComparator) {
+class ApprovedMedicinesAdapter : PagingDataAdapter<ApprovedMedicineItemDto, ApprovedMedicinesAdapter.ViewHolder>(MedicineComparator) {
 
-    class ViewHolder(private val binding: ManualMedicineItemBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    class ViewHolder(val binding: ManualMedicineItemBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
                 binding.item?.apply {
@@ -25,7 +27,11 @@ class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, Ap
                 executePendingBindings()
             }
         }
+    }
 
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+        GlideApp.with(holder.itemView.context).clear(holder.binding.medicineImgView)
     }
 
     override fun onCreateViewHolder(
@@ -34,10 +40,9 @@ class ApprovedMedicinesAdapter() : PagingDataAdapter<ApprovedMedicineItemDto, Ap
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position)?.apply {
-            holder.bind(this)
-        }
+        getItem(position)?.let { holder.bind(it) }
     }
+
 }
 
 object MedicineComparator : DiffUtil.ItemCallback<ApprovedMedicineItemDto>() {

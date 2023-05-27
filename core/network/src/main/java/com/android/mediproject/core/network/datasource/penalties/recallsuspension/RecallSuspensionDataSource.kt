@@ -9,7 +9,7 @@ interface RecallSuspensionDataSource {
      * 의약품 회수·판매중지 목록 조회
      */
     suspend fun getRecallSuspensionList(
-        pageNo: Int,
+        pageNo: Int, numOfRows: Int = 15
     ): Result<RecallSuspensionListResponse>
 
     /**

@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
-    id("org.jetbrains.kotlin.android")
+
     id("mediproject.android.feature")
     id("kotlinx-serialization")
     id(libs.plugins.kapt.get().pluginId)
@@ -19,7 +19,7 @@ android {
         properties.load(project.rootProject.file("/apikey.properties").bufferedReader())
         buildConfigField("String", "DATA_GO_KR_SERVICE_KEY", "\"${properties["dataGoKrServiceKey"]}\"")
         buildConfigField("String", "DATA_GO_KR_BASE_URL", "\"${properties["dataGoKrBaseUrl"]}\"")
-
+        buildConfigField("String", "AWS_BASE_URL", "\"${properties["awsUrl"]}\"")
     }
 }
 
@@ -36,5 +36,6 @@ dependencies {
     implementation(libs.bundles.glides)
     implementation(libs.lottie)
     kapt(libs.bundles.glides.kapt)
-
+    kapt(libs.androidx.hilt.compilerKapt)
+    implementation(libs.androidx.paging.runtime)
 }

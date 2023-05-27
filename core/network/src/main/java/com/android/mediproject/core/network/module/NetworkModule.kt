@@ -58,7 +58,7 @@ class CertificateHelper @Inject constructor(@ApplicationContext context: Context
     }
 }
 
-@Module(includes = [MedicineApprovalNetwork::class])
+@Module(includes = [DataGoKrNetwork::class, AwsNetwork::class])
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 

@@ -12,5 +12,5 @@ interface MedicineApprovalRepository {
         medicationType: String?,
     ): Flow<PagingData<Item>>
 
-    suspend fun getMedicineDetailInfo(itemName: String): Result<MedicineDetailInfoResponse.Body.Item>
+    suspend fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Body.Item>>
 }

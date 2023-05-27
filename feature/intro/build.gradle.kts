@@ -1,7 +1,7 @@
 plugins {
-    id("org.jetbrains.kotlin.android")
+
     id("mediproject.android.feature")
-    id(libs.plugins.kapt.get().pluginId)
+
 
 }
 
@@ -19,6 +19,8 @@ hilt {
 dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
+    implementation(project(":core:model"))
+    implementation(project(":core:domain"))
     implementation(libs.bundles.glides)
     kapt(libs.bundles.glides.kapt)
     implementation(libs.bundles.kotlins)

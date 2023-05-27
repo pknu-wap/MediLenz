@@ -20,13 +20,22 @@ class RecallSuspensionRepositoryImpl @Inject constructor(
             recallSuspensionListDataSource
         }).flow
 
+    override suspend fun getRecentRecallDisposalList(
+        pageNo: Int, numOfRows: Int
+    ): Result<List<RecallSuspensionListResponse.Body.Item.Item>> = recallSuspensionDataSource.getRecallSuspensionList(
+        pageNo, numOfRows
+    ).map {
+        it.body.items.map { item ->
+            item.item
+        }
+    }
+
     override suspend fun getDetailRecallSuspension(
         company: String?, product: String?
-    ) =
-        recallSuspensionDataSource.getDetailRecallSuspensionInfo(
-            company = company, product = product
-        ).map {
-            it.body.items.first().item
-        }
+    ) = recallSuspensionDataSource.getDetailRecallSuspensionInfo(
+        company = company, product = product
+    ).map {
+        it.body.items.first().item
+    }
 
 }
