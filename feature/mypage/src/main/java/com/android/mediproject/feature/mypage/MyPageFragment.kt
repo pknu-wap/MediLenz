@@ -1,10 +1,19 @@
 package com.android.mediproject.feature.mypage
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.text.color
+import androidx.core.text.underline
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import repeatOnStarted
@@ -15,7 +24,24 @@ class MyPageFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.apply {
+
+            //글자 Span 적용
+            val span = SpannableStringBuilder(binding.guestTV.text.toString()).apply {
+                setSpan(
+                    ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.main)),
+                    15,
+                    18,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                setSpan(
+                    UnderlineSpan(), 15, 18,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+            guestTV.text = span
+
             viewModel = fragmentViewModel.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
             }
