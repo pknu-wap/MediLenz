@@ -1,11 +1,7 @@
 package com.android.mediproject.core.model.remote.token
 
-import kotlinx.serialization.SerialName
+import com.android.mediproject.core.model.remote.base.BaseAwsSignResponse
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AccessTokenResponse(
-    @SerialName("access_token") val accessToken: String?,
-    @SerialName("refresh_token") val refreshToken: String?,
-    @SerialName("message") val message: String,
-)
+class AccessTokenResponse : BaseAwsSignResponse()

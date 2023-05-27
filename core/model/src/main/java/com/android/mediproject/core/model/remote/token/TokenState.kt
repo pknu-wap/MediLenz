@@ -6,9 +6,12 @@ package com.android.mediproject.core.model.remote.token
  * @see TokenState.Expiration 만료
  * @see TokenState.Valid 유효
  * @see TokenState.Error 오류
+ * @see TokenState.Empty 토큰이 없음
  */
 sealed class TokenState<out T> {
     data class Expiration(val throwable: Throwable) : TokenState<Nothing>()
     data class Valid<out T>(val data: T) : TokenState<T>()
     data class Error(val throwable: Throwable) : TokenState<Nothing>()
+
+    object Empty : TokenState<Nothing>()
 }

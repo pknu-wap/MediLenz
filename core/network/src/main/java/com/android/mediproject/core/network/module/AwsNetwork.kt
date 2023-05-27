@@ -21,16 +21,30 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.Body
-import retrofit2.http.Header
 import retrofit2.http.POST
+import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 object AwsNetwork {
-    @Provides
+
+
     @Singleton
-    fun providesAwsNetworkApi(okHttpClient: OkHttpClient): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
+    @Provides
+    @Named("awsNetworkApiWithAccessTokens")
+    fun providesAwsNetworkApi(
+        @Named("okHttpClientWithAccessTokens") okHttpClient: OkHttpClient,
+    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
+        Json.asConverterFactory("application/json".toMediaType())
+    ).baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
+
+    @Singleton
+    @Provides
+    @Named("awsNetworkApiWithRefreshTokens")
+    fun providesReissueTokenAwsNetworkApi(
+        @Named("okHttpClientWithReissueTokens") okHttpClient: OkHttpClient,
+    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
         Json.asConverterFactory("application/json".toMediaType())
     ).baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
@@ -57,6 +71,5 @@ interface AwsNetworkApi {
 
     @POST(value = "user/reissue")
     suspend fun reissueTokens(
-        @Header("authorization") refreshToken: String,
     ): Response<AccessTokenResponse>
 }

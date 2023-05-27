@@ -2,18 +2,20 @@ package com.android.mediproject.core.network.datasource.sign
 
 import com.android.mediproject.core.model.parameters.SignInParameter
 import com.android.mediproject.core.model.parameters.SignUpParameter
+import com.android.mediproject.core.model.remote.base.BaseAwsSignResponse
 import com.android.mediproject.core.model.remote.token.ConnectionTokenDto
 import com.android.mediproject.core.network.module.AwsNetworkApi
-import com.android.mediproject.core.network.onResponse
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
+import com.android.mediproject.core.network.tokens.TokenServer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import retrofit2.Response
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class SignDataSourceImpl @Inject constructor(
-    private val awsNetworkApi: AwsNetworkApi
+    private val awsNetworkApi: AwsNetworkApi, private val tokenServer: TokenServer
 ) : SignDataSource {
 
     /**
@@ -73,7 +75,7 @@ class SignDataSourceImpl @Inject constructor(
      * 토큰 갱신
      */
     override suspend fun reissueTokens(refreshToken: CharArray, email: CharArray): Flow<Result<ConnectionTokenDto>> = channelFlow {
-        awsNetworkApi.reissueTokens(refreshToken.joinToString()).onResponse().fold(onSuccess = {
+        awsNetworkApi.reissueTokens().onResponse().fold(onSuccess = {
             if (it.accessToken.isNullOrEmpty() || it.refreshToken.isNullOrEmpty()) Result.success(
                 ConnectionTokenDto(
                     accessToken = it.accessToken!!.toCharArray(),
@@ -85,6 +87,29 @@ class SignDataSourceImpl @Inject constructor(
             else Result.failure(Exception("Token is not found"))
         }, onFailure = { Result.failure(it) }).also {
             trySend(it)
+        }
+    }
+
+
+    /**
+     * Response 처리하고, 정상 응답이면 토큰을 업데이트한다.
+     *
+     * @return Result<T>
+     */
+    private inline fun <reified T : BaseAwsSignResponse> Response<T>.onResponse(): Result<T> {
+        if (isSuccessful) {
+            body()?.let { body ->
+                // update tokens
+                tokenServer.updateTokens(
+                    TokenServer.Tokens(
+                        accessToken = body.accessToken?.toCharArray() ?: CharArray(0),
+                        refreshToken = body.refreshToken?.toCharArray() ?: CharArray(0)
+                    )
+                )
+                return Result.success(body)
+            } ?: return Result.failure(Throwable("Response Body is Null"))
+        } else {
+            return Result.failure(errorBody()?.string()?.let { Throwable(it) } ?: Throwable("Response Error"))
         }
     }
 }
