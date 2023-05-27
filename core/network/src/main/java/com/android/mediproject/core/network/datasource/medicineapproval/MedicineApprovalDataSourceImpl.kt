@@ -13,41 +13,33 @@ import kotlinx.coroutines.flow.channelFlow
 import javax.inject.Inject
 
 class MedicineApprovalDataSourceImpl @Inject constructor(
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-    private val dataGoKrNetworkApi: DataGoKrNetworkApi
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher, private val dataGoKrNetworkApi: DataGoKrNetworkApi
 ) : MedicineApprovalDataSource {
 
 
     override suspend fun getMedicineApprovalList(
         itemName: String?, entpName: String?, medicationType: String?, pageNo: Int
     ): Result<MedicineApprovalListResponse> = dataGoKrNetworkApi.getApprovalList(
-        itemName = itemName,
-        entpName = entpName,
-        pageNo = pageNo,
-        medicationType = medicationType
-    )
-        .onResponse()
-        .fold(onSuccess = { response ->
+        itemName = itemName, entpName = entpName, pageNo = pageNo, medicationType = medicationType
+    ).onResponse().fold(onSuccess = { response ->
+        response.isSuccess().let {
+            if (it == DataGoKrResult.isSuccess) Result.success(response)
+            else Result.failure(Throwable(it.failedMessage))
+        }
+    }, onFailure = {
+        Result.failure(it)
+    })
+
+    override suspend fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse>> = channelFlow {
+        dataGoKrNetworkApi.getMedicineDetailInfo(itemName = itemName).onResponse().fold(onSuccess = { response ->
             response.isSuccess().let {
-                if (it == DataGoKrResult.isSuccess) Result.success(response)
+                if (it is DataGoKrResult.isSuccess) Result.success(response)
                 else Result.failure(Throwable(it.failedMessage))
             }
         }, onFailure = {
-            Result.failure(it)
-        })
-
-    override suspend fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse>> =
-        channelFlow {
-            dataGoKrNetworkApi.getMedicineDetailInfo(itemName = itemName).onResponse()
-                .fold(onSuccess = { response ->
-                    response.isSuccess().let {
-                        if (it is DataGoKrResult.isSuccess) Result.success(response)
-                        else Result.failure(Throwable(it.failedMessage))
-                    }
-                }, onFailure = {
-                    Result.failure<MedicineDetailInfoResponse>(it)
-                }).also {
-                send(it)
-            }
+            Result.failure<MedicineDetailInfoResponse>(it)
+        }).also {
+            send(it)
         }
+    }
 }
