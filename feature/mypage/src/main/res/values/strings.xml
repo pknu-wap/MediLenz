@@ -2,4 +2,7 @@
     <string name="myFravoriteList">즐겨찾기 목록</string>
     <string name="myCommentList">내가 댓글 단 목록</string>
     <string name="guestMode">비로그인</string>
+    <string name="guestDescription">로그인하여 다른 사용자들과 \n<u>소통</u>을 즐겨보세요 !</string>
+    <string name="login">로그인</string>
+    <string name="signUp">회원가입</string>
 </resources>
