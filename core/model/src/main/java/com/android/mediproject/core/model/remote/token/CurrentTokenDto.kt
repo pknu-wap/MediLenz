@@ -11,7 +11,7 @@ import java.time.LocalDateTime
  * @property userEmail
  * @property expirationDateTime
  */
-data class ConnectionTokenDto(
+data class CurrentTokenDto(
     val accessToken: CharArray,
     val refreshToken: CharArray,
     val userEmail: CharArray,
@@ -26,7 +26,7 @@ data class ConnectionTokenDto(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ConnectionTokenDto
+        other as CurrentTokenDto
 
         if (!accessToken.contentEquals(other.accessToken)) return false
         if (!refreshToken.contentEquals(other.refreshToken)) return false

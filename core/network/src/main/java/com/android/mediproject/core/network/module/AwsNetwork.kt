@@ -10,6 +10,7 @@ import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
+import com.android.mediproject.core.network.tokens.TokenServer
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -54,7 +55,9 @@ object AwsNetwork {
 
     @Provides
     @Singleton
-    fun providesSignDataSource(awsNetworkApi: AwsNetworkApi): SignDataSource = SignDataSourceImpl(awsNetworkApi)
+    fun providesSignDataSource(awsNetworkApi: AwsNetworkApi, tokenServer: TokenServer): SignDataSource = SignDataSourceImpl(
+        awsNetworkApi, tokenServer
+    )
 }
 
 interface AwsNetworkApi {

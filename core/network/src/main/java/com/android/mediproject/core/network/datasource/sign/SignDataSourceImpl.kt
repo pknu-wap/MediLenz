@@ -3,7 +3,7 @@ package com.android.mediproject.core.network.datasource.sign
 import com.android.mediproject.core.model.parameters.SignInParameter
 import com.android.mediproject.core.model.parameters.SignUpParameter
 import com.android.mediproject.core.model.remote.base.BaseAwsSignResponse
-import com.android.mediproject.core.model.remote.token.ConnectionTokenDto
+import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.network.module.AwsNetworkApi
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
@@ -15,20 +15,20 @@ import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class SignDataSourceImpl @Inject constructor(
-    private val awsNetworkApi: AwsNetworkApi, private val tokenServer: TokenServer
+    private val awsNetworkApi: AwsNetworkApi, private val tokenServer: TokenServer,
 ) : SignDataSource {
 
     /**
      * 로그인
      */
-    override suspend fun signIn(signInParameter: SignInParameter): Flow<Result<ConnectionTokenDto>> = channelFlow {
+    override suspend fun signIn(signInParameter: SignInParameter): Flow<Result<CurrentTokenDto>> = channelFlow {
         val email = WeakReference(signInParameter.email.joinToString(""))
         val password = WeakReference(signInParameter.password.joinToString(""))
 
         awsNetworkApi.signIn(SignInRequestParameter(email = email.get()!!, password = password.get()!!)).onResponse()
             .fold(onSuccess = { response ->
                 if (!response.accessToken.isNullOrBlank() || !response.refreshToken.isNullOrBlank()) Result.success(
-                    ConnectionTokenDto(
+                    CurrentTokenDto(
                         accessToken = response.accessToken!!.toCharArray(),
                         refreshToken = response.refreshToken!!.toCharArray(),
                         userEmail = signInParameter.email,
@@ -48,14 +48,14 @@ class SignDataSourceImpl @Inject constructor(
     /**
      * 회원가입
      */
-    override suspend fun signUp(signUpParameter: SignUpParameter): Flow<Result<ConnectionTokenDto>> = channelFlow {
+    override suspend fun signUp(signUpParameter: SignUpParameter): Flow<Result<CurrentTokenDto>> = channelFlow {
         val email = WeakReference(signUpParameter.email.joinToString(""))
         val password = WeakReference(signUpParameter.password.joinToString(""))
 
         awsNetworkApi.signUp(SignUpRequestParameter(email.get()!!, password.get()!!, signUpParameter.nickName)).onResponse()
             .fold(onSuccess = {
                 if (it.accessToken.isNullOrEmpty() || it.refreshToken.isNullOrEmpty()) Result.success(
-                    ConnectionTokenDto(
+                    CurrentTokenDto(
                         accessToken = it.accessToken!!.toCharArray(),
                         refreshToken = it.refreshToken!!.toCharArray(),
                         userEmail = signUpParameter.email,
@@ -74,10 +74,10 @@ class SignDataSourceImpl @Inject constructor(
     /**
      * 토큰 갱신
      */
-    override suspend fun reissueTokens(refreshToken: CharArray, email: CharArray): Flow<Result<ConnectionTokenDto>> = channelFlow {
+    override suspend fun reissueTokens(refreshToken: CharArray, email: CharArray): Flow<Result<CurrentTokenDto>> = channelFlow {
         awsNetworkApi.reissueTokens().onResponse().fold(onSuccess = {
             if (it.accessToken.isNullOrEmpty() || it.refreshToken.isNullOrEmpty()) Result.success(
-                ConnectionTokenDto(
+                CurrentTokenDto(
                     accessToken = it.accessToken!!.toCharArray(),
                     refreshToken = it.refreshToken!!.toCharArray(),
                     userEmail = email,
@@ -103,7 +103,9 @@ class SignDataSourceImpl @Inject constructor(
                 tokenServer.updateTokens(
                     TokenServer.Tokens(
                         accessToken = body.accessToken?.toCharArray() ?: CharArray(0),
-                        refreshToken = body.refreshToken?.toCharArray() ?: CharArray(0)
+                        refreshToken = body.refreshToken?.toCharArray() ?: CharArray(0),
+                        email = CharArray(0),
+                        expirationDateTime = java.time.LocalDateTime.now()
                     )
                 )
                 return Result.success(body)
