@@ -164,7 +164,7 @@ androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core",
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidXTestRunner" }
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidXTestRules" }
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidXTestCore" }
-androidx-test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidXTestCore" }
+androidx-test-core-ktx = { module = "andro                                                                                                                                                                                                                                                                                     idx.test:core-ktx", version.ref = "androidXTestCore" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidXTestJUnit" }
 androidx-test-junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "androidXTestJUnit" }
 androidx-test-orchestrator = { module = "androidx.test:orchestrator", version.ref = "androidXTestOrchestra" }
