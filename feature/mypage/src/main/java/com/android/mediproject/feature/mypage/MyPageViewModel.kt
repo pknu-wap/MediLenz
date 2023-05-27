@@ -15,7 +15,7 @@ class MyPageViewModel : BaseViewModel() {
     fun interestedMedicineList() = event(MyPageEvent.InterestedMedicineList())
     fun login() = event(MyPageEvent.Login())
     fun signUp() = event(MyPageEvent.SignUp())
-    
+
     sealed class MyPageEvent{
         data class MyCommentsList(val unit : Unit? = null) : MyPageEvent()
         data class InterestedMedicineList(val unit : Unit? = null) : MyPageEvent()
