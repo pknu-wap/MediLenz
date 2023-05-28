@@ -11,11 +11,15 @@ class MyPageViewModel : BaseViewModel() {
     val eventFlow = _eventFlow.asEventFlow()
 
     fun event(event : MyPageEvent) = viewModelScope.launch{ _eventFlow.emit(event)}
-    fun myCommentList() = event(MyPageEvent.MyCommentsList())
-    fun interestedMedicineList() = event(MyPageEvent.InterestedMedicineList())
+    fun myCommentList() = event(MyPageEvent.MyCommentsList)
+    fun interestedMedicineList() = event(MyPageEvent.InterestedMedicineList)
+    fun login() = event(MyPageEvent.Login)
+    fun signUp() = event(MyPageEvent.SignUp)
 
     sealed class MyPageEvent{
-        data class MyCommentsList(val unit : Unit? = null) : MyPageEvent()
-        data class InterestedMedicineList(val unit : Unit? = null) : MyPageEvent()
+        object MyCommentsList : MyPageEvent()
+        object InterestedMedicineList : MyPageEvent()
+        object Login : MyPageEvent()
+        object SignUp : MyPageEvent()
     }
 }
