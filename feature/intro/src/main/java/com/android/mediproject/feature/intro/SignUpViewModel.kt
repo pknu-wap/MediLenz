@@ -81,7 +81,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     sealed class SignUpEvent {
-        data class SignUpComplete(val unit: Unit? = null) : SignUpEvent()
+        object SignUpComplete : SignUpEvent()
     }
 }
 

@@ -53,8 +53,8 @@ class LoginViewModel @Inject constructor(
 
     fun event(event: SignEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
-    fun login() = event(SignEvent.SignIn())
-    fun signUp() = event(SignEvent.SignUp())
+    fun login() = event(SignEvent.SignIn)
+    fun signUp() = event(SignEvent.SignUp)
 
 
     /**
@@ -109,8 +109,8 @@ class LoginViewModel @Inject constructor(
     }
 
     sealed class SignEvent {
-        data class SignIn(val sign: Unit? = null) : SignEvent()
-        data class SignUp(val unit: Unit? = null) : SignEvent()
+        object SignIn : SignEvent()
+        object SignUp : SignEvent()
     }
 
 

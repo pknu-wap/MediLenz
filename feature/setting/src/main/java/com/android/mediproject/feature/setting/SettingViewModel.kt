@@ -12,17 +12,17 @@ class SettingViewModel : BaseViewModel() {
 
     fun event(event: SettingEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
-    fun notice() = event(SettingEvent.Notice())
-    fun introduce() = event(SettingEvent.Introduce())
-    fun policy() = event(SettingEvent.Policy())
-    fun privacy() = event(SettingEvent.Privacy())
-    fun communicate() = event(SettingEvent.Communicate())
+    fun notice() = event(SettingEvent.Notice)
+    fun introduce() = event(SettingEvent.Introduce)
+    fun policy() = event(SettingEvent.Policy)
+    fun privacy() = event(SettingEvent.Privacy)
+    fun communicate() = event(SettingEvent.Communicate)
 
     sealed class SettingEvent {
-        data class Notice(val unit: Unit? = null) : SettingEvent()
-        data class Introduce(val unit: Unit? = null) : SettingEvent()
-        data class Policy(val unit: Unit? = null) : SettingEvent()
-        data class Privacy(val unit: Unit? = null) : SettingEvent()
-        data class Communicate(val unit: Unit? = null) : SettingEvent()
+        object Notice : SettingEvent()
+        object Introduce : SettingEvent()
+        object Policy : SettingEvent()
+        object Privacy : SettingEvent()
+        object Communicate : SettingEvent()
     }
 }

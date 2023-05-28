@@ -15,13 +15,13 @@ class IntroViewModel @Inject constructor() : BaseViewModel() {
 
     fun event(event: IntroEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
-    fun nonMemberLogin() = event(IntroEvent.NonMemberLogin())
-    fun memberLogin() = event(IntroEvent.MemberLogin())
-    fun signUp() = event(IntroEvent.SignUp())
+    fun nonMemberLogin() = event(IntroEvent.NonMemberLogin)
+    fun memberLogin() = event(IntroEvent.MemberLogin)
+    fun signUp() = event(IntroEvent.SignUp)
 
     sealed class IntroEvent {
-        data class NonMemberLogin(val unit: Unit? = null) : IntroEvent()
-        data class MemberLogin(val unit: Unit? = null) : IntroEvent()
-        data class SignUp(val unit: Unit? = null) : IntroEvent()
+        object NonMemberLogin : IntroEvent()
+        object MemberLogin : IntroEvent()
+        object SignUp : IntroEvent()
     }
 }
