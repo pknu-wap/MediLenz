@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
         SpannableStringBuilder(text).apply {
             val underline1Idx = "찾고".let {
                 val startIdx = text.indexOf(it)
-                startIdx to startIdx +
+                startIdx to startIdx + 2
             }
             val underline2Idx = "소통".let {
                 val startIdx = text.indexOf(it)
