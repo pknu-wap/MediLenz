@@ -3,8 +3,8 @@ package com.android.mediproject.core.network.datasource.medicineapproval
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.model.DataGoKrResult
-import com.android.mediproject.core.model.remote.medicineapproval.MedicineApprovalListResponse
-import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetailInfoResponse
+import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.network.module.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onResponse
 import kotlinx.coroutines.CoroutineDispatcher

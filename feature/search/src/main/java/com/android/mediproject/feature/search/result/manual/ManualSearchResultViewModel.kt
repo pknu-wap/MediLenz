@@ -6,7 +6,7 @@ import androidx.paging.cachedIn
 import com.android.mediproject.core.domain.GetMedicineApprovalListUseCase
 import com.android.mediproject.core.model.constants.MedicationType
 import com.android.mediproject.core.model.parameters.ApprovalListSearchParameter
-import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto
+import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

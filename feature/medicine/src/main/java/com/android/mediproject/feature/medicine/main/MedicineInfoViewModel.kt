@@ -8,7 +8,7 @@ import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
-import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetatilInfoDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

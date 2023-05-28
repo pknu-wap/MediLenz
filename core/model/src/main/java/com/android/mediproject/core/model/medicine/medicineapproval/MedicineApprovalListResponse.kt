@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.remote.medicineapproval
+package com.android.mediproject.core.model.medicine.medicineapproval
 
 import com.android.mediproject.core.model.DataGoKrBaseResponse
 import kotlinx.serialization.SerialName

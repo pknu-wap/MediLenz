@@ -3,7 +3,7 @@ package com.android.mediproject.core.network.datasource.medicineapproval
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
-import com.android.mediproject.core.model.remote.medicineapproval.Item
+import com.android.mediproject.core.model.medicine.medicineapproval.Item
 
 class MedicineApprovalListDataSourceImpl(
     private val medicineApprovalDataSource: MedicineApprovalDataSource,

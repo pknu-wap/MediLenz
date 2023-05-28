@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.mypage.MyPageViewModel" />
+
         <variable
             name="userDto"
             type="com.android.mediproject.core.model.user.UserDto" />
