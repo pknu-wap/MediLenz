@@ -70,8 +70,7 @@ class MyPageFragment :
                                     setSpan(UnderlineSpan(),7,8,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                                 }
                                 noMyCommentTV.text = span
-
-                                myCommentsListHeaderView.
+                                myCommentsListHeaderView.setMoreVisiblity(false)
                             }
                         } }
                     }

@@ -193,10 +193,23 @@ class HeaderForElementsView constructor(
         }
     }
 
+    /**
+     * 더보기 버튼 Visible 관련 로직
+     */
     fun setMoreVisiblity(boolean: Boolean){
         when(boolean){
             false -> moreBtnView.visibility = View.GONE
             true -> moreBtnView.visibility = View.VISIBLE
+        }
+    }
+
+    /**
+     * 확장 버튼 Visible 관련 로직
+     */
+    fun setExpandVisiblity(boolean: Boolean){
+        when(boolean){
+            false -> expandBtnView.visibility = View.GONE
+            true -> expandBtnView.visibility = View.VISIBLE
         }
     }
 
