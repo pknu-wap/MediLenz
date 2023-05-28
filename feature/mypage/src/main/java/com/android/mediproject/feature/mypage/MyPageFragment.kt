@@ -30,6 +30,7 @@ class MyPageFragment :
             myCommentsListRV.apply{
                 adapter = myCommentListAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
+                addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
             }
 
             userDto = UserDto("WAP짱짱")
