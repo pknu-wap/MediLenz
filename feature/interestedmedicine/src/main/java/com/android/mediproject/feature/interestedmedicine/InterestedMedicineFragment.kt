@@ -22,6 +22,8 @@ class InterestedMedicineFragment() :
         super.onViewCreated(view, savedInstanceState)
         addHistoryItemChips()
         initHeader()
+
+
     }
 
     private fun addHistoryItemChips() {
