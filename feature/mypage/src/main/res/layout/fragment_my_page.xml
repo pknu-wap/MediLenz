@@ -170,7 +170,6 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="25dp"
                     android:background="@drawable/rectangle_5_main"
-                    android:onClick="@{()->viewModel.interestedMedicineList()}"
                     android:orientation="vertical"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="10dp"
@@ -203,11 +202,9 @@
                         android:id="@+id/myCommentsList"
                         android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{()->viewModel.myCommentList()}" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

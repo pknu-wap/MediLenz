@@ -3,8 +3,10 @@ package com.android.mediproject.feature.interestedmedicine
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.android.mediproject.core.model.medicine.InterestedMedicine.MedicineInterestedDto
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
@@ -35,21 +37,29 @@ class InterestedMedicineFragment() :
             viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnStarted {
                     fragmentViewModel.medicineIntersted.collect { medicineList ->
-                        medicineList.forEach { medicine ->
-                            log(medicine.toString())
-                            this@apply.interestedMedicineList.addView(ButtonChip<Int>(requireContext()).apply {
-                                layoutParams = FlexboxLayout.LayoutParams(
-                                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT
-                                ).apply {
-                                    setMargins(horizontalSpace, 0, horizontalSpace, 0)
-                                }
-                                setChipText(medicine.medicineName)
-                                data = medicine.itemSeq
-                                setOnChipClickListener {
-                                    toast(it.toString())
-                                }
-                            })
+                        //즐겨찾기 목록 약의 개수가 0개가 아닐 경우
+                        if (medicineList.size != 0) {
+                            medicineList.forEach { medicine ->
+                                log(medicine.toString())
+                                this@apply.interestedMedicineList.addView(
+                                    ButtonChip<Int>(
+                                        requireContext()
+                                    ).apply {
+                                        layoutParams = FlexboxLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT
+                                        ).apply {
+                                            setMargins(horizontalSpace, 0, horizontalSpace, 0)
+                                        }
+                                        setChipText(medicine.medicineName)
+                                        data = medicine.itemSeq
+                                        setOnChipClickListener {
+                                            toast(it.toString())
+                                        }
+                                    })
+                            }
+                        } else {
+
                         }
                     }
                 }
@@ -65,8 +75,10 @@ class InterestedMedicineFragment() :
     private fun initHeader() {
         binding.headerView.apply {
             setOnExpandClickListener {
+
             }
             setOnMoreClickListener {
+                findNavController().navigate("medilens://main/moreInterestedMedicine_nav".toUri())
             }
         }
 
