@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetAdminActionInfoUseCase @Inject constructor(
-    private val adminActionRepository: AdminActionRepository
+    private val adminActionRepository: AdminActionRepository,
 ) {
 
     suspend fun getAdminActionList(

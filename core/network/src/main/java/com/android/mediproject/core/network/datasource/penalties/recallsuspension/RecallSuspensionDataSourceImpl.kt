@@ -6,6 +6,7 @@ import com.android.mediproject.core.model.DataGoKrResult
 import com.android.mediproject.core.network.module.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onResponse
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class RecallSuspensionDataSourceImpl @Inject constructor(
@@ -22,7 +23,9 @@ class RecallSuspensionDataSourceImpl @Inject constructor(
         }
     }, onFailure = {
         Result.failure(it)
-    })
+    }).let {
+        flowOf(it)
+    }
 
 
     override suspend fun getRecallSuspensionList(pageNo: Int, numOfRows: Int) =

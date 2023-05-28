@@ -11,6 +11,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,7 +23,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.android.mediproject.feature.news.adminaction.AdminActionScreen
+import com.android.mediproject.feature.news.adminaction.DetailAdminActionScreen
+import com.android.mediproject.feature.news.recallsuspension.DetailRecallDisposalScreen
 import com.android.mediproject.feature.news.recallsuspension.RecallDisposalScreen
 
 /**
@@ -37,15 +47,51 @@ enum class ChipType {
  */
 @Preview
 @Composable
+fun NewsNavHost(
+    navController: NavHostController = rememberNavController(), startDestination: String = "news"
+) {
+    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
+        ""
+    }
+
+    NavHost(navController = navController, startDestination = startDestination) {
+        composable("news") {
+            CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
+                NewsScreen()
+            }
+        }
+        composable(
+            "detailRecallSuspension/{product}", arguments = listOf(navArgument("product") { type = NavType.StringType })
+        ) {
+            DetailRecallDisposalScreen()
+        }
+        composable("detailAdminAction") {
+            CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
+                DetailAdminActionScreen()
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
 fun NewsScreen() {
     var selectedChip by remember { mutableStateOf(ChipType.RECALLS_SUSPENSION) }
+
+    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
+        ""
+    }
 
     Column {
         ChipGroup(selectedChip, onChipSelected = { chip ->
             selectedChip = chip
         })
         if (selectedChip == ChipType.RECALLS_SUSPENSION) RecallDisposalScreen()
-        else AdminActionScreen()
+        else {
+            CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
+                AdminActionScreen()
+            }
+        }
     }
 }
 

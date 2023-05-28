@@ -24,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -39,7 +41,9 @@ import java.time.format.DateTimeFormatter
  */
 @Preview
 @Composable
-fun RecallDisposalScreen(viewModel: RecallSuspensionViewModel = hiltViewModel()) {
+fun RecallDisposalScreen(
+    viewModel: RecallSuspensionViewModel = hiltViewModel(), navController: NavController = rememberNavController()
+) {
 
     val list = viewModel.recallDisposalList.collectAsLazyPagingItems()
 
@@ -48,7 +52,12 @@ fun RecallDisposalScreen(viewModel: RecallSuspensionViewModel = hiltViewModel())
             count = list.itemCount, key = list.itemKey(), contentType = list.itemContentType(
             )
         ) { index ->
-            list[index]?.let { ListItem(it) }
+            list[index]?.run {
+                onClick = {
+                    navController.navigate("detailRecallSuspension/${it.product}")
+                }
+                ListItem(this)
+            }
             if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
         }
 
@@ -122,4 +131,5 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
     }
 }
 
-private val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+private val dateFormat by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd") }

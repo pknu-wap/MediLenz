@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentIntroBinding
@@ -22,7 +23,9 @@ class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(Fragmen
 
     private fun handleEvent(event: IntroViewModel.IntroEvent) = when (event) {
         is IntroViewModel.IntroEvent.NonMemberLogin, IntroViewModel.IntroEvent.SkipIntro -> {
-            findNavController().navigate("medilens://main/home_nav".toUri())
+            findNavController().navigate(
+                "medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.introFragment, true).build()
+            )
         }
 
         is IntroViewModel.IntroEvent.NonSkipIntro -> {
