@@ -53,6 +53,7 @@ class MyPageFragment :
             viewModel = fragmentViewModel.apply {
                     viewLifecycleOwner.apply{
                         repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+
                         repeatOnStarted { myCommentsList.collect{myCommentList ->
 
                             //만약 사이즈가 1개 이상일 경우 RecyclerView로 데이터를 뛰운다.
@@ -64,13 +65,14 @@ class MyPageFragment :
                                 noMyCommentTV.visibility = View.VISIBLE
 
                                 val span = SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.noMyComment)).apply{
-                                    setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.main)),1,4,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                                    setSpan(UnderlineSpan(),1,4,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                                    setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.main)),7,8,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                                    setSpan(UnderlineSpan(),7,8,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                                    setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.main)),0,4,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                                    setSpan(UnderlineSpan(),0,4,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                                    setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.main)),6,8,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                                    setSpan(UnderlineSpan(),6,8,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                                 }
                                 noMyCommentTV.text = span
                                 myCommentsListHeaderView.setMoreVisiblity(false)
+                                myCommentsListHeaderView.setExpandVisiblity(false)
                             }
                         } }
                     }
