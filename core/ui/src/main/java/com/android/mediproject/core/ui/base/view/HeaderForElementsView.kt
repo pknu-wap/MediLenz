@@ -193,6 +193,13 @@ class HeaderForElementsView constructor(
         }
     }
 
+    fun setMoreVisiblity(boolean: Boolean){
+        when(boolean){
+            false -> moreBtnView.visibility = View.GONE
+            true -> moreBtnView.visibility = View.VISIBLE
+        }
+    }
+
 
     /**
      * 확장 버튼 클릭 시 호출
