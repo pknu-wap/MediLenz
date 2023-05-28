@@ -20,11 +20,11 @@ class AesCoder @Inject constructor(@ApplicationContext context: Context) {
     private val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
 
     init {
-        val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            context.packageManager.getPackageInfo(context.packageName, PackageManager.PackageInfoFlags.of(0))
-        } else {
-            context.packageManager.getPackageInfo(context.packageName, 0)
-        }
+        val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) context.packageManager.getPackageInfo(
+            context.packageName,
+            PackageManager.PackageInfoFlags.of(0)
+        )
+        else context.packageManager.getPackageInfo(context.packageName, 0)
 
         var key: String? = "${packageInfo.firstInstallTime}".repeat(4).substring(0, 32)
         key?.apply {
@@ -44,7 +44,9 @@ class AesCoder @Inject constructor(@ApplicationContext context: Context) {
     fun encode(plainArray: CharArray): String {
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec)
         val encrpytionByte = cipher.doFinal(ByteArray(plainArray.size) { plainArray[it].code.toByte() })
-        return Base64.encode(encrpytionByte, 0, encrpytionByte.size)
+        val result = Base64.encode(encrpytionByte, 0, encrpytionByte.size)
+        encrpytionByte.fill(0)
+        return result
     }
 
     /**
@@ -57,6 +59,8 @@ class AesCoder @Inject constructor(@ApplicationContext context: Context) {
     fun decode(encodedText: String): CharArray {
         cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec)
         val decodeByte = Base64.decode(encodedText, 0, encodedText.length)
-        return cipher.doFinal(decodeByte).map { it.toInt().toChar() }.toCharArray()
+        val result = cipher.doFinal(decodeByte).map { it.toInt().toChar() }.toCharArray()
+        decodeByte.fill(0)
+        return result
     }
 }

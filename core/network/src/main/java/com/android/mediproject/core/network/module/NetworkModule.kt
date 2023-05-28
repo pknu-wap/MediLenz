@@ -1,11 +1,10 @@
 package com.android.mediproject.core.network.module
 
 import android.content.Context
+import com.android.mediproject.core.datastore.TokenServer
 import com.android.mediproject.core.network.BuildConfig
 import com.android.mediproject.core.network.R
 import com.android.mediproject.core.network.tokens.TokenInterceptor
-import com.android.mediproject.core.network.tokens.TokenServer
-import com.android.mediproject.core.network.tokens.TokenServerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -123,7 +122,5 @@ object NetworkModule {
         build()
     }
 
-    @Provides
-    @Singleton
-    fun providesTokenServer(): TokenServer = TokenServerImpl()
+
 }

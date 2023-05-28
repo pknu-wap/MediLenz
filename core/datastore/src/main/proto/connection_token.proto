@@ -6,6 +6,5 @@ option java_multiple_files = true;
 message ConnectionToken {
   string refresh_token = 1;
   string access_token = 2;
-  string user_id = 3;
-  string expiration_datetime = 4;
+  string expiration_datetime = 3;
 }
