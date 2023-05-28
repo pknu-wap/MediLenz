@@ -214,7 +214,9 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/myCommentsListRV"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingHorizontal="15dp"/>
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

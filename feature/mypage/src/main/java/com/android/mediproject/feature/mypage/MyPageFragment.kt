@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.model.user.UserDto
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -22,8 +23,13 @@ class MyPageFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val myCommentListAdapter = MyPageMyCommentAdapter()
         binding.apply {
+
+            myCommentsListRV.apply{
+                adapter = myCommentListAdapter
+                layoutManager = LinearLayoutManager(requireActivity())
+            }
 
             userDto = UserDto("WAP짱짱")
 
