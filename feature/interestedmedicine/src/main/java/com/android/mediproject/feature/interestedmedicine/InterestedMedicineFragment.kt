@@ -1,12 +1,18 @@
 package com.android.mediproject.feature.interestedmedicine
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
 import com.android.mediproject.feature.interestedmedicine.databinding.FragmentInterestedMedicineBinding
@@ -58,7 +64,44 @@ class InterestedMedicineFragment() :
                                     })
                             }
                         } else {
+                            //0개 일 경우
+                            interestedMedicineList.visibility = View.GONE
+                            noInterstedMedicineTV.visibility = View.VISIBLE
 
+                            val span =
+                                SpannableStringBuilder(getString(com.android.mediproject.feature.interestedmedicine.R.string.noInterstedMedicine)).apply {
+                                    setSpan(
+                                        ForegroundColorSpan(
+                                            ContextCompat.getColor(
+                                                requireContext(),
+                                                R.color.main
+                                            )
+                                        ), 0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                    )
+                                    setSpan(
+                                        UnderlineSpan(),
+                                        0,
+                                        4,
+                                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                    )
+                                    setSpan(
+                                        ForegroundColorSpan(
+                                            ContextCompat.getColor(
+                                                requireContext(),
+                                                R.color.main
+                                            )
+                                        ), 6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                    )
+                                    setSpan(
+                                        UnderlineSpan(),
+                                        6,
+                                        8,
+                                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                    )
+                                }
+                            noInterstedMedicineTV.text = span
+                            interstedMedicineHeaderView.setMoreVisiblity(false)
+                            interstedMedicineHeaderView.setExpandVisiblity(false)
                         }
                     }
                 }
