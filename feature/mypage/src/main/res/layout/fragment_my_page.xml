@@ -200,7 +200,7 @@
                     app:layout_constraintTop_toBottomOf="@id/interestedMedicineListLL">
 
                     <com.android.mediproject.core.ui.base.view.HeaderForElementsView
-                        android:id="@+id/header_view"
+                        android:id="@+id/myCommentsListHeaderView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
