@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.model.user.UserDto
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
@@ -23,6 +24,8 @@ class MyPageFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
+
+            userDto = UserDto("WAP짱짱")
 
             //글자 Span 적용
             val span = SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {

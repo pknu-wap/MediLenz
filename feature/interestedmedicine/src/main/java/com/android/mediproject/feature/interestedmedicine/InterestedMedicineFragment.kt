@@ -24,11 +24,6 @@ class InterestedMedicineFragment() :
         initHeader()
     }
 
-    /**
-     * 최근 검색 목록 Chip을 추가합니다.
-     *
-     * 클릭 시 관련 로직을 수행하도록 합니다.
-     */
     private fun addHistoryItemChips() {
         binding.apply {
             val horizontalSpace =

@@ -70,7 +70,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="20dp"
                     android:text="@string/guestMode"
                     android:textColor="@color/gray2"
                     android:textSize="28sp"
@@ -146,7 +146,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="20dp"
                     android:text="@{userDto.nickName}"
                     android:textColor="@color/black"
                     android:textSize="28sp"
