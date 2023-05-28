@@ -115,10 +115,11 @@ class InterestedMedicineFragment() :
      * 확장 버튼 리스너, 더 보기 버튼 리스너
      */
     private fun initHeader() {
-        binding.headerView.apply {
+        binding.interstedMedicineHeaderView.apply {
             setOnExpandClickListener {
 
             }
+
             setOnMoreClickListener {
                 findNavController().navigate("medilens://main/moreInterestedMedicine_nav".toUri())
             }

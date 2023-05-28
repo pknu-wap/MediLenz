@@ -65,10 +65,8 @@ class MyPageFragment :
                                 noMyCommentTV.visibility = View.VISIBLE
 
                                 val span = SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.noMyComment)).apply{
-                                    setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.main)),0,4,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                                    setSpan(UnderlineSpan(),0,4,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                                    setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.main)),6,8,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                                    setSpan(UnderlineSpan(),6,8,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                                    setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.main)),7,9,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                                    setSpan(UnderlineSpan(),7,9,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                                 }
                                 noMyCommentTV.text = span
                                 myCommentsListHeaderView.setMoreVisiblity(false)
