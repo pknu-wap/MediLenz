@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.mypage.MyPageViewModel" />
@@ -198,9 +199,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/interestedMedicineListLL">
 
-                    <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/myCommentsList"
-                        android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
+                    <com.android.mediproject.core.ui.base.view.HeaderForElementsView
+                        android:id="@+id/header_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
+                        app:header_title="@string/myCommentList"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:more_title="@string/read_more"
+                        app:visibility_target_view="@id/myCommentsListRV" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/myCommentsListRV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
