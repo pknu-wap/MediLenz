@@ -10,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InterstedMedicineViewModel @Inject constructor() : BaseViewModel() {
 
-    val medicineIntersted: Flow<List<MedicineInterestedDto>> = channelFlow {
+    val interstedMedicineList: Flow<List<MedicineInterestedDto>> = channelFlow {
         send(
             listOf(
                 MedicineInterestedDto(1,"타이레놀", System.currentTimeMillis().toString()),

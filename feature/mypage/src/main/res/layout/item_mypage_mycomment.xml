@@ -13,10 +13,12 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <com.android.mediproject.core.ui.base.view.ButtonChip
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_10_main"
             android:text="@{myCommentDto.medicineName}"
+            android:gravity="center"
             android:textColor="@color/main"
             android:textSize="13sp"
             app:chipStrokeColor="@color/main" />

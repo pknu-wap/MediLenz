@@ -9,6 +9,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.model.user.UserDto
@@ -49,7 +50,12 @@ class MyPageFragment :
             guestTV.text = span
 
             viewModel = fragmentViewModel.apply {
-                repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+                    viewLifecycleOwner.apply{
+                        repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+                        repeatOnStarted { myCommentsList.collect{
+                            myCommentListAdapter.submitList(it)
+                        } }
+                    }
             }
 
             myCommentsListHeaderView.setOnMoreClickListener{

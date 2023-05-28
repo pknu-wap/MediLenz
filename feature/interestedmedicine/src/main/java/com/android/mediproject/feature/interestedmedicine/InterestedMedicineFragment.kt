@@ -7,7 +7,6 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.android.mediproject.core.model.medicine.InterestedMedicine.MedicineInterestedDto
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
 import com.android.mediproject.feature.interestedmedicine.databinding.FragmentInterestedMedicineBinding
@@ -36,7 +35,7 @@ class InterestedMedicineFragment() :
         binding.apply {
             viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnStarted {
-                    fragmentViewModel.medicineIntersted.collect { medicineList ->
+                    fragmentViewModel.interstedMedicineList.collect { medicineList ->
                         //즐겨찾기 목록 약의 개수가 0개가 아닐 경우
                         if (medicineList.size != 0) {
                             medicineList.forEach { medicine ->
