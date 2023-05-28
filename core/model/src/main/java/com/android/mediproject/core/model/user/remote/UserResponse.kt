@@ -1,5 +1,6 @@
 package com.android.mediproject.core.model.user.remote
 
+import com.android.mediproject.core.model.user.UserDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -22,3 +23,5 @@ data class UserResponse(
     @SerialName("created_at")
     val createdAt: String
 )
+
+fun UserResponse.toUserDto() = UserDto(nickName = nickName)
