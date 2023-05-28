@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="myCommentDto"
             type="com.android.mediproject.core.model.comments.MyCommentDto" />
@@ -17,10 +18,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rectangle_10_main"
-            android:text="@{myCommentDto.medicineName}"
+            android:gravity="center"
             android:paddingHorizontal="8dp"
             android:paddingVertical="6dp"
-            android:gravity="center"
+            android:text="@{myCommentDto.medicineName}"
             android:textColor="@color/main"
             android:textSize="13sp"
             app:chipStrokeColor="@color/main" />
@@ -29,9 +30,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
             android:text="@{myCommentDto.content}"
             android:textColor="@color/gray2"
             android:textSize="14sp" />
-
     </LinearLayout>
 </layout>
