@@ -17,7 +17,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding, NewsViewModel>(FragmentNe
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             composeView.setContent {
-                NewsScreen()
+                NewsNavHost()
             }
         }
     }
