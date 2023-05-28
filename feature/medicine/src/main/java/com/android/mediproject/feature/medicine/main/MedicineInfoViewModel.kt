@@ -38,9 +38,7 @@ class MedicineInfoViewModel @Inject constructor(
         if (primaryInfo == null) {
             flowOf(UiState.Initial)
         } else {
-            getMedicineDetailsUseCase(itemName = primaryInfo.medicineName)
-
-            getMedicineDetailsUseCase.invoke(itemName = primaryInfo.medicineName).map { result ->
+            getMedicineDetailsUseCase(itemName = primaryInfo.medicineName).map { result ->
                 result.fold(onSuccess = { UiState.Success(it) }, onFailure = { UiState.Error(it.message ?: "faileds") })
             }
         }

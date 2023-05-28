@@ -16,7 +16,6 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher, private val dataGoKrNetworkApi: DataGoKrNetworkApi
 ) : MedicineApprovalDataSource {
 
-
     override suspend fun getMedicineApprovalList(
         itemName: String?, entpName: String?, medicationType: String?, pageNo: Int
     ): Result<MedicineApprovalListResponse> = dataGoKrNetworkApi.getApprovalList(

@@ -43,7 +43,9 @@ class MedicineApprovalRepositoryImpl @Inject constructor(private val medicineApp
 
     override suspend fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Body.Item>> = channelFlow {
         medicineApprovalDataSource.getMedicineDetailInfo(itemName).map { result ->
-            result.fold(onSuccess = { Result.success(it.body.items.first()) }, onFailure = { Result.failure(it) })
+            result.fold(
+                onSuccess = { Result.success(it.body.items.first()) },
+                onFailure = { Result.failure(it) })
         }.collectLatest {
             send(it)
         }
