@@ -5,5 +5,5 @@
     <string name="guestDescription">로그인하여 다른 사용자들과 \n소통을 즐겨보세요 !</string>
     <string name="login">로그인</string>
     <string name="signUp">회원가입</string>
-    <string name="noMyComment">즐겨찾기한 알약이 없습니다.</string>
+    <string name="noMyComment">내가 작성한 댓글이 없습니다.</string>
 </resources>
