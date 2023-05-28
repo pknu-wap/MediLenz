@@ -8,6 +8,9 @@
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.mypage.MyPageViewModel" />
+        <variable
+            name="userDto"
+            type="com.android.mediproject.core.model.user.UserDto" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -144,7 +147,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
-                    android:text="태규안"
+                    android:text="@{userDto.nickName}"
                     android:textColor="@color/black"
                     android:textSize="28sp"
                     app:layout_constraintBottom_toBottomOf="@id/userImageIV"
