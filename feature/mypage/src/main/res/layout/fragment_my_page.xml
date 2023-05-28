@@ -33,6 +33,7 @@
             </com.android.mediproject.core.ui.base.view.Bar>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/guestModeCL"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -121,6 +122,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/loginModeCL"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:visibility="gone"
