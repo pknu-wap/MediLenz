@@ -8,8 +8,8 @@ import com.android.mediproject.core.model.remote.adminaction.AdminActionListResp
 import com.android.mediproject.core.model.remote.dur.DurResponse
 import com.android.mediproject.core.model.remote.elderlycaution.ElderlyCautionResponse
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
-import com.android.mediproject.core.model.remote.medicineapproval.MedicineApprovalListResponse
-import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetailInfoResponse
+import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
 import com.android.mediproject.core.network.datasource.dur.DurDataSource

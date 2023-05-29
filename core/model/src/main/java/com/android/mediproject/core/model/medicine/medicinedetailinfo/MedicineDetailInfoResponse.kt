@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.remote.medicinedetailinfo
+package com.android.mediproject.core.model.medicine.medicinedetailinfo
 
 
 import com.android.mediproject.core.model.DataGoKrBaseResponse

@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.intro.LoginViewModel"
-            />
+            type="com.android.mediproject.feature.intro.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".LoginFragment"
-        >
+        tools:context=".LoginFragment">
 
         <com.android.mediproject.core.ui.base.view.Bar
             android:id="@+id/loginBar"
@@ -25,31 +22,27 @@
             app:layout_constraintTop_toTopOf="parent"
             app:setTheme="blue"
             app:showBackButton="true"
-            app:title="@string/login"
-            />
+            app:title="@string/login" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginBar"
-            >
+            app:layout_constraintTop_toBottomOf="@id/loginBar">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/loginSignUpMarginHorizontal"
-                />
+                app:layout_constraintGuide_begin="@dimen/loginSignUpMarginHorizontal" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/loginSignUpMarginHorizontal"
-                />
+                app:layout_constraintGuide_end="@dimen/loginSignUpMarginHorizontal" />
 
             <com.android.mediproject.core.ui.base.view.Subtitle
                 android:id="@+id/loginEmail"
@@ -59,9 +52,7 @@
                 app:edtHint="@string/emailHint"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/guideline1"
-                app:layout_constraintTop_toBottomOf="@id/loginBar"
-                app:title="@string/email"
-                />
+                app:title="@string/email" />
 
             <com.android.mediproject.core.ui.base.view.Subtitle
                 android:id="@+id/loginPassword"
@@ -73,8 +64,7 @@
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/guideline1"
                 app:layout_constraintTop_toBottomOf="@id/loginEmail"
-                app:title="@string/password"
-                />
+                app:title="@string/password" />
 
             <FrameLayout
                 android:id="@+id/loginFL"
@@ -84,16 +74,14 @@
                 android:layout_marginEnd="43dp"
                 android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loginPassword"
-                >
+                app:layout_constraintTop_toBottomOf="@id/loginPassword">
 
                 <CheckBox
                     android:id="@+id/rememberEmailCB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleX="0.80"
-                    android:scaleY="0.80"
-                    />
+                    android:scaleY="0.80" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -101,8 +89,7 @@
                     android:layout_gravity="end|center"
                     android:text="@string/rememberEmail"
                     android:textColor="@color/gray2"
-                    android:textSize="16sp"
-                    />
+                    android:textSize="16sp" />
             </FrameLayout>
 
             <com.android.mediproject.core.ui.base.view.IntroButton
@@ -120,6 +107,7 @@
                 app:title="@string/login"
                 />
 
+
             <com.android.mediproject.core.ui.base.view.IntroButton
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -131,8 +119,7 @@
                 app:layout_constraintStart_toStartOf="@id/guideline1"
                 app:layout_constraintTop_toBottomOf="@id/loginFL"
                 app:setTitleColor="@color/white"
-                app:title="@string/signUpFull"
-                />
+                app:title="@string/signUpFull" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

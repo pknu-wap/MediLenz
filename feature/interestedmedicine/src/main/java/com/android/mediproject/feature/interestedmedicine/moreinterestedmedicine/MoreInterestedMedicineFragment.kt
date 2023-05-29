@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto
+import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.interestedmedicine.databinding.FragmentMoreInterestedMedicineBinding
 

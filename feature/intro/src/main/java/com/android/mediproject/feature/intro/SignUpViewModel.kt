@@ -35,7 +35,9 @@ class SignUpViewModel @Inject constructor(
 
     fun event(event: SignUpEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
+
     fun signUp() = event(SignUpEvent.SignUp)
+
 
     fun signUp(
         emailEditable: CharSequence, passwordEditable: CharSequence, checkPasswordEditable: CharSequence, nickNameEditable: CharSequence
@@ -82,7 +84,9 @@ class SignUpViewModel @Inject constructor(
 
     sealed class SignUpEvent {
         object SignUpComplete : SignUpEvent()
+
         object SignUp : SignUpEvent()
+
     }
 }
 

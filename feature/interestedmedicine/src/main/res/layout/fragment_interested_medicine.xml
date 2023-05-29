@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <com.android.mediproject.core.ui.base.view.HeaderForElementsView
-            android:id="@+id/header_view"
+            android:id="@+id/interstedMedicineHeaderView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
@@ -25,6 +25,20 @@
             app:more_title="@string/read_more"
             app:visibility_target_view="@id/interestedMedicineList" />
 
+        <TextView
+            android:id="@+id/noInterstedMedicineTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintTop_toBottomOf="@id/interstedMedicineHeaderView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/gray2"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/interestedMedicineList"
             android:layout_width="match_parent"
@@ -34,7 +48,7 @@
             app:alignItems="flex_start"
             app:flexWrap="wrap"
             app:justifyContent="flex_start"
-            app:layout_constraintTop_toBottomOf="@id/header_view" />
+            app:layout_constraintTop_toBottomOf="@id/interstedMedicineHeaderView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
