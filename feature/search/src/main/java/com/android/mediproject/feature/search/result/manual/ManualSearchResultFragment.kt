@@ -11,7 +11,7 @@ import com.android.mediproject.core.common.paging.setOnStateChangedListener
 import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.model.constants.MedicationType
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
-import com.android.mediproject.core.model.remote.medicineapproval.ApprovedMedicineItemDto
+import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.listfilter.MediPopupMenu
 import com.android.mediproject.feature.search.R

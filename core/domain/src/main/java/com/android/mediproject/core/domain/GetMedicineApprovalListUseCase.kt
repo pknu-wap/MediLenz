@@ -4,7 +4,7 @@ import androidx.paging.map
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
 import com.android.mediproject.core.model.constants.MedicationType
 import com.android.mediproject.core.model.parameters.ApprovalListSearchParameter
-import com.android.mediproject.core.model.remote.medicineapproval.toDto
+import com.android.mediproject.core.model.medicine.medicineapproval.toDto
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 

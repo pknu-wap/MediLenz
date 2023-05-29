@@ -8,6 +8,10 @@
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.mypage.MyPageViewModel" />
+
+        <variable
+            name="userDto"
+            type="com.android.mediproject.core.model.user.UserDto" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -36,6 +40,7 @@
                 android:id="@+id/guestModeCL"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mypageBar">
 
@@ -66,7 +71,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="20dp"
                     android:text="@string/guestMode"
                     android:textColor="@color/gray2"
                     android:textSize="28sp"
@@ -125,7 +130,7 @@
                 android:id="@+id/loginModeCL"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:visibility="gone"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mypageBar">
 
@@ -142,8 +147,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:text="태규안"
+                    android:layout_marginStart="20dp"
+                    android:text="@{userDto.nickName}"
                     android:textColor="@color/black"
                     android:textSize="28sp"
                     app:layout_constraintBottom_toBottomOf="@id/userImageIV"
@@ -166,7 +171,6 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="25dp"
                     android:background="@drawable/rectangle_5_main"
-                    android:onClick="@{()->viewModel.interestedMedicineList()}"
                     android:orientation="vertical"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="10dp"
@@ -195,15 +199,37 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/interestedMedicineListLL">
 
-                    <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/myCommentsList"
-                        android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
+                    <com.android.mediproject.core.ui.base.view.HeaderForElementsView
+                        android:id="@+id/myCommentsListHeaderView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="@{()->viewModel.myCommentList()}" />
+                        android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
+                        app:header_title="@string/myCommentList"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:more_title="@string/read_more"
+                        app:visibility_target_view="@id/myCommentsListRV" />
+
+                    <TextView
+                        android:id="@+id/noMyCommentTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginBottom="40dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/gray2"
+                        android:textSize="20sp"
+                        android:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/myCommentsListRV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp" />
+
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

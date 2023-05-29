@@ -1,7 +1,7 @@
 package com.android.mediproject.core.network.datasource.medicineapproval
 
-import com.android.mediproject.core.model.remote.medicineapproval.MedicineApprovalListResponse
-import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetailInfoResponse
+import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import kotlinx.coroutines.flow.Flow
 
 interface MedicineApprovalDataSource {

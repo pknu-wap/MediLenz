@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
  * @property createdAt 회원가입 날짜
  */
 @Serializable
-data class UserDto(
+data class LocalUserDto(
     @SerialName("nickname")
     val nickName: String,
     @SerialName("user_id")

@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.remote.medicineapproval
+package com.android.mediproject.core.model.medicine.medicineapproval
 
 /**
  * 의약품 검색 결과 중 하나의 아이템 정보를 담는 데이터 클래스

@@ -8,7 +8,7 @@ import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
-import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetatilInfoDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -38,9 +38,7 @@ class MedicineInfoViewModel @Inject constructor(
         if (primaryInfo == null) {
             flowOf(UiState.Initial)
         } else {
-            getMedicineDetailsUseCase(itemName = primaryInfo.medicineName)
-
-            getMedicineDetailsUseCase.invoke(itemName = primaryInfo.medicineName).map { result ->
+            getMedicineDetailsUseCase(itemName = primaryInfo.medicineName).map { result ->
                 result.fold(onSuccess = { UiState.Success(it) }, onFailure = { UiState.Error(it.message ?: "faileds") })
             }
         }

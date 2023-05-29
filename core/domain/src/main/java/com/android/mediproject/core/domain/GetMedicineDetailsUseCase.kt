@@ -3,8 +3,8 @@ package com.android.mediproject.core.domain
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
-import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetatilInfoDto
-import com.android.mediproject.core.model.remote.medicinedetailinfo.toDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.toDto
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow

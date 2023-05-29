@@ -6,7 +6,7 @@ import android.text.Spanned
 import androidx.core.text.toSpanned
 import com.android.mediproject.core.common.R
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoDto
-import com.android.mediproject.core.model.remote.medicinedetailinfo.MedicineDetatilInfoDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
 import com.android.mediproject.core.model.util.XMLParsedResult
 import java.lang.ref.WeakReference
 import javax.inject.Inject
