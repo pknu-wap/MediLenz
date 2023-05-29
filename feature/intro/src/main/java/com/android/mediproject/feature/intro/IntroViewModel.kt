@@ -41,9 +41,9 @@ class IntroViewModel @Inject constructor(
 
     sealed class IntroEvent {
 
-        data class NonMemberLogin(val unit: Unit? = null) : IntroEvent()
-        data class MemberLogin(val unit: Unit? = null) : IntroEvent()
-        data class SignUp(val unit: Unit? = null) : IntroEvent()
+        object NonMemberLogin : IntroEvent()
+        object MemberLogin : IntroEvent()
+        object SignUp : IntroEvent()
         object SkipIntro : IntroEvent()
         object NonSkipIntro : IntroEvent()
     }
