@@ -15,25 +15,24 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class AdminActionViewModel @Inject constructor(
     private val getAdminActionInfoUseCase: GetAdminActionInfoUseCase,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
     private lateinit var _adminActionList: Flow<PagingData<AdminActionListItemDto>>
     val adminActionList by lazy { _adminActionList }
 
     private val clickedItemPosition = MutableStateFlow(-1)
-
-    val clickedItem by lazy {
-        val getItemFromPaging = GetItemFromPaging(ioDispatcher)
-    }
 
     /**
      * 행정 처분 목록 로드
@@ -48,31 +47,38 @@ class AdminActionViewModel @Inject constructor(
         clickedItemPosition.value = position
     }
 
-}
+    private val _clickedItem = MutableStateFlow<AdminActionListItemDto?>(null)
+    val clickedItem get() = _clickedItem.asStateFlow()
 
-class GetItemFromPaging(dispatcher: CoroutineContext) : PagingDataDiffer<AdminActionListItemDto>(DiffCallback, dispatcher) {
-    override suspend fun presentNewList(
-        previousList: NullPaddedList<AdminActionListItemDto>,
-        newList: NullPaddedList<AdminActionListItemDto>,
-        lastAccessedIndex: Int,
-        onListPresentable: () -> Unit
-    ): Int? {
-        TODO()
-    }
+    fun getClickedItem() {
+        viewModelScope.launch(defaultDispatcher) {
+            adminActionList.collectLatest {
+                WeakReference(object : PagingDataDiffer<AdminActionListItemDto>(
+                    differCallback = object : DifferCallback {
+                        override fun onChanged(position: Int, count: Int) {
 
-}
+                        }
 
+                        override fun onInserted(position: Int, count: Int) {
+                        }
 
-object DiffCallback : DifferCallback {
-    override fun onChanged(position: Int, count: Int) {
-        TODO("Not yet implemented")
-    }
+                        override fun onRemoved(position: Int, count: Int) {
+                        }
 
-    override fun onInserted(position: Int, count: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onRemoved(position: Int, count: Int) {
-        TODO("Not yet implemented")
+                    },
+                    mainContext = defaultDispatcher,
+                    cachedPagingData = it
+                ) {
+                    override suspend fun presentNewList(
+                        previousList: NullPaddedList<AdminActionListItemDto>,
+                        newList: NullPaddedList<AdminActionListItemDto>,
+                        lastAccessedIndex: Int,
+                        onListPresentable: () -> Unit
+                    ) = null
+                }).get()?.apply {
+                    _clickedItem.value = this[clickedItemPosition.value]
+                }
+            }
+        }
     }
 }

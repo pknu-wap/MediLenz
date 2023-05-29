@@ -20,10 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -36,10 +36,10 @@ import java.time.format.DateTimeFormatter
 /**
  * 행정 처분 목록 표시
  */
-@Preview
 @Composable
-fun AdminActionScreen(viewModel: AdminActionViewModel = hiltViewModel()) {
-
+fun AdminActionScreen(
+    viewModel: AdminActionViewModel = hiltViewModel(), navController: NavController
+) {
     val list = viewModel.adminActionList.collectAsLazyPagingItems()
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -47,7 +47,13 @@ fun AdminActionScreen(viewModel: AdminActionViewModel = hiltViewModel()) {
             count = list.itemCount, key = list.itemKey(), contentType = list.itemContentType(
             )
         ) { index ->
-            list[index]?.let { ListItem(it) }
+            list[index]?.let {
+                it.onClick = {
+                    viewModel.onClickedItem(index)
+                    navController.navigate("detailAdminAction")
+                }
+                ListItem(it)
+            }
             if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
         }
 
@@ -78,7 +84,7 @@ fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
             .padding(horizontal = 24.dp, vertical = 9.dp),
         shape = RectangleShape,
         onClick = {
-            adminActionListItemDto.onClick?.invoke(adminActionListItemDto)
+            adminActionListItemDto.onClick?.invoke()
         },
     ) {
         Column(

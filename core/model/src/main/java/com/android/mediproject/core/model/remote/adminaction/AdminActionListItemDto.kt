@@ -35,7 +35,7 @@ data class AdminActionListItemDto(
     val itemSeq: String, // 200808451
     val lastSettleDate: LocalDate, // 20230526
     val publicEndDate: LocalDate, // 20230910
-    var onClick: ((AdminActionListItemDto) -> Unit)? = null
+    var onClick: (() -> Unit)? = null
 )
 
 fun AdminActionListResponse.Body.Item.toDto(): AdminActionListItemDto {

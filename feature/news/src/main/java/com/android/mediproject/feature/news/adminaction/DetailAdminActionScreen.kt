@@ -7,22 +7,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.android.mediproject.core.model.remote.adminaction.AdminActionListItemDto
 import java.time.format.DateTimeFormatter
 
 @Preview
 @Composable
 fun DetailAdminActionScreen(
-    navController: NavController = rememberNavController(),
     viewModel: AdminActionViewModel = hiltViewModel()
 ) {
+    viewModel.getClickedItem()
+    val item = viewModel.clickedItem.collectAsState()
+
+    item.value?.apply {
+        Item(item = this)
+    }
 }
 
 @Composable

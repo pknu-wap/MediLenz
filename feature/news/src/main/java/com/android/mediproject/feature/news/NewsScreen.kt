@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.news
 
+import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -34,12 +36,14 @@ import com.android.mediproject.feature.news.adminaction.AdminActionScreen
 import com.android.mediproject.feature.news.adminaction.DetailAdminActionScreen
 import com.android.mediproject.feature.news.recallsuspension.DetailRecallDisposalScreen
 import com.android.mediproject.feature.news.recallsuspension.RecallDisposalScreen
+import kotlinx.parcelize.Parcelize
 
 /**
  * 뉴스 타입
  */
-enum class ChipType {
-    RECALLS_SUSPENSION, ADMIN_ACTION
+@Parcelize
+enum class ChipType : Parcelable {
+    RECALLS_SUSPENSION, ADMIN_ACTION;
 }
 
 /**
@@ -57,7 +61,7 @@ fun NewsNavHost(
     NavHost(navController = navController, startDestination = startDestination) {
         composable("news") {
             CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
-                NewsScreen()
+                NewsScreen(navController)
             }
         }
         composable(
@@ -73,10 +77,9 @@ fun NewsNavHost(
     }
 }
 
-@Preview
 @Composable
-fun NewsScreen() {
-    var selectedChip by remember { mutableStateOf(ChipType.RECALLS_SUSPENSION) }
+fun NewsScreen(navController: NavController) {
+    var selectedChip by rememberSaveable { mutableStateOf(ChipType.RECALLS_SUSPENSION) }
 
     val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         ""
@@ -86,10 +89,10 @@ fun NewsScreen() {
         ChipGroup(selectedChip, onChipSelected = { chip ->
             selectedChip = chip
         })
-        if (selectedChip == ChipType.RECALLS_SUSPENSION) RecallDisposalScreen()
+        if (selectedChip == ChipType.RECALLS_SUSPENSION) RecallDisposalScreen(navController = navController)
         else {
             CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
-                AdminActionScreen()
+                AdminActionScreen(navController = navController)
             }
         }
     }

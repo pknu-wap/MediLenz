@@ -31,7 +31,7 @@ class DetailRecallSuspensionViewModel @Inject constructor(
      */
     init {
         viewModelScope.launch(ioDispatcher) {
-            val productName: String = checkNotNull(savedStateHandle["productName"])
+            val productName: String = checkNotNull(savedStateHandle["product"])
             getRecallSuspensionInfoUseCase.getDetailRecallSuspension(product = productName, company = null).collectLatest {
                 _detailRecallSuspension.value = it.fold(onSuccess = { item ->
                     UiState.Success(item)
