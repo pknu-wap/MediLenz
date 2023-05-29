@@ -1,5 +1,7 @@
 package com.android.mediproject.core.data.remote.di
 
+import com.android.mediproject.core.common.network.Dispatcher
+import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepository
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepositoryImpl
 import com.android.mediproject.core.data.remote.comments.CommentsRepository
@@ -16,6 +18,9 @@ import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensio
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepositoryImpl
 import com.android.mediproject.core.data.remote.sign.SignRepository
 import com.android.mediproject.core.data.remote.sign.SignRepositoryImpl
+import com.android.mediproject.core.data.search.SearchHistoryRepository
+import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
+import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
@@ -31,6 +36,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -40,8 +46,10 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideMedicineApprovalRepository(
-        medicineApprovalDataSource: MedicineApprovalDataSource
-    ): MedicineApprovalRepository = MedicineApprovalRepositoryImpl(medicineApprovalDataSource)
+        medicineApprovalDataSource: MedicineApprovalDataSource, searchHistoryDao: SearchHistoryDao
+    ): MedicineApprovalRepository = MedicineApprovalRepositoryImpl(
+        medicineApprovalDataSource, searchHistoryDao
+    )
 
     @Provides
     @Singleton
@@ -81,4 +89,10 @@ object RepositoryModule {
     fun providesSignRepository(
         signDataSource: SignDataSource, connectionTokenDataSourceImpl: TokenDataSourceImpl, appDataStore: AppDataStore
     ): SignRepository = SignRepositoryImpl(signDataSource, connectionTokenDataSourceImpl, appDataStore)
+
+    @Provides
+    @Singleton
+    fun providesSearchHistoryRepository(
+        searchHistoryDao: SearchHistoryDao, @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher
+    ): SearchHistoryRepository = SearchHistoryRepositoryImpl(searchHistoryDao, ioDispatcher)
 }

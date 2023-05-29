@@ -146,9 +146,10 @@ androidx-navigation-dynamic = { group = "androidx.navigation", name = "navigatio
 androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
 androidx-work-testingAndroidTestImplementation = { group = "androidx.work", name = "work-testing", version.ref = "androidxWork" }
 
-androidx-room-compileKapt = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
+androidx-room-compileKsp = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidxRoom" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "androidxRoom" }
 
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "androidxRecyclerview" }
 androidx-concurrentfutures = { module = "androidx.concurrent:concurrent-futures-ktx", version.ref = "androidxConcurrentFutures" }
@@ -278,7 +279,7 @@ firebases = ["firebase-bom", "firebase-crashlytics"]
 hilts = ["androidx-hilt-navigation-compose", "androidx-hilt-android", "androidx-hilt-navigation-fragment",
     "androidx-hilt-work", "androidx-hilt-navigation-compose"]
 
-rooms = ["androidx-room-ktx", "androidx-room-runtime"]
+rooms = ["androidx-room-ktx", "androidx-room-runtime", "androidx-room-paging"]
 
 dataStores = ["androidx-datastore-preferences", "androidx-datastore"]
 

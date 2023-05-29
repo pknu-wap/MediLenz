@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
+import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
 import com.android.mediproject.core.model.medicine.medicineapproval.Item
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
@@ -15,8 +16,9 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class MedicineApprovalRepositoryImpl @Inject constructor(private val medicineApprovalDataSource: MedicineApprovalDataSource) :
-    MedicineApprovalRepository {
+class MedicineApprovalRepositoryImpl @Inject constructor(
+    private val medicineApprovalDataSource: MedicineApprovalDataSource, private val searchHistoryDao: SearchHistoryDao
+) : MedicineApprovalRepository {
 
     /**
      * PagingData를 사용하여 페이징 처리를 하기 위해 Pager를 사용
@@ -33,6 +35,7 @@ class MedicineApprovalRepositoryImpl @Inject constructor(private val medicineApp
         if (itemName == null && entpName == null) {
             emptyFlow()
         } else {
+
             Pager(config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5), pagingSourceFactory = {
                 MedicineApprovalListDataSourceImpl(
                     medicineApprovalDataSource, itemName, entpName, medicationType
@@ -43,9 +46,7 @@ class MedicineApprovalRepositoryImpl @Inject constructor(private val medicineApp
 
     override suspend fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Body.Item>> = channelFlow {
         medicineApprovalDataSource.getMedicineDetailInfo(itemName).map { result ->
-            result.fold(
-                onSuccess = { Result.success(it.body.items.first()) },
-                onFailure = { Result.failure(it) })
+            result.fold(onSuccess = { Result.success(it.body.items.first()) }, onFailure = { Result.failure(it) })
         }.collectLatest {
             send(it)
         }

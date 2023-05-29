@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.core.ui.base.view.stateAsCollect
 import com.android.mediproject.feature.penalties.databinding.FragmentRecentPenaltyListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
@@ -32,17 +33,17 @@ class RecentPenaltyListFragment :
 
         initHeader()
         binding.apply {
-            headerView.onIndicatorVisibilityChanged(true)
-            headerView.setExpand(false)
             penaltyList.setHasFixedSize(true)
 
             val penaltyListAdapter = PenaltyListAdapter()
             penaltyList.adapter = penaltyListAdapter
 
             viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.recallDisposalList.collect { uiState ->
+                fragmentViewModel.recallDisposalList.stateAsCollect(headerView).collect { uiState ->
                     when (uiState) {
-                        is UiState.Error -> {}
+                        is UiState.Error -> {
+                            
+                        }
 
                         is UiState.Initial -> {}
 
@@ -50,8 +51,6 @@ class RecentPenaltyListFragment :
 
                         is UiState.Success -> {
                             penaltyListAdapter.submitList(uiState.data)
-                            binding.headerView.onIndicatorVisibilityChanged(false)
-                            binding.headerView.setExpand(true)
                         }
                     }
                 }

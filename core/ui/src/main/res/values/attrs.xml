@@ -74,7 +74,6 @@
         <attr name="more_title" format="string|reference" />
         <attr name="more_color" format="color|reference" />
         <attr name="expand_icon_color" format="color|reference" />
-        <attr name="is_expanded" format="boolean" />
         <attr name="title_text_size" format="dimension|reference" />
         <attr name="more_text_size" format="dimension|reference" />
         <attr name="visibility_target_view" format="reference" />

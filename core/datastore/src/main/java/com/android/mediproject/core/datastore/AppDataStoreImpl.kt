@@ -20,6 +20,7 @@ class AppDataStoreImpl @Inject constructor(
     private val KEY_NICK_NAME = stringPreferencesKey("nick_name")
     private val KEY_SKIP_INTRO = booleanPreferencesKey("skip_intro")
 
+
     override val userEmail: Flow<String> = context.dataStore.data.map { it[KEY_USER_EMAIL] ?: "" }
 
     override val nickName: Flow<String> = context.dataStore.data.map { it[KEY_NICK_NAME] ?: "" }
