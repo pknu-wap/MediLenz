@@ -8,14 +8,12 @@ import java.time.LocalDateTime
  *
  * @property accessToken
  * @property refreshToken
- * @property userEmail
- * @property expirationDateTime
+ * @property expirationTimeOfAccessToken
  */
-data class ConnectionTokenDto(
+data class CurrentTokenDto(
     val accessToken: CharArray,
     val refreshToken: CharArray,
-    val userEmail: CharArray,
-    val expirationDateTime: LocalDateTime,
+    val expirationTimeOfAccessToken: LocalDateTime
 ) {
 
     private fun CharArray.toStr(): String {
@@ -26,12 +24,11 @@ data class ConnectionTokenDto(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ConnectionTokenDto
+        other as CurrentTokenDto
 
         if (!accessToken.contentEquals(other.accessToken)) return false
         if (!refreshToken.contentEquals(other.refreshToken)) return false
-        if (!userEmail.contentEquals(other.userEmail)) return false
-        if (expirationDateTime != other.expirationDateTime) return false
+        if (expirationTimeOfAccessToken != other.expirationTimeOfAccessToken) return false
 
 
         return true
@@ -40,8 +37,7 @@ data class ConnectionTokenDto(
     override fun hashCode(): Int {
         var result = accessToken.contentHashCode()
         result = 31 * result + refreshToken.contentHashCode()
-        result = 31 * result + userEmail.contentHashCode()
-        result = 31 * result + expirationDateTime.hashCode()
+        result = 31 * result + expirationTimeOfAccessToken.hashCode()
 
         return result
     }

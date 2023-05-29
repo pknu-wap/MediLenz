@@ -2,6 +2,7 @@ package com.android.mediproject.core.network.datasource.penalties.recallsuspensi
 
 import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
+import kotlinx.coroutines.flow.Flow
 
 interface RecallSuspensionDataSource {
 
@@ -21,5 +22,5 @@ interface RecallSuspensionDataSource {
     suspend fun getDetailRecallSuspensionInfo(
         company: String?,
         product: String?,
-    ): Result<DetailRecallSuspensionResponse>
+    ): Flow<Result<DetailRecallSuspensionResponse>>
 }

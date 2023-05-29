@@ -2,7 +2,6 @@ package com.android.mediproject.feature.intro
 
 import MutableEventFlow
 import android.text.Editable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
@@ -14,8 +13,8 @@ import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.model.parameters.SignInParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.intro.SignInState.FailedSignIn
+import com.android.mediproject.feature.intro.SignInState.Initial
 import com.android.mediproject.feature.intro.SignInState.RegexError
-import com.android.mediproject.feature.intro.SignInState.SignOut
 import com.android.mediproject.feature.intro.SignInState.Signing
 import com.android.mediproject.feature.intro.SignInState.SuccessSignIn
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,17 +34,15 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val signUseCase: SignUseCase,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-    private val savedStateHandle: SavedStateHandle,
-    private val aesCoder: AesCoder
+    private val aesCoder: AesCoder,
 ) : BaseViewModel() {
 
-    private val _savedEmail = savedStateHandle.getStateFlow("savedEmail", "")
-    val savedEmail = _savedEmail.flatMapLatest {
+    val savedEmail = signUseCase.savedEmail.flatMapLatest {
         if (it.isEmpty()) emptyFlow()
-        else flowOf(aesCoder.decode(it))
-    }.flowOn(ioDispatcher).stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = CharArray(0))
+        else flowOf(it.toCharArray())
+    }.flowOn(ioDispatcher).stateIn(viewModelScope, started = SharingStarted.WhileSubscribed(5000L), initialValue = CharArray(0))
 
-    private val _signInEvent = MutableStateFlow<SignInState>(SignOut)
+    private val _signInEvent = MutableStateFlow<SignInState>(Initial)
     val signInEvent = _signInEvent.asStateFlow()
 
     private val _eventFlow = MutableEventFlow<SignEvent>(replay = 1)
@@ -55,7 +52,6 @@ class LoginViewModel @Inject constructor(
 
     fun login() = event(SignEvent.SignIn)
     fun signUp() = event(SignEvent.SignUp)
-
 
     /**
      * 로그인 요청
@@ -78,24 +74,19 @@ class LoginViewModel @Inject constructor(
                 return@launch
             }
 
-            val email = CharArray(emailEditable.length).also {
-                emailEditable.trim().forEachIndexed { index, c ->
-                    it[index] = c
-                }
+            val email = CharArray(emailEditable.length)
+            emailEditable.trim().forEachIndexed { index, c ->
+                email[index] = c
             }
-
-            val password = CharArray(passwordEditable.length).also {
-                passwordEditable.trim().forEachIndexed { index, c ->
-                    it[index] = c
-                }
+            val password = CharArray(passwordEditable.length)
+            passwordEditable.trim().forEachIndexed { index, c ->
+                password[index] = c
             }
 
             _signInEvent.value = Signing
-
             // 로그인
-            signUseCase.signIn(SignInParameter(email, password)).collect { result ->
+            signUseCase.signIn(SignInParameter(email, password, checkedSaveEmail)).collect { result ->
                 result.fold(onSuccess = {
-                    savedStateHandle["savedEmail"] = aesCoder.encode(email)
                     _signInEvent.value = SuccessSignIn
                 }, onFailure = {
                     _signInEvent.value = FailedSignIn(it.message ?: "로그인 실패")
@@ -119,14 +110,14 @@ class LoginViewModel @Inject constructor(
 /**
  * 로그인 상태
  *
- * @property SignOut 로그아웃 상태
+ * @property Initial 로그아웃 상태
  * @property Signing 로그인 중 상태
  * @property RegexError 이메일 또는 비밀번호 형식 오류
  * @property SuccessSignIn 로그인 성공
  * @property FailedSignIn 로그인 실패
  */
 sealed class SignInState {
-    object SignOut : SignInState()
+    object Initial : SignInState()
     object Signing : SignInState()
 
     object RegexError : SignInState()

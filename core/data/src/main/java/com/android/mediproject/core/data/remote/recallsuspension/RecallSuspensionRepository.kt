@@ -15,5 +15,5 @@ interface RecallSuspensionRepository {
 
     suspend fun getDetailRecallSuspension(
         company: String?, product: String?
-    ): Result<DetailRecallSuspensionResponse.Body.Item.Item>
+    ): Flow<Result<DetailRecallSuspensionResponse.Body.Item.Item>>
 }

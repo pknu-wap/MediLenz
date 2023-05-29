@@ -36,67 +36,67 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
     private val mainScope = MainScope()
     private val jobs = mutableListOf<Job>()
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            loginBtn.setOnClickListener {
-                fragmentViewModel.signIn(
-                    binding.loginEmail.getEditable(), binding.loginPassword.getEditable(), binding.rememberEmailCB.isChecked
-                )
-            }
-
-            loginBtn.isEnabled = true
+            loginBtn.isEnabled = false
 
             addDelayTextWatcher(loginEmail.inputData)
             addDelayTextWatcher(loginPassword.inputData)
 
             viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.signInEvent.collectLatest {
-                    when (it) {
-                        is SignInState.Signing -> {
-                            // 로그인 중
-                            LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.signing))
-                        }
+                viewModel = fragmentViewModel
 
-                        is SignInState.SuccessSignIn -> {
-                            // 로그인 성공
-                            LoadingDialog.dismiss()
-                            toast(getString(R.string.signInSuccess))
-                            findNavController().navigate(
-                                "medilens://main/home_nav".toUri(),
-                                NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
-                            )
-                        }
+                launch {
+                    fragmentViewModel.eventFlow.collect { handleEvent(it) }
+                }
 
-                        is SignInState.FailedSignIn -> {
-                            // 로그인 실패
-                            LoadingDialog.dismiss()
-                            toast(getString(R.string.signInFailed))
-                        }
+                launch {
+                    fragmentViewModel.signInEvent.collectLatest {
+                        when (it) {
+                            is SignInState.Signing -> {
+                                // 로그인 중
+                                LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.signing))
+                            }
 
-                        is SignInState.RegexError -> {
-                            // 이메일 또는 비밀번호 형식 오류
-                            toast(getString(R.string.signInRegexError))
-                        }
+                            is SignInState.SuccessSignIn -> {
+                                // 로그인 성공
+                                LoadingDialog.dismiss()
+                                toast(getString(R.string.signInSuccess))
+                                findNavController().navigate(
+                                    "medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
+                                )
+                            }
 
-                        is SignInState.SignOut -> {
-                            // 로그아웃 상태
+                            is SignInState.FailedSignIn -> {
+                                // 로그인 실패
+                                LoadingDialog.dismiss()
+                                toast(getString(R.string.signInFailed))
+                            }
+
+                            is SignInState.RegexError -> {
+                                // 이메일 또는 비밀번호 형식 오류
+                                toast(getString(R.string.signInRegexError))
+                            }
+
+                            is SignInState.Initial -> {
+                                // 로그아웃 상태
+                            }
                         }
                     }
                 }
-            }
-        }
-    }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.savedEmail.collectLatest {
-                if (it.isNotEmpty()) {
-                    binding.rememberEmailCB.isChecked = true
-                    binding.loginEmail.inputData.setText(it, 0, it.size)
+                launch {
+                    fragmentViewModel.savedEmail.collectLatest {
+                        if (it.isNotEmpty()) {
+                            binding.rememberEmailCB.isChecked = true
+                            binding.loginEmail.inputData.setText(it, 0, it.size)
+                        }
+                    }
                 }
+
             }
         }
     }
@@ -109,6 +109,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
 
     private fun handleEvent(event: LoginViewModel.SignEvent) = when (event) {
         is LoginViewModel.SignEvent.SignIn -> {
+            fragmentViewModel.signIn(
+                binding.loginEmail.getEditable(), binding.loginPassword.getEditable(), binding.rememberEmailCB.isChecked
+            )
         }
 
         is LoginViewModel.SignEvent.SignUp -> findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())

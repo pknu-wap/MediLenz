@@ -16,7 +16,8 @@ import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensio
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepositoryImpl
 import com.android.mediproject.core.data.remote.sign.SignRepository
 import com.android.mediproject.core.data.remote.sign.SignRepositoryImpl
-import com.android.mediproject.core.datastore.TokenDataSource
+import com.android.mediproject.core.datastore.AppDataStore
+import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.dur.DurDataSource
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
@@ -77,6 +78,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesSignRepository(signDataSource: SignDataSource, connectionTokenDataSource: TokenDataSource): SignRepository =
-        SignRepositoryImpl(signDataSource, connectionTokenDataSource)
+    fun providesSignRepository(
+        signDataSource: SignDataSource, connectionTokenDataSourceImpl: TokenDataSourceImpl, appDataStore: AppDataStore
+    ): SignRepository = SignRepositoryImpl(signDataSource, connectionTokenDataSourceImpl, appDataStore)
 }

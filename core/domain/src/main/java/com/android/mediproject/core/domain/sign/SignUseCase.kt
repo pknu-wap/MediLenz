@@ -9,11 +9,13 @@ import javax.inject.Singleton
 
 @Singleton
 class SignUseCase @Inject constructor(
-    private val signRepository: SignRepository
+    private val signRepository: SignRepository,
 ) {
     suspend fun signIn(signInParameter: SignInParameter): Flow<Result<Unit>> = signRepository.signIn(signInParameter)
 
     suspend fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>> = signRepository.signUp(signUpParameter)
 
     suspend fun signOut() = signRepository.signOut()
+
+    val savedEmail = signRepository.savedEmail
 }

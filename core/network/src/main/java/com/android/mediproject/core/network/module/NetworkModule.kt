@@ -1,8 +1,10 @@
 package com.android.mediproject.core.network.module
 
 import android.content.Context
+import com.android.mediproject.core.datastore.TokenServer
 import com.android.mediproject.core.network.BuildConfig
 import com.android.mediproject.core.network.R
+import com.android.mediproject.core.network.tokens.TokenInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +18,7 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.time.Duration
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
@@ -81,6 +84,42 @@ object NetworkModule {
             }
             build()
         }
+    }
+
+    @Provides
+    @Singleton
+    @Named("okHttpClientWithAccessTokens")
+    fun providesOkHttpClientWithAccessTokens(
+        tokenServer: TokenServer
+    ): OkHttpClient = OkHttpClient.Builder().run {
+        addInterceptor(HttpLoggingInterceptor().apply {
+            if (BuildConfig.DEBUG) {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+        })
+        addInterceptor(TokenInterceptor(tokenServer, TokenInterceptor.TokenType.ACCESS_TOKEN))
+        readTimeout(Duration.ofSeconds(10))
+        connectTimeout(Duration.ofSeconds(7))
+        writeTimeout(Duration.ofSeconds(7))
+        build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("okHttpClientWithReissueTokens")
+    fun providesOkHttpClientWithReissueTokens(
+        tokenServer: TokenServer
+    ): OkHttpClient = OkHttpClient.Builder().run {
+        addInterceptor(HttpLoggingInterceptor().apply {
+            if (BuildConfig.DEBUG) {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+        })
+        addInterceptor(TokenInterceptor(tokenServer, TokenInterceptor.TokenType.REFRESH_TOKEN))
+        readTimeout(Duration.ofSeconds(10))
+        connectTimeout(Duration.ofSeconds(7))
+        writeTimeout(Duration.ofSeconds(7))
+        build()
     }
 
 

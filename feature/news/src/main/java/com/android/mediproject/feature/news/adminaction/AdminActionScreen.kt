@@ -30,7 +30,6 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.android.mediproject.core.model.remote.adminaction.AdminActionListItemDto
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
-import kotlinx.datetime.toJavaLocalDate
 import java.time.format.DateTimeFormatter
 
 
@@ -90,7 +89,7 @@ fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
                 verticalAlignment = CenterVertically,
             ) {
                 Text(
-                    text = adminActionListItemDto.eNTPNAME,
+                    text = adminActionListItemDto.entpName,
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 14.sp,
                     color = Color.Black,
@@ -101,7 +100,7 @@ fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
                     maxLines = 1
                 )
                 Text(
-                    text = adminActionListItemDto.lASTSETTLEDATE.toJavaLocalDate().format(dateFormat),
+                    text = adminActionListItemDto.lastSettleDate.format(dateFormat),
                     fontSize = 12.sp,
                     modifier = Modifier.align(Alignment.CenterVertically),
                     color = Color.Gray,
@@ -110,11 +109,11 @@ fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = adminActionListItemDto.eXPOSECONT, fontSize = 12.sp, color = Color.Gray, maxLines = 1
+                text = adminActionListItemDto.violation, fontSize = 12.sp, color = Color.Gray, maxLines = 1
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = adminActionListItemDto.aDMDISPSNAME, fontSize = 12.sp, color = Color.Gray, maxLines = 1
+                text = adminActionListItemDto.disposition, fontSize = 12.sp, color = Color.Gray, maxLines = 1
             )
         }
     }

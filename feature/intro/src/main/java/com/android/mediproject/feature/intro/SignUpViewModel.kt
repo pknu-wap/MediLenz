@@ -30,12 +30,14 @@ class SignUpViewModel @Inject constructor(
     private val _signUpEvent = MutableStateFlow<SignUpState>(SignUpState.Initial)
     val signInEvent = _signUpEvent.asStateFlow()
 
-    private val _eventFlow = MutableEventFlow<SignUpEvent>()
+    private val _eventFlow = MutableEventFlow<SignUpEvent>(replay = 1)
     val eventFlow = _eventFlow.asEventFlow()
 
     fun event(event: SignUpEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
-    fun signUpComplete() = event(SignUpEvent.SignUpComplete)
+
+    fun signUp() = event(SignUpEvent.SignUp)
+
 
     fun signUp(
         emailEditable: CharSequence, passwordEditable: CharSequence, checkPasswordEditable: CharSequence, nickNameEditable: CharSequence
@@ -48,7 +50,7 @@ class SignUpViewModel @Inject constructor(
             } else if (isPasswordValid(passwordEditable)) {
                 _signUpEvent.value = SignUpState.RegexError
                 return@launch
-            } else if (passwordEditable != checkPasswordEditable) {
+            } else if (passwordEditable.contentEquals(checkPasswordEditable).not()) {
                 _signUpEvent.value = SignUpState.PasswordError
                 return@launch
             }
@@ -82,6 +84,9 @@ class SignUpViewModel @Inject constructor(
 
     sealed class SignUpEvent {
         object SignUpComplete : SignUpEvent()
+
+        object SignUp : SignUpEvent()
+
     }
 }
 

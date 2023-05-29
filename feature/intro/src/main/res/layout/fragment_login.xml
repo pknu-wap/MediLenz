@@ -98,12 +98,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
                 android:background="@color/login"
+                android:onClick="@{()->viewModel.login()}"
                 app:button_icon="@drawable/login"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/guideline1"
                 app:layout_constraintTop_toBottomOf="@id/loginFL"
                 app:setTitleColor="@color/white"
-                app:title="@string/login" />
+                app:title="@string/login"
+                />
+
 
             <com.android.mediproject.core.ui.base.view.IntroButton
                 android:layout_width="0dp"

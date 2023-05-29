@@ -33,7 +33,11 @@ class GetRecallSuspensionInfoUseCase @Inject constructor(
 
     suspend fun getDetailRecallSuspension(
         company: String?, product: String?
-    ): Result<DetailRecallSuspensionItemDto> = recallSuspensionRepository.getDetailRecallSuspension(company, product).map {
-        it.toDto()
+    ): Flow<Result<DetailRecallSuspensionItemDto>> = recallSuspensionRepository.getDetailRecallSuspension(company, product).map {
+        it.fold(onSuccess = { item ->
+            Result.success(item.toDto())
+        }, onFailure = { throwable ->
+            Result.failure(throwable)
+        })
     }
 }

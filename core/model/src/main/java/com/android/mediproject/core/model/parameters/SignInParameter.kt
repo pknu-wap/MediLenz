@@ -1,7 +1,7 @@
 package com.android.mediproject.core.model.parameters
 
 data class SignInParameter(
-    val email: CharArray, val password: CharArray
+    val email: CharArray, val password: CharArray, val isSavedEmail: Boolean
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -11,6 +11,7 @@ data class SignInParameter(
 
         if (!email.contentEquals(other.email)) return false
         if (!password.contentEquals(other.password)) return false
+        if (isSavedEmail != other.isSavedEmail) return false
 
         return true
     }
@@ -18,6 +19,7 @@ data class SignInParameter(
     override fun hashCode(): Int {
         var result = email.contentHashCode()
         result = 31 * result + password.contentHashCode()
+        result = 31 * result + isSavedEmail.hashCode()
         return result
     }
 

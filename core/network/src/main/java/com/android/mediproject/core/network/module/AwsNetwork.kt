@@ -1,9 +1,12 @@
 package com.android.mediproject.core.network.module
 
 import com.android.mediproject.core.common.BuildConfig
+import com.android.mediproject.core.common.network.Dispatcher
+import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
-import com.android.mediproject.core.model.remote.token.AccessTokenResponse
+import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
@@ -15,32 +18,53 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.Body
-import retrofit2.http.Header
 import retrofit2.http.POST
+import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 object AwsNetwork {
-    @Provides
+
+    @Provides()
+    @Named("awsNetworkApiWithAccessTokens")
     @Singleton
-    fun providesAwsNetworkApi(okHttpClient: OkHttpClient): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
+    fun providesAwsNetworkApi(
+        @Named("okHttpClientWithAccessTokens") okHttpClient: OkHttpClient,
+    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
+        Json.asConverterFactory("application/json".toMediaType())
+    ).baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
+
+    @Provides
+    @Named("awsNetworkApiWithRefreshTokens")
+    @Singleton
+    fun providesReissueTokenAwsNetworkApi(
+        @Named("okHttpClientWithReissueTokens") okHttpClient: OkHttpClient,
+    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
         Json.asConverterFactory("application/json".toMediaType())
     ).baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
     @Singleton
-    fun providesCommentsDataSource(awsNetworkApi: AwsNetworkApi): CommentsDataSource = CommentsDataSourceImpl(awsNetworkApi)
+    fun providesCommentsDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): CommentsDataSource =
+        CommentsDataSourceImpl(awsNetworkApi)
 
     @Provides
     @Singleton
-    fun providesSignDataSource(awsNetworkApi: AwsNetworkApi): SignDataSource = SignDataSourceImpl(awsNetworkApi)
+    fun providesSignDataSource(
+        @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi,
+        tokenDataSourceImpl: TokenDataSourceImpl,
+        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher
+    ): SignDataSource = SignDataSourceImpl(
+        awsNetworkApi, tokenDataSourceImpl, ioDispatcher
+    )
 }
 
 interface AwsNetworkApi {
@@ -57,6 +81,5 @@ interface AwsNetworkApi {
 
     @POST(value = "user/reissue")
     suspend fun reissueTokens(
-        @Header("authorization") refreshToken: String,
-    ): Response<AccessTokenResponse>
+    ): Response<ReissueTokenResponse>
 }

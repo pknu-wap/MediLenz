@@ -42,22 +42,19 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(Frag
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             viewModel = fragmentViewModel.apply {
-                repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+                viewLifecycleOwner.repeatOnStarted {
+                    eventFlow.collectLatest {
+                        handleEvent(it)
+                    }
+                }
             }
+
+            binding.signUpComplete.isEnabled = false
 
             addDelayTextWatcher(signUpEmail.inputData)
             addDelayTextWatcher(signUpPassword.inputData)
             addDelayTextWatcher(signUpPasswordCheck.inputData)
             addDelayTextWatcher(signUpNickName.inputData)
-
-            signUpComplete.setOnClickListener {
-                fragmentViewModel.signUp(
-                    binding.signUpEmail.getEditable(),
-                    binding.signUpPassword.getEditable(),
-                    binding.signUpPasswordCheck.getEditable(),
-                    binding.signUpNickName.getEditable()
-                )
-            }
 
             viewLifecycleOwner.repeatOnStarted {
                 fragmentViewModel.signInEvent.collectLatest {
@@ -70,8 +67,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(Frag
                             LoadingDialog.dismiss()
                             toast(getString(R.string.signUpSuccess))
                             findNavController().navigate(
-                                "medilens://main/home_nav".toUri(),
-                                NavOptions.Builder().setPopUpTo(R.id.signUpFragment, true).build()
+                                "medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.signUpFragment, true).build()
                             )
                         }
 
@@ -105,14 +101,16 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(Frag
     }
 
     private fun handleEvent(event: SignUpViewModel.SignUpEvent) = when (event) {
-        is SignUpViewModel.SignUpEvent.SignUpComplete -> {
-            binding.apply {
-                log(
-                    signUpEmail.getValue() + "\n" + signUpPassword.getValue() + "\n" + signUpPasswordCheck.getValue() + "\n" + signUpNickName.getValue()
-                )
-            }
-            //Todo
+        is SignUpViewModel.SignUpEvent.SignUp -> {
+            fragmentViewModel.signUp(
+                binding.signUpEmail.getEditable(),
+                binding.signUpPassword.getEditable(),
+                binding.signUpPasswordCheck.getEditable(),
+                binding.signUpNickName.getEditable()
+            )
         }
+
+        is SignUpViewModel.SignUpEvent.SignUpComplete -> {}
     }
 
     private fun addDelayTextWatcher(editText: EditText) {
