@@ -16,7 +16,7 @@ interface SignRepository {
 
     suspend fun signOut()
 
-    suspend fun getCurrentTokens(): TokenState<CurrentTokenDto>
+    suspend fun getCurrentTokens(): Flow<TokenState<CurrentTokenDto>>
 
     val savedEmail: Flow<String>
 }

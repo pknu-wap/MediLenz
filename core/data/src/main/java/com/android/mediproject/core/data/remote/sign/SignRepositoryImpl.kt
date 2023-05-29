@@ -10,11 +10,14 @@ import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SignRepositoryImpl @Inject constructor(
-    private val signDataSource: SignDataSource, private val tokenDataSource: TokenDataSource, private val appDataStore: AppDataStore
+    private val signDataSource: SignDataSource,
+    private val tokenDataSource: TokenDataSource,
+    private val appDataStore: AppDataStore
 ) : SignRepository {
 
     override val savedEmail: Flow<String> = appDataStore.userEmail
@@ -25,26 +28,27 @@ class SignRepositoryImpl @Inject constructor(
      * @param signInParameter 로그인 요청 파라미터
      * @return 응답받은 토큰
      */
-    override suspend fun signIn(signInParameter: SignInParameter): Flow<Result<Unit>> = channelFlow {
-        // 로그인 요청
-        signDataSource.signIn(signInParameter).map { result ->
-            result.fold(onSuccess = { dto ->
-                // 이메일 저장
-                if (signInParameter.isSavedEmail) appDataStore.saveUserEmail(signInParameter.email)
-                else appDataStore.saveUserEmail(charArrayOf())
-                appDataStore.saveSkipIntro(true)
+    override suspend fun signIn(signInParameter: SignInParameter): Flow<Result<Unit>> =
+        channelFlow {
+            // 로그인 요청
+            signDataSource.signIn(signInParameter).map { result ->
+                result.fold(onSuccess = { dto ->
+                    // 이메일 저장
+                    if (signInParameter.isSavedEmail) appDataStore.saveUserEmail(signInParameter.email)
+                    else appDataStore.saveUserEmail(charArrayOf())
+                    appDataStore.saveSkipIntro(true)
 
-                // 로그인 성공
-                Result.success(Unit)
-            }, onFailure = { throwable ->
-                // 로그인 실패
-                Result.failure(throwable)
-            })
-        }.collectLatest {
-            trySend(it)
-            close()
+                    // 로그인 성공
+                    Result.success(Unit)
+                }, onFailure = { throwable ->
+                    // 로그인 실패
+                    Result.failure(throwable)
+                })
+            }.collectLatest {
+                trySend(it)
+                close()
+            }
         }
-    }
 
 
     /**
@@ -52,22 +56,23 @@ class SignRepositoryImpl @Inject constructor(
      * @param signUpParameter 회원가입 요청 파라미터
      * @return 응답받은 토큰
      */
-    override suspend fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>> = channelFlow {
-        // 회원가입 요청
-        signDataSource.signUp(signUpParameter).map { result ->
-            result.fold(onSuccess = { dto ->
-                appDataStore.saveSkipIntro(true)
-                // 회원가입 성공
-                Result.success(Unit)
-            }, onFailure = { throwable ->
-                // 회원가입 실패
-                Result.failure(throwable)
-            })
-        }.collectLatest {
-            trySend(it)
-            close()
+    override suspend fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>> =
+        channelFlow {
+            // 회원가입 요청
+            signDataSource.signUp(signUpParameter).map { result ->
+                result.fold(onSuccess = { dto ->
+                    appDataStore.saveSkipIntro(true)
+                    // 회원가입 성공
+                    Result.success(Unit)
+                }, onFailure = { throwable ->
+                    // 회원가입 실패
+                    Result.failure(throwable)
+                })
+            }.collectLatest {
+                trySend(it)
+                close()
+            }
         }
-    }
 
 
     /**
@@ -89,20 +94,21 @@ class SignRepositoryImpl @Inject constructor(
     /**
      * 서버에 새로운 토큰을 요청한다.
      */
-    private suspend fun reissueToken(currentTokenDto: CurrentTokenDto): Flow<Result<Unit>> = channelFlow {
-        signDataSource.reissueTokens(currentTokenDto.refreshToken).map { result ->
-            result.fold(onSuccess = { dto ->
-                // 새로운 토큰 발급 성공
-                Result.success(Unit)
-            }, onFailure = { throwable ->
-                // 새로운 토큰 발급 실패
-                Result.failure(throwable)
-            })
-        }.collectLatest {
-            trySend(it)
-            close()
+    private suspend fun reissueToken(currentTokenDto: CurrentTokenDto): Flow<Result<Unit>> =
+        channelFlow {
+            signDataSource.reissueTokens(currentTokenDto.refreshToken).map { result ->
+                result.fold(onSuccess = { dto ->
+                    // 새로운 토큰 발급 성공
+                    Result.success(Unit)
+                }, onFailure = { throwable ->
+                    // 새로운 토큰 발급 실패
+                    Result.failure(throwable)
+                })
+            }.collectLatest {
+                trySend(it)
+                close()
+            }
         }
-    }
 
     /**
      * 저장된 토큰 정보를 삭제한다.
@@ -111,6 +117,22 @@ class SignRepositoryImpl @Inject constructor(
 
     /**
      * 외부에서 인터페이스로 접근할 때, 이 Flow를 collect하면, 토큰의 상태를 받을 수 있다.
+     * 만약 호출 했을 때, 만료되었으면 reissueToken()을 자동으로 호출해서 새로운 토큰을 반화한다.
      */
-    override suspend fun getCurrentTokens(): TokenState<CurrentTokenDto> = tokenDataSource.currentTokens
+    override suspend fun getCurrentTokens(): Flow<TokenState<CurrentTokenDto>> = channelFlow {
+        send(
+            when (val currentToken = tokenDataSource.currentTokens) {
+                is TokenState.Empty -> TokenState.Empty
+                is TokenState.Error -> TokenState.Error(Throwable())
+                is TokenState.Valid -> currentToken
+                is TokenState.Expiration -> {
+                    lateinit var newTokenState: TokenState<CurrentTokenDto>
+                    reissueToken(currentToken.data).collectLatest {
+                        it.fold(onSuccess = { newTokenState = tokenDataSource.currentTokens },
+                            onFailure = { newTokenState = TokenState.Error(Throwable()) })
+                    }
+                    newTokenState
+                }
+            })
+    }
 }
