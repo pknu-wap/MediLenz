@@ -58,6 +58,7 @@ class RecentSearchListFragment :
                 }
                 data = searchHistoryItemDto.query
                 setChipText(data.toString())
+
                 setOnChipClickListener {
                     onClicked(searchHistoryItemDto.query)
                 }

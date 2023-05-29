@@ -1,6 +1,7 @@
 package com.android.mediproject.core.domain
 
 import com.android.mediproject.core.data.search.SearchHistoryRepository
+import com.android.mediproject.core.database.searchhistory.SearchHistoryDto
 import com.android.mediproject.core.database.searchhistory.toSearchHistoryItemDto
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -10,7 +11,7 @@ import javax.inject.Singleton
 class SearchHistoryUseCase @Inject constructor(
     private val searchHistoryRepository: SearchHistoryRepository
 ) {
-    suspend fun insertSearchHistory(query: String) = searchHistoryRepository.insertSearchHistory(query)
+    suspend fun insertSearchHistory(query: String) = searchHistoryRepository.insertSearchHistory(SearchHistoryDto(query))
 
     suspend fun getSearchHistoryList(count: Int) = searchHistoryRepository.getSearchHistoryList(count).map {
         it.map {

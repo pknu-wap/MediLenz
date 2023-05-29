@@ -16,10 +16,17 @@
     </fragment>
 
     <deepLink app:uri="medilens://main/home_nav" />
-    
+
     <fragment
         android:id="@+id/searchMedicinesFragment"
         android:name="com.android.mediproject.feature.search.SearchMedicinesFragment"
-        tools:layout="@layout/fragment_search_medicines"
-        android:label="SearchMedicinesFragment" />
+        android:label="SearchMedicinesFragment"
+        tools:layout="@layout/fragment_search_medicines">
+
+        <argument
+            android:name="query"
+            android:defaultValue=""
+            app:argType="string" />
+
+    </fragment>
 </navigation>

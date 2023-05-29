@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.uiutil.hideKeyboard
@@ -20,7 +21,6 @@ class SearchMedicinesFragment :
     BaseFragment<FragmentSearchMedicinesBinding, SearchMedicinesViewModel>(FragmentSearchMedicinesBinding::inflate) {
 
     override val fragmentViewModel by viewModels<SearchMedicinesViewModel>()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,8 +61,18 @@ class SearchMedicinesFragment :
                 bundle.getString(RecentSearchListFragment.ResultKey.WORD.name)?.also {
                     binding.searchView.searchWithQuery(it)
                 }
-
             }
+        }
+
+        // 검색어가 전달된 경우에는 검색어를 넣은 후 검색
+        arguments?.getString("query")?.takeIf {
+            it.isNotEmpty()
+        }?.also {
+            binding.searchView.setText(it)
+            binding.contentsFragmentContainerView.findNavController().navigate(
+                RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment(),
+                NavOptions.Builder().setPopUpTo(R.id.manualSearchResultFragment, true).build()
+            )
         }
     }
 

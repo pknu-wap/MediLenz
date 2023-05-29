@@ -46,9 +46,11 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideMedicineApprovalRepository(
-        medicineApprovalDataSource: MedicineApprovalDataSource, searchHistoryRepository: SearchHistoryRepository
+        medicineApprovalDataSource: MedicineApprovalDataSource,
+        searchHistoryRepository: SearchHistoryRepository,
+        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher
     ): MedicineApprovalRepository = MedicineApprovalRepositoryImpl(
-        medicineApprovalDataSource, searchHistoryRepository
+        medicineApprovalDataSource, searchHistoryRepository, ioDispatcher
     )
 
     @Provides
@@ -93,6 +95,6 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun providesSearchHistoryRepository(
-        searchHistoryDao: SearchHistoryDao, @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher
-    ): SearchHistoryRepository = SearchHistoryRepositoryImpl(searchHistoryDao, ioDispatcher)
+        searchHistoryDao: SearchHistoryDao
+    ): SearchHistoryRepository = SearchHistoryRepositoryImpl(searchHistoryDao)
 }

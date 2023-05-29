@@ -1,8 +1,9 @@
 package com.android.mediproject.core.database.searchhistory
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -12,15 +13,15 @@ interface SearchHistoryDao {
      * 검색 기록을 추가한다.
      * @param searchHistoryDto
      */
-    @Upsert
-    fun insert(searchHistoryDto: SearchHistoryDto)
+    @Insert(entity = SearchHistoryDto::class, onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(SearchHistoryDto: SearchHistoryDto)
 
     /**
      * id에 해당하는 검색 기록을 삭제한다.
      * @param id
      */
     @Query("DELETE FROM search_history_table WHERE id = :id")
-    fun delete(id: Long)
+    suspend fun delete(id: Long)
 
     /**
      * 개수 만큼 검색 목록을 가져온다.
@@ -33,5 +34,8 @@ interface SearchHistoryDao {
      * 모든 검색 기록을 삭제한다.
      */
     @Query("DELETE FROM search_history_table")
-    fun deleteAll()
+    suspend fun deleteAll()
+
+    @Query("SELECT EXISTS (SELECT * FROM search_history_table WHERE `query` = :query)")
+    suspend fun isExist(query: String): Boolean
 }

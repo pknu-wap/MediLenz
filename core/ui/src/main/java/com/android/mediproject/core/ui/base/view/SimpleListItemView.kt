@@ -18,8 +18,8 @@ import com.android.mediproject.core.ui.R
  */
 class SimpleListItemView<T> : ConstraintLayout {
 
-    constructor(context: Context) : super(context, null) {
-        init(context, null)
+    constructor(context: Context, midRatio: Float) : super(context, null) {
+        init(context, null, midRatio)
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs) {
@@ -42,25 +42,13 @@ class SimpleListItemView<T> : ConstraintLayout {
         get() = _data
 
     @SuppressLint("ResourceType") private val chip = ButtonChip<T>(context).apply {
-        layoutParams = ConstraintLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-            topToTop = LayoutParams.PARENT_ID
-            bottomToBottom = LayoutParams.PARENT_ID
-            leftToLeft = LayoutParams.PARENT_ID
-        }
         textSize = 13f
         isClickable = false
         id = 10
     }
 
     @SuppressLint("ResourceType") private val textView = TextView(context).apply {
-        layoutParams = ConstraintLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT).apply {
-            topToTop = LayoutParams.PARENT_ID
-            bottomToBottom = LayoutParams.PARENT_ID
-            leftToRight = chip.id
-            rightToRight = LayoutParams.PARENT_ID
-            leftMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
-        }
-        ellipsize = TextUtils.TruncateAt.MARQUEE
+        ellipsize = TextUtils.TruncateAt.END
         isClickable = false
         maxLines = 1
         textAlignment = TEXT_ALIGNMENT_VIEW_START
@@ -68,7 +56,7 @@ class SimpleListItemView<T> : ConstraintLayout {
         id = 20
     }
 
-    private fun init(context: Context, attrs: AttributeSet?) {
+    private fun init(context: Context, attrs: AttributeSet?, midRatio: Float = 0.6f) {
         context.theme.obtainStyledAttributes(
             attrs, R.styleable.SimpleCommentItemView, 0, 0
         ).apply {
@@ -81,8 +69,18 @@ class SimpleListItemView<T> : ConstraintLayout {
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, resources.displayMetrics).toInt()
                     .apply { setPadding(0, this, 0, this) }
 
-                addView(chip)
-                addView(textView)
+                addView(chip, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                    topToTop = LayoutParams.PARENT_ID
+                    bottomToBottom = LayoutParams.PARENT_ID
+                    leftToLeft = LayoutParams.PARENT_ID
+                })
+                addView(textView, LayoutParams(0, LayoutParams.WRAP_CONTENT).apply {
+                    topToTop = LayoutParams.PARENT_ID
+                    bottomToBottom = LayoutParams.PARENT_ID
+                    leftToRight = chip.id
+                    rightToRight = LayoutParams.PARENT_ID
+                    leftMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
+                })
 
                 isClickable = true
 

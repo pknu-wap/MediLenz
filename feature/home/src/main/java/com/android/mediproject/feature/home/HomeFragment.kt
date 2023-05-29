@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.common.util.navigateByDeepLink
-import com.android.mediproject.core.model.searchmedicines.local.SearchQueryArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment
 import com.android.mediproject.feature.home.databinding.FragmentHomeBinding
@@ -72,12 +70,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
                 }
             }
             setFragmentResultListener(RecentSearchListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
-                bundle.apply {
-                    findNavController().navigateByDeepLink(
-                        "medilens://main/search/recentSearchListFragment",
-                        SearchQueryArgs(getString(RecentSearchListFragment.ResultKey.WORD.name) ?: "")
-                    )
-                }
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment(
+                            bundle.getString(RecentSearchListFragment.ResultKey.WORD.name) ?: ""
+                        )
+                )
             }
         }
     }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -21,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -49,7 +49,6 @@ enum class ChipType : Parcelable {
 /**
  * 뉴스 화면
  */
-@Preview
 @Composable
 fun NewsNavHost(
     navController: NavHostController = rememberNavController(), startDestination: String = "news"
@@ -89,6 +88,7 @@ fun NewsScreen(navController: NavController) {
         ChipGroup(selectedChip, onChipSelected = { chip ->
             selectedChip = chip
         })
+        Divider(modifier = Modifier.padding(horizontal = 24.dp))
         if (selectedChip == ChipType.RECALLS_SUSPENSION) RecallDisposalScreen(navController = navController)
         else {
             CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {

@@ -32,7 +32,7 @@ class RecentCommentsAdapter : ListAdapter<CommentDto, RecentCommentsAdapter.Rece
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentCommentListViewHolder =
-        RecentCommentListViewHolder(SimpleListItemView(parent.context))
+        RecentCommentListViewHolder(SimpleListItemView(parent.context, 0.6f))
 
     override fun onBindViewHolder(holder: RecentCommentListViewHolder, position: Int) {
 

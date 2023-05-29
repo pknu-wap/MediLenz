@@ -8,5 +8,12 @@ import androidx.room.PrimaryKey
 data class SearchHistoryDto(
     @PrimaryKey(autoGenerate = true) val id: Long,
 
-    @ColumnInfo(name = "query") val query: String, @ColumnInfo(name = "search_date_time") val searchDateTime: String
-)
+    @ColumnInfo(name = "query") var query: String,
+
+    @ColumnInfo(
+        name = "search_date_time", defaultValue = "CURRENT_TIMESTAMP"
+    ) val searchDateTime: String
+
+) {
+    constructor(query: String) : this(0, query, "")
+}

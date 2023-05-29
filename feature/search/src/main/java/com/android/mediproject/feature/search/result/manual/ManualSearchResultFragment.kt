@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.paging.map
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.mediproject.core.common.paging.setOnStateChangedListener
@@ -32,19 +31,12 @@ class ManualSearchResultFragment :
 
     override val fragmentViewModel: ManualSearchResultViewModel by viewModels()
 
-    private val searchQueryArgs: ManualSearchResultFragmentArgs by navArgs()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
             viewModel = fragmentViewModel
-
-            if (searchQueryArgs.query.isNotEmpty()) {
-                searchMedicinesViewModel.setQuery(searchQueryArgs.query)
-            }
-
             val searchResultListAdapter = ApprovedMedicinesAdapter().also {
                 it.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { it.retry() },
                     footer = PagingLoadStateAdapter { it.retry() })
