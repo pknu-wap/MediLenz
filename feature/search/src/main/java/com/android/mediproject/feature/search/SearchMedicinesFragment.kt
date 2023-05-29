@@ -28,46 +28,40 @@ class SearchMedicinesFragment :
         // contents_fragment_container_view 에 최근 검색 목록과 검색 결과 목록 화면 두 개를 띄운다.
         initSearchBar()
 
-        arguments?.apply {
-            getString("searchQuery")?.also {
-                binding.searchView.searchWithQuery(query = it)
+        viewLifecycleOwner.repeatOnStarted {
+            fragmentViewModel.searchQuery.collect { query ->
+                // Flow로 받은 문자열이 일치하는 경우에만 searchView에 표시한다.
+                if (!binding.searchView.getText().contentEquals(query)) binding.searchView.setText(query)
             }
         }
 
-        viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.searchQuery.collect { query ->
-                if (query.isNotBlank()) {
-                    binding.contentsFragmentContainerView.findNavController().also { navController ->
-                        navController.currentDestination?.also { currentDestination ->
-                            if (currentDestination.id == R.id.manualSearchResultFragment) navController.navigate(R.id.action_manualSearchResultFragment_self)
-                            else navController.navigate(
-                                RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment()
-                            )
+    }
 
-                        }
-                    }
-                }
-            }
+    private fun moveToManualSearchResultFragment() {
+        val navController = binding.contentsFragmentContainerView.findNavController()
+        navController.currentDestination?.also { currentDestination ->
+            // 현재 프래그먼트가 검색 결과 프래그먼트인 경우에는 백스택에서 검색 결과 프래그먼트를 제거하고 검색 결과 프래그먼트로
+            // 다시 이동한다.
+            // 검색 결과 프래그먼트가 아닌 경우에는 검색 결과 프래그먼트로 이동한다.
+            if (currentDestination.id == R.id.manualSearchResultFragment) navController.navigate(R.id.action_manualSearchResultFragment_self)
+            else navController.navigate(
+                RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment()
+            )
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
 
-        binding.apply {
-            childFragmentManager.findFragmentById(R.id.contentsFragmentContainerView)?.also { navHostFragment ->
-                navHostFragment.childFragmentManager.apply {
-                    setFragmentResultListener(
-                        RecentSearchListFragment.ResultKey.RESULT_KEY.name, navHostFragment.viewLifecycleOwner
-                    ) { _, bundle ->
-
-                        bundle.apply {
-                            getString(RecentSearchListFragment.ResultKey.WORD.name)?.also {
-                                binding.searchView.searchWithQuery(query = it)
-                            }
-                        }
-                    }
+        childFragmentManager.findFragmentById(R.id.contentsFragmentContainerView)?.also { navHostFragment ->
+            val childFragmentManager = navHostFragment.childFragmentManager
+            childFragmentManager.setFragmentResultListener(
+                RecentSearchListFragment.ResultKey.RESULT_KEY.name, navHostFragment.viewLifecycleOwner
+            ) { _, bundle ->
+                bundle.getString(RecentSearchListFragment.ResultKey.WORD.name)?.also {
+                    binding.searchView.searchWithQuery(it)
                 }
+
             }
         }
     }
@@ -83,7 +77,8 @@ class SearchMedicinesFragment :
         binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
             override fun onSearchQuery(query: String) {
                 hideKeyboard()
-                fragmentViewModel.searchMedicines(query)
+                fragmentViewModel.setQuery(query)
+                moveToManualSearchResultFragment()
             }
 
             override fun onEmptyQuery() {

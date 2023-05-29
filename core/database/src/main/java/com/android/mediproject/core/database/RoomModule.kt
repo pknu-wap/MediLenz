@@ -10,21 +10,20 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Module(includes = [DaoModule::class])
+@Module
 @InstallIn(SingletonComponent::class)
 object RoomModule {
 
     @Provides
     @Singleton
-    fun provideRoomDb(@ApplicationContext context: Context): RoomDb = Room.databaseBuilder(
-        context, RoomDb::class.java, "medi_database"
+    fun provideRoomDb(@ApplicationContext context: Context): RoomDB = Room.databaseBuilder(
+        context, RoomDB::class.java, "medi_database"
     ).build()
 }
-
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DaoModule {
     @Provides
-    fun provideSearchHistoryDao(roomDb: RoomDb): SearchHistoryDao = roomDb.searchHistoryDao()
+    fun provideSearchHistoryDao(roomDB: RoomDB): SearchHistoryDao = roomDB.searchHistoryDao()
 }

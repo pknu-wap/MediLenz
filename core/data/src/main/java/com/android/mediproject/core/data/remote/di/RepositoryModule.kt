@@ -46,9 +46,9 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideMedicineApprovalRepository(
-        medicineApprovalDataSource: MedicineApprovalDataSource, searchHistoryDao: SearchHistoryDao
+        medicineApprovalDataSource: MedicineApprovalDataSource, searchHistoryRepository: SearchHistoryRepository
     ): MedicineApprovalRepository = MedicineApprovalRepositoryImpl(
-        medicineApprovalDataSource, searchHistoryDao
+        medicineApprovalDataSource, searchHistoryRepository
     )
 
     @Provides

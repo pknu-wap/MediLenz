@@ -16,14 +16,16 @@ import com.android.mediproject.core.model.local.navargs.BaseNavArgs
  * @param parameter Uri에 들어갈 파라미터
  * @return Uri
  */
-private fun toDeepUrl(deepLinkUrl: String, parameter: Map<String, String>): Uri = StringBuilder(deepLinkUrl).let { uri ->
+private fun toDeepUrl(deepLinkUrl: String, parameter: Map<String, Any?>): Uri = StringBuilder(deepLinkUrl).let { uri ->
     parameter.takeIf {
         it.isNotEmpty()
     }?.also { map ->
         uri.append("?")
         map.onEachIndexed { index, entry ->
-            uri.append("${entry.key}=${entry.value}")
-            if (index != map.size - 1) uri.append("&")
+            if (entry.value != null) {
+                uri.append("${entry.key}=${entry.value}")
+                if (index != map.size - 1) uri.append("&")
+            }
         }
     }
     uri.toString().toUri()

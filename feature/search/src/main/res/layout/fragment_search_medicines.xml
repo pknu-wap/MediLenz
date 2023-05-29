@@ -34,6 +34,7 @@
             android:layout_marginTop="27dp"
             app:ai_text="@string/search_with_ai"
             app:camera_icon="@drawable/baseline_camera_24"
+            app:ime_options="actionSearch"
             app:is_all_btn="false"
             app:layout_constraintBottom_toTopOf="@id/contentsFragmentContainerView"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -42,7 +43,6 @@
             app:layout_goneMarginTop="30dp"
             app:search_hint="@string/search_hint"
             app:search_icon="@drawable/baseline_search_24"
-            app:ime_options="actionSearch"
             />
 
         <androidx.fragment.app.FragmentContainerView

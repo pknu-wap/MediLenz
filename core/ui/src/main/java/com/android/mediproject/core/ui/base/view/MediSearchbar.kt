@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.text.Editable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
@@ -229,5 +230,12 @@ class MediSearchbar constructor(
         } else {
             super.onInterceptTouchEvent(ev)
         }
+    }
+
+
+    fun getText(): Editable = searchEditView.text
+
+    fun setText(text: String) {
+        searchEditView.setText(text)
     }
 }

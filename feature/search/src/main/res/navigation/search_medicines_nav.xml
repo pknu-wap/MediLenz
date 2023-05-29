@@ -16,6 +16,8 @@
             android:id="@+id/action_recentSearchListFragment_to_manualSearchResultFragment"
             app:destination="@id/manualSearchResultFragment" />
 
+        <deepLink app:uri="medilens://main/search/recentSearchListFragment" />
+
     </fragment>
 
     <fragment
@@ -25,6 +27,12 @@
         tools:layout="@layout/fragment_manual_search_result">
 
         <deepLink app:uri="medilens://main/search/manualSearchResultFragment" />
+
+        <argument
+            android:name="query"
+            android:defaultValue=""
+            app:nullable="false"
+            app:argType="string" />
 
         <action
             android:id="@+id/action_manualSearchResultFragment_self"
@@ -50,5 +58,5 @@
     </fragment>
 
     <deepLink app:uri="medilens://main/search/search_medicines" />
-    
+
 </navigation>

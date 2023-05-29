@@ -6,7 +6,7 @@ import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDto
 
 
-@Database(entities = [SearchHistoryDto::class], version = 1)
-abstract class RoomDb : RoomDatabase() {
+@Database(entities = [SearchHistoryDto::class], version = 1, exportSchema = true)
+abstract class RoomDB : RoomDatabase() {
     abstract fun searchHistoryDao(): SearchHistoryDao
 }

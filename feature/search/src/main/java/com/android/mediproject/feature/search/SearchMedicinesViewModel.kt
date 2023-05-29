@@ -11,12 +11,15 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchMedicinesViewModel @Inject constructor() : BaseViewModel() {
 
-    private val _searchQuery = MutableStateFlow<String>("")
+    private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
-    fun searchMedicines(query: String) {
-        viewModelScope.launch {
-            _searchQuery.emit(query)
-        }
+
+    /**
+     * 검색어 저장
+     */
+    fun setQuery(query: String) = viewModelScope.launch {
+        _searchQuery.value = query
     }
+
 }

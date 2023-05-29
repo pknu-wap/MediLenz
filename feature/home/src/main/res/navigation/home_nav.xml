@@ -10,25 +10,16 @@
         android:name="com.android.mediproject.feature.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home">
-
-
         <action
             android:id="@+id/action_homeFragment_to_searchMedicinesFragment"
             app:destination="@id/searchMedicinesFragment" />
-
     </fragment>
 
+    <deepLink app:uri="medilens://main/home_nav" />
+    
     <fragment
         android:id="@+id/searchMedicinesFragment"
         android:name="com.android.mediproject.feature.search.SearchMedicinesFragment"
-        android:label="SearchMedicinesFragment"
-        tools:layout="@layout/fragment_search_medicines">
-
-        <action
-            android:id="@+id/action_searchMedicinesFragment_to_medicinesDetectorFragment"
-            app:destination="@id/medicinesDetectorFragment" />
-    </fragment>
-
-    <include app:graph="@navigation/search_medicines_nav" />
-    <deepLink app:uri="medilens://main/home_nav" />
+        tools:layout="@layout/fragment_search_medicines"
+        android:label="SearchMedicinesFragment" />
 </navigation>
