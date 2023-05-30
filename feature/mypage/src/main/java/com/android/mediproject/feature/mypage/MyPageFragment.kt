@@ -12,10 +12,12 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.GUEST_MODE
 import com.android.mediproject.core.common.LOGIN_MODE
+import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.model.comments.CommentDto
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
@@ -53,8 +55,7 @@ class MyPageFragment :
             }
 
             myCommentsListHeaderView.setOnMoreClickListener {
-                findNavController().navigate("medilens://main/comments_nav/myCommentsListFragment".toUri())
-            }
+                findNavController().navigateByDeepLink("medilens://main/comments_nav/myCommentsListFragment".toUri())}
         }
     }
 
