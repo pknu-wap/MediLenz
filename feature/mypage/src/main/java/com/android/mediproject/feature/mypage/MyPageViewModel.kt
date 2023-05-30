@@ -3,22 +3,39 @@ package com.android.mediproject.feature.mypage
 import MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import asEventFlow
+import com.android.mediproject.core.data.remote.sign.SignRepository
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.medicine.InterestedMedicine.MedicineInterestedDto
+import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPageViewModel @Inject constructor(private val signReposi) : BaseViewModel() {
+class MyPageViewModel @Inject constructor(private val signRepository: SignRepository) : BaseViewModel() {
     private val _eventFlow = MutableEventFlow<MyPageEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
-    val myCommentsList: Flow<List<MyCommentDto>> = channelFlow {
+    private val _token = MutableStateFlow<TokenState<CurrentTokenDto>>(TokenState.Empty)
+    val token : StateFlow<TokenState<CurrentTokenDto>>
+        get() = _token
 
+    init{
+        viewModelScope.launch{
+            signRepository.getCurrentTokens().collectLatest {
+                _token.emit(it)
+            }
+        }
+    }
+
+    val myCommentsList: Flow<List<MyCommentDto>> = channelFlow {
         //dummy for test
         val dummy = listOf(
             MyCommentDto(20230528,"타이레놀","아따 좋습니다 좋아요",System.currentTimeMillis().toString(),3),
