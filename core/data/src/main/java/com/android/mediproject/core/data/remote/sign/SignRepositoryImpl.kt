@@ -1,5 +1,6 @@
 package com.android.mediproject.core.data.remote.sign
 
+import android.util.Log
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.datastore.TokenDataSource
 import com.android.mediproject.core.model.parameters.SignInParameter
@@ -10,7 +11,9 @@ import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.fold
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -79,7 +82,7 @@ class SignRepositoryImpl @Inject constructor(
      * 현재 토큰의 상태에 따라 새로운 토큰을 서버에 요청한다.
      */
     override suspend fun reissueToken(): Flow<Result<Unit>> = channelFlow {
-        when (val tokenState = tokenDataSource.currentTokens) {
+        when (val tokenState = tokenDataSource.currentTokens().last()) {
             is TokenState.Empty -> send(Result.failure(Exception("Empty Token")))
             is TokenState.Expiration -> reissueToken(tokenState.data).collectLatest {
                 send(it)
@@ -120,19 +123,24 @@ class SignRepositoryImpl @Inject constructor(
      * 만약 호출 했을 때, 만료되었으면 reissueToken()을 자동으로 호출해서 새로운 토큰을 반환한다.
      */
     override suspend fun getCurrentTokens(): Flow<TokenState<CurrentTokenDto>> = channelFlow {
-        send(
-            when (val currentToken = tokenDataSource.currentTokens) {
-                is TokenState.Empty -> TokenState.Empty
-                is TokenState.Error -> TokenState.Error(Throwable())
-                is TokenState.Valid -> currentToken
-                is TokenState.Expiration -> {
-                    lateinit var newTokenState: TokenState<CurrentTokenDto>
-                    reissueToken(currentToken.data).collectLatest {
-                        it.fold(onSuccess = { newTokenState = tokenDataSource.currentTokens },
-                            onFailure = { newTokenState = TokenState.Error(Throwable()) })
-                    }
-                    newTokenState
+        tokenDataSource.currentTokens().collectLatest { currentToken ->
+            when (currentToken) {
+                is TokenState.Empty -> trySend(TokenState.Empty)
+                is TokenState.Error -> trySend(TokenState.Error(Throwable("Error")))
+                is TokenState.Valid -> {
+                    Log.d("Tgyuu", "SignRepositoryImpl" + currentToken.toString())
+                    trySend(currentToken)
                 }
-            })
+
+                is TokenState.Expiration -> {
+                    reissueToken(currentToken.data).collectLatest {
+                        val newState = it.fold(onSuccess = { currentToken },
+                            onFailure = { TokenState.Error(Throwable("failed")) })
+                        trySend(newState)
+                    }
+
+                }
+            }
+        }
     }
 }

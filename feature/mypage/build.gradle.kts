@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
     implementation(project(":core:data"))
+    implementation(project(":core:domain"))
     implementation(project(":feature:interestedmedicine"))
     implementation(project(":feature:comments"))
     implementation(libs.bundles.glides)

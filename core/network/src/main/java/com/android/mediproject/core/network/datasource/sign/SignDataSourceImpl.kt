@@ -84,14 +84,12 @@ class SignDataSourceImpl @Inject constructor(
         body()?.let { body ->
             if (body.isSuccess()) {
                 // 새로운 토큰 업데이트
-                withContext(ioDispatcher) {
                     tokenDataSource.updateTokens(
                         NewTokensFromAws(
                             accessToken = body.accessToken!!.toCharArray(),
                             refreshToken = body.refreshToken!!.toCharArray(),
                         )
                     )
-                }
                 Result.success(body)
             } else {
                 Result.failure(Throwable(body.message))
