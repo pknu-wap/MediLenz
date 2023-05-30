@@ -10,13 +10,20 @@ object LoadingDialog {
 
     fun showLoadingDialog(context: Context, textMessage: String?) {
         dismiss()
-        AlertDialog.Builder(context).setView(ProgressIndicator(context, null, textMessage)).setCancelable(false).create().also {
-            it.window?.setBackgroundDrawableResource(android.R.color.transparent)
-            it.window?.attributes = it.window?.attributes?.apply {
-                width = ViewGroup.LayoutParams.WRAP_CONTENT
-                height = ViewGroup.LayoutParams.WRAP_CONTENT
+        AlertDialog.Builder(context).setView(ProgressIndicator(context, textMessage)).setCancelable(false).create().also {
+            it.window?.apply {
+                setClipToOutline(true)
+                setElevation(8f)
+                // shadow
+
+                attributes = attributes.apply {
+                    width = ViewGroup.LayoutParams.WRAP_CONTENT
+                    height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    dimAmount = 0.5f
+                }
             }
             it.setCanceledOnTouchOutside(false)
+            dismiss()
             dialog = it
             it.show()
         }

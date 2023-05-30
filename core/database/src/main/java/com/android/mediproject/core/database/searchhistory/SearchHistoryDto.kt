@@ -3,6 +3,7 @@ package com.android.mediproject.core.database.searchhistory
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity(tableName = "search_history_table")
 data class SearchHistoryDto(
@@ -11,9 +12,10 @@ data class SearchHistoryDto(
     @ColumnInfo(name = "query") var query: String,
 
     @ColumnInfo(
-        name = "search_date_time", defaultValue = "CURRENT_TIMESTAMP"
-    ) val searchDateTime: String
+        name = "search_date_time"
+    ) val searchDateTime: LocalDateTime
 
 ) {
-    constructor(query: String) : this(0, query, "")
+    constructor(query: String) : this(0, query, LocalDateTime.now())
+
 }

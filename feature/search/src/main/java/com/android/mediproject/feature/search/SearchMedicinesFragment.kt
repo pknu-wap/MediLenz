@@ -68,7 +68,7 @@ class SearchMedicinesFragment :
         arguments?.getString("query")?.takeIf {
             it.isNotEmpty()
         }?.also {
-            binding.searchView.setText(it)
+            fragmentViewModel.setQuery(it)
             binding.contentsFragmentContainerView.findNavController().navigate(
                 RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment(),
                 NavOptions.Builder().setPopUpTo(R.id.manualSearchResultFragment, true).build()

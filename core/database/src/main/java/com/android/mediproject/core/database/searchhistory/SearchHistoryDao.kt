@@ -4,38 +4,44 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface SearchHistoryDao {
+abstract class SearchHistoryDao {
 
     /**
      * 검색 기록을 추가한다.
      * @param searchHistoryDto
      */
+    @Transaction
+    open suspend fun insert(SearchHistoryDto: SearchHistoryDto) {
+        if (!isExist(SearchHistoryDto.query)) realInsert(SearchHistoryDto)
+    }
+
     @Insert(entity = SearchHistoryDto::class, onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(SearchHistoryDto: SearchHistoryDto)
+    abstract suspend fun realInsert(SearchHistoryDto: SearchHistoryDto)
 
     /**
      * id에 해당하는 검색 기록을 삭제한다.
      * @param id
      */
     @Query("DELETE FROM search_history_table WHERE id = :id")
-    suspend fun delete(id: Long)
+    abstract suspend fun delete(id: Long)
 
     /**
      * 개수 만큼 검색 목록을 가져온다.
      * @param count
      */
     @Query("SELECT * FROM search_history_table ORDER BY id DESC LIMIT :count")
-    fun select(count: Int): Flow<List<SearchHistoryDto>>
+    abstract fun select(count: Int): Flow<List<SearchHistoryDto>>
 
     /**
      * 모든 검색 기록을 삭제한다.
      */
     @Query("DELETE FROM search_history_table")
-    suspend fun deleteAll()
+    abstract suspend fun deleteAll()
 
     @Query("SELECT EXISTS (SELECT * FROM search_history_table WHERE `query` = :query)")
-    suspend fun isExist(query: String): Boolean
+    abstract suspend fun isExist(query: String): Boolean
 }

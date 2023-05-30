@@ -2,8 +2,6 @@ package com.android.mediproject.core.common.dialog
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Typeface
-import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TextView
@@ -14,7 +12,7 @@ import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.android.mediproject.core.common.R
 import com.android.mediproject.core.common.uiutil.dpToPx
 
-class ProgressIndicator(context: Context, attrs: AttributeSet?, textMessage: String?) : ConstraintLayout(context, attrs) {
+class ProgressIndicator(context: Context, textMessage: String?) : ConstraintLayout(context) {
 
     private val lottie = LottieAnimationView(context).apply {
         setAnimation(R.raw.bluedottedprogress)
@@ -26,7 +24,6 @@ class ProgressIndicator(context: Context, attrs: AttributeSet?, textMessage: Str
         textMessage?.apply {
             textView.text = this
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
-            textView.typeface = Typeface.create("sans-serif-condensed", Typeface.NORMAL)
             textView.setTextColor(Color.DKGRAY)
         } ?: run { textView.visibility = GONE }
 

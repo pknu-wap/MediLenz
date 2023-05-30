@@ -12,13 +12,14 @@ import com.android.mediproject.core.model.parameters.ApprovalListSearchParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -43,19 +44,19 @@ class ManualSearchResultViewModel @Inject constructor(
     )
     val searchParameter = _searchParameter.asStateFlow()
 
-    val searchResultFlow: Flow<UiState<PagingData<ApprovedMedicineItemDto>>> = searchParameter.flatMapLatest { parameter ->
-        if (parameter.entpName.isNullOrEmpty() && parameter.itemName.isNullOrEmpty()) {
-            flowOf(UiState.Error("검색어를 입력해주세요"))
-        } else {
-            flowOf(
-                UiState.Success(
-                    getMedicineApprovalListUseCase.invoke(
-                        parameter
-                    ).last()
-                )
-            )
-        }
-    }.flowOn(ioDispatcher)
+    val searchResultFlow: StateFlow<UiState<PagingData<ApprovedMedicineItemDto>>> by lazy {
+        searchParameter.flatMapLatest { parameter ->
+            if (parameter.entpName.isNullOrEmpty() && parameter.itemName.isNullOrEmpty()) {
+                flowOf(UiState.Error("검색어를 입력해주세요."))
+            } else {
+                getMedicineApprovalListUseCase(parameter).flatMapLatest {
+                    flowOf(UiState.Success(it))
+                }
+            }
+        }.catch {
+            flowOf(UiState.Error(it.message ?: "알 수 없는 오류가 발생했습니다."))
+        }.stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = UiState.Loading)
+    }
 
     /**
      * 의약품명으로 검색

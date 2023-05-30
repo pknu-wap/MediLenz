@@ -7,13 +7,12 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class SearchHistoryRepositoryImpl @Inject constructor(
-    private val searchHistoryDao: SearchHistoryDao,
+    private val searchHistoryDao: SearchHistoryDao
 ) : SearchHistoryRepository {
     override suspend fun insertSearchHistory(searchHistoryDto: SearchHistoryDto) = runBlocking {
-        searchHistoryDto.apply {
+        searchHistoryDao.insert(searchHistoryDto.apply {
             query = query.trim()
-        }
-        if (!searchHistoryDao.isExist(searchHistoryDto.query)) searchHistoryDao.insert(searchHistoryDto)
+        })
     }
 
 
