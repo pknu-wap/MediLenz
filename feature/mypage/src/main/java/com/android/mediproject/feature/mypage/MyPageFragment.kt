@@ -57,10 +57,7 @@ class MyPageFragment :
             }
 
             myCommentsListHeaderView.setOnMoreClickListener {
-                findNavController().navigateByDeepLink(
-                    "medilens://main/comments_nav/myCommentsListFragment",
-                    LoginFromMyPageArgs(flag = TOMYPAGE)
-                )
+                findNavController().navigate("medilens://main/comments_nav/myCommentsListFragment".toUri())
             }
         }
     }
@@ -72,8 +69,8 @@ class MyPageFragment :
     }
 
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
-        is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
-        is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
+        is MyPageViewModel.MyPageEvent.Login -> findNavController().navigateByDeepLink("medilens://main/intro_nav/login",LoginFromMyPageArgs(flag = TOMYPAGE))
+        is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigateByDeepLink("medilens://main/intro_nav/signUp",LoginFromMyPageArgs(flag = TOMYPAGE))
     }
 
     private fun handleToken(tokenState: TokenState<CurrentTokenDto>) {

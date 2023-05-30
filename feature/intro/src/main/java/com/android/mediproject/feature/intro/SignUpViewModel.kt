@@ -3,6 +3,7 @@ package com.android.mediproject.feature.intro
 import MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import asEventFlow
+import com.android.mediproject.core.common.TOHOME
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.isEmailValid
@@ -33,12 +34,12 @@ class SignUpViewModel @Inject constructor(
     private val _eventFlow = MutableEventFlow<SignUpEvent>(replay = 1)
     val eventFlow = _eventFlow.asEventFlow()
 
+    private val _moveFlag = MutableStateFlow(TOHOME)
+    val moveFlag get() = _moveFlag.asStateFlow()
+
     fun event(event: SignUpEvent) = viewModelScope.launch { _eventFlow.emit(event) }
-
-
     fun signUp() = event(SignUpEvent.SignUp)
-
-
+    fun setMoveFlag(flag : Int){ _moveFlag.value = flag }
     fun signUp(
         emailEditable: CharSequence, passwordEditable: CharSequence, checkPasswordEditable: CharSequence, nickNameEditable: CharSequence
     ) {
