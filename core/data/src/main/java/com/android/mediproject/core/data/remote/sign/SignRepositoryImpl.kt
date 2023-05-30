@@ -128,7 +128,7 @@ class SignRepositoryImpl @Inject constructor(
                 is TokenState.Empty -> trySend(TokenState.Empty)
                 is TokenState.Error -> trySend(TokenState.Error(Throwable("Error")))
                 is TokenState.Valid -> {
-                    Log.d("Tgyuu", "SignRepositoryImpl" + currentToken.toString())
+                    Log.d("wap", "SignRepositoryImpl" + currentToken.toString())
                     trySend(currentToken)
                 }
 
@@ -138,7 +138,6 @@ class SignRepositoryImpl @Inject constructor(
                             onFailure = { TokenState.Error(Throwable("failed")) })
                         trySend(newState)
                     }
-
                 }
             }
         }

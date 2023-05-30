@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.view.View
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
@@ -34,6 +35,7 @@ class MyPageFragment :
     override val fragmentViewModel: MyPageViewModel by viewModels()
     private val myCommentListAdapter: MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
     private var loginMode = GUEST_MODE
+    var myCommentList: List<MyCommentDto> = listOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,8 +45,16 @@ class MyPageFragment :
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { token.collect { handleToken(it) } }
-                    repeatOnStarted { user.collect { userDto = it } }
+                    repeatOnStarted {
+                        token.collect {
+                            log("Collect")
+                            handleToken(it)
+                        }
+                    }
+                    repeatOnStarted {
+                        user.collect { userDto = it }
+                    }
+                    repeatOnStarted { myCommentsList.collect { myCommentList = it } }
                 }
                 loadTokens()
             }
@@ -55,8 +65,8 @@ class MyPageFragment :
         }
     }
 
-    private fun setRecyclerView() = binding.apply {
-        myCommentsListRV.apply {
+    private fun setRecyclerView() {
+        binding.myCommentsListRV.apply {
             adapter = myCommentListAdapter
             layoutManager = LinearLayoutManager(requireActivity())
             addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
@@ -69,14 +79,16 @@ class MyPageFragment :
     }
 
     private fun handleToken(tokenState: TokenState<CurrentTokenDto>) {
+        log("handleToken")
+        log(tokenState.toString())
         when (tokenState) {
-            is TokenState.Empty -> {}
-            is TokenState.Error -> {}
-            is TokenState.Expiration -> {
+            is TokenState.Empty -> {
                 loginMode = GUEST_MODE
                 setMyCommentsList()
             }
 
+            is TokenState.Error -> {}
+            is TokenState.Expiration -> {}
             is TokenState.Valid -> {
                 loginMode = LOGIN_MODE
                 setMyCommentsList()
@@ -85,6 +97,7 @@ class MyPageFragment :
     }
 
     private fun setMyCommentsList() {
+        log("setMyCommentList")
         when (loginMode) {
             LOGIN_MODE -> loginMyCommentList()
             GUEST_MODE -> guestMyCommentList()
@@ -92,71 +105,68 @@ class MyPageFragment :
     }
 
     //로그인 상태일 시 보여주는 화면
-    private fun loginMyCommentList() = binding.apply {
-        guestModeCL.visibility = View.GONE
-        loginModeCL.visibility = View.VISIBLE
+    private fun loginMyCommentList() {
+        binding.apply {
+            guestModeCL.visibility = View.GONE
+            loginModeCL.visibility = View.VISIBLE
 
-        fragmentViewModel.loadUser()
+            log("LoadUser!!")
+            fragmentViewModel.loadUser()
+            fragmentViewModel.loadComments()
 
-        lateinit var myCommentList: List<MyCommentDto>
-        repeatOnStarted {
-            fragmentViewModel.apply {
-                viewLifecycleOwner.repeatOnStarted {
-                    myCommentsList.collect { myCommentList = it }
-                }
+            //만약 사이즈가 1개 이상일 경우 RecyclerView로 데이터를 뛰운다.
+            if (myCommentList.size != 0) myCommentListAdapter.submitList(myCommentList)
+
+            //없을 경우 텍스트를 보여줌
+            else {
+                myCommentsListRV.visibility = View.GONE
+                noMyCommentTV.visibility = View.VISIBLE
+
+                val span =
+                    SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.noMyComment)).apply {
+                        setSpan(
+                            ForegroundColorSpan(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.main
+                                )
+                            ), 7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                        )
+                        setSpan(UnderlineSpan(), 7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    }
+                noMyCommentTV.text = span
+                myCommentsListHeaderView.setMoreVisiblity(false)
+                myCommentsListHeaderView.setExpandVisiblity(false)
             }
         }
+    }
 
-        //만약 사이즈가 1개 이상일 경우 RecyclerView로 데이터를 뛰운다.
-        if (myCommentList.size != 0) myCommentListAdapter.submitList(myCommentList)
+    //비로그인 상태일 시 보여주는 화면
+    private fun guestMyCommentList() {
+        binding.apply {
+            guestModeCL.visibility = View.VISIBLE
+            loginModeCL.visibility = View.GONE
 
-        //없을 경우 텍스트를 보여줌
-        else {
-            myCommentsListRV.visibility = View.GONE
-            noMyCommentTV.visibility = View.VISIBLE
-
+            //글자 Span 적용
             val span =
-                SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.noMyComment)).apply {
+                SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
                     setSpan(
                         ForegroundColorSpan(
                             ContextCompat.getColor(
                                 requireContext(),
                                 R.color.main
                             )
-                        ), 7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                        ),
+                        15,
+                        18,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
-                    setSpan(UnderlineSpan(), 7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    setSpan(
+                        UnderlineSpan(), 15, 18,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                 }
-            noMyCommentTV.text = span
-            myCommentsListHeaderView.setMoreVisiblity(false)
-            myCommentsListHeaderView.setExpandVisiblity(false)
+            guestTV.text = span
         }
-    }
-
-    //비로그인 상태일 시 보여주는 화면
-    private fun guestMyCommentList() = binding.apply {
-        guestModeCL.visibility = View.VISIBLE
-        loginModeCL.visibility = View.GONE
-
-        //글자 Span 적용
-        val span =
-            SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
-                setSpan(
-                    ForegroundColorSpan(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.main
-                        )
-                    ),
-                    15,
-                    18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                setSpan(
-                    UnderlineSpan(), 15, 18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            }
-        guestTV.text = span
     }
 }

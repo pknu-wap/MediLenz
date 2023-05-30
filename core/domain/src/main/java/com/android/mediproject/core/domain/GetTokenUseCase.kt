@@ -17,6 +17,7 @@ class GetTokenUseCase @Inject constructor(private val signRepository: SignReposi
 
     suspend operator fun invoke(): Flow<TokenState<CurrentTokenDto>> = channelFlow {
         signRepository.getCurrentTokens().collectLatest {
+            Log.d("wap","GetTokenUseCase"+it.toString())
             trySend(it)
         }
     }
