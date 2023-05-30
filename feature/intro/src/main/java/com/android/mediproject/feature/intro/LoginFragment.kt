@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.TOHOME
+import com.android.mediproject.core.common.TOMYPAGE
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -67,9 +68,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
                                 // 로그인 성공
                                 LoadingDialog.dismiss()
                                 toast(getString(R.string.signInSuccess))
-                                findNavController().navigate(
-                                    "medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
-                                )
+
+                                when(fragmentViewModel.moveFlag.value){
+                                    TOHOME -> findNavController().navigate("medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
+                                    TOMYPAGE -> findNavController().navigate("medilens://main/mypage_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
+                                }
                             }
 
                             is SignInState.FailedSignIn -> {
