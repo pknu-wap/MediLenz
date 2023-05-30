@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface AppDataStore {
     val userEmail: Flow<String>
-    val nickNamebhi: Flow<String>
+    val nickName: Flow<String>
     val skipIntro: Flow<Boolean>
     suspend fun saveUserEmail(email: CharArray)
     suspend fun saveNickName(nickName: String)
