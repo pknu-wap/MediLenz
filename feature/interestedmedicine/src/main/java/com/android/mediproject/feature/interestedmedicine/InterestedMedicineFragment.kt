@@ -72,6 +72,8 @@ class InterestedMedicineFragment() :
     private fun setInterstedMedicineList(medicineList: List<MedicineInterestedDto>) {
 
         val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
+        
+        binding.interestedMedicineList.removeAllViews()
 
         //즐겨찾기 목록 약의 개수가 0개가 아닐 경우
         if (medicineList.size != 0) {

@@ -40,12 +40,17 @@ class MyPageViewModel @Inject constructor(
     private val _token = MutableStateFlow<TokenState<CurrentTokenDto>>(TokenState.Empty)
     val token get() = _token.asStateFlow()
 
-    private val _user = MutableStateFlow<UserDto>(UserDto(""))
+    private val _user = MutableStateFlow(UserDto("기본값"))
     val user: StateFlow<UserDto>
         get() = _user.asStateFlow()
 
     fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
-    fun loadUser() = viewModelScope.launch { getUserUseCase().collect { _user.value = it } }
+    fun loadUser() = viewModelScope.launch {
+        getUserUseCase().collect {
+            Log.d("tgyuu", it.toString())
+            _user.value = it
+        }
+    }
 
     val myCommentsList: Flow<List<MyCommentDto>> = channelFlow {
         //dummy for test
