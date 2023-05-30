@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.GUEST_MODE
@@ -23,6 +24,7 @@ import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import repeatOnStarted
 
 @AndroidEntryPoint
@@ -35,33 +37,27 @@ class MyPageFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setRecyclerView()
         binding.apply {
-
-            myCommentsListRV.apply {
-                adapter = myCommentListAdapter
-                layoutManager = LinearLayoutManager(requireActivity())
-                addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
-            }
-
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
-                    repeatOnStarted {
-                        eventFlow.collect { handleEvent(it) }
-                    }
+                    repeatOnStarted { eventFlow.collect { handleEvent(it) } }
                     repeatOnStarted { token.collect { handleToken(it) } }
-                    repeatOnStarted {
-                        myCommentsList.collect { myCommentList -> setMyCommentsList(myCommentList) }
-                    }
                 }
-
                 loadTokens()
-
             }
-
 
             myCommentsListHeaderView.setOnMoreClickListener {
                 findNavController().navigate("medilens://main/comments_nav/myCommentsListFragment".toUri())
             }
+        }
+    }
+
+    private fun setRecyclerView() = binding.apply {
+        myCommentsListRV.apply {
+            adapter = myCommentListAdapter
+            layoutManager = LinearLayoutManager(requireActivity())
+            addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
         }
     }
 
@@ -70,14 +66,25 @@ class MyPageFragment :
         is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
     }
 
-    private fun handleToken(tokenState: TokenState<CurrentTokenDto>) = when (tokenState) {
-        is TokenState.Empty -> {}
-        is TokenState.Error -> {}
-        is TokenState.Expiration -> loginMode = GUEST_MODE
-        is TokenState.Valid -> loginMode = LOGIN_MODE
+    private fun handleToken(tokenState: TokenState<CurrentTokenDto>) {
+        when (tokenState) {
+            is TokenState.Empty -> {}
+            is TokenState.Error -> {}
+            is TokenState.Expiration -> loginMode = GUEST_MODE
+            is TokenState.Valid -> loginMode = LOGIN_MODE
+        }
+
+        repeatOnStarted {
+            fragmentViewModel.apply {
+                viewLifecycleOwner.repeatOnStarted {
+                    myCommentsList.collect { myCommentList -> setMyCommentsList(myCommentList) }
+                }
+            }
+        }
     }
 
     private fun setMyCommentsList(myCommentList: List<MyCommentDto>) {
+        //로그인 상태일 경우
         if (loginMode == LOGIN_MODE) {
             binding.apply {
 
@@ -111,6 +118,7 @@ class MyPageFragment :
                     myCommentsListHeaderView.setExpandVisiblity(false)
                 }
             }
+            //로그인 상태가 아닐 경우
         } else {
             binding.apply {
                 guestModeCL.visibility = View.VISIBLE
@@ -120,7 +128,12 @@ class MyPageFragment :
                 val span =
                     SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
                         setSpan(
-                            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.main)),
+                            ForegroundColorSpan(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.main
+                                )
+                            ),
                             15,
                             18,
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
