@@ -38,3 +38,21 @@ const deleteComment = async (commentId) => {
     });
     return true;
 }
+const editComment = async (commentId, comment) => {
+    const targetComment = await Comment.findOne({
+        where: {
+            ID: commentId
+        }
+    });
+    if (!targetComment) {
+        return false;
+    }
+    await Comment.update({
+        COMMENT: comment
+    }, {
+        where: {
+            ID: commentId
+        }
+    });
+    return true;
+}
