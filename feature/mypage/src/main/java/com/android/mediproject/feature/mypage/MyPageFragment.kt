@@ -38,6 +38,7 @@ class MyPageFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
+
         binding.apply {
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
@@ -83,6 +84,7 @@ class MyPageFragment :
         }
     }
 
+    //로그인 상태일 시 보여주는 화면
     private fun loginMyCommentList() = binding.apply {
         guestModeCL.visibility = View.GONE
         loginModeCL.visibility = View.VISIBLE
@@ -124,6 +126,7 @@ class MyPageFragment :
         }
     }
 
+    //비로그인 상태일 시 보여주는 화면
     private fun guestMyCommentList() = binding.apply {
         guestModeCL.visibility = View.VISIBLE
         loginModeCL.visibility = View.GONE

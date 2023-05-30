@@ -16,7 +16,6 @@ import javax.inject.Singleton
 class GetTokenUseCase @Inject constructor(private val signRepository: SignRepository) {
 
     suspend operator fun invoke(): Flow<TokenState<CurrentTokenDto>> = channelFlow {
-        Log.d("tgyuu","TokenUseCase")
         signRepository.getCurrentTokens().collectLatest {
             trySend(it)
         }
