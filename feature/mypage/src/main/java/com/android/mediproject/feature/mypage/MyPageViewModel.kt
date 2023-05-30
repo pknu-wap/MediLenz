@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.data.remote.sign.SignRepository
 import com.android.mediproject.core.domain.GetTokenUseCase
+import com.android.mediproject.core.domain.sign.GetUserUseCase
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.medicine.InterestedMedicine.MedicineInterestedDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.model.user.UserDto
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +29,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPageViewModel @Inject constructor(private val getTokenUseCase: GetTokenUseCase, ) :
+class MyPageViewModel @Inject constructor(
+    private val getTokenUseCase: GetTokenUseCase,
+    private val getUserUseCase: GetUserUseCase
+) :
     BaseViewModel() {
     private val _eventFlow = MutableEventFlow<MyPageEvent>()
     val eventFlow = _eventFlow.asEventFlow()
@@ -35,13 +40,12 @@ class MyPageViewModel @Inject constructor(private val getTokenUseCase: GetTokenU
     private val _token = MutableStateFlow<TokenState<CurrentTokenDto>>(TokenState.Empty)
     val token get() = _token.asStateFlow()
 
-    fun loadTokens() {
-        viewModelScope.launch {
-            getTokenUseCase().collect {
-                _token.value = it
-            }
-        }
-    }
+    private val _user = MutableStateFlow<UserDto>(UserDto(""))
+    val user: StateFlow<UserDto>
+        get() = _user.asStateFlow()
+
+    fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
+    fun loadUser() = viewModelScope.launch { getUserUseCase().collect { _user.value = it } }
 
     val myCommentsList: Flow<List<MyCommentDto>> = channelFlow {
         //dummy for test

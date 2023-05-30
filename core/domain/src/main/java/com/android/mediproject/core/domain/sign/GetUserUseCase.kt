@@ -8,7 +8,6 @@ import javax.inject.Inject
 
 
 class GetUserUseCase @Inject constructor(private val appDataStore: AppDataStore) {
-
     suspend operator fun invoke(): Flow<UserDto> = channelFlow {
         appDataStore.nickName.collect { nickName ->
             trySend(UserDto(nickName = nickName))
