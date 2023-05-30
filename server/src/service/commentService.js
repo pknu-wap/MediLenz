@@ -20,7 +20,6 @@ const deleteComment = async (commentId) => {
         return false;
     }
     if (comment.SUBORDINATIONID == 0) {
-        //delete comment with no subordination
         await Comment.destroy({
             where: {
                 ID: commentId
@@ -28,7 +27,6 @@ const deleteComment = async (commentId) => {
         });
         return true;
     }
-    //replace content with "삭제된 댓글입니다."
     await Comment.update({
         COMMENT: "삭제된 댓글입니다."
     }, {
@@ -55,4 +53,29 @@ const editComment = async (commentId, comment) => {
         }
     });
     return true;
+}
+const getCommentList = async (medicineId) => {
+    const commentList = await Comment.findAll({
+        where: {
+            MEDICINEID: medicineId
+        }
+    });
+
+    alignedCommentList = []
+    for (let comment in commentList) {
+        if (comment.SUBORDINATION == 0) continue;
+        comment.replies = [];
+        alignedCommentList.push(comment);
+    }
+
+    for (let i = 0; i < commentList.length; i++) {
+        if (commentList[i].SUBORDINATION != 0) {
+            for (let j = 0; j < alignedCommentList.length; j++) {
+                if (commentList[i].SUBORDINATION == alignedCommentList[j].ID) {
+                    alignedCommentList[j].replies.push(commentList[i]);
+                }
+            }
+        }
+    }
+    return commentList;
 }
