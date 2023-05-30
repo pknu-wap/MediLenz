@@ -117,7 +117,7 @@ class SignRepositoryImpl @Inject constructor(
 
     /**
      * 외부에서 인터페이스로 접근할 때, 이 Flow를 collect하면, 토큰의 상태를 받을 수 있다.
-     * 만약 호출 했을 때, 만료되었으면 reissueToken()을 자동으로 호출해서 새로운 토큰을 반화한다.
+     * 만약 호출 했을 때, 만료되었으면 reissueToken()을 자동으로 호출해서 새로운 토큰을 반환한다.
      */
     override suspend fun getCurrentTokens(): Flow<TokenState<CurrentTokenDto>> = channelFlow {
         send(
