@@ -17,9 +17,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.GUEST_MODE
 import com.android.mediproject.core.common.LOGIN_MODE
+import com.android.mediproject.core.common.TOMYPAGE
 import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.model.comments.CommentDto
 import com.android.mediproject.core.model.comments.MyCommentDto
+import com.android.mediproject.core.model.local.navargs.LoginFromMyPageArgs
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.model.user.UserDto
@@ -55,7 +57,11 @@ class MyPageFragment :
             }
 
             myCommentsListHeaderView.setOnMoreClickListener {
-                findNavController().navigateByDeepLink("medilens://main/comments_nav/myCommentsListFragment".toUri())}
+                findNavController().navigateByDeepLink(
+                    "medilens://main/comments_nav/myCommentsListFragment",
+                    LoginFromMyPageArgs(flag = TOMYPAGE)
+                )
+            }
         }
     }
 

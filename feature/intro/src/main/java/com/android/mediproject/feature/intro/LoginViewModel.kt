@@ -4,6 +4,7 @@ import MutableEventFlow
 import android.text.Editable
 import androidx.lifecycle.viewModelScope
 import asEventFlow
+import com.android.mediproject.core.common.TOHOME
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.AesCoder
@@ -48,10 +49,13 @@ class LoginViewModel @Inject constructor(
     private val _eventFlow = MutableEventFlow<SignEvent>(replay = 1)
     val eventFlow = _eventFlow.asEventFlow()
 
-    fun event(event: SignEvent) = viewModelScope.launch { _eventFlow.emit(event) }
+    private val _moveFlag = MutableStateFlow(TOHOME)
+    val moveFlag get() = _moveFlag.asStateFlow()
 
+    fun event(event: SignEvent) = viewModelScope.launch { _eventFlow.emit(event) }
     fun login() = event(SignEvent.SignIn)
     fun signUp() = event(SignEvent.SignUp)
+    fun setMoveFlag(flag : Int){ _moveFlag.value = flag }
 
     /**
      * 로그인 요청

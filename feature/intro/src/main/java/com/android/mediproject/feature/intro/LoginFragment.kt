@@ -8,6 +8,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.common.TOHOME
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -36,12 +37,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
     private val mainScope = MainScope()
     private val jobs = mutableListOf<Job>()
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
             loginBtn.isEnabled = false
+            val moveFlag = arguments?.getInt("flag", TOHOME)
+            fragmentViewModel.setMoveFlag(moveFlag ?: TOHOME)
 
             addDelayTextWatcher(loginEmail.inputData)
             addDelayTextWatcher(loginPassword.inputData)
