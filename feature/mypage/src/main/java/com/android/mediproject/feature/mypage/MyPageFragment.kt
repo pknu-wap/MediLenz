@@ -44,6 +44,7 @@ class MyPageFragment :
                 viewLifecycleOwner.apply {
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
                     repeatOnStarted { token.collect { handleToken(it) } }
+                    repeatOnStarted { user.collect { userDto = it } }
                 }
                 loadTokens()
             }
@@ -71,10 +72,16 @@ class MyPageFragment :
         when (tokenState) {
             is TokenState.Empty -> {}
             is TokenState.Error -> {}
-            is TokenState.Expiration -> loginMode = GUEST_MODE
-            is TokenState.Valid -> loginMode = LOGIN_MODE
+            is TokenState.Expiration -> {
+                loginMode = GUEST_MODE
+                setMyCommentsList()
+            }
+
+            is TokenState.Valid -> {
+                loginMode = LOGIN_MODE
+                setMyCommentsList()
+            }
         }
-        setMyCommentsList()
     }
 
     private fun setMyCommentsList() {
@@ -89,7 +96,7 @@ class MyPageFragment :
         guestModeCL.visibility = View.GONE
         loginModeCL.visibility = View.VISIBLE
 
-        userDto = UserDto("WAP짱짱")
+        fragmentViewModel.loadUser()
 
         lateinit var myCommentList: List<MyCommentDto>
         repeatOnStarted {
