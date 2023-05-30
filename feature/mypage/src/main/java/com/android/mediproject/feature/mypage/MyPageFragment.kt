@@ -12,7 +12,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.mediproject.core.model.comments.CommentDto
 import com.android.mediproject.core.model.comments.MyCommentDto
+import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.model.user.UserDto
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -21,8 +24,9 @@ import repeatOnStarted
 
 class MyPageFragment :
     BaseFragment<FragmentMyPageBinding, MyPageViewModel>(FragmentMyPageBinding::inflate) {
+
     override val fragmentViewModel: MyPageViewModel by viewModels()
-    private val myCommentListAdapter : MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
+    private val myCommentListAdapter: MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,12 +59,8 @@ class MyPageFragment :
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-
-                    repeatOnStarted {
-                        myCommentsList.collect { myCommentList ->
-                            setMyCommentsList(myCommentList)
-                        }
-                    }
+                    repeatOnStarted { token.collect { handleToken(it) } }
+                    repeatOnStarted { myCommentsList.collect { myCommentList -> setMyCommentsList(myCommentList) } }
                 }
             }
 
@@ -73,6 +73,13 @@ class MyPageFragment :
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
         is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
         is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
+    }
+
+    private fun handleToken(tokenState: TokenState<CurrentTokenDto>) = when (tokenState) {
+        is TokenState.Empty -> {}
+        is TokenState.Error -> {}
+        is TokenState.Expiration -> {}
+        is TokenState.Valid -> {}
     }
 
     private fun setMyCommentsList(myCommentList: List<MyCommentDto>) {
