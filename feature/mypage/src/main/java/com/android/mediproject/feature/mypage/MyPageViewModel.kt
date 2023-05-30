@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPageViewModel @Inject constructor() : BaseViewModel() {
+class MyPageViewModel @Inject constructor(private val signReposi) : BaseViewModel() {
     private val _eventFlow = MutableEventFlow<MyPageEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
