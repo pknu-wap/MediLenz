@@ -73,6 +73,7 @@ class MyPageFragment :
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
         is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
         is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
+        is MyPageViewModel.MyPageEvent.MyPageMore -> {}
     }
 
     private fun setMyCommentsList(myCommentList: List<MyCommentDto>) {
