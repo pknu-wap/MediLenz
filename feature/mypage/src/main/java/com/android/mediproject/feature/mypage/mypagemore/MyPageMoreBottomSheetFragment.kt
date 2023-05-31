@@ -1,11 +1,13 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.android.mediproject.feature.mypage.MyPageViewModel
 import com.android.mediproject.feature.mypage.R
@@ -17,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.ViewModelLifecycle
 import repeatOnStarted
+import java.time.format.TextStyle
 
 @AndroidEntryPoint
 class MyPageMoreBottomSheetFragment(private val context: Context) : BottomSheetDialogFragment() {
@@ -51,11 +54,105 @@ class MyPageMoreBottomSheetFragment(private val context: Context) : BottomSheetD
             is MyPageMoreBottomSheetViewModel.MyPageMoreBottomSheetEvent.Confirm -> {}
         }
 
-    private fun handleFlag(flag: Int) = when (flag) {
-        CHANGE_NICKNAME -> {}
-        CHANGE_PASSWORD -> {}
-        WITHDRAWAL -> {}
-        else -> Unit
+    private fun handleFlag(flag: Int) {
+        when (flag) {
+            CHANGE_NICKNAME -> {
+                binding.apply {
+                    changeNickNameTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.main
+                            )
+                        )
+                        setTypeface(null, Typeface.BOLD)
+                    }
+                    changePasswordTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                    withdrawalTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                }
+            }
+
+            CHANGE_PASSWORD -> {
+                binding.apply {
+                    changeNickNameTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                    changePasswordTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.main
+                            )
+                        )
+                        setTypeface(null, Typeface.BOLD)
+                    }
+                    withdrawalTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                }
+            }
+
+            WITHDRAWAL -> {
+                binding.apply {
+                    changeNickNameTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                    changePasswordTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                    withdrawalTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.main
+                            )
+                        )
+                        setTypeface(null, Typeface.BOLD)
+                    }
+                }
+            }
+            else -> Unit
+        }
     }
 
     override fun onDestroyView() {
