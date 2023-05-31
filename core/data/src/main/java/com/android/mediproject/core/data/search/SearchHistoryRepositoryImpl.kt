@@ -9,22 +9,22 @@ import javax.inject.Inject
 class SearchHistoryRepositoryImpl @Inject constructor(
     private val searchHistoryDao: SearchHistoryDao
 ) : SearchHistoryRepository {
-    override suspend fun insertSearchHistory(searchHistoryDto: SearchHistoryDto) = runBlocking {
-        searchHistoryDao.insert(searchHistoryDto.apply {
+    override fun insertSearchHistory(searchHistoryDto: SearchHistoryDto) = runBlocking {
+        searchHistoryDao.insert(searchHistoryDto.apply
+        {
             query = query.trim()
         })
     }
 
+    override fun getSearchHistoryList(count: Int): Flow<List<SearchHistoryDto>> = searchHistoryDao.select(count)
 
-    override suspend fun getSearchHistoryList(count: Int): Flow<List<SearchHistoryDto>> = searchHistoryDao.select(count)
 
-
-    override suspend fun deleteSearchHistory(id: Long) = runBlocking {
+    override suspend fun deleteSearchHistory(id: Long) {
         searchHistoryDao.delete(id)
     }
 
 
-    override suspend fun deleteAllSearchHistory() = runBlocking {
+    override suspend fun deleteAllSearchHistory() {
         searchHistoryDao.deleteAll()
     }
 

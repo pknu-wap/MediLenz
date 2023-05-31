@@ -20,7 +20,7 @@ interface MedicineApprovalDataSource {
         pageNo: Int,
     ): Result<MedicineApprovalListResponse>
 
-    suspend fun getMedicineDetailInfo(
+    fun getMedicineDetailInfo(
         itemName: String,
     ): Flow<Result<MedicineDetailInfoResponse>>
 }

@@ -29,7 +29,7 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
         Result.failure(it)
     })
 
-    override suspend fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse>> = channelFlow {
+    override fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse>> = channelFlow {
         dataGoKrNetworkApi.getMedicineDetailInfo(itemName = itemName).onResponse().fold(onSuccess = { response ->
             response.isSuccess().let {
                 if (it is DataGoKrResult.isSuccess) Result.success(response)

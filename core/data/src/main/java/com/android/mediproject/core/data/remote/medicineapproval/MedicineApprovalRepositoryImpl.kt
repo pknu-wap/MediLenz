@@ -14,9 +14,6 @@ import com.android.mediproject.core.network.datasource.medicineapproval.Medicine
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalListDataSourceImpl
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -37,24 +34,19 @@ class MedicineApprovalRepositoryImpl @Inject constructor(
      * @param entpName 업체명
      *
      */
-    override suspend fun getMedicineApprovalList(itemName: String?, entpName: String?, medicationType: String?): Flow<PagingData<Item>> =
-        if (itemName == null && entpName == null) {
-            emptyFlow()
-        } else {
-            searchHistoryRepository.insertSearchHistory(SearchHistoryDto(itemName ?: entpName!!))
-            Pager(config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5), pagingSourceFactory = {
-                MedicineApprovalListDataSourceImpl(
-                    medicineApprovalDataSource, itemName, entpName, medicationType
-                )
-            }).flow
-        }
+    override fun getMedicineApprovalList(itemName: String?, entpName: String?, medicationType: String?): Flow<PagingData<Item>> {
+        searchHistoryRepository.insertSearchHistory(SearchHistoryDto(itemName ?: entpName!!))
+        return Pager(config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5), pagingSourceFactory = {
+            MedicineApprovalListDataSourceImpl(
+                medicineApprovalDataSource, itemName, entpName, medicationType
+            )
+        }).flow
+    }
 
 
-    override suspend fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Body.Item>> = channelFlow {
+    override fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Body.Item>> =
         medicineApprovalDataSource.getMedicineDetailInfo(itemName).map { result ->
             result.fold(onSuccess = { Result.success(it.body.items.first()) }, onFailure = { Result.failure(it) })
-        }.collectLatest {
-            send(it)
         }
-    }
+
 }

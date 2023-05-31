@@ -6,11 +6,11 @@ import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDe
 import kotlinx.coroutines.flow.Flow
 
 interface MedicineApprovalRepository {
-    suspend fun getMedicineApprovalList(
+    fun getMedicineApprovalList(
         itemName: String?,
         entpName: String?,
         medicationType: String?,
     ): Flow<PagingData<Item>>
 
-    suspend fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Body.Item>>
+    fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Body.Item>>
 }

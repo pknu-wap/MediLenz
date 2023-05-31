@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import androidx.core.os.bundleOf
+import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
 import com.android.mediproject.core.model.search.local.SearchHistoryItemDto
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -37,6 +38,9 @@ class RecentSearchListFragment :
         viewLifecycleOwner.repeatOnStarted {
             fragmentViewModel.searchHistoryList().collectLatest {
                 // 최근 검색 목록을 가져옵니다.
+
+                // 리스트를 비웁니다.
+                if (binding.searchHistoryList.size > 0) binding.searchHistoryList.removeAllViews()
                 it.forEach { searchHistoryItemDto ->
                     addHistoryItemChips(searchHistoryItemDto)
                 }
@@ -58,7 +62,6 @@ class RecentSearchListFragment :
                 }
                 data = searchHistoryItemDto.query
                 setChipText(data.toString())
-
                 setOnChipClickListener {
                     onClicked(searchHistoryItemDto.query)
                 }
@@ -67,17 +70,12 @@ class RecentSearchListFragment :
     }
 
     override fun onDestroyView() {
-        binding.searchHistoryList.removeAllViews()
         super.onDestroyView()
     }
 
     private fun onClicked(query: String) {
         parentFragmentManager.apply {
-            setFragmentResult(
-                ResultKey.RESULT_KEY.name, bundleOf(
-                    ResultKey.WORD.name to query
-                )
-            )
+            setFragmentResult(ResultKey.RESULT_KEY.name, bundleOf(ResultKey.WORD.name to query))
         }
     }
 
