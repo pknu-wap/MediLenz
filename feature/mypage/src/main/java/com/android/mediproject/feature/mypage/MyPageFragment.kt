@@ -79,11 +79,13 @@ class MyPageFragment :
         }
     }
 
-    private fun handleFlag(flag: Int) = when (flag) {
-        CHANGE_NICKNAME -> {}
-        CHANGE_PASSWORD -> {}
-        WITHDRAWAL -> {}
-        else -> Unit
+    private fun handleFlag(flag: Int) {
+        when (flag) {
+            CHANGE_NICKNAME -> { log(flag.toString()) }
+            CHANGE_PASSWORD -> { log(flag.toString()) }
+            WITHDRAWAL -> { log(flag.toString()) }
+            else -> Unit
+        }
     }
 
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {

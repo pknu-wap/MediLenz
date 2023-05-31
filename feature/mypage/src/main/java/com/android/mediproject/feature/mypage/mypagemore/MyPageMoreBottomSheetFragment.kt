@@ -75,13 +75,13 @@ class MyPageMoreBottomSheetFragment(
     private fun handleEvent(event: MyPageMoreBottomSheetViewModel.MyPageMoreBottomSheetEvent) =
         when (event) {
             is MyPageMoreBottomSheetViewModel.MyPageMoreBottomSheetEvent.Confirm -> {
-                Log.d("wap", event.flag.toString())
                 when (event.flag) {
-                    CHANGE_NICKNAME -> {}
-                    CHANGE_PASSWORD -> {}
-                    WITHDRAWAL -> {}
+                    CHANGE_NICKNAME -> changeLoginDismiss
+                    CHANGE_PASSWORD -> changePasswordDismiss
+                    WITHDRAWAL -> withdrawalDismiss
                     else -> Unit
                 }
+                Log.d("wap", event.flag.toString())
             }
         }
 
