@@ -1,8 +1,6 @@
 plugins {
-
     id("mediproject.android.feature")
     id("kotlinx-serialization")
-
 }
 
 android {

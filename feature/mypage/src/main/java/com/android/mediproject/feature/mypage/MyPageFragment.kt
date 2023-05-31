@@ -6,30 +6,23 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.view.View
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.GUEST_MODE
 import com.android.mediproject.core.common.LOGIN_MODE
-import com.android.mediproject.core.common.TOMYPAGE
 import com.android.mediproject.core.common.util.navigateByDeepLink
-import com.android.mediproject.core.model.comments.CommentDto
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.local.navargs.LoginFromMyPageArgs
+import com.android.mediproject.core.model.local.navargs.TOMYPAGE
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
-import com.android.mediproject.core.model.user.UserDto
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import repeatOnStarted
 
 @AndroidEntryPoint
@@ -79,7 +72,6 @@ class MyPageFragment :
                 loginMode = GUEST_MODE
                 setMyCommentsList()
             }
-
             is TokenState.Error -> {}
             is TokenState.Expiration -> {}
             is TokenState.Valid -> {
@@ -139,21 +131,9 @@ class MyPageFragment :
         val span =
             SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
                 setSpan(
-                    ForegroundColorSpan(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.main
-                        )
-                    ),
-                    15,
-                    18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                setSpan(
-                    UnderlineSpan(), 15, 18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            }
+                    ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.main)), 15, 18,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) }
         guestTV.text = span
     }
 }

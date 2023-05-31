@@ -18,7 +18,7 @@ class GlideAppModule : AppGlideModule()
 object BindingAdapter {
     @JvmStatic
     @BindingAdapter("medicationTypeText")
-    fun setStatusText(textView: TextView, type: MedicationType) {
+    fun setMedicationTypeText(textView: TextView, type: MedicationType) {
         val arr = textView.context.resources.getStringArray(R.array.medicationTypes)
         textView.text = arr[type.ordinal]
     }

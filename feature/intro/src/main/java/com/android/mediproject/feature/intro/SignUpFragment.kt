@@ -7,12 +7,12 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.common.TOHOME
-import com.android.mediproject.core.common.TOMYPAGE
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.delayTextChangedCallback
+import com.android.mediproject.core.model.local.navargs.TOHOME
+import com.android.mediproject.core.model.local.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentSignUpBinding
 import dagger.hilt.android.AndroidEntryPoint

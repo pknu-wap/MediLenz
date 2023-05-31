@@ -4,13 +4,13 @@ import MutableEventFlow
 import android.text.Editable
 import androidx.lifecycle.viewModelScope
 import asEventFlow
-import com.android.mediproject.core.common.TOHOME
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.domain.sign.SignUseCase
+import com.android.mediproject.core.model.local.navargs.TOHOME
 import com.android.mediproject.core.model.parameters.SignInParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.intro.SignInState.FailedSignIn

@@ -16,6 +16,3 @@ const val AWS_LOAD_PAGE_SIZE = 15
 
 const val GUEST_MODE = 101
 const val LOGIN_MODE = 102
-
-const val TOHOME = 201
-const val TOMYPAGE = 202
