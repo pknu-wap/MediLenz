@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
@@ -48,6 +49,7 @@ class MyPageMoreBottomSheetFragment : BottomSheetDialogFragment() {
             }
         }
     }
+
 
     private fun handleEvent(event: MyPageMoreBottomSheetViewModel.MyPageMoreBottomSheetEvent) =
         when (event) {

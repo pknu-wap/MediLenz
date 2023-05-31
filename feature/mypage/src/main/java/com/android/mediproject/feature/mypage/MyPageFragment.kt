@@ -1,13 +1,16 @@
 package com.android.mediproject.feature.mypage
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.view.View
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,8 +26,8 @@ import repeatOnStarted
 class MyPageFragment :
     BaseFragment<FragmentMyPageBinding, MyPageViewModel>(FragmentMyPageBinding::inflate) {
     override val fragmentViewModel: MyPageViewModel by viewModels()
-    private val myCommentListAdapter : MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
-    private var myPageMoreBottomSheet : MyPageMoreBottomSheetFragment? = null
+    private val myCommentListAdapter: MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
+    private var myPageMoreBottomSheet: MyPageMoreBottomSheetFragment? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,8 +78,9 @@ class MyPageFragment :
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
         is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
         is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
-        is MyPageViewModel.MyPageEvent.MyPageMore -> { myPageMoreBottomSheet = MyPageMoreBottomSheetFragment()
-            myPageMoreBottomSheet!!.show( parentFragmentManager, MyPageMoreBottomSheetFragment.TAG)
+        is MyPageViewModel.MyPageEvent.MyPageMore -> {
+            myPageMoreBottomSheet = MyPageMoreBottomSheetFragment()
+            myPageMoreBottomSheet!!.show(parentFragmentManager, MyPageMoreBottomSheetFragment.TAG)
         }
     }
 
