@@ -1,20 +1,15 @@
 package com.android.mediproject.core.domain
 
 import androidx.paging.map
-import com.android.mediproject.core.common.network.Dispatcher
-import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
 import com.android.mediproject.core.model.constants.MedicationType
 import com.android.mediproject.core.model.medicine.medicineapproval.toDto
 import com.android.mediproject.core.model.parameters.ApprovalListSearchParameter
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetMedicineApprovalListUseCase @Inject constructor(
     private val medicineApprovalRepository: MedicineApprovalRepository,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) {
 
     /**
@@ -23,7 +18,9 @@ class GetMedicineApprovalListUseCase @Inject constructor(
     operator fun invoke(
         parameter: ApprovalListSearchParameter
     ) = medicineApprovalRepository.getMedicineApprovalList(
-        itemName = parameter.itemName, entpName = parameter.entpName, medicationType = when (parameter.medicationType) {
+        itemName = parameter.itemName,
+        entpName = parameter.entpName,
+        medicationType = when (parameter.medicationType) {
             MedicationType.ALL -> null
             else -> parameter.medicationType.description
         }
@@ -32,5 +29,5 @@ class GetMedicineApprovalListUseCase @Inject constructor(
             // 데이터 변환
             item.toDto()
         }
-    }.flowOn(defaultDispatcher)
+    }
 }

@@ -6,9 +6,11 @@ import android.view.ViewGroup.LayoutParams
 import androidx.core.os.bundleOf
 import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.search.local.SearchHistoryItemDto
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
+import com.android.mediproject.core.ui.base.view.stateAsCollect
 import com.android.mediproject.feature.search.databinding.FragmentRecentSearchListBinding
 import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +25,9 @@ import repeatOnStarted
  */
 @AndroidEntryPoint
 class RecentSearchListFragment :
-    BaseFragment<FragmentRecentSearchListBinding, RecentSearchListViewModel>(FragmentRecentSearchListBinding::inflate) {
+    BaseFragment<FragmentRecentSearchListBinding, RecentSearchListViewModel>(
+        FragmentRecentSearchListBinding::inflate
+    ) {
 
     enum class ResultKey {
         RESULT_KEY, WORD
@@ -36,13 +40,18 @@ class RecentSearchListFragment :
         initHeader()
 
         viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.searchHistoryList().collectLatest {
-                // 최근 검색 목록을 가져옵니다.
+            // 최근 검색 목록을 가져옵니다.
+            fragmentViewModel.searchHistoryList().stateAsCollect(binding.headerView).collectLatest {
+                when (it) {
+                    is UiState.Success -> {
+                        // 리스트를 비웁니다.
+                        if (binding.searchHistoryList.size > 0) binding.searchHistoryList.removeAllViews()
+                        it.data.forEach { searchHistoryItemDto ->
+                            addHistoryItemChips(searchHistoryItemDto)
+                        }
+                    }
 
-                // 리스트를 비웁니다.
-                if (binding.searchHistoryList.size > 0) binding.searchHistoryList.removeAllViews()
-                it.forEach { searchHistoryItemDto ->
-                    addHistoryItemChips(searchHistoryItemDto)
+                    else -> {}
                 }
             }
         }
@@ -55,11 +64,14 @@ class RecentSearchListFragment :
      */
     private fun addHistoryItemChips(searchHistoryItemDto: SearchHistoryItemDto) {
         binding.apply {
-            val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
+            val horizontalSpace =
+                resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
             this.searchHistoryList.addView(ButtonChip<String>(requireContext()).apply {
-                layoutParams = FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-                    setMargins(horizontalSpace, 0, horizontalSpace, 0)
-                }
+                layoutParams =
+                    FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+                        .apply {
+                            setMargins(horizontalSpace, 0, horizontalSpace, 0)
+                        }
                 data = searchHistoryItemDto.query
                 setChipText(data.toString())
                 setOnChipClickListener {

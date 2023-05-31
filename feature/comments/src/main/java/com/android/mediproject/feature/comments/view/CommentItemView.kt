@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.android.mediproject.core.common.uiutil.dpToPx
 import com.android.mediproject.core.model.comments.CommentDto
 import com.android.mediproject.feature.comments.R
@@ -16,7 +17,7 @@ import kotlinx.datetime.toJavaLocalDateTime
 import java.time.format.DateTimeFormatter
 
 class CommentItemView(
-    context: Context
+    context: Context,
 ) : ConstraintLayout(context) {
 
     companion object {
@@ -110,12 +111,10 @@ class CommentItemView(
 
         commentTextView = TextView(context).apply {
             id = R.id.commentTextView
-            layoutParams =
-                ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-                    .apply {
-                        topToBottom = userProfileImageView.id
-                        topMargin = 6.dpToPx(context)
-                    }
+            layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
+                topToBottom = userProfileImageView.id
+                topMargin = 6.dpToPx(context)
+            }
             setPadding(0, 9.dpToPx(context), 0, 0)
             text = "comment"
             setTextColor(Color.BLACK)
@@ -124,12 +123,10 @@ class CommentItemView(
 
         dateTimeTextView = TextView(context).apply {
             id = R.id.dateTimeTextView
-            layoutParams =
-                ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-                    .apply {
-                        topToBottom = commentTextView.id
-                        topMargin = 4.dpToPx(context)
-                    }
+            layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT).apply {
+                topToBottom = commentTextView.id
+                topMargin = 4.dpToPx(context)
+            }
             setPadding(0, 4.dpToPx(context), 0, 0)
             text = "dateTime"
             setTextColor(Color.GRAY)
@@ -162,10 +159,8 @@ class CommentItemView(
      * 뷰 배경을 댓글 종속성에 따라 지정합니다.
      */
     private fun setCommentBackground(isReply: Boolean) {
-        setBackgroundResource(
-            if (isReply) R.drawable.reply_background
-            else R.drawable.comment_background
-        )
+        setBackgroundResource(if (isReply) R.drawable.reply_background
+        else R.drawable.comment_background)
     }
 
 
@@ -202,14 +197,7 @@ class CommentItemView(
             onLikeClickListener.onClick(it)
         }
     }
-
-    /**
-     * 내 댓글 삭제 버튼 클릭 콜백 추가
-     */
-    fun setOnDeleteClickListener(onDeleteClickListener: OnClickListener) {
-        TODO()
-    }
-
+    
     /**
      * 더 보기 버튼
      */
@@ -217,6 +205,10 @@ class CommentItemView(
         moreButton.setOnClickListener {
             onMoreClickListener.onClick(it)
         }
+    }
+
+    fun moreButtonVisible(visible: Boolean) {
+        moreButton.isVisible = visible
     }
 
 }

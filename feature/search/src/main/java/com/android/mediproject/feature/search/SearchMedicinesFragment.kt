@@ -18,7 +18,9 @@ import repeatOnStarted
 
 @AndroidEntryPoint
 class SearchMedicinesFragment :
-    BaseFragment<FragmentSearchMedicinesBinding, SearchMedicinesViewModel>(FragmentSearchMedicinesBinding::inflate) {
+    BaseFragment<FragmentSearchMedicinesBinding, SearchMedicinesViewModel>(
+        FragmentSearchMedicinesBinding::inflate
+    ) {
 
     override val fragmentViewModel by viewModels<SearchMedicinesViewModel>()
 
@@ -31,7 +33,9 @@ class SearchMedicinesFragment :
         viewLifecycleOwner.repeatOnStarted {
             fragmentViewModel.searchQuery.collect { query ->
                 // Flow로 받은 문자열이 일치하는 경우에만 searchView에 표시한다.
-                if (!binding.searchView.getText().contentEquals(query)) binding.searchView.setText(query)
+                if (!binding.searchView.getText().contentEquals(query)) binding.searchView.setText(
+                    query
+                )
             }
         }
 
@@ -53,26 +57,33 @@ class SearchMedicinesFragment :
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
-        childFragmentManager.findFragmentById(R.id.contentsFragmentContainerView)?.also { navHostFragment ->
-            val childFragmentManager = navHostFragment.childFragmentManager
-            childFragmentManager.setFragmentResultListener(
-                RecentSearchListFragment.ResultKey.RESULT_KEY.name, navHostFragment.viewLifecycleOwner
-            ) { _, bundle ->
-                bundle.getString(RecentSearchListFragment.ResultKey.WORD.name)?.also {
-                    binding.searchView.searchWithQuery(it)
+        childFragmentManager.findFragmentById(R.id.contentsFragmentContainerView)
+            ?.also { navHostFragment ->
+                val childFragmentManager = navHostFragment.childFragmentManager
+                childFragmentManager.setFragmentResultListener(
+                    RecentSearchListFragment.ResultKey.RESULT_KEY.name,
+                    navHostFragment.viewLifecycleOwner
+                ) { _, bundle ->
+                    bundle.getString(RecentSearchListFragment.ResultKey.WORD.name)?.also {
+                        binding.searchView.searchWithQuery(it)
+                    }
                 }
             }
-        }
 
         // 검색어가 전달된 경우에는 검색어를 넣은 후 검색
         arguments?.getString("query")?.takeIf {
             it.isNotEmpty()
         }?.also {
-            fragmentViewModel.setQuery(it)
-            binding.contentsFragmentContainerView.findNavController().navigate(
-                RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment(),
-                NavOptions.Builder().setPopUpTo(R.id.manualSearchResultFragment, true).build()
-            )
+            binding.contentsFragmentContainerView.findNavController().apply {
+                if (currentDestination?.id != R.id.manualSearchResultFragment) {
+                    fragmentViewModel.setQuery(it)
+                    navigate(
+                        RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment(),
+                        NavOptions.Builder().setPopUpTo(R.id.manualSearchResultFragment, true)
+                            .build()
+                    )
+                }
+            }
         }
     }
 

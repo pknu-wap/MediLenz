@@ -20,7 +20,9 @@ import repeatOnStarted
  */
 @AndroidEntryPoint
 class RecentPenaltyListFragment :
-    BaseFragment<FragmentRecentPenaltyListBinding, RecentPenaltyListViewModel>(FragmentRecentPenaltyListBinding::inflate) {
+    BaseFragment<FragmentRecentPenaltyListBinding, RecentPenaltyListViewModel>(
+        FragmentRecentPenaltyListBinding::inflate
+    ) {
 
     enum class ResultKey {
         RESULT_KEY, PENALTY_ID
@@ -42,7 +44,7 @@ class RecentPenaltyListFragment :
                 fragmentViewModel.recallDisposalList.stateAsCollect(headerView).collect { uiState ->
                     when (uiState) {
                         is UiState.Error -> {
-                            
+
                         }
 
                         is UiState.Initial -> {}

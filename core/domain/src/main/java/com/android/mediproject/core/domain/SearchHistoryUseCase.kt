@@ -11,13 +11,15 @@ import javax.inject.Singleton
 class SearchHistoryUseCase @Inject constructor(
     private val searchHistoryRepository: SearchHistoryRepository
 ) {
-    suspend fun insertSearchHistory(query: String) = searchHistoryRepository.insertSearchHistory(SearchHistoryDto(query))
+    suspend fun insertSearchHistory(query: String) =
+        searchHistoryRepository.insertSearchHistory(SearchHistoryDto(query))
 
-    fun getSearchHistoryList(count: Int) = searchHistoryRepository.getSearchHistoryList(count).mapLatest {
-        it.map { dto ->
-            dto.toSearchHistoryItemDto()
+    fun getSearchHistoryList(count: Int) =
+        searchHistoryRepository.getSearchHistoryList(count).mapLatest {
+            it.map { dto ->
+                dto.toSearchHistoryItemDto()
+            }
         }
-    }
 
     suspend fun deleteSearchHistory(id: Long) = searchHistoryRepository.deleteSearchHistory(id)
 

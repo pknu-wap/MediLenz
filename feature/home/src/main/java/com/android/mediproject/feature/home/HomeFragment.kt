@@ -12,9 +12,11 @@ import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListF
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHomeBinding::inflate) {
+class HomeFragment :
+    BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHomeBinding::inflate) {
 
     override val fragmentViewModel by viewModels<HomeViewModel>()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,21 +61,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     private fun initChildFragments() {
         // 아이템 클릭 시 처리 로직
         childFragmentManager.apply {
-            setFragmentResultListener(RecentCommentListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
+            setFragmentResultListener(
+                RecentCommentListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner
+            ) { _, bundle ->
                 bundle.apply {
                     val result = getInt(RecentCommentListFragment.ResultKey.WORD.name)
                 }
             }
-            setFragmentResultListener(RecentPenaltyListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
+            setFragmentResultListener(
+                RecentPenaltyListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner
+            ) { _, bundle ->
                 bundle.apply {
                     val result = getInt(RecentPenaltyListFragment.ResultKey.PENALTY_ID.name)
                 }
             }
-            setFragmentResultListener(RecentSearchListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
+            setFragmentResultListener(
+                RecentSearchListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner
+            ) { _, bundle ->
                 findNavController().navigate(
                     HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment(
-                            bundle.getString(RecentSearchListFragment.ResultKey.WORD.name) ?: ""
-                        )
+                        bundle.getString(RecentSearchListFragment.ResultKey.WORD.name) ?: ""
+                    )
                 )
             }
         }

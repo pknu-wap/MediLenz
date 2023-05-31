@@ -19,7 +19,7 @@ interface RecallSuspensionDataSource {
      * @param company 제조사
      * @param product 제품명
      */
-    suspend fun getDetailRecallSuspensionInfo(
+    fun getDetailRecallSuspensionInfo(
         company: String?,
         product: String?,
     ): Flow<Result<DetailRecallSuspensionResponse>>

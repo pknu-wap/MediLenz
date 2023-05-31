@@ -2,6 +2,7 @@ package com.android.mediproject.feature.search.result.manual
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -49,11 +51,11 @@ class ManualSearchResultViewModel @Inject constructor(
             if (parameter.entpName.isNullOrEmpty() && parameter.itemName.isNullOrEmpty()) {
                 flowOf(UiState.Error("검색어를 입력해주세요."))
             } else {
-                getMedicineApprovalListUseCase(parameter).flatMapLatest {
+                getMedicineApprovalListUseCase(parameter).cachedIn(viewModelScope).flatMapLatest {
                     flowOf(UiState.Success(it))
                 }
             }
-        }.catch {
+        }.flowOn(ioDispatcher).catch {
             flowOf(UiState.Error(it.message ?: "알 수 없는 오류가 발생했습니다."))
         }.stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = UiState.Loading)
     }

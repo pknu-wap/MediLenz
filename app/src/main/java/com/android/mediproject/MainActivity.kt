@@ -3,15 +3,18 @@ package com.android.mediproject
 import android.animation.ObjectAnimator
 import android.os.Build
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.android.mediproject.core.ui.WindowViewModel
 import com.android.mediproject.core.ui.base.BaseActivity
 import com.android.mediproject.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,6 +23,8 @@ import repeatOnStarted
 @AndroidEntryPoint
 class MainActivity :
     BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
+
+    private val windowViewModel: WindowViewModel by viewModels()
 
     companion object {
         const val VISIBLE = 0
@@ -60,10 +65,24 @@ class MainActivity :
             viewModel = activityViewModel.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
             }
+
+            root.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    if (bottomAppBar.height > 0) {
+                        root.viewTreeObserver.removeOnPreDrawListener(this)
+                        val containerHeight = root.height - bottomAppBar.height
+                        windowViewModel.setBottomNavHeight(containerHeight)
+                        fragmentContainerView.layoutParams = CoordinatorLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, containerHeight
+                        )
+                    }
+                    return true
+                }
+            })
         }
     }
 
-    override fun setSplash(){
+    override fun setSplash() {
         installSplashScreen()
     }
 

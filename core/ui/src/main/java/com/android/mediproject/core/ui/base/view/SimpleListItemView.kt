@@ -26,7 +26,9 @@ class SimpleListItemView<T> : ConstraintLayout {
         init(context, attrs)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs) {
+    constructor(
+        context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int
+    ) : super(context, attrs) {
         init(context, attrs)
     }
 
@@ -41,13 +43,15 @@ class SimpleListItemView<T> : ConstraintLayout {
         }
         get() = _data
 
-    @SuppressLint("ResourceType") private val chip = ButtonChip<T>(context).apply {
+    @SuppressLint("ResourceType")
+    private val chip = ButtonChip<T>(context).apply {
         textSize = 13f
         isClickable = false
         id = 10
     }
 
-    @SuppressLint("ResourceType") private val textView = TextView(context).apply {
+    @SuppressLint("ResourceType")
+    private val textView = TextView(context).apply {
         ellipsize = TextUtils.TruncateAt.END
         isClickable = false
         maxLines = 1
@@ -63,26 +67,35 @@ class SimpleListItemView<T> : ConstraintLayout {
             try {
                 // 투명 배경에 ripple 효과를 주기 위함
                 val outValue = TypedValue()
-                context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+                context.theme.resolveAttribute(
+                    android.R.attr.selectableItemBackground, outValue, true
+                )
                 setBackgroundResource(outValue.resourceId)
                 // 수평 마진
-                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, resources.displayMetrics).toInt()
-                    .apply { setPadding(0, this, 0, this) }
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, resources.displayMetrics)
+                    .toInt().apply { setPadding(0, this, 0, this) }
 
-                addView(chip, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                addView(chip, LayoutParams(0, LayoutParams.WRAP_CONTENT).apply {
                     topToTop = LayoutParams.PARENT_ID
                     bottomToBottom = LayoutParams.PARENT_ID
                     leftToLeft = LayoutParams.PARENT_ID
+                    rightToLeft = textView.id
+                    horizontalBias = midRatio
+                    horizontalChainStyle = LayoutParams.CHAIN_PACKED
                 })
                 addView(textView, LayoutParams(0, LayoutParams.WRAP_CONTENT).apply {
                     topToTop = LayoutParams.PARENT_ID
                     bottomToBottom = LayoutParams.PARENT_ID
                     leftToRight = chip.id
                     rightToRight = LayoutParams.PARENT_ID
-                    leftMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
+                    leftMargin = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics
+                    ).toInt()
                 })
 
                 isClickable = true
+                clipToPadding = false
+                clipChildren = false
 
                 layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             } finally {
@@ -90,8 +103,6 @@ class SimpleListItemView<T> : ConstraintLayout {
 
             }
         }
-
-
     }
 
     fun setTitle(text: String): SimpleListItemView<T> {

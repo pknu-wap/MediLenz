@@ -1,8 +1,8 @@
 package com.android.mediproject.feature.search.result.manual
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.paging.map
@@ -24,13 +24,16 @@ import repeatOnStarted
 
 @AndroidEntryPoint
 class ManualSearchResultFragment :
-    BaseFragment<FragmentManualSearchResultBinding, ManualSearchResultViewModel>(FragmentManualSearchResultBinding::inflate) {
+    BaseFragment<FragmentManualSearchResultBinding, ManualSearchResultViewModel>(
+        FragmentManualSearchResultBinding::inflate
+    ) {
 
     private val searchMedicinesViewModel: SearchMedicinesViewModel by viewModels({ requireParentFragment().requireParentFragment() })
 
     override val fragmentViewModel: ManualSearchResultViewModel by viewModels()
 
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -50,9 +53,15 @@ class ManualSearchResultFragment :
 
             pagingListViewGroup.pagingList.apply {
                 setHasFixedSize(true)
-                setItemViewCacheSize(8)
-                addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-                    setDrawable(ContextCompat.getDrawable(requireContext(), com.android.mediproject.core.ui.R.drawable.divider)!!)
+                setItemViewCacheSize(10)
+                addItemDecoration(DividerItemDecoration(
+                    requireContext(), DividerItemDecoration.VERTICAL
+                ).apply {
+                    setDrawable(
+                        resources.getDrawable(
+                            com.android.mediproject.core.ui.R.drawable.divider, null
+                        )
+                    )
                 })
                 adapter = searchResultListAdapter
             }
@@ -63,11 +72,17 @@ class ManualSearchResultFragment :
                 ) { menuItem ->
 
                     when (menuItem.itemId) {
-                        R.id.listOnlySpecialtyMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.SPECIALTY)
+                        R.id.listOnlySpecialtyMedicines -> fragmentViewModel.searchMedicinesByMedicationType(
+                            MedicationType.SPECIALTY
+                        )
 
-                        R.id.listOnlyGenericMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.GENERAL)
+                        R.id.listOnlyGenericMedicines -> fragmentViewModel.searchMedicinesByMedicationType(
+                            MedicationType.GENERAL
+                        )
 
-                        R.id.listAllMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.ALL)
+                        R.id.listAllMedicines -> fragmentViewModel.searchMedicinesByMedicationType(
+                            MedicationType.ALL
+                        )
                     }
                     true
                 }
@@ -107,15 +122,16 @@ class ManualSearchResultFragment :
     }
 
     private fun openMedicineInfo(approvedMedicineItemDto: ApprovedMedicineItemDto) {
-        activity?.findNavController(com.android.mediproject.core.common.R.id.fragmentContainerView)?.navigateByDeepLink(
-            "medilens://search/medicine/medicine_detail_nav", MedicineInfoArgs(
-                medicineName = approvedMedicineItemDto.itemName,
-                imgUrl = approvedMedicineItemDto.bigPrdtImgUrl ?: "",
-                entpName = approvedMedicineItemDto.entpName ?: "",
-                itemSequence = approvedMedicineItemDto.itemSeq ?: "",
-                medicineEngName = approvedMedicineItemDto.itemEngName ?: ""
+        activity?.findNavController(com.android.mediproject.core.common.R.id.fragmentContainerView)
+            ?.navigateByDeepLink(
+                "medilens://search/medicine/medicine_detail_nav", MedicineInfoArgs(
+                    medicineName = approvedMedicineItemDto.itemName,
+                    imgUrl = approvedMedicineItemDto.bigPrdtImgUrl ?: "",
+                    entpName = approvedMedicineItemDto.entpName ?: "",
+                    itemSequence = approvedMedicineItemDto.itemSeq ?: "",
+                    medicineEngName = approvedMedicineItemDto.itemEngName ?: ""
+                )
             )
-        )
 
     }
 }

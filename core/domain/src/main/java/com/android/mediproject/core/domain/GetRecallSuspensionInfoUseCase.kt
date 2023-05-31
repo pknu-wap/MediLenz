@@ -14,30 +14,33 @@ class GetRecallSuspensionInfoUseCase @Inject constructor(
     private val recallSuspensionRepository: RecallSuspensionRepository
 ) {
 
-    suspend fun getRecallDisposalList(
-    ): Flow<PagingData<RecallSuspensionListItemDto>> = recallSuspensionRepository.getRecallDisposalList().let { pager ->
-        pager.map { pagingData ->
-            pagingData.map {
-                it.toDto()
+    fun getRecallDisposalList(
+    ): Flow<PagingData<RecallSuspensionListItemDto>> =
+        recallSuspensionRepository.getRecallDisposalList().let { pager ->
+            pager.map { pagingData ->
+                pagingData.map {
+                    it.toDto()
+                }
             }
         }
-    }
 
     suspend fun getRecentRecallDisposalList(
         pageNo: Int = 1, numOfRows: Int = 15
-    ): Result<List<RecallSuspensionListItemDto>> = recallSuspensionRepository.getRecentRecallDisposalList(pageNo, numOfRows).map {
-        it.map { item ->
-            item.toDto()
+    ): Result<List<RecallSuspensionListItemDto>> =
+        recallSuspensionRepository.getRecentRecallDisposalList(pageNo, numOfRows).map {
+            it.map { item ->
+                item.toDto()
+            }
         }
-    }
 
-    suspend fun getDetailRecallSuspension(
+    fun getDetailRecallSuspension(
         company: String?, product: String?
-    ): Flow<Result<DetailRecallSuspensionItemDto>> = recallSuspensionRepository.getDetailRecallSuspension(company, product).map {
-        it.fold(onSuccess = { item ->
-            Result.success(item.toDto())
-        }, onFailure = { throwable ->
-            Result.failure(throwable)
-        })
-    }
+    ): Flow<Result<DetailRecallSuspensionItemDto>> =
+        recallSuspensionRepository.getDetailRecallSuspension(company, product).map {
+            it.fold(onSuccess = { item ->
+                Result.success(item.toDto())
+            }, onFailure = { throwable ->
+                Result.failure(throwable)
+            })
+        }
 }

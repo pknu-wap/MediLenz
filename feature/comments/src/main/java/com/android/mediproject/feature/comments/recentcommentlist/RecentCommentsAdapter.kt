@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.model.comments.CommentDto
 import com.android.mediproject.core.ui.base.view.SimpleListItemView
 
-class RecentCommentsAdapter : ListAdapter<CommentDto, RecentCommentsAdapter.RecentCommentListViewHolder>(AsyncDiffer) {
+class RecentCommentsAdapter :
+    ListAdapter<CommentDto, RecentCommentsAdapter.RecentCommentListViewHolder>(AsyncDiffer) {
 
 
-    class RecentCommentListViewHolder(private val view: SimpleListItemView<CommentDto>) : RecyclerView.ViewHolder(view) {
+    class RecentCommentListViewHolder(private val view: SimpleListItemView<CommentDto>) :
+        RecyclerView.ViewHolder(view) {
 
         private var item: CommentDto? = null
 

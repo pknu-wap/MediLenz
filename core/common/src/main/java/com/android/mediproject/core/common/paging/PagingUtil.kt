@@ -16,15 +16,21 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
  * @param emptyMsg 로딩 상태가 아닐 때 보여줄 메시지
  */
 fun PagingDataAdapter<*, *>.setOnStateChangedListener(
-    msgTextView: TextView, listView: RecyclerView, progressBar: CircularProgressIndicator, emptyMsg: String
+    msgTextView: TextView,
+    listView: RecyclerView,
+    progressBar: CircularProgressIndicator,
+    emptyMsg: String
 ) {
     var isFirstLoad = true
     addLoadStateListener { loadState ->
         isFirstLoad = loadState.refresh is LoadState.Loading
         if (isFirstLoad) listView.scrollToPosition(0)
 
+        msgTextView.text = emptyMsg
+
         progressBar.isVisible = isFirstLoad
-        listView.isVisible = (!isFirstLoad && loadState.source.refresh !is LoadState.Loading)
-        msgTextView.isVisible = !isFirstLoad && loadState.source.refresh !is LoadState.Loading && itemCount == 0
+        listView.isVisible = (!isFirstLoad && (loadState.source.refresh !is LoadState.Loading))
+        msgTextView.isVisible =
+            ((!isFirstLoad && loadState.source.refresh !is LoadState.Loading) && itemCount == 0)
     }
 }

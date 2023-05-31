@@ -13,15 +13,11 @@ import com.android.mediproject.feature.comments.databinding.ItemViewCommentEditB
 import com.android.mediproject.feature.comments.view.CommentItemView
 
 
-class CommentsAdapter : PagingDataAdapter<CommentDto, BaseCommentViewHolder>(Diff) {
+class CommentsAdapter : PagingDataAdapter<CommentDto, CommentsAdapter.BaseCommentViewHolder>(Diff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = viewType.let {
         when (it) {
             CommentType.COMMENT.ordinal -> CommentsViewHolder(CommentItemView(parent.context))
-            CommentType.EDITING.ordinal -> CommentEditViewHolder(
-                ItemViewCommentEditBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-                )
-            )
+            CommentType.EDITING.ordinal -> CommentEditViewHolder(ItemViewCommentEditBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
             else -> throw IllegalArgumentException("Invalid view type")
         }
@@ -34,115 +30,124 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, BaseCommentViewHolder>(Dif
     }
 
     /**
-     * 현재 댓글 수정 상태이면 1, 아니면 0 반환
+     * 현재 댓글이 수정 중인 상태이면 1, 아니면 0 반환
      */
-    override fun getItemViewType(position: Int): Int {
-        return getItem(position)?.let {
-            if (it.isEditing) CommentType.EDITING.ordinal else CommentType.COMMENT.ordinal
-        } ?: CommentType.COMMENT.ordinal
-    }
-}
+    override fun getItemViewType(position: Int): Int = getItem(position)?.run {
+        if (isEditing) CommentType.EDITING.ordinal else CommentType.COMMENT.ordinal
+    } ?: CommentType.COMMENT.ordinal
 
 
-/**
- * 댓글 아이템 뷰 홀더
- *
- * type : 0
- */
-class CommentsViewHolder(private val view: CommentItemView) : BaseCommentViewHolder(view.rootView) {
-    private var item: CommentDto? = null
+    /**
+     * 댓글 아이템 뷰 홀더
+     *
+     * type : 0
+     * 댓글 아이템 뷰
+     */
+    class CommentsViewHolder(private val view: CommentItemView) : BaseCommentViewHolder(view.rootView) {
+        private var item: CommentDto? = null
 
-    init {
-        view.setOnReplyClickListener {
-            item?.also { safeItem ->
-                safeItem.onClickReply?.invoke(safeItem.commentId)
+        init {
+            view.setOnReplyClickListener {
+                item?.apply {
+                    onClickReply?.invoke(commentId)
+                }
             }
-        }
-        view.setOnLikeClickListener {
-            item?.also { safeItem ->
-                safeItem.onClickLike?.invoke(safeItem.commentId)
+            view.setOnLikeClickListener {
+                item?.apply {
+                    onClickLike?.invoke(commentId)
+                }
             }
-        }
-        view.setOnMoreClickListener {
-            item?.takeIf { it.isMine }?.also { safeItem ->
-                MediPopupMenu.showMenu(it, R.menu.comment_action_menu) { menuItem ->
-                    when (menuItem.itemId) {
-                        R.id.deleteMyComment -> safeItem.onClickDelete?.invoke(absoluteAdapterPosition)
-                        R.id.editMyComment -> {
-                            safeItem.isEditing = true
-                            safeItem.onClickEdit?.invoke(absoluteAdapterPosition)
+            view.setOnMoreClickListener {
+                item?.apply {
+                    if (isMine) {
+                        // 내 댓글이면 삭제, 수정 메뉴를 보여준다.
+                        MediPopupMenu.showMenu(it, R.menu.comment_action_menu) { menuItem ->
+                            when (menuItem.itemId) {
+                                R.id.deleteMyComment -> onClickDelete?.invoke(absoluteAdapterPosition)
+                                R.id.editMyComment -> {
+                                    onClickEdit?.invoke(this, absoluteAdapterPosition)
+                                }
+                            }
+                            true
                         }
                     }
-                    true
                 }
             }
+
+
         }
 
-    }
+        override fun bind(commentDto: CommentDto) {
+            item = commentDto
+            view.setComment(commentDto)
 
-    override fun bind(commentDto: CommentDto) {
-        item = commentDto
-        view.setComment(commentDto)
-    }
+            if (commentDto.isMine) view.moreButtonVisible(true)
+        }
 
-    override fun fixBind() {
-        item?.also {
-            view.setComment(it)
+        override fun fixBind() {
         }
     }
-}
 
 
-/**
- * 댓글 수정 뷰홀더
- *
- * type : 1
- */
-class CommentEditViewHolder(private val binding: ItemViewCommentEditBinding) : BaseCommentViewHolder(binding.root) {
-    init {
-        binding.apply {
-            commentEditButton.setOnClickListener {
-                takeIf { !binding.commentInput.text.isNullOrBlank() && commentDto != null }?.apply {
+    /**
+     * 댓글 수정 뷰홀더
+     *
+     * type : 1
+     * 나의 댓글을 수정 중일때 보여주는 아이템 뷰
+     */
+    class CommentEditViewHolder(private val binding: ItemViewCommentEditBinding) : BaseCommentViewHolder(binding.root) {
+        init {
+            binding.apply {
+                commentEditButton.setOnClickListener {
+                    takeIf { !binding.commentInput.text.isNullOrBlank() && commentDto != null }?.apply {
+                        commentDto?.apply {
+                            onClickApplyEdited?.invoke(copy(content = binding.commentInput.text.toString()))
+                        }
+                    }
+                }
+
+                cancelButton.setOnClickListener {
                     commentDto?.apply {
-                        onClickApplyEdited?.invoke(copy(content = binding.commentInput.text.toString()), absoluteAdapterPosition)
+                        onClickEdit?.invoke(this, absoluteAdapterPosition)
                     }
                 }
             }
 
-            cancelButton.setOnClickListener {
-                commentDto?.apply {
-                    isEditing = false
-                    onClickEditCancel?.invoke(absoluteAdapterPosition)
-                }
-            }
         }
 
+        override fun bind(commentDto: CommentDto) {
+            binding.commentDto = commentDto
+            binding.executePendingBindings()
+        }
+
+        override fun fixBind() {
+
+        }
     }
 
-    override fun bind(commentDto: CommentDto) {
-        binding.commentDto = commentDto
-        binding.executePendingBindings()
+    abstract class BaseCommentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        open fun bind(commentDto: CommentDto) {}
+
+        /**
+         * 뷰홀더가 재활용 될 때 호출하는 메소드
+         */
+        open fun fixBind() {}
     }
 
-    override fun fixBind() {
+    object Diff : DiffUtil.ItemCallback<CommentDto>() {
+        override fun areItemsTheSame(oldItem: CommentDto, newItem: CommentDto): Boolean = oldItem.commentId == newItem.commentId
+
+
+        override fun areContentsTheSame(oldItem: CommentDto, newItem: CommentDto): Boolean = oldItem == newItem
 
     }
-}
 
-abstract class BaseCommentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    open fun bind(commentDto: CommentDto) {}
-
-    open fun fixBind() {}
-}
-
-object Diff : DiffUtil.ItemCallback<CommentDto>() {
-    override fun areItemsTheSame(oldItem: CommentDto, newItem: CommentDto): Boolean = oldItem.commentId == newItem.commentId
-
-
-    override fun areContentsTheSame(oldItem: CommentDto, newItem: CommentDto): Boolean = oldItem == newItem
-
-}
-
-enum class CommentType {
-    COMMENT, EDITING
+    /**
+     * 아이템 뷰 타입
+     * 0 : 댓글
+     * 1 : 내 댓글 수정 중
+     */
+    enum class CommentType {
+        COMMENT, EDITING
+    }
 }
