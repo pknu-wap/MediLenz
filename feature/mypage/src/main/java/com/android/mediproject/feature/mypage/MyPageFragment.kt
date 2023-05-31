@@ -21,6 +21,7 @@ import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import repeatOnStarted
 
 class MyPageFragment :
