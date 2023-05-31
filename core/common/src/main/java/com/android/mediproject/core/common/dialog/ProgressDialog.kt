@@ -1,8 +1,8 @@
 package com.android.mediproject.core.common.dialog
 
 import android.content.Context
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 object LoadingDialog {
 
@@ -10,23 +10,14 @@ object LoadingDialog {
 
     fun showLoadingDialog(context: Context, textMessage: String?) {
         dismiss()
-        AlertDialog.Builder(context).setView(ProgressIndicator(context, textMessage)).setCancelable(false).create().also {
-            it.window?.apply {
-                setClipToOutline(true)
-                setElevation(8f)
-                // shadow
-
-                attributes = attributes.apply {
-                    width = ViewGroup.LayoutParams.WRAP_CONTENT
-                    height = ViewGroup.LayoutParams.WRAP_CONTENT
-                    dimAmount = 0.5f
-                }
+        MaterialAlertDialogBuilder(context).setView(ProgressIndicator(context, textMessage))
+            .setCancelable(false).create().also {
+                it.setCanceledOnTouchOutside(false)
+                it.window?.setBackgroundDrawableResource(android.R.color.transparent)
+                dismiss()
+                dialog = it
+                it.show()
             }
-            it.setCanceledOnTouchOutside(false)
-            dismiss()
-            dialog = it
-            it.show()
-        }
 
     }
 
