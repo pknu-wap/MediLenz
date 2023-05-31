@@ -10,6 +10,7 @@
     <string name="chanheNickName">닉네임 변경</string>
     <string name="chanhePassword">비밀번호 변경</string>
     <string name="withdrawal">회원 탈퇴</string>
+    <string name="check">확인</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
