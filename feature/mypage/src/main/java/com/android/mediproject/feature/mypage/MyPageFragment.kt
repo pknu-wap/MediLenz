@@ -85,6 +85,12 @@ class MyPageFragment :
         }
     }
 
+    private fun bottomSheetDismiss(){
+        if(myPageMoreBottomSheet != null){
+            myPageMoreBottomSheet!!.dismiss()
+        }
+    }
+
     private fun setMyCommentsList(myCommentList: List<MyCommentDto>) {
 
         binding.apply {

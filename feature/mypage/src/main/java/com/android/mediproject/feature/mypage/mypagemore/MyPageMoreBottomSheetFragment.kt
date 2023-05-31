@@ -80,6 +80,11 @@ class MyPageMoreBottomSheetFragment : BottomSheetDialogFragment() {
             }
         }
 
+    override fun dismiss() {
+        super.dismiss()
+        _binding = null
+    }
+
     private fun handleFlag(flag: Int) {
         when (flag) {
             CHANGE_NICKNAME -> {
