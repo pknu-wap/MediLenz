@@ -1,15 +1,12 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -25,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MyPageMoreBottomSheetFragment() : BottomSheetDialogFragment() {
+class MyPageMoreBottomSheetFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "MyPageMoreBottomSheetFragment"

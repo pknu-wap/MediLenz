@@ -4,7 +4,6 @@ import MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.mypage.MyPageViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

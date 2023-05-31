@@ -1,19 +1,14 @@
 package com.android.mediproject.feature.mypage
 
-import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.view.View
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.model.comments.MyCommentDto
@@ -22,11 +17,9 @@ import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFragment
-import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_NICKNAME
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_PASSWORD
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.WITHDRAWAL
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import repeatOnStarted
 
 class MyPageFragment :
@@ -88,7 +81,6 @@ class MyPageFragment :
             myPageMoreBottomSheet!!.dismiss()
             myPageMoreBottomSheet = null
         }
-
     }
 
     private fun handleFlag(flag: Int) {

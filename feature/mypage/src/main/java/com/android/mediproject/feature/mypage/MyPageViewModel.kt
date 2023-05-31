@@ -4,13 +4,9 @@ import MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.model.comments.MyCommentDto
-import com.android.mediproject.core.model.medicine.InterestedMedicine.MedicineInterestedDto
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_NICKNAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
