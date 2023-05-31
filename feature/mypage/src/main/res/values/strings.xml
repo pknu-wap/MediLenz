@@ -6,4 +6,6 @@
     <string name="login">로그인</string>
     <string name="signUp">회원가입</string>
     <string name="noMyComment">내가 작성한 댓글이 없습니다.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
