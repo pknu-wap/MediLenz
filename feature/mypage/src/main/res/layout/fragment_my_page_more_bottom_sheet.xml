@@ -14,26 +14,29 @@
         tools:context=".mypagemore.MyPageMoreBottomSheetFragment">
 
         <TextView
+            android:id="@+id/changeNickNameTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
             android:gravity="center"
             android:padding="10dp"
-            android:text="@string/chanheNickName"
+            android:text="@string/changeNickName"
             android:textColor="@color/gray3"
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/changePasswordTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
             android:gravity="center"
             android:padding="10dp"
-            android:text="@string/chanhePassword"
+            android:text="@string/changePassword"
             android:textColor="@color/gray3"
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/withdrawalTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
