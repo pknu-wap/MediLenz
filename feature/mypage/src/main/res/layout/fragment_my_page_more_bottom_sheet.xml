@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel" />
     </data>
 
     <LinearLayout
@@ -19,6 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
             android:gravity="center"
+            android:onClick="@{()->viewModel.changeNickName()}"
             android:padding="10dp"
             android:text="@string/changeNickName"
             android:textColor="@color/gray3"
@@ -30,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
             android:gravity="center"
+            android:onClick="@{()->viewModel.changePassword()}"
             android:padding="10dp"
             android:text="@string/changePassword"
             android:textColor="@color/gray3"
@@ -41,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
             android:gravity="center"
+            android:onClick="@{()->viewModel.withdrawal()}"
             android:padding="10dp"
             android:text="@string/withdrawal"
             android:textColor="@color/gray3"
@@ -54,6 +60,7 @@
             android:layout_marginBottom="30dp"
             android:background="@drawable/rectangle_20_main"
             android:gravity="center"
+            android:onClick="@{()->viewModel.confirm()}"
             android:paddingVertical="10dp"
             android:text="@string/confirm"
             android:textColor="@color/white"
