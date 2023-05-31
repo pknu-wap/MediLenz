@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreBottomSheetBinding
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_NICKNAME
@@ -23,11 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MyPageMoreBottomSheetFragment(
-    private val changeLoginDismiss: () -> Unit,
-    private val changePasswordDismiss: () -> Unit,
-    private val withdrawalDismiss: () -> Unit
-) : BottomSheetDialogFragment() {
+class MyPageMoreBottomSheetFragment() : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "MyPageMoreBottomSheetFragment"
@@ -76,12 +74,11 @@ class MyPageMoreBottomSheetFragment(
         when (event) {
             is MyPageMoreBottomSheetViewModel.MyPageMoreBottomSheetEvent.Confirm -> {
                 when (event.flag) {
-                    CHANGE_NICKNAME -> changeLoginDismiss
-                    CHANGE_PASSWORD -> changePasswordDismiss
-                    WITHDRAWAL -> withdrawalDismiss
+                    CHANGE_NICKNAME -> setFragmentResult(TAG, bundleOf(TAG to CHANGE_NICKNAME))
+                    CHANGE_PASSWORD -> setFragmentResult(TAG, bundleOf(TAG to CHANGE_PASSWORD))
+                    WITHDRAWAL -> setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL))
                     else -> Unit
                 }
-                Log.d("wap", event.flag.toString())
             }
         }
 

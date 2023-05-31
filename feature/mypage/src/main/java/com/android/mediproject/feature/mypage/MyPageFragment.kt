@@ -11,6 +11,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -34,10 +35,10 @@ class MyPageFragment :
     private val myCommentListAdapter: MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
     private var myPageMoreBottomSheet: MyPageMoreBottomSheetFragment? = null
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-
             myCommentsListRV.apply {
                 adapter = myCommentListAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
@@ -77,13 +78,33 @@ class MyPageFragment :
                 findNavController().navigate("medilens://main/comments_nav/myCommentsListFragment".toUri())
             }
         }
+
+        parentFragmentManager.setFragmentResultListener(
+            MyPageMoreBottomSheetFragment.TAG,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val flag = bundle.getInt(MyPageMoreBottomSheetFragment.TAG)
+            handleFlag(flag)
+            myPageMoreBottomSheet!!.dismiss()
+            myPageMoreBottomSheet = null
+        }
+
     }
 
     private fun handleFlag(flag: Int) {
         when (flag) {
-            CHANGE_NICKNAME -> { log(flag.toString()) }
-            CHANGE_PASSWORD -> { log(flag.toString()) }
-            WITHDRAWAL -> { log(flag.toString()) }
+            CHANGE_NICKNAME -> {
+                log("PageFragment" + flag.toString())
+            }
+
+            CHANGE_PASSWORD -> {
+                log("PageFragment" + flag.toString())
+            }
+
+            WITHDRAWAL -> {
+                log("PageFragment" + flag.toString())
+            }
+
             else -> Unit
         }
     }
@@ -92,37 +113,12 @@ class MyPageFragment :
         is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
         is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
         is MyPageViewModel.MyPageEvent.MyPageMore -> {
-            myPageMoreBottomSheet = MyPageMoreBottomSheetFragment(
-                { changeNickNameDismiss() },
-                { changePasswordDismiss() },
-                { withdrawalDismiss() })
+            myPageMoreBottomSheet = MyPageMoreBottomSheetFragment()
             myPageMoreBottomSheet!!.show(parentFragmentManager, MyPageMoreBottomSheetFragment.TAG)
         }
     }
 
-    private fun changeNickNameDismiss() {
-        if (myPageMoreBottomSheet != null) {
-            myPageMoreBottomSheet!!.dismiss()
-            handleFlag(CHANGE_NICKNAME)
-        }
-    }
-
-    private fun changePasswordDismiss() {
-        if (myPageMoreBottomSheet != null) {
-            myPageMoreBottomSheet!!.dismiss()
-            handleFlag(CHANGE_PASSWORD)
-        }
-    }
-
-    private fun withdrawalDismiss() {
-        if (myPageMoreBottomSheet != null) {
-            myPageMoreBottomSheet!!.dismiss()
-            handleFlag(WITHDRAWAL)
-        }
-    }
-
     private fun setMyCommentsList(myCommentList: List<MyCommentDto>) {
-
         binding.apply {
             //만약 사이즈가 1개 이상일 경우 RecyclerView로 데이터를 뛰운다.
             if (myCommentList.size != 0) myCommentListAdapter.submitList(myCommentList)
