@@ -3,6 +3,7 @@ package com.android.mediproject.feature.mypage.mypagemore
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,6 +52,7 @@ class MyPageMoreBottomSheetFragment : BottomSheetDialogFragment() {
     private fun handleEvent(event: MyPageMoreBottomSheetViewModel.MyPageMoreBottomSheetEvent) =
         when (event) {
             is MyPageMoreBottomSheetViewModel.MyPageMoreBottomSheetEvent.Confirm -> {
+                Log.d("wap",event.flag.toString())
                 when (event.flag) {
                     CHANGE_NICKNAME -> {}
                     CHANGE_PASSWORD -> {}
