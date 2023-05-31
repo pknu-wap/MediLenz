@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreBottomSheetBinding
@@ -22,7 +23,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MyPageMoreBottomSheetFragment : BottomSheetDialogFragment() {
+class MyPageMoreBottomSheetFragment(
+    private val changeLoginDismiss: () -> Unit,
+    private val changePasswordDismiss: () -> Unit,
+    private val withdrawalDismiss: () -> Unit
+) : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "MyPageMoreBottomSheetFragment"
@@ -70,7 +75,7 @@ class MyPageMoreBottomSheetFragment : BottomSheetDialogFragment() {
     private fun handleEvent(event: MyPageMoreBottomSheetViewModel.MyPageMoreBottomSheetEvent) =
         when (event) {
             is MyPageMoreBottomSheetViewModel.MyPageMoreBottomSheetEvent.Confirm -> {
-                Log.d("wap",event.flag.toString())
+                Log.d("wap", event.flag.toString())
                 when (event.flag) {
                     CHANGE_NICKNAME -> {}
                     CHANGE_PASSWORD -> {}

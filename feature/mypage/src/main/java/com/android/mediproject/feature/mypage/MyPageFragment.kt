@@ -21,6 +21,10 @@ import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFragment
+import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel
+import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_NICKNAME
+import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_PASSWORD
+import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.WITHDRAWAL
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import repeatOnStarted
 
@@ -61,7 +65,6 @@ class MyPageFragment :
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-
                     repeatOnStarted {
                         myCommentsList.collect { myCommentList ->
                             setMyCommentsList(myCommentList)
@@ -76,18 +79,43 @@ class MyPageFragment :
         }
     }
 
+    private fun handleFlag(flag: Int) = when (flag) {
+        CHANGE_NICKNAME -> {}
+        CHANGE_PASSWORD -> {}
+        WITHDRAWAL -> {}
+        else -> Unit
+    }
+
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
         is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
         is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
         is MyPageViewModel.MyPageEvent.MyPageMore -> {
-            myPageMoreBottomSheet = MyPageMoreBottomSheetFragment()
+            myPageMoreBottomSheet = MyPageMoreBottomSheetFragment(
+                { changeNickNameDismiss() },
+                { changePasswordDismiss() },
+                { withdrawalDismiss() })
             myPageMoreBottomSheet!!.show(parentFragmentManager, MyPageMoreBottomSheetFragment.TAG)
         }
     }
 
-    private fun bottomSheetDismiss(){
-        if(myPageMoreBottomSheet != null){
+    private fun changeNickNameDismiss() {
+        if (myPageMoreBottomSheet != null) {
             myPageMoreBottomSheet!!.dismiss()
+            handleFlag(CHANGE_NICKNAME)
+        }
+    }
+
+    private fun changePasswordDismiss() {
+        if (myPageMoreBottomSheet != null) {
+            myPageMoreBottomSheet!!.dismiss()
+            handleFlag(CHANGE_PASSWORD)
+        }
+    }
+
+    private fun withdrawalDismiss() {
+        if (myPageMoreBottomSheet != null) {
+            myPageMoreBottomSheet!!.dismiss()
+            handleFlag(WITHDRAWAL)
         }
     }
 

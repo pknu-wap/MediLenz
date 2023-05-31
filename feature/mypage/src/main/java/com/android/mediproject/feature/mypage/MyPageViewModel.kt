@@ -6,19 +6,22 @@ import asEventFlow
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.medicine.InterestedMedicine.MedicineInterestedDto
 import com.android.mediproject.core.ui.base.BaseViewModel
+import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_NICKNAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor() : BaseViewModel() {
+
     private val _eventFlow = MutableEventFlow<MyPageEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
     val myCommentsList: Flow<List<MyCommentDto>> = channelFlow {
-
         //dummy for test
         val dummy = listOf(
             MyCommentDto(20230528,"타이레놀","아따 좋습니다 좋아요",System.currentTimeMillis().toString(),3),
