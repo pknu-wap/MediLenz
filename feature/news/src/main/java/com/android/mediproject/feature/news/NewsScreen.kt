@@ -32,6 +32,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.android.mediproject.core.model.local.navargs.RecallDisposalArgs
 import com.android.mediproject.feature.news.adminaction.AdminActionScreen
 import com.android.mediproject.feature.news.adminaction.DetailAdminActionScreen
 import com.android.mediproject.feature.news.recallsuspension.DetailRecallDisposalScreen
@@ -51,20 +52,24 @@ enum class ChipType : Parcelable {
  */
 @Composable
 fun NewsNavHost(
-    navController: NavHostController = rememberNavController(), startDestination: String = "news"
+    navController: NavHostController = rememberNavController(), arguments: RecallDisposalArgs
 ) {
     val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         ""
     }
 
-    NavHost(navController = navController, startDestination = startDestination) {
+    val start = if (arguments.product.isNotEmpty()) "detailRecallSuspension"
+    else "news"
+
+    NavHost(navController = navController, startDestination = start) {
         composable("news") {
             CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                 NewsScreen(navController)
             }
         }
         composable(
-            "detailRecallSuspension/{product}", arguments = listOf(navArgument("product") { type = NavType.StringType })
+            "detailRecallSuspension/{product}",
+            arguments = listOf(navArgument("product") { type = NavType.StringType })
         ) {
             DetailRecallDisposalScreen()
         }
@@ -107,7 +112,8 @@ fun NewsScreen(navController: NavController) {
 @Composable
 fun ChipGroup(selectedChip: ChipType, onChipSelected: (ChipType) -> Unit) {
     Row(
-        verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 24.dp, end = 24.dp)
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 24.dp, end = 24.dp)
     ) {
         CustomFilterChip(
             title = stringResource(id = R.string.recallSuspension),
@@ -132,7 +138,9 @@ fun ChipGroup(selectedChip: ChipType, onChipSelected: (ChipType) -> Unit) {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomFilterChip(type: ChipType, title: String, isSelected: Boolean, onClick: (ChipType) -> Unit) {
+fun CustomFilterChip(
+    type: ChipType, title: String, isSelected: Boolean, onClick: (ChipType) -> Unit
+) {
     FilterChip(
         selected = isSelected,
         onClick = { onClick.invoke(type) },

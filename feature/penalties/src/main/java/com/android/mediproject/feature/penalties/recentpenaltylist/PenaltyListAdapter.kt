@@ -23,8 +23,6 @@ class PenaltyListAdapter :
     class PenaltyViewHolder(private val view: SimpleListItemView<RecallSuspensionListItemDto>) :
         RecyclerView.ViewHolder(view) {
 
-        private var item: RecallSuspensionListItemDto? = null
-
         init {
             view.setTitleColor(view.context.resources.getColor(R.color.newsChipColor, null))
             view.setContentTextColor(view.context.resources.getColor(R.color.newsChipColor, null))
@@ -38,7 +36,7 @@ class PenaltyListAdapter :
         }
 
         fun bind(data: RecallSuspensionListItemDto) {
-            item = data
+            view.data = data
             view.setTitle(data.product)
             view.setContent(data.rtrvlResn)
         }

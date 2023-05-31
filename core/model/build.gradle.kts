@@ -2,6 +2,7 @@ plugins {
     id("mediproject.android.library")
     id(libs.plugins.kotlin.serialization.get().pluginId)
     id(libs.plugins.nav.safeargs.kotlin.get().pluginId)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {

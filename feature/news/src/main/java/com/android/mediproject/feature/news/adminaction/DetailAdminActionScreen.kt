@@ -40,17 +40,36 @@ fun Item(item: AdminActionListItemDto) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = item.entpName, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(bottom = 8.dp))
-            Text(text = item.itemName, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(bottom = 8.dp))
+            Text(
+                text = item.entpName,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = item.itemName,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
             Text(
                 text = item.lastSettleDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            Text(text = item.disposition, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(bottom = 12.dp))
-            Text(text = item.violation, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(bottom = 12.dp))
-            Text(text = item.applyLaw, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(bottom = 12.dp))
-
+            Text(
+                text = item.disposition,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+            Text(
+                text = item.violation,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+            Text(
+                text = item.applyLaw,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
         }
     }
 }
