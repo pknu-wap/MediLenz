@@ -34,9 +34,11 @@ class MyPageViewModel @Inject constructor() : BaseViewModel() {
     fun event(event : MyPageEvent) = viewModelScope.launch{ _eventFlow.emit(event)}
     fun login() = event(MyPageEvent.Login)
     fun signUp() = event(MyPageEvent.SignUp)
+    fun myPageMore() = event(MyPageEvent.MyPageMore)
 
     sealed class MyPageEvent{
         object Login : MyPageEvent()
         object SignUp : MyPageEvent()
+        object MyPageMore : MyPageEvent()
     }
 }
