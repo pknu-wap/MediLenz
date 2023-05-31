@@ -6,16 +6,20 @@
 
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
         tools:context=".mypagemore.MyPageMoreBottomSheetFragment">
 
-        <!-- TODO: Update blank fragment layout -->
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="닉네임 변경"
+            android:textSize="18sp"
+            android:textColor="@color/gray2"
 
-    </FrameLayout>
+    </LinearLayout>
 </layout>
