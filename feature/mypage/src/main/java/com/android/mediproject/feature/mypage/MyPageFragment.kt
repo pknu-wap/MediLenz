@@ -9,20 +9,24 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.GUEST_MODE
 import com.android.mediproject.core.common.LOGIN_MODE
-import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.model.comments.MyCommentDto
-import com.android.mediproject.core.model.local.navargs.LoginFromMyPageArgs
-import com.android.mediproject.core.model.local.navargs.TOMYPAGE
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import dagger.hilt.android.AndroidEntryPoint
+import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFragment
+import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_NICKNAME
+import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_PASSWORD
+import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.WITHDRAWAL
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import repeatOnStarted
 
 @AndroidEntryPoint
@@ -33,6 +37,7 @@ class MyPageFragment :
     private val myCommentListAdapter: MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
     private var loginMode = GUEST_MODE
     var myCommentList: List<MyCommentDto> = listOf()
+    private var myPageMoreBottomSheet: MyPageMoreBottomSheetFragment? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,8 +48,8 @@ class MyPageFragment :
                 viewLifecycleOwner.apply {
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
                     repeatOnStarted { user.collect { userDto = it } }
-                    repeatOnStarted { myCommentsList.collect { myCommentList = it } }
                     repeatOnStarted { token.collect { handleToken(it) } }
+                    repeatOnStarted { myCommentsList.collect { myCommentList = it } }
                 }
                 loadTokens()
             }
@@ -53,17 +58,39 @@ class MyPageFragment :
                 findNavController().navigate("medilens://main/comments_nav/myCommentsListFragment".toUri())
             }
         }
+
+        parentFragmentManager.setFragmentResultListener(
+            MyPageMoreBottomSheetFragment.TAG,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val flag = bundle.getInt(MyPageMoreBottomSheetFragment.TAG)
+            handleFlag(flag)
+            myPageMoreBottomSheet!!.dismiss()
+            myPageMoreBottomSheet = null
+        }
+    }
+
+    private fun handleFlag(flag: Int) {
+        when (flag) {
+            CHANGE_NICKNAME -> {
+                log("PageFragment" + flag.toString())
+            }
+
+            CHANGE_PASSWORD -> {
+                log("PageFragment" + flag.toString())
+            }
+
+            WITHDRAWAL -> {
+                log("PageFragment" + flag.toString())
+            }
+            else -> Unit
+        }
     }
 
     private fun setRecyclerView() = binding.myCommentsListRV.apply {
         adapter = myCommentListAdapter
         layoutManager = LinearLayoutManager(requireActivity())
         addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
-    }
-
-    private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
-        is MyPageViewModel.MyPageEvent.Login -> findNavController().navigateByDeepLink("medilens://main/intro_nav/login",LoginFromMyPageArgs(flag = TOMYPAGE))
-        is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigateByDeepLink("medilens://main/intro_nav/signUp",LoginFromMyPageArgs(flag = TOMYPAGE))
     }
 
     private fun handleToken(tokenState: TokenState<CurrentTokenDto>) {
@@ -78,6 +105,18 @@ class MyPageFragment :
                 loginMode = LOGIN_MODE
                 setMyCommentsList()
             }
+        }
+    }
+
+    private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
+        is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
+        is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
+        is MyPageViewModel.MyPageEvent.MyPageMore -> {
+                myPageMoreBottomSheet = MyPageMoreBottomSheetFragment()
+                myPageMoreBottomSheet!!.show(
+                    parentFragmentManager,
+                    MyPageMoreBottomSheetFragment.TAG
+                )
         }
     }
 
@@ -114,7 +153,12 @@ class MyPageFragment :
                             )
                         ), 7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
-                    setSpan(UnderlineSpan(), 7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    setSpan(
+                        UnderlineSpan(),
+                        7,
+                        9,
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
                 }
             noMyCommentTV.text = span
             myCommentsListHeaderView.setMoreVisiblity(false)
@@ -131,9 +175,16 @@ class MyPageFragment :
         val span =
             SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
                 setSpan(
-                    ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.main)), 15, 18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) }
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.main
+                        )
+                    ), 15, 18,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
         guestTV.text = span
     }
 }

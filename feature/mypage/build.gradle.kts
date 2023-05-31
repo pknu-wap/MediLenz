@@ -1,6 +1,7 @@
 plugins {
 
     id("mediproject.android.feature")
+    id("org.jetbrains.kotlin.android")
 
 }
 
