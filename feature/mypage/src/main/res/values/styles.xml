@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="disabledDragBottomSheet" parent="Widget.Material3.BottomSheet.Modal">
-        <item name="behavior_draggable">false</item>
-    </style>
-</resources>
