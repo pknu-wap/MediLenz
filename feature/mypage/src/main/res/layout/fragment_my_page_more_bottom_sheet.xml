@@ -55,7 +55,7 @@
             android:background="@drawable/rectangle_20_main"
             android:gravity="center"
             android:paddingVertical="10dp"
-            android:text="@string/check"
+            android:text="@string/confirm"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
