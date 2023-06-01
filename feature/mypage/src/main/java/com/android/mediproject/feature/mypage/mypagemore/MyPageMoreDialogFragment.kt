@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.android.mediproject.core.common.uiutil.dialogResize
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +43,15 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         this.isCancelable = false
         _binding = FragmentMyPageMoreDialogBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        when(flag){
+            is DialogFlag.ChangeNickName -> requireContext().dialogResize(this,0.9f,0.45f)
+            is DialogFlag.ChangePassword -> requireContext().dialogResize(this,0.9f,0.45f)
+            is DialogFlag.Withdrawal -> requireContext().dialogResize(this,0.9f,0.45f)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
