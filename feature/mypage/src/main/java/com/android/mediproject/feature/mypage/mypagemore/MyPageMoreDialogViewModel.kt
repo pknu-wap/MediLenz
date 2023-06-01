@@ -21,7 +21,9 @@ class MyPageMoreDialogViewModel : ViewModel() {
     fun setDialogFlag(dialogFlag : MyPageMoreDialogFragment.DialogFlag){ _dialogFlag.value = dialogFlag}
 
     fun event(event : MyPageMoreDialogEvent) = viewModelScope.launch{ _eventFlow.emit(event) }
+    fun completeDialog() = event(MyPageMoreDialogEvent.CompleteDialog)
 
     sealed class MyPageMoreDialogEvent{
+        object CompleteDialog : MyPageMoreDialogEvent()
     }
 }

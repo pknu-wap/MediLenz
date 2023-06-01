@@ -49,7 +49,11 @@ class MyPageMoreDialogFragment(private val flag : DialogFlag) : DialogFragment()
     }
 
     private fun handleFlag(dialogFlag : DialogFlag) = when(dialogFlag){
-        is DialogFlag.ChangeNickName -> {}
+        is DialogFlag.ChangeNickName -> {
+            binding.apply{
+                dialogSubtitle1.title=
+            }
+        }
         is DialogFlag.ChangePassword -> {}
         is DialogFlag.Withdrawal -> {}
     }

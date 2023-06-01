@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogViewModel" />
@@ -20,44 +21,45 @@
             android:id="@+id/dialogTitleTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="@color/main"
-            android:text="@string/changeNickName"
             android:layout_gravity="center"
-            android:layout_marginTop="25dp"/>
+            android:layout_marginTop="25dp"
+            android:text="@string/changeNickName"
+            android:textColor="@color/main"
+            android:textSize="20sp" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp" />
 
         <com.android.mediproject.core.ui.base.view.Subtitle
             android:id="@+id/dialogSubtitle1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            app:title="@string/nickName"
-            app:edtHint="@string/nickNameHint"/>
+            app:edtHint="@string/nickNameHint"
+            app:title="@string/nickName" />
 
         <com.android.mediproject.core.ui.base.view.Subtitle
             android:id="@+id/dialogSubtitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_marginTop="25dp"
-            app:title="@string/checkedPassword"
-            app:edtHint="@string/passwordHint"/>
+            android:visibility="gone"
+            app:edtHint="@string/passwordHint"
+            app:title="@string/checkedPassword" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/white"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="40dp"
-            android:paddingVertical="10dp"
-            android:gravity="center"
             android:background="@drawable/radius_main_5"
-            android:text="@string/complete" />
+            android:gravity="center"
+            android:onClick="@{()->viewModel.completeDialog()}"
+            android:paddingVertical="10dp"
+            android:text="@string/complete"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
     </LinearLayout>
 </layout>
