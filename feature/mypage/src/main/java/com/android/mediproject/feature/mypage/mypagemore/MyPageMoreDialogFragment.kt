@@ -5,6 +5,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,13 +18,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MyPageMoreDialogFragment(private val flag : DialogFlag) : DialogFragment() {
+class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() {
 
-    companion object{
+    companion object {
         const val TAG = "MyPageMoreDialogFragment"
     }
 
-    sealed class DialogFlag{
+    sealed class DialogFlag {
         object ChangeNickName : DialogFlag()
         object ChangePassword : DialogFlag()
         object Withdrawal : DialogFlag()
@@ -46,7 +47,7 @@ class MyPageMoreDialogFragment(private val flag : DialogFlag) : DialogFragment()
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             viewModel = fragmentViewModel.apply {
-                viewLifecycleOwner.apply{
+                viewLifecycleOwner.apply {
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
                     repeatOnStarted { dialogFlag.collect { handleFlag(it) } }
                 }
@@ -59,15 +60,26 @@ class MyPageMoreDialogFragment(private val flag : DialogFlag) : DialogFragment()
 
         //확인 버튼을 눌렀을 때 로직
         is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteDialog -> {
-            when(fragmentViewModel.dialogFlag.value){
-                is DialogFlag.ChangeNickName -> {}
-                is DialogFlag.ChangePassword -> {}
-                is DialogFlag.Withdrawal -> {}
+            when (fragmentViewModel.dialogFlag.value) {
+                is DialogFlag.ChangeNickName -> {
+                    Log.d("wap", "ChangeNickName")
+                    dismiss()
+                }
+
+                is DialogFlag.ChangePassword -> {
+                    Log.d("wap", "ChangePassword")
+                    dismiss()
+                }
+
+                is DialogFlag.Withdrawal -> {
+                    Log.d("wap", "Withdrawal")
+                    dismiss()
+                }
             }
         }
     }
 
-    private fun handleFlag(dialogFlag : DialogFlag) {
+    private fun handleFlag(dialogFlag: DialogFlag) {
         when (dialogFlag) {
             //닉네임 변경 다이얼로그
             is DialogFlag.ChangeNickName -> {
