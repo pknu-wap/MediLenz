@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
@@ -48,14 +49,18 @@ class MyPageMoreDialogFragment(private val flag : DialogFlag) : DialogFragment()
         else -> {}
     }
 
-    private fun handleFlag(dialogFlag : DialogFlag) = when(dialogFlag){
-        is DialogFlag.ChangeNickName -> {
-            binding.apply{
-                dialogSubtitle1.title=
+    private fun handleFlag(dialogFlag : DialogFlag) {
+        when (dialogFlag) {
+            is DialogFlag.ChangeNickName -> {
+                binding.apply {
+                    dialogSubtitle1.setTitle(getString(R.string.changeNickName))
+                    dialogSubtitle1.
+                }
             }
+
+            is DialogFlag.ChangePassword -> {}
+            is DialogFlag.Withdrawal -> {}
         }
-        is DialogFlag.ChangePassword -> {}
-        is DialogFlag.Withdrawal -> {}
     }
 
     override fun onDestroyView() {

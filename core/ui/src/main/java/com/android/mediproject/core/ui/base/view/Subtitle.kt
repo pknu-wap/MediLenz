@@ -51,13 +51,20 @@ class Subtitle @JvmOverloads constructor(
         }
 
         if (dataType == PASSWORD) {
-            inputData.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            inputData.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
 
         typedArray.recycle()
     }
 
-    fun setTitle(newTitle : String){ title.text = newTitle}
+    fun setTitle(newTitle: String) {
+        title.text = newTitle
+    }
+
+    fun setHint(newHint: String) {
+        inputData.hint = newHint
+    }
 
     //EditText에 적은 값을 불러오는 함수
     fun getValue(): String = inputData.text.toString()
