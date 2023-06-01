@@ -11,6 +11,8 @@
     <string name="changePassword">비밀번호 변경</string>
     <string name="withdrawal">회원 탈퇴</string>
     <string name="confirm">확인</string>
+
+    <string name="complete">완료</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
