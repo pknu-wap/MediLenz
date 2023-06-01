@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.mypage
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -8,6 +9,7 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -25,6 +27,7 @@ import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFr
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_NICKNAME
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_PASSWORD
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.WITHDRAWAL
+import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import repeatOnStarted
@@ -72,17 +75,28 @@ class MyPageFragment :
 
     private fun handleFlag(flag: Int) {
         when (flag) {
+            //현재 에러나는 코드
             CHANGE_NICKNAME -> {
-                log("PageFragment" + flag.toString())
+                MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangeNickName).apply {
+                    isCancelable = false
+                    show(requireActivity().supportFragmentManager, MyPageMoreDialogFragment.TAG)
+                }
             }
 
             CHANGE_PASSWORD -> {
-                log("PageFragment" + flag.toString())
+                MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangePassword).apply {
+                    isCancelable = false
+                    show(requireActivity().supportFragmentManager, MyPageMoreDialogFragment.TAG)
+                }
             }
 
             WITHDRAWAL -> {
-                log("PageFragment" + flag.toString())
+                MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.Withdrawal).apply {
+                    isCancelable = false
+                    show(requireActivity().supportFragmentManager, MyPageMoreDialogFragment.TAG)
+                }
             }
+
             else -> Unit
         }
     }
@@ -96,9 +110,12 @@ class MyPageFragment :
     private fun handleToken(tokenState: TokenState<CurrentTokenDto>) {
         when (tokenState) {
             is TokenState.Empty -> {
-                loginMode = GUEST_MODE
+                //for test
+                loginMode = LOGIN_MODE
+                // loginMode = GUEST_MODE
                 setMyCommentsList()
             }
+
             is TokenState.Error -> {}
             is TokenState.Expiration -> {}
             is TokenState.Valid -> {
@@ -112,11 +129,11 @@ class MyPageFragment :
         is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
         is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
         is MyPageViewModel.MyPageEvent.MyPageMore -> {
-                myPageMoreBottomSheet = MyPageMoreBottomSheetFragment()
-                myPageMoreBottomSheet!!.show(
-                    parentFragmentManager,
-                    MyPageMoreBottomSheetFragment.TAG
-                )
+            myPageMoreBottomSheet = MyPageMoreBottomSheetFragment()
+            myPageMoreBottomSheet!!.show(
+                parentFragmentManager,
+                MyPageMoreBottomSheetFragment.TAG
+            )
         }
     }
 

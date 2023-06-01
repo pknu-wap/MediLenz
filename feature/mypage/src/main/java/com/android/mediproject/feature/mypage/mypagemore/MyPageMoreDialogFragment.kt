@@ -19,6 +19,10 @@ import repeatOnStarted
 @AndroidEntryPoint
 class MyPageMoreDialogFragment(private val flag : DialogFlag) : DialogFragment() {
 
+    companion object{
+        const val TAG = "MyPageMoreDialogFragment"
+    }
+
     sealed class DialogFlag{
         object ChangeNickName : DialogFlag()
         object ChangePassword : DialogFlag()
