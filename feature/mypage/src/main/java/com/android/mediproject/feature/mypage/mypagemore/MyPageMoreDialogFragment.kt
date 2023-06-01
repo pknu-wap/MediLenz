@@ -51,7 +51,15 @@ class MyPageMoreDialogFragment(private val flag : DialogFlag) : DialogFragment()
     }
 
     private fun handleEvent(event: MyPageMoreDialogViewModel.MyPageMoreDialogEvent) = when (event) {
-        else -> {}
+
+        //확인 버튼을 눌렀을 때 로직
+        is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteDialog -> {
+            when(fragmentViewModel.dialogFlag.value){
+                is DialogFlag.ChangeNickName -> {}
+                is DialogFlag.ChangePassword -> {}
+                is DialogFlag.Withdrawal -> {}
+            }
+        }
     }
 
     private fun handleFlag(dialogFlag : DialogFlag) {
