@@ -3,11 +3,9 @@ package com.android.mediproject
 import android.animation.ObjectAnimator
 import android.os.Build
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -21,8 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MainActivity :
-    BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
 
     private val windowViewModel: WindowViewModel by viewModels()
 
@@ -49,8 +46,7 @@ class MainActivity :
         }
 
         binding.apply {
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
             navController = navHostFragment.navController
 
             bottomNav.apply {
@@ -70,11 +66,13 @@ class MainActivity :
                 override fun onPreDraw(): Boolean {
                     if (bottomAppBar.height > 0) {
                         root.viewTreeObserver.removeOnPreDrawListener(this)
+                        /**
                         val containerHeight = root.height - bottomAppBar.height
                         windowViewModel.setBottomNavHeight(containerHeight)
                         fragmentContainerView.layoutParams = CoordinatorLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, containerHeight
+                        ViewGroup.LayoutParams.MATCH_PARENT, containerHeight
                         )
+                         */
                     }
                     return true
                 }
@@ -110,15 +108,14 @@ class MainActivity :
      *
      * argument 를 통해 bottomNav 를 숨길지 말지 결정한다.
      */
-    private fun setDestinationListener() =
-        navController.addOnDestinationChangedListener { _, destination, arg ->
-            log(arg.toString())
-            if (destination.id in hideBottomNavDestinationIds) {
-                bottomVisible(INVISIBLE)
-            } else {
-                bottomVisible(VISIBLE)
-            }
+    private fun setDestinationListener() = navController.addOnDestinationChangedListener { _, destination, arg ->
+        log(arg.toString())
+        if (destination.id in hideBottomNavDestinationIds) {
+            bottomVisible(INVISIBLE)
+        } else {
+            bottomVisible(VISIBLE)
         }
+    }
 
     private fun bottomVisible(isVisible: Int) {
         log(isVisible.toString())

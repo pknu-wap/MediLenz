@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -26,13 +27,12 @@ class MedicinesDetectorFragment :
 
     override val fragmentViewModel: MedicinesDetectorViewModel by activityViewModels()
 
-
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         if (isGranted) {
+            // 권한 부여 받았으므로 카메라 초기화
             initializeCamera()
         } else {
+            // 권한 부여 거부된 경우 뒤로가기
             findNavController().popBackStack()
         }
     }
@@ -41,63 +41,58 @@ class MedicinesDetectorFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = fragmentViewModel
 
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                initializeCamera()
-            }
-
-            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
-                MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.cameraPermission))
-                    .setMessage(getString(R.string.cameraPermissionMessage)).setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                        dialog.dismiss()
-                        requestPermissionLauncher.launch(
-                            Manifest.permission.CAMERA
-                        )
-                    }.setNegativeButton(getString(R.string.close)) { _, _ -> }.setCancelable(false).show()
-            }
-
-            else -> {
-                requestPermissionLauncher.launch(
-                    Manifest.permission.CAMERA
-                )
-            }
-        }
-
-
         viewLifecycleOwner.repeatOnStarted {
-            /**
-             * Collecting the detected objects from the camera preview
-             *
-             * If the detected objects are not empty, then navigate to the [ConfirmDialogFragment]
-             *
-             * If the detected objects are empty, then show a toast and open the camera again
-             *
-             */
             launch {
-                fragmentViewModel.detectedObjects.collectLatest { objs ->
-                    if (objs.isNotEmpty()) {
-                        findNavController().navigate(
-                            MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment()
-                        )
-                    } else {
-                        toast(getString(R.string.noMedicinesDetected))
-                        fragmentViewModel.openCamera()
+                // 검출된 객체 상태
+                fragmentViewModel.detectedObjects.collectLatest { state ->
+                    when (state) {
+                        is UiState.Success -> {
+                            LoadingDialog.dismiss()
+                            findNavController().navigate(MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment())
+                        }
+
+                        is UiState.Error -> {
+                            LoadingDialog.dismiss()
+                            toast(getString(R.string.noMedicinesDetected))
+                            fragmentViewModel.openCamera()
+                        }
+
+                        is UiState.Loading -> {
+                            LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.getDetectedObjects))
+                        }
+
+                        is UiState.Initial -> {
+
+                        }
                     }
                 }
             }
 
             launch {
-                fragmentViewModel.loadedModel.collectLatest { isLoaded ->
-                    if (isLoaded) {
-                        fragmentViewModel.openCamera()
-                        activity?.apply {
-                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                // AI모델 로드 상태
+                fragmentViewModel.aiModelState.collectLatest { state ->
+                    when (state) {
+                        is AiModelState.Loaded -> {
+                            LoadingDialog.dismiss()
+                            activity?.apply {
+                                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                            }
+                            fragmentViewModel.openCamera()
+                        }
+
+                        is AiModelState.Loading -> {
+                            LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.loadingAiModels))
+                        }
+
+                        is AiModelState.LoadFailed -> {
+                            LoadingDialog.dismiss()
+                        }
+
+                        is AiModelState.NotLoaded -> {
+
                         }
                     }
 
-                    LoadingDialog.dismiss()
                 }
             }
         }
@@ -107,9 +102,6 @@ class MedicinesDetectorFragment :
 
     private fun initializeCamera() {
         binding.apply {
-
-            LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.loadingAiModels))
-
             val surfaceHolder = object : SurfaceHolder.Callback2 {
                 override fun surfaceCreated(holder: SurfaceHolder) {
                 }
@@ -128,8 +120,33 @@ class MedicinesDetectorFragment :
             surfaceView.holder.setFormat(PixelFormat.RGBA_8888)
             surfaceView.holder.addCallback(surfaceHolder)
 
-            // Load the model from the assets folder
+            // AI모델 로드
             fragmentViewModel.loadModel(requireContext().assets)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        when {
+            // 권한 확인
+            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
+                // 권한 부여 받은 상태이므로 카메라 초기화
+                initializeCamera()
+            }
+
+            // 권한 요청 다이얼로그 표시
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.cameraPermission))
+                    .setMessage(getString(R.string.cameraPermissionMessage)).setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        dialog.dismiss()
+                        requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    }.setNegativeButton(getString(R.string.close)) { _, _ -> }.setCancelable(false).show()
+            }
+
+            // 권한 요청
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
         }
     }
 

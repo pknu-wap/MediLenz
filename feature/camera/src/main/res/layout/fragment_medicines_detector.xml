@@ -5,46 +5,42 @@
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.camera.MedicinesDetectorViewModel"
-            />
+            type="com.android.mediproject.feature.camera.MedicinesDetectorViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false"
-        >
+        android:clipChildren="false">
 
         <SurfaceView
             android:id="@+id/surfaceView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
 
         <ImageButton
             android:id="@+id/backBtn"
+            style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/back"
             android:src="@drawable/left_arrow"
             app:layout_constraintBottom_toBottomOf="@id/title"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/logo"
-            android:contentDescription="@string/back"
-            />
+            app:layout_constraintTop_toTopOf="@id/logo" />
 
         <ImageView
             android:id="@+id/logo"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="22dp"
             android:layout_marginTop="48dp"
             android:contentDescription="@string/appLogo"
             android:src="@drawable/medilenz_white_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/title"
@@ -53,11 +49,10 @@
             android:gravity="center"
             android:text="@string/aiCamera"
             android:textColor="@color/white"
-            android:textSize="13sp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@id/logo"
             app:layout_constraintStart_toStartOf="@id/logo"
-            app:layout_constraintTop_toBottomOf="@id/logo"
-            />
+            app:layout_constraintTop_toBottomOf="@id/logo" />
 
         <ImageButton
             android:id="@+id/detectionBtn"
@@ -66,14 +61,14 @@
             android:layout_marginBottom="26dp"
             android:background="@drawable/detection_button_background"
             android:contentDescription="@string/search_with_ai"
-            android:onClick="@{() ->  viewModel.retrieveObjects()}"
-            android:paddingHorizontal="32dp"
-            android:paddingVertical="9dp"
+            android:onClick="@{() ->viewModel.capture()}"
+            android:paddingHorizontal="33dp"
+            android:paddingVertical="10dp"
             android:src="@drawable/baseline_search_24"
             app:layout_constraintBottom_toTopOf="@id/detectionDescription"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            android:elevation="2dp"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <TextView
@@ -90,8 +85,7 @@
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

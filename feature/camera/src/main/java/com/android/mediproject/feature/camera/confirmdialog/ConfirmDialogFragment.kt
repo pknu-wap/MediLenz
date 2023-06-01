@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.toSpannable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
 import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentConfirmDialogBinding
@@ -61,18 +63,25 @@ class ConfirmDialogFragment : DialogFragment() {
 
         viewLifecycleOwner.repeatOnStarted {
             viewModel.detectedObjects.collectLatest { objs ->
-                val text = "${objs.size} ${getString(R.string.checkCountsOfMedicinesMessage)}"
-                binding.confirmDialogTextView.text = text
+                (objs as UiState.Success).data.apply {
+                    val text = "$size ${getString(R.string.checkCountsOfMedicinesMessage)}".toSpannable()
+                    binding.confirmDialogTextView.text = text
 
-                binding.detectedObjectsRecyclerView.adapter = ImageListAdapter().apply {
-                    objs.map {
-                        it.onClicked = { this@ConfirmDialogFragment.onDetectedObjectClicked() }
-                        it
-                    }.let { submitList(it) }
+                    binding.detectedObjectsRecyclerView.adapter = ImageListAdapter().apply {
+                        map {
+                            it.onClicked = { this@ConfirmDialogFragment.onDetectedObjectClicked() }
+                            it
+                        }.let { submitList(it) }
+                    }
                 }
             }
 
         }
+    }
+
+    override fun dismiss() {
+        super.dismiss()
+        viewModel.openCamera()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
