@@ -1,23 +1,15 @@
 package com.android.mediproject.feature.camera.imagedialog
 
-import android.annotation.SuppressLint
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.ScaleGestureDetector
-import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.android.mediproject.core.common.bindingadapter.GlideApp
-import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
+import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentDetectedImageDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import repeatOnStarted
 
 
 @AndroidEntryPoint
@@ -27,48 +19,26 @@ class DetectedImageFragment : DialogFragment() {
 
     private val medicinesDetectorViewModel by activityViewModels<MedicinesDetectorViewModel>()
 
-    private lateinit var scaleGestureDetector: ScaleGestureDetector
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = super.onCreateDialog(savedInstanceState).also { dialog ->
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setCancelable(false)
-    }
-
-
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = medicinesDetectorViewModel
-        viewLifecycleOwner.repeatOnStarted {
-            medicinesDetectorViewModel.capturedImage.collectLatest {
-                when (it) {
-                    is UiState.Success -> {
-                        GlideApp.with(requireContext()).load(it.data).into(binding.imageView)
-                    }
 
-                    else -> {
-
-                    }
-                }
-            }
-        }
 
         binding.apply {
-            scaleGestureDetector = ScaleGestureDetector(requireContext(), object : SimpleOnScaleGestureListener() {
-                private var mScaleFactor = 1.0f
-
-                override fun onScale(detector: ScaleGestureDetector): Boolean {
-                    mScaleFactor *= scaleGestureDetector.scaleFactor
-                    mScaleFactor = maxOf(0.1f, minOf(mScaleFactor, 10.0f))
-                    imageView.scaleX = mScaleFactor
-                    imageView.scaleY = mScaleFactor
-                    return true
-                }
-            })
-
-            imageView.setOnTouchListener { v, event ->
-                scaleGestureDetector.onTouchEvent(event)
+            viewModel = medicinesDetectorViewModel
+            backBtn.setOnClickListener {
+                dismiss()
+            }
+            imageView.minimumScale = 1.0f
+            imageView.maximumScale = 2.5f
+            zoomIn.setOnClickListener {
+                val scale = imageView.scale + 0.4f
+                if (scale <= imageView.maximumScale) imageView.setScale(scale, true)
+                else imageView.setScale(imageView.maximumScale, true)
+            }
+            zoomOut.setOnClickListener {
+                val scale = imageView.scale - 0.4f
+                if (scale >= imageView.minimumScale) imageView.setScale(scale, true)
+                else imageView.setScale(imageView.minimumScale, true)
             }
         }
     }
@@ -79,9 +49,7 @@ class DetectedImageFragment : DialogFragment() {
         return binding.root
     }
 
-    override fun getView(): View {
-        return binding.root
-    }
+    override fun getTheme(): Int = R.style.DialogFullscreen
 
     override fun onDestroyView() {
         _binding = null
