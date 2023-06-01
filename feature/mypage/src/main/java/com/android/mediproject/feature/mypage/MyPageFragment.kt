@@ -7,6 +7,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.view.View
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
@@ -75,27 +76,20 @@ class MyPageFragment :
 
     private fun handleFlag(flag: Int) {
         when (flag) {
-            //현재 에러나는 코드
-            CHANGE_NICKNAME -> {
-                MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangeNickName).apply {
-                    isCancelable = false
-                    show(requireActivity().supportFragmentManager, MyPageMoreDialogFragment.TAG)
-                }
-            }
+            CHANGE_NICKNAME -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangeNickName).show(
+                requireActivity().supportFragmentManager,
+                MyPageMoreDialogFragment.TAG
+            )
 
-            CHANGE_PASSWORD -> {
-                MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangePassword).apply {
-                    isCancelable = false
-                    show(requireActivity().supportFragmentManager, MyPageMoreDialogFragment.TAG)
-                }
-            }
+            CHANGE_PASSWORD -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangePassword).show(
+                requireActivity().supportFragmentManager,
+                MyPageMoreDialogFragment.TAG
+            )
 
-            WITHDRAWAL -> {
-                MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.Withdrawal).apply {
-                    isCancelable = false
-                    show(requireActivity().supportFragmentManager, MyPageMoreDialogFragment.TAG)
-                }
-            }
+            WITHDRAWAL -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.Withdrawal).show(
+                requireActivity().supportFragmentManager,
+                MyPageMoreDialogFragment.TAG
+            )
 
             else -> Unit
         }

@@ -37,6 +37,7 @@ class MyPageMoreDialogFragment(private val flag : DialogFlag) : DialogFragment()
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        this.isCancelable = false
         _binding = FragmentMyPageMoreDialogBinding.inflate(inflater, container, false)
         return binding.root
     }
