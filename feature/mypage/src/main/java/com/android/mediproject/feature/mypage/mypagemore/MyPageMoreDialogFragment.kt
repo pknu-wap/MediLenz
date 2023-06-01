@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MyPageMoreDialogFragment(private val dialogFlag : DialogFlag) : DialogFragment() {
+class MyPageMoreDialogFragment(private val flag : DialogFlag) : DialogFragment() {
 
     sealed class DialogFlag{
         object ChangeNickName : DialogFlag()
@@ -36,13 +35,23 @@ class MyPageMoreDialogFragment(private val dialogFlag : DialogFlag) : DialogFrag
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             viewModel = fragmentViewModel.apply {
-                viewLifecycleOwner.repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+                viewLifecycleOwner.apply{
+                    repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+                    repeatOnStarted { dialogFlag.collect { handleFlag(it) } }
+                }
+                setDialogFlag(flag)
             }
         }
     }
 
     private fun handleEvent(event: MyPageMoreDialogViewModel.MyPageMoreDialogEvent) = when (event) {
         else -> {}
+    }
+
+    private fun handleFlag(dialogFlag : DialogFlag) = when(dialogFlag){
+        is DialogFlag.ChangeNickName -> {}
+        is DialogFlag.ChangePassword -> {}
+        is DialogFlag.Withdrawal -> {}
     }
 
     override fun onDestroyView() {
