@@ -64,16 +64,19 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                 is DialogFlag.ChangeNickName -> {
                     Log.d("wap", "ChangeNickName")
                     dismiss()
+                    //닉네임 변경 로직
                 }
 
                 is DialogFlag.ChangePassword -> {
                     Log.d("wap", "ChangePassword")
                     dismiss()
+                    //비밀번호 변경 로직
                 }
 
                 is DialogFlag.Withdrawal -> {
                     Log.d("wap", "Withdrawal")
                     dismiss()
+                    //회원탈퇴 로직
                 }
             }
         }
