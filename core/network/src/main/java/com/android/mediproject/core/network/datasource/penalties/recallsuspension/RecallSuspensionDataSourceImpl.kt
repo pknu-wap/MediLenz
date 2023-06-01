@@ -9,7 +9,6 @@ import com.android.mediproject.core.network.onResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class RecallSuspensionDataSourceImpl @Inject constructor(
@@ -30,7 +29,7 @@ class RecallSuspensionDataSourceImpl @Inject constructor(
             }, onFailure = {
                 Result.failure(it)
             }).also {
-                flowOf(it)
+                emit(it)
             }
     }
 

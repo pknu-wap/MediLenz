@@ -2,9 +2,9 @@ package com.android.mediproject.feature.penalties.recentpenaltylist
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.common.util.deepNavigate
 import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.local.navargs.RecallDisposalArgs
@@ -57,8 +57,8 @@ class RecentPenaltyListFragment :
 
                             uiState.data.forEach { itemDto ->
                                 itemDto.onClick = {
-                                    findNavController().navigateByDeepLink(
-                                        "medilens://main/news_nav", RecallDisposalArgs(it.product)
+                                    findNavController().deepNavigate(
+                                        "medilens://main/news_nav", RecallDisposalArgs(it.product),
                                     )
                                 }
                             }
@@ -82,7 +82,9 @@ class RecentPenaltyListFragment :
         binding.headerView.setOnExpandClickListener {}
 
         binding.headerView.setOnMoreClickListener {
-            findNavController().navigate("medilens://main/news_nav".toUri())
+            findNavController().navigateByDeepLink(
+                "medilens://main/news_nav", RecallDisposalArgs(""),
+            )
         }
     }
 }

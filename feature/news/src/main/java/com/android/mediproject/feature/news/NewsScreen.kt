@@ -58,7 +58,7 @@ fun NewsNavHost(
         ""
     }
 
-    val start = if (arguments.product.isNotEmpty()) "detailRecallSuspension"
+    val start = if (arguments.product.isNotEmpty()) "detailRecallSuspension/{product}"
     else "news"
 
     NavHost(navController = navController, startDestination = start) {
@@ -68,8 +68,10 @@ fun NewsNavHost(
             }
         }
         composable(
-            "detailRecallSuspension/{product}",
-            arguments = listOf(navArgument("product") { type = NavType.StringType })
+            "detailRecallSuspension/{product}", arguments = listOf(navArgument("product") {
+                type = NavType.StringType
+                defaultValue = arguments.product
+            })
         ) {
             DetailRecallDisposalScreen()
         }
