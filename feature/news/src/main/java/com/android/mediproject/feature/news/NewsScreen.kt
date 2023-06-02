@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -21,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -32,6 +32,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.android.mediproject.core.model.local.navargs.RecallDisposalArgs
 import com.android.mediproject.feature.news.adminaction.AdminActionScreen
 import com.android.mediproject.feature.news.adminaction.DetailAdminActionScreen
 import com.android.mediproject.feature.news.recallsuspension.DetailRecallDisposalScreen
@@ -49,23 +50,28 @@ enum class ChipType : Parcelable {
 /**
  * 뉴스 화면
  */
-@Preview
 @Composable
 fun NewsNavHost(
-    navController: NavHostController = rememberNavController(), startDestination: String = "news"
+    navController: NavHostController = rememberNavController(), arguments: RecallDisposalArgs
 ) {
     val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         ""
     }
 
-    NavHost(navController = navController, startDestination = startDestination) {
+    val start = if (arguments.product.isNotEmpty()) "detailRecallSuspension/{product}"
+    else "news"
+
+    NavHost(navController = navController, startDestination = start) {
         composable("news") {
             CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                 NewsScreen(navController)
             }
         }
         composable(
-            "detailRecallSuspension/{product}", arguments = listOf(navArgument("product") { type = NavType.StringType })
+            "detailRecallSuspension/{product}", arguments = listOf(navArgument("product") {
+                type = NavType.StringType
+                defaultValue = arguments.product
+            })
         ) {
             DetailRecallDisposalScreen()
         }
@@ -89,6 +95,7 @@ fun NewsScreen(navController: NavController) {
         ChipGroup(selectedChip, onChipSelected = { chip ->
             selectedChip = chip
         })
+        Divider(modifier = Modifier.padding(horizontal = 24.dp))
         if (selectedChip == ChipType.RECALLS_SUSPENSION) RecallDisposalScreen(navController = navController)
         else {
             CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
@@ -107,7 +114,8 @@ fun NewsScreen(navController: NavController) {
 @Composable
 fun ChipGroup(selectedChip: ChipType, onChipSelected: (ChipType) -> Unit) {
     Row(
-        verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 24.dp, end = 24.dp)
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 24.dp, end = 24.dp)
     ) {
         CustomFilterChip(
             title = stringResource(id = R.string.recallSuspension),
@@ -132,7 +140,9 @@ fun ChipGroup(selectedChip: ChipType, onChipSelected: (ChipType) -> Unit) {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomFilterChip(type: ChipType, title: String, isSelected: Boolean, onClick: (ChipType) -> Unit) {
+fun CustomFilterChip(
+    type: ChipType, title: String, isSelected: Boolean, onClick: (ChipType) -> Unit
+) {
     FilterChip(
         selected = isSelected,
         onClick = { onClick.invoke(type) },

@@ -1,6 +1,8 @@
 package com.android.mediproject.core.model.comments
 
+import com.android.mediproject.core.model.remote.comments.MedicineCommentsResponse
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * 댓글 정보를 담는 데이터 클래스입니다.
@@ -17,7 +19,6 @@ import kotlinx.datetime.LocalDateTime
  * @property onClickReply 답글 달기 버튼 클릭 시 실행되는 람다 함수
  * @property onClickLike 댓글 좋아요 버튼 클릭 시 실행되는 람다 함수
  * @property onClickApplyEdited 답글 수정 버튼 클릭 시 실행되는 람다 함수
- * @property onClickEditCancel 답글 수정 취소 버튼 클릭 시 실행되는 람다 함수
  * @property onClickDelete 답글 삭제 버튼 클릭 시 실행되는 람다 함수
  * @property onClickEdit 답글 수정 버튼 클릭 시 실행되는 람다 함수
  * @property isMine 내가 쓴 댓글인지 여부
@@ -34,9 +35,8 @@ data class CommentDto(
     var onClickReply: ((Int) -> Unit)?,
     var onClickLike: ((Int) -> Unit)?,
     var onClickDelete: ((Int) -> Unit)?,
-    var onClickEdit: ((Int) -> Unit)?,
-    var onClickApplyEdited: ((CommentDto, Int) -> Unit)?,
-    var onClickEditCancel: ((Int) -> Unit)?,
+    var onClickEdit: ((CommentDto, Int) -> Unit)?,
+    var onClickApplyEdited: ((CommentDto) -> Unit)?,
     var isMine: Boolean = false
 ) {
     var isEditing: Boolean = false
@@ -51,3 +51,19 @@ CONTENT	varchar2	댓글 내용
 CREATED_AT	DATETIME	작성 시각
 UPDATED_AT	DATETIME	수정 시각
  */
+
+fun MedicineCommentsResponse.toDto() = CommentDto(
+    commentId = commentId,
+    userId = userId,
+    userName = userName,
+    isReply = isReply,
+    subordinationId = subordinationId,
+    content = content,
+    createdAt = createdAt.toLocalDateTime(),
+    updatedAt = updatedAt.toLocalDateTime(),
+    onClickReply = null,
+    onClickLike = null,
+    onClickDelete = null,
+    onClickEdit = null,
+    onClickApplyEdited = null,
+)

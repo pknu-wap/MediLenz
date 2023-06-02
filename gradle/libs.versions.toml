@@ -10,6 +10,7 @@ ksp = "1.8.21-1.0.11"
 
 androidGradlePlugin = "8.0.1"
 androidDesugarJdkLibs = "2.0.3"
+photoview = "2.3.0"
 
 # androidx
 androidXPagingCompose = "1.0.0-alpha19"
@@ -146,9 +147,10 @@ androidx-navigation-dynamic = { group = "androidx.navigation", name = "navigatio
 androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
 androidx-work-testingAndroidTestImplementation = { group = "androidx.work", name = "work-testing", version.ref = "androidxWork" }
 
-androidx-room-compileKapt = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
+androidx-room-compileKsp = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidxRoom" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "androidxRoom" }
 
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "androidxRecyclerview" }
 androidx-concurrentfutures = { module = "androidx.concurrent:concurrent-futures-ktx", version.ref = "androidxConcurrentFutures" }
@@ -217,6 +219,7 @@ okhttp-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor
 glide-main = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-kapt = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 glide-kapt-arch = { module = "android.arch.lifecycle:compiler", version.ref = "androidArchLifecycle" }
+photo-view = { module = "com.github.chrisbanes:PhotoView", version.ref = "photoview" }
 
 # lottie --------------------------------------------------------------------------------------------------------------
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
@@ -278,7 +281,7 @@ firebases = ["firebase-bom", "firebase-crashlytics"]
 hilts = ["androidx-hilt-navigation-compose", "androidx-hilt-android", "androidx-hilt-navigation-fragment",
     "androidx-hilt-work", "androidx-hilt-navigation-compose"]
 
-rooms = ["androidx-room-ktx", "androidx-room-runtime"]
+rooms = ["androidx-room-ktx", "androidx-room-runtime", "androidx-room-paging"]
 
 dataStores = ["androidx-datastore-preferences", "androidx-datastore"]
 

@@ -21,11 +21,11 @@ class CommentsListDataSourceImpl(
         val currentPage = params.key ?: 1
 
         return try {
-            commentsDataSource.getCommentsForAMedicine(
+            commentsDataSource.getCommentsForAMedicineCatching(
                 itemSeq
             ).fold(onSuccess = {
                 val nextKey = it.let { body ->
-                    if (body.count() <= AWS_LOAD_PAGE_SIZE) null
+                    if (body.size <= AWS_LOAD_PAGE_SIZE) null
                     else currentPage + 1
                 }
 

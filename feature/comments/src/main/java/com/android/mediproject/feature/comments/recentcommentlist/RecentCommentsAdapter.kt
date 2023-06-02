@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.model.comments.CommentDto
 import com.android.mediproject.core.ui.base.view.SimpleListItemView
 
-class RecentCommentsAdapter : ListAdapter<CommentDto, RecentCommentsAdapter.RecentCommentListViewHolder>(AsyncDiffer) {
+class RecentCommentsAdapter :
+    ListAdapter<CommentDto, RecentCommentsAdapter.RecentCommentListViewHolder>(AsyncDiffer) {
 
 
-    class RecentCommentListViewHolder(private val view: SimpleListItemView<CommentDto>) : RecyclerView.ViewHolder(view) {
+    class RecentCommentListViewHolder(private val view: SimpleListItemView<CommentDto>) :
+        RecyclerView.ViewHolder(view) {
 
         private var item: CommentDto? = null
 
@@ -32,7 +34,7 @@ class RecentCommentsAdapter : ListAdapter<CommentDto, RecentCommentsAdapter.Rece
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentCommentListViewHolder =
-        RecentCommentListViewHolder(SimpleListItemView(parent.context))
+        RecentCommentListViewHolder(SimpleListItemView(parent.context, 0.6f))
 
     override fun onBindViewHolder(holder: RecentCommentListViewHolder, position: Int) {
 

@@ -1,10 +1,12 @@
 package com.android.mediproject.core.model.remote.adminaction
 
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-
+@Parcelize
 /**
  * 행정처분 목록 별 데이터 클래스
  *
@@ -36,7 +38,7 @@ data class AdminActionListItemDto(
     val lastSettleDate: LocalDate, // 20230526
     val publicEndDate: LocalDate, // 20230910
     var onClick: (() -> Unit)? = null
-)
+) : Parcelable
 
 fun AdminActionListResponse.Body.Item.toDto(): AdminActionListItemDto {
     return AdminActionListItemDto(

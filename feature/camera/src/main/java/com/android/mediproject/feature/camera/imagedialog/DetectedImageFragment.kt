@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.camera.imagedialog
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,52 +7,49 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
+import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentDetectedImageDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import repeatOnStarted
+
 
 @AndroidEntryPoint
 class DetectedImageFragment : DialogFragment() {
     private var _binding: FragmentDetectedImageDialogBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by activityViewModels<MedicinesDetectorViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = super.onCreateDialog(savedInstanceState).let { dialog ->
-        dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setCancelable(false)
-        dialog
-    }
-
+    private val medicinesDetectorViewModel by activityViewModels<MedicinesDetectorViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         binding.apply {
-            viewModel = viewModel
-            viewLifecycleOwner.repeatOnStarted {
-                this@DetectedImageFragment.viewModel.detectedImage.collectLatest {
-                    imageView.setImageBitmap(it)
-                }
+            viewModel = medicinesDetectorViewModel
+            backBtn.setOnClickListener {
+                dismiss()
+            }
+            imageView.minimumScale = 1.0f
+            imageView.maximumScale = 2.5f
+            zoomIn.setOnClickListener {
+                val scale = imageView.scale + 0.4f
+                if (scale <= imageView.maximumScale) imageView.setScale(scale, true)
+                else imageView.setScale(imageView.maximumScale, true)
+            }
+            zoomOut.setOnClickListener {
+                val scale = imageView.scale - 0.4f
+                if (scale >= imageView.minimumScale) imageView.setScale(scale, true)
+                else imageView.setScale(imageView.minimumScale, true)
             }
         }
-
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDetectedImageDialogBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
-    override fun getView(): View? {
-        return binding.root
-    }
+    override fun getTheme(): Int = R.style.DialogFullscreen
 
     override fun onDestroyView() {
         _binding = null

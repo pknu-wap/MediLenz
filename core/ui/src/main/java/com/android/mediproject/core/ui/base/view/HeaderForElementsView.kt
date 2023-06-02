@@ -12,8 +12,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.R
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 
 
 private const val DOT_CHAR = "• "
@@ -31,6 +36,25 @@ class HeaderForElementsView constructor(
     private val moreBtnView: TextView
     private val titleView: TextView
     private var expanded = true
+        set(value) {
+            field = value
+            expandBtnView.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    context, if (value) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24
+                )
+            )
+
+            takeIf { targetViewId != -1 }?.let {
+                (parent.parent as View).findViewById<View>(targetViewId)?.apply {
+                    visibility = if (value) View.VISIBLE
+                    else View.GONE
+                }
+            }
+
+            onExpandClickListener?.onExpandClick(value)
+        }
+
+
     private var moreVisibility = View.VISIBLE
 
     private var onExpandClickListener: OnExpandClickListener? = null
@@ -66,10 +90,8 @@ class HeaderForElementsView constructor(
                 val iconColor = typedArr.getColor(R.styleable.HeaderForElementsView_expand_icon_color, Color.BLACK)
                 val titleFontSize = typedArr.getDimension(R.styleable.HeaderForElementsView_title_text_size, 15f)
                 val moreFontSize = typedArr.getDimension(R.styleable.HeaderForElementsView_more_text_size, 14f)
-                expanded = typedArr.getBoolean(R.styleable.HeaderForElementsView_is_expanded, expanded)
                 moreVisibility = typedArr.getInt(R.styleable.HeaderForElementsView_more_visibility, moreVisibility)
                 targetViewId = typedArr.getResourceId(R.styleable.HeaderForElementsView_visibility_target_view, -1)
-
 
                 // title
                 titleView = TextView(context).apply {
@@ -84,7 +106,7 @@ class HeaderForElementsView constructor(
                     id = 1
 
                     setOnClickListener {
-                        setExpand(!expanded)
+                        this@HeaderForElementsView.expanded = !this@HeaderForElementsView.expanded
                     }
                 }
                 setTitle(title)
@@ -93,7 +115,7 @@ class HeaderForElementsView constructor(
                 // 확장 버튼
                 expandBtnView = ImageView(context).apply {
                     setOnClickListener {
-                        setExpand(!expanded)
+                        this@HeaderForElementsView.expanded = !this@HeaderForElementsView.expanded
                     }
 
                     isClickable = true
@@ -196,8 +218,8 @@ class HeaderForElementsView constructor(
     /**
      * 더보기 버튼 Visible 관련 로직
      */
-    fun setMoreVisiblity(boolean: Boolean){
-        when(boolean){
+    fun setMoreVisiblity(boolean: Boolean) {
+        when (boolean) {
             false -> moreBtnView.visibility = View.GONE
             true -> moreBtnView.visibility = View.VISIBLE
         }
@@ -206,8 +228,8 @@ class HeaderForElementsView constructor(
     /**
      * 확장 버튼 Visible 관련 로직
      */
-    fun setExpandVisiblity(boolean: Boolean){
-        when(boolean){
+    fun setExpandVisiblity(boolean: Boolean) {
+        when (boolean) {
             false -> expandBtnView.visibility = View.GONE
             true -> expandBtnView.visibility = View.VISIBLE
         }
@@ -215,50 +237,45 @@ class HeaderForElementsView constructor(
 
 
     /**
-     * 확장 버튼 클릭 시 호출
+     * 인디케이터의 Visible 여부에 따라 확장 버튼의 Visible 여부를 결정
      *
-     * @param expanded 확장 여부
-     *
+     * @param visibility 인디케이터의 Visible 여부
      */
-    fun setExpand(expanded: Boolean) {
-        this.expanded = expanded
-        expandBtnView.setImageDrawable(
-            AppCompatResources.getDrawable(
-                context, if (expanded) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24
-            )
-        )
-
-        takeIf { targetViewId != -1 }?.let {
-            (parent.parent as View).findViewById<View>(targetViewId)?.apply {
-                visibility = if (expanded) View.VISIBLE
-                else View.GONE
-            }
-        }
-
-        onExpandClickListener?.onExpandClick(expanded)
-    }
-
     override fun onIndicatorVisibilityChanged(visibility: Boolean) {
         findViewById<CircularProgressIndicator>(R.id.indicator)?.apply {
-
-            val visible = if (visibility) View.VISIBLE else View.GONE
-            setVisibility(visible)
-            when (visibility) {
-                true -> {
-                    show()
-                    expandBtnView.visibility = View.GONE
-                }
-
-                false -> {
-                    hide()
-                    expandBtnView.visibility = View.VISIBLE
-                }
-            }
+            isVisible = visibility
+            expandBtnView.isVisible = !visibility
+            expanded = !visibility
+            if (visibility) show()
+            else hide()
         }
     }
-
 }
 
 fun interface OnIndicatorVisibilityChangedListener {
     fun onIndicatorVisibilityChanged(visibility: Boolean)
+}
+
+
+suspend inline fun <reified T> Flow<UiState<T>>.stateAsCollect(
+    headerForElementsView: HeaderForElementsView,
+): Flow<UiState<T>> = flatMapLatest {
+    when (it) {
+        is UiState.Error -> {
+            headerForElementsView.onIndicatorVisibilityChanged(false)
+        }
+
+        is UiState.Loading -> {
+            headerForElementsView.onIndicatorVisibilityChanged(true)
+        }
+
+        is UiState.Success -> {
+            headerForElementsView.onIndicatorVisibilityChanged(false)
+        }
+
+        is UiState.Initial -> {
+            headerForElementsView.onIndicatorVisibilityChanged(true)
+        }
+    }
+    flowOf(it)
 }

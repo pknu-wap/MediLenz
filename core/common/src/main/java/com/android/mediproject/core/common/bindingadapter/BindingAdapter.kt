@@ -2,6 +2,8 @@ package com.android.mediproject.core.common.bindingadapter
 
 import android.graphics.Bitmap
 import android.text.Spanned
+import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.PrecomputedTextCompat
@@ -26,22 +28,45 @@ object BindingAdapter {
     @BindingAdapter("img")
     @JvmStatic
     fun loadImage(imageView: ImageView, img: String) {
-        GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(false).into(imageView)
+        GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(false)
+            .into(imageView)
     }
 
     @BindingAdapter("img")
     @JvmStatic
     fun loadImage(imageView: ImageView, img: Bitmap) {
-        GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(false).into(imageView)
+        GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(false)
+            .into(imageView)
     }
 
 
+    /**
+     * TextView에 비동기적으로 텍스트를 설정합니다.
+     */
     @BindingAdapter("asyncText")
     @JvmStatic
     fun setAsyncText(textView: TextView, text: Spanned?) {
         if (text != null) {
-            val precomputedText = PrecomputedTextCompat.create(text, TextViewCompat.getTextMetricsParams(textView))
+            val precomputedText =
+                PrecomputedTextCompat.create(text, TextViewCompat.getTextMetricsParams(textView))
             TextViewCompat.setPrecomputedText(textView, precomputedText)
         }
     }
+
+    /**
+     * EditText의 텍스트를 전달받은 ViewModel의 onClickedSendButton 함수에 전달하고, EditText의 텍스트를 지웁니다.
+     *
+     * @param view 클릭 이벤트를 받을 View
+     * @param editText 텍스트를 전달받을 EditText
+     * @param iSendText 텍스트를 전달받을 ViewModel
+     */
+    @BindingAdapter("onClickSend", "inputText")
+    @JvmStatic
+    fun setOnClick(view: View, iSendText: ISendText, editText: EditText) {
+        view.setOnClickListener {
+            iSendText.onClickedSendButton(editText.text)
+            editText.text.clear()
+        }
+    }
+
 }

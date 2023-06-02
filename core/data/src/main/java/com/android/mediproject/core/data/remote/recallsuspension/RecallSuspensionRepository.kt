@@ -6,14 +6,14 @@ import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResp
 import kotlinx.coroutines.flow.Flow
 
 interface RecallSuspensionRepository {
-    suspend fun getRecallDisposalList(
+    fun getRecallDisposalList(
     ): Flow<PagingData<RecallSuspensionListResponse.Body.Item.Item>>
 
     suspend fun getRecentRecallDisposalList(
         pageNo: Int = 1, numOfRows: Int = 15
     ): Result<List<RecallSuspensionListResponse.Body.Item.Item>>
 
-    suspend fun getDetailRecallSuspension(
+    fun getDetailRecallSuspension(
         company: String?, product: String?
     ): Flow<Result<DetailRecallSuspensionResponse.Body.Item.Item>>
 }

@@ -12,9 +12,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecentPenaltyListViewModel @Inject constructor(getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase) : BaseViewModel() {
+class RecentPenaltyListViewModel @Inject constructor(getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase) :
+    BaseViewModel() {
 
-    private val _recallDisposalList = MutableStateFlow<UiState<List<RecallSuspensionListItemDto>>>(UiState.Initial)
+    private val _recallDisposalList =
+        MutableStateFlow<UiState<List<RecallSuspensionListItemDto>>>(UiState.Initial)
     val recallDisposalList get() = _recallDisposalList.asStateFlow()
 
     /**
@@ -22,16 +24,13 @@ class RecentPenaltyListViewModel @Inject constructor(getRecallSuspensionInfoUseC
      */
     init {
         viewModelScope.launch {
-            getRecallSuspensionInfoUseCase.getRecentRecallDisposalList(numOfRows = 5).fold(onSuccess = {
-                _recallDisposalList.value = UiState.Success(it)
-            }, onFailure = {
-                _recallDisposalList.value = UiState.Error(it.message ?: "failed")
-            })
+            getRecallSuspensionInfoUseCase.getRecentRecallDisposalList(numOfRows = 5)
+                .fold(onSuccess = {
+                    _recallDisposalList.value = UiState.Success(it)
+                }, onFailure = {
+                    _recallDisposalList.value = UiState.Error(it.message ?: "failed")
+                })
         }
-    }
-
-    private fun openDetail(item: RecallSuspensionListItemDto) {
-
     }
 
 }

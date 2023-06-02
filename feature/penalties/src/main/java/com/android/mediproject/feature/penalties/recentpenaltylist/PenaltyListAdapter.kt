@@ -1,23 +1,32 @@
 package com.android.mediproject.feature.penalties.recentpenaltylist
 
-import android.graphics.Color
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItemDto
 import com.android.mediproject.core.ui.base.view.SimpleListItemView
+import com.android.mediproject.feature.penalties.R
 
-class PenaltyListAdapter : ListAdapter<RecallSuspensionListItemDto, PenaltyListAdapter.PenaltyViewHolder>(Diff) {
+class PenaltyListAdapter :
+    ListAdapter<RecallSuspensionListItemDto, PenaltyListAdapter.PenaltyViewHolder>(object :
+        DiffUtil.ItemCallback<RecallSuspensionListItemDto>() {
+        override fun areItemsTheSame(
+            oldItem: RecallSuspensionListItemDto, newItem: RecallSuspensionListItemDto
+        ): Boolean = oldItem == newItem
 
-    class PenaltyViewHolder(private val view: SimpleListItemView<RecallSuspensionListItemDto>) : RecyclerView.ViewHolder(view) {
+        override fun areContentsTheSame(
+            oldItem: RecallSuspensionListItemDto, newItem: RecallSuspensionListItemDto
+        ): Boolean = oldItem == newItem
+    }) {
 
-        private var item: RecallSuspensionListItemDto? = null
+    class PenaltyViewHolder(private val view: SimpleListItemView<RecallSuspensionListItemDto>) :
+        RecyclerView.ViewHolder(view) {
 
         init {
-            view.setTitleColor(Color.BLACK)
-            view.setContentTextColor(Color.BLACK)
-            view.setChipStrokeColor(android.R.color.black)
+            view.setTitleColor(view.context.resources.getColor(R.color.newsChipColor, null))
+            view.setContentTextColor(view.context.resources.getColor(R.color.newsChipColor, null))
+            view.setChipStrokeColor(R.color.newsChipColor)
 
             view.setOnItemClickListener {
                 it?.apply {
@@ -27,23 +36,18 @@ class PenaltyListAdapter : ListAdapter<RecallSuspensionListItemDto, PenaltyListA
         }
 
         fun bind(data: RecallSuspensionListItemDto) {
-            item = data
+            view.data = data
             view.setTitle(data.product)
             view.setContent(data.rtrvlResn)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PenaltyViewHolder =
-        PenaltyViewHolder(SimpleListItemView<RecallSuspensionListItemDto>(parent.context))
+        PenaltyViewHolder(SimpleListItemView(parent.context, 0.6f))
 
     override fun onBindViewHolder(holder: PenaltyViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
-}
 
-object Diff : DiffUtil.ItemCallback<RecallSuspensionListItemDto>() {
-    override fun areItemsTheSame(oldItem: RecallSuspensionListItemDto, newItem: RecallSuspensionListItemDto): Boolean = oldItem == newItem
 
-    override fun areContentsTheSame(oldItem: RecallSuspensionListItemDto, newItem: RecallSuspensionListItemDto): Boolean =
-        oldItem == newItem
 }

@@ -30,7 +30,7 @@ class MedicineApprovalListDataSourceImpl(
                 pageNo = currentPage,
             ).fold(onSuccess = {
                 val nextKey = it.body.let { body ->
-                    if (body.items.count() < DATA_GO_KR_PAGE_SIZE) null
+                    if (body.items.size < DATA_GO_KR_PAGE_SIZE) null
                     else currentPage + 1
                 }
 

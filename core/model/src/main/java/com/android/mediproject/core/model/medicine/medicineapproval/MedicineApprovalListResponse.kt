@@ -18,7 +18,7 @@ data class MedicineApprovalListResponse(
 
 @Serializable
 data class Body(
-    @SerialName("items") val items: List<Item>, @SerialName("numOfRows") val numOfRows: Int, // 15
+    val items: List<Item> = emptyList(), @SerialName("numOfRows") val numOfRows: Int, // 15
     @SerialName("pageNo") val pageNo: Int, // 1
     @SerialName("totalCount") val totalCount: Int // 245
 )

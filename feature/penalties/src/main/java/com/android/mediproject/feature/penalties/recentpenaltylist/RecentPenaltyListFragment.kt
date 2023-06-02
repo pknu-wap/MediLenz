@@ -2,11 +2,14 @@ package com.android.mediproject.feature.penalties.recentpenaltylist
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.common.util.deepNavigate
+import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.model.local.navargs.RecallDisposalArgs
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.core.ui.base.view.stateAsCollect
 import com.android.mediproject.feature.penalties.databinding.FragmentRecentPenaltyListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
@@ -19,7 +22,9 @@ import repeatOnStarted
  */
 @AndroidEntryPoint
 class RecentPenaltyListFragment :
-    BaseFragment<FragmentRecentPenaltyListBinding, RecentPenaltyListViewModel>(FragmentRecentPenaltyListBinding::inflate) {
+    BaseFragment<FragmentRecentPenaltyListBinding, RecentPenaltyListViewModel>(
+        FragmentRecentPenaltyListBinding::inflate
+    ) {
 
     enum class ResultKey {
         RESULT_KEY, PENALTY_ID
@@ -32,26 +37,33 @@ class RecentPenaltyListFragment :
 
         initHeader()
         binding.apply {
-            headerView.onIndicatorVisibilityChanged(true)
-            headerView.setExpand(false)
             penaltyList.setHasFixedSize(true)
 
             val penaltyListAdapter = PenaltyListAdapter()
             penaltyList.adapter = penaltyListAdapter
 
             viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.recallDisposalList.collect { uiState ->
+                fragmentViewModel.recallDisposalList.stateAsCollect(headerView).collect { uiState ->
                     when (uiState) {
-                        is UiState.Error -> {}
+                        is UiState.Error -> {
+
+                        }
 
                         is UiState.Initial -> {}
 
                         is UiState.Loading -> {}
 
                         is UiState.Success -> {
+
+                            uiState.data.forEach { itemDto ->
+                                itemDto.onClick = {
+                                    findNavController().deepNavigate(
+                                        "medilens://main/news_nav", RecallDisposalArgs(it.product),
+                                    )
+                                }
+                            }
+
                             penaltyListAdapter.submitList(uiState.data)
-                            binding.headerView.onIndicatorVisibilityChanged(false)
-                            binding.headerView.setExpand(true)
                         }
                     }
                 }
@@ -70,7 +82,9 @@ class RecentPenaltyListFragment :
         binding.headerView.setOnExpandClickListener {}
 
         binding.headerView.setOnMoreClickListener {
-            findNavController().navigate("medilens://main/news_nav".toUri())
+            findNavController().navigateByDeepLink(
+                "medilens://main/news_nav", RecallDisposalArgs(""),
+            )
         }
     }
 }

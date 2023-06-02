@@ -11,7 +11,6 @@
         android:label="RecentSearchListFragment"
         tools:layout="@layout/fragment_recent_search_list">
 
-
         <action
             android:id="@+id/action_recentSearchListFragment_to_manualSearchResultFragment"
             app:destination="@id/manualSearchResultFragment" />
@@ -23,8 +22,6 @@
         android:name="com.android.mediproject.feature.search.result.manual.ManualSearchResultFragment"
         android:label="ManualSearchResultFragment"
         tools:layout="@layout/fragment_manual_search_result">
-
-        <deepLink app:uri="medilens://main/search/manualSearchResultFragment" />
 
         <action
             android:id="@+id/action_manualSearchResultFragment_self"
@@ -39,9 +36,6 @@
         android:label="AiSearchResultFragment"
         tools:layout="@layout/fragment_ai_search_result">
 
-        <deepLink app:uri="medilens://main/search/aiSearchResultFragment" />
-
-
         <action
             android:id="@+id/action_aiSearchResultFragment_self"
             app:destination="@id/aiSearchResultFragment"
@@ -50,5 +44,5 @@
     </fragment>
 
     <deepLink app:uri="medilens://main/search/search_medicines" />
-    
+
 </navigation>

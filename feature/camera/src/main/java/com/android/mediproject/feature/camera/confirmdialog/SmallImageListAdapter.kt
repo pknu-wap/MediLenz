@@ -16,24 +16,19 @@ class ImageListAdapter : ListAdapter<DetectedObject, ViewHolder>(Diff) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
-
-    override fun getItemCount(): Int {
-        return super.getItemCount()
-    }
 }
 
 class ViewHolder(private val binding: ItemViewDetectedObjectBinding) : RecyclerView.ViewHolder(binding.root) {
 
     init {
         binding.root.setOnClickListener {
-            binding.detectedObject?.let { item ->
-                item.onClicked?.invoke()
-            }
+            binding.detectedObject?.onClicked?.invoke()
         }
     }
 
     fun bind(detectedObject: DetectedObject) {
         binding.detectedObject = detectedObject
+        binding.executePendingBindings()
     }
 }
 

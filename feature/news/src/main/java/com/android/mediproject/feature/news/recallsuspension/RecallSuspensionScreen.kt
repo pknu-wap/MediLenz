@@ -85,7 +85,7 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 9.dp),
+            .padding(horizontal = 24.dp, vertical = 20.dp),
         shape = RectangleShape,
         onClick = {
             recallSuspensionListItemDto.onClick?.invoke(recallSuspensionListItemDto)

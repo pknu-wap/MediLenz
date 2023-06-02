@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     android:paddingHorizontal="24dp"
     android:paddingTop="16dp"
-    android:paddingBottom="24dp"
-    >
+    android:paddingBottom="24dp">
 
     <TextView
         android:id="@+id/confirmDialogTextView"
@@ -15,7 +14,7 @@
         android:layout_height="wrap_content"
         style="@style/MaterialAlertDialog.Material3.Body.Text"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        android:bufferType="spannable" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detectedObjectsRecyclerView"
@@ -28,7 +27,6 @@
         app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/confirmDialogTextView"
         tools:itemCount="5"
-        tools:listitem="@layout/item_view_detected_object"
-        />
+        tools:listitem="@layout/item_view_detected_object" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

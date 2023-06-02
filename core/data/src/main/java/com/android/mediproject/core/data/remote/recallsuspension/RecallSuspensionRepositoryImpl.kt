@@ -17,31 +17,33 @@ class RecallSuspensionRepositoryImpl @Inject constructor(
     private val recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl,
 ) : RecallSuspensionRepository {
 
-    override suspend fun getRecallDisposalList(): Flow<PagingData<RecallSuspensionListResponse.Body.Item.Item>> =
+    override fun getRecallDisposalList(): Flow<PagingData<RecallSuspensionListResponse.Body.Item.Item>> =
         Pager(config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE), pagingSourceFactory = {
             recallSuspensionListDataSource
         }).flow
 
     override suspend fun getRecentRecallDisposalList(
         pageNo: Int, numOfRows: Int
-    ): Result<List<RecallSuspensionListResponse.Body.Item.Item>> = recallSuspensionDataSource.getRecallSuspensionList(
-        pageNo, numOfRows
-    ).map {
-        it.body.items.map { item ->
-            item.item
+    ): Result<List<RecallSuspensionListResponse.Body.Item.Item>> =
+        recallSuspensionDataSource.getRecallSuspensionList(
+            pageNo, numOfRows
+        ).map {
+            it.body.items.map { item ->
+                item.item
+            }
         }
-    }
 
-    override suspend fun getDetailRecallSuspension(
+    override fun getDetailRecallSuspension(
         company: String?, product: String?
-    ): Flow<Result<DetailRecallSuspensionResponse.Body.Item.Item>> = recallSuspensionDataSource.getDetailRecallSuspensionInfo(
-        company = company, product = product
-    ).map { result ->
-        result.fold(onSuccess = {
-            Result.success(it.body.items.first().item)
-        }, onFailure = {
-            Result.failure(it)
-        })
-    }
+    ): Flow<Result<DetailRecallSuspensionResponse.Body.Item.Item>> =
+        recallSuspensionDataSource.getDetailRecallSuspensionInfo(
+            company = company, product = product
+        ).map { result ->
+            result.fold(onSuccess = {
+                Result.success(it.body.items.first().item)
+            }, onFailure = {
+                Result.failure(it)
+            })
+        }
 
 }
