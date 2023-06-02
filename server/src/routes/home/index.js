@@ -15,4 +15,6 @@ router.get("/", (req, res) => {
 const user = require("../user/userRouter");
 router.use("/user", user);
 
+const medicine = require("../medicine");
+router.use("/medicine", medicine);
 module.exports = router;

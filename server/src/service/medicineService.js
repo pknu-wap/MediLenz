@@ -1,18 +1,18 @@
 "use strict";
 
 const { Medicine } = require("../models/index");
+const { responseFormat } = require("../config/response");
+const responseMsg = require("../config/responseMsg");
 
-const getMedicineId = async (item_seq, item_name, item_ingr_name, prduct_type, entp_name, spclty_pblc, ingredient_name) => {
+const getMedicineId = async (item_seq, item_name, item_ingr_name, prduct_type, entp_name, spclty_pblc) => {
     const medicine = await Medicine.findOne({
-        attributes: ["ID"],
         where: {
             ITEM_SEQ: item_seq,
             ITEM_NAME: item_name,
             ITEM_INGR_NAME: item_ingr_name,
             PRDUCT_TYPE: prduct_type,
             ENTP_NAME: entp_name,
-            SPCLTY_PBLC: spclty_pblc,
-            INGREDIENT_NAME: ingredient_name
+            SPCLTY_PBLC: spclty_pblc
         }
     });
     if (!medicine) {
@@ -23,12 +23,11 @@ const getMedicineId = async (item_seq, item_name, item_ingr_name, prduct_type, e
             ITEM_INGR_NAME: item_ingr_name,
             PRDUCT_TYPE: prduct_type,
             ENTP_NAME: entp_name,
-            SPCLTY_PBLC: spclty_pblc,
-            INGREDIENT_NAME: ingredient_name
+            SPCLTY_PBLC: spclty_pblc
         });
-        return newMedicine.ID;
+        return responseFormat(200, {message: responseMsg.MEDICINE_ID_FOUND, medicineId: newMedicine.ID});
     }
-    return medicine.ID;
+    return responseFormat(200, {message: responseMsg.MEDICINE_ID_FOUND, medicineId: medicine.ID});
 }
 
 module.exports = {

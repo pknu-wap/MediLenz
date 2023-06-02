@@ -1,14 +1,57 @@
 "use strict";
 
-const { Comment } = require("../models/index");
-const writeComment = async (userId, medicineId, comment, subOrdinationId) => {
+const { Comment, Like } = require("../models/index");
+const { responseFormat } = require("../config/response");
+const responseMsg = require("../config/responseMsg");
+
+const addLike = async (userId, commentId) => {
+    try {
+        const newLike = await Like.create({
+            USERID: userId,
+            COMMENTID: commentId
+        });
+        return responseFormat(200, { message: responseMsg.LIKE_ADD_COMPLETE, likeId: newLike.ID });
+    } catch (err) {
+        return responseFormat(500, { message: responseMsg.LIKE_ADD_FAIL });
+    }
+}
+const removeLike = async (userId, commentId) => {
+    try {
+        await Like.destroy({
+            where: {
+                USERID: userId,
+                COMMENTID: commentId
+            }
+        });
+        return responseFormat(200, { message: responseMsg.LIKE_REMOVE_COMPLETE });
+    } catch (err) {
+        return responseFormat(500, { message: responseMsg.LIKE_REMOVE_FAIL });
+    }
+}
+const getLikeList = async (commentId) => {
+    try {
+        const likeList = await Like.findAll({
+            where: {
+                COMMENTID: commentId
+            }
+        });
+        _likeList = [];
+        for (let i in likeList) {
+            _likeList.push(likeList[i].dataValues);
+        }
+        return _likeList;
+    } catch (err) {
+        return [];
+    }
+}
+const writeComment = async (userId, medicineId, content, subOrdinationId) => {
     const newComment = await Comment.create({
         USERID: userId,
         MEDICINEID: medicineId,
-        COMMENT: comment,
-        SUBORDINATIONID: subOrdinationId
+        CONTENT: content,
+        SUBORDINATION: subOrdinationId
     });
-    return newComment.ID;
+    return responseFormat(200, { message: responseMsg.COMMENT_WRITE_COMPLETE, commentId: newComment.ID });
 }
 const deleteComment = async (commentId) => {
     const comment = await Comment.findOne({
@@ -28,7 +71,7 @@ const deleteComment = async (commentId) => {
         return true;
     }
     await Comment.update({
-        COMMENT: "삭제된 댓글입니다."
+        CONTENT: "삭제된 댓글입니다."
     }, {
         where: {
             ID: commentId
@@ -36,7 +79,7 @@ const deleteComment = async (commentId) => {
     });
     return true;
 }
-const editComment = async (commentId, comment) => {
+const editComment = async (commentId, content) => {
     const targetComment = await Comment.findOne({
         where: {
             ID: commentId
@@ -46,7 +89,7 @@ const editComment = async (commentId, comment) => {
         return false;
     }
     await Comment.update({
-        COMMENT: comment
+        CONTENT: content
     }, {
         where: {
             ID: commentId
@@ -60,22 +103,31 @@ const getCommentList = async (medicineId) => {
             MEDICINEID: medicineId
         }
     });
-
-    alignedCommentList = []
-    for (let comment in commentList) {
-        if (comment.SUBORDINATION == 0) continue;
-        comment.replies = [];
-        alignedCommentList.push(comment);
+    let _commentList = [];
+    for (let i in commentList) {
+        let _comment = commentList[i].dataValues;
+        if (_comment.SUBORDINATION != 0) continue;
+        _comment.likeList = await getLikeList(_comment.ID);
+        _comment.replies = [];
+        _commentList.push(_comment);
     }
-
-    for (let i = 0; i < commentList.length; i++) {
-        if (commentList[i].SUBORDINATION != 0) {
-            for (let j = 0; j < alignedCommentList.length; j++) {
-                if (commentList[i].SUBORDINATION == alignedCommentList[j].ID) {
-                    alignedCommentList[j].replies.push(commentList[i]);
-                }
+    for (let i in commentList) {
+        let _comment = commentList[i].dataValues;
+        if (_comment.SUBORDINATION == 0) continue;
+        for (let j in _commentList) {
+            if (_comment.SUBORDINATION == _commentList[j].ID) {
+                _comment.likeList = await getLikeList(_comment.ID);
+                _commentList[j].replies.push(_comment);
+                break;
             }
         }
     }
-    return commentList;
+    return _commentList;
 }
+
+module.exports = {
+    writeComment,
+    deleteComment,
+    editComment,
+    getCommentList
+};

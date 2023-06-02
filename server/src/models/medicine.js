@@ -38,11 +38,6 @@ module.exports = function (sequelize, DataTypes) {
             field: 'SPCLTY_PBLC',
             type: DataTypes.STRING,
             allowNull: false
-        },
-        INGREDIENT_NAME: {
-            field: 'INGREDIENT_NAME',
-            type: DataTypes.STRING,
-            allowNull: false
         }
     }, {
         underscored: true,

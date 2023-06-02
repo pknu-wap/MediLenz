@@ -17,6 +17,11 @@ module.exports = {
     SIGNUP_DUPLICATE_PARAMETER: (parameter) => {
         return `the ${parameter} is already in use`
     },
-    SIGNUP_INTERNAL_SERVER_ERROR: "DB Error"
+    SIGNUP_INTERNAL_SERVER_ERROR: "DB Error",
 
+    // Comment
+    COMMENT_WRITE_COMPLETE: "comment write complete",
+
+    // Medicine
+    MEDICINE_ID_FOUND: "medicine id found",
 }
