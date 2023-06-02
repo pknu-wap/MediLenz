@@ -24,4 +24,12 @@ module.exports = {
 
     // Medicine
     MEDICINE_ID_FOUND: "medicine id found",
+
+    // Like
+    LIKE_ADD_COMPLETE: "like add complete",
+    LIKE_REMOVE_COMPLETE: "like remove complete",
+    LIKE_ADD_FAIL: "like add fail",
+    LIKE_REMOVE_FAIL: "like remove fail",
+    LIKE_FOUND: "like found",
+    LIKE_NOT_FOUND: "like not found",
 }

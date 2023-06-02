@@ -1,8 +1,9 @@
 "use strict";
 
 const {getMedicineId} = require("../../service/medicineService");
-const {writeComment, deleteComment, editComment, getCommentList} = require("../../service/commentService");
+const {writeComment, deleteComment, editComment, getCommentList, addLike, removeLike, isLiked} = require("../../service/commentService");
 
+//userId is in req.verifiedToken
 const get = async (req, res) => {
     //item_seq, item_name, item_ingr_name, prduct_type, entp_name, spclty_pblc as POST
     const {ITEM_SEQ, ITEM_NAME, ITEM_INGR_NAME, PRDUCT_TYPE, ENTP_NAME, SPCLTY_PBLC} = req.body;
@@ -19,7 +20,30 @@ const writeTest = async (req, res) => {
     const result = await writeComment(userId, medicineId, content, subOrdinationId);
     return res.status(result.code).send(result.response);
 }
+
+const likeGet = async (req, res) => {
+    const {commentId} = req.query; 
+    const {userId} = req.verifiedToken;
+    const result = await isLiked(userId, commentId);
+    return res.status(result.code).send(result.response);
+}
+const likePost = async (req, res) => { //addLike
+    const {commentId} = req.body;
+    const {userId} = req.verifiedToken;
+    const result = await addLike(userId, commentId);
+    return res.status(result.code).send(result.response);
+}
+const likeDelete = async (req, res) => { //removeLike
+    const {commentId} = req.body;
+    const {userId} = req.verifiedToken;
+    const result = await removeLike(userId, commentId);
+    return res.status(result.code).send(result.response);
+}
+
 module.exports = {
     get,
-    writeTest
+    writeTest,
+    likeGet,
+    likePost,
+    likeDelete
 }

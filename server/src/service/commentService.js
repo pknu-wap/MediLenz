@@ -28,6 +28,22 @@ const removeLike = async (userId, commentId) => {
         return responseFormat(500, { message: responseMsg.LIKE_REMOVE_FAIL });
     }
 }
+const isLiked = async (userId, commentId) => {
+    try {
+        const like = await Like.findOne({
+            where: {
+                USERID: userId,
+                COMMENTID: commentId
+            }
+        });
+        if (!like) {
+            return responseFormat(200, { message: responseMsg.LIKE_NOT_FOUND });
+        }
+        return responseFormat(200, { message: responseMsg.LIKE_FOUND });
+    } catch (err) {
+        return responseFormat(500, { message: responseMsg.LIKE_NOT_FOUND });
+    }
+}
 const getLikeList = async (commentId) => {
     try {
         const likeList = await Like.findAll({
@@ -126,8 +142,11 @@ const getCommentList = async (medicineId) => {
 }
 
 module.exports = {
+    addLike,
+    removeLike,
     writeComment,
     deleteComment,
     editComment,
-    getCommentList
+    getCommentList,
+    isLiked
 };
