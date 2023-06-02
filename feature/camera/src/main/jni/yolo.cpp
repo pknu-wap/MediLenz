@@ -8,7 +8,7 @@
 
 #include "cpu.h"
 
-static const float prob_threshold = 0.4f;
+static const float prob_threshold = 0.45f;
 static const float nms_threshold = 0.45f;
 
 static float fast_exp(float x) {
@@ -215,9 +215,10 @@ Yolo::load(AAssetManager *mgr, const char *modeltype, int _target_size, const fl
     ncnn::set_omp_num_threads(ncnn::get_cpu_count());
 
     yolo.opt = ncnn::Option();
+    yolo.opt.use_vulkan_compute = false;
 
 #if NCNN_VULKAN
-    yolo.opt.use_vulkan_compute = use_gpu;
+
 #endif
 
     yolo.opt.num_threads = ncnn::get_cpu_count();

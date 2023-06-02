@@ -159,17 +159,15 @@ static std::vector<Object> objs;
 
 void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
     {
-        //ncnn::MutexLockGuard g(lock);
+        ncnn::MutexLockGuard g(lock);
 
         if (g_yolo) {
             objs.clear();
             g_yolo->detect(rgb, objs);
             g_yolo->draw(rgb, objs);
 
-            if (!objs.empty()) {
-                currentRgb = &rgb;
-                detectedObjects = objs;
-            }
+            currentRgb = &rgb;
+            detectedObjects = objs;
         }
     }
 
@@ -188,7 +186,6 @@ Java_com_android_mediproject_feature_camera_aimodel_Yolo_detectedObjects(JNIEnv 
                                                    env->FindClass("com/android/mediproject/feature/camera/aimodel/DetectedObject"),
                                                    nullptr);
 
-    __android_log_print(ANDROID_LOG_DEBUG, "finalDetectedObjects", "finalDetectedObjects size: %d", finalDetectedObjects->size());
 
     for (int i = 0; i < finalDetectedObjects->size(); i++) {
         cv::Mat croppedMat = finalRgb->operator()(finalDetectedObjects->at(i));
@@ -315,12 +312,12 @@ Java_com_android_mediproject_feature_camera_aimodel_Yolo_setOutputWindow(JNIEnv 
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_android_mediproject_feature_camera_aimodel_Yolo_getCurrentImage(JNIEnv *env, jobject thiz) {
-    if (currentRgb != nullptr) {
+    if (currentRgb != nullptr)
         delete finalRgb;
-    }
-    if (finalDetectedObjects != nullptr) {
+
+    if (finalDetectedObjects != nullptr)
         delete finalDetectedObjects;
-    }
+
 
     finalRgb = new cv::Mat();
     currentRgb->copyTo(*finalRgb);
@@ -329,12 +326,6 @@ Java_com_android_mediproject_feature_camera_aimodel_Yolo_getCurrentImage(JNIEnv 
     for (int i = 0; i < detectedObjects.size(); i++) {
         finalDetectedObjects->push_back(detectedObjects[i].rect);
     }
-
-    __android_log_print(ANDROID_LOG_DEBUG, "detectedObjects", "detectedObjects size: %d", detectedObjects.size());
-
-    __android_log_print(ANDROID_LOG_DEBUG, "finalDetectedObjects", "finalDetectedObjects size: %d", finalDetectedObjects->size());
-
-
     cv::cvtColor(*finalRgb, *finalRgb, cv::COLOR_BGR2RGB);
     std::string base64String = mat2str(*finalRgb);
 

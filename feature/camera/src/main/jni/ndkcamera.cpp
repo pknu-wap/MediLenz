@@ -12,9 +12,6 @@
 #include <future>
 #include <vector>
 
-static constexpr size_t num_tasks = 3;
-static std::array<std::future<void>, num_tasks> futures;
-
 static void onDisconnected(void *context, ACameraDevice *device) {
     __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onDisconnected %p", device);
 }
@@ -24,96 +21,87 @@ static void onError(void *context, ACameraDevice *device, int error) {
 }
 
 static void onImageAvailable(void *context, AImageReader *reader) {
-    for (size_t i = 0; i < num_tasks; ++i) {
-        if (futures[i].wait_for(std::chrono::seconds(0)) != std::future_status::ready) {
-            return;
-        }
+    AImage *image = 0;
+    media_status_t status = AImageReader_acquireLatestImage(reader, &image);
 
-        futures[i] = std::async(std::launch::async, [&reader, &context] {
-            AImage *image = 0;
-            media_status_t status = AImageReader_acquireLatestImage(reader, &image);
-
-            if (status != AMEDIA_OK)
-                return;
+    if (status != AMEDIA_OK)
+        return;
 
 
-            int32_t format;
-            AImage_getFormat(image, &format);
+    int32_t format;
+    AImage_getFormat(image, &format);
 
 
-            int32_t width = 0;
-            int32_t height = 0;
-            AImage_getWidth(image, &width);
-            AImage_getHeight(image, &height);
+    int32_t width = 0;
+    int32_t height = 0;
+    AImage_getWidth(image, &width);
+    AImage_getHeight(image, &height);
 
-            int32_t y_pixelStride = 0;
-            int32_t u_pixelStride = 0;
-            int32_t v_pixelStride = 0;
-            AImage_getPlanePixelStride(image, 0, &y_pixelStride);
-            AImage_getPlanePixelStride(image, 1, &u_pixelStride);
-            AImage_getPlanePixelStride(image, 2, &v_pixelStride);
+    int32_t y_pixelStride = 0;
+    int32_t u_pixelStride = 0;
+    int32_t v_pixelStride = 0;
+    AImage_getPlanePixelStride(image, 0, &y_pixelStride);
+    AImage_getPlanePixelStride(image, 1, &u_pixelStride);
+    AImage_getPlanePixelStride(image, 2, &v_pixelStride);
 
-            int32_t y_rowStride = 0;
-            int32_t u_rowStride = 0;
-            int32_t v_rowStride = 0;
-            AImage_getPlaneRowStride(image, 0, &y_rowStride);
-            AImage_getPlaneRowStride(image, 1, &u_rowStride);
-            AImage_getPlaneRowStride(image, 2, &v_rowStride);
+    int32_t y_rowStride = 0;
+    int32_t u_rowStride = 0;
+    int32_t v_rowStride = 0;
+    AImage_getPlaneRowStride(image, 0, &y_rowStride);
+    AImage_getPlaneRowStride(image, 1, &u_rowStride);
+    AImage_getPlaneRowStride(image, 2, &v_rowStride);
 
-            uint8_t *y_data = 0;
-            uint8_t *u_data = 0;
-            uint8_t *v_data = 0;
-            int y_len = 0;
-            int u_len = 0;
-            int v_len = 0;
-            AImage_getPlaneData(image, 0, &y_data, &y_len);
-            AImage_getPlaneData(image, 1, &u_data, &u_len);
-            AImage_getPlaneData(image, 2, &v_data, &v_len);
+    uint8_t *y_data = 0;
+    uint8_t *u_data = 0;
+    uint8_t *v_data = 0;
+    int y_len = 0;
+    int u_len = 0;
+    int v_len = 0;
+    AImage_getPlaneData(image, 0, &y_data, &y_len);
+    AImage_getPlaneData(image, 1, &u_data, &u_len);
+    AImage_getPlaneData(image, 2, &v_data, &v_len);
 
-            if (u_data == v_data + 1 && v_data == y_data + width * height && y_pixelStride == 1 && u_pixelStride == 2 &&
-                v_pixelStride == 2 &&
-                y_rowStride == width && u_rowStride == width && v_rowStride == width) {
-                // already nv21  :)
-                ((NdkCamera *) context)->on_image((unsigned char *) y_data, (int) width, (int) height);
-            } else {
-                // construct nv21
-                unsigned char *nv21 = new unsigned char[width * height + width * height / 2];
-                {
-                    // Y
-                    unsigned char *yptr = nv21;
-                    for (int y = 0; y < height; y++) {
-                        const unsigned char *y_data_ptr = y_data + y_rowStride * y;
-                        for (int x = 0; x < width; x++) {
-                            yptr[0] = y_data_ptr[0];
-                            yptr++;
-                            y_data_ptr += y_pixelStride;
-                        }
-                    }
-
-                    // UV
-                    unsigned char *uvptr = nv21 + width * height;
-                    for (int y = 0; y < height / 2; y++) {
-                        const unsigned char *v_data_ptr = v_data + v_rowStride * y;
-                        const unsigned char *u_data_ptr = u_data + u_rowStride * y;
-                        for (int x = 0; x < width / 2; x++) {
-                            uvptr[0] = v_data_ptr[0];
-                            uvptr[1] = u_data_ptr[0];
-                            uvptr += 2;
-                            v_data_ptr += v_pixelStride;
-                            u_data_ptr += u_pixelStride;
-                        }
-                    }
+    if (u_data == v_data + 1 && v_data == y_data + width * height && y_pixelStride == 1 && u_pixelStride == 2 &&
+        v_pixelStride == 2 &&
+        y_rowStride == width && u_rowStride == width && v_rowStride == width) {
+        // already nv21  :)
+        ((NdkCamera *) context)->on_image((unsigned char *) y_data, (int) width, (int) height);
+    } else {
+        // construct nv21
+        unsigned char *nv21 = new unsigned char[width * height + width * height / 2];
+        {
+            // Y
+            unsigned char *yptr = nv21;
+            for (int y = 0; y < height; y++) {
+                const unsigned char *y_data_ptr = y_data + y_rowStride * y;
+                for (int x = 0; x < width; x++) {
+                    yptr[0] = y_data_ptr[0];
+                    yptr++;
+                    y_data_ptr += y_pixelStride;
                 }
-
-                ((NdkCamera *) context)->on_image((unsigned char *) nv21, (int) width, (int) height);
-
-                delete[] nv21;
             }
 
-            AImage_delete(image);
-        });
+            // UV
+            unsigned char *uvptr = nv21 + width * height;
+            for (int y = 0; y < height / 2; y++) {
+                const unsigned char *v_data_ptr = v_data + v_rowStride * y;
+                const unsigned char *u_data_ptr = u_data + u_rowStride * y;
+                for (int x = 0; x < width / 2; x++) {
+                    uvptr[0] = v_data_ptr[0];
+                    uvptr[1] = u_data_ptr[0];
+                    uvptr += 2;
+                    v_data_ptr += v_pixelStride;
+                    u_data_ptr += u_pixelStride;
+                }
+            }
+        }
+
+        ((NdkCamera *) context)->on_image((unsigned char *) nv21, (int) width, (int) height);
+
+        delete[] nv21;
     }
 
+    AImage_delete(image);
 
 }
 
@@ -420,7 +408,12 @@ void NdkCameraWindow::set_window(ANativeWindow *_win) {
 void NdkCameraWindow::on_image_render(cv::Mat &rgb) const {
 }
 
+static std::chrono::system_clock::time_point start;
+static std::chrono::system_clock::time_point end;
+
 void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv21_height) const {
+
+    start = std::chrono::system_clock::now();
     // resolve orientation from camera_orientation and accelerometer_sensor
     {
         if (!sensor_event_queue) {
@@ -574,6 +567,12 @@ void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv
     // rotate to native window orientation
     cv::Mat rgb_render(render_h, render_w, CV_8UC3);
     ncnn::kanna_rotate_c3(rgb.data, roi_w, roi_h, rgb_render.data, render_w, render_h, render_rotate_type);
+
+    // 속도개선위해 일부 데이터 스킵
+
+    end = std::chrono::system_clock::now();
+    if ((end - start).count() % 2 == 0)return;
+
 
     ANativeWindow_setBuffersGeometry(win, render_w, render_h, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM);
 
