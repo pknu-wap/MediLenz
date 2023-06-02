@@ -238,8 +238,14 @@ Yolo::load(AAssetManager *mgr, const char *modeltype, int _target_size, const fl
     return 0;
 }
 
+// sort objects by area
+struct {
+    bool operator()(const Object &a, const Object &b) const {
+        return a.rect.area() > b.rect.area();
+    }
+} objects_area_greater;
 
-int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects) {
+void Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects) {
     int width = rgb.cols;
     int height = rgb.rows;
 
@@ -295,17 +301,10 @@ int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects) {
     for (int i = 0; i < count; i++) {
         objects[i] = proposals[picked[i]];
 
-        // adjust offset to original unpadded
-        float x0 = (objects[i].rect.x - (wpad / 2)) / scale;
-        float y0 = (objects[i].rect.y - (hpad / 2)) / scale;
-        float x1 = (objects[i].rect.x + objects[i].rect.width - (wpad / 2)) / scale;
-        float y1 = (objects[i].rect.y + objects[i].rect.height - (hpad / 2)) / scale;
-
-        // clip
-        x0 = std::max(std::min(x0, (float) (width - 1)), 0.f);
-        y0 = std::max(std::min(y0, (float) (height - 1)), 0.f);
-        x1 = std::max(std::min(x1, (float) (width - 1)), 0.f);
-        y1 = std::max(std::min(y1, (float) (height - 1)), 0.f);
+        float x0 = std::max(std::min((objects[i].rect.x - (wpad / 2)) / scale, (float) (width - 1)), 0.f);
+        float y0 = std::max(std::min((objects[i].rect.y - (hpad / 2)) / scale, (float) (height - 1)), 0.f);
+        float x1 = std::max(std::min((objects[i].rect.x + objects[i].rect.width - (wpad / 2)) / scale, (float) (width - 1)), 0.f);
+        float y1 = std::max(std::min((objects[i].rect.y + objects[i].rect.height - (hpad / 2)) / scale, (float) (height - 1)), 0.f);
 
         objects[i].rect.x = x0;
         objects[i].rect.y = y0;
@@ -313,28 +312,14 @@ int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects) {
         objects[i].rect.height = y1 - y0;
     }
 
-    // sort objects by area
-    struct {
-        bool operator()(const Object &a, const Object &b) const {
-            return a.rect.area() > b.rect.area();
-        }
-    } objects_area_greater;
     std::sort(objects.begin(), objects.end(), objects_area_greater);
-
-    return 0;
 }
 
 static const int color = 255;
 static const cv::Scalar detectedRectColor(color, color, color);
 
-
-int Yolo::draw(cv::Mat &rgb, const std::vector<Object> &objects) {
-    if (objects.empty())
-        return 0;
-
-    for (const auto &obj: objects) {
-        cv::rectangle(rgb, obj.rect, detectedRectColor, 2);
+void Yolo::draw(cv::Mat &rgb, const std::vector<Object> &objects) {
+    for (Object obj: objects) {
+        cv::rectangle(rgb, obj.rect, detectedRectColor, 2, cv::LINE_AA);
     }
-
-    return 0;
 }
