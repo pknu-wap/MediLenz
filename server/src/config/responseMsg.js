@@ -20,8 +20,14 @@ module.exports = {
     SIGNUP_INTERNAL_SERVER_ERROR: "DB Error",
 
     // Comment
+    COMMENT_GET_COMPLETE: "comment get complete",
     COMMENT_WRITE_COMPLETE: "comment write complete",
-
+    COMMENT_WRITE_FAIL: "comment write fail",
+    COMMENT_NOT_FOUND: "comment not found",
+    COMMENT_DELETE_COMPLETE: "comment delete complete",
+    COMMENT_DELETE_FAIL: "comment delete fail",
+    COMMENT_EDIT_COMPLETE: "comment edit complete",
+    COMMENT_EDIT_FAIL: "comment edit fail",
     // Medicine
     MEDICINE_ID_FOUND: "medicine id found",
 
