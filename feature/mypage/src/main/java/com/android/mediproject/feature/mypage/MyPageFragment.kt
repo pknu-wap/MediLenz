@@ -119,16 +119,18 @@ class MyPageFragment :
         }
     }
 
+    private fun showMyPageBottomSheet(){
+        myPageMoreBottomSheet = MyPageMoreBottomSheetFragment()
+        myPageMoreBottomSheet!!.show(
+            parentFragmentManager,
+            MyPageMoreBottomSheetFragment.TAG
+        )
+    }
+
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
         is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
         is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
-        is MyPageViewModel.MyPageEvent.MyPageMore -> {
-            myPageMoreBottomSheet = MyPageMoreBottomSheetFragment()
-            myPageMoreBottomSheet!!.show(
-                parentFragmentManager,
-                MyPageMoreBottomSheetFragment.TAG
-            )
-        }
+        is MyPageViewModel.MyPageEvent.MyPageMore -> showMyPageBottomSheet()
     }
 
     private fun setMyCommentsList() {
