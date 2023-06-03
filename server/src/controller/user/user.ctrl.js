@@ -3,9 +3,15 @@
 const { responseFormat } = require("../../config/response")
 const responseMsg = require("../../config/responseMsg");
 const { login, createUser, reissueToken } = require("../../service/userService");
-
+const { getComment, getCommentListByUserId } = require("../../service/commentService");
 // GET
 const output = {
+    //본인이 작성한 댓글 조회
+    getComment: async (req, res) => {
+        const { userId } = req.verifiedToken;
+        const result = await getCommentListByUserId(userId);
+        return res.status(result.code).send(result.response);
+    }
 }
 
 // POST

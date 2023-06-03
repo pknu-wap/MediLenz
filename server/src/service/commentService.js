@@ -61,9 +61,25 @@ const _getReplyList = async (medicineId, commentId) => { //NOT FOR EXPORT
     }
     return _commentList;
 }
-const getCommentList = async (medicineId) => {
+const getCommentListByMedicineId = async (medicineId) => {
     const commentList = await _getCommentList(medicineId);
     return responseFormat(200, { message: responseMsg.COMMENT_GET_COMPLETE, commentList: commentList });
+}
+const getCommentListByUserId = async (userId) => {
+    const commentList = await Comment.findAll({
+        where: {
+            USERID: userId
+        }
+    });
+    let _commentList = [];
+    for (let i in commentList) {
+        let _comment;
+        _comment.medicineId = commentList[i].dataValues.MEDICINEID;
+        _comment.id = commentList[i].dataValues.ID;
+        _comment.content = commentList[i].dataValues.CONTENT;
+        _commentList.push(_comment);
+    }
+    return responseFormat(200, { message: responseMsg.COMMENT_GET_COMPLETE, commentList: _commentList });
 }
 const addLike = async (userId, commentId) => {
     try {
@@ -200,5 +216,6 @@ module.exports = {
     deleteComment,
     editComment,
     isLiked,
-    getCommentList
+    getCommentListByMedicineId,
+    getCommentListByUserId
 };

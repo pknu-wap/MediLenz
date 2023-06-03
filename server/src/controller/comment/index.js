@@ -1,22 +1,23 @@
 "use strict";
 
 const {getMedicineId} = require("../../service/medicineService");
-const {writeComment, deleteComment, getCommentList, editComment, addLike, removeLike, isLiked} = require("../../service/commentService");
+const {writeComment, deleteComment, getCommentList, editComment, addLike, removeLike, isLiked, getCommentListByMedicineId} = require("../../service/commentService");
 
-//userId is in req.verifiedToken
 const get = async (req, res) => {
     //item_seq, item_name, item_ingr_name, prduct_type, entp_name, spclty_pblc as POST
     const {ITEM_SEQ, ITEM_NAME, ITEM_INGR_NAME, PRDUCT_TYPE, ENTP_NAME, SPCLTY_PBLC} = req.body;
     const result = await getMedicineId(ITEM_SEQ, ITEM_NAME, ITEM_INGR_NAME, PRDUCT_TYPE, ENTP_NAME, SPCLTY_PBLC);
     return res.status(result.code).send(result.response);
 }
+
 const getComment = async (req, res) => {
     const {medicineId} = req.params;
     console.log(req);
     console.log(medicineId);
-    const result = await getCommentList(medicineId);
+    const result = await getCommentListByMedicineId(medicineId);
     return res.status(result.code).send(result.response);
 }
+
 const writeTest = async (req, res) => {
     const {userId, medicineId, content, subOrdinationId} = req.body;
     const result = await writeComment(userId, medicineId, content, subOrdinationId);
