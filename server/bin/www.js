@@ -28,7 +28,6 @@ app.listen(PORT, async () => {
   console.log("All medicines:", JSON.stringify(await models.Medicine.findAll(), null, 2));
   console.log("All likes:", JSON.stringify(await models.Like.findAll(), null, 2));
   console.log("All comments:", JSON.stringify(await models.Comment.findAll(), null, 2));
-  console.log("All recent browses:", JSON.stringify(await models.RecentBrowsed.findAll(), null, 2));
   console.log("All favorite medicines:", JSON.stringify(await models.FavoriteMedicine.findAll(), null, 2));
 
   // // model auto generation test
