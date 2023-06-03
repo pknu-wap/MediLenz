@@ -30,6 +30,9 @@ module.exports = {
     COMMENT_EDIT_FAIL: "comment edit fail",
     // Medicine
     MEDICINE_ID_FOUND: "medicine id found",
+    // Medicine_Favorite
+    MEDICINE_FAVORITE_ADD_COMPLETE: "favorite medicine add complete",
+    MEDICINE_FAVORITE_ADD_FAIL: "comment write fail",
 
     // Like
     LIKE_ADD_COMPLETE: "like add complete",

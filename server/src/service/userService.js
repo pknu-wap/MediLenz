@@ -30,8 +30,8 @@ const login = async (email, password) => {
     }
   
     const message = responseMsg.SIGNIN_SUCCESS; // generate response message
-    const accessToken = createAccessToken(userInfo.USERID); // generate access token
-    const refreshToken = createRefreshToken(userInfo.USERID); // generate refresh token
+    const accessToken = createAccessToken(userInfo.ID); // generate access token
+    const refreshToken = createRefreshToken(userInfo.ID); // generate refresh token
 
     return responseFormat(200, tokenResponseFormat(message, accessToken, refreshToken));
 }

@@ -1,6 +1,6 @@
 "use strict";
 
-const { Medicine } = require("../models/index");
+const { Medicine, FavoriteMedicine } = require("../models/index");
 const { responseFormat } = require("../config/response");
 const responseMsg = require("../config/responseMsg");
 
@@ -25,11 +25,26 @@ const getMedicineId = async (item_seq, item_name, item_ingr_name, prduct_type, e
             ENTP_NAME: entp_name,
             SPCLTY_PBLC: spclty_pblc
         });
-        return responseFormat(200, {message: responseMsg.MEDICINE_ID_FOUND, medicineId: newMedicine.ID});
+        return responseFormat(200, { message: responseMsg.MEDICINE_ID_FOUND, medicineId: newMedicine.ID });
     }
-    return responseFormat(200, {message: responseMsg.MEDICINE_ID_FOUND, medicineId: medicine.ID});
+    return responseFormat(200, { message: responseMsg.MEDICINE_ID_FOUND, medicineId: medicine.ID });
+}
+
+const addFavoriteMedicine = async (user_id, medicine_id) => {
+    try {
+        const newFavoriteMedicine = await FavoriteMedicine.create({ // insert new favorite medicine into DB
+            USERID: user_id,
+            MEDICINEID: medicine_id
+        });
+        return responseFormat(201, { message: responseMsg.MEDICINE_FAVORITE_ADD_COMPLETE, favoriteMedicineId: newFavoriteMedicine.ID }); // insert SUCCESS
+    }
+    catch (err) {
+        console.log(err);
+        return responseFormat(500, { message: responseMsg.MEDICINE_FAVORITE_ADD_FAIL }); // insert FAIL
+    }
 }
 
 module.exports = {
-    getMedicineId
+    getMedicineId,
+    addFavoriteMedicine
 }
