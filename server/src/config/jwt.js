@@ -37,6 +37,7 @@ const verifyAccessToken = (req, res, next) => {
         const result = responseFormat(401, responseMsg.JWT_INVALID_FORMAT); // 401 unauthorized
         return res.status(result.code).send(result.response);
     }
+    jwt.decode()
     jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRETKEY, (err, data) => { // verifing token
         if (err) {
             console.log(err)
