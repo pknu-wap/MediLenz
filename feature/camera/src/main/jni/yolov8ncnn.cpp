@@ -159,7 +159,7 @@ static std::vector<Object> objs;
 
 void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
     {
-        ncnn::MutexLockGuard g(lock);
+        // ncnn::MutexLockGuard g(lock);
 
         if (g_yolo) {
             objs.clear();

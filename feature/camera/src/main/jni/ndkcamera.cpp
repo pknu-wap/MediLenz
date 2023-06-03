@@ -408,12 +408,8 @@ void NdkCameraWindow::set_window(ANativeWindow *_win) {
 void NdkCameraWindow::on_image_render(cv::Mat &rgb) const {
 }
 
-static std::chrono::system_clock::time_point start;
-static std::chrono::system_clock::time_point end;
 
 void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv21_height) const {
-
-    start = std::chrono::system_clock::now();
     // resolve orientation from camera_orientation and accelerometer_sensor
     {
         if (!sensor_event_queue) {
@@ -567,12 +563,6 @@ void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv
     // rotate to native window orientation
     cv::Mat rgb_render(render_h, render_w, CV_8UC3);
     ncnn::kanna_rotate_c3(rgb.data, roi_w, roi_h, rgb_render.data, render_w, render_h, render_rotate_type);
-
-    // 속도개선위해 일부 데이터 스킵
-
-    end = std::chrono::system_clock::now();
-    if ((end - start).count() % 2 == 0)return;
-
 
     ANativeWindow_setBuffersGeometry(win, render_w, render_h, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM);
 
