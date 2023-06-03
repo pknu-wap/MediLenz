@@ -2,11 +2,17 @@
 
 const { responseFormat } = require("../../../config/response")
 const responseMsg = require("../../../config/responseMsg");
-const { addFavoriteMedicine } = require("../../../service/medicineService");
+const { addFavoriteMedicine, getFavoriteMedicineList } = require("../../../service/medicineService");
 
 // GET
 const output = {
-
+    // GET favorite medicine list
+    // [GET] /medicine/favorite
+    getFavoriteMedicineList: async (req, res) => {
+        const { userId } = req.verifiedToken;
+        const result = await getFavoriteMedicineList(userId); // get favorite medicine list
+        return res.status(result.code).send(result.response);
+    }
 }
 
 // POST

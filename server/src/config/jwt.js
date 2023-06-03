@@ -21,9 +21,7 @@ const createRefreshToken = (userId) => {
 
 // resolve token
 const resolveToken = (req) => {
-    console.log(req.headers)
     const token = req.headers[AUTHORIZATION_HEADER] // extract token from http header
-    console.log(token)
     if (token && token.startsWith("Bearer ")) { // if token exist
         return token.substring(7); // return pure token value
     }

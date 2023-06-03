@@ -31,6 +31,10 @@ module.exports = {
     // Medicine
     MEDICINE_ID_FOUND: "medicine id found",
     // Medicine_Favorite
+    MEDICINE_FAVORITE_LIST_GET_COMPLETE: "favorite medicine list get complete",
+    MEDICINE_FAVORITE_LIST_GET_FAIL: "favorite medicine list get fail",
+    MEDICINE_FAVORITE_GET_COMPLETE: "favorite medicine get complete",
+    MEDICINE_FAVORITE_GET_FAIL: "favorite medicine get fail",
     MEDICINE_FAVORITE_ADD_COMPLETE: "favorite medicine add complete",
     MEDICINE_FAVORITE_ADD_FAIL: "comment write fail",
 
