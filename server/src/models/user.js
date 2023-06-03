@@ -41,7 +41,6 @@ module.exports = function (sequelize, DataTypes) {
         }
     });
     User.associate = function (models) {
-        User.hasMany(models.RecentBrowsed, {foreignKey: 'USERID', targetKey: 'ID'});
         User.hasMany(models.FavoriteMedicine, {foreignKey: 'USERID', targetKey: 'ID'});
         User.hasMany(models.Like, {foreignKey: 'USERID', targetKey: 'ID'});
         User.hasMany(models.Comment, {foreignKey: 'USERID', targetKey: 'ID'});
