@@ -49,9 +49,9 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
     override fun onResume() {
         super.onResume()
         when(flag){
-            is DialogFlag.ChangeNickName -> requireContext().dialogResize(this,0.90f,0.375f)
-            is DialogFlag.ChangePassword -> requireContext().dialogResize(this,0.9f,0.4f)
-            is DialogFlag.Withdrawal -> requireContext().dialogResize(this,0.9f,0.375f)
+            is DialogFlag.ChangeNickName -> requireContext().dialogResize(this,0.95f,0.375f)
+            is DialogFlag.ChangePassword -> requireContext().dialogResize(this,0.95f,0.49f)
+            is DialogFlag.Withdrawal -> requireContext().dialogResize(this,0.95f,0.375f)
         }
     }
 
