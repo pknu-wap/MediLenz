@@ -50,7 +50,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         super.onResume()
         when(flag){
             is DialogFlag.ChangeNickName -> requireContext().dialogResize(this,0.95f,0.375f)
-            is DialogFlag.ChangePassword -> requireContext().dialogResize(this,0.95f,0.49f)
+            is DialogFlag.ChangePassword -> requireContext().dialogResize(this,0.95f,0.48f)
             is DialogFlag.Withdrawal -> requireContext().dialogResize(this,0.95f,0.375f)
         }
     }
