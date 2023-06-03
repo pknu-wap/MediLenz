@@ -10,6 +10,7 @@ import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.domain.sign.SignUseCase
+import com.android.mediproject.core.model.local.navargs.TOHOME
 import com.android.mediproject.core.model.parameters.SignInParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.intro.SignInState.FailedSignIn
@@ -48,10 +49,13 @@ class LoginViewModel @Inject constructor(
     private val _eventFlow = MutableEventFlow<SignEvent>(replay = 1)
     val eventFlow = _eventFlow.asEventFlow()
 
-    fun event(event: SignEvent) = viewModelScope.launch { _eventFlow.emit(event) }
+    private val _moveFlag = MutableStateFlow(TOHOME)
+    val moveFlag get() = _moveFlag.asStateFlow()
 
+    fun event(event: SignEvent) = viewModelScope.launch { _eventFlow.emit(event) }
     fun login() = event(SignEvent.SignIn)
     fun signUp() = event(SignEvent.SignUp)
+    fun setMoveFlag(flag : Int){ _moveFlag.value = flag }
 
     /**
      * 로그인 요청

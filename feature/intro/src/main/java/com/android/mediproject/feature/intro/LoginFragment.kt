@@ -12,6 +12,8 @@ import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.delayTextChangedCallback
+import com.android.mediproject.core.model.local.navargs.TOHOME
+import com.android.mediproject.core.model.local.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,12 +38,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
     private val mainScope = MainScope()
     private val jobs = mutableListOf<Job>()
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
             loginBtn.isEnabled = false
+            val moveFlag = arguments?.getInt("flag", TOHOME)
+            fragmentViewModel.setMoveFlag(moveFlag ?: TOHOME)
 
             addDelayTextWatcher(loginEmail.inputData)
             addDelayTextWatcher(loginPassword.inputData)
@@ -65,9 +68,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
                                 // 로그인 성공
                                 LoadingDialog.dismiss()
                                 toast(getString(R.string.signInSuccess))
-                                findNavController().navigate(
-                                    "medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
-                                )
+
+                                when(fragmentViewModel.moveFlag.value){
+                                    TOHOME -> findNavController().navigate("medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
+                                    TOMYPAGE -> findNavController().navigate("medilens://main/mypage_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
+                                }
                             }
 
                             is SignInState.FailedSignIn -> {

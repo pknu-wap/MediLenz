@@ -11,6 +11,8 @@ import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.delayTextChangedCallback
+import com.android.mediproject.core.model.local.navargs.TOHOME
+import com.android.mediproject.core.model.local.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentSignUpBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,11 +29,14 @@ import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(FragmentSignUpBinding::inflate) {
+class SignUpFragment :
+    BaseFragment<FragmentSignUpBinding, SignUpViewModel>(FragmentSignUpBinding::inflate) {
 
     override val fragmentViewModel: SignUpViewModel by viewModels()
 
-    @Inject @Dispatcher(MediDispatchers.Default) lateinit var defaultDispatcher: CoroutineDispatcher
+    @Inject
+    @Dispatcher(MediDispatchers.Default)
+    lateinit var defaultDispatcher: CoroutineDispatcher
 
     private val mainScope = MainScope()
 
@@ -40,6 +45,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(Frag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val moveFlag = arguments?.getInt("flag", TOHOME)
+        fragmentViewModel.setMoveFlag(moveFlag ?: TOHOME)
+
         binding.apply {
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.repeatOnStarted {
@@ -60,15 +69,28 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(Frag
                 fragmentViewModel.signInEvent.collectLatest {
                     when (it) {
                         is SignUpState.SigningUp -> {
-                            LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.signingUp))
+                            LoadingDialog.showLoadingDialog(
+                                requireActivity(),
+                                getString(R.string.signingUp)
+                            )
                         }
 
                         is SignUpState.SuccessSignUp -> {
                             LoadingDialog.dismiss()
                             toast(getString(R.string.signUpSuccess))
-                            findNavController().navigate(
-                                "medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.signUpFragment, true).build()
-                            )
+                            when (fragmentViewModel.moveFlag.value) {
+                                TOHOME -> findNavController().navigate(
+                                    "medilens://main/home_nav".toUri(),
+                                    NavOptions.Builder().setPopUpTo(R.id.signUpFragment, true)
+                                        .build()
+                                )
+
+                                TOMYPAGE -> findNavController().navigate(
+                                    "medilens://main/mypage_nav".toUri(),
+                                    NavOptions.Builder().setPopUpTo(R.id.signUpFragment, true)
+                                        .build()
+                                )
+                            }
                         }
 
                         is SignUpState.FailedSignUp -> {

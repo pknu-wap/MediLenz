@@ -1,6 +1,7 @@
 package com.android.mediproject.core.ui.base.view
 
 import android.content.Context
+import android.graphics.Typeface
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -51,10 +52,23 @@ class Subtitle @JvmOverloads constructor(
         }
 
         if (dataType == PASSWORD) {
-            inputData.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            inputData.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
 
         typedArray.recycle()
+    }
+
+    fun setTitle(newTitle: String) {
+        title.text = newTitle
+    }
+
+    fun setHint(newHint: String) {
+        inputData.hint = newHint
+    }
+
+    fun setTitleStyleNormal(){
+        title.setTypeface(null,Typeface.NORMAL)
     }
 
     //EditText에 적은 값을 불러오는 함수

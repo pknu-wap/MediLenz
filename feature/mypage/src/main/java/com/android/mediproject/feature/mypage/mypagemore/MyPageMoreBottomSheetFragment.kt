@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MyPageMoreBottomSheetFragment : BottomSheetDialogFragment() {
+class MyPageMoreBottomSheetFragment(private val backCallback : () -> Unit) : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "MyPageMoreBottomSheetFragment"
@@ -184,5 +184,6 @@ class MyPageMoreBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        backCallback()
     }
 }

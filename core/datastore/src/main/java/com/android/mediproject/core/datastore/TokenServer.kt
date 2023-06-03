@@ -4,22 +4,23 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 class TokenServerImpl @Inject constructor() : TokenServer {
-    private var _tokens: TokenServer.Tokens = TokenServer.Tokens(CharArray(0), CharArray(0), LocalDateTime.now(), LocalDateTime.now())
-    override var tokens
-        get() = _tokens
-        set(value) {
-            _tokens = value
-        }
+    override var tokens : TokenServer.Tokens? = null
 
+    override val currentTokens: TokenServer.Tokens
+        get() = tokens!!
 
-    override fun isTokenEmpty(): Boolean = tokens.isEmpty()
+    override fun isTokenEmpty(): Boolean = tokens?.isEmpty()?:true
 
-    override fun isExpiredAccessToken(): Boolean = LocalDateTime.now().isAfter(tokens.expirationTimeOfAccessToken)
+    override fun isExpiredAccessToken(): Boolean = tokens?.run {
+        LocalDateTime.now().isAfter(expirationTimeOfAccessToken)
+    } ?: true
 
-    override fun isExpiredRefreshToken(): Boolean = LocalDateTime.now().isAfter(tokens.expirationTimeOfRefreshToken)
+    override fun isExpiredRefreshToken(): Boolean =  tokens?.run {
+        LocalDateTime.now().isAfter(expirationTimeOfRefreshToken)
+    } ?: true
 
     override fun clearTokens() {
-        _tokens = TokenServer.Tokens(CharArray(0), CharArray(0), LocalDateTime.now(), LocalDateTime.now())
+        tokens = TokenServer.Tokens(CharArray(0), CharArray(0), LocalDateTime.now(), LocalDateTime.now())
     }
 }
 
@@ -33,6 +34,7 @@ interface TokenServer {
     ) {
 
         fun isEmpty(): Boolean = accessToken.isEmpty() && refreshToken.isEmpty()
+
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
@@ -58,7 +60,8 @@ interface TokenServer {
 
     }
 
-    var tokens: Tokens
+    var tokens: Tokens?
+    val currentTokens : Tokens
 
     fun isTokenEmpty(): Boolean
 

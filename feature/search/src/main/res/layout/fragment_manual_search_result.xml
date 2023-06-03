@@ -31,8 +31,7 @@
             app:drawableRightCompat="@drawable/baseline_expand_more_24"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:medicationTypeText="@{viewModel.searchParameter.medicationType}"
-            />
+            app:medicationTypeText="@{viewModel.searchParameter.medicationType}" />
 
         <include
             android:id="@+id/pagingListViewGroup"

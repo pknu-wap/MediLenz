@@ -1,5 +1,6 @@
 package com.android.mediproject.core.datastore
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -10,15 +11,29 @@ import com.android.mediproject.core.model.remote.token.TokenState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * 로컬에 토큰 정보를 저장/삭제하는 클래스
@@ -34,97 +49,92 @@ class TokenDataSourceImpl @Inject constructor(
     private val tokenDataStore: DataStore<ConnectionToken>,
     private val aesCoder: AesCoder,
     private val tokenServer: TokenServer,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : TokenDataSource {
 
-    @OptIn(DelicateCoroutinesApi::class) private val globalScope = GlobalScope
 
-    /**
-     * 보조 기억 장치에 저장된 토큰을 가져온다.
-     */
-    @OptIn(DelicateCoroutinesApi::class) override val savedTokens = tokenDataStore.data.map { savedToken ->
-        savedToken.takeIf {
-            it.accessToken.isNotEmpty() && it.refreshToken.isNotEmpty() && it.expirationDatetime.isNotEmpty() && LocalDateTime.parse(it.expirationDatetime) > LocalDateTime.now()
-        }?.let {
-            TokenState.Valid(
-                CurrentTokenDto(
-                    aesCoder.decode(it.accessToken), aesCoder.decode(it.refreshToken), LocalDateTime.parse(it.expirationDatetime)
-                )
-            )
-        } ?: TokenState.Empty
-    }.flowOn(ioDispatcher).buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST).shareIn(
-        globalScope, replay = 1, started = SharingStarted.Lazily
-    )
-
-    /**
-     * 현재 토큰 상태를 가져온다.
-     * @return TokenState
-     */
-    override val currentTokens: TokenState<CurrentTokenDto> = tokenServer.let {
-        if (it.isTokenEmpty()) TokenState.Empty
-        else if (it.isExpiredAccessToken()) {
-            val token = it.tokens
-            TokenState.Expiration(
-                CurrentTokenDto(
-                    token.accessToken.copyOf(), token.refreshToken.copyOf(), token.expirationTimeOfAccessToken
-                )
-            )
-        } else {
-            val token = it.tokens
-            TokenState.Valid(
-                CurrentTokenDto(
-                    token.accessToken.copyOf(), token.refreshToken.copyOf(), token.expirationTimeOfAccessToken
-                )
-            )
+    override suspend fun currentTokens(): Flow<TokenState<CurrentTokenDto>> = channelFlow {
+        if (tokenServer.isTokenEmpty()) {
+            val load = async { loadSavedTokens() }
+            load.await()
         }
-    }
+        Log.d("wap", "currentTokens")
+        val token = tokenServer.tokens?.let { tokens ->
 
-    init {
-        suspend {
-            savedTokens.collectLatest {
-                when (it) {
-                    is TokenState.Valid -> {
-                        tokenServer.tokens = TokenServer.Tokens(
-                            accessToken = it.data.accessToken.copyOf(),
-                            refreshToken = it.data.refreshToken.copyOf(),
-                            expirationTimeOfAccessToken = it.data.expirationTimeOfAccessToken,
-                            expirationTimeOfRefreshToken = it.data.expirationTimeOfAccessToken
-                        )
-                    }
-
-                    else -> {
-                        tokenServer.clearTokens()
-                    }
+            if (tokens.isEmpty())
+                TokenState.Empty
+            else {
+                val currentTokenDto = CurrentTokenDto(
+                    refreshToken = tokens.refreshToken.copyOf(),
+                    accessToken = tokens.accessToken.copyOf(),
+                    expirationTimeOfAccessToken = tokens.expirationTimeOfAccessToken
+                )
+                Log.d("wap","토큰 체크 TokenDto"+currentTokenDto.toString())
+                Log.d("wap", "토큰 만료 확인")
+                // 토큰 만료 확인
+                if (tokenServer.isExpiredAccessToken() && tokenServer.isExpiredRefreshToken()) {
+                    Log.d("wap", "토큰 만료")
+                    TokenState.Expiration(currentTokenDto)
                 }
+                else
+                    TokenState.Valid(
+                        currentTokenDto
+                    )
             }
+        } ?: TokenState.Empty
+        trySend(token)
+    }
+
+    private suspend fun loadSavedTokens() {
+        Log.d("wap", "loadSavedTokens")
+
+        return tokenDataStore.data.first().let { savedToken ->
+            Log.d("wap", "saved")
+            if (savedToken.accessToken.isNotEmpty() && savedToken.refreshToken.isNotEmpty())
+                tokenServer.tokens = TokenServer.Tokens(
+                    refreshToken = savedToken.refreshToken.toCharArray(),
+                    accessToken = savedToken.accessToken.toCharArray(),
+                    expirationTimeOfAccessToken = LocalDateTime.parse(savedToken.expirationDatetime),
+                    expirationTimeOfRefreshToken = LocalDateTime.parse(savedToken.expirationDatetime)
+                )
         }
     }
+
 
     /**
      * 토큰을 저장한다.
      */
     override suspend fun updateTokens(newTokensFromAws: NewTokensFromAws) {
-        // refreshToken 변경여부 확인
-        if (tokenServer.tokens.refreshToken.contentEquals(newTokensFromAws.refreshToken)) {
+        if (!tokenServer.isTokenEmpty()) {
+            // refreshToken 변경여부 확인
+            Log.d("wap","토큰이 있습니다.")
+
+            if (tokenServer.currentTokens.refreshToken.contentEquals(newTokensFromAws.refreshToken))
             // refreshToken이 변경되지 않았다면, refreshToken은 유지하고 accessToken만 변경한다.
-            tokenServer.tokens = tokenServer.tokens.copy(
-                accessToken = newTokensFromAws.accessToken, expirationTimeOfAccessToken = LocalDateTime.now()
-            )
+                tokenServer.tokens = tokenServer.currentTokens.copy(
+                    accessToken = newTokensFromAws.accessToken,
+                    expirationTimeOfAccessToken = LocalDateTime.now().plusHours(1)
+                )
+
+            Log.d("wap","액세스 토큰만 변경")
         } else {
-            // refreshToken이 변경되었다면, refreshToken과 accessToken을 모두 변경한다.
-            tokenServer.tokens = tokenServer.tokens.copy(
+            tokenServer.tokens = TokenServer.Tokens(
                 accessToken = newTokensFromAws.accessToken,
                 refreshToken = newTokensFromAws.refreshToken,
-                expirationTimeOfRefreshToken = LocalDateTime.now(),
-                expirationTimeOfAccessToken = LocalDateTime.now()
+                expirationTimeOfRefreshToken = LocalDateTime.now().plusHours(1),
+                expirationTimeOfAccessToken = LocalDateTime.now().plusHours(1)
             )
+            Log.d("wap","새로운 토큰 발급")
         }
 
+
         tokenDataStore.updateData { currentToken ->
-            val tokens = tokenServer.tokens
-            currentToken.toBuilder().setAccessToken(aesCoder.encode(tokens.accessToken)).setRefreshToken(
-                aesCoder.encode(tokens.refreshToken)
-            ).setExpirationDatetime(tokens.expirationTimeOfRefreshToken.toString()).build()
+            val tokens = tokenServer.currentTokens
+            Log.d("wap","뭔지모르는 분기")
+            currentToken.toBuilder().setAccessToken(aesCoder.encode(tokens.accessToken))
+                .setRefreshToken(
+                    aesCoder.encode(tokens.refreshToken)
+                ).setExpirationDatetime(tokens.expirationTimeOfRefreshToken.toString()).build()
         }
     }
 
@@ -134,7 +144,8 @@ class TokenDataSourceImpl @Inject constructor(
     override suspend fun signOut() {
         tokenServer.clearTokens()
         tokenDataStore.updateData { currentToken ->
-            currentToken.toBuilder().setAccessToken("").setRefreshToken("").setExpirationDatetime("").build()
+            currentToken.toBuilder().setAccessToken("").setRefreshToken("")
+                .setExpirationDatetime("").build()
         }
     }
 }

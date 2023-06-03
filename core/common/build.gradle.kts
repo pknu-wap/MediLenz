@@ -25,7 +25,7 @@ android {
 
 hilt {
     enableAggregatingTask = true
-}
+ }
 
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
