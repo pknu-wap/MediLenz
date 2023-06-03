@@ -7,9 +7,12 @@ const {writeComment, deleteComment, getCommentList, editComment, addLike, remove
 const get = async (req, res) => {
     //item_seq, item_name, item_ingr_name, prduct_type, entp_name, spclty_pblc as POST
     const {ITEM_SEQ, ITEM_NAME, ITEM_INGR_NAME, PRDUCT_TYPE, ENTP_NAME, SPCLTY_PBLC} = req.body;
-    let result = await getMedicineId(ITEM_SEQ, ITEM_NAME, ITEM_INGR_NAME, PRDUCT_TYPE, ENTP_NAME, SPCLTY_PBLC);
-    if (result.code != 200) { return res.status(result.code).send(result.response); }
-    result = await getCommentList(result.response);
+    const result = await getMedicineId(ITEM_SEQ, ITEM_NAME, ITEM_INGR_NAME, PRDUCT_TYPE, ENTP_NAME, SPCLTY_PBLC);
+    return res.status(result.code).send(result.response);
+}
+const getComment = async (req, res) => {
+    const {medicineId} = req.query;
+    const result = await getCommentList(medicineId);
     return res.status(result.code).send(result.response);
 }
 const writeTest = async (req, res) => {
@@ -30,7 +33,8 @@ const del = async (req, res) => {
     return res.status(result.code).send(result.response);
 }
 const likeGet = async (req, res) => {
-    const {commentId, userId} = req.query; 
+    const {commentId} = req.query; 
+    const {userId} = req.verifiedToken;
     const result = await isLiked(userId, commentId);
     return res.status(result.code).send(result.response);
 }
@@ -49,6 +53,7 @@ const likeDelete = async (req, res) => { //removeLike
 
 module.exports = {
     get,
+    getComment,
     writeTest,
     patch,
     del,
