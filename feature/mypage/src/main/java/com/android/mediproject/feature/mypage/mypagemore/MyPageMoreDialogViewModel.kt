@@ -23,8 +23,10 @@ class MyPageMoreDialogViewModel @Inject constructor(): ViewModel() {
 
     fun event(event : MyPageMoreDialogEvent) = viewModelScope.launch{ _eventFlow.emit(event) }
     fun completeDialog() = event(MyPageMoreDialogEvent.CompleteDialog)
+    fun cancelDialog() = event(MyPageMoreDialogEvent.CancelDialog)
 
     sealed class MyPageMoreDialogEvent{
         object CompleteDialog : MyPageMoreDialogEvent()
+        object CancelDialog : MyPageMoreDialogEvent()
     }
 }
