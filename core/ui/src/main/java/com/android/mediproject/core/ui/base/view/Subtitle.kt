@@ -1,6 +1,7 @@
 package com.android.mediproject.core.ui.base.view
 
 import android.content.Context
+import android.graphics.Typeface
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -64,6 +65,10 @@ class Subtitle @JvmOverloads constructor(
 
     fun setHint(newHint: String) {
         inputData.hint = newHint
+    }
+
+    fun setTitleStyleNormal(){
+        title.setTypeface(null,Typeface.NORMAL)
     }
 
     //EditText에 적은 값을 불러오는 함수

@@ -44,14 +44,12 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         return binding.root
     }
 
-    //이쪽 부분이 Dialog 크기를 조절하는 부분인데, 현재 넣어준 값대로 동작을 안합니다. 일일이 때려맞추는 중입니다..
-    //Figma보면서 비율계산해서 넣어주는데 그 계산한대로 안나와요/
     override fun onResume() {
         super.onResume()
         when(flag){
             is DialogFlag.ChangeNickName -> requireContext().dialogResize(this,0.95f,0.375f)
             is DialogFlag.ChangePassword -> requireContext().dialogResize(this,0.95f,0.48f)
-            is DialogFlag.Withdrawal -> requireContext().dialogResize(this,0.95f,0.375f)
+            is DialogFlag.Withdrawal -> requireContext().dialogResize(this,0.95f,0.4f)
         }
     }
 
