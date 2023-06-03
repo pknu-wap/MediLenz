@@ -47,8 +47,8 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
     override fun onResume() {
         super.onResume()
         when(flag){
-            is DialogFlag.ChangeNickName -> requireContext().dialogResize(this,0.95f,0.375f)
-            is DialogFlag.ChangePassword -> requireContext().dialogResize(this,0.95f,0.48f)
+            is DialogFlag.ChangeNickName -> requireContext().dialogResize(this,0.95f,0.38f)
+            is DialogFlag.ChangePassword -> requireContext().dialogResize(this,0.95f,0.5f)
             is DialogFlag.Withdrawal -> requireContext().dialogResize(this,0.95f,0.4f)
         }
     }
@@ -138,6 +138,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                     dialogTitleTV.text = getString(R.string.withdrawal)
                     dialogSubtitle1.title.text = span
                     dialogSubtitle1.setHint(getString(R.string.withdrawalHint))
+                    dialogSubtitle1.setTitleStyleNormal()
                     dialogSubtitle2.visibility = View.GONE
                 }
             }
