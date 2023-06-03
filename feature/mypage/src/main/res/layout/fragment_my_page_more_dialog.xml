@@ -49,17 +49,53 @@
             app:edtHint="@string/passwordHint"
             app:title="@string/checkedPassword" />
 
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="40dp"
-            android:background="@drawable/radius_main_5"
-            android:gravity="center"
-            android:onClick="@{()->viewModel.completeDialog()}"
-            android:paddingVertical="10dp"
-            android:text="@string/complete"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/radius_main_5"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.completeDialog()}"
+                android:paddingVertical="10dp"
+                android:text="@string/complete"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/rectangle_5_white"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.completeDialog()}"
+                android:paddingVertical="10dp"
+                android:text="@string/complete"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </LinearLayout>
 </layout>
