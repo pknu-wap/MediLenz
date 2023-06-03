@@ -11,7 +11,9 @@ const get = async (req, res) => {
     return res.status(result.code).send(result.response);
 }
 const getComment = async (req, res) => {
-    const {medicineId} = req.query;
+    const {medicineId} = req.params;
+    console.log(req);
+    console.log(medicineId);
     const result = await getCommentList(medicineId);
     return res.status(result.code).send(result.response);
 }
@@ -32,19 +34,15 @@ const del = async (req, res) => {
     const result = await deleteComment(userId, medicineId, commentId);
     return res.status(result.code).send(result.response);
 }
-const likeGet = async (req, res) => {
-    const {commentId} = req.query; 
-    const {userId} = req.verifiedToken;
-    const result = await isLiked(userId, commentId);
-    return res.status(result.code).send(result.response);
-}
 const likePost = async (req, res) => { //addLike
+    const {medicineId} = req.params;
     const {commentId} = req.body;
     const {userId} = req.verifiedToken;
     const result = await addLike(userId, commentId);
     return res.status(result.code).send(result.response);
 }
 const likeDelete = async (req, res) => { //removeLike
+    const {medicineId} = req.params;
     const {commentId} = req.body;
     const {userId} = req.verifiedToken;
     const result = await removeLike(userId, commentId);
@@ -57,7 +55,6 @@ module.exports = {
     writeTest,
     patch,
     del,
-    likeGet,
     likePost,
     likeDelete
 }
