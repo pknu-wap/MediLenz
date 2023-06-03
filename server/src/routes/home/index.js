@@ -2,8 +2,8 @@
 
 const router = require("express").Router();
 
-router.get("/", (req, res) => {
-    res.send("hello!");
+router.post("/", (req, res) => {
+    res.send(req.body);
 })
 
 /**
@@ -15,4 +15,6 @@ router.get("/", (req, res) => {
 const user = require("../user/userRouter");
 router.use("/user", user);
 
+const medicine = require("../medicine");
+router.use("/medicine", medicine);
 module.exports = router;
