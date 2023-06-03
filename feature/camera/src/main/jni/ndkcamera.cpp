@@ -9,6 +9,9 @@
 
 #include "mat.h"
 
+#include <future>
+#include <vector>
+
 static void onDisconnected(void *context, ACameraDevice *device) {
     __android_log_print(ANDROID_LOG_WARN, "NdkCamera", "onDisconnected %p", device);
 }
@@ -21,10 +24,9 @@ static void onImageAvailable(void *context, AImageReader *reader) {
     AImage *image = 0;
     media_status_t status = AImageReader_acquireLatestImage(reader, &image);
 
-    if (status != AMEDIA_OK) {
-        // error
+    if (status != AMEDIA_OK)
         return;
-    }
+
 
     int32_t format;
     AImage_getFormat(image, &format);
@@ -59,7 +61,8 @@ static void onImageAvailable(void *context, AImageReader *reader) {
     AImage_getPlaneData(image, 1, &u_data, &u_len);
     AImage_getPlaneData(image, 2, &v_data, &v_len);
 
-    if (u_data == v_data + 1 && v_data == y_data + width * height && y_pixelStride == 1 && u_pixelStride == 2 && v_pixelStride == 2 &&
+    if (u_data == v_data + 1 && v_data == y_data + width * height && y_pixelStride == 1 && u_pixelStride == 2 &&
+        v_pixelStride == 2 &&
         y_rowStride == width && u_rowStride == width && v_rowStride == width) {
         // already nv21  :)
         ((NdkCamera *) context)->on_image((unsigned char *) y_data, (int) width, (int) height);
@@ -99,6 +102,7 @@ static void onImageAvailable(void *context, AImageReader *reader) {
     }
 
     AImage_delete(image);
+
 }
 
 static void onSessionActive(void *context, ACameraCaptureSession *session) {
@@ -146,7 +150,7 @@ NdkCamera::NdkCamera() {
 
     // setup imagereader and its surface
     {
-        AImageReader_new(640, 640, AIMAGE_FORMAT_YUV_420_888, /*maxImages*/3, &image_reader);
+        AImageReader_new(640, 640, AIMAGE_FORMAT_YUV_420_888, /*maxImages*/5, &image_reader);
 
         AImageReader_ImageListener listener;
         listener.context = this;
@@ -404,6 +408,7 @@ void NdkCameraWindow::set_window(ANativeWindow *_win) {
 void NdkCameraWindow::on_image_render(cv::Mat &rgb) const {
 }
 
+
 void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv21_height) const {
     // resolve orientation from camera_orientation and accelerometer_sensor
     {
@@ -562,6 +567,7 @@ void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv
     ANativeWindow_setBuffersGeometry(win, render_w, render_h, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM);
 
     ANativeWindow_Buffer buf;
+    // 기기 화면에 보여주기 위해 화면을 잠금
     ANativeWindow_lock(win, &buf, NULL);
 
     // scale to target size
@@ -596,6 +602,6 @@ void NdkCameraWindow::on_image(const unsigned char *nv21, int nv21_width, int nv
             }
         }
     }
-
+    // 화면 잠금 풀고 처리한 데이터를 표시
     ANativeWindow_unlockAndPost(win);
 }
