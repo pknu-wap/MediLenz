@@ -120,11 +120,15 @@ class MyPageFragment :
     }
 
     private fun showMyPageBottomSheet(){
-        myPageMoreBottomSheet = MyPageMoreBottomSheetFragment()
-        myPageMoreBottomSheet!!.show(
-            parentFragmentManager,
-            MyPageMoreBottomSheetFragment.TAG
-        )
+        if(myPageMoreBottomSheet == null) {
+            myPageMoreBottomSheet = MyPageMoreBottomSheetFragment{
+                myPageMoreBottomSheet = null
+            }
+            myPageMoreBottomSheet!!.show(
+                parentFragmentManager,
+                MyPageMoreBottomSheetFragment.TAG
+            )
+        }
     }
 
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
