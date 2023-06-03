@@ -1,8 +1,6 @@
 "use strict";
 
-const { responseFormat } = require("../../../config/response")
-const responseMsg = require("../../../config/responseMsg");
-const { addFavoriteMedicine, getFavoriteMedicineList } = require("../../../service/medicineService");
+const { addFavoriteMedicine, getFavoriteMedicineList, deleteFavoriteMedicine } = require("../../../service/medicineService");
 
 // GET
 const output = {
@@ -34,7 +32,14 @@ const edit = {
 
 // DELETE
 const eliminate = {
-
+    // Delete favorite medicine
+    // [DELETE] /medicine/favorite/:medicineId
+    deleteFavoriteMedicine: async (req, res) => {
+        const { userId } = req.verifiedToken;
+        const { medicineId } = req.query;
+        const result = await deleteFavoriteMedicine(userId, medicineId); // delete favorite medicine
+        return res.status(result.code).send(result.response);
+    }
 }
 
 module.exports = {

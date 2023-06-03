@@ -67,7 +67,7 @@ const addFavoriteMedicine = async (user_id, medicine_id) => {
             USERID: user_id,
             MEDICINEID: medicine_id
         });
-        return responseFormat(201, { message: responseMsg.MEDICINE_FAVORITE_ADD_COMPLETE, medicineList: newFavoriteMedicine.ID }); // insert SUCCESS
+        return responseFormat(201, { message: responseMsg.MEDICINE_FAVORITE_ADD_COMPLETE, favoriteMedicineID: newFavoriteMedicine.ID }); // insert SUCCESS
     }
     catch (err) {
         console.log(err);
@@ -75,8 +75,27 @@ const addFavoriteMedicine = async (user_id, medicine_id) => {
     }
 }
 
+// Delete favorite medicine
+const deleteFavoriteMedicine = async (user_id, medicine_id) => {
+    try {
+        await FavoriteMedicine.destroy({ // delete favorite medicine
+            where: {
+                USERID: user_id,
+                MEDICINEID: medicine_id
+            }
+
+        });
+        return responseFormat(200, { message: responseMsg.MEDICINE_FAVORITE_DELETE_COMPLETE}); // delete SUCCESS
+    }
+    catch (err) {
+        console.log(err);
+        return responseFormat(500, { message: responseMsg.MEDICINE_FAVORITE_DELETE_FAIL }); // delete FAIL
+    }
+}
+
 module.exports = {
     getMedicineId,
     getFavoriteMedicineList,
-    addFavoriteMedicine
+    addFavoriteMedicine,
+    deleteFavoriteMedicine
 }

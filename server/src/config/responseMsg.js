@@ -36,7 +36,9 @@ module.exports = {
     MEDICINE_FAVORITE_GET_COMPLETE: "favorite medicine get complete",
     MEDICINE_FAVORITE_GET_FAIL: "favorite medicine get fail",
     MEDICINE_FAVORITE_ADD_COMPLETE: "favorite medicine add complete",
-    MEDICINE_FAVORITE_ADD_FAIL: "comment write fail",
+    MEDICINE_FAVORITE_ADD_FAIL: "favorite medicine add fail",
+    MEDICINE_FAVORITE_DELETE_COMPLETE: "favorite medicine delete complete",
+    MEDICINE_FAVORITE_DELETE_FAIL: "favorite medicine delete fail",
 
     // Like
     LIKE_ADD_COMPLETE: "like add complete",

@@ -7,5 +7,6 @@ const { verifyAccessToken } = require("../../../config/jwt");
 // Favorite
 router.get("/", verifyAccessToken, favoriteCtrl.output.getFavoriteMedicineList); // add favorite medicine
 router.post("/", verifyAccessToken, favoriteCtrl.process.addFavoriteMedicine); // add favorite medicine
+router.delete("/", verifyAccessToken, favoriteCtrl.eliminate.deleteFavoriteMedicine); // delete favorite medicine
 
 module.exports = router;
