@@ -58,8 +58,9 @@ class TokenDataSourceImpl @Inject constructor(
             val load = async { loadSavedTokens() }
             load.await()
         }
-        Log.d("Tgyuu", "currentTokens")
+        Log.d("wap", "currentTokens")
         val token = tokenServer.tokens?.let { tokens ->
+
             if (tokens.isEmpty())
                 TokenState.Empty
             else {
@@ -68,10 +69,13 @@ class TokenDataSourceImpl @Inject constructor(
                     accessToken = tokens.accessToken.copyOf(),
                     expirationTimeOfAccessToken = tokens.expirationTimeOfAccessToken
                 )
-                Log.d("Tgyuu", "토큰 만료 확인")
+                Log.d("wap","토큰 체크 TokenDto"+currentTokenDto.toString())
+                Log.d("wap", "토큰 만료 확인")
                 // 토큰 만료 확인
-                if (tokenServer.isExpiredAccessToken() && tokenServer.isExpiredRefreshToken())
+                if (tokenServer.isExpiredAccessToken() && tokenServer.isExpiredRefreshToken()) {
+                    Log.d("wap", "토큰 만료")
                     TokenState.Expiration(currentTokenDto)
+                }
                 else
                     TokenState.Valid(
                         currentTokenDto
@@ -82,10 +86,10 @@ class TokenDataSourceImpl @Inject constructor(
     }
 
     private suspend fun loadSavedTokens() {
-        Log.d("Tgyuu", "loadSavedTokens")
+        Log.d("wap", "loadSavedTokens")
 
         return tokenDataStore.data.first().let { savedToken ->
-            Log.d("Tgyuu", "saved")
+            Log.d("wap", "saved")
             if (savedToken.accessToken.isNotEmpty() && savedToken.refreshToken.isNotEmpty())
                 tokenServer.tokens = TokenServer.Tokens(
                     refreshToken = savedToken.refreshToken.toCharArray(),
@@ -103,22 +107,30 @@ class TokenDataSourceImpl @Inject constructor(
     override suspend fun updateTokens(newTokensFromAws: NewTokensFromAws) {
         if (!tokenServer.isTokenEmpty()) {
             // refreshToken 변경여부 확인
+            Log.d("wap","토큰이 있습니다.")
+
             if (tokenServer.currentTokens.refreshToken.contentEquals(newTokensFromAws.refreshToken))
             // refreshToken이 변경되지 않았다면, refreshToken은 유지하고 accessToken만 변경한다.
                 tokenServer.tokens = tokenServer.currentTokens.copy(
                     accessToken = newTokensFromAws.accessToken,
                     expirationTimeOfAccessToken = LocalDateTime.now().plusHours(1)
                 )
-        } else
-            tokenServer.tokens = TokenServer.Tokens(accessToken = newTokensFromAws.accessToken,
+
+            Log.d("wap","액세스 토큰만 변경")
+        } else {
+            tokenServer.tokens = TokenServer.Tokens(
+                accessToken = newTokensFromAws.accessToken,
                 refreshToken = newTokensFromAws.refreshToken,
                 expirationTimeOfRefreshToken = LocalDateTime.now().plusHours(1),
                 expirationTimeOfAccessToken = LocalDateTime.now().plusHours(1)
             )
+            Log.d("wap","새로운 토큰 발급")
+        }
 
 
         tokenDataStore.updateData { currentToken ->
             val tokens = tokenServer.currentTokens
+            Log.d("wap","뭔지모르는 분기")
             currentToken.toBuilder().setAccessToken(aesCoder.encode(tokens.accessToken))
                 .setRefreshToken(
                     aesCoder.encode(tokens.refreshToken)

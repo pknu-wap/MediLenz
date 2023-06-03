@@ -50,9 +50,9 @@ class MyPageFragment :
         binding.apply {
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
+                    repeatOnStarted { token.collect { handleToken(it) } }
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
                     repeatOnStarted { user.collect { userDto = it } }
-                    repeatOnStarted { token.collect { handleToken(it) } }
                     repeatOnStarted { myCommentsList.collect { myCommentList = it } }
                 }
                 loadTokens()
@@ -106,7 +106,7 @@ class MyPageFragment :
             is TokenState.Empty -> {
                 //for test
                 loginMode = LOGIN_MODE
-                // loginMode = GUEST_MODE
+                //loginMode = GUEST_MODE
                 setMyCommentsList()
             }
 
