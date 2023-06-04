@@ -2,9 +2,8 @@ package com.android.mediproject.core.model.remote.token
 
 import java.time.LocalDateTime
 
-val ACCESS_TOKEN_EXPIRES_IN = java.time.Duration.ofDays(180L)
-val REFRESH_TOKEN_EXPIRES_IN = java.time.Duration.ofMinutes(30L)
-
+val REFRESH_TOKEN_EXPIRES_IN = java.time.Duration.ofDays(180L)
+val ACCESS_TOKEN_EXPIRES_IN = java.time.Duration.ofMinutes(30L)
 
 /**
  * 서버로 부터 응답으로 받은 토큰 정보

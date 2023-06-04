@@ -109,6 +109,8 @@ class MyPageFragment :
                 loginMode = LOGIN_MODE
                 setMyCommentsList()
             }
+
+            else -> {}
         }
     }
 
