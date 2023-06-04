@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.camera.aimodel
+package com.android.mediproject.feature.camera.yolo
 
 import android.content.res.AssetManager
 import android.graphics.Bitmap

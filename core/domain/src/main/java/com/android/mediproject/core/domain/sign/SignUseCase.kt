@@ -17,5 +17,5 @@ class SignUseCase @Inject constructor(
 
     suspend fun signOut() = signRepository.signOut()
 
-    val savedEmail = signRepository.savedEmail
+    val savedEmail = signRepository.myEmail
 }

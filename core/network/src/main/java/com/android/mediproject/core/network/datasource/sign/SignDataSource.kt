@@ -8,7 +8,7 @@ import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
 import kotlinx.coroutines.flow.Flow
 
 interface SignDataSource {
-    suspend fun signIn(signInParameter: SignInParameter): Flow<Result<SignInResponse>>
-    suspend fun signUp(signUpParameter: SignUpParameter): Flow<Result<SignUpResponse>>
-    suspend fun reissueTokens(refreshToken: CharArray): Flow<Result<ReissueTokenResponse>>
+    fun signIn(signInParameter: SignInParameter): Flow<Result<SignInResponse>>
+    fun signUp(signUpParameter: SignUpParameter): Flow<Result<SignUpResponse>>
+    fun reissueTokens(refreshToken: CharArray): Flow<Result<ReissueTokenResponse>>
 }

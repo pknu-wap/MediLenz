@@ -9,9 +9,6 @@ plugins {
 android {
     namespace = "com.android.mediproject.feature.camera"
 
-    buildFeatures {
-        buildConfig = true
-    }
     /*
 
         externalNativeBuild {

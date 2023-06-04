@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.feature.camera.aimodel.DetectedObject
 import com.android.mediproject.feature.camera.databinding.ItemViewDetectedObjectBinding
+import com.android.mediproject.feature.camera.yolo.DetectedObject
 
 class ImageListAdapter : ListAdapter<DetectedObject, ViewHolder>(Diff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =

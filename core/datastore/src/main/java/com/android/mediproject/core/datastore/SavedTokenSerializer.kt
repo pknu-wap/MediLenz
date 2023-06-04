@@ -7,21 +7,21 @@ import java.io.OutputStream
 import javax.inject.Inject
 
 
-class ConnectionTokenSerializer @Inject constructor() : Serializer<ConnectionToken> {
-    
-    override val defaultValue: ConnectionToken
-        get() = ConnectionToken.getDefaultInstance()
+class SavedTokenSerializer @Inject constructor() : Serializer<SavedToken> {
 
-    override suspend fun readFrom(input: InputStream): ConnectionToken {
+    override val defaultValue: SavedToken
+        get() = SavedToken.getDefaultInstance()
+
+    override suspend fun readFrom(input: InputStream): SavedToken {
         try {
             @Suppress("BlockingMethodInNonBlockingContext")
-            return ConnectionToken.parseFrom(input)
+            return SavedToken.parseFrom(input)
         } catch (exception: Exception) {
             throw CorruptionException("Failed to read proto.", exception)
         }
     }
 
-    override suspend fun writeTo(t: ConnectionToken, output: OutputStream) {
+    override suspend fun writeTo(t: SavedToken, output: OutputStream) {
         @Suppress("BlockingMethodInNonBlockingContext")
         t.writeTo(output)
     }
