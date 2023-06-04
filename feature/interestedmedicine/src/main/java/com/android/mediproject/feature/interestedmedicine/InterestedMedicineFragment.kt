@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
@@ -21,7 +20,6 @@ import com.android.mediproject.core.ui.base.view.ButtonChip
 import com.android.mediproject.feature.interestedmedicine.databinding.FragmentInterestedMedicineBinding
 import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import repeatOnStarted
 
 @AndroidEntryPoint
@@ -72,10 +70,6 @@ class InterestedMedicineFragment :
      */
     private fun initHeader() {
         binding.interstedMedicineHeaderView.apply {
-            setOnExpandClickListener {
-
-            }
-
             setOnMoreClickListener {
                 findNavController().navigate("medilens://main/moreInterestedMedicine_nav".toUri())
             }
