@@ -10,6 +10,8 @@ import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
+import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
+import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
@@ -35,7 +37,7 @@ import javax.inject.Singleton
 @Module
 object AwsNetwork {
 
-    @Provides()
+    @Provides
     @Named("awsNetworkApiWithAccessTokens")
     @Singleton
     fun providesAwsNetworkApi(
@@ -57,6 +59,12 @@ object AwsNetwork {
     @Singleton
     fun providesCommentsDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): CommentsDataSource =
         CommentsDataSourceImpl(awsNetworkApi)
+
+    @Provides
+    @Singleton
+    fun provideInterestedMedicineDatasource(
+        @Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi
+    ): InterestedMedicineDataSource = InterestedMedicineDataSourceImpl(awsNetworkApi)
 
     @Provides
     @Singleton
@@ -86,5 +94,5 @@ interface AwsNetworkApi {
     ): Response<ReissueTokenResponse>
 
     @GET(value = "medicine/favorite")
-    suspend fun getInterestedMedicineList() : Response<InterestedMedicineListResponse>
+    suspend fun getInterestedMedicineList(): Response<InterestedMedicineListResponse>
 }
