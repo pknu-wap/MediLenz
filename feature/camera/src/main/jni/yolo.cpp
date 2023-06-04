@@ -8,7 +8,7 @@
 
 #include "cpu.h"
 
-static const float prob_threshold = 0.4f;
+static const float prob_threshold = 0.35f;
 static const float nms_threshold = 0.45f;
 
 static float fast_exp(float x) {
@@ -136,13 +136,13 @@ generate_proposals(std::vector<GridAndStride> grid_strides, const ncnn::Mat &pre
         // find label with max score
         int label = -1;
         float score = -FLT_MAX;
-        for (int k = 0; k < num_class; k++) {
-            float confidence = scores[k];
-            if (confidence > score) {
-                label = k;
-                score = confidence;
-            }
+
+        float confidence = scores[0];
+        if (confidence > score) {
+            label = 0;
+            score = confidence;
         }
+
         float box_prob = sigmoid(score);
         if (box_prob >= prob_threshold) {
             ncnn::Mat bbox_pred(reg_max_1, 4, (void *) pred.row(i));
@@ -155,8 +155,8 @@ generate_proposals(std::vector<GridAndStride> grid_strides, const ncnn::Mat &pre
                 softmax->load_param(pd);
 
                 ncnn::Option opt;
-                opt.num_threads = 1;
-                opt.use_packing_layout = false;
+                opt.num_threads = 2;
+                opt.use_packing_layout = true;
 
                 softmax->create_pipeline(opt);
 
@@ -206,7 +206,7 @@ Yolo::Yolo() {
 
 
 int
-Yolo::load(AAssetManager *mgr, const char *modeltype, int _target_size, const float *_mean_vals, const float *_norm_vals, bool use_gpu) {
+Yolo::load(AAssetManager *mgr, const int *target_size, const float *_mean_vals, const float *_norm_vals, bool use_gpu) {
     yolo.clear();
     blob_pool_allocator.clear();
     workspace_pool_allocator.clear();
@@ -227,7 +227,9 @@ Yolo::load(AAssetManager *mgr, const char *modeltype, int _target_size, const fl
     yolo.load_param(mgr, "medicinesdetector.param");
     yolo.load_model(mgr, "medicinesdetector.bin");
 
-    target_size = _target_size;
+    net_h = target_size[0];
+    net_w = target_size[1];
+
     mean_vals[0] = _mean_vals[0];
     mean_vals[1] = _mean_vals[1];
     mean_vals[2] = _mean_vals[2];
@@ -248,12 +250,12 @@ int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects) {
     int h = height;
     float scale = 1.f;
     if (w > h) {
-        scale = (float) target_size / w;
-        w = target_size;
+        scale = net_w / (float) w;
+        w = net_w;
         h = h * scale;
     } else {
-        scale = (float) target_size / h;
-        h = target_size;
+        scale = net_h / (float) h;
+        h = net_h;
         w = w * scale;
     }
 
@@ -265,7 +267,7 @@ int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects) {
     ncnn::Mat in_pad;
     ncnn::copy_make_border(in, in_pad, hpad / 2, hpad - hpad / 2, wpad / 2, wpad - wpad / 2, ncnn::BORDER_CONSTANT, 0.f);
 
-    in_pad.substract_mean_normalize(0, norm_vals);
+    in_pad.substract_mean_normalize(mean_vals, norm_vals);
 
     ncnn::Extractor ex = yolo.create_extractor();
 
@@ -276,7 +278,7 @@ int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects) {
     ncnn::Mat out;
     ex.extract("output0", out);
 
-// might have stride=64
+    // might have stride=64
     std::vector<GridAndStride> grid_strides;
     generate_grids_and_stride(in_pad.w, in_pad.h, grid_strides);
 
@@ -319,7 +321,7 @@ int Yolo::detect(const cv::Mat &rgb, std::vector<Object> &objects) {
             return a.rect.area() > b.rect.area();
         }
     } objects_area_greater;
-    std::sort(objects.begin(), objects.end(), objects_area_greater);
+    // std::sort(objects.begin(), objects.end(), objects_area_greater);
 
     return 0;
 }
@@ -328,13 +330,8 @@ static const int color = 255;
 static const cv::Scalar detectedRectColor(color, color, color);
 
 
-int Yolo::draw(cv::Mat &rgb, const std::vector<Object> &objects) {
-    if (objects.empty())
-        return 0;
-
+void Yolo::draw(cv::Mat &rgb, const std::vector<Object> &objects) {
     for (const auto &obj: objects) {
-        cv::rectangle(rgb, obj.rect, detectedRectColor, 2);
+        cv::rectangle(rgb, obj.rect, detectedRectColor, 2, cv::LINE_AA);
     }
-
-    return 0;
 }

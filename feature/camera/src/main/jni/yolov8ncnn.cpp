@@ -124,6 +124,7 @@ static int draw_fps(cv::Mat &rgb) {
     }
 
     char text[32];
+    sprintf(text, "FPS=%d", (int) avg_fps);
 
     int baseLine = 0;
     cv::Size label_size = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
@@ -135,7 +136,7 @@ static int draw_fps(cv::Mat &rgb) {
                   cv::Scalar(255, 255, 255), -1);
 
     cv::putText(rgb, text, cv::Point(x, y + label_size.height),
-                cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0));
+                cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(0, 0, 0));
 
     return 0;
 }
@@ -159,7 +160,7 @@ static std::vector<Object> objs;
 
 void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
     {
-        // ncnn::MutexLockGuard g(lock);
+        ncnn::MutexLockGuard g(lock);
 
         if (g_yolo) {
             objs.clear();
@@ -171,7 +172,7 @@ void MyNdkCamera::on_image_render(cv::Mat &rgb) const {
         }
     }
 
-    // draw_fps(rgb);
+    draw_fps(rgb);
 }
 
 // return detectedObjects;
@@ -239,34 +240,21 @@ JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
 extern "C"
 JNIEXPORT jboolean JNICALL
 Java_com_android_mediproject_feature_camera_aimodel_Yolo_loadModel(JNIEnv *env, jobject thiz, jobject assetManager, jint modelid,
-                                                                   jint cpugpu) {
-    if (modelid < 0 || modelid > 6 || cpugpu < 0 || cpugpu > 1) {
-        return JNI_FALSE;
-    }
-
+                                                                   jint useGpu) {
     AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
 
-    const int target_sizes[] =
-            {
-                    640,
-                    640,
-            };
+    const int target_sizes[] = {
+            320,
+            320,
+    };
 
-    const float mean_vals[][3] =
-            {
-                    {103.53f, 116.28f, 123.675f},
-                    {103.53f, 116.28f, 123.675f},
-            };
+    const float mean_vals[] =
+            {0.f, 0.f, 0.f};
+    
+    const float norm_vals[] =
+            {1 / 255.f, 1 / 255.f, 1 / 255.f};
 
-    const float norm_vals[][3] =
-            {
-                    {1 / 255.f, 1 / 255.f, 1 / 255.f},
-                    {1 / 255.f, 1 / 255.f, 1 / 255.f},
-            };
-
-    const char *modeltype = "s";
-    int target_size = target_sizes[(int) modelid];
-    bool use_gpu = (int) cpugpu == 1;
+    bool use_gpu = (int) useGpu == 1;
 
     // reload
     {
@@ -279,7 +267,7 @@ Java_com_android_mediproject_feature_camera_aimodel_Yolo_loadModel(JNIEnv *env, 
         } else {
             if (!g_yolo)
                 g_yolo = new Yolo;
-            g_yolo->load(mgr, modeltype, target_size, mean_vals[(int) modelid], norm_vals[(int) modelid], use_gpu);
+            g_yolo->load(mgr, target_sizes, mean_vals, norm_vals);
         }
     }
 
