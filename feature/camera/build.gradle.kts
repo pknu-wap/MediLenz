@@ -4,28 +4,34 @@ plugins {
 
 }
 
+
+
 android {
     namespace = "com.android.mediproject.feature.camera"
+
     buildFeatures {
         buildConfig = true
     }
+    /*
 
-    externalNativeBuild {
-        cmake {
-            version = "3.22.1"
-            path = file("src/main/jni/CMakeLists.txt")
+        externalNativeBuild {
+            cmake {
+                version = "3.22.1"
+                path = file("src/main/jni/CMakeLists.txt")
+            }
         }
-    }
 
-    defaultConfig {
+        defaultConfig {
 
-        ndk {
-            version = "25.2.9519653"
-            abiFilters += listOf(
-                "armeabi-v7a", "arm64-v8a"
-            )
+            ndk {
+                version = "25.2.9519653"
+                abiFilters += listOf(
+                    "armeabi-v7a", "arm64-v8a"
+                )
+            }
         }
-    }
+
+     */
 
 }
 
@@ -52,4 +58,5 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.photo.view)
 
+    implementation(libs.bundles.tflite)
 }
