@@ -4,6 +4,7 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
+import com.android.mediproject.core.model.remote.medicine.InterestedMedicineListResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
@@ -25,6 +26,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import javax.inject.Named
 import javax.inject.Singleton
@@ -82,4 +84,7 @@ interface AwsNetworkApi {
     @POST(value = "user/reissue")
     suspend fun reissueTokens(
     ): Response<ReissueTokenResponse>
+
+    @GET(value = "medicine/favorite")
+    suspend fun getInterestedMedicineList() : Response<InterestedMedicineListResponse>
 }
