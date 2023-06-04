@@ -19,16 +19,7 @@ class InterstedMedicineViewModel @Inject constructor(
     private val getInterestedMedicineUseCase: GetInterestedMedicineUseCase
 ) : BaseViewModel() {
 
-    //dummy for test
-    val dummy = listOf(
-        InterestedMedicineDto("1", "타이레놀"),
-        InterestedMedicineDto("2", "가나다라"),
-        InterestedMedicineDto("2", "ABCD"),
-        InterestedMedicineDto("2", "EFGH"),
-        InterestedMedicineDto("3", "에이비시")
-    )
-
-    private val _interstedMedicineList = MutableStateFlow<List<InterestedMedicineDto>>(dummy)
+    private val _interstedMedicineList = MutableStateFlow<List<InterestedMedicineDto>>(listOf())
     val interstedMedicineList get() = _interstedMedicineList
 
     private val _token = MutableStateFlow<TokenState<CurrentTokenDto>>(TokenState.Empty)

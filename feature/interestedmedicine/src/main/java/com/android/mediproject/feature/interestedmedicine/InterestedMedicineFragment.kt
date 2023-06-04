@@ -49,6 +49,7 @@ class InterestedMedicineFragment :
                     }
                     repeatOnStarted { token.collect { handleToken(it) } }
                 }
+                loadTokens()
             }
         }
     }
@@ -58,7 +59,9 @@ class InterestedMedicineFragment :
             is TokenState.Empty -> {}
             is TokenState.Error -> {}
             is TokenState.Expiration -> {}
-            is TokenState.Valid -> {}
+            is TokenState.Valid -> {
+                fragmentViewModel.loadInterestedMedicines()
+            }
         }
     }
 
@@ -88,6 +91,7 @@ class InterestedMedicineFragment :
         val horizontalSpace =
             resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
 
+        //다른화면 갔다올 경우 이전에 있는 약품에 더해서 더 생기기 때문에 제거해줘야 함
         binding.interestedMedicineList.removeAllViews()
 
         //즐겨찾기 목록 약의 개수가 0개가 아닐 경우
