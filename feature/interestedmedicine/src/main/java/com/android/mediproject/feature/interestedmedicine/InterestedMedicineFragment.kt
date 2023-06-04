@@ -13,6 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineDto
+import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
@@ -38,13 +40,25 @@ class InterestedMedicineFragment :
 
     private fun addInterestedMedicinesChips() {
         binding.apply {
-            viewLifecycleOwner.lifecycleScope.launch {
-                repeatOnStarted {
-                    fragmentViewModel.interstedMedicineList.collect { medicineList ->
-                        setInterstedMedicineList(medicineList)
+            fragmentViewModel.apply {
+                viewLifecycleOwner.apply {
+                    repeatOnStarted {
+                        interstedMedicineList.collect {
+                            setInterstedMedicineList(it)
+                        }
                     }
+                    repeatOnStarted { token.collect { handleToken(it) } }
                 }
             }
+        }
+    }
+
+    private fun handleToken(token: TokenState<CurrentTokenDto>) {
+        when (token) {
+            is TokenState.Empty -> {}
+            is TokenState.Error -> {}
+            is TokenState.Expiration -> {}
+            is TokenState.Valid -> {}
         }
     }
 
@@ -71,7 +85,8 @@ class InterestedMedicineFragment :
      */
     private fun setInterstedMedicineList(medicineList: List<InterestedMedicineDto>) {
 
-        val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
+        val horizontalSpace =
+            resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
 
         binding.interestedMedicineList.removeAllViews()
 
