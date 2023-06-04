@@ -3,6 +3,7 @@ package com.android.mediproject.feature.mypage
 import MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import asEventFlow
+import com.android.mediproject.core.domain.GetInterestedMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.domain.sign.GetUserUseCase
 import com.android.mediproject.core.model.comments.MyCommentDto

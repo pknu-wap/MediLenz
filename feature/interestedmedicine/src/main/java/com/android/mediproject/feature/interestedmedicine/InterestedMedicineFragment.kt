@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import repeatOnStarted
 
 @AndroidEntryPoint
-class InterestedMedicineFragment() :
+class InterestedMedicineFragment :
     BaseFragment<FragmentInterestedMedicineBinding, InterstedMedicineViewModel>(
         FragmentInterestedMedicineBinding::inflate
     ) {
@@ -80,7 +80,7 @@ class InterestedMedicineFragment() :
             medicineList.forEach { medicine ->
                 log(medicine.toString())
                 binding.interestedMedicineList.addView(
-                    ButtonChip<Int>(
+                    ButtonChip<String>(
                         requireContext()
                     ).apply {
                         layoutParams = FlexboxLayout.LayoutParams(
