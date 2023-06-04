@@ -1,17 +1,31 @@
 "use strict";
 
-const { addFavoriteMedicine, getFavoriteMedicineList, deleteFavoriteMedicine } = require("../../../service/medicineService");
+const {
+    addFavoriteMedicine,
+    getFavoriteMedicineList,
+    deleteFavoriteMedicine,
+    checkFavoriteMedicine,
+} = require("../../../service/medicineService");
 
 // GET
 const output = {
-    // GET favorite medicine list
+    // GET favorite medicine (list)
     // [GET] /medicine/favorite
     getFavoriteMedicineList: async (req, res) => {
         const { userId } = req.verifiedToken;
-        const result = await getFavoriteMedicineList(userId); // get favorite medicine list
+        const { ITEM_SEQ } = req.query;
+        let result;
+        // If ITEM_SEQ exists -> get favorite medicine
+        if (ITEM_SEQ) {
+            result = await checkFavoriteMedicine(userId, ITEM_SEQ); // check favorite medicine
+        } 
+        // If ITEM_SEQ doesn't exist -> get favorite medicine list
+        else {
+            result = await getFavoriteMedicineList(userId); // get favorite medicine list
+        }
         return res.status(result.code).send(result.response);
     }
-}
+};
 
 // POST
 const process = {
@@ -22,13 +36,11 @@ const process = {
         const { medicineId } = req.body;
         const result = await addFavoriteMedicine(userId, medicineId); // add favorite medicine
         return res.status(result.code).send(result.response);
-    }
-}
+    },
+};
 
 // PUT
-const edit = {
-
-}
+const edit = {};
 
 // DELETE
 const eliminate = {
@@ -39,8 +51,8 @@ const eliminate = {
         const { medicineId } = req.query;
         const result = await deleteFavoriteMedicine(userId, medicineId); // delete favorite medicine
         return res.status(result.code).send(result.response);
-    }
-}
+    },
+};
 
 module.exports = {
     output,
