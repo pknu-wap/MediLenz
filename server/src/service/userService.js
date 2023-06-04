@@ -80,10 +80,10 @@ const createUser = async (email, password, nickname) => {
 
 // reissue token
 const reissueToken = (userId) => {
-    const response = responseMsg.REISSUE_SUCCESS;
-    response.accessToken = createAccessToken(userId); // generate access token
-    response.refreshToken = createRefreshToken(userId); // generate refresh token
-    return responseFormat(200, response);
+    const message = responseMsg.REISSUE_SUCCESS;
+    const accessToken = createAccessToken(userId); // generate access token
+    const refreshToken = createRefreshToken(userId); // generate refresh token
+    return responseFormat(200, tokenResponseFormat(message, accessToken, refreshToken));
 }
 
 module.exports = {
