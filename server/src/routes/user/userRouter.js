@@ -1,6 +1,6 @@
 "use strict";
 
-const userCrtl = require('../../controller/user/user.ctrl');
+const userCtrl = require('../../controller/user/user.ctrl');
 const { verifyRefreshToken } = require("../../config/jwt");
 const router = require("express").Router();
 
@@ -75,9 +75,9 @@ const router = require("express").Router();
  *                  type: string
  *                  example: null
  */
-router.post("/login", userCrtl.process.login); // sign-in
+router.post("/login", userCtrl.process.login); // sign-in
 
-router.post("/reissue", verifyRefreshToken, userCrtl.process.reissue); // reissuing token
+router.post("/reissue", verifyRefreshToken, userCtrl.process.reissue); // reissuing token
 
 /**
  * @swagger
@@ -153,6 +153,6 @@ router.post("/reissue", verifyRefreshToken, userCrtl.process.reissue); // reissu
  *                  type: string
  *                  example: null
  */
-router.post("/register", userCrtl.process.register); // sign-up
+router.post("/register", userCtrl.process.register); // sign-up
 
 module.exports = router;
