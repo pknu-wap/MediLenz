@@ -1,5 +1,6 @@
-package com.android.mediproject.core.model.remote.medicine
+package com.android.mediproject.core.model.medicine.InterestedMedicine
 
+import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -26,3 +27,6 @@ data class InterestedMedicineListResponse(
         val spcltyPblc: String
     )
 }
+
+fun InterestedMedicineListResponse.Medicine.toInterestedMedicineDto() =
+    InterestedMedicineDto(itemSeq = itemSeq, medicineName = itemName)

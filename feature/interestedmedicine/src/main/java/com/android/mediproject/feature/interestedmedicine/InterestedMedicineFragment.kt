@@ -12,7 +12,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.android.mediproject.core.model.medicine.InterestedMedicine.MedicineInterestedDto
+import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineDto
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
@@ -69,7 +69,7 @@ class InterestedMedicineFragment() :
     /**
      * 마이페이지 즐겨찾기 목록 화면 로직
      */
-    private fun setInterstedMedicineList(medicineList: List<MedicineInterestedDto>) {
+    private fun setInterstedMedicineList(medicineList: List<InterestedMedicineDto>) {
 
         val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
 

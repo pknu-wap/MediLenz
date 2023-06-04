@@ -12,6 +12,8 @@ import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRep
 import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRepositoryImpl
 import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepository
 import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepositoryImpl
+import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepository
+import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepositoryImpl
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepositoryImpl
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepository
@@ -27,6 +29,7 @@ import com.android.mediproject.core.network.datasource.comments.CommentsDataSour
 import com.android.mediproject.core.network.datasource.dur.DurDataSource
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
+import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
@@ -45,6 +48,11 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideInterestedMedicineRepository(interestedMedicineDataSource: InterestedMedicineDataSource): InterestedMedicineRepository =
+        InterestedMedicineRepositoryImpl(interestedMedicineDataSource)
+
+    @Provides
+    @Singleton
     fun provideMedicineApprovalRepository(
         medicineApprovalDataSource: MedicineApprovalDataSource,
         searchHistoryRepository: SearchHistoryRepository,
@@ -56,8 +64,10 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideRecallSuspensionRepository(
-        recallSuspensionDataSource: RecallSuspensionDataSource, recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl
-    ): RecallSuspensionRepository = RecallSuspensionRepositoryImpl(recallSuspensionDataSource, recallSuspensionListDataSource)
+        recallSuspensionDataSource: RecallSuspensionDataSource,
+        recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl
+    ): RecallSuspensionRepository =
+        RecallSuspensionRepositoryImpl(recallSuspensionDataSource, recallSuspensionListDataSource)
 
     @Provides
     @Singleton
@@ -69,7 +79,8 @@ object RepositoryModule {
     @Singleton
     fun providesGranuleIdentificationRepository(
         granuleIdentificationDataSource: GranuleIdentificationDataSource
-    ): GranuleIdentificationRepository = GranuleIdentificationRepositoryImpl(granuleIdentificationDataSource)
+    ): GranuleIdentificationRepository =
+        GranuleIdentificationRepositoryImpl(granuleIdentificationDataSource)
 
     @Provides
     @Singleton
@@ -78,19 +89,24 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesDurRepository(durDataSource: DurDataSource): DurRepository = DurRepositoryImpl(durDataSource)
+    fun providesDurRepository(durDataSource: DurDataSource): DurRepository =
+        DurRepositoryImpl(durDataSource)
 
 
     @Provides
     @Singleton
-    fun providesCommentsRepository(commentsDataSource: CommentsDataSource): CommentsRepository = CommentsRepositoryImpl(commentsDataSource)
+    fun providesCommentsRepository(commentsDataSource: CommentsDataSource): CommentsRepository =
+        CommentsRepositoryImpl(commentsDataSource)
 
 
     @Provides
     @Singleton
     fun providesSignRepository(
-        signDataSource: SignDataSource, connectionTokenDataSourceImpl: TokenDataSourceImpl, appDataStore: AppDataStore
-    ): SignRepository = SignRepositoryImpl(signDataSource, connectionTokenDataSourceImpl, appDataStore)
+        signDataSource: SignDataSource,
+        connectionTokenDataSourceImpl: TokenDataSourceImpl,
+        appDataStore: AppDataStore
+    ): SignRepository =
+        SignRepositoryImpl(signDataSource, connectionTokenDataSourceImpl, appDataStore)
 
     @Provides
     @Singleton
