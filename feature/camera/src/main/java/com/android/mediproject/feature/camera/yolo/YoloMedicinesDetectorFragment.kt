@@ -1,39 +1,31 @@
-package com.android.mediproject.feature.camera
-
+package com.android.mediproject.feature.camera.yolo
+/*
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.PixelFormat
 import android.os.Bundle
+import android.view.SurfaceHolder
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
-import com.android.mediproject.feature.camera.tflite.CameraController
-import com.android.mediproject.feature.camera.tflite.CameraHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.tensorflow.lite.task.gms.vision.detector.Detection
 import repeatOnStarted
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MedicinesDetectorFragment :
-    BaseFragment<FragmentMedicinesDetectorBinding, MedicinesDetectorViewModel>(FragmentMedicinesDetectorBinding::inflate),
-    CameraHelper.OnDetectionCallback {
+    BaseFragment<FragmentMedicinesDetectorBinding, MedicinesDetectorViewModel>(FragmentMedicinesDetectorBinding::inflate) {
 
     override val fragmentViewModel: MedicinesDetectorViewModel by activityViewModels()
-
-    // AI관련 모든 처리 담당
-    @Inject lateinit var cameraController: CameraController
-
-    private val mainScope = MainScope()
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         if (isGranted) {
@@ -49,14 +41,32 @@ class MedicinesDetectorFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = fragmentViewModel
 
-        // AI처리 객체를 관리하기 위해 생명주기 리스너를 설정
-        cameraController.fragmentLifeCycleOwner = this.viewLifecycleOwner
-        cameraController.activityLifecycle = requireActivity().lifecycle
-
-        // AI처리 객체의 콜백을 현재 프래그먼트로 설정
-        cameraController.detectionCallback = this
-
         viewLifecycleOwner.repeatOnStarted {
+            launch {
+                // 검출된 객체 상태
+                fragmentViewModel.detectedObjects.collectLatest { state ->
+                    when (state) {
+                        is UiState.Success -> {
+                            LoadingDialog.dismiss()
+                            findNavController().navigate(MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment())
+                        }
+
+                        is UiState.Error -> {
+                            LoadingDialog.dismiss()
+                            toast(getString(R.string.noMedicinesDetected))
+                            fragmentViewModel.openCamera()
+                        }
+
+                        is UiState.Loading -> {
+                            LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.getDetectedObjects))
+                        }
+
+                        is UiState.Initial -> {
+
+                        }
+                    }
+                }
+            }
 
             launch {
                 // AI모델 로드 상태
@@ -64,6 +74,10 @@ class MedicinesDetectorFragment :
                     when (state) {
                         is AiModelState.Loaded -> {
                             LoadingDialog.dismiss()
+                            activity?.apply {
+                                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                            }
+                            fragmentViewModel.openCamera()
                         }
 
                         is AiModelState.Loading -> {
@@ -72,7 +86,6 @@ class MedicinesDetectorFragment :
 
                         is AiModelState.LoadFailed -> {
                             LoadingDialog.dismiss()
-                            findNavController().popBackStack()
                         }
 
                         is AiModelState.NotLoaded -> {
@@ -82,42 +95,34 @@ class MedicinesDetectorFragment :
 
                 }
             }
-
-            launch {
-                fragmentViewModel.detectionObjects.collectLatest { state ->
-                    when (state) {
-                        is DetectionState.Detected -> {
-                            cameraController.pause()
-                            findNavController().navigate(MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment())
-                        }
-
-                        is DetectionState.Detecting -> {
-                            binding.overlayView.apply {
-                                if (results.isNotEmpty()) {
-                                    fragmentViewModel.makeDetectionResult(results, imgwidth, imgHeight)
-                                } else {
-                                    toast(getString(R.string.noMedicinesDetected))
-                                }
-                            }
-                        }
-
-                        is DetectionState.Initial -> {
-
-                        }
-
-                        is DetectionState.DetectFailed -> {
-                            toast(getString(R.string.detectionFailed))
-                        }
-                    }
-
-                }
-            }
         }
 
     }
 
+
     private fun initializeCamera() {
-        fragmentViewModel.loadModel(binding.previewView)
+        binding.apply {
+            val surfaceHolder = object : SurfaceHolder.Callback2 {
+                override fun surfaceCreated(holder: SurfaceHolder) {
+                }
+
+                override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+                    fragmentViewModel.surfaceCreated(holder)
+                }
+
+                override fun surfaceDestroyed(holder: SurfaceHolder) {
+                }
+
+                override fun surfaceRedrawNeeded(holder: SurfaceHolder) {
+                }
+            }
+
+            surfaceView.holder.setFormat(PixelFormat.RGBA_8888)
+            surfaceView.holder.addCallback(surfaceHolder)
+
+            // AI모델 로드
+            fragmentViewModel.loadModel(requireContext().assets)
+        }
     }
 
     override fun onStart() {
@@ -145,20 +150,20 @@ class MedicinesDetectorFragment :
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mainScope.cancel()
+
+    override fun onPause() {
+        super.onPause()
+        activity?.apply {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        fragmentViewModel.closeCamera()
     }
 
-    override fun onDetectedResult(objects: List<Detection>, width: Int, height: Int) {
-        if (objects.isNotEmpty()) {
-            mainScope.launch {
-                binding.overlayView.apply {
-                    setResults(objects, height, width)
-                    invalidate()
-                }
-            }
-        }
+    override fun onDestroy() {
+        fragmentViewModel.clear()
+        super.onDestroy()
     }
 
 }
+
+ */

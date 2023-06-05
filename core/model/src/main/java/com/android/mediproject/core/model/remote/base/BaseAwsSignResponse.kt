@@ -9,7 +9,6 @@ open class BaseAwsSignResponse() {
     @SerialName("refresh_token") val refreshToken: String? = null
     @SerialName("message") val message: String = ""
 
-    fun isSuccess(): Boolean {
-        return !accessToken.isNullOrEmpty() && !refreshToken.isNullOrEmpty()
-    }
+    fun isSuccess(): Boolean = !accessToken.isNullOrEmpty() && !refreshToken.isNullOrEmpty()
+
 }

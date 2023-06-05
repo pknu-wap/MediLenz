@@ -10,14 +10,16 @@ import androidx.core.text.toSpannable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.feature.camera.DetectionState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
 import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentConfirmDialogBinding
+import com.android.mediproject.feature.camera.tflite.CameraController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ConfirmDialogFragment : DialogFragment() {
@@ -25,6 +27,8 @@ class ConfirmDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MedicinesDetectorViewModel by activityViewModels()
+
+    @Inject lateinit var cameraController: CameraController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,16 +66,26 @@ class ConfirmDialogFragment : DialogFragment() {
         }
 
         viewLifecycleOwner.repeatOnStarted {
-            viewModel.detectedObjects.collectLatest { objs ->
-                (objs as UiState.Success).data.apply {
-                    val text = "$size ${getString(R.string.checkCountsOfMedicinesMessage)}".toSpannable()
-                    binding.confirmDialogTextView.text = text
+            viewModel.detectionObjects.collectLatest { objs ->
+                when (objs) {
+                    is DetectionState.Detected -> {
+                        val detection = objs.detection
+                        val text = "${detection.detection.size} ${getString(R.string.checkCountsOfMedicinesMessage)}".toSpannable()
+                        binding.confirmDialogTextView.text = text
 
-                    binding.detectedObjectsRecyclerView.adapter = ImageListAdapter().apply {
-                        map {
-                            it.onClicked = { this@ConfirmDialogFragment.onDetectedObjectClicked() }
-                            it
+                        /**
+                        binding.detectedObjectsRecyclerView.adapter = ImageListAdapter().apply {
+                        objs.map {
+                        it.onClicked = { this@ConfirmDialogFragment.onDetectedObjectClicked() }
+                        it
                         }.let { submitList(it) }
+                        }
+                         */
+
+                    }
+
+                    else -> {
+
                     }
                 }
             }
@@ -81,7 +95,7 @@ class ConfirmDialogFragment : DialogFragment() {
 
     override fun dismiss() {
         super.dismiss()
-        viewModel.openCamera()
+        cameraController.resume()
     }
 
     override fun onDismiss(dialog: DialogInterface) {

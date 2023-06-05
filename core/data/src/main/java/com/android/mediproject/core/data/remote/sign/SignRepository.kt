@@ -8,15 +8,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface SignRepository {
 
-    suspend fun signIn(signInParameter: SignInParameter): Flow<Result<Unit>>
+    fun signIn(signInParameter: SignInParameter): Flow<Result<Unit>>
 
-    suspend fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>>
-
-    suspend fun reissueToken(): Flow<Result<Unit>>
+    fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>>
 
     suspend fun signOut()
 
-    suspend fun getCurrentTokens(): Flow<TokenState<CurrentTokenDto>>
+    fun getCurrentTokens(): Flow<TokenState<CurrentTokenDto>>
 
-    val savedEmail: Flow<String>
+    val myEmail: Flow<String>
 }

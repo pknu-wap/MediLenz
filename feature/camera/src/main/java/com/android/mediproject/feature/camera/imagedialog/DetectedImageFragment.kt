@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.android.mediproject.feature.camera.DetectionState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
 import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentDetectedImageDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import repeatOnStarted
 
 
 @AndroidEntryPoint
@@ -21,7 +24,6 @@ class DetectedImageFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         binding.apply {
             viewModel = medicinesDetectorViewModel
@@ -39,6 +41,26 @@ class DetectedImageFragment : DialogFragment() {
                 val scale = imageView.scale - 0.4f
                 if (scale >= imageView.minimumScale) imageView.setScale(scale, true)
                 else imageView.setScale(imageView.minimumScale, true)
+            }
+
+            viewLifecycleOwner.repeatOnStarted {
+                medicinesDetectorViewModel.detectionObjects.collectLatest { objs ->
+                    when (objs) {
+                        is DetectionState.Detected -> {
+                            overlayView.apply {
+                                objs.detection.apply {
+                                    setResults(detection, height, width)
+                                    invalidate()
+                                }
+
+                            }
+                        }
+
+                        else -> {
+                            
+                        }
+                    }
+                }
             }
         }
     }

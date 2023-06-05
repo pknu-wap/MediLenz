@@ -1,8 +1,6 @@
 package com.android.mediproject.core.network.module
 
 import com.android.mediproject.core.common.BuildConfig
-import com.android.mediproject.core.common.network.Dispatcher
-import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.remote.medicine.InterestedMedicineListResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
@@ -21,7 +19,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -42,18 +39,18 @@ object AwsNetwork {
     @Singleton
     fun providesAwsNetworkApi(
         @Named("okHttpClientWithAccessTokens") okHttpClient: OkHttpClient,
-    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
-        Json.asConverterFactory("application/json".toMediaType())
-    ).baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
+    ): AwsNetworkApi =
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
     @Named("awsNetworkApiWithRefreshTokens")
     @Singleton
     fun providesReissueTokenAwsNetworkApi(
         @Named("okHttpClientWithReissueTokens") okHttpClient: OkHttpClient,
-    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
-        Json.asConverterFactory("application/json".toMediaType())
-    ).baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
+    ): AwsNetworkApi =
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
     @Singleton
@@ -71,22 +68,17 @@ object AwsNetwork {
     fun providesSignDataSource(
         @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi,
         tokenDataSourceImpl: TokenDataSourceImpl,
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher
-    ): SignDataSource = SignDataSourceImpl(
-        awsNetworkApi, tokenDataSourceImpl, ioDispatcher
-    )
+    ): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenDataSourceImpl)
 }
 
 interface AwsNetworkApi {
     @POST(value = "user/register")
     suspend fun signUp(
-        @Body signUpRequestParameter: SignUpRequestParameter
-    ): Response<SignUpResponse>
+        @Body signUpRequestParameter: SignUpRequestParameter): Response<SignUpResponse>
 
     @POST(value = "user/login")
     suspend fun signIn(
-        @Body signInRequestParameter: SignInRequestParameter
-    ): Response<SignInResponse>
+        @Body signInRequestParameter: SignInRequestParameter): Response<SignInResponse>
 
 
     @POST(value = "user/reissue")

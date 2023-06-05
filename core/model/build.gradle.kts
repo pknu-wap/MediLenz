@@ -14,4 +14,5 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlin.reflection)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.tensorflow.lite.taskVisionPlayServices)
 }

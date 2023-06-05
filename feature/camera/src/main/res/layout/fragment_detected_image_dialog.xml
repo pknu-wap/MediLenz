@@ -19,8 +19,12 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/capturedImage"
-            app:img="@{viewModel.capturedImageValue}" />
+            android:contentDescription="@string/capturedImage" />
+
+        <com.android.mediproject.feature.camera.tflite.OverlayView
+            android:id="@+id/overlayView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 
         <ImageButton
