@@ -2,7 +2,7 @@ package com.android.mediproject.core.network.module
 
 import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
-import com.android.mediproject.core.model.remote.medicine.InterestedMedicineListResponse
+import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineListResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
