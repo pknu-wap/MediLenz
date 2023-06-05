@@ -155,5 +155,6 @@ router.post("/reissue", verifyRefreshToken, userCtrl.process.reissue); // reissu
  */
 router.post("/register", userCtrl.process.register); // sign-up
 router.patch("/", verifyAccessToken, userCtrl.edit.patchUserInfo) // edit user information
+router.delete("/", verifyAccessToken, userCtrl.eliminate.deleteUser) // delete user
 
 module.exports = router;

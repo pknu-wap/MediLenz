@@ -27,6 +27,9 @@ module.exports = {
     USER_UPDATE_FAIL: (parameter) => {
         return `user ${parameter} update fail`;
     },
+    USER_DELETE_COMPLETE: "user delete complete",
+    USER_DELETE_FAIL: "user delete fail",
+
 
     // Comment
     COMMENT_GET_COMPLETE: "comment get complete",

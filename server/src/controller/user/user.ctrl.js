@@ -2,7 +2,7 @@
 
 const { responseFormat } = require("../../config/response")
 const responseMsg = require("../../config/responseMsg");
-const { login, createUser, reissueToken, updateUserInfo } = require("../../service/userService");
+const { login, createUser, reissueToken, updateUserInfo, deleteUser } = require("../../service/userService");
 
 // GET
 const output = {
@@ -55,7 +55,13 @@ const edit = {
 
 // DELETE
 const eliminate = {
-
+    // Delete user
+    // [DELETE] /user
+    deleteUser: async (req, res) => {
+        const { userId } = req.verifiedToken;
+        const result = await deleteUser(userId); // delete user
+        return res.status(result.code).send(result.response);
+    }
 }
 
 module.exports = {

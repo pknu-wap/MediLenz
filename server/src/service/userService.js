@@ -115,9 +115,27 @@ const updateUserInfo = async (user_id, new_nickname, new_password) => {
     }
 }
 
+// delete user
+const deleteUser = async (user_id) => {
+    try {
+        // delete user
+        await User.destroy(
+            { where: { ID: user_id } }
+        );
+        return responseFormat(200, {
+            message: responseMsg.USER_DELETE_COMPLETE,
+        }); // delete SUCCESS
+    }
+    catch (err) {
+        console.log(err);
+        return responseFormat(500, { message: responseMsg.USER_DELETE_FAIL });
+    }
+}
+
 module.exports = {
     login,
     createUser,
     reissueToken,
-    updateUserInfo
+    updateUserInfo,
+    deleteUser
 }
