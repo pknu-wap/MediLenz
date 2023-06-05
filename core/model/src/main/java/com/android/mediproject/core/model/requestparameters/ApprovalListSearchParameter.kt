@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.parameters
+package com.android.mediproject.core.model.requestparameters
 
 import com.android.mediproject.core.model.constants.MedicationType
 import java.io.Serializable

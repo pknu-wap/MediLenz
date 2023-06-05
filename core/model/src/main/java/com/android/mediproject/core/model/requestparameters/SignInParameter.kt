@@ -1,5 +1,12 @@
-package com.android.mediproject.core.model.parameters
+package com.android.mediproject.core.model.requestparameters
 
+/**
+ * 로그인을 위한 파라미터 클래스입니다.
+ *
+ * @property email 이메일
+ * @property password 비밀번호
+ * @property isSavedEmail 이메일 저장 여부
+ */
 data class SignInParameter(
     val email: CharArray, val password: CharArray, val isSavedEmail: Boolean
 ) {

@@ -24,7 +24,7 @@ class TokenInterceptor @Inject constructor(
             val token = if (tokenType == TokenType.ACCESS_TOKEN) tokenOnTokenServer.accessToken
             else tokenOnTokenServer.refreshToken
 
-            val response = chain.request().newBuilder().header("Authorization", "Bearer $token").build()
+            val response = chain.request().newBuilder().header("Authorization", "Bearer ${token.joinToString("")}").build()
             return chain.proceed(response)
         }
     }
