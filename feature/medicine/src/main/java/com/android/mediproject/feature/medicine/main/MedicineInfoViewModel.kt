@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.medicine.main
 
-import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -11,67 +10,34 @@ import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDe
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 @HiltViewModel
 class MedicineInfoViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
-) : BaseViewModel() {
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher) : BaseViewModel() {
 
-    private val _medicinePrimaryInfo = MutableStateFlow<MedicinePrimaryInfoDto?>(null)
-    val medicinePrimaryInfo get() = _medicinePrimaryInfo.asStateFlow()
+    private val _medicinePrimaryInfo = MutableSharedFlow<MedicineInfoArgs>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val medicinePrimaryInfo get() = _medicinePrimaryInfo.asSharedFlow()
 
     val medicineDetails: StateFlow<UiState<MedicineDetatilInfoDto>> = medicinePrimaryInfo.flatMapLatest { primaryInfo ->
-        if (primaryInfo == null) {
-            flowOf(UiState.Initial)
-        } else {
-            getMedicineDetailsUseCase(itemName = primaryInfo.medicineName).map { result ->
-                result.fold(onSuccess = { UiState.Success(it) }, onFailure = { UiState.Error(it.message ?: "faileds") })
-            }
+        getMedicineDetailsUseCase(itemName = primaryInfo.itemKorName).map { result ->
+            result.fold(onSuccess = { UiState.Success(it) }, onFailure = { UiState.Error(it.message ?: "failed") })
         }
-    }.stateIn(
-        viewModelScope, started = SharingStarted.WhileSubscribed(5000L), initialValue = UiState.Loading
-    )
+    }.stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = UiState.Initial)
 
     fun setMedicinePrimaryInfo(medicineArgs: MedicineInfoArgs) {
         viewModelScope.launch {
-            _medicinePrimaryInfo.value = MedicinePrimaryInfoDto(
-                medicineName = medicineArgs.medicineName,
-                imgUrl = medicineArgs.imgUrl,
-                entpName = medicineArgs.entpKorName,
-                itemSequence = medicineArgs.itemSequence,
-                medicineEngName = medicineArgs.medicineEngName
-            )
+            _medicinePrimaryInfo.emit(medicineArgs)
         }
     }
-
-}
-
-/**
- * 약 핵심 정보
- *
- * @property medicineName 약 이름
- * @property imgUrl 약 이미지 URL
- * @property entpName 약 제조사
- * @property itemSequence 약 품목기준코드
- * @property medicineEngName 약 영문 이름
- */
-data class MedicinePrimaryInfoDto(
-    val medicineName: String, val imgUrl: String, val entpName: String, val itemSequence: Long, val medicineEngName: String
-)
-
-@Parcelize
-enum class BasicInfoType : Parcelable {
-    EFFICACY_EFFECT, DOSAGE, MEDICINE_INFO, PRECAUTIONS
 }

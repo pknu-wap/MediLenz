@@ -1,5 +1,8 @@
 package com.android.mediproject.core.model.local.navargs
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * 약 목록에서 약 정보 화면으로 이동 시 전달할 데이터
  *
@@ -11,7 +14,9 @@ package com.android.mediproject.core.model.local.navargs
  * @param itemSeq 약 품목 기준 코드 : 200302348
  * @param productType 약 품목 : [01140]해열.진통.소염제
  * @param medicineType 약 분류 : [01]일반의약품
+ * @param imgUrl 약 이미지 URL : http://drug.mfds.go.kr/html/images/200302348.jpg
  */
+@Parcelize
 data class MedicineInfoArgs(
     val entpKorName: String,
     val entpEngName: String,
@@ -20,4 +25,5 @@ data class MedicineInfoArgs(
     val itemEngName: String,
     val itemSeq: Long,
     val productType: String,
-    val medicineType: String) : BaseNavArgs(MedicineInfoArgs::class.java.name)
+    val imgUrl: String,
+    val medicineType: String) : BaseNavArgs(MedicineInfoArgs::class.java.name), Parcelable

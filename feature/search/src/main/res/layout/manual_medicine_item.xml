@@ -18,7 +18,7 @@
 
         <ImageView
             android:id="@+id/medicineImgView"
-            img="@{item.bigPrdtImgUrl}"
+            img="@{item.imgUrl}"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/circle_image_background"

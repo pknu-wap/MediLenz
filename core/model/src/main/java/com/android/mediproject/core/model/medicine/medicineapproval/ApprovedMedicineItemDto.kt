@@ -18,7 +18,7 @@ package com.android.mediproject.core.model.medicine.medicineapproval
  * @property prductPrmisnNo 제품허가번호
  * @property itemIngrName 성분명
  * @property itemIngrCnt 성분수
- * @property bigPrdtImgUrl 대표 제품 이미지 URL
+ * @property imgUrl 대표 제품 이미지 URL
  * @property permitKindCode 허가종류코드
  * @property cancelDate 취소 일자
  * @property cancelName 취소 여부
@@ -42,7 +42,7 @@ data class ApprovedMedicineItemDto(
     val prductPrmisnNo: String? = null,
     val itemIngrName: String,
     val itemIngrCnt: String,
-    val bigPrdtImgUrl: String? = null,
+    val imgUrl: String,
     val permitKindCode: String? = null,
     val cancelDate: String? = null,
     val cancelName: String? = null,
@@ -67,7 +67,7 @@ fun Item.toDto() = ApprovedMedicineItemDto(
     prductPrmisnNo = prductPrmisnNo,
     itemIngrName = itemIngrName,
     itemIngrCnt = itemIngrCnt,
-    bigPrdtImgUrl = bigPrdtImgUrl,
+    imgUrl = bigPrdtImgUrl,
     permitKindCode = permitKindCode,
     cancelDate = cancelDate,
     cancelName = cancelName,

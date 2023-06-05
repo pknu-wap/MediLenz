@@ -115,6 +115,7 @@ class ManualSearchResultFragment :
                     itemSeq = approvedMedicineItemDto.itemSeq,
                     productType = approvedMedicineItemDto.prductType,
                     medicineType = approvedMedicineItemDto.medicineType,
+                    imgUrl = approvedMedicineItemDto.imgUrl,
                 ))
     }
 }

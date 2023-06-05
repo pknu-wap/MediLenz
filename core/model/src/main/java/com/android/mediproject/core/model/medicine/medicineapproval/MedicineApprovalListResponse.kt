@@ -50,7 +50,7 @@ data class Body(
  */
 @Serializable
 data class Item(
-    @SerialName("BIG_PRDT_IMG_URL") val bigPrdtImgUrl: String?,
+    @SerialName("BIG_PRDT_IMG_URL") val bigPrdtImgUrl: String,
     @SerialName("BIZRNO") val bizrno: String?,
     @SerialName("CANCEL_DATE") val cancelDate: String?,
     @SerialName("CANCEL_NAME") val cancelName: String?,
