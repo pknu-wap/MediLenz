@@ -28,7 +28,7 @@ const login = async (email, password) => {
     if (password != userInfo.PASSWORD) { // password mismatch
         return responseFormat(401, tokenResponseFormat(responseMsg.SIGNIN_PASSWORD_MISMATCH));
     }
-  
+
     const message = responseMsg.SIGNIN_SUCCESS; // generate response message
     const accessToken = createAccessToken(userInfo.ID); // generate access token
     const refreshToken = createRefreshToken(userInfo.ID); // generate refresh token
@@ -51,11 +51,11 @@ const createUser = async (email, password, nickname) => {
     // duplicate check
     let checkParam = "EMAIL"
     if (await duplicateCheck({ [checkParam]: email })) { // email
-        return responseFormat(409, tokenResponseFormat(responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam)));
+        return responseFormat(409, tokenResponseFormat(responseMsg.DUPLICATE_PARAMETER(checkParam)));
     }
     checkParam = "NICKNAME";
     if (await duplicateCheck({ [checkParam]: nickname })) { // nickname
-        return responseFormat(409, tokenResponseFormat(responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam)));
+        return responseFormat(409, tokenResponseFormat(responseMsg.DUPLICATE_PARAMETER(checkParam)));
     }
 
     try {
@@ -64,7 +64,7 @@ const createUser = async (email, password, nickname) => {
             PASSWORD: password,
             NICKNAME: nickname
         });
-      
+
         const message = responseMsg.SIGNUP_SUCCESS; // generate response message
         const accessToken = createAccessToken(user.ID); // generate access token
         const refreshToken = createRefreshToken(user.ID); // generate refresh token
@@ -86,8 +86,29 @@ const reissueToken = (userId) => {
     return responseFormat(200, tokenResponseFormat(message, accessToken, refreshToken));
 }
 
+// update user nickname
+const updateUserNickname = async (user_id, new_nickname) => {
+    // nickname duplicate check
+    if (await duplicateCheck({ NICKNAME: new_nickname })) {
+        return responseFormat(409, responseMsg.DUPLICATE_PARAMETER("NICKNAME"));
+    }
+    try {
+        // update user nickname
+        await User.update(
+            { NICKNAME: new_nickname },
+            { where: { ID: user_id } }
+        );
+        return responseFormat(200, { message: responseMsg.USER_UPDATE_NICKNAME_COMPLETE });
+    }
+    catch (err) {
+        console.log(err);
+        return responseFormat(500, { message: responseMsg.USER_UPDATE_NICKNAME_FAIL });
+    }
+}
+
 module.exports = {
     login,
     createUser,
-    reissueToken
+    reissueToken,
+    updateUserNickname
 }

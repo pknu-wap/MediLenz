@@ -1,7 +1,7 @@
 "use strict";
 
 const userCtrl = require('../../controller/user/user.ctrl');
-const { verifyRefreshToken } = require("../../config/jwt");
+const { verifyRefreshToken, verifyAccessToken } = require("../../config/jwt");
 const router = require("express").Router();
 
 /**
@@ -154,5 +154,6 @@ router.post("/reissue", verifyRefreshToken, userCtrl.process.reissue); // reissu
  *                  example: null
  */
 router.post("/register", userCtrl.process.register); // sign-up
+router.patch("/", verifyAccessToken, userCtrl.edit.patchUserNickname) // edit user nickname
 
 module.exports = router;
