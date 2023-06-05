@@ -2,7 +2,7 @@
 
 const { responseFormat } = require("../../config/response")
 const responseMsg = require("../../config/responseMsg");
-const { login, createUser, reissueToken, updateUserNickname } = require("../../service/userService");
+const { login, createUser, reissueToken, updateUserInfo } = require("../../service/userService");
 
 // GET
 const output = {
@@ -43,12 +43,12 @@ const process = {
 
 // PUT
 const edit = {
-    // Edit user nickname
+    // Edit user nickname/password
     // [PATCH] /user
-    patchUserNickname: async (req, res) => {
+    patchUserInfo: async (req, res) => {
         const { userId } = req.verifiedToken;
-        const { newNickname } = req.body;
-        const result = await updateUserNickname(userId, newNickname); // update user nickname
+        const { newNickname, newPassword } = req.body;
+        const result = await updateUserInfo(userId, newNickname, newPassword); // update user nickname or password
         return res.status(result.code).send(result.response);
     }
 }

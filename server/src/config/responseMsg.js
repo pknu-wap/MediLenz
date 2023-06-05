@@ -16,13 +16,17 @@ module.exports = {
 
     // Response error
     DUPLICATE_PARAMETER: (parameter) => {
-        return `the ${parameter} is already in use`
+        return `the ${parameter} is already in use`;
     },
     SIGNUP_INTERNAL_SERVER_ERROR: "server error",
 
     // USERINFO
-    USER_UPDATE_NICKNAME_COMPLETE: "user nickname update complete",
-    USER_UPDATE_NICKNAME_FAIL: "user nickname update fail",
+    USER_UPDATE_COMPLETE: (parameter) => {
+        return `user ${parameter} update complete`;
+    },
+    USER_UPDATE_FAIL: (parameter) => {
+        return `user ${parameter} update fail`;
+    },
 
     // Comment
     COMMENT_GET_COMPLETE: "comment get complete",

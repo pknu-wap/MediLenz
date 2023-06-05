@@ -154,6 +154,6 @@ router.post("/reissue", verifyRefreshToken, userCtrl.process.reissue); // reissu
  *                  example: null
  */
 router.post("/register", userCtrl.process.register); // sign-up
-router.patch("/", verifyAccessToken, userCtrl.edit.patchUserNickname) // edit user nickname
+router.patch("/", verifyAccessToken, userCtrl.edit.patchUserInfo) // edit user information
 
 module.exports = router;

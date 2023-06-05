@@ -86,23 +86,32 @@ const reissueToken = (userId) => {
     return responseFormat(200, tokenResponseFormat(message, accessToken, refreshToken));
 }
 
-// update user nickname
-const updateUserNickname = async (user_id, new_nickname) => {
-    // nickname duplicate check
-    if (await duplicateCheck({ NICKNAME: new_nickname })) {
-        return responseFormat(409, responseMsg.DUPLICATE_PARAMETER("NICKNAME"));
+// update user information
+const updateUserInfo = async (user_id, new_nickname, new_password) => {
+    let updateCondition, checkParam;
+    if (new_nickname && !new_password) { // update user nickname
+        checkParam = "NICKNAME";
+        updateCondition = { [checkParam]: new_nickname };
+        // nickname duplicate check
+        if (await duplicateCheck(updateCondition)) {
+            return responseFormat(409, responseMsg.DUPLICATE_PARAMETER(checkParam));
+        }
+    } else if (!new_nickname && new_password) { // update user password
+        checkParam = "PASSWORD";
+        updateCondition = { [checkParam]: new_password };
     }
+
     try {
-        // update user nickname
+        // update user information
         await User.update(
-            { NICKNAME: new_nickname },
+            updateCondition,
             { where: { ID: user_id } }
         );
-        return responseFormat(200, { message: responseMsg.USER_UPDATE_NICKNAME_COMPLETE });
+        return responseFormat(200, { message: responseMsg.USER_UPDATE_COMPLETE(checkParam) });
     }
     catch (err) {
         console.log(err);
-        return responseFormat(500, { message: responseMsg.USER_UPDATE_NICKNAME_FAIL });
+        return responseFormat(500, { message: responseMsg.USER_UPDATE_FAIL(checkParam) });
     }
 }
 
@@ -110,5 +119,5 @@ module.exports = {
     login,
     createUser,
     reissueToken,
-    updateUserNickname
+    updateUserInfo
 }
