@@ -3,7 +3,7 @@
 const { Comment, Like } = require("../models/index");
 const { responseFormat } = require("../config/response");
 const responseMsg = require("../config/responseMsg");
-
+const {_getUserNickname} = require("./userService");
 const _getLikeList = async (commentId) => { //NOT FOR EXPORT
     try {
         const likeList = await Like.findAll({
@@ -31,6 +31,7 @@ const _getCommentList = async (medicineId) => { //NOT FOR EXPORT
         let _comment = commentList[i].dataValues;
         if (_comment.SUBORDINATION != 0) continue;
         _comment.likeList = await _getLikeList(_comment.ID);
+        _comment.nickname = await _getUserNickname(_comment.USERID);
         _comment.replies = [];
         _commentList.push(_comment);
     }
@@ -39,6 +40,7 @@ const _getCommentList = async (medicineId) => { //NOT FOR EXPORT
         if (_comment.SUBORDINATION == 0) continue;
         for (let j in _commentList) {
             if (_comment.SUBORDINATION == _commentList[j].ID) {
+                _comment.nickname = await _getUserNickname(_comment.USERID);
                 _comment.likeList = await _getLikeList(_comment.ID);
                 _commentList[j].replies.push(_comment);
                 break;
