@@ -15,7 +15,9 @@ import com.android.mediproject.feature.camera.tflite.CameraController
 import com.android.mediproject.feature.camera.tflite.CameraHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,7 +35,7 @@ class MedicinesDetectorFragment :
     // AI관련 모든 처리 담당
     @Inject lateinit var cameraController: CameraController
 
-    private val mainScope = MainScope()
+    private val mainScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         if (isGranted) {
@@ -151,14 +153,11 @@ class MedicinesDetectorFragment :
     }
 
     override fun onDetectedResult(objects: List<Detection>, width: Int, height: Int) {
-        if (objects.isNotEmpty()) {
-            mainScope.launch {
-                binding.overlayView.apply {
-                    setResults(objects, height, width)
-                    invalidate()
-                }
+        mainScope.launch {
+            binding.overlayView.apply {
+                setResults(objects, width, height)
+                invalidate()
             }
         }
     }
-
 }
