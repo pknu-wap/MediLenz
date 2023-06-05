@@ -25,5 +25,5 @@ data class MedicineInfoArgs(
     val itemEngName: String,
     val itemSeq: Long,
     val productType: String,
-    val imgUrl: String,
+    val imgUrl: String?,
     val medicineType: String) : BaseNavArgs(MedicineInfoArgs::class.java.name), Parcelable

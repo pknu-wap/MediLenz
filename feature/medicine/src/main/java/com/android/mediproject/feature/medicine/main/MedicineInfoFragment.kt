@@ -35,6 +35,8 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
         binding.apply {
 
             viewModel = fragmentViewModel
+            medicineInfoArgs = navArgs
+
             root.doOnPreDraw {
                 /**
                 // coordinatorlayout으로 인해 viewpager의 높이가 휴대폰 화면 하단을 벗어나 버리는 현상을 방지하기 위해 사용

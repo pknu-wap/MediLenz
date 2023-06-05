@@ -50,17 +50,17 @@ data class Body(
  */
 @Serializable
 data class Item(
-    @SerialName("BIG_PRDT_IMG_URL") val bigPrdtImgUrl: String,
+    @SerialName("BIG_PRDT_IMG_URL") val bigPrdtImgUrl: String?,
     @SerialName("BIZRNO") val bizrno: String?,
     @SerialName("CANCEL_DATE") val cancelDate: String?,
     @SerialName("CANCEL_NAME") val cancelName: String?,
     @SerialName("EDI_CODE") val ediCode: String?,
-    @SerialName("ENTP_ENG_NAME") val entpEngName: String,
+    @SerialName("ENTP_ENG_NAME") val entpEngName: String?,
     @SerialName("ENTP_NAME") val entpName: String,
     @SerialName("ENTP_NO") val entpNo: String,
     @SerialName("ENTP_SEQ") val entpSeq: String,
     @SerialName("INDUTY") val induty: String?,
-    @SerialName("ITEM_ENG_NAME") val itemEngName: String,
+    @SerialName("ITEM_ENG_NAME") val itemEngName: String?,
     @SerialName("ITEM_INGR_CNT") val itemIngrCnt: String,
     @SerialName("ITEM_INGR_NAME") val itemIngrName: String,
     @SerialName("ITEM_NAME") val itemName: String,

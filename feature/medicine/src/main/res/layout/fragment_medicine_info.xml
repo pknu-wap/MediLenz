@@ -5,6 +5,10 @@
     <data>
 
         <variable
+            name="medicineInfoArgs"
+            type="com.android.mediproject.core.model.local.navargs.MedicineInfoArgs" />
+
+        <variable
             name="viewModel"
             type="com.android.mediproject.feature.medicine.main.MedicineInfoViewModel" />
 
@@ -33,7 +37,7 @@
                 app:expandedTitleMarginBottom="0dp"
                 app:expandedTitleTextColor="@android:color/transparent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:title="@{viewModel.medicinePrimaryInfo.medicineName}"
+                app:title="@{medicineInfoArgs.itemKorName}"
                 app:titleCollapseMode="scale">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +55,7 @@
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/medicineImageView"
-                        img="@{viewModel.medicinePrimaryInfo.imgUrl}"
+                        img="@{medicineInfoArgs.imgUrl}"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:contentDescription="@string/medicineImage"
@@ -67,7 +71,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="@{viewModel.medicinePrimaryInfo.medicineName}"
+                        android:text="@{medicineInfoArgs.itemKorName}"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toTopOf="@id/medicineEngName"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -80,7 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="@{viewModel.medicinePrimaryInfo.medicineEngName}"
+                        android:text="@{medicineInfoArgs.itemEngName}"
                         android:textColor="@color/medicineEngName"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="@id/medicineKorName"
