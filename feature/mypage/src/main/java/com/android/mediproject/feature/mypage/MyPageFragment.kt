@@ -98,9 +98,7 @@ class MyPageFragment :
     private fun handleToken(tokenState: TokenState<CurrentTokenDto>) {
         when (tokenState) {
             is TokenState.Empty -> {
-                //for test
-                loginMode = LOGIN_MODE
-                //loginMode = GUEST_MODE
+                loginMode = GUEST_MODE
                 setMyCommentsList()
             }
 
