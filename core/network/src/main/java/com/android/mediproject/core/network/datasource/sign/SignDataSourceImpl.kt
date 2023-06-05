@@ -1,7 +1,7 @@
 package com.android.mediproject.core.network.datasource.sign
 
 import com.android.mediproject.core.datastore.TokenDataSource
-import com.android.mediproject.core.model.remote.base.BaseAwsSignResponse
+import com.android.mediproject.core.model.awscommon.BaseAwsSignResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto

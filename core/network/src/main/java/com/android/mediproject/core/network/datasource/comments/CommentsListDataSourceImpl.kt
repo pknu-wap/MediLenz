@@ -2,7 +2,6 @@ package com.android.mediproject.core.network.datasource.comments
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.android.mediproject.core.common.AWS_LOAD_PAGE_SIZE
 import com.android.mediproject.core.model.remote.comments.MedicineCommentsResponse
 
 class CommentsListDataSourceImpl(
@@ -17,22 +16,15 @@ class CommentsListDataSourceImpl(
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): PagingSource.LoadResult<Int, MedicineCommentsResponse> {
-        val currentPage = params.key ?: 1
-
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MedicineCommentsResponse> {
         return try {
-            commentsDataSource.getCommentsForAMedicineCatching(
+            commentsDataSource.getCommentsForAMedicine(
                 itemSeq
             ).fold(onSuccess = {
-                val nextKey = it.let { body ->
-                    if (body.size <= AWS_LOAD_PAGE_SIZE) null
-                    else currentPage + 1
-                }
-
                 PagingSource.LoadResult.Page(
                     data = it,
                     prevKey = null,
-                    nextKey = nextKey,
+                    nextKey = null,
                 )
             }, onFailure = { PagingSource.LoadResult.Error(it) })
 

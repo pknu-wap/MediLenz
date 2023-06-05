@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
  * @property userId 유저 id
  */
 @Serializable
-data class ApplyNewCommentParameter(
+data class NewCommentParameter(
     @SerialName("content") val content: String, // 테스트 - 서브 댓글 2 - 2
     @SerialName("medicineId") val medicineId: String, // 41
     @SerialName("subOrdinationId") val subOrdinationId: String, // 3

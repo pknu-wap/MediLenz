@@ -10,6 +10,7 @@ import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
+import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
@@ -110,6 +111,13 @@ interface AwsNetworkApi {
     @POST(value = "medicine/comment")
     suspend fun likeComment(
         @Body likeCommentParameter: LikeCommentParameter): Response<CommentChangedResponse>
+
+    /**
+     * 댓글 등록
+     */
+    @POST(value = "medicine/comment/writeTest")
+    suspend fun applyNewComment(
+        @Body newCommentParameter: NewCommentParameter): Response<CommentChangedResponse>
 
 
 }

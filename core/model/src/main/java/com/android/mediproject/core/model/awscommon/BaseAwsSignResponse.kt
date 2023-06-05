@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.remote.base
+package com.android.mediproject.core.model.awscommon
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

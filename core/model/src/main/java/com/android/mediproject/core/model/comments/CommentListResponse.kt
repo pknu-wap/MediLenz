@@ -1,7 +1,7 @@
 package com.android.mediproject.core.model.comments
 
 
-import com.android.mediproject.core.model.remote.base.BaseAwsQueryResponse
+import com.android.mediproject.core.model.awscommon.BaseAwsQueryResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
