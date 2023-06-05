@@ -56,7 +56,8 @@ class InterestedMedicineFragment :
         when (token) {
             is TokenState.Empty -> {}
             is TokenState.Error -> {}
-            is TokenState.Expiration -> {}
+            is TokenState.RefreshExpiration -> {}
+            is TokenState.AccessExpiration -> {}
             is TokenState.Valid -> {
                 fragmentViewModel.loadInterestedMedicines()
             }

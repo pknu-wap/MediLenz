@@ -8,8 +8,8 @@ import com.android.mediproject.core.model.remote.token.NewTokensFromAws
 import com.android.mediproject.core.model.remote.token.RequestBehavior
 import com.android.mediproject.core.model.remote.token.TokenState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -43,7 +43,7 @@ class TokenDataSourceImpl @Inject constructor(
      *
      * DataStore로 저장된 토큰값은 이미 로드되어 있다.
      */
-    override fun currentTokens(): Flow<TokenState<CurrentTokenDto>> = flow {
+    override fun currentTokens(): Flow<TokenState<CurrentTokenDto>> = channelFlow {
         Log.d("wap", "currentTokens() 호출됨")
         val tokenState = tokenServer.currentTokens
 
@@ -62,24 +62,24 @@ class TokenDataSourceImpl @Inject constructor(
                 if (now > currentToken.accessTokenExpiresIn) {
                     Log.d("wap", "currentTokens() : 액세스 만료")
                     // 액세스 만료
-                    emit(TokenState.AccessExpiration(CurrentTokenDto(accessToken = currentToken.accessToken,
+                    trySend(TokenState.AccessExpiration(CurrentTokenDto(accessToken = currentToken.accessToken,
                         refreshToken = currentToken.refreshToken)))
                 } else if (now > currentToken.refreshTokenExpiresIn) {
                     Log.d("wap", "currentTokens() : 리프레시 만료")
                     // 리프레시 만료
-                    emit(TokenState.RefreshExpiration(CurrentTokenDto(accessToken = currentToken.accessToken,
+                    trySend(TokenState.RefreshExpiration(CurrentTokenDto(accessToken = currentToken.accessToken,
                         refreshToken = currentToken.refreshToken)))
                 } else {
                     // 토큰 유효
                     Log.d("wap", "currentTokens() : 토큰 유효")
-                    emit(TokenState.Valid(CurrentTokenDto(accessToken = currentToken.accessToken,
+                    trySend(TokenState.Valid(CurrentTokenDto(accessToken = currentToken.accessToken,
                         refreshToken = currentToken.refreshToken)))
                 }
             }
 
             is EndpointTokenState.NoToken -> {
                 Log.d("wap", "currentTokens : NoToken")
-                emit(TokenState.Empty)
+                trySend(TokenState.Empty)
             }
         }
 

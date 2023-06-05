@@ -11,7 +11,6 @@ import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -82,32 +81,32 @@ class SignRepositoryImpl @Inject constructor(
      *
      * return  Result<Unit>.success()
      */
-    private fun reissueToken(): Flow<Result<Unit>> = flow {
+    private fun reissueToken(): Flow<Result<Unit>> = channelFlow {
         when (val currentToken = tokenDataSource.currentTokens().last()) {
             is TokenState.AccessExpiration -> {
                 // refresh token이 있는 상태이므로 토큰 재발급 요청
                 Log.d("wap", "reissueToken: refresh token이 있는 상태이므로 토큰 재발급 요청")
                 signDataSource.reissueTokens(currentToken.data.refreshToken).collectLatest {
-                    emit(Result.success(Unit))
+                    trySend(Result.success(Unit))
                 }
             }
 
             is TokenState.RefreshExpiration -> {
                 // 모든 토큰이 만료되었으므로 토큰 재발급 불가
                 Log.d("wap", "reissueToken: 모든 token이 만료됨")
-                emit(Result.failure(Exception("모든 token이 만료됨")))
+                trySend(Result.failure(Exception("모든 token이 만료됨")))
             }
 
             is TokenState.Empty -> {
                 // refresh token이 없는 상태이므로 토큰 재발급 불가
                 Log.d("wap", "reissueToken: refresh token이 없는 상태이므로 토큰 재발급 불가")
-                emit(Result.failure(Exception("refresh token이 없습니다")))
+                trySend(Result.failure(Exception("refresh token이 없습니다")))
             }
 
             is TokenState.Valid -> {
                 // 아직 토큰이 유효하므로 재발급 불필요
                 Log.d("wap", "reissueToken: 아직 토큰이 유효하므로 재발급 불필요")
-                emit(Result.success(Unit))
+                trySend(Result.success(Unit))
             }
 
             else -> {}
