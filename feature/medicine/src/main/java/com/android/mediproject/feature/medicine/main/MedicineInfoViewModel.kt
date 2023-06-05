@@ -1,7 +1,6 @@
 package com.android.mediproject.feature.medicine.main
 
 import android.os.Parcelable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -27,8 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicineInfoViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
-    private val savedStateHandle: SavedStateHandle,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel() {
 
     private val _medicinePrimaryInfo = MutableStateFlow<MedicinePrimaryInfoDto?>(null)
@@ -51,7 +49,7 @@ class MedicineInfoViewModel @Inject constructor(
             _medicinePrimaryInfo.value = MedicinePrimaryInfoDto(
                 medicineName = medicineArgs.medicineName,
                 imgUrl = medicineArgs.imgUrl,
-                entpName = medicineArgs.entpName,
+                entpName = medicineArgs.entpKorName,
                 itemSequence = medicineArgs.itemSequence,
                 medicineEngName = medicineArgs.medicineEngName
             )

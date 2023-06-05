@@ -106,10 +106,15 @@ class ManualSearchResultFragment :
     private fun openMedicineInfo(approvedMedicineItemDto: ApprovedMedicineItemDto) {
         activity?.findNavController(com.android.mediproject.core.common.R.id.fragmentContainerView)
             ?.deepNavigate("medilens://search/medicine/medicine_detail_nav",
-                MedicineInfoArgs(medicineName = approvedMedicineItemDto.itemName,
-                    imgUrl = approvedMedicineItemDto.bigPrdtImgUrl ?: "",
-                    entpName = approvedMedicineItemDto.entpName ?: "",
-                    itemSequence = approvedMedicineItemDto.itemSeq,
-                    medicineEngName = approvedMedicineItemDto.itemEngName ?: ""))
+                MedicineInfoArgs(
+                    entpKorName = approvedMedicineItemDto.entpName,
+                    entpEngName = approvedMedicineItemDto.entpEngName,
+                    itemIngrName = approvedMedicineItemDto.itemIngrName,
+                    itemKorName = approvedMedicineItemDto.itemName,
+                    itemEngName = approvedMedicineItemDto.itemEngName,
+                    itemSeq = approvedMedicineItemDto.itemSeq,
+                    productType = approvedMedicineItemDto.prductType,
+                    medicineType = approvedMedicineItemDto.medicineType,
+                ))
     }
 }

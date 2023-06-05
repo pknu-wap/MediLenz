@@ -13,7 +13,7 @@ package com.android.mediproject.core.model.medicine.medicineapproval
  * @property itemPermitDate 아이템 허가 일자
  * @property induty 업종
  * @property prdlstStdrCode 제품표준코드
- * @property spcltyPblc 특수약품 구분
+ * @property medicineType 특수약품 구분
  * @property prductType 제품유형
  * @property prductPrmisnNo 제품허가번호
  * @property itemIngrName 성분명
@@ -29,19 +29,19 @@ package com.android.mediproject.core.model.medicine.medicineapproval
 data class ApprovedMedicineItemDto(
     val itemSeq: Long,
     val itemName: String,
-    val itemEngName: String? = null,
-    val entpName: String? = null,
-    val entpEngName: String? = null,
-    val entpSeq: String? = null,
-    val entpNo: String? = null,
+    val itemEngName: String,
+    val entpName: String,
+    val entpEngName: String,
+    val entpSeq: String,
+    val entpNo: String,
     val itemPermitDate: String? = null,
     val induty: String? = null,
     val prdlstStdrCode: String? = null,
-    val spcltyPblc: String? = null,
-    val prductType: String? = null,
+    val medicineType: String,
+    val prductType: String,
     val prductPrmisnNo: String? = null,
-    val itemIngrName: String? = null,
-    val itemIngrCnt: String? = null,
+    val itemIngrName: String,
+    val itemIngrCnt: String,
     val bigPrdtImgUrl: String? = null,
     val permitKindCode: String? = null,
     val cancelDate: String? = null,
@@ -53,7 +53,7 @@ data class ApprovedMedicineItemDto(
 
 fun Item.toDto() = ApprovedMedicineItemDto(
     itemSeq = itemSeq.toLong(),
-    itemName = itemName ?: "",
+    itemName = itemName,
     itemEngName = itemEngName,
     entpName = entpName,
     entpEngName = entpEngName,
@@ -62,7 +62,7 @@ fun Item.toDto() = ApprovedMedicineItemDto(
     itemPermitDate = itemPermitDate,
     induty = induty,
     prdlstStdrCode = prdlstStdrCode,
-    spcltyPblc = spcltyPblc,
+    medicineType = medicineType,
     prductType = prductType,
     prductPrmisnNo = prductPrmisnNo,
     itemIngrName = itemIngrName,

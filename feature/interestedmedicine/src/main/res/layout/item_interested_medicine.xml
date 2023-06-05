@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/medicine_type_background"
-            android:text="@{item.spcltyPblc}"
+            android:text="@{item.medicineType}"
             android:textColor="@color/medicineType"
             android:textSize="11sp"
             app:layout_constraintLeft_toRightOf="@id/medicineNameTextView"
