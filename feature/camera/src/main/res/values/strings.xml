@@ -17,5 +17,6 @@
     <string name="capturedImage">캡처된 이미지</string>
     <string name="zoomOut">축소</string>
     <string name="zoomIn">확대</string>
+    <string name="detectionFailed">인식 실패</string>
 
 </resources>

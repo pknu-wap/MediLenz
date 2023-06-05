@@ -6,7 +6,7 @@
 
         <variable
             name="detectedObject"
-            type="com.android.mediproject.feature.camera.aimodel.DetectedObject" />
+            type="com.android.mediproject.feature.camera.yolo.DetectedObject" />
     </data>
 
 
@@ -26,8 +26,7 @@
             img="@{detectedObject.bitmap}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            />
+            android:scaleType="centerCrop" />
 
     </com.google.android.material.carousel.MaskableFrameLayout>
 </layout>

@@ -20,27 +20,29 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
+
+    
     @Provides
     @Singleton
     fun providesTokenDataStore(
         @ApplicationContext context: Context,
         @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher,
-        serializer: ConnectionTokenSerializer,
-    ): DataStore<ConnectionToken> = DataStoreFactory.create(
+        serializer: SavedTokenSerializer,
+    ): DataStore<SavedToken> = DataStoreFactory.create(
         serializer = serializer,
         scope = CoroutineScope(ioDispatcher + SupervisorJob()),
     ) {
-        context.dataStoreFile("connection_token.pb")
+        context.dataStoreFile("saved_token.pb")
     }
+
 
     @Provides
     @Singleton
     fun providesTokenDataSource(
-        tokenDataStore: DataStore<ConnectionToken>,
+        tokenDataStore: DataStore<SavedToken>,
         aesCoder: AesCoder,
         tokenServer: TokenServer,
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher,
-    ): TokenDataSource = TokenDataSourceImpl(tokenDataStore, aesCoder, tokenServer, ioDispatcher)
+    ): TokenDataSource = TokenDataSourceImpl(tokenDataStore, aesCoder, tokenServer)
 
     @Provides
     @Singleton
