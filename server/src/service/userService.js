@@ -28,7 +28,7 @@ const login = async (email, password) => {
     if (password != userInfo.PASSWORD) { // password mismatch
         return responseFormat(401, tokenResponseFormat(responseMsg.SIGNIN_PASSWORD_MISMATCH));
     }
-  
+
     const message = responseMsg.SIGNIN_SUCCESS; // generate response message
     const accessToken = createAccessToken(userInfo.ID); // generate access token
     const refreshToken = createRefreshToken(userInfo.ID); // generate refresh token
@@ -51,11 +51,11 @@ const createUser = async (email, password, nickname) => {
     // duplicate check
     let checkParam = "EMAIL"
     if (await duplicateCheck({ [checkParam]: email })) { // email
-        return responseFormat(409, tokenResponseFormat(responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam)));
+        return responseFormat(409, tokenResponseFormat(responseMsg.DUPLICATE_PARAMETER(checkParam)));
     }
     checkParam = "NICKNAME";
     if (await duplicateCheck({ [checkParam]: nickname })) { // nickname
-        return responseFormat(409, tokenResponseFormat(responseMsg.SIGNUP_DUPLICATE_PARAMETER(checkParam)));
+        return responseFormat(409, tokenResponseFormat(responseMsg.DUPLICATE_PARAMETER(checkParam)));
     }
 
     try {
@@ -64,7 +64,7 @@ const createUser = async (email, password, nickname) => {
             PASSWORD: password,
             NICKNAME: nickname
         });
-      
+
         const message = responseMsg.SIGNUP_SUCCESS; // generate response message
         const accessToken = createAccessToken(user.ID); // generate access token
         const refreshToken = createRefreshToken(user.ID); // generate refresh token
@@ -86,8 +86,56 @@ const reissueToken = (userId) => {
     return responseFormat(200, tokenResponseFormat(message, accessToken, refreshToken));
 }
 
+// update user information
+const updateUserInfo = async (user_id, new_nickname, new_password) => {
+    let updateCondition, checkParam;
+    if (new_nickname && !new_password) { // update user nickname
+        checkParam = "NICKNAME";
+        updateCondition = { [checkParam]: new_nickname };
+        // nickname duplicate check
+        if (await duplicateCheck(updateCondition)) {
+            return responseFormat(409, responseMsg.DUPLICATE_PARAMETER(checkParam));
+        }
+    } else if (!new_nickname && new_password) { // update user password
+        checkParam = "PASSWORD";
+        updateCondition = { [checkParam]: new_password };
+    }
+
+    try {
+        // update user information
+        await User.update(
+            updateCondition,
+            { where: { ID: user_id } }
+        );
+        return responseFormat(200, { message: responseMsg.USER_UPDATE_COMPLETE(checkParam) });
+    }
+    catch (err) {
+        console.log(err);
+        return responseFormat(500, { message: responseMsg.USER_UPDATE_FAIL(checkParam) });
+    }
+}
+
+// delete user
+const deleteUser = async (user_id) => {
+    try {
+        // delete user
+        await User.destroy(
+            { where: { ID: user_id } }
+        );
+        return responseFormat(200, {
+            message: responseMsg.USER_DELETE_COMPLETE,
+        }); // delete SUCCESS
+    }
+    catch (err) {
+        console.log(err);
+        return responseFormat(500, { message: responseMsg.USER_DELETE_FAIL });
+    }
+}
+
 module.exports = {
     login,
     createUser,
-    reissueToken
+    reissueToken,
+    updateUserInfo,
+    deleteUser
 }

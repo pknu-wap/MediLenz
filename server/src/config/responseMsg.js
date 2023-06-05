@@ -1,6 +1,7 @@
 "use strict";
 
 module.exports = {
+    // USER
     // Success
     SIGNIN_SUCCESS: "login success",
     SIGNUP_SUCCESS: "new user created",
@@ -14,10 +15,21 @@ module.exports = {
     SIGNUP_BAD_REQUEST: "paramter must include 'email(string), password(string), nickname(string)'",
 
     // Response error
-    SIGNUP_DUPLICATE_PARAMETER: (parameter) => {
-        return `the ${parameter} is already in use`
+    DUPLICATE_PARAMETER: (parameter) => {
+        return `the ${parameter} is already in use`;
     },
     SIGNUP_INTERNAL_SERVER_ERROR: "server error",
+
+    // USERINFO
+    USER_UPDATE_COMPLETE: (parameter) => {
+        return `user ${parameter} update complete`;
+    },
+    USER_UPDATE_FAIL: (parameter) => {
+        return `user ${parameter} update fail`;
+    },
+    USER_DELETE_COMPLETE: "user delete complete",
+    USER_DELETE_FAIL: "user delete fail",
+
 
     // Comment
     COMMENT_GET_COMPLETE: "comment get complete",
