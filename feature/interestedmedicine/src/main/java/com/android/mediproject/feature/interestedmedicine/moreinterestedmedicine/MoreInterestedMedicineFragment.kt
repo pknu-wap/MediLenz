@@ -10,9 +10,7 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.interestedmedicine.databinding.FragmentMoreInterestedMedicineBinding
 
 class MoreInterestedMedicineFragment :
-    BaseFragment<FragmentMoreInterestedMedicineBinding, MoreInterestedMedicineViewModel>(
-        FragmentMoreInterestedMedicineBinding::inflate
-    ) {
+    BaseFragment<FragmentMoreInterestedMedicineBinding, MoreInterestedMedicineViewModel>(FragmentMoreInterestedMedicineBinding::inflate) {
     override val fragmentViewModel: MoreInterestedMedicineViewModel by viewModels()
     private val moreInterestedMedicineAdapter: MoreInterestedMeidicneAdapter by lazy { MoreInterestedMeidicneAdapter() }
 
@@ -29,15 +27,38 @@ class MoreInterestedMedicineFragment :
             }
         }
 
-        moreInterestedMedicineAdapter.submitList(
-            mutableListOf(
-                ApprovedMedicineItemDto(itemName="탁센연질캡슐", entpName = "(주)녹십자", entpEngName = "GreenSipja", spcltyPblc = "일반의약품", itemIngrName = "나프록센"),
-                ApprovedMedicineItemDto(itemName="탁센연질캡슐", entpName = "(주)녹십자", entpEngName = "GreenSipja", spcltyPblc = "일반의약품", itemIngrName = "나프록센"),
-                ApprovedMedicineItemDto(itemName="탁센연질캡슐", entpName = "(주)녹십자", entpEngName = "GreenSipja", spcltyPblc = "일반의약품", itemIngrName = "나프록센"),
-                ApprovedMedicineItemDto(itemName="탁센연질캡슐", entpName = "(주)녹십자", entpEngName = "GreenSipja", spcltyPblc = "일반의약품", itemIngrName = "나프록센"),
-                ApprovedMedicineItemDto(itemName="탁센연질캡슐", entpName = "(주)녹십자", entpEngName = "GreenSipja", spcltyPblc = "일반의약품", itemIngrName = "나프록센"),
-            )
-        )
+        moreInterestedMedicineAdapter.submitList(mutableListOf(
+            ApprovedMedicineItemDto(itemName = "탁센연질캡슐",
+                entpName = "(주)녹십자",
+                entpEngName = "GreenSipja",
+                spcltyPblc = "일반의약품",
+                itemIngrName = "나프록센",
+                itemSeq = 0),
+            ApprovedMedicineItemDto(itemName = "탁센연질캡슐",
+                entpName = "(주)녹십자",
+                entpEngName = "GreenSipja",
+                spcltyPblc = "일반의약품",
+                itemIngrName = "나프록센",
+                itemSeq = 0),
+            ApprovedMedicineItemDto(itemName = "탁센연질캡슐",
+                entpName = "(주)녹십자",
+                entpEngName = "GreenSipja",
+                spcltyPblc = "일반의약품",
+                itemIngrName = "나프록센",
+                itemSeq = 0),
+            ApprovedMedicineItemDto(itemName = "탁센연질캡슐",
+                entpName = "(주)녹십자",
+                entpEngName = "GreenSipja",
+                spcltyPblc = "일반의약품",
+                itemIngrName = "나프록센",
+                itemSeq = 0),
+            ApprovedMedicineItemDto(itemName = "탁센연질캡슐",
+                entpName = "(주)녹십자",
+                entpEngName = "GreenSipja",
+                spcltyPblc = "일반의약품",
+                itemIngrName = "나프록센",
+                itemSeq = 0),
+        ))
 
     }
 

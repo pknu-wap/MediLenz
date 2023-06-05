@@ -17,4 +17,5 @@ interface SignRepository {
     fun getCurrentTokens(): Flow<TokenState<CurrentTokenDto>>
 
     val myEmail: Flow<String>
+    val myId: Flow<Long>
 }

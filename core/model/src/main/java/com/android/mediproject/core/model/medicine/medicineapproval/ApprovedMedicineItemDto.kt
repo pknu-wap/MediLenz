@@ -27,7 +27,7 @@ package com.android.mediproject.core.model.medicine.medicineapproval
  */
 
 data class ApprovedMedicineItemDto(
-    val itemSeq: String? = null,
+    val itemSeq: Long,
     val itemName: String,
     val itemEngName: String? = null,
     val entpName: String? = null,
@@ -52,7 +52,7 @@ data class ApprovedMedicineItemDto(
 )
 
 fun Item.toDto() = ApprovedMedicineItemDto(
-    itemSeq = itemSeq,
+    itemSeq = itemSeq.toLong(),
     itemName = itemName ?: "",
     itemEngName = itemEngName,
     entpName = entpName,

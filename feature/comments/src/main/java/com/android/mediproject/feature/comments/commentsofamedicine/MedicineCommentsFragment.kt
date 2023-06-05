@@ -5,6 +5,8 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.common.paging.setOnStateChangedListener
+import com.android.mediproject.core.common.util.navArgs
+import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.R
 import com.android.mediproject.feature.comments.databinding.FragmentMedicineCommentsBinding
@@ -15,11 +17,11 @@ import repeatOnStarted
 
 @AndroidEntryPoint
 class MedicineCommentsFragment :
-    BaseFragment<FragmentMedicineCommentsBinding, MedicineCommentsViewModel>(
-        FragmentMedicineCommentsBinding::inflate
-    ) {
+    BaseFragment<FragmentMedicineCommentsBinding, MedicineCommentsViewModel>(FragmentMedicineCommentsBinding::inflate) {
 
     override val fragmentViewModel: MedicineCommentsViewModel by viewModels()
+
+    private val medicineBasicInfoArgs by navArgs<MedicineBasicInfoArgs>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,12 +30,10 @@ class MedicineCommentsFragment :
             viewModel = fragmentViewModel
 
             val adapter = CommentsAdapter().apply {
-                setOnStateChangedListener(
-                    pagingListView.messageTextView,
+                setOnStateChangedListener(pagingListView.messageTextView,
                     pagingListView.pagingList,
                     pagingListView.progressIndicator,
-                    getString(R.string.emptyComments)
-                )
+                    getString(R.string.emptyComments))
             }
 
             pagingListView.pagingList.apply {
@@ -44,16 +44,16 @@ class MedicineCommentsFragment :
                 */
                 setItemViewCacheSize(0)
                 setRecycledViewPool(RecyclerView.RecycledViewPool().apply {
-                    setMaxRecycledViews(CommentsAdapter.CommentType.COMMENT.ordinal, 6)
-                    setMaxRecycledViews(CommentsAdapter.CommentType.EDITING.ordinal, 1)
+                    setMaxRecycledViews(CommentsAdapter.ViewType.COMMENT.ordinal, 6)
+                    setMaxRecycledViews(CommentsAdapter.ViewType.EDITING.ordinal, 0)
+                    setMaxRecycledViews(CommentsAdapter.ViewType.REPLY.ordinal, 6)
                 })
                 this.adapter = adapter
             }
 
             viewLifecycleOwner.repeatOnStarted {
-
                 launch {
-                    fragmentViewModel.action.collect { action ->
+                    fragmentViewModel.action.collect() { action ->
                         when (action) {
                             is CommentActionState.CLICKED_LIKE -> {
                             }

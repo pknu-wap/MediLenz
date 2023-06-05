@@ -9,5 +9,5 @@ package com.android.mediproject.core.model.local.navargs
  * @property itemSequence 약 품목기준코드
  */
 data class MedicineInfoArgs(
-    val medicineName: String, val imgUrl: String, val entpName: String, val itemSequence: String, val medicineEngName: String
+    val medicineName: String, val imgUrl: String, val entpName: String, val itemSequence: Long, val medicineEngName: String
 ) : BaseNavArgs(MedicineInfoArgs::class.java.name)

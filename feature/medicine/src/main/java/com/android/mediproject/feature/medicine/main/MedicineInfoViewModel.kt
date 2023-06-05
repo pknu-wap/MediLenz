@@ -70,7 +70,7 @@ class MedicineInfoViewModel @Inject constructor(
  * @property medicineEngName 약 영문 이름
  */
 data class MedicinePrimaryInfoDto(
-    val medicineName: String, val imgUrl: String, val entpName: String, val itemSequence: String, val medicineEngName: String
+    val medicineName: String, val imgUrl: String, val entpName: String, val itemSequence: Long, val medicineEngName: String
 )
 
 @Parcelize

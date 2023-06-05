@@ -8,7 +8,7 @@ import androidx.navigation.findNavController
 import androidx.paging.map
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.mediproject.core.common.paging.setOnStateChangedListener
-import com.android.mediproject.core.common.util.navigateByDeepLink
+import com.android.mediproject.core.common.util.deepNavigate
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.constants.MedicationType
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
@@ -24,9 +24,7 @@ import repeatOnStarted
 
 @AndroidEntryPoint
 class ManualSearchResultFragment :
-    BaseFragment<FragmentManualSearchResultBinding, ManualSearchResultViewModel>(
-        FragmentManualSearchResultBinding::inflate
-    ) {
+    BaseFragment<FragmentManualSearchResultBinding, ManualSearchResultViewModel>(FragmentManualSearchResultBinding::inflate) {
 
     private val searchMedicinesViewModel: SearchMedicinesViewModel by viewModels({ requireParentFragment().requireParentFragment() })
 
@@ -43,46 +41,30 @@ class ManualSearchResultFragment :
                 it.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { it.retry() },
                     footer = PagingLoadStateAdapter { it.retry() })
 
-                it.setOnStateChangedListener(
-                    pagingListViewGroup.messageTextView,
+                it.setOnStateChangedListener(pagingListViewGroup.messageTextView,
                     pagingListViewGroup.pagingList,
                     pagingListViewGroup.progressIndicator,
-                    getString(R.string.searchResultIsEmpty)
-                )
+                    getString(R.string.searchResultIsEmpty))
             }
 
             pagingListViewGroup.pagingList.apply {
                 setHasFixedSize(true)
                 setItemViewCacheSize(10)
-                addItemDecoration(DividerItemDecoration(
-                    requireContext(), DividerItemDecoration.VERTICAL
-                ).apply {
-                    setDrawable(
-                        resources.getDrawable(
-                            com.android.mediproject.core.ui.R.drawable.divider, null
-                        )
-                    )
+                addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                    setDrawable(resources.getDrawable(com.android.mediproject.core.ui.R.drawable.divider, null))
                 })
                 adapter = searchResultListAdapter
             }
 
             filterBtn.setOnClickListener { it ->
-                MediPopupMenu.showMenu(
-                    it, R.menu.search_result_list_filter_menu
-                ) { menuItem ->
+                MediPopupMenu.showMenu(it, R.menu.search_result_list_filter_menu) { menuItem ->
 
                     when (menuItem.itemId) {
-                        R.id.listOnlySpecialtyMedicines -> fragmentViewModel.searchMedicinesByMedicationType(
-                            MedicationType.SPECIALTY
-                        )
+                        R.id.listOnlySpecialtyMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.SPECIALTY)
 
-                        R.id.listOnlyGenericMedicines -> fragmentViewModel.searchMedicinesByMedicationType(
-                            MedicationType.GENERAL
-                        )
+                        R.id.listOnlyGenericMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.GENERAL)
 
-                        R.id.listAllMedicines -> fragmentViewModel.searchMedicinesByMedicationType(
-                            MedicationType.ALL
-                        )
+                        R.id.listAllMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.ALL)
                     }
                     true
                 }
@@ -123,15 +105,11 @@ class ManualSearchResultFragment :
 
     private fun openMedicineInfo(approvedMedicineItemDto: ApprovedMedicineItemDto) {
         activity?.findNavController(com.android.mediproject.core.common.R.id.fragmentContainerView)
-            ?.navigateByDeepLink(
-                "medilens://search/medicine/medicine_detail_nav", MedicineInfoArgs(
-                    medicineName = approvedMedicineItemDto.itemName,
+            ?.deepNavigate("medilens://search/medicine/medicine_detail_nav",
+                MedicineInfoArgs(medicineName = approvedMedicineItemDto.itemName,
                     imgUrl = approvedMedicineItemDto.bigPrdtImgUrl ?: "",
                     entpName = approvedMedicineItemDto.entpName ?: "",
-                    itemSequence = approvedMedicineItemDto.itemSeq ?: "",
-                    medicineEngName = approvedMedicineItemDto.itemEngName ?: ""
-                )
-            )
-
+                    itemSequence = approvedMedicineItemDto.itemSeq,
+                    medicineEngName = approvedMedicineItemDto.itemEngName ?: ""))
     }
 }

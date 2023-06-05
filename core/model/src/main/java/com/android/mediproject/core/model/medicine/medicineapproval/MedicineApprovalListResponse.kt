@@ -65,7 +65,7 @@ data class Item(
     @SerialName("ITEM_INGR_NAME") val itemIngrName: String?,
     @SerialName("ITEM_NAME") val itemName: String?,
     @SerialName("ITEM_PERMIT_DATE") val itemPermitDate: String?,
-    @SerialName("ITEM_SEQ") val itemSeq: String?,
+    @SerialName("ITEM_SEQ") val itemSeq: String,
     @SerialName("PERMIT_KIND_CODE") val permitKindCode: String?,
     @SerialName("PRDLST_STDR_CODE") val prdlstStdrCode: String?,
     @SerialName("PRDUCT_PRMISN_NO") val prductPrmisnNo: String?,

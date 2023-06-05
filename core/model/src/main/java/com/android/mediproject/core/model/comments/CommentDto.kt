@@ -1,8 +1,8 @@
 package com.android.mediproject.core.model.comments
 
-import com.android.mediproject.core.model.remote.comments.MedicineCommentsResponse
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * 댓글 정보를 담는 데이터 클래스입니다.
@@ -24,21 +24,20 @@ import kotlinx.datetime.toLocalDateTime
  * @property isMine 내가 쓴 댓글인지 여부
  */
 data class CommentDto(
-    val commentId: Int,
-    val userId: Int,
+    val commentId: Long,
+    val userId: Long,
     val userName: String,
     val isReply: Boolean = false,
-    val subordinationId: Int = -1,
+    val subordinationId: Long = -1,
     val content: String,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime,
+    val createdAt: String,
+    val updatedAt: String,
     var onClickReply: ((Int) -> Unit)?,
-    var onClickLike: ((Int) -> Unit)?,
-    var onClickDelete: ((Int) -> Unit)?,
+    var onClickLike: ((Long) -> Unit)?,
+    var onClickDelete: ((Long) -> Unit)?,
     var onClickEdit: ((CommentDto, Int) -> Unit)?,
     var onClickApplyEdited: ((CommentDto) -> Unit)?,
-    var isMine: Boolean = false
-) {
+    var isMine: Boolean = false) {
     var isEditing: Boolean = false
 }
 
@@ -52,18 +51,20 @@ CREATED_AT	DATETIME	작성 시각
 UPDATED_AT	DATETIME	수정 시각
  */
 
-fun MedicineCommentsResponse.toDto() = CommentDto(
-    commentId = commentId,
+fun CommentListResponse.Comment.toDto() = CommentDto(
+    commentId = id,
     userId = userId,
-    userName = userName,
-    isReply = isReply,
-    subordinationId = subordinationId,
+    userName = userId.toString(),
+    isReply = subordination != -1L,
+    subordinationId = subordination,
     content = content,
-    createdAt = createdAt.toLocalDateTime(),
-    updatedAt = updatedAt.toLocalDateTime(),
+    createdAt = createdAt.toLocalDateTime().toJavaLocalDateTime().format(dateTimeFormatter),
+    updatedAt = updatedAt.toLocalDateTime().toJavaLocalDateTime().format(dateTimeFormatter),
     onClickReply = null,
     onClickLike = null,
     onClickDelete = null,
     onClickEdit = null,
     onClickApplyEdited = null,
 )
+
+internal val dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd HH:mm")
