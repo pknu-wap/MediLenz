@@ -13,7 +13,19 @@ const tokenResponseFormat = (message, access_token = null, refresh_token = null)
         refresh_token
     }
 }
-
+const _getUserNickname = async (userId) => { //NOT FOR EXPORT
+    try {
+        const user = await User.findOne({
+            attributes: ["NICKNAME"],
+            where: {
+                ID: userId
+            }
+        });
+        return user.NICKNAME;
+    } catch (err) {
+        return null;
+    }
+}
 // sign-in
 const login = async (email, password) => {
     const userInfo = await User.findOne({
@@ -133,6 +145,7 @@ const deleteUser = async (user_id) => {
 }
 
 module.exports = {
+    _getUserNickname,
     login,
     createUser,
     reissueToken,
