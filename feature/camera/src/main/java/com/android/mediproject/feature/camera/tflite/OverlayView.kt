@@ -15,8 +15,9 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var _results: List<Detection> = LinkedList<Detection>()
     val results: List<Detection>
         get() = _results.toMutableList()
-    private var boxPaint = Paint()
+    private val boxPaint = Paint()
     private var scaleFactor: Float = 1f
+    private val roundCornerRadius = 8f
 
     var imgwidth: Int = 0
     var imgHeight: Int = 0
@@ -33,9 +34,10 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     private fun initPaints() {
         boxPaint.color = Color.WHITE
-        boxPaint.strokeWidth = 6f
+        boxPaint.strokeWidth = 12f
         boxPaint.style = Paint.Style.STROKE
-        boxPaint.strokeCap = Paint.Cap.ROUND
+        boxPaint.strokeCap = Paint.Cap.SQUARE
+        boxPaint.isAntiAlias = true
     }
 
     override fun draw(canvas: Canvas) {
@@ -48,24 +50,21 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             val left = boundingBox.left * scaleFactor
             val right = boundingBox.right * scaleFactor
 
-            val drawableRect = RectF(left, top, right, bottom)
-            canvas.drawRect(drawableRect, boxPaint)
+            canvas.drawRoundRect(RectF(left, top, right, bottom), roundCornerRadius, roundCornerRadius, boxPaint)
         }
     }
 
     fun setResults(
         detectionResults: List<Detection>,
-        imageHeight: Int,
         imageWidth: Int,
+        imageHeight: Int,
     ) {
         _results = detectionResults
 
-        imgwidth = imageWidth
+        imgwidth = imageHeight
         imgHeight = imageHeight
 
-        // PreviewView is in FILL_START mode. So we need to scale up the bounding box to match with
-        // the size that the captured images will be displayed.
-        scaleFactor = max(imgwidth * 1f / imageWidth, imgHeight * 1f / imageHeight)
+        scaleFactor = max(width * 1f / imageHeight, height * 1f / imageHeight)
     }
 
 }

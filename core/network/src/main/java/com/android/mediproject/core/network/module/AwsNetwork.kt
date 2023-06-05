@@ -2,9 +2,15 @@ package com.android.mediproject.core.network.module
 
 import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
+import com.android.mediproject.core.model.comments.CommentChangedResponse
+import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
+import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
+import com.android.mediproject.core.model.requestparameters.EditCommentParameter
+import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
+import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
@@ -22,7 +28,11 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Query
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -41,7 +51,6 @@ object AwsNetwork {
 
     @Provides
     @Named("awsNetworkApiWithRefreshTokens")
-    @Singleton
     fun providesReissueTokenAwsNetworkApi(
         @Named("okHttpClientWithReissueTokens") okHttpClient: OkHttpClient,
     ): AwsNetworkApi =
@@ -54,7 +63,6 @@ object AwsNetwork {
         CommentsDataSourceImpl(awsNetworkApi)
 
     @Provides
-    @Singleton
     fun providesSignDataSource(
         @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi,
         tokenDataSourceImpl: TokenDataSourceImpl,
@@ -74,4 +82,42 @@ interface AwsNetworkApi {
     @POST(value = "user/reissue")
     suspend fun reissueTokens(
     ): Response<ReissueTokenResponse>
+
+    /**
+     * 특정 약에 대한 댓글 목록 조회
+     */
+    @GET(value = "medicine/comment")
+    suspend fun getComments(
+        @Query("medicineId", encoded = true) medicineId: Long,
+    ): Response<CommentListResponse>
+
+    /**
+     * 댓글 수정
+     */
+    @PATCH(value = "medicine/comment")
+    suspend fun editComment(
+        @Body editCommentParameter: EditCommentParameter): Response<CommentChangedResponse>
+
+    /**
+     * 댓글 삭제
+     */
+    @DELETE(value = "medicine/comment")
+    suspend fun deleteComment(
+        @Body deleteCommentParameter: DeleteCommentParameter): Response<CommentChangedResponse>
+
+    /**
+     * 댓글 좋아요
+     */
+    @POST(value = "medicine/comment")
+    suspend fun likeComment(
+        @Body likeCommentParameter: LikeCommentParameter): Response<CommentChangedResponse>
+
+    /**
+     * 댓글 등록
+     */
+    @POST(value = "medicine/comment/writeTest")
+    suspend fun applyNewComment(
+        @Body newCommentParameter: NewCommentParameter): Response<CommentChangedResponse>
+
+
 }

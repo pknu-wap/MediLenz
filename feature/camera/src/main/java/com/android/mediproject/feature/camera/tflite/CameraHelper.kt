@@ -2,12 +2,9 @@ package com.android.mediproject.feature.camera.tflite
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageFormat
-import android.graphics.Rect
-import android.graphics.YuvImage
-import android.media.Image
 import android.util.Log
+import androidx.camera.core.AspectRatio
+import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -27,13 +24,13 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.image.ops.Rot90Op
 import org.tensorflow.lite.task.core.BaseOptions
 import org.tensorflow.lite.task.gms.vision.TfLiteVision
 import org.tensorflow.lite.task.gms.vision.detector.Detection
 import org.tensorflow.lite.task.gms.vision.detector.ObjectDetector
-import java.io.ByteArrayOutputStream
-import java.lang.ref.WeakReference
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.concurrent.ExecutorService
@@ -65,7 +62,7 @@ class CameraHelper @Inject constructor(
 
 
     private val _detectionResult =
-        MutableSharedFlow<List<Detection>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 4)
+        MutableSharedFlow<List<Detection>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 5)
 
     override val detectionResult get() = _detectionResult.asSharedFlow()
 
@@ -117,9 +114,9 @@ class CameraHelper @Inject constructor(
             TfLiteVision.initialize(context).addOnCompleteListener {
 
                 if (it.isSuccessful) {
-                    val modelFile = context.assets.open("medicine_detector.tflite")
+                    val modelFile = context.assets.open("automl_tflite.tflite")
 
-                    val objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setMaxResults(5).setScoreThreshold(0.35f)
+                    val objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setMaxResults(8).setScoreThreshold(0.3f)
                         .setBaseOptions(BaseOptions.builder().apply {
                             useNnapi()
                         }.build()).build()
@@ -142,19 +139,18 @@ class CameraHelper @Inject constructor(
         }
     }
 
-    @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
-    private fun detect(image: ImageProxy) {
-        Log.d("detect", "${image.width} ${image.height}")
 
+    private fun detect(image: ImageProxy) {
         image.use {
             bitmapBuffer.copyPixelsFromBuffer(image.planes[0].buffer)
         }
-        val tensorImage = TensorImage.fromBitmap(bitmapBuffer)
+
+        val imageProcessor = ImageProcessor.Builder().add(Rot90Op((-image.imageInfo.rotationDegrees) / 90)).build()
+        val tensorImage = imageProcessor.process(TensorImage.fromBitmap(bitmapBuffer))
 
         detectionCallback?.onDetectedResult(objectDetector.detect(tensorImage).apply {
-            Log.d("검출 완료", "$size 개")
             _detectionResult.tryEmit(this)
-        }, image.width, image.height)
+        }, tensorImage.width, tensorImage.height)
     }
 
     // fragment view의 생명주기 변화 수신
@@ -201,24 +197,25 @@ class CameraHelper @Inject constructor(
             ProcessCameraProvider.getInstance(context).also { cameraProviderFuture ->
                 cameraProviderFuture.addListener(Runnable {
 
+                    val cameraSelector =
+                        CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
+
                     _cameraProvider = cameraProviderFuture.get()
-                    val imageAnalyzer = ImageAnalysis.Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    val imageAnalyzer = ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        .setTargetAspectRatio(AspectRatio.RATIO_4_3).setTargetRotation(previewView.display.rotation)
                         .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build().also {
                             it.setAnalyzer(cameraExecutor) { image ->
                                 if (_bitmapBuffer == null) _bitmapBuffer =
                                     Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
-
-                                Log.d("imgProxy", "${image.width} ${image.height}")
                                 detect(image)
                             }
                         }
 
-                    _preview = Preview.Builder().build()
+                    _preview = Preview.Builder().setTargetAspectRatio(RATIO_4_3).setTargetRotation(previewView.display.rotation).build()
                     cameraProvider.unbindAll()
 
                     _camera =
-                        cameraProvider.bindToLifecycle(fragmentLifeCycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, _preview, imageAnalyzer)
+                        cameraProvider.bindToLifecycle(fragmentLifeCycleOwner, cameraSelector, _preview, imageAnalyzer)
                     _preview?.setSurfaceProvider(previewView.surfaceProvider)
 
                     Log.d("ProcessCameraProvider", "카메라 바인딩 성공")
@@ -236,31 +233,6 @@ class CameraHelper @Inject constructor(
 
     override fun resume() {
         _preview?.setSurfaceProvider(_previewView?.surfaceProvider)
-    }
-
-
-    private fun Image.toBitmap(): Bitmap {
-        val yBuffer = WeakReference(planes[0].buffer).get()!! // Y
-        val vuBuffer = WeakReference(planes[2].buffer).get()!! // VU
-
-        val ySize = yBuffer.remaining()
-        val vuSize = vuBuffer.remaining()
-
-        return WeakReference(ByteArray(ySize + vuSize)).get()!!.let { nv21 ->
-            yBuffer.get(nv21, 0, ySize)
-            vuBuffer.get(nv21, ySize, vuSize)
-
-            val yuvImage = WeakReference(YuvImage(nv21, ImageFormat.NV21, this.width, this.height, null)).get()!!
-            val out = ByteArrayOutputStream()
-
-            yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 100, out)
-
-            val imageBytes = WeakReference(out.toByteArray()).get()!!
-            val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-
-            out.close()
-            bitmap
-        }
     }
 
 
