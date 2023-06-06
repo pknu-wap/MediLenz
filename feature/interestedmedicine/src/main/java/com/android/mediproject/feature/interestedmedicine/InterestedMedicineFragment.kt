@@ -45,7 +45,11 @@ class InterestedMedicineFragment :
                             setInterstedMedicineList(it)
                         }
                     }
-                    repeatOnStarted { token.collect { handleToken(it) } }
+                    repeatOnStarted {
+                        token.collect {
+                            handleToken(it)
+                        }
+                    }
                 }
                 loadTokens()
             }
@@ -78,6 +82,49 @@ class InterestedMedicineFragment :
 
     }
 
+    private fun showNoInterestedMedicine(){
+        log("즐겨찾기 없음")
+        binding.apply {
+            interestedMedicineList.visibility = View.GONE
+            noInterstedMedicineTV.visibility = View.VISIBLE
+
+            val span =
+                SpannableStringBuilder(getString(com.android.mediproject.feature.interestedmedicine.R.string.noInterstedMedicine)).apply {
+                    setSpan(
+                        ForegroundColorSpan(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.main
+                            )
+                        ), 0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                    setSpan(
+                        UnderlineSpan(),
+                        0,
+                        4,
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                    setSpan(
+                        ForegroundColorSpan(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.main
+                            )
+                        ), 6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                    setSpan(
+                        UnderlineSpan(),
+                        6,
+                        8,
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                }
+            noInterstedMedicineTV.text = span
+            interstedMedicineHeaderView.setMoreVisiblity(false)
+            interstedMedicineHeaderView.setExpandVisiblity(false)
+        }
+    }
+    
     /**
      * 마이페이지 즐겨찾기 목록 화면 로직
      */
@@ -112,45 +159,7 @@ class InterestedMedicineFragment :
             }
         } else {
             //0개 일 경우
-            binding.apply {
-                interestedMedicineList.visibility = View.GONE
-                noInterstedMedicineTV.visibility = View.VISIBLE
-
-                val span =
-                    SpannableStringBuilder(getString(com.android.mediproject.feature.interestedmedicine.R.string.noInterstedMedicine)).apply {
-                        setSpan(
-                            ForegroundColorSpan(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.main
-                                )
-                            ), 0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                        )
-                        setSpan(
-                            UnderlineSpan(),
-                            0,
-                            4,
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                        )
-                        setSpan(
-                            ForegroundColorSpan(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.main
-                                )
-                            ), 6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                        )
-                        setSpan(
-                            UnderlineSpan(),
-                            6,
-                            8,
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                        )
-                    }
-                noInterstedMedicineTV.text = span
-                interstedMedicineHeaderView.setMoreVisiblity(false)
-                interstedMedicineHeaderView.setExpandVisiblity(false)
-            }
+            showNoInterestedMedicine()
         }
     }
 }
