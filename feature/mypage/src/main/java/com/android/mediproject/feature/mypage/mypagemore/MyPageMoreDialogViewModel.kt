@@ -1,11 +1,13 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
 import MutableEventFlow
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.domain.user.UserUseCase
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
+import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageMoreDialogViewModel @Inject constructor(private val userUseCase: UserUseCase) :
-    ViewModel() {
+    BaseViewModel() {
 
     private val _eventFlow = MutableEventFlow<MyPageMoreDialogEvent>()
     val eventFlow = _eventFlow.asEventFlow()
