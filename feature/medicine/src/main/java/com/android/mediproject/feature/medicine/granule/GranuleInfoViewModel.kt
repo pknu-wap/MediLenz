@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,21 +22,23 @@ import javax.inject.Inject
 class GranuleInfoViewModel @Inject constructor(
     private val medicineInfoMapper: MedicineInfoMapper,
     private val getGranuleIdentificationUseCase: GetGranuleIdentificationUseCase,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
-) : BaseViewModel() {
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher) : BaseViewModel() {
 
     private val granuleIdentification = MutableStateFlow<UiState<GranuleIdentificationInfoDto>>(UiState.Loading)
     private val _granuleTextTags = MutableStateFlow<Spanned?>(null)
     val granuleTextTags get() = _granuleTextTags.asStateFlow()
 
     fun getGranuleIdentificationInfo(
-        itemName: String?, entpName: String?, itemSeq: String?, context: Context
-    ) = viewModelScope.launch(defaultDispatcher) {
+        itemName: String?, entpName: String?, itemSeq: String?, context: Context) = viewModelScope.launch(defaultDispatcher) {
         granuleIdentification.value = UiState.Loading
-        getGranuleIdentificationUseCase(itemName, entpName, itemSeq).fold(onSuccess = {
-            _granuleTextTags.value = medicineInfoMapper.toGranuleInfo(context, it)
-            granuleIdentification.value = UiState.Success(it)
-        }, onFailure = { granuleIdentification.value = UiState.Error(it.message ?: "failed") })
+        getGranuleIdentificationUseCase(itemName, entpName, itemSeq).collectLatest { result ->
+            result.onSuccess {
+                granuleIdentification.value = UiState.Success(it)
+                _granuleTextTags.value = medicineInfoMapper.toGranuleInfo(context, it)
+            }.onFailure {
+                granuleIdentification.value = UiState.Error(it.message ?: "알 수 없는 오류가 발생했습니다.")
+            }
+        }
     }
 
 }

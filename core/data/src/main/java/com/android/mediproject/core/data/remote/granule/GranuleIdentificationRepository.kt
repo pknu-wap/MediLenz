@@ -1,11 +1,12 @@
 package com.android.mediproject.core.data.remote.granule
 
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
+import kotlinx.coroutines.flow.Flow
 
 interface GranuleIdentificationRepository {
-    suspend fun getGranuleIdentificationInfo(
+    fun getGranuleIdentificationInfo(
         itemName: String?,
         entpName: String?,
         itemSeq: String?,
-    ): Result<GranuleIdentificationInfoResponse.Body.Item>
+    ): Flow<Result<GranuleIdentificationInfoResponse.Body.Item>>
 }
