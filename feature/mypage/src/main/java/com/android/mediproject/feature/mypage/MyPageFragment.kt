@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.mypage
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.GUEST_MODE
 import com.android.mediproject.core.common.LOGIN_MODE
+import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
@@ -26,16 +28,24 @@ import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetVi
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyPageFragment :
     BaseFragment<FragmentMyPageBinding, MyPageViewModel>(FragmentMyPageBinding::inflate) {
+
+    @Inject lateinit var systemBarStyler: SystemBarStyler
 
     override val fragmentViewModel: MyPageViewModel by viewModels()
     private val myCommentListAdapter: MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
     private var loginMode = GUEST_MODE
     var myCommentList: List<MyCommentDto> = listOf()
     private var myPageMoreBottomSheet: MyPageMoreBottomSheetFragment? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK,SystemBarStyler.NavigationBarColor.BLACK)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,6 +61,9 @@ class MyPageFragment :
                 }
                 loadTokens()
             }
+
+            systemBarStyler.changeMode(topViews = listOf(SystemBarStyler.ChangeView(mypageBar, SystemBarStyler.SpacingType.PADDING)))
+
 
             myCommentsListHeaderView.setOnMoreClickListener {
                 findNavController().navigate("medilens://main/comments_nav/myCommentsListFragment".toUri())
