@@ -82,7 +82,44 @@ class InterestedMedicineFragment :
 
     }
 
-    private fun showNoInterestedMedicine(){
+    /**
+     * 마이페이지 즐겨찾기 목록 화면 로직
+     */
+    private fun setInterstedMedicineList(medicineList: List<InterestedMedicineDto>) {
+        //다른화면 갔다올 경우 이전에 있는 약품에 더해서 더 생기기 때문에 제거해줘야 함
+        binding.interestedMedicineList.removeAllViews()
+
+        //즐겨찾기 목록 약의 개수가 0개가 아닐 경우
+        if (medicineList.size != 0) {
+
+            val horizontalSpace = resources.getDimension(R.dimen.dp_4).toInt()
+
+            medicineList.forEach { medicine ->
+                log(medicine.toString())
+                binding.interestedMedicineList.addView(
+                    ButtonChip<String>(
+                        requireContext()
+                    ).apply {
+                        layoutParams = FlexboxLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        ).apply {
+                            setMargins(horizontalSpace, 0, horizontalSpace, 0)
+                        }
+                        setChipText(medicine.medicineName)
+                        data = medicine.itemSeq
+                        setOnChipClickListener {
+                            toast(it.toString())
+                        }
+                    })
+            }
+        } else {
+            //0개 일 경우
+            showNoInterestedMedicine()
+        }
+    }
+
+    private fun showNoInterestedMedicine() {
         log("즐겨찾기 없음")
         binding.apply {
             interestedMedicineList.visibility = View.GONE
@@ -122,44 +159,6 @@ class InterestedMedicineFragment :
             noInterstedMedicineTV.text = span
             interstedMedicineHeaderView.setMoreVisiblity(false)
             interstedMedicineHeaderView.setExpandVisiblity(false)
-        }
-    }
-    
-    /**
-     * 마이페이지 즐겨찾기 목록 화면 로직
-     */
-    private fun setInterstedMedicineList(medicineList: List<InterestedMedicineDto>) {
-
-        val horizontalSpace =
-            resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
-
-        //다른화면 갔다올 경우 이전에 있는 약품에 더해서 더 생기기 때문에 제거해줘야 함
-        binding.interestedMedicineList.removeAllViews()
-
-        //즐겨찾기 목록 약의 개수가 0개가 아닐 경우
-        if (medicineList.size != 0) {
-            medicineList.forEach { medicine ->
-                log(medicine.toString())
-                binding.interestedMedicineList.addView(
-                    ButtonChip<String>(
-                        requireContext()
-                    ).apply {
-                        layoutParams = FlexboxLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                        ).apply {
-                            setMargins(horizontalSpace, 0, horizontalSpace, 0)
-                        }
-                        setChipText(medicine.medicineName)
-                        data = medicine.itemSeq
-                        setOnChipClickListener {
-                            toast(it.toString())
-                        }
-                    })
-            }
-        } else {
-            //0개 일 경우
-            showNoInterestedMedicine()
         }
     }
 }
