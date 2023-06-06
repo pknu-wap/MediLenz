@@ -1,6 +1,8 @@
 package com.android.mediproject.feature.medicine.main
 
+import MutableEventFlow
 import androidx.lifecycle.viewModelScope
+import asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
@@ -27,12 +29,17 @@ class MedicineInfoViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher) : BaseViewModel() {
 
+    private val _eventState = MutableEventFlow<EventState>(replay = 1)
+    val eventState get() = _eventState.asEventFlow()
+
     private val _medicinePrimaryInfo = MutableSharedFlow<MedicineInfoArgs>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val medicinePrimaryInfo get() = _medicinePrimaryInfo.asSharedFlow()
 
     val medicineDetails: StateFlow<UiState<MedicineDetatilInfoDto>> = medicinePrimaryInfo.flatMapLatest { primaryInfo ->
         getMedicineDetailsUseCase(primaryInfo).mapLatest { result ->
-            result.fold(onSuccess = { UiState.Success(it) }, onFailure = { UiState.Error(it.message ?: "failed") })
+            result.fold(onSuccess = {
+                UiState.Success(it)
+            }, onFailure = { UiState.Error(it.message ?: "failed") })
         }.flowOn(defaultDispatcher)
     }.stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = UiState.Loading)
 
@@ -41,4 +48,21 @@ class MedicineInfoViewModel @Inject constructor(
             _medicinePrimaryInfo.emit(medicineArgs)
         }
     }
+
+    fun checkInterestMedicine() {
+        viewModelScope.launch {
+
+        }
+    }
+
+    fun scrollToBottom() {
+        viewModelScope.launch {
+            _eventState.emit(EventState.ScrollToBottom)
+        }
+    }
+}
+
+sealed class EventState {
+    data class Interest(val isInterest: Boolean) : EventState()
+    object ScrollToBottom : EventState()
 }

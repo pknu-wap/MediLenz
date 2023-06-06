@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CommentsRepository {
     fun getCommentsForAMedicine(
-        itemSeq: String,
+        medicineId: Long,
     ): Flow<PagingData<CommentListResponse.Comment>>
 
     /**

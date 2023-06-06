@@ -12,7 +12,7 @@
         android:id="@+id/commentItemView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="11dp">
+        android:layout_margin="11dp">
 
         <ImageView
             android:id="@+id/userProfileImageView"

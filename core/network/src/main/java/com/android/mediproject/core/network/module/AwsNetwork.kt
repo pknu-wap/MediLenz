@@ -37,13 +37,22 @@ import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.Path
 import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 object AwsNetwork {
+
+    @Provides()
+    @Named("awsNetworkApiWithoutTokens")
+    @Singleton
+    fun providesWithoutTokensAwsNetworkApi(
+        okHttpClient: OkHttpClient,
+    ): AwsNetworkApi =
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides()
     @Named("awsNetworkApiWithAccessTokens")
@@ -75,9 +84,8 @@ object AwsNetwork {
 
     @Provides
     @Singleton
-    fun providesGetMedicineIdDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): MedicineIdDataSource =
+    fun providesGetMedicineIdDataSource(@Named("awsNetworkApiWithoutTokens") awsNetworkApi: AwsNetworkApi): MedicineIdDataSource =
         MedicineIdDataSourceImpl(awsNetworkApi)
-
 }
 
 interface AwsNetworkApi {
@@ -97,9 +105,9 @@ interface AwsNetworkApi {
     /**
      * 특정 약에 대한 댓글 목록 조회
      */
-    @GET(value = "medicine/comment")
+    @GET(value = "medicine/comment/{medicineId}")
     suspend fun getComments(
-        @Query("medicineId", encoded = true) medicineId: Long,
+        @Path("medicineId", encoded = true) medicineId: Long,
     ): Response<CommentListResponse>
 
     /**

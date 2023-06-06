@@ -16,6 +16,8 @@ import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfoBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import repeatOnStarted
 import javax.inject.Inject
 
@@ -37,17 +39,12 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
         systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         fragmentViewModel.setMedicinePrimaryInfo(navArgs)
 
         binding.apply {
+            systemBarStyler.changeMode(topViews = listOf(SystemBarStyler.ChangeView(topAppBar, SystemBarStyler.SpacingType.PADDING)))
 
             viewModel = fragmentViewModel
             medicineInfoArgs = navArgs
@@ -83,24 +80,38 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
         }
 
         viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.medicineDetails.collect { uiState ->
-                when (uiState) {
-                    is UiState.Success -> {
-                        initTabs()
-                        LoadingDialog.dismiss()
+            launch {
+                fragmentViewModel.medicineDetails.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Success -> {
+                            initTabs()
+                            LoadingDialog.dismiss()
+                        }
+
+                        is UiState.Error -> {
+                            LoadingDialog.dismiss()
+                        }
+
+                        is UiState.Loading -> {
+                            LoadingDialog.showLoadingDialog(requireContext(), null)
+                        }
+
+                        is UiState.Initial -> {}
+
                     }
-
-                    is UiState.Error -> {
-                        LoadingDialog.dismiss()
-                    }
-
-                    is UiState.Loading -> {
-                        LoadingDialog.showLoadingDialog(requireContext(), null)
-                    }
-
-                    is UiState.Initial -> {}
-
                 }
+            }
+
+            launch {
+                fragmentViewModel.eventState.collectLatest {
+                    when (it) {
+                        is EventState.Interest -> {}
+                        is EventState.ScrollToBottom -> {
+                            binding.topAppBar.setExpanded(false, true)
+                        }
+                    }
+                }
+
             }
         }
 

@@ -74,13 +74,11 @@ object NetworkModule {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
             })
-            readTimeout(Duration.ofSeconds(10))
-            connectTimeout(Duration.ofSeconds(7))
-            writeTimeout(Duration.ofSeconds(7))
+            readTimeout(Duration.ofSeconds(15))
+            connectTimeout(Duration.ofSeconds(10))
+            callTimeout(Duration.ofSeconds(10))
             certificateHelper.apply {
-                sslSocketFactory(
-                    sslContext.socketFactory, tmf.trustManagers[0] as X509TrustManager
-                )
+                sslSocketFactory(sslContext.socketFactory, tmf.trustManagers[0] as X509TrustManager)
             }
             build()
         }
@@ -90,17 +88,13 @@ object NetworkModule {
     @Singleton
     @Named("okHttpClientWithAccessTokens")
     fun providesOkHttpClientWithAccessTokens(
-        tokenServer: TokenServer
-    ): OkHttpClient = OkHttpClient.Builder().run {
+        tokenServer: TokenServer): OkHttpClient = OkHttpClient.Builder().run {
         addInterceptor(HttpLoggingInterceptor().apply {
             if (BuildConfig.DEBUG) {
                 level = HttpLoggingInterceptor.Level.BODY
             }
         })
         addInterceptor(TokenInterceptor(tokenServer, TokenInterceptor.TokenType.ACCESS_TOKEN))
-        readTimeout(Duration.ofSeconds(10))
-        connectTimeout(Duration.ofSeconds(7))
-        writeTimeout(Duration.ofSeconds(7))
         build()
     }
 
@@ -108,17 +102,13 @@ object NetworkModule {
     @Singleton
     @Named("okHttpClientWithReissueTokens")
     fun providesOkHttpClientWithReissueTokens(
-        tokenServer: TokenServer
-    ): OkHttpClient = OkHttpClient.Builder().run {
+        tokenServer: TokenServer): OkHttpClient = OkHttpClient.Builder().run {
         addInterceptor(HttpLoggingInterceptor().apply {
             if (BuildConfig.DEBUG) {
                 level = HttpLoggingInterceptor.Level.BODY
             }
         })
         addInterceptor(TokenInterceptor(tokenServer, TokenInterceptor.TokenType.REFRESH_TOKEN))
-        readTimeout(Duration.ofSeconds(10))
-        connectTimeout(Duration.ofSeconds(7))
-        writeTimeout(Duration.ofSeconds(7))
         build()
     }
 

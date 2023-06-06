@@ -19,7 +19,7 @@ class GranuleIdentificationDataSourceImpl @Inject constructor(private val networ
         networkApi.getGranuleIdentificationInfo(itemName = itemName, entpName = entpName, itemSeq = itemSeq).onResponse()
             .fold(onSuccess = { response ->
                 response.isSuccess().let {
-                    if (it is DataGoKrResult.isSuccess && response.body != null) {
+                    if (it is DataGoKrResult.isSuccess && response.body.items.isNotEmpty()) {
                         emit(Result.success(response))
                     } else {
                         emit(Result.failure(Throwable(it.failedMessage)))
