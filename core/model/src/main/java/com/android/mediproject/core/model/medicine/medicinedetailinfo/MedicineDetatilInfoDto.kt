@@ -49,8 +49,10 @@ import java.time.format.DateTimeFormatter
  * @param storageMethod 저장 방법입니다.
  * @param totalContent 총 함량입니다.
  * @param udDocData 용법 용량
- * @param uDDOCID UD 문서의 식별자(ID)입니다.
+ * @param uDocUid UD 문서의 식별자(ID)입니다.
  * @param validTerm 유효 기간입니다. 제조일로부터의 개월 수를 나타냅니다.
+ * @param medicineIdInAws AWS에 저장된 의약품 ID
+ * @param hasMedicineIdInAws AWS에 저장된 의약품 ID가 있는지 여부
  */
 data class MedicineDetatilInfoDto(
     val atcCode: String?,
@@ -93,11 +95,13 @@ data class MedicineDetatilInfoDto(
     val storageMethod: String?,
     val totalContent: String?,
     val udDocData: XMLParsedResult,
-    val uDDOCID: String?,
+    val uDocUid: String?,
     val validTerm: String?,
+    val medicineIdInAws: Long,
+    val hasMedicineIdInAws: Boolean
 )
 
-fun MedicineDetailInfoResponse.Body.Item.toDto() = MedicineDetatilInfoDto(
+fun MedicineDetailInfoResponse.Body.Item.toDto(medicineIdInAws: Long) = MedicineDetatilInfoDto(
     atcCode = atcCode,
     barCode = barCode,
     businessRegistrationNumber = businessRegistrationNumber,
@@ -138,8 +142,10 @@ fun MedicineDetailInfoResponse.Body.Item.toDto() = MedicineDetatilInfoDto(
     storageMethod = storageMethod,
     totalContent = totalContent,
     udDocData = udDocData.parseXmlString(),
-    uDDOCID = uDDOCID,
+    uDocUid = uDDOCID,
     validTerm = validTerm,
+    medicineIdInAws = medicineIdInAws,
+    hasMedicineIdInAws = medicineIdInAws != 0L
 )
 
 private fun String?.toLocalDate(): LocalDate? = this?.let {

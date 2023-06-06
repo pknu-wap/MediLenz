@@ -34,6 +34,7 @@ import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -132,7 +133,7 @@ interface AwsNetworkApi {
     /**
      * 약 ID 조회
      */
-    @GET(value = "medicine/comment")
+    @HTTP(method = "GET", path = "medicine/comment", hasBody = true)
     suspend fun getMedicineId(
         @Body getMedicineIdParameter: GetMedicineIdParameter): Response<MedicineIdResponse>
 }

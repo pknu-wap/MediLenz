@@ -38,7 +38,6 @@ class SignRepositoryImpl @Inject constructor(
                     if (signInParameter.isSavedEmail) saveUserEmail(signInParameter.email)
                     else saveUserEmail(charArrayOf())
                     saveSkipIntro(true)
-                    saveMyAccountId(dto.id)
                 }
 
                 // 로그인 성공

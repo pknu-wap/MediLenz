@@ -16,7 +16,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,15 +25,15 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicineInfoViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher) : BaseViewModel() {
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher) : BaseViewModel() {
 
     private val _medicinePrimaryInfo = MutableSharedFlow<MedicineInfoArgs>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val medicinePrimaryInfo get() = _medicinePrimaryInfo.asSharedFlow()
 
     val medicineDetails: StateFlow<UiState<MedicineDetatilInfoDto>> = medicinePrimaryInfo.flatMapLatest { primaryInfo ->
-        getMedicineDetailsUseCase(itemName = primaryInfo.itemKorName).map { result ->
+        getMedicineDetailsUseCase(primaryInfo).mapLatest { result ->
             result.fold(onSuccess = { UiState.Success(it) }, onFailure = { UiState.Error(it.message ?: "failed") })
-        }
+        }.flowOn(defaultDispatcher)
     }.stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = UiState.Loading)
 
     fun setMedicinePrimaryInfo(medicineArgs: MedicineInfoArgs) {

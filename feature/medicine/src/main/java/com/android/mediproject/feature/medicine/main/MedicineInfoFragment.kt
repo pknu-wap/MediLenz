@@ -1,11 +1,13 @@
 package com.android.mediproject.feature.medicine.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
+import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.common.util.navArgs
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
@@ -15,6 +17,7 @@ import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfo
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
+import javax.inject.Inject
 
 /**
  * 약 정보 화면
@@ -26,6 +29,18 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
     override val fragmentViewModel: MedicineInfoViewModel by viewModels()
 
     private val navArgs by navArgs<MedicineInfoArgs>()
+
+    @Inject lateinit var systemBarStyler: SystemBarStyler
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

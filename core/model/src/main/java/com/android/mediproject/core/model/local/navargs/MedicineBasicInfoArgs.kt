@@ -6,4 +6,4 @@ package com.android.mediproject.core.model.local.navargs
  * @property itemSeq 약 품목기준코드
  */
 data class MedicineBasicInfoArgs(
-    val itemSeq: Long) : BaseNavArgs(MedicineBasicInfoArgs::class.java.name)
+    val itemSeq: Long, val medicineIdInAws: Long) : BaseNavArgs(MedicineBasicInfoArgs::class.java.name)

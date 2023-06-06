@@ -11,4 +11,14 @@ data class GetMedicineIdParameter(
     @SerialName("ITEM_NAME") val itemName: String, // 타이레놀콜드-에스정(수출명:TylenolColdTablet,TylenolColdCaplet)
     @SerialName("ITEM_SEQ") val itemSeq: String, // 200302348
     @SerialName("PRDUCT_TYPE") val productType: String, // [01140]해열.진통.소염제
-    @SerialName("SPCLTY_PBLC") val medicineType: String)
+    @SerialName("SPCLTY_PBLC") val medicineType: String) {
+
+    fun toMap(): Map<String, String> = mapOf(
+        "ENTP_NAME" to entpName,
+        "ITEM_INGR_NAME" to itemIngrName,
+        "ITEM_NAME" to itemName,
+        "ITEM_SEQ" to itemSeq,
+        "PRDUCT_TYPE" to productType,
+        "SPCLTY_PBLC" to medicineType
+    )
+}

@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.comments.commentsofamedicine
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -11,6 +10,7 @@ import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.CommentsUseCase
 import com.android.mediproject.core.domain.sign.GetMyUserInfoUseCase
 import com.android.mediproject.core.model.comments.CommentDto
+import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
@@ -29,9 +29,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -45,35 +47,36 @@ import javax.inject.Inject
 class MedicineCommentsViewModel @Inject constructor(
     private val commentsUseCase: CommentsUseCase,
     private val getMyUserInfoUseCase: GetMyUserInfoUseCase,
-    private val savedStateHandle: SavedStateHandle,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel(), ISendText {
     private val _action =
         MutableSharedFlow<CommentActionState>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 2)
     val action get() = _action.asSharedFlow()
 
-    private val medicindItemSeq = savedStateHandle.getStateFlow("medicineItemSeq", 0L)
+    private val _medicineBasicInfo =
+        MutableSharedFlow<MedicineBasicInfoArgs>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 2)
+    val medicineBasicInfo get() = _medicineBasicInfo.asSharedFlow()
 
-    private var _myUserId: Long = 0L
-
-    private val myUserId get() = _myUserId
+    private val _myUserId = MutableStateFlow<Long>(-1)
+    val myUserId get() = _myUserId.asStateFlow()
 
     init {
         suspend {
-            _myUserId = getMyUserInfoUseCase().last()
+            _myUserId.emit(getMyUserInfoUseCase.invoke().last())
         }
     }
 
 
-    val comments: StateFlow<PagingData<CommentDto>> = medicindItemSeq.flatMapLatest { itemSeq ->
+    val comments: StateFlow<PagingData<CommentDto>> = medicineBasicInfo.flatMapLatest { itemSeq ->
         commentsUseCase.getCommentsForAMedicine(itemSeq.toString()).flatMapLatest {
             it.map { commentDto ->
                 commentDto.apply {
                     onClickReply = ::onClickedReply
                     onClickLike = ::onClickedLike
+                    val myId = myUserId.value
 
                     // 내가 쓴 댓글이면 수정, 삭제 가능하도록 메서드 참조 설정
-                    if (commentDto.userId == myUserId) {
+                    if (commentDto.userId == myId) {
                         onClickEdit = ::onClickedEdit
                         onClickDelete = ::onClickedDelete
                         onClickApplyEdited = ::applyEditedComment
@@ -94,8 +97,8 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     private fun applyReplyComment(comment: String, subOrdinationId: Long) {
         viewModelScope.launch {
-            commentsUseCase.applyNewComment(NewCommentParameter(medicineId = medicindItemSeq.value,
-                userId = myUserId,
+            commentsUseCase.applyNewComment(NewCommentParameter(medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws,
+                userId = myUserId.value,
                 content = comment,
                 subOrdinationId = subOrdinationId)).collectLatest { result ->
                 result.onSuccess {
@@ -117,7 +120,7 @@ class MedicineCommentsViewModel @Inject constructor(
         viewModelScope.launch {
             commentsUseCase.applyEditedComment(EditCommentParameter(commentId = commentDto.commentId,
                 content = commentDto.content,
-                medicineId = medicindItemSeq.value)).collectLatest { result ->
+                medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws)).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 수정 성공
                     _action.emit(COMPLETED_APPLY_EDITED_COMMENT)
@@ -161,7 +164,7 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     private fun onClickedLike(commentId: Long) {
         viewModelScope.launch {
-            commentsUseCase.likeComment(LikeCommentParameter(commentId, 0)).collectLatest { result ->
+            commentsUseCase.likeComment(LikeCommentParameter(commentId, myUserId.value)).collectLatest { result ->
                 result.onSuccess {
                     // like 처리 완료
                     _action.emit(COMPLETED_LIKE)
@@ -197,8 +200,8 @@ class MedicineCommentsViewModel @Inject constructor(
     override fun onClickedSendButton(text: CharSequence) {
         viewModelScope.launch {
             if (text.isEmpty()) _action.tryEmit(ERROR("댓글 내용을 입력해주세요."))
-            else commentsUseCase.applyNewComment(NewCommentParameter(medicineId = medicindItemSeq.value,
-                userId = 0L,
+            else commentsUseCase.applyNewComment(NewCommentParameter(medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws,
+                userId = myUserId.value,
                 content = text.toString(),
                 subOrdinationId = 0)).collectLatest { result ->
                 result.onSuccess {
@@ -208,6 +211,12 @@ class MedicineCommentsViewModel @Inject constructor(
                     _action.emit(ERROR(it.message ?: "Failed"))
                 }
             }
+        }
+    }
+
+    fun setMedicineBasicInfo(medicineBasicInfo: MedicineBasicInfoArgs) {
+        viewModelScope.launch {
+            _medicineBasicInfo.emit(medicineBasicInfo)
         }
     }
 }

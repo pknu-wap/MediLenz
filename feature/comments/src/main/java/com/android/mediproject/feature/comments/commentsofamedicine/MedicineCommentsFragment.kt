@@ -29,6 +29,8 @@ class MedicineCommentsFragment :
         binding.apply {
             viewModel = fragmentViewModel
 
+            fragmentViewModel.setMedicineBasicInfo(medicineBasicInfoArgs)
+
             val adapter = CommentsAdapter().apply {
                 setOnStateChangedListener(pagingListView.messageTextView,
                     pagingListView.pagingList,

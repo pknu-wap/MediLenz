@@ -2,8 +2,20 @@
 <resources>
 
     <style name="MediBaseTheme" parent="Theme.Material3.Light.NoActionBar">
-        <item name="colorOnPrimary">@color/main</item>
-        <item name="android:colorPrimary">@color/main</item>
+        <item name="colorOnSurfaceVariant">@color/white</item>
+        <item name="colorPrimary">@color/main</item>
+        <item name="colorPrimaryContainer">@color/main</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSurfaceContainerLowest">@color/white</item>
+        <item name="colorSurfaceContainerHigh">@color/white</item>
+        <item name="colorSurfaceContainerHighest">@color/white</item>
+        <item name="colorSurfaceContainerLow">@color/white</item>
+        <item name="colorSurfaceContainer">@color/white</item>
+        <item name="colorSurfaceInverse">@color/white</item>
+        <item name="colorSurfaceBright">@color/white</item>
+        <item name="colorSurface">@color/white</item>
     </style>
 
     <style name="ButtonChip" parent="@style/Widget.Material3.Chip.Assist" />

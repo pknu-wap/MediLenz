@@ -84,14 +84,14 @@ class SystemBarStyler @Inject constructor(
         topViews.forEach { topView ->
             if (topView.type == SpacingType.MARGIN) {
                 topView.view.updateLayoutParams {
-                    (this as ViewGroup.MarginLayoutParams).topMargin = statusBarHeight
+                    (this as ViewGroup.MarginLayoutParams).topMargin += statusBarHeight
                 }
             } else topView.view.updatePadding(left = 0, right = 0, top = statusBarHeight, bottom = 0)
         }
         bottomViews.forEach { bottomView ->
             if (bottomView.type == SpacingType.MARGIN) {
                 bottomView.view.updateLayoutParams {
-                    (this as ViewGroup.MarginLayoutParams).bottomMargin = navigationBarHeight
+                    (this as ViewGroup.MarginLayoutParams).bottomMargin += navigationBarHeight
                 }
             } else {
                 if (bottomView in topViews) {

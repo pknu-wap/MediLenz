@@ -35,8 +35,8 @@ class HostCommentsFragment : Fragment() {
         val navInflater = navHostFragment.navController.navInflater
         val graph = navInflater.inflate(com.android.mediproject.feature.comments.R.navigation.medicine_comments_nav)
 
-        val args = MedicineBasicInfoArgs(itemSeq = (viewModel.medicineDetails.value as UiState.Success).data.itemSequence.toLong())
-        graph.addInDefaultArgs(args.toBundle())
+        val args = (viewModel.medicineDetails.value as UiState.Success).data
+        graph.addInDefaultArgs(MedicineBasicInfoArgs(args.itemSequence.toLong(), args.medicineIdInAws).toBundle())
 
         navHostFragment.navController.graph = graph
     }

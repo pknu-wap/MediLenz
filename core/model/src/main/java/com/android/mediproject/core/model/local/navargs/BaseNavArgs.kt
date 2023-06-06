@@ -53,12 +53,13 @@ abstract class BaseNavArgs(
             val args = constructor.parameters.map { parameter ->
                 val type = parameter.type.javaType
                 with(type) {
+                    val value = bundle.get(parameter.name)!! as String
                     when (type) {
-                        String::class.java -> bundle.getString(parameter.name)
-                        Int::class.java -> bundle.getInt(parameter.name)
-                        Long::class.java -> bundle.getLong(parameter.name)
-                        Float::class.java -> bundle.getFloat(parameter.name)
-                        Boolean::class.java -> bundle.getBoolean(parameter.name)
+                        String::class.java -> value
+                        Int::class.java -> value.toInt()
+                        Long::class.java -> value.toLong()
+                        Float::class.java -> value.toFloat()
+                        Boolean::class.java -> value.toBoolean()
                         else -> {}
                     }
                 }
