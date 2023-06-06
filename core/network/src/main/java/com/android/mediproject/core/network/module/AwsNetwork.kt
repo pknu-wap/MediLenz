@@ -88,7 +88,7 @@ object AwsNetwork {
 
     @Provides
     @Singleton
-    fun providesUserDataSource(@Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi) =
+    fun providesUserDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi) =
         UserDataSourceImpl(awsNetworkApi)
 }
 
