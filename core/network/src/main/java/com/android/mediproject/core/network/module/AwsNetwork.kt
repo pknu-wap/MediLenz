@@ -24,6 +24,7 @@ import com.android.mediproject.core.network.datasource.medicineid.MedicineIdData
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
+import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -56,7 +57,8 @@ object AwsNetwork {
     fun providesAwsNetworkApi(
         @Named("okHttpClientWithAccessTokens") okHttpClient: OkHttpClient,
     ): AwsNetworkApi =
-        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        Retrofit.Builder().client(okHttpClient)
+            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
@@ -64,7 +66,8 @@ object AwsNetwork {
     fun providesReissueTokenAwsNetworkApi(
         @Named("okHttpClientWithReissueTokens") okHttpClient: OkHttpClient,
     ): AwsNetworkApi =
-        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        Retrofit.Builder().client(okHttpClient)
+            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
@@ -83,16 +86,22 @@ object AwsNetwork {
     fun providesGetMedicineIdDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): MedicineIdDataSource =
         MedicineIdDataSourceImpl(awsNetworkApi)
 
+    @Provides
+    @Singleton
+    fun providesUserDataSource(@Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi) =
+        UserDataSourceImpl(awsNetworkApi)
 }
 
 interface AwsNetworkApi {
     @POST(value = "user/register")
     suspend fun signUp(
-        @Body signUpRequestParameter: SignUpRequestParameter): Response<SignUpResponse>
+        @Body signUpRequestParameter: SignUpRequestParameter
+    ): Response<SignUpResponse>
 
     @POST(value = "user/login")
     suspend fun signIn(
-        @Body signInRequestParameter: SignInRequestParameter): Response<SignInResponse>
+        @Body signInRequestParameter: SignInRequestParameter
+    ): Response<SignInResponse>
 
 
     @POST(value = "user/reissue")
@@ -112,53 +121,60 @@ interface AwsNetworkApi {
      */
     @PATCH(value = "medicine/comment")
     suspend fun editComment(
-        @Body editCommentParameter: EditCommentParameter): Response<CommentChangedResponse>
+        @Body editCommentParameter: EditCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 댓글 삭제
      */
     @DELETE(value = "medicine/comment")
     suspend fun deleteComment(
-        @Body deleteCommentParameter: DeleteCommentParameter): Response<CommentChangedResponse>
+        @Body deleteCommentParameter: DeleteCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 댓글 좋아요
      */
     @POST(value = "medicine/comment")
     suspend fun likeComment(
-        @Body likeCommentParameter: LikeCommentParameter): Response<CommentChangedResponse>
+        @Body likeCommentParameter: LikeCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 댓글 등록
      */
     @POST(value = "medicine/comment/writeTest")
     suspend fun applyNewComment(
-        @Body newCommentParameter: NewCommentParameter): Response<CommentChangedResponse>
+        @Body newCommentParameter: NewCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 닉네임 변경
      */
     @PATCH(value = "user")
     suspend fun changeNickname(
-        @Body changeNicknameParameter: ChangeNicknameParameter) : Response<ChangeNicknameResponse>
+        @Body changeNicknameParameter: ChangeNicknameParameter
+    ): Response<ChangeNicknameResponse>
 
     /**
      * 비밀번호 변경
      */
     @PATCH(value = "user")
     suspend fun changePassword(
-        @Body changePasswordParamter: ChangePasswordParamter) : Response<ChangePasswordResponse>
+        @Body changePasswordParamter: ChangePasswordParamter
+    ): Response<ChangePasswordResponse>
 
     /**
      * 회원탈퇴
      */
     @DELETE(value = "user")
-    suspend fun withdrawal() : Response<WithdrawalResponse>
+    suspend fun withdrawal(): Response<WithdrawalResponse>
 
     /**
      * 약 ID 조회
      */
     @HTTP(method = "POST", path = "medicine/comment", hasBody = true)
     suspend fun getMedicineId(
-        @Body getMedicineIdParameter: GetMedicineIdParameter): Response<MedicineIdResponse>
+        @Body getMedicineIdParameter: GetMedicineIdParameter
+    ): Response<MedicineIdResponse>
 }
