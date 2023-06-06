@@ -8,6 +8,8 @@ import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
+import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
@@ -129,6 +131,26 @@ interface AwsNetworkApi {
     @POST(value = "medicine/comment/writeTest")
     suspend fun applyNewComment(
         @Body newCommentParameter: NewCommentParameter): Response<CommentChangedResponse>
+
+    /**
+     * 닉네임 변경
+     */
+    @PATCH(value = "user")
+    suspend fun changeNickname(
+        @Body changeNicknameParameter: ChangeNicknameParameter) : Response<>
+
+    /**
+     * 비밀번호 변경
+     */
+    @PATCH(value = "user")
+    suspend fun changeNickname(
+        @Body changePasswordParamter: ChangePasswordParamter) : Response<>
+
+    /**
+     * 회원탈퇴
+     */
+    @DELETE(value = "user")
+    suspend fun withdrawal() : Response<>
 
     /**
      * 약 ID 조회
