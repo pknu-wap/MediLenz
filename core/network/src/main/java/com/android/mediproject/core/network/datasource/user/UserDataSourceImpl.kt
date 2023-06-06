@@ -13,6 +13,10 @@ import javax.inject.Inject
 
 class UserDataSourceImpl @Inject constructor(private val awsNetworkApi: AwsNetworkApi) :
     UserDataSource {
+
+    /**
+     * 닉네임 변경
+     */
     override suspend fun changeNickname(changeNicknameParameter: ChangeNicknameParameter): Flow<Result<ChangeNicknameResponse>> =
         channelFlow {
             awsNetworkApi.changeNickname(changeNicknameParameter).onResponse()
@@ -20,11 +24,22 @@ class UserDataSourceImpl @Inject constructor(private val awsNetworkApi: AwsNetwo
                 .also { trySend(it) }
         }
 
-    override suspend fun changePassword(changePasswordParamter: ChangePasswordParamter): Flow<Result<ChangePasswordResponse>> {
-        TODO("Not yet implemented")
-    }
+    /**
+     * 비밀번호 변경
+     */
+    override suspend fun changePassword(changePasswordParamter: ChangePasswordParamter): Flow<Result<ChangePasswordResponse>> =
+        channelFlow {
+            awsNetworkApi.changePassword(changePasswordParamter).onResponse()
+                .fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
+                .also { trySend(it) }
+        }
 
-    override suspend fun withdrawal(): Flow<Result<WithdrawalResponse>> {
-        TODO("Not yet implemented")
+    /**
+     * 회원 탈퇴
+     */
+    override suspend fun withdrawal(): Flow<Result<WithdrawalResponse>> = channelFlow {
+        awsNetworkApi.withdrawal().onResponse()
+            .fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
+            .also { trySend(it) }
     }
 }

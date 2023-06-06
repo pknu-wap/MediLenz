@@ -146,7 +146,7 @@ interface AwsNetworkApi {
      * 비밀번호 변경
      */
     @PATCH(value = "user")
-    suspend fun changeNickname(
+    suspend fun changePassword(
         @Body changePasswordParamter: ChangePasswordParamter) : Response<ChangePasswordResponse>
 
     /**
