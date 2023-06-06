@@ -41,13 +41,14 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class MedicineCommentsViewModel @Inject constructor(
     private val commentsUseCase: CommentsUseCase,
     private val getMyUserInfoUseCase: GetMyUserInfoUseCase,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel(), ISendText {
     private val _action =
         MutableSharedFlow<CommentActionState>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 2)
@@ -61,7 +62,7 @@ class MedicineCommentsViewModel @Inject constructor(
     val myUserId get() = _myUserId.asStateFlow()
 
     init {
-        suspend {
+        runBlocking {
             _myUserId.emit(getMyUserInfoUseCase.invoke().last())
         }
     }
@@ -86,7 +87,7 @@ class MedicineCommentsViewModel @Inject constructor(
             }
             flowOf(it)
         }
-    }.flowOn(ioDispatcher).cachedIn(viewModelScope).stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+    }.flowOn(defaultDispatcher).cachedIn(viewModelScope).stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
 
     /**

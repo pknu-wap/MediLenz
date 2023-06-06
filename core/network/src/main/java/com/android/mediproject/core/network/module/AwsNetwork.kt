@@ -133,7 +133,7 @@ interface AwsNetworkApi {
     /**
      * 약 ID 조회
      */
-    @HTTP(method = "GET", path = "medicine/comment", hasBody = true)
+    @HTTP(method = "POST", path = "medicine/comment", hasBody = true)
     suspend fun getMedicineId(
         @Body getMedicineIdParameter: GetMedicineIdParameter): Response<MedicineIdResponse>
 }

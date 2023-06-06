@@ -79,8 +79,18 @@ class SystemBarStyler @Inject constructor(
         }
     }
 
+    fun defaultStyle() {
+        window.navigationBarColor = Color.TRANSPARENT
+        window.statusBarColor = Color.TRANSPARENT
 
-    fun changeMode(topViews: List<ChangeView>, bottomViews: List<ChangeView>) {
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = false
+            isAppearanceLightNavigationBars = true
+        }
+    }
+
+
+    fun changeMode(topViews: List<ChangeView> = emptyList(), bottomViews: List<ChangeView> = emptyList()) {
         topViews.forEach { topView ->
             if (topView.type == SpacingType.MARGIN) {
                 topView.view.updateLayoutParams {
