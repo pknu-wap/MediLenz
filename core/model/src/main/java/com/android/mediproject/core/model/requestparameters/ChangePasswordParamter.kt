@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ChangePasswordParamter(
-    val newPassword : String
+    val newPassword : CharArray
 )
