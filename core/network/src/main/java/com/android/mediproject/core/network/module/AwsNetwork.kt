@@ -15,6 +15,9 @@ import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
+import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
+import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
+import com.android.mediproject.core.model.user.remote.WithdrawalResponse
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
@@ -137,20 +140,20 @@ interface AwsNetworkApi {
      */
     @PATCH(value = "user")
     suspend fun changeNickname(
-        @Body changeNicknameParameter: ChangeNicknameParameter) : Response<>
+        @Body changeNicknameParameter: ChangeNicknameParameter) : Response<ChangeNicknameResponse>
 
     /**
      * 비밀번호 변경
      */
     @PATCH(value = "user")
     suspend fun changeNickname(
-        @Body changePasswordParamter: ChangePasswordParamter) : Response<>
+        @Body changePasswordParamter: ChangePasswordParamter) : Response<ChangePasswordResponse>
 
     /**
      * 회원탈퇴
      */
     @DELETE(value = "user")
-    suspend fun withdrawal() : Response<>
+    suspend fun withdrawal() : Response<WithdrawalResponse>
 
     /**
      * 약 ID 조회
