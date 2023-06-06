@@ -6,7 +6,7 @@ const { verifyAccessToken } = require("../../../config/jwt");
 
 // Comment
 router.post("/writeTest", verifyAccessToken, commentController.writeTest); //CREATE
-router.get("/", commentController.get); //READ
+router.post("/", commentController.get); //READ -> The function to get the medicine id, but the http body exists, so use post
 router.get("/:medicineId", commentController.getComment); //READ
 router.patch("/", verifyAccessToken, commentController.patch); //UPDATE
 router.delete("/", verifyAccessToken, commentController.del); //DELETE
