@@ -13,12 +13,12 @@ package com.android.mediproject.core.model.medicine.medicineapproval
  * @property itemPermitDate 아이템 허가 일자
  * @property induty 업종
  * @property prdlstStdrCode 제품표준코드
- * @property spcltyPblc 특수약품 구분
+ * @property medicineType 특수약품 구분
  * @property prductType 제품유형
  * @property prductPrmisnNo 제품허가번호
  * @property itemIngrName 성분명
  * @property itemIngrCnt 성분수
- * @property bigPrdtImgUrl 대표 제품 이미지 URL
+ * @property imgUrl 대표 제품 이미지 URL
  * @property permitKindCode 허가종류코드
  * @property cancelDate 취소 일자
  * @property cancelName 취소 여부
@@ -27,22 +27,22 @@ package com.android.mediproject.core.model.medicine.medicineapproval
  */
 
 data class ApprovedMedicineItemDto(
-    val itemSeq: String? = null,
+    val itemSeq: Long,
     val itemName: String,
-    val itemEngName: String? = null,
-    val entpName: String? = null,
-    val entpEngName: String? = null,
-    val entpSeq: String? = null,
-    val entpNo: String? = null,
+    val itemEngName: String?,
+    val entpName: String,
+    val entpEngName: String?,
+    val entpSeq: String,
+    val entpNo: String,
     val itemPermitDate: String? = null,
     val induty: String? = null,
     val prdlstStdrCode: String? = null,
-    val spcltyPblc: String? = null,
-    val prductType: String? = null,
+    val medicineType: String,
+    val prductType: String,
     val prductPrmisnNo: String? = null,
-    val itemIngrName: String? = null,
-    val itemIngrCnt: String? = null,
-    val bigPrdtImgUrl: String? = null,
+    val itemIngrName: String,
+    val itemIngrCnt: String,
+    val imgUrl: String?,
     val permitKindCode: String? = null,
     val cancelDate: String? = null,
     val cancelName: String? = null,
@@ -51,9 +51,8 @@ data class ApprovedMedicineItemDto(
     var onClick: ((ApprovedMedicineItemDto) -> Unit)? = null,
 )
 
-fun Item.toDto() = ApprovedMedicineItemDto(
-    itemSeq = itemSeq,
-    itemName = itemName ?: "",
+fun Item.toDto() = ApprovedMedicineItemDto(itemSeq = itemSeq.toLong(),
+    itemName = itemName,
     itemEngName = itemEngName,
     entpName = entpName,
     entpEngName = entpEngName,
@@ -62,15 +61,14 @@ fun Item.toDto() = ApprovedMedicineItemDto(
     itemPermitDate = itemPermitDate,
     induty = induty,
     prdlstStdrCode = prdlstStdrCode,
-    spcltyPblc = spcltyPblc,
+    medicineType = medicineType,
     prductType = prductType,
     prductPrmisnNo = prductPrmisnNo,
     itemIngrName = itemIngrName,
     itemIngrCnt = itemIngrCnt,
-    bigPrdtImgUrl = bigPrdtImgUrl,
+    imgUrl = bigPrdtImgUrl,
     permitKindCode = permitKindCode,
     cancelDate = cancelDate,
     cancelName = cancelName,
     ediCode = ediCode,
-    bizrno = bizrno,
-)
+    bizrno = bizrno)

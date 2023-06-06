@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="comment"
+            type="com.android.mediproject.core.model.comments.CommentDto" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/commentItemView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="11dp">
+
+        <ImageView
+            android:id="@+id/userProfileImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/logo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/moreButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:contentDescription="@string/more"
+            android:src="@drawable/baseline_more_vert_24"
+            app:layout_constraintBottom_toBottomOf="@+id/userProfileImageView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/userProfileImageView"
+            app:tint="@color/moreButtonColor" />
+
+        <ImageView
+            android:id="@+id/replyButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:contentDescription="@string/replyComment"
+            android:src="@drawable/outline_add_comment_24"
+            app:layout_constraintBottom_toBottomOf="@+id/userProfileImageView"
+            app:layout_constraintRight_toLeftOf="@+id/moreButton"
+            app:layout_constraintTop_toTopOf="@+id/userProfileImageView"
+            app:tint="@color/replyButtonColor" />
+
+        <ImageView
+            android:id="@+id/likeButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:contentDescription="@string/likeComment"
+            android:src="@drawable/outline_thumb_up_24"
+            app:layout_constraintBottom_toBottomOf="@+id/userProfileImageView"
+            app:layout_constraintRight_toLeftOf="@+id/replyButton"
+            app:layout_constraintTop_toTopOf="@+id/userProfileImageView"
+            app:tint="@color/likeButtonColor" />
+
+        <TextView
+            android:id="@+id/userNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{comment.userName}"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/userProfileImageView"
+            app:layout_constraintLeft_toRightOf="@+id/userProfileImageView"
+            app:layout_constraintRight_toLeftOf="@+id/likeButton"
+            app:layout_constraintTop_toTopOf="@+id/userProfileImageView" />
+
+        <TextView
+            android:id="@+id/commentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:paddingTop="9dp"
+            android:text="@{comment.content}"
+            android:textColor="@android:color/black"
+            android:textSize="13sp"
+            app:layout_constraintTop_toBottomOf="@+id/userProfileImageView" />
+
+        <TextView
+            android:id="@+id/dateTimeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingTop="4dp"
+            android:text="@{comment.createdAt}"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/commentTextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

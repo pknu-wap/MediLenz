@@ -9,6 +9,9 @@ plugins {
 android {
     namespace = "com.android.mediproject.feature.camera"
 
+    androidResources {
+        noCompress += listOf("tflite")
+    }
     /*
 
         externalNativeBuild {

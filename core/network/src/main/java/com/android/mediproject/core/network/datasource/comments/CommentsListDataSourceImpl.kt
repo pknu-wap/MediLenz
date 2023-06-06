@@ -2,40 +2,30 @@ package com.android.mediproject.core.network.datasource.comments
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.android.mediproject.core.common.AWS_LOAD_PAGE_SIZE
-import com.android.mediproject.core.model.remote.comments.MedicineCommentsResponse
+import com.android.mediproject.core.model.comments.CommentListResponse
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
 
 class CommentsListDataSourceImpl(
     private val commentsDataSource: CommentsDataSource,
     private val itemSeq: String,
-) : PagingSource<Int, MedicineCommentsResponse>() {
+) : PagingSource<Int, CommentListResponse.Comment>() {
 
-    override fun getRefreshKey(state: PagingState<Int, MedicineCommentsResponse>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            val anchorPage = state.closestPageToPosition(anchorPosition)
-            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
-        }
-    }
+    override fun getRefreshKey(state: PagingState<Int, CommentListResponse.Comment>) = 1
 
-    override suspend fun load(params: LoadParams<Int>): PagingSource.LoadResult<Int, MedicineCommentsResponse> {
-        val currentPage = params.key ?: 1
-
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CommentListResponse.Comment> {
         return try {
-            commentsDataSource.getCommentsForAMedicineCatching(
-                itemSeq
-            ).fold(onSuccess = {
-                val nextKey = it.let { body ->
-                    if (body.size <= AWS_LOAD_PAGE_SIZE) null
-                    else currentPage + 1
-                }
-
-                PagingSource.LoadResult.Page(
-                    data = it,
-                    prevKey = null,
-                    nextKey = nextKey,
-                )
-            }, onFailure = { PagingSource.LoadResult.Error(it) })
-
+            commentsDataSource.getCommentsForAMedicine(itemSeq).map { result ->
+                result.fold(onSuccess = {
+                    PagingSource.LoadResult.Page(
+                        data = it.commentList,
+                        prevKey = null,
+                        nextKey = if (it.commentList.size > 100000) 1 else null,
+                    )
+                }, onFailure = {
+                    LoadResult.Error(it)
+                })
+            }.single()
         } catch (e: Exception) {
             PagingSource.LoadResult.Error(e)
         }

@@ -12,7 +12,7 @@ import javax.inject.Inject
 class SearchMedicinesViewModel @Inject constructor() : BaseViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
-    val searchQuery = _searchQuery.asStateFlow()
+    val searchQuery get() = _searchQuery.asStateFlow()
 
 
     /**

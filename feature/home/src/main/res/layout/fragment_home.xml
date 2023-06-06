@@ -1,64 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.home.HomeViewModel"
-            />
+            type="com.android.mediproject.feature.home.HomeViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
-        <com.android.mediproject.core.ui.base.view.Bar
-            android:id="@+id/homeBar1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:setTheme="home_blue"
-            />
-
-        <com.android.mediproject.core.ui.base.view.Bar
-            android:id="@+id/homeBar2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:alpha="0"
-            app:layout_constraintTop_toTopOf="parent"
-            app:setTheme="home_white"
-            />
+        android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:scrollbars="none"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            android:scrollbars="none">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/headerLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/main"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:clipChildren="false"
                     android:clipToPadding="false"
-                    >
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:id="@+id/headerText"
@@ -75,15 +49,13 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:clipChildren="false"
                     android:orientation="vertical"
                     android:paddingHorizontal="20dp"
@@ -94,35 +66,30 @@
                         android:name="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
-                        />
+                        android:layout_marginTop="40dp" />
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/divider_margin_vertical"
-                        />
+                        android:layout_marginVertical="@dimen/divider_margin_vertical" />
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/recentCommentListFragment"
                         android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
+                        android:layout_height="wrap_content" />
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/divider_margin_vertical"
-                        />
+                        android:layout_marginVertical="@dimen/divider_margin_vertical" />
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/recentPenaltyListFragment"
                         android:name="com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/divider_margin_vertical"
-                        />
+                        android:layout_marginBottom="@dimen/divider_margin_vertical" />
                 </LinearLayout>
 
                 <com.android.mediproject.core.ui.base.view.MediSearchbar
@@ -138,9 +105,23 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/headerLayout"
                     app:search_hint="@string/searchHint"
-                    app:search_icon="@drawable/baseline_search_24"
-                    />
+                    app:search_icon="@drawable/baseline_search_24" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/homeBar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            app:setTheme="home_blue" />
+
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/homeBar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:alpha="0"
+            app:setTheme="home_white" />
+    </FrameLayout>
 </layout>

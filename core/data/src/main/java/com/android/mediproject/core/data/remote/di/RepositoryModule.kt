@@ -16,6 +16,8 @@ import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMed
 import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepositoryImpl
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepositoryImpl
+import com.android.mediproject.core.data.remote.medicineid.MedicineIdRepository
+import com.android.mediproject.core.data.remote.medicineid.MedicineIdRepositoryImpl
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepository
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepositoryImpl
 import com.android.mediproject.core.data.remote.sign.SignRepository
@@ -31,6 +33,7 @@ import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCau
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
 import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
+import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionListDataSourceImpl
@@ -56,30 +59,25 @@ object RepositoryModule {
     fun provideMedicineApprovalRepository(
         medicineApprovalDataSource: MedicineApprovalDataSource,
         searchHistoryRepository: SearchHistoryRepository,
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher
-    ): MedicineApprovalRepository = MedicineApprovalRepositoryImpl(
-        medicineApprovalDataSource, searchHistoryRepository, ioDispatcher
-    )
+        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher): MedicineApprovalRepository =
+        MedicineApprovalRepositoryImpl(medicineApprovalDataSource, searchHistoryRepository, ioDispatcher)
 
     @Provides
     @Singleton
     fun provideRecallSuspensionRepository(
         recallSuspensionDataSource: RecallSuspensionDataSource,
-        recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl
-    ): RecallSuspensionRepository =
+        recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl): RecallSuspensionRepository =
         RecallSuspensionRepositoryImpl(recallSuspensionDataSource, recallSuspensionListDataSource)
 
     @Provides
     @Singleton
     fun providesAdminActionRepository(
-        adminActionDataSource: AdminActionListDataSourceImpl
-    ): AdminActionRepository = AdminActionRepositoryImpl(adminActionDataSource)
+        adminActionDataSource: AdminActionListDataSourceImpl): AdminActionRepository = AdminActionRepositoryImpl(adminActionDataSource)
 
     @Provides
     @Singleton
     fun providesGranuleIdentificationRepository(
-        granuleIdentificationDataSource: GranuleIdentificationDataSource
-    ): GranuleIdentificationRepository =
+        granuleIdentificationDataSource: GranuleIdentificationDataSource): GranuleIdentificationRepository =
         GranuleIdentificationRepositoryImpl(granuleIdentificationDataSource)
 
     @Provides
@@ -89,28 +87,27 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesDurRepository(durDataSource: DurDataSource): DurRepository =
-        DurRepositoryImpl(durDataSource)
+    fun providesDurRepository(durDataSource: DurDataSource): DurRepository = DurRepositoryImpl(durDataSource)
 
 
     @Provides
     @Singleton
-    fun providesCommentsRepository(commentsDataSource: CommentsDataSource): CommentsRepository =
-        CommentsRepositoryImpl(commentsDataSource)
+    fun providesCommentsRepository(commentsDataSource: CommentsDataSource): CommentsRepository = CommentsRepositoryImpl(commentsDataSource)
 
 
     @Provides
     @Singleton
     fun providesSignRepository(
-        signDataSource: SignDataSource,
-        connectionTokenDataSourceImpl: TokenDataSourceImpl,
-        appDataStore: AppDataStore
-    ): SignRepository =
+        signDataSource: SignDataSource, connectionTokenDataSourceImpl: TokenDataSourceImpl, appDataStore: AppDataStore): SignRepository =
         SignRepositoryImpl(signDataSource, connectionTokenDataSourceImpl, appDataStore)
 
     @Provides
     @Singleton
     fun providesSearchHistoryRepository(
-        searchHistoryDao: SearchHistoryDao
-    ): SearchHistoryRepository = SearchHistoryRepositoryImpl(searchHistoryDao)
+        searchHistoryDao: SearchHistoryDao): SearchHistoryRepository = SearchHistoryRepositoryImpl(searchHistoryDao)
+
+    @Provides
+    @Singleton
+    fun providesMedicineIdRepository(
+        medicineIdDataSource: MedicineIdDataSource): MedicineIdRepository = MedicineIdRepositoryImpl(medicineIdDataSource)
 }

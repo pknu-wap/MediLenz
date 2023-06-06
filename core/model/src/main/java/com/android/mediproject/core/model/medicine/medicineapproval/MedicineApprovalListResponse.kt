@@ -35,7 +35,7 @@ data class Body(
  * @property itemPermitDate 아이템 허가 일자
  * @property induty 업종
  * @property prdlstStdrCode 제품표준코드
- * @property spcltyPblc 특수약품 구분
+ * @property medicineType 특수약품 구분
  * @property prductType 제품유형
  * @property prductPrmisnNo 제품허가번호
  * @property itemIngrName 성분명
@@ -56,19 +56,19 @@ data class Item(
     @SerialName("CANCEL_NAME") val cancelName: String?,
     @SerialName("EDI_CODE") val ediCode: String?,
     @SerialName("ENTP_ENG_NAME") val entpEngName: String?,
-    @SerialName("ENTP_NAME") val entpName: String?,
-    @SerialName("ENTP_NO") val entpNo: String?,
-    @SerialName("ENTP_SEQ") val entpSeq: String?,
+    @SerialName("ENTP_NAME") val entpName: String,
+    @SerialName("ENTP_NO") val entpNo: String,
+    @SerialName("ENTP_SEQ") val entpSeq: String,
     @SerialName("INDUTY") val induty: String?,
     @SerialName("ITEM_ENG_NAME") val itemEngName: String?,
-    @SerialName("ITEM_INGR_CNT") val itemIngrCnt: String?,
-    @SerialName("ITEM_INGR_NAME") val itemIngrName: String?,
-    @SerialName("ITEM_NAME") val itemName: String?,
-    @SerialName("ITEM_PERMIT_DATE") val itemPermitDate: String?,
-    @SerialName("ITEM_SEQ") val itemSeq: String?,
+    @SerialName("ITEM_INGR_CNT") val itemIngrCnt: String,
+    @SerialName("ITEM_INGR_NAME") val itemIngrName: String,
+    @SerialName("ITEM_NAME") val itemName: String,
+    @SerialName("ITEM_PERMIT_DATE") val itemPermitDate: String,
+    @SerialName("ITEM_SEQ") val itemSeq: String,
     @SerialName("PERMIT_KIND_CODE") val permitKindCode: String?,
     @SerialName("PRDLST_STDR_CODE") val prdlstStdrCode: String?,
     @SerialName("PRDUCT_PRMISN_NO") val prductPrmisnNo: String?,
-    @SerialName("PRDUCT_TYPE") val prductType: String?,
-    @SerialName("SPCLTY_PBLC") val spcltyPblc: String?
+    @SerialName("PRDUCT_TYPE") val prductType: String,
+    @SerialName("SPCLTY_PBLC") val medicineType: String
 )

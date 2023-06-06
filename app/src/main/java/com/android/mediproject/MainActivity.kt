@@ -3,25 +3,33 @@ package com.android.mediproject
 import android.animation.ObjectAnimator
 import android.os.Build
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.WindowViewModel
 import com.android.mediproject.core.ui.base.BaseActivity
 import com.android.mediproject.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
 
     private val windowViewModel: WindowViewModel by viewModels()
+
+    @Inject lateinit var systemBarStyler: SystemBarStyler
 
     companion object {
         const val VISIBLE = 0
@@ -32,6 +40,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
     private lateinit var navController: NavController
 
     override fun afterBinding() {
+        systemBarStyler.init(this, window)
+        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
 
         //SDK 31이상일 때 Splash가 소소하게 사라지는 이펙트 입니다. 추후 걸리적거리면 삭제해도 됌
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -64,19 +74,36 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
 
             root.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
-                    if (bottomAppBar.height > 0) {
+                    if (bottomNav.marginBottom == 0) {
+                        systemBarStyler.changeMode(emptyList(),
+                            listOf(SystemBarStyler.ChangeView(bottomNav, SystemBarStyler.SpacingType.MARGIN)))
+                        return true
+                    }
+
+                    if (bottomAppBar.height > 0 && bottomNav.marginBottom == systemBarStyler.navigationBarHeightPx) {
                         root.viewTreeObserver.removeOnPreDrawListener(this)
-                        /**
-                        val containerHeight = root.height - bottomAppBar.height
-                        windowViewModel.setBottomNavHeight(containerHeight)
-                        fragmentContainerView.layoutParams = CoordinatorLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, containerHeight
-                        )
-                         */
+                        windowViewModel.bottomNavHeightInPx = bottomAppBar.height
+                        setFragmentContainerFullHeight(false)
                     }
                     return true
                 }
             })
+        }
+    }
+
+    /**
+     * fragmentContainerView의 높이를 조정해주는 함수
+     *
+     * CoordinatorLayout으로 인해 fragmentContainerView의 높이가 앱 전체의 높이로 되어있는데
+     * isFull true를 전달받으면 fragmentContainerView의 bottom좌표가 bottomNav의 top좌표가 되고,
+     * isFull false를 전달받으면 fragmentContainerView의 bottom좌표가 앱 전체의 bottom좌표가 된다.
+     *
+     * @param isFull true: 전체화면, false: 전체화면X
+     */
+    private fun setFragmentContainerFullHeight(isFull: Boolean) {
+        if (windowViewModel.bottomNavHeight.value > 0) {
+            binding.fragmentContainerView.layoutParams = CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                if (isFull) ViewGroup.LayoutParams.MATCH_PARENT else (binding.root.height - windowViewModel.bottomNavHeight.value))
         }
     }
 
@@ -110,23 +137,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
      */
     private fun setDestinationListener() = navController.addOnDestinationChangedListener { _, destination, arg ->
         log(arg.toString())
-        if (destination.id in hideBottomNavDestinationIds) {
-            bottomVisible(INVISIBLE)
-        } else {
-            bottomVisible(VISIBLE)
-        }
+        bottomVisible(destination.id !in hideBottomNavDestinationIds)
     }
 
-    private fun bottomVisible(isVisible: Int) {
-        log(isVisible.toString())
-        binding.cameraFAB.visibility = when (isVisible) {
-            VISIBLE -> View.VISIBLE
-            else -> View.GONE
-        }
-        binding.bottomAppBar.visibility = when (isVisible) {
-            VISIBLE -> View.VISIBLE
-            else -> View.GONE
-        }
+    private fun bottomVisible(visible: Boolean) {
+        log(visible.toString())
+        binding.cameraFAB.isVisible = visible
+        binding.bottomAppBar.isVisible = visible
+        setFragmentContainerFullHeight(!visible)
     }
 
     fun handleEvent(event: MainViewModel.MainEvent) = when (event) {

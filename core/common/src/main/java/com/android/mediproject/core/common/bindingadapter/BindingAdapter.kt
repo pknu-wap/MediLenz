@@ -28,15 +28,13 @@ object BindingAdapter {
     @BindingAdapter("img")
     @JvmStatic
     fun loadImage(imageView: ImageView, img: String) {
-        GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(false)
-            .into(imageView)
+        GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(false).into(imageView)
     }
 
     @BindingAdapter("img")
     @JvmStatic
     fun loadImage(imageView: ImageView, img: Bitmap) {
-        GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(false)
-            .into(imageView)
+        GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(false).into(imageView)
     }
 
 
@@ -47,8 +45,7 @@ object BindingAdapter {
     @JvmStatic
     fun setAsyncText(textView: TextView, text: Spanned?) {
         if (text != null) {
-            val precomputedText =
-                PrecomputedTextCompat.create(text, TextViewCompat.getTextMetricsParams(textView))
+            val precomputedText = PrecomputedTextCompat.create(text, TextViewCompat.getTextMetricsParams(textView))
             TextViewCompat.setPrecomputedText(textView, precomputedText)
         }
     }
@@ -68,5 +65,6 @@ object BindingAdapter {
             editText.text.clear()
         }
     }
+
 
 }

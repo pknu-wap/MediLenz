@@ -1,22 +1,24 @@
 package com.android.mediproject.core.network.datasource.comments
 
 import androidx.paging.PagingData
-import com.android.mediproject.core.model.comments.EditedCommentDto
-import com.android.mediproject.core.model.comments.MyCommentDto
-import com.android.mediproject.core.model.comments.NewCommentDto
-import com.android.mediproject.core.model.remote.comments.MedicineCommentsResponse
+import com.android.mediproject.core.model.comments.CommentChangedResponse
+import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
+import com.android.mediproject.core.model.requestparameters.EditCommentParameter
+import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
+import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import kotlinx.coroutines.flow.Flow
 
 interface CommentsDataSource {
 
-    suspend fun getCommentsForAMedicineCatching(itemSeq: String): Result<List<MedicineCommentsResponse>>
+    suspend fun getCommentsForAMedicine(itemSeq: String): Flow<Result<CommentListResponse>>
 
-    fun getMyComments(userId: Int): Flow<PagingData<MyCommentDto>>
+    fun getMyComments(userId: Int): Flow<PagingData<CommentListResponse>>
 
-    fun applyEditedComment(editedCommentDto: EditedCommentDto): Flow<Result<Unit>>
+    fun applyEditedComment(parameter: EditCommentParameter): Flow<Result<CommentChangedResponse>>
 
-    fun applyNewComment(newCommentDto: NewCommentDto): Flow<Result<Unit>>
-    fun deleteComment(commentId: Int): Flow<Result<Unit>>
+    fun applyNewComment(parameter: NewCommentParameter): Flow<Result<CommentChangedResponse>>
+    fun deleteComment(parameter: DeleteCommentParameter): Flow<Result<CommentChangedResponse>>
 
-    fun likeComment(commentId: Int): Flow<Result<Unit>>
+    fun likeComment(likeCommentParameter: LikeCommentParameter): Flow<Result<CommentChangedResponse>>
 }

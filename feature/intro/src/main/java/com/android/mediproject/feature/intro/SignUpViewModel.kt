@@ -9,7 +9,7 @@ import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.model.local.navargs.TOHOME
-import com.android.mediproject.core.model.parameters.SignUpParameter
+import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.intro.SignUpState.FailedSignUp
 import com.android.mediproject.feature.intro.SignUpState.PasswordError
@@ -39,7 +39,10 @@ class SignUpViewModel @Inject constructor(
 
     fun event(event: SignUpEvent) = viewModelScope.launch { _eventFlow.emit(event) }
     fun signUp() = event(SignUpEvent.SignUp)
-    fun setMoveFlag(flag : Int){ _moveFlag.value = flag }
+    fun setMoveFlag(flag: Int) {
+        _moveFlag.value = flag
+    }
+
     fun signUp(
         emailEditable: CharSequence, passwordEditable: CharSequence, checkPasswordEditable: CharSequence, nickNameEditable: CharSequence
     ) {
