@@ -90,7 +90,6 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                 }
             }
         }
-
         is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> dismiss()
     }
 
