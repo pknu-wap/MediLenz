@@ -123,6 +123,7 @@ inline fun <reified Args : BaseNavArgs> Fragment.navArgs(): NavArgsLazy<out Args
     val bundle = arguments ?: Bundle()
     bundle.apply {
         putString("className", Args::class.java.name)
+        remove(NAV_KEY)
     }
 }
 

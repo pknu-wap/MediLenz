@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -44,7 +45,9 @@ fun RecallDisposalScreen(
 
     val list = viewModel.recallDisposalList.collectAsLazyPagingItems()
 
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+    LazyColumn(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()) {
         items(
             count = list.itemCount, key = list.itemKey(), contentType = list.itemContentType(
             )
@@ -112,7 +115,7 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
                 Text(
                     text = recallSuspensionListItemDto.let {
                         if (it.recallCommandDate != null) it.recallCommandDate
-                        else it.rtrlCommandDt
+                        else it.destructionOrderDate
                     }!!.toJavaLocalDate().format(dateFormat),
                     fontSize = 12.sp,
                     modifier = Modifier.align(Alignment.CenterVertically),
@@ -122,7 +125,7 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = recallSuspensionListItemDto.rtrvlResn, fontSize = 12.sp, color = Color.Gray, maxLines = 1
+                text = recallSuspensionListItemDto.reason, fontSize = 12.sp, color = Color.Gray, maxLines = 1
             )
         }
     }

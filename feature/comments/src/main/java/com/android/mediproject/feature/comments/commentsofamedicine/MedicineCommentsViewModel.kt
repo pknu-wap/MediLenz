@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.comments.commentsofamedicine
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -9,9 +8,12 @@ import com.android.mediproject.core.common.bindingadapter.ISendText
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.CommentsUseCase
+import com.android.mediproject.core.domain.sign.GetMyUserInfoUseCase
 import com.android.mediproject.core.model.comments.CommentDto
-import com.android.mediproject.core.model.comments.EditedCommentDto
-import com.android.mediproject.core.model.comments.NewCommentDto
+import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
+import com.android.mediproject.core.model.requestparameters.EditCommentParameter
+import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
+import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.comments.commentsofamedicine.CommentActionState.CLICKED_DELETE_MY_COMMENT
 import com.android.mediproject.feature.comments.commentsofamedicine.CommentActionState.CLICKED_EDIT_COMMENT
@@ -27,44 +29,55 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class MedicineCommentsViewModel @Inject constructor(
     private val commentsUseCase: CommentsUseCase,
-    private val savedStateHandle: SavedStateHandle,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    private val getMyUserInfoUseCase: GetMyUserInfoUseCase,
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel(), ISendText {
-
-    private val myUserId = savedStateHandle.getStateFlow("myUserId", 3)
-
-    private val _action = MutableSharedFlow<CommentActionState>(
-        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 1
-    )
-
-    private val medicindItemSeq = savedStateHandle.getStateFlow("medicineItemSeq", "")
-
+    private val _action =
+        MutableSharedFlow<CommentActionState>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 2)
     val action get() = _action.asSharedFlow()
 
-    val comments: StateFlow<PagingData<CommentDto>> = medicindItemSeq.flatMapLatest { itemSeq ->
-        commentsUseCase.getCommentsForAMedicine(itemSeq).flatMapLatest {
-            val id = myUserId.value
+    private val _medicineBasicInfo =
+        MutableSharedFlow<MedicineBasicInfoArgs>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 2)
+    val medicineBasicInfo get() = _medicineBasicInfo.asSharedFlow()
+
+    private val _myUserId = MutableStateFlow<Long>(-1)
+    val myUserId get() = _myUserId.asStateFlow()
+
+    init {
+        runBlocking {
+            _myUserId.emit(getMyUserInfoUseCase.invoke().last())
+        }
+    }
+
+
+    val comments: StateFlow<PagingData<CommentDto>> = medicineBasicInfo.flatMapLatest { itemSeq ->
+        commentsUseCase.getCommentsForAMedicine(itemSeq.toString()).flatMapLatest {
             it.map { commentDto ->
                 commentDto.apply {
                     onClickReply = ::onClickedReply
                     onClickLike = ::onClickedLike
+                    val myId = myUserId.value
 
                     // 내가 쓴 댓글이면 수정, 삭제 가능하도록 메서드 참조 설정
-                    if (commentDto.userId == id) {
+                    if (commentDto.userId == myId) {
                         onClickEdit = ::onClickedEdit
                         onClickDelete = ::onClickedDelete
                         onClickApplyEdited = ::applyEditedComment
@@ -74,29 +87,24 @@ class MedicineCommentsViewModel @Inject constructor(
             }
             flowOf(it)
         }
-    }.flowOn(ioDispatcher).cachedIn(viewModelScope)
-        .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+    }.flowOn(defaultDispatcher).cachedIn(viewModelScope).stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
 
     /**
      * 답글 등록
      *
      * @param comment 답글 내용
-     * @param subordinationId 부모 댓글의 id
+     * @param subOrdinationId 부모 댓글의 id
      */
-    private fun applyReplyComment(comment: String, subordinationId: Int) {
+    private fun applyReplyComment(comment: String, subOrdinationId: Long) {
         viewModelScope.launch {
-            commentsUseCase.applyNewComment(
-                NewCommentDto(
-                    medicineId = medicindItemSeq.value,
-                    userId = myUserId.value,
-                    content = comment,
-                    subordinationId = subordinationId
-                )
-            ).collectLatest { result ->
+            commentsUseCase.applyNewComment(NewCommentParameter(medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws,
+                userId = myUserId.value,
+                content = comment,
+                subOrdinationId = subOrdinationId)).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 등록 성공
-                    _action.emit(COMPLETED_APPLY_COMMENT_REPLY)
+                    _action.emit(CommentActionState.COMPLETED_APPLY_COMMENT_REPLY)
                 }.onFailure {
                     _action.emit(ERROR(it.message ?: "Failed"))
                 }
@@ -111,11 +119,9 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     private fun applyEditedComment(commentDto: CommentDto) {
         viewModelScope.launch {
-            commentsUseCase.applyEditedComment(
-                EditedCommentDto(
-                    commentId = commentDto.commentId, content = commentDto.content
-                )
-            ).collectLatest { result ->
+            commentsUseCase.applyEditedComment(EditCommentParameter(commentId = commentDto.commentId,
+                content = commentDto.content,
+                medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws)).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 수정 성공
                     _action.emit(COMPLETED_APPLY_EDITED_COMMENT)
@@ -145,7 +151,7 @@ class MedicineCommentsViewModel @Inject constructor(
      *
      * @param commentId 삭제할 댓글의 id
      */
-    private fun onClickedDelete(commentId: Int) {
+    private fun onClickedDelete(commentId: Long) {
         viewModelScope.launch {
             _action.tryEmit(CLICKED_DELETE_MY_COMMENT(commentId))
         }
@@ -157,9 +163,9 @@ class MedicineCommentsViewModel @Inject constructor(
      *
      * @param commentId LIKE를 등록또는 해제 할 댓글의 id
      */
-    private fun onClickedLike(commentId: Int) {
+    private fun onClickedLike(commentId: Long) {
         viewModelScope.launch {
-            commentsUseCase.likeComment(commentId).collectLatest { result ->
+            commentsUseCase.likeComment(LikeCommentParameter(commentId, myUserId.value)).collectLatest { result ->
                 result.onSuccess {
                     // like 처리 완료
                     _action.emit(COMPLETED_LIKE)
@@ -195,14 +201,10 @@ class MedicineCommentsViewModel @Inject constructor(
     override fun onClickedSendButton(text: CharSequence) {
         viewModelScope.launch {
             if (text.isEmpty()) _action.tryEmit(ERROR("댓글 내용을 입력해주세요."))
-            else commentsUseCase.applyNewComment(
-                NewCommentDto(
-                    medicineId = medicindItemSeq.value,
-                    userId = myUserId.value,
-                    content = text.toString(),
-                    subordinationId = -1
-                )
-            ).collectLatest { result ->
+            else commentsUseCase.applyNewComment(NewCommentParameter(medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws,
+                userId = myUserId.value,
+                content = text.toString(),
+                subOrdinationId = 0)).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 등록 성공
                     _action.emit(COMPLETED_APPLY_COMMENT_REPLY)
@@ -210,6 +212,12 @@ class MedicineCommentsViewModel @Inject constructor(
                     _action.emit(ERROR(it.message ?: "Failed"))
                 }
             }
+        }
+    }
+
+    fun setMedicineBasicInfo(medicineBasicInfo: MedicineBasicInfoArgs) {
+        viewModelScope.launch {
+            _medicineBasicInfo.emit(medicineBasicInfo)
         }
     }
 }
@@ -234,7 +242,7 @@ sealed class CommentActionState {
     /**
      * @property commentId 삭제할 댓글의 id
      */
-    data class CLICKED_DELETE_MY_COMMENT(val commentId: Int) : CommentActionState()
+    data class CLICKED_DELETE_MY_COMMENT(val commentId: Long) : CommentActionState()
 
     /**
      * @property position 답글 입력하기 클릭한 댓글의 리스트 내 절대 위치

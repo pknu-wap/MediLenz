@@ -21,7 +21,7 @@ class RecentCommentsAdapter :
                 item?.apply {
                     onClickDelete?.invoke(commentId)
                     onClickLike?.invoke(commentId)
-                    onClickReply?.invoke(commentId)
+                    onClickReply?.invoke(absoluteAdapterPosition)
                 }
             }
         }

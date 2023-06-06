@@ -30,6 +30,7 @@
     <string name="loadingMedicineDetails">상세 정보를 불러오는 중입니다</string>
     <string name="interestBtn">즐겨찾기 버튼</string>
     <string name="loadingSafeUsage">안전 사용 정보를 불러오는 중입니다</string>
+    <string name="emptyImage">제공된 의약품 사진 없음</string>
 
 
 </resources>

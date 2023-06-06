@@ -4,15 +4,19 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
+import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
+import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
+import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
@@ -30,6 +34,7 @@ import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -67,6 +72,12 @@ object AwsNetwork {
         @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi,
         tokenDataSourceImpl: TokenDataSourceImpl,
     ): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenDataSourceImpl)
+
+    @Provides
+    @Singleton
+    fun providesGetMedicineIdDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): MedicineIdDataSource =
+        MedicineIdDataSourceImpl(awsNetworkApi)
+
 }
 
 interface AwsNetworkApi {
@@ -119,5 +130,10 @@ interface AwsNetworkApi {
     suspend fun applyNewComment(
         @Body newCommentParameter: NewCommentParameter): Response<CommentChangedResponse>
 
-
+    /**
+     * 약 ID 조회
+     */
+    @HTTP(method = "POST", path = "medicine/comment", hasBody = true)
+    suspend fun getMedicineId(
+        @Body getMedicineIdParameter: GetMedicineIdParameter): Response<MedicineIdResponse>
 }

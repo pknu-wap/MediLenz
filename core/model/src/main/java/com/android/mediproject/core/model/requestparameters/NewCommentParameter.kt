@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NewCommentParameter(
     @SerialName("content") val content: String, // 테스트 - 서브 댓글 2 - 2
-    @SerialName("medicineId") val medicineId: String, // 41
-    @SerialName("subOrdinationId") val subOrdinationId: String, // 3
-    @SerialName("userId") val userId: String // 3
+    @SerialName("medicineId") val medicineId: Long, // 41
+    @SerialName("subOrdinationId") val subOrdinationId: Long, // 3
+    @SerialName("userId") val userId: Long // 3
 )

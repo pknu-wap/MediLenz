@@ -38,7 +38,7 @@ class PenaltyListAdapter :
         fun bind(data: RecallSuspensionListItemDto) {
             view.data = data
             view.setTitle(data.product)
-            view.setContent(data.rtrvlResn)
+            view.setContent(data.reason)
         }
     }
 

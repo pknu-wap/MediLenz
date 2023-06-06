@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor() : BaseViewModel() {
-    // TODO: Implement the ViewModel
+    
 }

@@ -20,6 +20,8 @@ class SignRepositoryImpl @Inject constructor(
 
     override val myEmail: Flow<String> = appDataStore.userEmail
 
+    override val myId: Flow<Long> = appDataStore.myAccountId
+
     /**
      * 서버에 로그인 요청을 하고, 토큰 정보를 받는다.
      *
@@ -30,10 +32,13 @@ class SignRepositoryImpl @Inject constructor(
         // 로그인 요청
         signDataSource.signIn(signInParameter).map { result ->
             result.fold(onSuccess = { dto ->
-                // 이메일 저장
-                if (signInParameter.isSavedEmail) appDataStore.saveUserEmail(signInParameter.email)
-                else appDataStore.saveUserEmail(charArrayOf())
-                appDataStore.saveSkipIntro(true)
+
+                appDataStore.apply {
+                    // 이메일 저장, 인트로 스킵, ID 저장
+                    if (signInParameter.isSavedEmail) saveUserEmail(signInParameter.email)
+                    else saveUserEmail(charArrayOf())
+                    saveSkipIntro(true)
+                }
 
                 // 로그인 성공
                 Result.success(Unit)

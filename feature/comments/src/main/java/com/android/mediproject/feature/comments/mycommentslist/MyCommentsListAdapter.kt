@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.model.comments.MyCommentDto
-import com.android.mediproject.feature.comments.databinding.ItemMyCommnetBinding
+import com.android.mediproject.feature.comments.databinding.ItemMyCommentBinding
 
 class MyCommentsViewHolder(
-    private val binding: ItemMyCommnetBinding
+    private val binding: ItemMyCommentBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
@@ -44,7 +44,7 @@ class MyCommentsListAdapter : ListAdapter<MyCommentDto, MyCommentsViewHolder>(di
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyCommentsViewHolder {
         val binding =
-            ItemMyCommnetBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemMyCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyCommentsViewHolder(binding)
     }
 

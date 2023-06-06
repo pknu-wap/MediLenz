@@ -27,7 +27,6 @@
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,9 +34,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
 
             </intent-filter>
-            <meta-data
-                android:name="android.notch_support"
-                android:value="true" />
         </activity>
 
     </application>
