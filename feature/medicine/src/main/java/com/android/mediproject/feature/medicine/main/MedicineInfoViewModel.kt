@@ -33,7 +33,7 @@ class MedicineInfoViewModel @Inject constructor(
         getMedicineDetailsUseCase(itemName = primaryInfo.itemKorName).map { result ->
             result.fold(onSuccess = { UiState.Success(it) }, onFailure = { UiState.Error(it.message ?: "failed") })
         }
-    }.stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = UiState.Initial)
+    }.stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = UiState.Loading)
 
     fun setMedicinePrimaryInfo(medicineArgs: MedicineInfoArgs) {
         viewModelScope.launch {

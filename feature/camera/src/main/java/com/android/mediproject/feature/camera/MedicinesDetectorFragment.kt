@@ -1,6 +1,7 @@
 package com.android.mediproject.feature.camera
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
+import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
 import com.android.mediproject.feature.camera.tflite.CameraController
@@ -32,6 +34,8 @@ class MedicinesDetectorFragment :
 
     override val fragmentViewModel: MedicinesDetectorViewModel by activityViewModels()
 
+    @Inject lateinit var systemBarStyler: SystemBarStyler
+
     // AI관련 모든 처리 담당
     @Inject lateinit var cameraController: CameraController
 
@@ -47,9 +51,22 @@ class MedicinesDetectorFragment :
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.WHITE)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = fragmentViewModel
+
+        systemBarStyler.changeMode(listOf(SystemBarStyler.ChangeView(binding.logo, SystemBarStyler.SpacingType.MARGIN)),
+            listOf(SystemBarStyler.ChangeView(binding.detectionDescription, SystemBarStyler.SpacingType.MARGIN)))
 
         // AI처리 객체를 관리하기 위해 생명주기 리스너를 설정
         cameraController.fragmentLifeCycleOwner = this.viewLifecycleOwner

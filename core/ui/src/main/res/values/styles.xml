@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ButtonChip" parent="@style/Widget.Material3.Chip.Assist"></style>
+    <style name="MediBaseTheme" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorOnPrimary">@color/main</item>
+        <item name="android:colorPrimary">@color/main</item>
+    </style>
 
-    <style name="Theme.MediProject" parent="Theme.Material3.Light.NoActionBar"></style>
+    <style name="ButtonChip" parent="@style/Widget.Material3.Chip.Assist" />
+
+    <style name="Theme.MediProject" parent="MediBaseTheme" />
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowIsFloating">false</item>

@@ -51,7 +51,6 @@ class ManualSearchResultViewModel @Inject constructor(
         }
     }
 
-
     private val _eventState = MutableEventFlow<EventState>(replay = 1)
 
     val eventState = _eventState.asEventFlow()

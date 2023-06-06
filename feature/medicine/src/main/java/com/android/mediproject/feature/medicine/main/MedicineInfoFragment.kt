@@ -80,10 +80,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                     }
 
                     is UiState.Loading -> {
-                        fragmentViewModel.medicinePrimaryInfo.replayCache.first().let {
-                            LoadingDialog.showLoadingDialog(requireContext(),
-                                "it.itemKorName ${getString(R.string.loadingMedicineDetails)}")
-                        }
+                        LoadingDialog.showLoadingDialog(requireContext(), null)
                     }
 
                     is UiState.Initial -> {}
