@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -46,10 +47,10 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
 
     override fun onResume() {
         super.onResume()
-        when(flag){
-            is DialogFlag.ChangeNickName -> requireContext().dialogResize(this,0.95f,0.38f)
-            is DialogFlag.ChangePassword -> requireContext().dialogResize(this,0.95f,0.5f)
-            is DialogFlag.Withdrawal -> requireContext().dialogResize(this,0.95f,0.4f)
+        when (flag) {
+            is DialogFlag.ChangeNickName -> requireContext().dialogResize(this, 0.95f, 0.38f)
+            is DialogFlag.ChangePassword -> requireContext().dialogResize(this, 0.95f, 0.5f)
+            is DialogFlag.Withdrawal -> requireContext().dialogResize(this, 0.95f, 0.4f)
         }
     }
 
@@ -72,26 +73,33 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteDialog -> {
             when (fragmentViewModel.dialogFlag.value) {
                 is DialogFlag.ChangeNickName -> {
+                    val newNickname = binding.dialogSubtitle1.getValue()
+                    fragmentViewModel.changeNickname(newNickname)
                     Log.d("wap", "ChangeNickName")
-                    dismiss()
-                    //닉네임 변경 로직
                 }
 
                 is DialogFlag.ChangePassword -> {
                     Log.d("wap", "ChangePassword")
-                    dismiss()
                     //비밀번호 변경 로직
                 }
 
                 is DialogFlag.Withdrawal -> {
+                    fragmentViewModel.withdrawal()
                     Log.d("wap", "Withdrawal")
-                    dismiss()
                     //회원탈퇴 로직
                 }
             }
         }
 
-        is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> dismiss()
+        is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> {
+            dismiss()
+            Log.d("wap", "Cancel")
+        }
+
+        is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> {
+            Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+            Log.d("wap", "Toast")
+        }
     }
 
     private fun handleFlag(dialogFlag: DialogFlag) {

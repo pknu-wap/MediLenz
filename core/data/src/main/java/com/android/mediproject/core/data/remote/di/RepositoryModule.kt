@@ -20,6 +20,7 @@ import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensio
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepositoryImpl
 import com.android.mediproject.core.data.remote.sign.SignRepository
 import com.android.mediproject.core.data.remote.sign.SignRepositoryImpl
+import com.android.mediproject.core.data.remote.user.UserRepository
 import com.android.mediproject.core.data.remote.user.UserRepositoryImpl
 import com.android.mediproject.core.data.search.SearchHistoryRepository
 import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
@@ -52,7 +53,7 @@ object RepositoryModule {
     @Singleton
     fun provideUserRepository(
         userDataSource: UserDataSource
-    ) = UserRepositoryImpl(userDataSource)
+    ) : UserRepository = UserRepositoryImpl(userDataSource)
 
     @Provides
     @Singleton

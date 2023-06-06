@@ -24,6 +24,7 @@ import com.android.mediproject.core.network.datasource.medicineid.MedicineIdData
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
+import com.android.mediproject.core.network.datasource.user.UserDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
@@ -88,7 +89,7 @@ object AwsNetwork {
 
     @Provides
     @Singleton
-    fun providesUserDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi) =
+    fun providesUserDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): UserDataSource =
         UserDataSourceImpl(awsNetworkApi)
 }
 
