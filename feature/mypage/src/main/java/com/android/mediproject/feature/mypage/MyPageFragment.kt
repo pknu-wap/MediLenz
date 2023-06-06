@@ -117,7 +117,12 @@ class MyPageFragment :
     private fun handleLoginMode(loginMode: MyPageViewModel.LoginMode) {
         when (loginMode) {
             MyPageViewModel.LoginMode.GUEST_MODE -> guestCommentList()
-            MyPageViewModel.LoginMode.LOGIN_MODE -> fragmentViewModel.loadComments()
+            MyPageViewModel.LoginMode.LOGIN_MODE -> {
+                fragmentViewModel.apply{
+                    loadUser()
+                    loadComments()
+                }
+            }
         }
     }
 
