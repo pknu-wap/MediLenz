@@ -78,7 +78,7 @@
                 android:layout_marginStart="15dp"
                 android:background="@drawable/rectangle_5_white_main"
                 android:gravity="center"
-                android:onClick="@{()->viewModel.completeDialog()}"
+                android:onClick="@{()->viewModel.cancelDialog()}"
                 android:paddingVertical="10dp"
                 android:text="@string/cancel"
                 android:textColor="@color/main"
