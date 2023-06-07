@@ -2,7 +2,6 @@ package com.android.mediproject.feature.camera.tflite
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
@@ -39,18 +38,24 @@ import kotlin.coroutines.suspendCoroutine
 class CameraHelper @Inject constructor(
     private val context: Context) : LifecycleEventObserver, AiController, CameraController {
 
-    private var _camera: Camera? = null
+    private var camera: Camera? = null
 
     private var _preview: Preview? = null
+    private var preview: Preview = _preview!!
 
     private var _previewView: PreviewView? = null
+    private val previewView: PreviewView = _previewView!!
+
+    private var _imageAnalyzer: ImageAnalysis? = null
+    private val imageAnalyzer: ImageAnalysis = _imageAnalyzer!!
 
     private var _cameraProvider: ProcessCameraProvider? = null
-    private val cameraProvider get() = _cameraProvider!!
+    private val cameraProvider = _cameraProvider!!
 
     private var _objectDetector: ObjectDetector? = null
-    private val objectDetector get() = _objectDetector!!
+    private val objectDetector = _objectDetector!!
 
+    private val cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
 
     private val _detectionResult =
         MutableSharedFlow<List<Detection>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 7)
@@ -147,7 +152,7 @@ class CameraHelper @Inject constructor(
                 _objectDetector = null
                 _preview = null
                 _previewView = null
-                _camera = null
+                camera = null
                 _cameraProvider = null
                 _bitmapBuffer = null
                 _cameraExecutor = null
@@ -172,27 +177,8 @@ class CameraHelper @Inject constructor(
 
             ProcessCameraProvider.getInstance(context).also { cameraProviderFuture ->
                 cameraProviderFuture.addListener(Runnable {
-
-                    val cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
-
                     _cameraProvider = cameraProviderFuture.get()
-                    val imageAnalyzer = ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .setTargetAspectRatio(RATIO_4_3).setTargetRotation(previewView.display.rotation)
-                        .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build().also {
-                            it.setAnalyzer(cameraExecutor) { image ->
-                                if (_bitmapBuffer == null) _bitmapBuffer =
-                                    Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
-                                detect(image)
-                            }
-                        }
-
-                    _preview = Preview.Builder().setTargetAspectRatio(RATIO_4_3).setTargetRotation(previewView.display.rotation).build()
-                    cameraProvider.unbindAll()
-
-                    _camera = cameraProvider.bindToLifecycle(fragmentLifeCycleOwner, cameraSelector, _preview, imageAnalyzer)
-                    _preview?.setSurfaceProvider(previewView.surfaceProvider)
-
-                    Log.d("ProcessCameraProvider", "카메라 바인딩 성공")
+                    camera(true)
                     continuation.resume(Result.success(Unit))
                 }, ContextCompat.getMainExecutor(context))
             }
@@ -201,14 +187,37 @@ class CameraHelper @Inject constructor(
         }
     }
 
+    private fun camera(enabled: Boolean) {
+        if (enabled) {
+            _imageAnalyzer =
+                ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).setTargetAspectRatio(RATIO_4_3)
+                    .setTargetRotation(previewView.display.rotation).setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                    .build().also {
+                        it.setAnalyzer(cameraExecutor) { image ->
+                            if (_bitmapBuffer == null) _bitmapBuffer =
+                                Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
+                            detect(image)
+                        }
+                    }
+
+            _preview = Preview.Builder().setTargetAspectRatio(RATIO_4_3).setTargetRotation(previewView.display.rotation).build()
+            cameraProvider.unbindAll()
+            camera = cameraProvider.bindToLifecycle(fragmentLifeCycleOwner, cameraSelector, _preview, imageAnalyzer)
+            preview.setSurfaceProvider(previewView.surfaceProvider)
+        } else {
+            preview.setSurfaceProvider(null)
+            cameraProvider.unbindAll()
+            imageAnalyzer.clearAnalyzer()
+        }
+    }
+
     override fun pause() {
-        _preview?.setSurfaceProvider(null)
+        camera(false)
     }
 
     override fun resume() {
-        _preview?.setSurfaceProvider(_previewView?.surfaceProvider)
+        camera(true)
     }
-
 
     fun interface OnDetectionCallback {
         fun onDetectedResult(objects: List<Detection>, width: Int, height: Int)

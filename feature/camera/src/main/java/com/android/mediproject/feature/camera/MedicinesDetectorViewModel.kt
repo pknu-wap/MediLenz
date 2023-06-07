@@ -1,6 +1,7 @@
 package com.android.mediproject.feature.camera
 
 import android.graphics.Bitmap
+import android.util.Size
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.tensorflow.lite.task.gms.vision.detector.Detection
 import javax.inject.Inject
+import kotlin.math.max
 
 
 @HiltViewModel
@@ -63,19 +65,27 @@ class MedicinesDetectorViewModel @Inject constructor(
     }
 
     fun makeDetectionResult(
-        objects: List<Detection>, width: Int, height: Int, backgroundImage: Bitmap?) {
+        objects: List<Detection>, realWindowSize: Size, resizedWindowSize: Size, backgroundImage: Bitmap?) {
         viewModelScope.launch(defaultDispatcher) {
             // 처리중 오류 발생시 DetectFailed 상태로 변경
+            val scaleFactor =
+                max(realWindowSize.width * 1f / resizedWindowSize.height, realWindowSize.height * 1f / resizedWindowSize.height)
             backgroundImage?.also {
                 // 검출된 객체 자르기
                 val cutted = objects.map {
-                    val detection = it.boundingBox
-                    val cuttedBitmap = Bitmap.createBitmap(backgroundImage,
-                        detection.left.toInt(),
-                        detection.top.toInt(),
-                        detection.width().toInt(),
-                        detection.height().toInt())
-                    DetectionObject(it, cuttedBitmap)
+                    val boundingBox = it.boundingBox
+
+                    val top = boundingBox.top * scaleFactor
+                    val bottom = boundingBox.bottom * scaleFactor
+                    val left = boundingBox.left * scaleFactor
+                    val right = boundingBox.right * scaleFactor
+
+                    val width = right - left
+                    val height = bottom - top
+
+                    val croppedBitmap = Bitmap.createBitmap(backgroundImage, left.toInt(), top.toInt(), width.toInt(), height.toInt())
+
+                    DetectionObject(it, croppedBitmap)
                 }
                 _detectionObjects.emit(DetectionState.Detected(DetectionObjects(cutted, backgroundImage)))
             } ?: _detectionObjects.emit(DetectionState.DetectFailed)

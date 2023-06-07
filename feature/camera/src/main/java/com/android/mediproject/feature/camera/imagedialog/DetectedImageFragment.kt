@@ -21,8 +21,9 @@ class DetectedImageFragment : DialogFragment() {
     private var _binding: FragmentDetectedImageDialogBinding? = null
     private val binding get() = _binding!!
 
-    private val medicinesDetectorViewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav)
-
+    private val medicinesDetectorViewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav) {
+        defaultViewModelProviderFactory
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,7 +56,7 @@ class DetectedImageFragment : DialogFragment() {
                                         it.detection
                                     }
                                     Glide.with(requireContext()).load(backgroundImage).into(binding.imageView)
-                                    setResults(objects, width, height)
+                                    setResults(objects, backgroundImage.width, backgroundImage.height)
                                     invalidate()
                                 }
 

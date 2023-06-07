@@ -24,7 +24,9 @@ class ConfirmDialogFragment : DialogFragment() {
     private var _binding: FragmentConfirmDialogBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav)
+    private val viewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav) {
+        defaultViewModelProviderFactory
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireActivity()).apply {

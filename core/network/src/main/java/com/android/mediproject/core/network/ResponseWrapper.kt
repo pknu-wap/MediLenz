@@ -21,7 +21,7 @@ fun <T> Response<T>.onResponse(): Result<T> {
 }
 
 
-inline fun <reified T : BaseVertexAiResponse> Response<T>.onResponse(): Result<T> {
+inline fun <reified T : BaseVertexAiResponse> Response<T>.onGoogleResponse(): Result<T> {
     if (isSuccessful) {
         body()?.let { body ->
             if (body.error != null) {
