@@ -3,7 +3,7 @@
 const { responseFormat } = require("../../config/response")
 const responseMsg = require("../../config/responseMsg");
 const { login, createUser, reissueToken, updateUserInfo, deleteUser, getUserInfo } = require("../../service/userService");
-
+const { getCommentListFromUserId } = require("../../service/commentService");
 // GET
 const output = {
     // GET user info
@@ -11,6 +11,11 @@ const output = {
     getUserInfo: async (req, res) => {
         const { userId } = req.verifiedToken;
         const result = await getUserInfo(userId); // get user info
+        return res.status(result.code).send(result.response);
+    },
+    getCommentListFromUserId: async (req, res) => {
+        const { userId } = req.verifiedToken;
+        const result = await getCommentListFromUserId(userId); // get user info
         return res.status(result.code).send(result.response);
     }
 }
