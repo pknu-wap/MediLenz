@@ -5,5 +5,6 @@ data class MoreInterestedMedicineDto(
     val itemName: String,
     val entpName: String,
     val itemIngrName: String,
-    val spcltyPblc: String
+    val spcltyPblc: String,
+    val onClick : (() -> Unit)? = null
 )
