@@ -86,12 +86,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
 
                     is DialogFlag.ChangePassword -> {
                         val newPassword = binding.dialogSubtitle1.getEditable()
-                        if (isPasswordValid(newPassword)) {
-                            val password = CharArray(newPassword.length)
-                            newPassword.trim().forEachIndexed { index, c ->
-                                password[index] = c
-                            }
-                            fragmentViewModel.cha
+                        fragmentViewModel.changePassword(newPassword)
                         } else {
                             Toast.makeText(
                                 requireContext(),
@@ -118,7 +113,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         }
     }
 
-    private fun handleFlag(dialogFlag: DialogFlag) {
+    private fun handleFlag(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
         when (dialogFlag) {
             //닉네임 변경 다이얼로그
             is DialogFlag.ChangeNickName -> {

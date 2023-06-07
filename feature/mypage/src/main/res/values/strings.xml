@@ -24,5 +24,6 @@
     <string name="changePasswordFailure">비밀번호 변경에 실패하였습니다.</string>
     <string name="withdrawalComplete">회원탈퇴에 성공하였습니다.</string>
     <string name="withdrawalFailure">회원탈퇴에 실패하였습니다.</string>
+
     <string name="changePasswordNotification">비밀번호는 영문 + 숫자 포함 4~10자 입니다.</string>
 </resources>

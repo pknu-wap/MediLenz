@@ -1,10 +1,12 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
 import MutableEventFlow
+import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import asEventFlow
+import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.domain.user.UserUseCase
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
@@ -58,7 +60,14 @@ class MyPageMoreDialogViewModel @Inject constructor(private val userUseCase: Use
         }
     }
 
-    fun changePassword(newPassword: CharArray) = viewModelScope.launch {
+    fun changePassword(newPassword: Editable) = viewModelScope.launch {
+        if (isPasswordValid(newPassword)) {
+            val password = CharArray(newPassword.length)
+            newPassword.trim().forEachIndexed { index, c ->
+                password[index] = c
+            }
+        }
+
         userUseCase.changePassword(changePasswordParamter = ChangePasswordParamter(newPassword))
             .collect {
                 it.fold(
