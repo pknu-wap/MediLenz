@@ -154,8 +154,12 @@ const updateUserInfo = async (user_id, new_nickname, new_password) => {
 // delete user
 const deleteUser = async (user_id) => {
     try {
-        // delete user
-        await User.destroy(
+        // update email with destroyed_{user_id}, nickname with 알수없음_{user_id}
+        const updated = await User.update(
+            {
+                EMAIL: `destroyed_${user_id}`,
+                NICKNAME: `알수없음_${user_id}`
+            },
             { where: { ID: user_id } }
         );
         return responseFormat(200, {
