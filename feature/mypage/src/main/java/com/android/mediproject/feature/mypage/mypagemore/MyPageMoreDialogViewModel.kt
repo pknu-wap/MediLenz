@@ -60,16 +60,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
     }
 
     fun withdrawal(withdrawalInput: String) = viewModelScope.launch {
-
-        if (!(withdrawalInput == "회원탈퇴")) {
-            toast("입력 문구가 잘못되었습니다.")
-            cancelDialog()
-            return@launch
-        }
-
-        log("viewModel : withdrawal()")
         userUseCase.withdrawal().collect {
-            log("viewModel : collect() 내부" + it.toString())
             it.fold(onSuccess = {
                 toast("회원 탈퇴가 완료되었습니다.")
                 withdrawalComplete()
