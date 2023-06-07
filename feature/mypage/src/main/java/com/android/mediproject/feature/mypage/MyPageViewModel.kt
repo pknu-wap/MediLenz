@@ -4,6 +4,7 @@ import MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.domain.GetTokenUseCase
+import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.domain.user.UserUseCase
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getTokenUseCase: GetTokenUseCase,
-    private val userUseCase: UserUseCase
+    private val userUseCase: UserUseCase,
+    private val signUseCase: SignUseCase
 ) : BaseViewModel() {
 
     val dummy = listOf(
@@ -69,8 +71,10 @@ class MyPageViewModel @Inject constructor(
     fun loadUser() = viewModelScope.launch { userUseCase().collect { _user.value = it } }
     fun loadComments() = viewModelScope.launch{ _myCommentsList.value = dummy }
     fun setLoginMode(loginMode: LoginMode) {
-        _loginMode.value = loginMode
-    }
+        log("MyPageViewModel : setLoginMode() loginMode : "+ loginMode.toString())
+        _loginMode.value = loginMode }
+
+    fun signOut() = viewModelScope.launch { signUseCase.signOut() }
 
     fun event(event: MyPageEvent) = viewModelScope.launch { _eventFlow.emit(event) }
     fun login() = event(MyPageEvent.Login)

@@ -116,6 +116,8 @@ class MyPageFragment :
 
     //가장 처음 토큰 값을 식별하는 함수입니다.
     private fun handleToken(tokenState: TokenState<CurrentTokenDto>) {
+        log(tokenState.toString())
+
         when (tokenState) {
             is TokenState.Empty -> fragmentViewModel.setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
             is TokenState.AccessExpiration -> {}
@@ -126,9 +128,9 @@ class MyPageFragment :
 
     private fun handleLoginMode(loginMode: MyPageViewModel.LoginMode) {
         when (loginMode) {
-            MyPageViewModel.LoginMode.GUEST_MODE -> guestCommentList()
+            MyPageViewModel.LoginMode.GUEST_MODE -> guestModeScreen()
             MyPageViewModel.LoginMode.LOGIN_MODE -> {
-                fragmentViewModel.apply{
+                fragmentViewModel.apply {
                     loadUser()
                     loadComments()
                 }
@@ -163,7 +165,7 @@ class MyPageFragment :
     }
 
     //다이얼로그로 돌아왔을 때 실행되는 함수입니다.
-    private fun handleDialogFlag(dialogFlag : Int) {
+    private fun handleDialogFlag(dialogFlag: Int) {
         when (dialogFlag) {
             CHANGE_NICKNAME -> {
                 log("MyPageDialog Callback : changeNickname() ")
@@ -176,7 +178,9 @@ class MyPageFragment :
 
             WITHDRAWAL -> {
                 log("MyPageDialog Callback : withdrawal() ")
-            fragmentViewModel.setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
+                fragmentViewModel.apply{
+                    signOut()
+                }
             }
 
         }
@@ -229,7 +233,8 @@ class MyPageFragment :
     }
 
     //비로그인 상태일 시 보여주는 화면
-    private fun guestCommentList() = binding.apply {
+    private fun guestModeScreen() = binding.apply {
+        log("MyPageFragment : guestModeScreen() 호출 ")
         guestModeCL.visibility = View.VISIBLE
         loginModeCL.visibility = View.GONE
 
