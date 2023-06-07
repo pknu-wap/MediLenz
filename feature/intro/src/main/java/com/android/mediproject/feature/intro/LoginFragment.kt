@@ -38,10 +38,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
     private val mainScope = MainScope()
     private val jobs = mutableListOf<Job>()
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
+
+
             loginBtn.isEnabled = false
             val moveFlag = arguments?.getInt("flag", TOHOME)
             fragmentViewModel.setMoveFlag(moveFlag ?: TOHOME)
@@ -69,9 +72,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
                                 LoadingDialog.dismiss()
                                 toast(getString(R.string.signInSuccess))
 
-                                when(fragmentViewModel.moveFlag.value){
-                                    TOHOME -> findNavController().navigate("medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
-                                    TOMYPAGE -> findNavController().navigate("medilens://main/mypage_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
+                                when (fragmentViewModel.moveFlag.value) {
+                                    TOHOME -> findNavController().navigate("medilens://main/home_nav".toUri(),
+                                        NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
+
+                                    TOMYPAGE -> findNavController().navigate("medilens://main/mypage_nav".toUri(),
+                                        NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
                                 }
                             }
 
@@ -114,9 +120,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
 
     private fun handleEvent(event: LoginViewModel.SignEvent) = when (event) {
         is LoginViewModel.SignEvent.SignIn -> {
-            fragmentViewModel.signIn(
-                binding.loginEmail.getEditable(), binding.loginPassword.getEditable(), binding.rememberEmailCB.isChecked
-            )
+            fragmentViewModel.signIn(binding.loginEmail.getEditable(),
+                binding.loginPassword.getEditable(),
+                binding.rememberEmailCB.isChecked)
         }
 
         is LoginViewModel.SignEvent.SignUp -> findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())

@@ -30,7 +30,8 @@ private const val DOT_CHAR = "• "
  */
 @SuppressLint("ResourceType")
 class HeaderForElementsView constructor(
-    context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs), OnIndicatorVisibilityChangedListener {
+    context: Context, attrs: AttributeSet
+) : ConstraintLayout(context, attrs), OnIndicatorVisibilityChangedListener {
     private val expandBtnView: ImageView
     private val moreBtnView: TextView
     private val titleView: TextView
@@ -254,7 +255,8 @@ fun interface OnIndicatorVisibilityChangedListener {
 
 
 suspend inline fun <reified T> Flow<UiState<T>>.stateAsCollect(
-    headerForElementsView: HeaderForElementsView, noDataWarningView: View?): Flow<UiState<T>> = flatMapLatest {
+    headerForElementsView: HeaderForElementsView, noDataWarningView: View?
+): Flow<UiState<T>> = flatMapLatest {
     when (it) {
         is UiState.Error -> {
             headerForElementsView.onIndicatorVisibilityChanged(false)
@@ -268,7 +270,7 @@ suspend inline fun <reified T> Flow<UiState<T>>.stateAsCollect(
 
         is UiState.Success -> {
             headerForElementsView.onIndicatorVisibilityChanged(false)
-            noDataWarningView?.isVisible = true
+            noDataWarningView?.isVisible = false
         }
 
         is UiState.Initial -> {

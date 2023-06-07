@@ -50,6 +50,8 @@ class SignUpFragment :
         fragmentViewModel.setMoveFlag(moveFlag ?: TOHOME)
 
         binding.apply {
+
+
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.repeatOnStarted {
                     eventFlow.collectLatest {

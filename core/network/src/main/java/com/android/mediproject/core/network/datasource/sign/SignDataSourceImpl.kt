@@ -23,7 +23,8 @@ import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class SignDataSourceImpl @Inject constructor(
-    private val awsNetworkApi: AwsNetworkApi, private val tokenDataSource: TokenDataSource, private val aesCoder: AesCoder) :
+    private val awsNetworkApi: AwsNetworkApi, private val tokenDataSource: TokenDataSource, private val aesCoder: AesCoder
+) :
     SignDataSource {
 
     /**
@@ -47,7 +48,7 @@ class SignDataSourceImpl @Inject constructor(
      */
     override fun signUp(signUpParameter: SignUpParameter): Flow<Result<SignUpResponse>> = channelFlow {
         val email = WeakReference(signUpParameter.email.joinToString("")).get()!!
-        val password = WeakReference(signUpParameter.password.hashCode().toString()).get()!!
+        val password = WeakReference(aesCoder.encodePassword(signUpParameter.email, signUpParameter.password)).get()!!
 
         awsNetworkApi.signUp(SignUpRequestParameter(email, password, signUpParameter.nickName))
             .onResponseWithTokens(RequestBehavior.NewTokens).fold(onSuccess = {

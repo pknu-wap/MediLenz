@@ -1,20 +1,28 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
+import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.common.uiutil.dialogResize
+import com.android.mediproject.core.common.CHANGE_NICKNAME
+import com.android.mediproject.core.common.WITHDRAWAL
+import com.android.mediproject.core.ui.base.view.Subtitle.Companion.PASSWORD
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
@@ -41,6 +49,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             _binding = FragmentMyPageMoreDialogBinding.inflate(layoutInflater, null, false)
             setView(onCreateView(layoutInflater, binding.rootLayout, savedInstanceState))
         }.create()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = binding.root
 
@@ -54,7 +63,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { dialogFlag.collect { handleFlag(it) } }
+                    repeatOnStarted { dialogFlag.collect { handleDialogFlag(it) } }
                 }
                 setDialogFlag(flag)
             }
@@ -84,17 +93,11 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                 }
             }
 
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> Toast.makeText(
-                requireContext(),
-                event.message,
-                Toast.LENGTH_SHORT
-            ).show()
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT)
+                .show()
 
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> dismiss()
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.WithdrawalComplete -> setFragmentResult(
-                TAG,
-                bundleOf(TAG to WITHDRAWAL)
-            )
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.WithdrawalComplete -> setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL))
         }
     }
 
@@ -110,18 +113,12 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         setHint(getString(com.android.mediproject.core.ui.R.string.nickNameHint))
                         inputData.addTextChangedListener(object : TextWatcher {
                             override fun beforeTextChanged(
-                                s: CharSequence?,
-                                start: Int,
-                                count: Int,
-                                after: Int
+                                s: CharSequence?, start: Int, count: Int, after: Int
                             ) {
                             }
 
                             override fun onTextChanged(
-                                s: CharSequence?,
-                                start: Int,
-                                before: Int,
-                                count: Int
+                                s: CharSequence?, start: Int, before: Int, count: Int
                             ) {
                             }
 
@@ -149,18 +146,12 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         visibility = View.VISIBLE
                         inputData.addTextChangedListener(object : TextWatcher {
                             override fun beforeTextChanged(
-                                s: CharSequence?,
-                                start: Int,
-                                count: Int,
-                                after: Int
+                                s: CharSequence?, start: Int, count: Int, after: Int
                             ) {
                             }
 
                             override fun onTextChanged(
-                                s: CharSequence?,
-                                start: Int,
-                                before: Int,
-                                count: Int
+                                s: CharSequence?, start: Int, before: Int, count: Int
                             ) {
                             }
 
@@ -176,23 +167,13 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             //회원 탈퇴 다이얼로그
             is DialogFlag.Withdrawal -> {
                 binding.apply {
-                    val span =
-                        SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
-                            setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        com.android.mediproject.core.ui.R.color.red
-                                    )
-                                ), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                            )
-                            setSpan(
-                                UnderlineSpan(),
-                                4,
-                                8,
-                                Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                            )
-                        }
+                    val span = SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
+                        setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), com.android.mediproject.core.ui.R.color.red)),
+                            4,
+                            8,
+                            Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                        setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    }
                     completeButtonDisEnabled()
                     dialogTitleTV.text = getString(R.string.withdrawal)
                     dialogSubtitle1.apply {
@@ -201,18 +182,12 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         setTitleStyleNormal()
                         inputData.addTextChangedListener(object : TextWatcher {
                             override fun beforeTextChanged(
-                                s: CharSequence?,
-                                start: Int,
-                                count: Int,
-                                after: Int
+                                s: CharSequence?, start: Int, count: Int, after: Int
                             ) {
                             }
 
                             override fun onTextChanged(
-                                s: CharSequence?,
-                                start: Int,
-                                before: Int,
-                                count: Int
+                                s: CharSequence?, start: Int, before: Int, count: Int
                             ) {
                             }
 
@@ -227,21 +202,18 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         }
     }
 
-    private fun completeButtonDisEnabled() =
-        binding.myPageDialogCompleteTV.apply {
-            isEnabled = false
-            alpha = 0.5.toFloat()
-        }
+    private fun completeButtonDisEnabled() = binding.myPageDialogCompleteTV.apply {
+        isEnabled = false
+        alpha = 0.5.toFloat()
+    }
 
-    private fun completeButtonEnabled() =
-        binding.myPageDialogCompleteTV.apply {
-            isEnabled = true
-            alpha = 1.toFloat()
-        }
+    private fun completeButtonEnabled() = binding.myPageDialogCompleteTV.apply {
+        isEnabled = true
+        alpha = 1.toFloat()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

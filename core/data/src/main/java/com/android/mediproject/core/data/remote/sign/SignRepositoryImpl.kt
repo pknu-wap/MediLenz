@@ -13,7 +13,6 @@ import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.zip
 import javax.inject.Inject
 
 class SignRepositoryImpl @Inject constructor(
@@ -31,16 +30,11 @@ class SignRepositoryImpl @Inject constructor(
      * @return 응답받은 토큰
      */
     override fun signIn(signInParameter: SignInParameter): Flow<Result<Unit>> = channelFlow {
-        signDataSource.signIn(signInParameter).zip(userInfoRepository.getMyAccountInfo()) { r1, r2 ->
-            r1 to r2
-        }.collect { resultPair ->
-            val signInResult = resultPair.first
-            val myAccountInfoResult = resultPair.second
-
-            // 두개 모두 성공하지 않은 경우에는 로그인 실패 처리
-            if (signInResult.isFailure || myAccountInfoResult.isFailure) {
+        signDataSource.signIn(signInParameter).collect { signInResult ->
+            // 로그인 실패 처리
+            if (signInResult.isFailure) {
                 // 로그인 실패
-                trySend(Result.failure(signInResult.exceptionOrNull() ?: myAccountInfoResult.exceptionOrNull() ?: Exception("로그인 실패")))
+                trySend(Result.failure(signInResult.exceptionOrNull() ?: Exception("로그인 실패")))
                 return@collect
             }
 
@@ -48,15 +42,10 @@ class SignRepositoryImpl @Inject constructor(
             // 이메일 저장, 인트로 스킵, ID 저장
             appDataStore.apply {
                 saveSkipIntro(true)
-                myAccountInfoResult.onSuccess {
+                signInResult.onSuccess {
                     // 내 계정 정보 메모리에 저장
-                    userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it.userId, it.nickname, it.email))
-
-                    if (signInParameter.isSavedEmail) {
-                        saveMyAccountInfo(it.email, it.nickname, it.userId)
-                    } else {
-                        saveMyAccountInfo("", it.nickname, it.userId)
-                    }
+                    userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it._userId!!.toLong(), it._nickName!!, it._email!!))
+                    saveMyAccountInfo(if (signInParameter.isSavedEmail) it._email!! else "", it._nickName!!, it._userId!!.toLong())
                 }
             }
 
@@ -73,16 +62,12 @@ class SignRepositoryImpl @Inject constructor(
      */
     override fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>> = channelFlow {
         // 회원가입 요청
-        signDataSource.signUp(signUpParameter).zip(userInfoRepository.getMyAccountInfo()) { r1, r2 ->
-            r1 to r2
-        }.collect { resultPair ->
-            val signUpResult = resultPair.first
-            val myAccountInfoResult = resultPair.second
+        signDataSource.signUp(signUpParameter).collect { signUpResult ->
 
             // 두개 모두 성공하지 않은 경우에는 가입 실패 처리
-            if (signUpResult.isFailure || myAccountInfoResult.isFailure) {
+            if (signUpResult.isFailure) {
                 // 가입 실패
-                trySend(Result.failure(signUpResult.exceptionOrNull() ?: myAccountInfoResult.exceptionOrNull() ?: Exception("로그인 실패")))
+                trySend(Result.failure(signUpResult.exceptionOrNull() ?: Exception("로그인 실패")))
                 return@collect
             }
 
@@ -90,11 +75,10 @@ class SignRepositoryImpl @Inject constructor(
             // 인트로 스킵
             appDataStore.apply {
                 saveSkipIntro(true)
-                myAccountInfoResult.onSuccess {
+                signUpResult.onSuccess {
                     // 내 계정 정보 메모리에 저장
-
-                    userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it.userId, it.nickname, it.email))
-                    saveMyAccountInfo("", it.nickname, it.userId)
+                    userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it._userId!!.toLong(), it._nickName!!, it._email!!))
+                    saveMyAccountInfo("", it._nickName!!, it._userId!!.toLong())
                 }
             }
 

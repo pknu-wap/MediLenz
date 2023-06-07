@@ -1,7 +1,6 @@
 package com.android.mediproject.core.data.remote.user
 
-import com.android.mediproject.core.data.remote.sign.SignRepository
-import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.user.AccountState
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,12 +9,13 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.zip
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class UserInfoRepositoryImpl @Inject constructor(
-    private val userInfoDataSource: UserInfoDataSource
+    private val userInfoDataSource: UserInfoDataSource, private val appDataStore: AppDataStore
 ) : UserInfoRepository {
 
-    @Inject lateinit var signRepository: SignRepository
 
     private val _myAccountInfo = MutableStateFlow<AccountState>(AccountState.Unknown)
 
@@ -29,20 +29,22 @@ class UserInfoRepositoryImpl @Inject constructor(
      * 로그인 상태 확인, 동시에 토큰 처리
      */
     override suspend fun loadAccountState() {
-        getMyAccountInfo().zip(signRepository.getCurrentTokens()) { r1, r2 -> r1 to r2 }.collect { results ->
-            val accountResult = results.first
-            val tokenResult = results.second
+        appDataStore.apply {
+            myAccountId.zip(userEmail) { id, email ->
+                id to email
+            }.zip(nickName) { (id, email), nickName ->
+                Triple(id, email, nickName)
+            }.collectLatest {
+                val id = it.first
+                val email = it.second
+                val nickName = it.third
 
-            accountResult.onSuccess {
-                if (tokenResult is TokenState.Valid) {
-                    accountResult.onSuccess {
-                        _myAccountInfo.value = AccountState.SignedIn(it.userId, it.nickname, it.email)
-                    }
+                if (id != 0L && email.isNotEmpty() && nickName.isNotEmpty()) {
+                    _myAccountInfo.value = AccountState.SignedIn(id, nickName, email)
+                } else {
+                    _myAccountInfo.value = AccountState.Unknown
                 }
-            }.onFailure {
-                _myAccountInfo.value = AccountState.Unknown
             }
-
         }
     }
 

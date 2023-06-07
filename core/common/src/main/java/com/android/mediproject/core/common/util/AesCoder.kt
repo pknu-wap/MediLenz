@@ -43,7 +43,7 @@ class AesCoder @Inject constructor(@ApplicationContext context: Context) {
             }
             if (extraLength > 0) {
                 val extra = "5".toByte()
-                IntRange(0, extraLength).forEachIndexed { index, i ->
+                IntRange(0, extraLength - 1).forEachIndexed { index, i ->
                     this[keyLength + index] = extra
                 }
             }
