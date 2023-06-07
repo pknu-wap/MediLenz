@@ -6,11 +6,15 @@ import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
+import com.android.mediproject.core.model.medicine.InterestedMedicine.AddInterestedMedicineResponse
+import com.android.mediproject.core.model.medicine.InterestedMedicine.DeleteInterestedMedicineResponse
 import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineListResponse
+import com.android.mediproject.core.model.medicine.InterestedMedicine.IsInterestedMedicineResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
+import com.android.mediproject.core.model.requestparameters.AddInterestedMedicineParameter
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
@@ -52,6 +56,7 @@ import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -224,4 +229,28 @@ interface AwsNetworkApi {
      */
     @GET(value = "user")
     suspend fun getUserInfo(): Response<UserResponse>
+
+    /**
+     * 관심 약 조회
+     */
+    @GET(value = "medicine/favorite")
+    suspend fun isInterestedMedicine(
+        @Query("ITEM_SEQ") itemSeq: Long
+    ): Response<IsInterestedMedicineResponse>
+
+    /**
+     * 관심 약 추가
+     */
+    @POST(value = "medicine/favorite")
+    suspend fun addInterestedMedicine(
+        @Body addInterestedMedicineParameter: AddInterestedMedicineParameter
+    ): Response<AddInterestedMedicineResponse>
+
+    /**
+     * 관심 약 삭제
+     */
+    @DELETE(value = "medicine/favorite")
+    suspend fun deleteInterestedMedicine(
+        @Query("medicineId") medicineId: Long
+    ): Response<DeleteInterestedMedicineResponse>
 }

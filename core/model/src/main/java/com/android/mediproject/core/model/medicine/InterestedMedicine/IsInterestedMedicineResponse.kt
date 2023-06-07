@@ -1,11 +1,10 @@
-package com.android.mediproject.core.model.favorites
-
+package com.android.mediproject.core.model.medicine.InterestedMedicine
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IsFavoriteMedicineResponse(
+data class IsInterestedMedicineResponse(
     @SerialName("isFavorite") val isFavorite: Boolean, // false
     @SerialName("message") val message: String
 )
