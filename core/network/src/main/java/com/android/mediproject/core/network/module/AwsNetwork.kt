@@ -1,6 +1,7 @@
 package com.android.mediproject.core.network.module
 
 import com.android.mediproject.core.common.BuildConfig
+import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
@@ -80,7 +81,7 @@ object AwsNetwork {
     fun providesSignDataSource(
         @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi,
         tokenDataSourceImpl: TokenDataSourceImpl,
-    ): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenDataSourceImpl)
+        aesCoder: AesCoder): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenDataSourceImpl, aesCoder)
 
     @Provides
     @Singleton

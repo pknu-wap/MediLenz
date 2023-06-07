@@ -103,12 +103,7 @@ class SignRepositoryImpl @Inject constructor(
                 // 1. 토큰이 없거나 유효한 경우 -> 그대로 반환(Error or Valid)
                 // 2.모든 토큰이 만료되었으므로 토큰 재발급 불가 -> 로그인 새로 ㄱㄱ
 
-                val token = StringBuilder()
-                val state = tokenState as TokenState.Valid
-                token.append(state.data.refreshToken.joinToString(""))
-                token.append(state.data.accessToken.joinToString(""))
-
-                Log.d("wap", "getCurrentTokens: ${token.toString()}")
+          
                 send(tokenState)
 
 

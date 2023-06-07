@@ -35,15 +35,16 @@
 
         <TextView
             android:id="@+id/noHistoryTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="40dp"
             android:bufferType="spannable"
+            android:gravity="center"
             android:text="@{viewModel.noHistoryText}"
             android:textColor="@color/gray2"
             android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headerView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

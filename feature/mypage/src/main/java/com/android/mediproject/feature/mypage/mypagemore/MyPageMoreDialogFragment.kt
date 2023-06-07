@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -12,9 +13,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.common.uiutil.dialogResize
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
@@ -35,23 +36,19 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
     private var _binding: FragmentMyPageMoreDialogBinding? = null
     val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        this.isCancelable = false
-        _binding = FragmentMyPageMoreDialogBinding.inflate(inflater, container, false)
-        return binding.root
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return MaterialAlertDialogBuilder(requireActivity()).apply {
+            _binding = FragmentMyPageMoreDialogBinding.inflate(layoutInflater, null, false)
+            setView(onCreateView(layoutInflater, binding.rootLayout, savedInstanceState))
+        }.create()
     }
 
-    override fun onResume() {
-        super.onResume()
-        when(flag){
-            is DialogFlag.ChangeNickName -> requireContext().dialogResize(this,0.95f,0.38f)
-            is DialogFlag.ChangePassword -> requireContext().dialogResize(this,0.95f,0.5f)
-            is DialogFlag.Withdrawal -> requireContext().dialogResize(this,0.95f,0.4f)
-        }
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = binding.root
+
+
+    override fun getView(): View = binding.root
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -119,23 +116,13 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             //회원 탈퇴 다이얼로그
             is DialogFlag.Withdrawal -> {
                 binding.apply {
-                    val span =
-                        SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
-                            setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        com.android.mediproject.core.ui.R.color.red
-                                    )
-                                ), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                            )
-                            setSpan(
-                                UnderlineSpan(),
-                                4,
-                                8,
-                                Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                            )
-                        }
+                    val span = SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
+                        setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), com.android.mediproject.core.ui.R.color.red)),
+                            4,
+                            8,
+                            Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                        setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    }
 
                     dialogTitleTV.text = getString(R.string.withdrawal)
                     dialogSubtitle1.title.text = span

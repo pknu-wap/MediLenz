@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -10,19 +9,20 @@
             type="com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogViewModel" />
     </data>
 
+
     <LinearLayout
+        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="20dp"
-        tools:context=".mypagemore.MyPageMoreDialogFragment">
+        android:paddingHorizontal="20dp">
 
         <TextView
             android:id="@+id/dialogTitleTV"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginTop="25dp"
+            android:gravity="center"
             android:text="@string/changeNickName"
             android:textColor="@color/main"
             android:textSize="20sp" />
@@ -95,7 +95,6 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </LinearLayout>
 </layout>
