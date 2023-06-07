@@ -41,21 +41,19 @@ class MyPageMoreDialogViewModel @Inject constructor(private val userUseCase: Use
     fun changeNickname(newNickname: String) = viewModelScope.launch {
         userUseCase.changeNickname(changeNicknameParameter = ChangeNicknameParameter(newNickname))
             .collect {
-                it.map {
-                    it.fold(
-                        onSuccess = { toast("닉네임 변경이 완료되었습니다.") },
-                        onFailure = { toast("닉네임 변경에 실패하였습니다.") })
-                }
+                it.fold(
+                    onSuccess = { toast("닉네임 변경이 완료되었습니다.") },
+                    onFailure = { toast("닉네임 변경에 실패하였습니다.") })
             }
     }
 
     fun withdrawal() = viewModelScope.launch {
+        log("viewModel : withdrawal()")
         userUseCase.withdrawal().collect {
-            it.map {
-                it.fold(onSuccess = { toast("회원 탈퇴가 완료되었습니다.") }, onFailure = {
-                    toast("회원 탈퇴에 실패하였습니다.")
-                })
-            }
+            log("viewModel : collect() 내부" + it.toString())
+            it.fold(onSuccess = { toast("회원 탈퇴가 완료되었습니다.") }, onFailure = {
+                toast("회원 탈퇴에 실패하였습니다.")
+            })
         }
     }
 

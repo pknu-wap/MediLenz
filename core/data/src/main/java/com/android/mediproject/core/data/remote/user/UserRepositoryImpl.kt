@@ -1,5 +1,6 @@
 package com.android.mediproject.core.data.remote.user
 
+import android.util.Log
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
 import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
@@ -29,7 +30,9 @@ class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDat
         }
 
     override suspend fun withdrawal(): Flow<Result<WithdrawalResponse>> = channelFlow {
+        Log.d("wap", "UserRepository : withdrawal()")
         userDataSource.withdrawal().map {
+            Log.d("wap", "UserRepository : withdrawal()"+it.toString())
             it.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
         }.collectLatest { trySend(it) }
     }

@@ -7,5 +7,5 @@ import androidx.lifecycle.ViewModel
 
 open class BaseViewModel : ViewModel() {
 
-    fun log(str: String) = Log.e("wap", str) //for test
+    fun log(str: String) = Log.d("wap", str) //for test
 }

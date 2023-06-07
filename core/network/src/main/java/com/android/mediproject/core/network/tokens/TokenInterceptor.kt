@@ -1,5 +1,6 @@
 package com.android.mediproject.core.network.tokens
 
+import android.util.Log
 import com.android.mediproject.core.datastore.EndpointTokenState
 import com.android.mediproject.core.datastore.TokenServer
 import okhttp3.Interceptor
@@ -25,6 +26,7 @@ class TokenInterceptor @Inject constructor(
             else tokenOnTokenServer.refreshToken
 
             val response = chain.request().newBuilder().header("Authorization", "Bearer ${token.joinToString("")}").build()
+            Log.d("wap", "TokenInterceptor : "+response.toString())
             return chain.proceed(response)
         }
     }

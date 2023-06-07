@@ -68,7 +68,6 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
     }
 
     private fun handleEvent(event: MyPageMoreDialogViewModel.MyPageMoreDialogEvent) = when (event) {
-
         //확인 버튼을 눌렀을 때 로직
         is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteDialog -> {
             when (fragmentViewModel.dialogFlag.value) {

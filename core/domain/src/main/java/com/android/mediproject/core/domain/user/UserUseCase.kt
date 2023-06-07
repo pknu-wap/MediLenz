@@ -8,6 +8,7 @@ import com.android.mediproject.core.model.requestparameters.ChangePasswordParamt
 import com.android.mediproject.core.model.user.UserDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -26,18 +27,20 @@ class UserUseCase @Inject constructor(
     suspend fun changeNickname(changeNicknameParameter: ChangeNicknameParameter) = channelFlow {
         userRepository.changeNickname(changeNicknameParameter).map {
             it.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
-        }.also { trySend(it) }
+        }.collectLatest { trySend(it) }
     }
 
     suspend fun changePassword(changePasswordParamter: ChangePasswordParamter) = channelFlow {
         userRepository.changePassword(changePasswordParamter).map {
             it.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
-        }.also { trySend(it) }
+        }.collectLatest { trySend(it) }
     }
 
     suspend fun withdrawal() = channelFlow {
+        Log.d("wap", "UserUseCase : withdrawal()")
         userRepository.withdrawal().map {
+            Log.d("wap", "UserUseCase : withdrawal()"+it.toString())
             it.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
-        }.also { trySend(it) }
+        }.collectLatest { trySend(it) }
     }
 }

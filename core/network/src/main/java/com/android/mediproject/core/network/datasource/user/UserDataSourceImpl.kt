@@ -1,5 +1,6 @@
 package com.android.mediproject.core.network.datasource.user
 
+import android.util.Log
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
 import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
@@ -38,8 +39,13 @@ class UserDataSourceImpl @Inject constructor(private val awsNetworkApi: AwsNetwo
      * 회원 탈퇴
      */
     override suspend fun withdrawal(): Flow<Result<WithdrawalResponse>> = channelFlow {
+        Log.d("wap", "UserDataSource : withdrawal()")
         awsNetworkApi.withdrawal().onResponse()
-            .fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
+            .fold(onSuccess = {
+                Log.d("wap","dataSource : 성공")
+                Result.success(it) }, onFailure = {
+                Log.d("wap","dataSource : 실패 에러내용 : "+ it.toString())
+                Result.failure(it) })
             .also { trySend(it) }
     }
 }
