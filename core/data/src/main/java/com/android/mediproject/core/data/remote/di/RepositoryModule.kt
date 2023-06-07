@@ -84,7 +84,9 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesCommentsRepository(commentsDataSource: CommentsDataSource): CommentsRepository = CommentsRepositoryImpl(commentsDataSource)
+    fun providesCommentsRepository(
+        commentsDataSource: CommentsDataSource,
+        signRepository: SignRepository): CommentsRepository = CommentsRepositoryImpl(commentsDataSource, signRepository)
 
 
     @Provides

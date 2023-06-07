@@ -15,7 +15,7 @@ class CommentsListDataSourceImpl(
         return try {
             commentsDataSource.getCommentsForAMedicine(medicineId).fold(onSuccess = {
                 PagingSource.LoadResult.Page(
-                    data = it.commentList.reversed(),
+                    data = it.commentList.asReversed(),
                     prevKey = null,
                     nextKey = if (it.commentList.size > 100000) 1 else null,
                 )

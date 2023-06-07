@@ -1,6 +1,5 @@
 package com.android.mediproject.core.domain
 
-import android.util.Log
 import androidx.paging.PagingData
 import androidx.paging.flatMap
 import com.android.mediproject.core.common.network.Dispatcher
@@ -32,10 +31,9 @@ class CommentsUseCase @Inject constructor(
     fun getCommentsForAMedicine(medicineId: Long): Flow<PagingData<CommentDto>> = channelFlow {
         commentsRepository.getCommentsForAMedicine(medicineId).collectLatest { pagingData ->
             val result = pagingData.flatMap {
-                Log.d("CommentsUseCase", "getCommentsForAMedicine: $it")
                 (it.replies.map { reply ->
                     reply.toDto()
-                }) + listOf(it.toDto())
+                }.reversed()) + listOf(it.toDto())
             }
             send(result)
         }

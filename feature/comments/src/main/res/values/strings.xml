@@ -17,4 +17,9 @@
     <string name="emptyComments">댓글이 없습니다</string>
     <string name="deleteMyComment">댓글 삭제</string>
     <string name="successAddComment">댓글 등록 완료</string>
+    <string name="yes">네</string>
+    <string name="failedLikeComment">좋아요 처리 오류</string>
+    <string name="failedDeleteComment">댓글 삭제 처리 오류</string>
+    <string name="requestToDeleteComment">댓글을 삭제하시겠습니까?</string>
+    <string name="failedApplyComment">댓글 처리 오류</string>
 </resources>

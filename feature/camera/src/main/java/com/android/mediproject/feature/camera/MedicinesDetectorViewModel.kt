@@ -10,7 +10,10 @@ import com.android.mediproject.feature.camera.tflite.AiController
 import com.android.mediproject.feature.camera.tflite.CameraController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,8 +32,9 @@ class MedicinesDetectorViewModel @Inject constructor(
     val aiModelState get() = _aiModelState.asStateFlow()
 
     // 검출 정보 가록
-    private val _detectionObjects = MutableStateFlow<DetectionState>(DetectionState.Initial)
-    val detectionObjects get() = _detectionObjects.asStateFlow()
+    private val _detectionObjects = MutableSharedFlow<DetectionState>(replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 5)
+    val detectionObjects get() = _detectionObjects.asSharedFlow()
 
     fun loadModel(previewView: PreviewView) {
         viewModelScope.launch {
@@ -51,15 +55,15 @@ class MedicinesDetectorViewModel @Inject constructor(
     }
 
     fun capture() {
-        viewModelScope.launch {
-            _detectionObjects.tryEmit(DetectionState.Detecting)
+        viewModelScope.launch(defaultDispatcher) {
+            _detectionObjects.emit(DetectionState.Detecting)
         }
     }
 
     fun makeDetectionResult(objects: List<Detection>, width: Int, height: Int) {
         viewModelScope.launch(defaultDispatcher) {
             // 검출된 객체를 기록
-            _detectionObjects.value = DetectionState.Detected(DetectionObjects(objects, width, height))
+            _detectionObjects.emit(DetectionState.Detected(DetectionObjects(objects, width, height)))
         }
     }
 
