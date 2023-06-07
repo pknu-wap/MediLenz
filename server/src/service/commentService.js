@@ -177,6 +177,8 @@ const editComment = async (userId, medicineId, commentId, content) => {
             return responseFormat(404, { message: responseMsg.COMMENT_NOT_FOUND });
         }
         if (targetComment.USERID != userId) {
+            console.log('userId: ', userId);
+            console.log('targetComment.USERID: ', targetComment.USERID);
             return responseFormat(403, { message: responseMsg.COMMENT_EDIT_FAIL });
         }
         await Comment.update({
