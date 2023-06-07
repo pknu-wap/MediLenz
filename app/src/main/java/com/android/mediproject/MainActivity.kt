@@ -3,19 +3,20 @@ package com.android.mediproject
 import android.animation.ObjectAnimator
 import android.os.Build
 import android.view.View
-import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.ViewTreeObserver
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import androidx.core.view.marginBottom
+import androidx.core.view.updateLayoutParams
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.android.mediproject.core.common.uiutil.LayoutController
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.WindowViewModel
 import com.android.mediproject.core.ui.base.BaseActivity
@@ -25,7 +26,7 @@ import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate), LayoutController {
 
     private val windowViewModel: WindowViewModel by viewModels()
 
@@ -40,7 +41,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
     private lateinit var navController: NavController
 
     override fun afterBinding() {
-        systemBarStyler.init(this, window)
+        systemBarStyler.init(this, window, this::changeFragmentContainerHeight)
         systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
 
         //SDK 31이상일 때 Splash가 소소하게 사라지는 이펙트 입니다. 추후 걸리적거리면 삭제해도 됌
@@ -83,7 +84,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
                     if (bottomAppBar.height > 0 && bottomNav.marginBottom == systemBarStyler.navigationBarHeightPx) {
                         root.viewTreeObserver.removeOnPreDrawListener(this)
                         windowViewModel.bottomNavHeightInPx = bottomAppBar.height
-                        setFragmentContainerFullHeight(false)
+                        this@MainActivity.changeFragmentContainerHeight(false)
                     }
                     return true
                 }
@@ -91,21 +92,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         }
     }
 
-    /**
-     * fragmentContainerView의 높이를 조정해주는 함수
-     *
-     * CoordinatorLayout으로 인해 fragmentContainerView의 높이가 앱 전체의 높이로 되어있는데
-     * isFull true를 전달받으면 fragmentContainerView의 bottom좌표가 bottomNav의 top좌표가 되고,
-     * isFull false를 전달받으면 fragmentContainerView의 bottom좌표가 앱 전체의 bottom좌표가 된다.
-     *
-     * @param isFull true: 전체화면, false: 전체화면X
-     */
-    private fun setFragmentContainerFullHeight(isFull: Boolean) {
-        if (windowViewModel.bottomNavHeight.value > 0) {
-            binding.fragmentContainerView.layoutParams = CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                if (isFull) ViewGroup.LayoutParams.MATCH_PARENT else (binding.root.height - windowViewModel.bottomNavHeight.value))
-        }
-    }
 
     override fun setSplash() {
         installSplashScreen()
@@ -144,11 +130,28 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         log(visible.toString())
         binding.cameraFAB.isVisible = visible
         binding.bottomAppBar.isVisible = visible
-        setFragmentContainerFullHeight(!visible)
+        this.changeFragmentContainerHeight(!visible)
     }
 
     fun handleEvent(event: MainViewModel.MainEvent) = when (event) {
         is MainViewModel.MainEvent.AICamera -> navController.navigate("medilens://main/camera_nav".toUri())
+    }
+
+    /**
+     * fragmentContainerView의 높이를 조정해주는 함수
+     *
+     * CoordinatorLayout으로 인해 fragmentContainerView의 높이가 앱 전체의 높이로 되어있는데
+     * isFull true를 전달받으면 fragmentContainerView의 bottom좌표가 bottomNav의 top좌표가 되고,
+     * isFull false를 전달받으면 fragmentContainerView의 bottom좌표가 앱 전체의 bottom좌표가 된다.
+     *
+     * @param isFull true: 전체화면, false: 전체화면X
+     */
+    override fun changeFragmentContainerHeight(isFull: Boolean) {
+        if (windowViewModel.bottomNavHeight.value > 0) {
+            binding.fragmentContainerView.updateLayoutParams<MarginLayoutParams> {
+                bottomMargin = if (!isFull) (windowViewModel.bottomNavHeight.value) else 0
+            }
+        }
     }
 
 }

@@ -37,6 +37,12 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
     override fun onAttach(context: Context) {
         super.onAttach(context)
         systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
+        systemBarStyler.changeFragmentContainerHeight(false)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        systemBarStyler.changeFragmentContainerHeight(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,37 +51,24 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
         binding.apply {
             systemBarStyler.changeMode(topViews = listOf(SystemBarStyler.ChangeView(topAppBar, SystemBarStyler.SpacingType.PADDING)))
-
             viewModel = fragmentViewModel
             medicineInfoArgs = navArgs
 
             root.doOnPreDraw {
-                /**
-                // coordinatorlayout으로 인해 viewpager의 높이가 휴대폰 화면 하단을 벗어나 버리는 현상을 방지하기 위해 사용
-                val viewPagerHeight = root.height - topAppBar.height
-                contentViewPager.layoutParams = CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, viewPagerHeight).apply {
-                behavior = AppBarLayout.ScrollingViewBehavior()
-                }
-                 */
-
                 topAppBar.removeOnOffsetChangedListener(null)
                 // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
                 topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
                     // 스크롤 할 때 마다 medicinePrimaryInfoViewgroup의 투명도 조정
                     medicinePrimaryInfoViewgroup.alpha = 1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
-                        if (this == -1.0f) medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
-                        else if (this > -0.8f) medicinePrimaryInfoViewgroup.isVisible = true
+                        if (this == -1.0f) {
+                            medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
+                            systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
+                        } else if (this > -0.8f) {
+                            medicinePrimaryInfoViewgroup.isVisible = true
+                            systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
+                        }
                     }
-
-                    /**
-                    // 스크롤 할 때 마다 viewpager의 높이를 조정
-                    contentViewPager.layoutParams =
-                    CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (viewPagerHeight - verticalOffset)).apply {
-                    behavior = AppBarLayout.ScrollingViewBehavior()
-                    }
-                     */
                 }
-
             }
         }
 

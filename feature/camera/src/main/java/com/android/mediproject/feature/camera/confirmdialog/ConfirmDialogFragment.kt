@@ -14,12 +14,10 @@ import com.android.mediproject.feature.camera.DetectionState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
 import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentConfirmDialogBinding
-import com.android.mediproject.feature.camera.tflite.CameraController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ConfirmDialogFragment : DialogFragment() {
@@ -27,12 +25,6 @@ class ConfirmDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MedicinesDetectorViewModel by activityViewModels()
-
-    @Inject lateinit var cameraController: CameraController
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireActivity()).apply {
@@ -95,7 +87,7 @@ class ConfirmDialogFragment : DialogFragment() {
 
     override fun dismiss() {
         super.dismiss()
-        cameraController.resume()
+        viewModel.cameraController.resume()
     }
 
     override fun onDismiss(dialog: DialogInterface) {

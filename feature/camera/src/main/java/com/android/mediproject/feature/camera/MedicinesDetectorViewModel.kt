@@ -25,15 +25,16 @@ import javax.inject.Inject
 class MedicinesDetectorViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
-    private val cameraController: CameraController,
-    private val aiController: AiController) : BaseViewModel() {
+    val aiController: AiController,
+    val cameraController: CameraController) : BaseViewModel() {
+
 
     private val _aiModelState = MutableStateFlow<AiModelState>(AiModelState.NotLoaded)
     val aiModelState get() = _aiModelState.asStateFlow()
 
     // 검출 정보 가록
-    private val _detectionObjects = MutableSharedFlow<DetectionState>(replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 5)
+    private val _detectionObjects =
+        MutableSharedFlow<DetectionState>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 5)
     val detectionObjects get() = _detectionObjects.asSharedFlow()
 
     fun loadModel(previewView: PreviewView) {
@@ -44,7 +45,6 @@ class MedicinesDetectorViewModel @Inject constructor(
                 withContext(ioDispatcher) {
                     aiController.loadModel()
                     cameraController.setupCamera(previewView)
-
                 }.fold(onSuccess = {
                     _aiModelState.value = AiModelState.Loaded
                 }, onFailure = {
@@ -67,6 +67,10 @@ class MedicinesDetectorViewModel @Inject constructor(
         }
     }
 
+    override fun onCleared() {
+        _detectionObjects.resetReplayCache()
+        super.onCleared()
+    }
 }
 
 sealed class AiModelState {
@@ -77,7 +81,6 @@ sealed class AiModelState {
 }
 
 sealed class DetectionState {
-
     object Initial : DetectionState()
     object Detecting : DetectionState()
     data class Detected(val detection: DetectionObjects) : DetectionState()

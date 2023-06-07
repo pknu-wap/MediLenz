@@ -3,7 +3,6 @@ package com.android.mediproject.feature.camera.tflite
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.camera.core.AspectRatio
 import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
@@ -16,13 +15,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.android.mediproject.core.common.network.Dispatcher
-import com.android.mediproject.core.common.network.MediDispatchers
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
@@ -36,17 +30,14 @@ import java.nio.ByteOrder
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 /**
  * 카메라 제어, ai처리 담당
  */
-@Singleton
 class CameraHelper @Inject constructor(
-    @ApplicationContext private val context: Context, @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher) :
-    LifecycleEventObserver, AiController, CameraController {
+    private val context: Context) : LifecycleEventObserver, AiController, CameraController {
 
     private var _camera: Camera? = null
 
@@ -62,7 +53,7 @@ class CameraHelper @Inject constructor(
 
 
     private val _detectionResult =
-        MutableSharedFlow<List<Detection>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 5)
+        MutableSharedFlow<List<Detection>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 7)
 
     override val detectionResult get() = _detectionResult.asSharedFlow()
 
@@ -96,27 +87,16 @@ class CameraHelper @Inject constructor(
             value.lifecycle.addObserver(this)
         }
 
-    // activity 생명주기에 맞춰 필요한 로직을 처리
-    private var _activityLifecycle: Lifecycle? = null
-    override var activityLifecycle: Lifecycle
-        get() = _activityLifecycle!!
-        set(value) {
-            _activityLifecycle = value
-            value.addObserver(this)
-        }
-
-
     /**
      * TFLite 모델을 로드한다.
      */
     override suspend fun loadModel(): Result<Unit> = suspendCoroutine { continuation ->
         try {
             TfLiteVision.initialize(context).addOnCompleteListener {
-
                 if (it.isSuccessful) {
-                    val modelFile = context.assets.open("automl_tflite.tflite")
+                    val modelFile = context.assets.open("automl_tflite3.tflite")
 
-                    val objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setMaxResults(8).setScoreThreshold(0.3f)
+                    val objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setMaxResults(8).setScoreThreshold(0.46f)
                         .setBaseOptions(BaseOptions.builder().apply {
                             useNnapi()
                         }.build()).build()
@@ -157,26 +137,22 @@ class CameraHelper @Inject constructor(
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         when (event) {
             Lifecycle.Event.ON_DESTROY -> {
-                if (source == _fragmentLifeCycleOwner) {
-                    _fragmentLifeCycleOwner?.lifecycle?.removeObserver(this)
-                    _detectionResult.resetReplayCache()
-                    _cameraProvider?.unbindAll()
-                    _bitmapBuffer?.recycle()
-                    _cameraExecutor?.shutdown()
+                // 메모리 누수 방지 위해 초기화
+                _detectionResult.resetReplayCache()
+                _cameraProvider?.unbindAll()
+                _bitmapBuffer?.recycle()
+                _cameraExecutor?.shutdown()
+                _objectDetector?.close()
 
-                    _preview = null
-                    _camera = null
-                    _cameraProvider = null
-                    _bitmapBuffer = null
-                } else {
-                    _activityLifecycle?.removeObserver(this)
-                    _objectDetector?.close()
-                    _objectDetector = null
-                }
-            }
+                _objectDetector = null
+                _preview = null
+                _previewView = null
+                _camera = null
+                _cameraProvider = null
+                _bitmapBuffer = null
+                _cameraExecutor = null
 
-            Lifecycle.Event.ON_START -> {
-
+                _fragmentLifeCycleOwner?.lifecycle?.removeObserver(this)
             }
 
             else -> {
@@ -197,12 +173,11 @@ class CameraHelper @Inject constructor(
             ProcessCameraProvider.getInstance(context).also { cameraProviderFuture ->
                 cameraProviderFuture.addListener(Runnable {
 
-                    val cameraSelector =
-                        CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
+                    val cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
 
                     _cameraProvider = cameraProviderFuture.get()
                     val imageAnalyzer = ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .setTargetAspectRatio(AspectRatio.RATIO_4_3).setTargetRotation(previewView.display.rotation)
+                        .setTargetAspectRatio(RATIO_4_3).setTargetRotation(previewView.display.rotation)
                         .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build().also {
                             it.setAnalyzer(cameraExecutor) { image ->
                                 if (_bitmapBuffer == null) _bitmapBuffer =
@@ -214,8 +189,7 @@ class CameraHelper @Inject constructor(
                     _preview = Preview.Builder().setTargetAspectRatio(RATIO_4_3).setTargetRotation(previewView.display.rotation).build()
                     cameraProvider.unbindAll()
 
-                    _camera =
-                        cameraProvider.bindToLifecycle(fragmentLifeCycleOwner, cameraSelector, _preview, imageAnalyzer)
+                    _camera = cameraProvider.bindToLifecycle(fragmentLifeCycleOwner, cameraSelector, _preview, imageAnalyzer)
                     _preview?.setSurfaceProvider(previewView.surfaceProvider)
 
                     Log.d("ProcessCameraProvider", "카메라 바인딩 성공")
@@ -239,26 +213,4 @@ class CameraHelper @Inject constructor(
     fun interface OnDetectionCallback {
         fun onDetectedResult(objects: List<Detection>, width: Int, height: Int)
     }
-}
-
-/**
- * AI를 제어하는 인터페이스
- */
-interface AiController {
-    val detectionResult: SharedFlow<List<Detection>>
-
-    suspend fun loadModel(): Result<Unit>
-}
-
-/**
- * 카메라를 제어하는 인터페이스
- */
-interface CameraController {
-    fun pause()
-    fun resume()
-    suspend fun setupCamera(previewView: PreviewView): Result<Unit>
-    var detectionCallback: CameraHelper.OnDetectionCallback?
-
-    var fragmentLifeCycleOwner: LifecycleOwner
-    var activityLifecycle: Lifecycle
 }
