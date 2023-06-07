@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto" />
+            type="com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineDto" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

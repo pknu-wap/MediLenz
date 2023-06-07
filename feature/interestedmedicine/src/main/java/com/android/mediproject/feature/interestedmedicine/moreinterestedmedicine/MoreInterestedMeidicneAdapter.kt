@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineDto
 import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto
 import com.android.mediproject.feature.interestedmedicine.databinding.ItemInterestedMedicineBinding
 
@@ -21,26 +22,26 @@ class MoreInterestedMedicineViewHolder(private val binding: ItemInterestedMedici
         }
     }
 
-    fun bind(interestedMedicine: ApprovedMedicineItemDto) {
+    fun bind(interestedMedicine: InterestedMedicineDto) {
         binding.item = interestedMedicine
     }
 }
 
 class MoreInterestedMeidicneAdapter :
-    ListAdapter<ApprovedMedicineItemDto, MoreInterestedMedicineViewHolder>(diffUtil) {
+    ListAdapter<InterestedMedicineDto, MoreInterestedMedicineViewHolder>(diffUtil) {
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<ApprovedMedicineItemDto>() {
+        val diffUtil = object : DiffUtil.ItemCallback<InterestedMedicineDto>() {
             override fun areItemsTheSame(
-                oldItem: ApprovedMedicineItemDto,
-                newItem: ApprovedMedicineItemDto
+                oldItem: InterestedMedicineDto,
+                newItem: InterestedMedicineDto
             ): Boolean {
                 return oldItem === newItem
             }
 
             override fun areContentsTheSame(
-                oldItem: ApprovedMedicineItemDto,
-                newItem: ApprovedMedicineItemDto
+                oldItem: InterestedMedicineDto,
+                newItem: InterestedMedicineDto
             ): Boolean {
                 return oldItem == newItem
             }
