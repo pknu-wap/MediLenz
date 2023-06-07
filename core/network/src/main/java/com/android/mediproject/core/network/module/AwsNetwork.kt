@@ -4,6 +4,7 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineListResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
@@ -20,6 +21,8 @@ import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
 import com.android.mediproject.core.model.user.remote.WithdrawalResponse
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
+import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
+import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSourceImpl
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
@@ -51,6 +54,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object AwsNetwork {
+
+    @Provides
+    @Singleton
+    fun provideInterestedMedicineDatasource(
+        @Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi
+    ): InterestedMedicineDataSource = InterestedMedicineDataSourceImpl(awsNetworkApi)
 
     @Provides()
     @Named("awsNetworkApiWithAccessTokens")
@@ -94,6 +103,10 @@ object AwsNetwork {
 }
 
 interface AwsNetworkApi {
+
+    @GET(value = "medicine/favorite")
+    suspend fun getInterestedMedicineList(): Response<InterestedMedicineListResponse>
+
     @POST(value = "user/register")
     suspend fun signUp(
         @Body signUpRequestParameter: SignUpRequestParameter

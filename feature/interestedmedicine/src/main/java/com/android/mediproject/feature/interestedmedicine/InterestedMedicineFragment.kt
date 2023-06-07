@@ -10,20 +10,20 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.android.mediproject.core.model.medicine.InterestedMedicine.MedicineInterestedDto
+import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineDto
+import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
 import com.android.mediproject.feature.interestedmedicine.databinding.FragmentInterestedMedicineBinding
 import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import repeatOnStarted
 
 @AndroidEntryPoint
-class InterestedMedicineFragment() :
+class InterestedMedicineFragment :
     BaseFragment<FragmentInterestedMedicineBinding, InterstedMedicineViewModel>(
         FragmentInterestedMedicineBinding::inflate
     ) {
@@ -38,12 +38,32 @@ class InterestedMedicineFragment() :
 
     private fun addInterestedMedicinesChips() {
         binding.apply {
-            viewLifecycleOwner.lifecycleScope.launch {
-                repeatOnStarted {
-                    fragmentViewModel.interstedMedicineList.collect { medicineList ->
-                        setInterstedMedicineList(medicineList)
+            fragmentViewModel.apply {
+                viewLifecycleOwner.apply {
+                    repeatOnStarted {
+                        interstedMedicineList.collect {
+                            setInterstedMedicineList(it)
+                        }
+                    }
+                    repeatOnStarted {
+                        token.collect {
+                            handleToken(it)
+                        }
                     }
                 }
+                loadTokens()
+            }
+        }
+    }
+
+    private fun handleToken(token: TokenState<CurrentTokenDto>) {
+        when (token) {
+            is TokenState.Empty -> {}
+            is TokenState.Error -> {}
+            is TokenState.RefreshExpiration -> {}
+            is TokenState.AccessExpiration -> {}
+            is TokenState.Valid -> {
+                fragmentViewModel.loadInterestedMedicines()
             }
         }
     }
@@ -55,10 +75,6 @@ class InterestedMedicineFragment() :
      */
     private fun initHeader() {
         binding.interstedMedicineHeaderView.apply {
-            setOnExpandClickListener {
-
-            }
-
             setOnMoreClickListener {
                 findNavController().navigate("medilens://main/moreInterestedMedicine_nav".toUri())
             }
@@ -69,18 +85,19 @@ class InterestedMedicineFragment() :
     /**
      * 마이페이지 즐겨찾기 목록 화면 로직
      */
-    private fun setInterstedMedicineList(medicineList: List<MedicineInterestedDto>) {
-
-        val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
-
+    private fun setInterstedMedicineList(medicineList: List<InterestedMedicineDto>) {
+        //다른화면 갔다올 경우 이전에 있는 약품에 더해서 더 생기기 때문에 제거해줘야 함
         binding.interestedMedicineList.removeAllViews()
 
         //즐겨찾기 목록 약의 개수가 0개가 아닐 경우
         if (medicineList.size != 0) {
+
+            val horizontalSpace = resources.getDimension(R.dimen.dp_4).toInt()
+
             medicineList.forEach { medicine ->
                 log(medicine.toString())
                 binding.interestedMedicineList.addView(
-                    ButtonChip<Int>(
+                    ButtonChip<String>(
                         requireContext()
                     ).apply {
                         layoutParams = FlexboxLayout.LayoutParams(
@@ -98,45 +115,50 @@ class InterestedMedicineFragment() :
             }
         } else {
             //0개 일 경우
-            binding.apply {
-                interestedMedicineList.visibility = View.GONE
-                noInterstedMedicineTV.visibility = View.VISIBLE
+            showNoInterestedMedicine()
+        }
+    }
 
-                val span =
-                    SpannableStringBuilder(getString(com.android.mediproject.feature.interestedmedicine.R.string.noInterstedMedicine)).apply {
-                        setSpan(
-                            ForegroundColorSpan(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.main
-                                )
-                            ), 0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                        )
-                        setSpan(
-                            UnderlineSpan(),
-                            0,
-                            4,
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                        )
-                        setSpan(
-                            ForegroundColorSpan(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.main
-                                )
-                            ), 6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                        )
-                        setSpan(
-                            UnderlineSpan(),
-                            6,
-                            8,
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                        )
-                    }
-                noInterstedMedicineTV.text = span
-                interstedMedicineHeaderView.setMoreVisiblity(false)
-                interstedMedicineHeaderView.setExpandVisiblity(false)
-            }
+    private fun showNoInterestedMedicine() {
+        log("즐겨찾기 없음")
+        binding.apply {
+            interestedMedicineList.visibility = View.GONE
+            noInterstedMedicineTV.visibility = View.VISIBLE
+
+            val span =
+                SpannableStringBuilder(getString(com.android.mediproject.feature.interestedmedicine.R.string.noInterstedMedicine)).apply {
+                    setSpan(
+                        ForegroundColorSpan(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.main
+                            )
+                        ), 0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                    setSpan(
+                        UnderlineSpan(),
+                        0,
+                        4,
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                    setSpan(
+                        ForegroundColorSpan(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.main
+                            )
+                        ), 6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                    setSpan(
+                        UnderlineSpan(),
+                        6,
+                        8,
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                }
+            noInterstedMedicineTV.text = span
+            interstedMedicineHeaderView.setMoreVisiblity(false)
+            interstedMedicineHeaderView.setExpandVisiblity(false)
         }
     }
 }

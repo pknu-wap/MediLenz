@@ -1,19 +1,32 @@
 package com.android.mediproject.feature.setting
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.setting.databinding.FragmentSettingBinding
+import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SettingFragment :
     BaseFragment<FragmentSettingBinding, SettingViewModel>(FragmentSettingBinding::inflate) {
     override val fragmentViewModel: SettingViewModel by viewModels()
 
+    @Inject
+    lateinit var systemBarStyler: SystemBarStyler
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK,SystemBarStyler.NavigationBarColor.BLACK)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -21,6 +34,7 @@ class SettingFragment :
             viewModel = fragmentViewModel.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
             }
+            systemBarStyler.changeMode(topViews = listOf(SystemBarStyler.ChangeView(settingBar, SystemBarStyler.SpacingType.PADDING)))
         }
     }
 

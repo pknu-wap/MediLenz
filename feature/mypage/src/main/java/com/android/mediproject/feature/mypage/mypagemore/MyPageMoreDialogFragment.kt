@@ -95,13 +95,11 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                 }
             }
 
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> {
-                dismiss()
-            }
-
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> {
                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
             }
+
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> dismiss()
         }
     }
 

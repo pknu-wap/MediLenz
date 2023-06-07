@@ -13,10 +13,6 @@ const val AWS_LOAD_PAGE_SIZE = 100
  *
  * 를 나타냅니다.
  */
-
-const val GUEST_MODE = 101
-const val LOGIN_MODE = 102
-
 const val CHANGE_NICKNAME_BOTTOMSHEET = 301
 const val CHANGE_PASSWORD_BOTTOMSHEET = 302
 const val WITHDRAWAL_BOTTOMSHEET = 303
