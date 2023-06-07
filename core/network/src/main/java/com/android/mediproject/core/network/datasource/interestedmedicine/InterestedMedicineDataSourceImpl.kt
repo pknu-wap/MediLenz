@@ -1,9 +1,9 @@
 package com.android.mediproject.core.network.datasource.interestedmedicine
 
-import com.android.mediproject.core.model.medicine.interestedMedicine.AddInterestedMedicineResponse
-import com.android.mediproject.core.model.medicine.interestedMedicine.DeleteInterestedMedicineResponse
-import com.android.mediproject.core.model.medicine.interestedMedicine.InterestedMedicineListResponse
-import com.android.mediproject.core.model.medicine.interestedMedicine.IsInterestedMedicineResponse
+import com.android.mediproject.core.model.interestedmedicine.DeleteInterestedMedicineResponse
+import com.android.mediproject.core.model.interestedmedicine.InterestedMedicineListResponse
+import com.android.mediproject.core.model.interestedmedicine.IsInterestedMedicineResponse
+import com.android.mediproject.core.model.interestedmedicine.NewInterestedMedicineResponse
 import com.android.mediproject.core.model.requestparameters.AddInterestedMedicineParameter
 import com.android.mediproject.core.network.module.AwsNetworkApi
 import com.android.mediproject.core.network.onResponse
@@ -19,7 +19,7 @@ class InterestedMedicineDataSourceImpl @Inject constructor(private val awsNetwor
             }
     }
 
-    override fun addInterestedMedicine(addInterestedMedicineParameter: AddInterestedMedicineParameter): Flow<Result<AddInterestedMedicineResponse>> =
+    override fun addInterestedMedicine(addInterestedMedicineParameter: AddInterestedMedicineParameter): Flow<Result<NewInterestedMedicineResponse>> =
         channelFlow {
             awsNetworkApi.addInterestedMedicine(addInterestedMedicineParameter).onResponse()
                 .fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) }).also {

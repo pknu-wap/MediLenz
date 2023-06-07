@@ -1,8 +1,8 @@
 package com.android.mediproject.core.domain
 
 import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepository
-import com.android.mediproject.core.model.medicine.interestedMedicine.IsInterestedMedicineResponse
-import com.android.mediproject.core.model.medicine.interestedMedicine.toInterestedMedicineDto
+import com.android.mediproject.core.model.interestedmedicine.IsInterestedMedicineResponse
+import com.android.mediproject.core.model.interestedmedicine.toInterestedMedicineDto
 import com.android.mediproject.core.model.requestparameters.AddInterestedMedicineParameter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow

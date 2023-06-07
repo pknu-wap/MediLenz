@@ -6,11 +6,11 @@ import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
+import com.android.mediproject.core.model.interestedmedicine.DeleteInterestedMedicineResponse
+import com.android.mediproject.core.model.interestedmedicine.InterestedMedicineListResponse
+import com.android.mediproject.core.model.interestedmedicine.IsInterestedMedicineResponse
+import com.android.mediproject.core.model.interestedmedicine.NewInterestedMedicineResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
-import com.android.mediproject.core.model.medicine.interestedMedicine.AddInterestedMedicineResponse
-import com.android.mediproject.core.model.medicine.interestedMedicine.DeleteInterestedMedicineResponse
-import com.android.mediproject.core.model.medicine.interestedMedicine.InterestedMedicineListResponse
-import com.android.mediproject.core.model.medicine.interestedMedicine.IsInterestedMedicineResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
@@ -244,7 +244,7 @@ interface AwsNetworkApi {
     @POST(value = "medicine/favorite")
     suspend fun addInterestedMedicine(
         @Body addInterestedMedicineParameter: AddInterestedMedicineParameter
-    ): Response<AddInterestedMedicineResponse>
+    ): Response<NewInterestedMedicineResponse>
 
     /**
      * 관심 약 삭제

@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.medicine.interestedMedicine
+package com.android.mediproject.core.model.interestedmedicine
 
 
 import kotlinx.serialization.SerialName
