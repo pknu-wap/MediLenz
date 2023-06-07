@@ -45,8 +45,6 @@ class UserUseCase @Inject constructor(
             this.email = email
         }).map {
             it.fold(onSuccess = {
-                appDataStore.clearMyAccountInfo()
-                signRepository.signOut()
                 Result.success(it)
             }, onFailure = { Result.failure(it) })
         }.collectLatest { trySend(it) }
@@ -56,7 +54,11 @@ class UserUseCase @Inject constructor(
         Log.d("wap", "UserUseCase : withdrawal()")
         userRepository.withdrawal().map {
             Log.d("wap", "UserUseCase : withdrawal()" + it.toString())
-            it.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
+            it.fold(onSuccess = {
+                signRepository.signOut()
+                appDataStore.clearMyAccountInfo()
+                Result.success(it)
+            }, onFailure = { Result.failure(it) })
         }.collectLatest { trySend(it) }
     }
 }
