@@ -3,6 +3,9 @@ package com.android.mediproject.feature.mypage.mypagemore
 import MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import asEventFlow
+import com.android.mediproject.core.common.CHANGE_NICKNAME
+import com.android.mediproject.core.common.CHANGE_PASSWORD
+import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,12 +15,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageMoreBottomSheetViewModel @Inject constructor() : BaseViewModel() {
-
-    companion object{
-        const val CHANGE_NICKNAME = 301
-        const val CHANGE_PASSWORD = 302
-        const val WITHDRAWAL = 303
-    }
 
     private val _eventFlow = MutableEventFlow<MyPageMoreBottomSheetEvent>()
     val eventFlow = _eventFlow.asEventFlow()

@@ -12,6 +12,9 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.mediproject.core.common.CHANGE_NICKNAME
+import com.android.mediproject.core.common.CHANGE_PASSWORD
+import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
@@ -20,9 +23,6 @@ import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFragment
-import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_NICKNAME
-import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_PASSWORD
-import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.WITHDRAWAL
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
@@ -87,7 +87,13 @@ class MyPageFragment :
         )
     }
 
-    private fun setFragmentResultListner() =
+    private fun setRecyclerView() = binding.myCommentsListRV.apply {
+        adapter = myCommentListAdapter
+        layoutManager = LinearLayoutManager(requireActivity())
+        addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
+    }
+
+    private fun setFragmentResultListner() {
         parentFragmentManager.setFragmentResultListener(
             MyPageMoreBottomSheetFragment.TAG,
             viewLifecycleOwner
@@ -98,14 +104,20 @@ class MyPageFragment :
             myPageMoreBottomSheet = null
         }
 
-    private fun setRecyclerView() = binding.myCommentsListRV.apply {
-        adapter = myCommentListAdapter
-        layoutManager = LinearLayoutManager(requireActivity())
-        addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
+        //다이얼로그
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            MyPageMoreDialogFragment.TAG,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val flag = bundle.getInt(MyPageMoreDialogFragment.TAG)
+            handleDialogFlag(flag)
+        }
     }
 
     //가장 처음 토큰 값을 식별하는 함수입니다.
     private fun handleToken(tokenState: TokenState<CurrentTokenDto>) {
+        log(tokenState.toString())
+
         when (tokenState) {
             is TokenState.Empty -> fragmentViewModel.setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
             is TokenState.AccessExpiration -> {}
@@ -116,9 +128,10 @@ class MyPageFragment :
 
     private fun handleLoginMode(loginMode: MyPageViewModel.LoginMode) {
         when (loginMode) {
-            MyPageViewModel.LoginMode.GUEST_MODE -> guestCommentList()
+            MyPageViewModel.LoginMode.GUEST_MODE -> guestModeScreen()
             MyPageViewModel.LoginMode.LOGIN_MODE -> {
-                fragmentViewModel.apply{
+                log("MyPageFragment : 로그인 모드")
+                fragmentViewModel.apply {
                     loadUser()
                     loadComments()
                 }
@@ -149,8 +162,29 @@ class MyPageFragment :
                 requireActivity().supportFragmentManager,
                 MyPageMoreDialogFragment.TAG
             )
+        }
+    }
 
-            else -> Unit
+    //다이얼로그로 돌아왔을 때 실행되는 함수입니다.
+    private fun handleDialogFlag(dialogFlag: Int) {
+        when (dialogFlag) {
+            CHANGE_NICKNAME -> {
+                log("MyPageDialog Callback : changeNickname() ")
+                fragmentViewModel.loadUser()
+            }
+
+            CHANGE_PASSWORD -> {
+                log("MyPageDialog Callback : changePassword() ")
+            }
+
+            WITHDRAWAL -> {
+                log("MyPageDialog Callback : withdrawal() ")
+                fragmentViewModel.apply {
+                    signOut()
+                    setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
+                }
+            }
+
         }
     }
 
@@ -201,7 +235,7 @@ class MyPageFragment :
     }
 
     //비로그인 상태일 시 보여주는 화면
-    private fun guestCommentList() = binding.apply {
+    private fun guestModeScreen() = binding.apply {
         guestModeCL.visibility = View.VISIBLE
         loginModeCL.visibility = View.GONE
 

@@ -9,11 +9,17 @@ import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
+import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
+import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
+import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
+import com.android.mediproject.core.model.user.remote.WithdrawalResponse
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
 import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
@@ -22,6 +28,8 @@ import com.android.mediproject.core.network.datasource.medicineid.MedicineIdData
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
+import com.android.mediproject.core.network.datasource.user.UserDataSource
+import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -54,7 +62,7 @@ object AwsNetwork {
         @Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi
     ): InterestedMedicineDataSource = InterestedMedicineDataSourceImpl(awsNetworkApi)
 
-    @Provides()
+    @Provides
     @Named("awsNetworkApiWithAccessTokens")
     @Singleton
     fun providesAwsNetworkApi(
@@ -89,6 +97,10 @@ object AwsNetwork {
     fun providesGetMedicineIdDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): MedicineIdDataSource =
         MedicineIdDataSourceImpl(awsNetworkApi)
 
+    @Provides
+    @Singleton
+    fun providesUserDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): UserDataSource =
+        UserDataSourceImpl(awsNetworkApi)
 }
 
 interface AwsNetworkApi {
@@ -150,6 +162,28 @@ interface AwsNetworkApi {
     suspend fun applyNewComment(
         @Body newCommentParameter: NewCommentParameter
     ): Response<CommentChangedResponse>
+
+    /**
+     * 닉네임 변경
+     */
+    @PATCH(value = "user")
+    suspend fun changeNickname(
+        @Body changeNicknameParameter: ChangeNicknameParameter
+    ): Response<ChangeNicknameResponse>
+
+    /**
+     * 비밀번호 변경
+     */
+    @PATCH(value = "user")
+    suspend fun changePassword(
+        @Body changePasswordRequestParameter: ChangePasswordRequestParameter
+    ): Response<ChangePasswordResponse>
+
+    /**
+     * 회원탈퇴
+     */
+    @DELETE(value = "user")
+    suspend fun withdrawal(): Response<WithdrawalResponse>
 
     /**
      * 약 ID 조회

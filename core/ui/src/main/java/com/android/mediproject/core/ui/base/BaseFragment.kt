@@ -32,7 +32,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(private val 
     }
 
 
-    fun log(str: String) = Log.e("wap", str) //for test
+    fun log(str: String) = Log.d("wap", str) //for test
 
     fun toast(str: String) = Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
 }

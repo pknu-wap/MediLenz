@@ -1,5 +1,6 @@
 package com.android.mediproject.core.model.user.remote
 
+import com.android.mediproject.core.model.awscommon.BaseAwsQueryResponse
 import com.android.mediproject.core.model.user.UserDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -22,6 +23,6 @@ data class UserResponse(
     val email: String,
     @SerialName("created_at")
     val createdAt: String
-)
+) : BaseAwsQueryResponse()
 
 fun UserResponse.toUserDto() = UserDto(nickName = nickName)
