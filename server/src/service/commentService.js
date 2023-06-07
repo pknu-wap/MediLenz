@@ -11,12 +11,13 @@ const _getLikeList = async (commentId) => { //NOT FOR EXPORT
                 COMMENTID: commentId
             }
         });
-        _likeList = [];
+        let _likeList = [];
         for (let i in likeList) {
             _likeList.push(likeList[i].dataValues);
         }
         return _likeList;
     } catch (err) {
+        console.log(err);
         return [];
     }
 }
