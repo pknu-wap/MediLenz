@@ -36,6 +36,9 @@ class RecentSearchListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initHeader()
+
+        binding.viewModel = fragmentViewModel
+
         fragmentViewModel.createNoHistoryText(requireContext())
 
         viewLifecycleOwner.repeatOnStarted {
@@ -66,8 +69,8 @@ class RecentSearchListFragment :
             val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
             this.searchHistoryList.addView(ButtonChip<String>(requireContext()).apply {
                 layoutParams = FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-                        setMargins(horizontalSpace, 0, horizontalSpace, 0)
-                    }
+                    setMargins(horizontalSpace, 0, horizontalSpace, 0)
+                }
                 data = searchHistoryItemDto.query
                 setChipText(data.toString())
                 setOnChipClickListener {

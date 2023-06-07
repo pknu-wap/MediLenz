@@ -7,6 +7,7 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import androidx.core.content.ContextCompat
+import androidx.core.text.toSpanned
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -42,7 +43,7 @@ class RecentSearchListViewModel @Inject constructor(
                     Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                 setSpan(UnderlineSpan(), 7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
-            _noHistoryText.value = span
+            _noHistoryText.value = span.toSpanned()
         }
     }
 

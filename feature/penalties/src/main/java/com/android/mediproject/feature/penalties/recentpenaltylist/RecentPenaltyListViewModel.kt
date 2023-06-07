@@ -35,7 +35,7 @@ class RecentPenaltyListViewModel @Inject constructor(
 
     fun createNoHistoryText(context: Context) {
         viewModelScope.launch(defaultDispatcher) {
-            val text = context.getString(R.string.failedLoading)
+            val text = context.getString(com.android.mediproject.feature.penalties.R.string.failedLoading)
             val firstIdx = text.indexOf("데이터")
             val span = SpannableStringBuilder(text).apply {
                 setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.main)),
