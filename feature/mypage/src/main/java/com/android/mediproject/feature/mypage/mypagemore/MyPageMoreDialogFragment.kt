@@ -19,7 +19,6 @@ import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.CHANGE_NICKNAME
 import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.dialogResize
-import com.android.mediproject.core.ui.base.view.Subtitle.Companion.NORMAL
 import com.android.mediproject.core.ui.base.view.Subtitle.Companion.PASSWORD
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
@@ -116,10 +115,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             //닉네임 변경 다이얼로그
             is DialogFlag.ChangeNickName -> {
                 binding.apply {
-                    myPageDialogCompleteTV.apply {
-                        isEnabled = false
-                        alpha = 0.5.toFloat()
-                    }
+                    completeButtonDisEnabled()
                     dialogTitleTV.text = getString(R.string.changeNickName)
                     dialogSubtitle1.apply {
                         setTitle(getString(com.android.mediproject.core.ui.R.string.nickName))
@@ -142,17 +138,8 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                             }
 
                             override fun afterTextChanged(s: Editable?) {
-                                if (s.toString().length != 0) {
-                                    myPageDialogCompleteTV.apply {
-                                        isEnabled = true
-                                        alpha = 1.toFloat()
-                                    }
-                                } else {
-                                    myPageDialogCompleteTV.apply {
-                                        isEnabled = false
-                                        alpha = 0.5.toFloat()
-                                    }
-                                }
+                                if (s.toString().length != 0) completeButtonEnabled()
+                                else completeButtonDisEnabled()
                             }
                         })
                     }
@@ -162,10 +149,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             //비밀번호 변경 다이얼로그
             is DialogFlag.ChangePassword -> {
                 binding.apply {
-                    myPageDialogCompleteTV.apply {
-                        isEnabled = false
-                        alpha = 0.5.toFloat()
-                    }
+                    completeButtonDisEnabled()
                     dialogTitleTV.text = getString(R.string.changePassword)
                     dialogSubtitle1.apply {
                         setTitle(getString(com.android.mediproject.core.ui.R.string.password))
@@ -191,18 +175,10 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                                 count: Int
                             ) {
                             }
+
                             override fun afterTextChanged(s: Editable?) {
-                                if (s.toString().length != 0 && (s.toString() == dialogSubtitle1.getValue())) {
-                                    myPageDialogCompleteTV.apply {
-                                        isEnabled = true
-                                        alpha = 1.toFloat()
-                                    }
-                                } else {
-                                    myPageDialogCompleteTV.apply {
-                                        isEnabled = false
-                                        alpha = 0.5.toFloat()
-                                    }
-                                }
+                                if (s.toString().length != 0 && (s.toString() == dialogSubtitle1.getValue())) completeButtonEnabled()
+                                else completeButtonDisEnabled()
                             }
                         })
                     }
@@ -229,10 +205,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
                             )
                         }
-                    myPageDialogCompleteTV.apply {
-                        isEnabled = false
-                        alpha = 0.5.toFloat()
-                    }
+                    completeButtonDisEnabled()
                     dialogTitleTV.text = getString(R.string.withdrawal)
                     dialogSubtitle1.apply {
                         title.text = span
@@ -256,17 +229,8 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                             }
 
                             override fun afterTextChanged(s: Editable?) {
-                                if (s.toString() == "회원탈퇴") {
-                                    myPageDialogCompleteTV.apply {
-                                        isEnabled = true
-                                        alpha = 1.toFloat()
-                                    }
-                                } else {
-                                    myPageDialogCompleteTV.apply {
-                                        isEnabled = false
-                                        alpha = 0.5.toFloat()
-                                    }
-                                }
+                                if (s.toString() == "회원탈퇴") completeButtonEnabled()
+                                else completeButtonDisEnabled()
                             }
                         })
                     }
@@ -274,6 +238,18 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             }
         }
     }
+
+    private fun completeButtonDisEnabled() =
+        binding.myPageDialogCompleteTV.apply {
+            isEnabled = false
+            alpha = 0.5.toFloat()
+        }
+
+    private fun completeButtonEnabled() =
+        binding.myPageDialogCompleteTV.apply {
+            isEnabled = true
+            alpha = 1.toFloat()
+        }
 
     override fun onDestroyView() {
         super.onDestroyView()
