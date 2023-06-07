@@ -3,6 +3,7 @@ package com.android.mediproject.core.network.datasource.comments
 import androidx.paging.PagingData
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.comments.LikeResponse
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
@@ -14,7 +15,8 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class CommentsDataSourceImpl @Inject constructor(
-    private val awsNetworkApi: AwsNetworkApi) : CommentsDataSource {
+    private val awsNetworkApi: AwsNetworkApi
+) : CommentsDataSource {
 
     /**
      * 약품에 대한 댓글 리스트를 가져온다.
@@ -57,8 +59,11 @@ class CommentsDataSourceImpl @Inject constructor(
         }).also { emit(it) }
     }
 
-    override fun likeComment(parameter: LikeCommentParameter): Flow<Result<CommentChangedResponse>> = flow {
-        awsNetworkApi.likeComment(parameter).onResponse().fold(onSuccess = { response ->
+    override fun likeComment(parameter: LikeCommentParameter): Flow<Result<LikeResponse>> = flow {
+        parameter.let {
+            if (it.toLike) awsNetworkApi.likeComment(parameter.medicineId, parameter.commentId)
+            else awsNetworkApi.unlikeComment(parameter.medicineId, parameter.commentId)
+        }.onResponse().fold(onSuccess = { response ->
             Result.success(response)
         }, onFailure = {
             Result.failure(it)

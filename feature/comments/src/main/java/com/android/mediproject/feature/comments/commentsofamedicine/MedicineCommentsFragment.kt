@@ -3,8 +3,10 @@ package com.android.mediproject.feature.comments.commentsofamedicine
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.core.text.HtmlCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +18,6 @@ import com.android.mediproject.feature.comments.R
 import com.android.mediproject.feature.comments.databinding.FragmentMedicineCommentsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import repeatOnStarted
 
@@ -33,6 +34,7 @@ class MedicineCommentsFragment :
 
         binding.apply {
             viewModel = fragmentViewModel
+            replyHeader.isVisible = false
 
             val adapter = CommentsAdapter().apply {
                 setOnStateChangedListener(pagingListView.messageTextView,
@@ -70,7 +72,10 @@ class MedicineCommentsFragment :
                             }
 
                             is CommentActionState.CLICKED_REPLY -> {
-                                adapter.notifyItemChanged(action.position)
+                                val text =
+                                    HtmlCompat.fromHtml(getString(R.string.replyHeader) + action.comment, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                                replayInfoHeader.text = text
+                                replyHeader.isVisible = true
                             }
 
                             is CommentActionState.CLICKED_EDIT_COMMENT -> {
@@ -94,7 +99,10 @@ class MedicineCommentsFragment :
                             }
 
                             is CommentActionState.COMPLETED_APPLY_COMMENT_REPLY -> {
+                                replayInfoHeader.isVisible = false
                                 action.result.fold(onSuccess = {
+                                    replyHeader.isVisible = false
+                                    toast(getString(R.string.appliedComment))
                                     adapter.refresh()
                                 }, onFailure = {
                                     toast(it.message.toString())
@@ -104,6 +112,7 @@ class MedicineCommentsFragment :
                             is CommentActionState.COMPLETED_APPLY_EDITED_COMMENT -> {
                                 action.result.fold(onSuccess = {
                                     adapter.refresh()
+                                    toast(getString(R.string.appliedEditComment))
                                 }, onFailure = {
                                     toast(it.message.toString())
                                 })
@@ -112,20 +121,24 @@ class MedicineCommentsFragment :
                             is CommentActionState.COMPLETED_DELETE_COMMENT -> {
                                 action.result.fold(onSuccess = {
                                     adapter.refresh()
+                                    toast(getString(R.string.deletedComment))
                                 }, onFailure = {
                                     toast(it.message.toString())
                                 })
                             }
 
-
                             is CommentActionState.NONE -> {
+                            }
+
+                            is CommentActionState.CANCELED_REPLY -> {
+                                replyHeader.isVisible = false
                             }
                         }
                     }
                 }
 
                 launch {
-                    fragmentViewModel.comments.collectLatest {
+                    fragmentViewModel.comments.collect {
                         adapter.submitData(it)
                     }
                 }

@@ -32,14 +32,16 @@ data class CommentDto(
     val content: String,
     val createdAt: String,
     val updatedAt: String,
-    var onClickReply: ((Int) -> Unit)?,
-    var onClickLike: ((Long) -> Unit)?,
+    var onClickReply: ((String, Long) -> Unit)?,
+    var onClickLike: ((Long, Boolean) -> Unit)?,
     var onClickDelete: ((Long) -> Unit)?,
     var onClickEdit: ((CommentDto, Int) -> Unit)?,
     var onClickApplyEdited: ((CommentDto) -> Unit)?,
-    var isMine: Boolean = false) {
+    var isMine: Boolean = false
+) {
 
     var isEditing: Boolean = false
+    var isLiked: Boolean = false
 }
 
 

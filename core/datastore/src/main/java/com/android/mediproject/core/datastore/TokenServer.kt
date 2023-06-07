@@ -19,7 +19,7 @@ class TokenServerImpl @Inject constructor() : TokenServer {
      */
     override val currentTokens: EndpointTokenState
         get() {
-            val token = tokens.replayCache.firstOrNull()
+            val token = tokens.replayCache.lastOrNull()
             return if (token == null) {
                 EndpointTokenState.NoToken
             } else {

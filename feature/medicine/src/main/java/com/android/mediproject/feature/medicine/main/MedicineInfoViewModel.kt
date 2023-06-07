@@ -6,6 +6,7 @@ import asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.domain.CommentsUseCase
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
@@ -20,6 +21,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,7 +30,18 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicineInfoViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher) : BaseViewModel() {
+    private val commentsUseCase: CommentsUseCase,
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
+) : BaseViewModel() {
+
+    init {
+        viewModelScope.launch {
+            // 댓글 업데이트 시 스크롤을 맨 아래로 내립니다.
+            commentsUseCase.scrollChannel.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Eagerly, replay = 0).collect {
+                _eventState.emit(EventState.ScrollToBottom)
+            }
+        }
+    }
 
     private val _eventState = MutableEventFlow<EventState>(replay = 1)
     val eventState get() = _eventState.asEventFlow()

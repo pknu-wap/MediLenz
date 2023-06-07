@@ -3,6 +3,7 @@ package com.android.mediproject.core.network.datasource.comments
 import androidx.paging.PagingData
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.comments.LikeResponse
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
@@ -20,5 +21,5 @@ interface CommentsDataSource {
     fun applyNewComment(parameter: NewCommentParameter): Flow<Result<CommentChangedResponse>>
     fun deleteComment(parameter: DeleteCommentParameter): Flow<Result<CommentChangedResponse>>
 
-    fun likeComment(likeCommentParameter: LikeCommentParameter): Flow<Result<CommentChangedResponse>>
+    fun likeComment(likeCommentParameter: LikeCommentParameter): Flow<Result<LikeResponse>>
 }

@@ -5,6 +5,7 @@ import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.comments.LikeResponse
 import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineListResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
@@ -15,7 +16,6 @@ import com.android.mediproject.core.model.requestparameters.ChangePasswordReques
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
-import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
 import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
@@ -164,12 +164,22 @@ interface AwsNetworkApi {
     ): Response<CommentChangedResponse>
 
     /**
-     * 댓글 좋아요
+     * 댓글 좋아요 추가
      */
-    @POST(value = "medicine/comment")
+    @POST(value = "medicine/comment/{medicineId}/like/{commentId}")
     suspend fun likeComment(
-        @Body likeCommentParameter: LikeCommentParameter
-    ): Response<CommentChangedResponse>
+        @Path("medicineId", encoded = true) medicineId: Long,
+        @Path("commentId", encoded = true) commentId: Long,
+    ): Response<LikeResponse>
+
+    /**
+     * 댓글 좋아요 해제
+     */
+    @DELETE(value = "medicine/comment/{medicineId}/like/{commentId}")
+    suspend fun unlikeComment(
+        @Path("medicineId", encoded = true) medicineId: Long,
+        @Path("commentId", encoded = true) commentId: Long,
+    ): Response<LikeResponse>
 
     /**
      * 댓글 등록

@@ -16,7 +16,6 @@ class UserInfoRepositoryImpl @Inject constructor(
     private val userInfoDataSource: UserInfoDataSource, private val appDataStore: AppDataStore
 ) : UserInfoRepository {
 
-
     private val _myAccountInfo = MutableStateFlow<AccountState>(AccountState.Unknown)
 
     override val myAccountInfo get() = _myAccountInfo as StateFlow<AccountState>
