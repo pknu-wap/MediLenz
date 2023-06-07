@@ -6,8 +6,11 @@ const responseMsg = require("../config/responseMsg");
 const { createAccessToken, createRefreshToken } = require("../config/jwt");
 
 // sign-in response format
-const tokenResponseFormat = (message, access_token = null, refresh_token = null) => {
+const tokenResponseFormat = (message, userId = null, nickname = null, email = null, access_token = null, refresh_token = null) => {
     return {
+        userId,
+        nickname,
+        email,
         message,
         access_token,
         refresh_token
@@ -28,24 +31,24 @@ const _getUserNickname = async (userId) => { //NOT FOR EXPORT
 }
 // sign-in
 const login = async (email, password) => {
-    const userInfo = await User.findOne({
-        attributes: ["ID", "PASSWORD"],
+    const user = await User.findOne({
+        attributes: ["ID", "PASSWORD", "NICKNAME", "EMAIL"],
         where: {
             EMAIL: email
         }
     });
-    if (!userInfo) { // if user not exists
+    if (!user) { // if user not exists
         return responseFormat(404, tokenResponseFormat(responseMsg.SIGNIN_USER_NOT_FOUND));
     }
-    if (password != userInfo.PASSWORD) { // password mismatch
+    if (password != user.PASSWORD) { // password mismatch
         return responseFormat(401, tokenResponseFormat(responseMsg.SIGNIN_PASSWORD_MISMATCH));
     }
 
     const message = responseMsg.SIGNIN_SUCCESS; // generate response message
-    const accessToken = createAccessToken(userInfo.ID); // generate access token
-    const refreshToken = createRefreshToken(userInfo.ID); // generate refresh token
+    const accessToken = createAccessToken(user.ID); // generate access token
+    const refreshToken = createRefreshToken(user.ID); // generate refresh token
 
-    return responseFormat(200, tokenResponseFormat(message, accessToken, refreshToken));
+    return responseFormat(200, tokenResponseFormat(message, user.ID, user.NICKNAME, user.EMAIL, accessToken, refreshToken));
 }
 
 // duplicate check
@@ -102,7 +105,7 @@ const createUser = async (email, password, nickname) => {
         const accessToken = createAccessToken(user.ID); // generate access token
         const refreshToken = createRefreshToken(user.ID); // generate refresh token
 
-        return responseFormat(201, tokenResponseFormat(message, accessToken, refreshToken));
+        return responseFormat(201, tokenResponseFormat(message, user.ID, user.NICKNAME, user.EMAIL, accessToken, refreshToken));
 
     }
     catch (err) {
