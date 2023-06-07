@@ -30,19 +30,15 @@ private const val DOT_CHAR = "• "
  */
 @SuppressLint("ResourceType")
 class HeaderForElementsView constructor(
-    context: Context, attrs: AttributeSet
-) : ConstraintLayout(context, attrs), OnIndicatorVisibilityChangedListener {
+    context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs), OnIndicatorVisibilityChangedListener {
     private val expandBtnView: ImageView
     private val moreBtnView: TextView
     private val titleView: TextView
     private var expanded = true
         set(value) {
             field = value
-            expandBtnView.setImageDrawable(
-                AppCompatResources.getDrawable(
-                    context, if (value) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24
-                )
-            )
+            expandBtnView.setImageDrawable(AppCompatResources.getDrawable(context,
+                if (value) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24))
 
             takeIf { targetViewId != -1 }?.let {
                 (parent.parent as View).findViewById<View>(targetViewId)?.apply {
@@ -258,23 +254,26 @@ fun interface OnIndicatorVisibilityChangedListener {
 
 
 suspend inline fun <reified T> Flow<UiState<T>>.stateAsCollect(
-    headerForElementsView: HeaderForElementsView,
-): Flow<UiState<T>> = flatMapLatest {
+    headerForElementsView: HeaderForElementsView, noDataWarningView: View?): Flow<UiState<T>> = flatMapLatest {
     when (it) {
         is UiState.Error -> {
             headerForElementsView.onIndicatorVisibilityChanged(false)
+            noDataWarningView?.isVisible = true
         }
 
         is UiState.Loading -> {
             headerForElementsView.onIndicatorVisibilityChanged(true)
+            noDataWarningView?.isVisible = false
         }
 
         is UiState.Success -> {
             headerForElementsView.onIndicatorVisibilityChanged(false)
+            noDataWarningView?.isVisible = true
         }
 
         is UiState.Initial -> {
             headerForElementsView.onIndicatorVisibilityChanged(true)
+            noDataWarningView?.isVisible = false
         }
     }
     flowOf(it)

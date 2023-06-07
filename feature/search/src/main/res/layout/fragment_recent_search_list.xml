@@ -1,36 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListViewModel" />
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <com.android.mediproject.core.ui.base.view.HeaderForElementsView
             android:id="@+id/headerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
             app:header_title="@string/recentSearch"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visibility_target_view="@id/searchHistoryList"
-            android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
             app:more_title="@string/read_more"
-            />
+            app:visibility_target_view="@id/searchHistoryList" />
 
         <com.google.android.flexbox.FlexboxLayout
-            app:layout_constraintTop_toBottomOf="@id/headerView"
-            android:layout_marginTop="@dimen/spacing_betweens_header_and_elements"
+            android:id="@+id/searchHistoryList"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_betweens_header_and_elements"
+            app:alignContent="flex_start"
+            app:alignItems="flex_start"
             app:flexWrap="wrap"
             app:justifyContent="flex_start"
-            app:alignItems="flex_start"
-            app:alignContent="flex_start"
+            app:layout_constraintTop_toBottomOf="@id/headerView" />
+
+        <TextView
+            android:id="@+id/noHistoryTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/searchHistoryList"
-            />
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            android:bufferType="spannable"
+            android:text="@{viewModel.noHistoryText}"
+            android:textColor="@color/gray2"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/headerView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

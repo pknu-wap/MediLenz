@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="penaltyList">행정 처분 목록</string>
+    <string name="failedLoading">식약처로 부터 데이터를 불러오는데 실패했습니다.</string>
 </resources>

@@ -25,9 +25,7 @@ import repeatOnStarted
  */
 @AndroidEntryPoint
 class RecentSearchListFragment :
-    BaseFragment<FragmentRecentSearchListBinding, RecentSearchListViewModel>(
-        FragmentRecentSearchListBinding::inflate
-    ) {
+    BaseFragment<FragmentRecentSearchListBinding, RecentSearchListViewModel>(FragmentRecentSearchListBinding::inflate) {
 
     enum class ResultKey {
         RESULT_KEY, WORD
@@ -38,10 +36,11 @@ class RecentSearchListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initHeader()
+        fragmentViewModel.createNoHistoryText(requireContext())
 
         viewLifecycleOwner.repeatOnStarted {
             // 최근 검색 목록을 가져옵니다.
-            fragmentViewModel.searchHistoryList().stateAsCollect(binding.headerView).collectLatest {
+            fragmentViewModel.searchHistoryList().stateAsCollect(binding.headerView, binding.noHistoryTextView).collectLatest {
                 when (it) {
                     is UiState.Success -> {
                         // 리스트를 비웁니다.
@@ -64,14 +63,11 @@ class RecentSearchListFragment :
      */
     private fun addHistoryItemChips(searchHistoryItemDto: SearchHistoryItemDto) {
         binding.apply {
-            val horizontalSpace =
-                resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
+            val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
             this.searchHistoryList.addView(ButtonChip<String>(requireContext()).apply {
-                layoutParams =
-                    FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-                        .apply {
-                            setMargins(horizontalSpace, 0, horizontalSpace, 0)
-                        }
+                layoutParams = FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                        setMargins(horizontalSpace, 0, horizontalSpace, 0)
+                    }
                 data = searchHistoryItemDto.query
                 setChipText(data.toString())
                 setOnChipClickListener {

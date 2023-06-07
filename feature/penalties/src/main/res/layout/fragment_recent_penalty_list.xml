@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <com.android.mediproject.core.ui.base.view.HeaderForElementsView
             android:id="@+id/headerView"
@@ -16,8 +22,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:more_title="@string/read_more"
-            app:visibility_target_view="@id/penaltyList"
-            />
+            app:visibility_target_view="@id/penaltyList" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/penaltyList"
@@ -26,8 +31,20 @@
             android:layout_marginTop="@dimen/spacing_betweens_header_and_elements"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/headerView"
-            />
+            app:layout_constraintTop_toBottomOf="@id/headerView" />
+
+        <TextView
+            android:id="@+id/noHistoryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            android:bufferType="spannable"
+            android:text="@{viewModel.noHistoryText}"
+            android:textColor="@color/gray2"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/headerView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -31,7 +31,7 @@ class SignDataSourceImpl @Inject constructor(
      */
     override fun signIn(signInParameter: SignInParameter): Flow<Result<SignInResponse>> = channelFlow {
         val email = WeakReference(signInParameter.email.joinToString("")).get()!!
-        val password = WeakReference(signInParameter.password.joinToString("")).get()!!
+        val password = WeakReference(signInParameter.password.hashCode().toString()).get()!!
 
         awsNetworkApi.signIn(SignInRequestParameter(email, password)).onResponseWithTokens(RequestBehavior.NewTokens).fold(onSuccess = {
             Result.success(it)
