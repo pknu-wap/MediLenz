@@ -1,9 +1,11 @@
 package com.android.mediproject.core.domain.user
 
 import android.util.Log
+import com.android.mediproject.core.data.remote.sign.SignRepository
 import com.android.mediproject.core.data.remote.user.UserInfoRepository
 import com.android.mediproject.core.data.remote.user.UserRepository
 import com.android.mediproject.core.datastore.AppDataStore
+import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
 import com.android.mediproject.core.model.user.AccountState
@@ -18,7 +20,8 @@ import javax.inject.Inject
 class UserUseCase @Inject constructor(
     private val appDataStore: AppDataStore,
     private val userRepository: UserRepository,
-    private val getUserInfoRepository: UserInfoRepository
+    private val getUserInfoRepository: UserInfoRepository,
+    private val signRepository: SignRepository
 ) {
     suspend operator fun invoke(): Flow<UserDto> = channelFlow {
         appDataStore.nickName.collect { nickName ->
@@ -43,6 +46,7 @@ class UserUseCase @Inject constructor(
         }).map {
             it.fold(onSuccess = {
                 appDataStore.clearMyAccountInfo()
+                signRepository.signOut()
                 Result.success(it)
             }, onFailure = { Result.failure(it) })
         }.collectLatest { trySend(it) }
