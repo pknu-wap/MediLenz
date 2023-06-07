@@ -116,11 +116,45 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             //닉네임 변경 다이얼로그
             is DialogFlag.ChangeNickName -> {
                 binding.apply {
+                    myPageDialogCompleteTV.apply {
+                        isEnabled = false
+                        alpha = 0.5.toFloat()
+                    }
                     dialogTitleTV.text = getString(R.string.changeNickName)
                     dialogSubtitle1.apply {
                         setTitle(getString(com.android.mediproject.core.ui.R.string.nickName))
                         setHint(getString(com.android.mediproject.core.ui.R.string.nickNameHint))
-                        setDataType(NORMAL)
+                        inputData.addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
+                            }
+
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                            }
+
+                            override fun afterTextChanged(s: Editable?) {
+                                if (s.toString().length != 0) {
+                                    myPageDialogCompleteTV.apply {
+                                        isEnabled = true
+                                        alpha = 1.toFloat()
+                                    }
+                                } else {
+                                    myPageDialogCompleteTV.apply {
+                                        isEnabled = false
+                                        alpha = 0.5.toFloat()
+                                    }
+                                }
+                            }
+                        })
                     }
                 }
             }
@@ -128,6 +162,10 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             //비밀번호 변경 다이얼로그
             is DialogFlag.ChangePassword -> {
                 binding.apply {
+                    myPageDialogCompleteTV.apply {
+                        isEnabled = false
+                        alpha = 0.5.toFloat()
+                    }
                     dialogTitleTV.text = getString(R.string.changePassword)
                     dialogSubtitle1.apply {
                         setTitle(getString(com.android.mediproject.core.ui.R.string.password))
@@ -137,6 +175,36 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                     dialogSubtitle2.apply {
                         setDataType(PASSWORD)
                         visibility = View.VISIBLE
+                        inputData.addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
+                            }
+
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                            }
+                            override fun afterTextChanged(s: Editable?) {
+                                if (s.toString().length != 0 && (s.toString() == dialogSubtitle1.getValue())) {
+                                    myPageDialogCompleteTV.apply {
+                                        isEnabled = true
+                                        alpha = 1.toFloat()
+                                    }
+                                } else {
+                                    myPageDialogCompleteTV.apply {
+                                        isEnabled = false
+                                        alpha = 0.5.toFloat()
+                                    }
+                                }
+                            }
+                        })
                     }
                 }
             }
