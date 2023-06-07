@@ -181,7 +181,7 @@ class MyPageFragment :
                 log("MyPageDialog Callback : withdrawal() ")
                 fragmentViewModel.apply {
                     signOut()
-                    loadTokens()
+                    setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
                 }
             }
 

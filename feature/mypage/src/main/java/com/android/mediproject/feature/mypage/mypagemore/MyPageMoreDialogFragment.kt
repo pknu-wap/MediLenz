@@ -1,11 +1,12 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
 import android.os.Bundle
+import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,6 @@ import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.CHANGE_NICKNAME
 import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.dialogResize
-import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.ui.base.view.Subtitle.Companion.NORMAL
 import com.android.mediproject.core.ui.base.view.Subtitle.Companion.PASSWORD
 import com.android.mediproject.feature.mypage.R
@@ -67,7 +67,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { dialogFlag.collect { handleFlag(it) } }
+                    repeatOnStarted { dialogFlag.collect { handleDialogFlag(it) } }
                 }
                 setDialogFlag(flag)
             }
@@ -96,7 +96,13 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                     }
                 }
             }
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> Toast.makeText(
+                requireContext(),
+                event.message,
+                Toast.LENGTH_SHORT
+            ).show()
+
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> dismiss()
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.WithdrawalComplete -> setFragmentResult(
                 TAG,
@@ -105,7 +111,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         }
     }
 
-    private fun handleFlag(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
+    private fun handleDialogFlag(dialogFlag: DialogFlag) {
         when (dialogFlag) {
             //닉네임 변경 다이얼로그
             is DialogFlag.ChangeNickName -> {
@@ -155,12 +161,46 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
                             )
                         }
-
+                    myPageDialogCompleteTV.apply {
+                        isEnabled = false
+                        alpha = 0.5.toFloat()
+                    }
                     dialogTitleTV.text = getString(R.string.withdrawal)
-                    dialogSubtitle1.apply{
+                    dialogSubtitle1.apply {
                         title.text = span
                         setHint(getString(R.string.withdrawalHint))
-                        dialogSubtitle1.setTitleStyleNormal()
+                        setTitleStyleNormal()
+                        inputData.addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
+                            }
+
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                            }
+
+                            override fun afterTextChanged(s: Editable?) {
+                                if (s.toString() == "회원탈퇴") {
+                                    myPageDialogCompleteTV.apply {
+                                        isEnabled = true
+                                        alpha = 1.toFloat()
+                                    }
+                                } else {
+                                    myPageDialogCompleteTV.apply {
+                                        isEnabled = false
+                                        alpha = 0.5.toFloat()
+                                    }
+                                }
+                            }
+                        })
                     }
                 }
             }
