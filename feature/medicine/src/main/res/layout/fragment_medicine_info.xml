@@ -63,6 +63,8 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:message="@{@string/emptyImage}"
+                        app:messageView="@{emptyImageTextView}"
                         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize.20DP" />
 
                     <TextView
@@ -79,43 +81,50 @@
                     <TextView
                         android:id="@+id/medicineKorName"
                         style="@style/TextAppearance.Material3.LabelLarge"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        android:maxLines="1"
                         android:text="@{medicineInfoArgs.itemKorName}"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toTopOf="@id/medicineEngName"
                         app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/interestBtn"
                         app:layout_constraintTop_toBottomOf="@id/medicineImageView"
                         app:layout_constraintVertical_chainStyle="packed" />
 
                     <TextView
                         android:id="@+id/medicineEngName"
                         style="@style/TextAppearance.Material3.LabelMedium"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
+                        android:maxLines="1"
                         android:text="@{medicineInfoArgs.itemEngName}"
                         android:textColor="@color/medicineEngName"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="@id/medicineKorName"
+                        app:layout_constraintRight_toLeftOf="@id/interestBtn"
                         app:layout_constraintTop_toBottomOf="@id/medicineKorName" />
 
-                    <ImageView
+
+                    <CheckBox
                         android:id="@+id/interestBtn"
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="12dp"
-                        android:background="?attr/selectableItemBackground"
+                        android:button="@drawable/checkbox_interest"
+                        android:checked="false"
                         android:contentDescription="@string/interestBtn"
-                        android:src="@drawable/round_star_border_24"
+                        android:onClick="@{() -> viewModel.checkInterestMedicine()}"
+                        android:scaleX="1.4"
+                        android:scaleY="1.4"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/medicineImageView"
-                        app:tint="@color/gray" />
-
+                        app:layout_constraintTop_toBottomOf="@id/medicineImageView" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -132,7 +141,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:background="@color/white"
                 app:tabIndicatorColor="@color/design_default_color_primary"
                 app:tabTextColor="@color/black" />
 
@@ -142,7 +150,6 @@
             android:id="@+id/contentViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,8 +1,8 @@
 package com.android.mediproject.core.model.comments
 
-import kotlinx.datetime.toJavaLocalDateTime
-import kotlinx.datetime.toLocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+
 
 /**
  * 댓글 정보를 담는 데이터 클래스입니다.
@@ -38,8 +38,10 @@ data class CommentDto(
     var onClickEdit: ((CommentDto, Int) -> Unit)?,
     var onClickApplyEdited: ((CommentDto) -> Unit)?,
     var isMine: Boolean = false) {
+
     var isEditing: Boolean = false
 }
+
 
 /*
 ID	int	기본키
@@ -54,12 +56,28 @@ UPDATED_AT	DATETIME	수정 시각
 fun CommentListResponse.Comment.toDto() = CommentDto(
     commentId = id,
     userId = userId,
-    userName = userId.toString(),
-    isReply = subordination != -1L,
+    userName = nickName,
+    isReply = false,
     subordinationId = subordination,
     content = content,
-    createdAt = createdAt.toLocalDateTime().toJavaLocalDateTime().format(dateTimeFormatter),
-    updatedAt = updatedAt.toLocalDateTime().toJavaLocalDateTime().format(dateTimeFormatter),
+    createdAt = ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).format(dateTimeFormatter),
+    updatedAt = ZonedDateTime.parse(updatedAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).format(dateTimeFormatter),
+    onClickReply = null,
+    onClickLike = null,
+    onClickDelete = null,
+    onClickEdit = null,
+    onClickApplyEdited = null,
+)
+
+fun CommentListResponse.Comment.Reply.toDto() = CommentDto(
+    commentId = id,
+    userId = userId,
+    userName = nickName,
+    isReply = true,
+    subordinationId = subordination,
+    content = content,
+    createdAt = ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).format(dateTimeFormatter),
+    updatedAt = ZonedDateTime.parse(updatedAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).format(dateTimeFormatter),
     onClickReply = null,
     onClickLike = null,
     onClickDelete = null,

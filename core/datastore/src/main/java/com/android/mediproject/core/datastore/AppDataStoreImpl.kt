@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 
 class AppDataStoreImpl @Inject constructor(
-    @ApplicationContext private val context: Context) : AppDataStore {
+    @ApplicationContext private val context: Context
+) : AppDataStore {
     private val Context.dataStore by preferencesDataStore("user_preferences")
 
     private val KEY_USER_EMAIL = stringPreferencesKey("user_email")
@@ -35,8 +36,12 @@ class AppDataStoreImpl @Inject constructor(
     }
 
 
-    override suspend fun saveUserEmail(email: CharArray) {
-        context.dataStore.edit { it[KEY_USER_EMAIL] = email.joinToString("") }
+    override suspend fun saveMyAccountInfo(userEmail: String, nickName: String, myAccountId: Long) {
+        context.dataStore.edit {
+            it[KEY_USER_EMAIL] = userEmail
+            it[KEY_NICK_NAME] = nickName
+            it[KEY_MY_ACCOUNT_ID] = myAccountId
+        }
     }
 
     override suspend fun saveNickName(nickName: String) {
@@ -46,8 +51,5 @@ class AppDataStoreImpl @Inject constructor(
     override suspend fun saveSkipIntro(skipIntro: Boolean) {
         context.dataStore.edit { it[KEY_SKIP_INTRO] = skipIntro }
     }
-
-    override suspend fun saveMyAccountId(myAccountId: Long) {
-        context.dataStore.edit { it[KEY_MY_ACCOUNT_ID] = myAccountId }
-    }
+    
 }

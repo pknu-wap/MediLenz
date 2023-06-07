@@ -25,7 +25,7 @@ class PenaltyListAdapter :
 
         init {
             view.setTitleColor(view.context.resources.getColor(R.color.newsChipColor, null))
-            view.setContentTextColor(view.context.resources.getColor(com.android.mediproject.core.ui.R.color.gray2, null))
+            view.setContentTextColor(view.context.resources.getColor(R.color.newsContentColor, null))
             view.setChipStrokeColor(R.color.newsChipColor)
 
             view.setOnItemClickListener {

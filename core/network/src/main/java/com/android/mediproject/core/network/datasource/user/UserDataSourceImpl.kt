@@ -1,6 +1,7 @@
 package com.android.mediproject.core.network.datasource.user
 
 import android.util.Log
+import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
@@ -14,7 +15,10 @@ import kotlinx.coroutines.flow.channelFlow
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
-class UserDataSourceImpl @Inject constructor(private val awsNetworkApi: AwsNetworkApi) :
+class UserDataSourceImpl @Inject constructor(
+    private val awsNetworkApi: AwsNetworkApi,
+    private val aesCoder: AesCoder
+) :
     UserDataSource {
 
     /**
@@ -32,7 +36,7 @@ class UserDataSourceImpl @Inject constructor(private val awsNetworkApi: AwsNetwo
      */
     override suspend fun changePassword(changePasswordParamter: ChangePasswordParamter): Flow<Result<ChangePasswordResponse>> =
         channelFlow {
-            val password = WeakReference(changePasswordParamter.newPassword.hashCode().toString()).get()!!
+            val password = WeakReference(aesCoder.encodePassword(changePasswordParamter.email, changePasswordParamter.newPassword)).get()!!
             awsNetworkApi.changePassword(ChangePasswordRequestParameter(password)).onResponse()
                 .fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
                 .also { trySend(it) }
@@ -45,10 +49,12 @@ class UserDataSourceImpl @Inject constructor(private val awsNetworkApi: AwsNetwo
         Log.d("wap", "UserDataSource : withdrawal()")
         awsNetworkApi.withdrawal().onResponse()
             .fold(onSuccess = {
-                Log.d("wap","dataSource : 성공")
-                Result.success(it) }, onFailure = {
-                Log.d("wap","dataSource : 실패 에러내용 : "+ it.toString())
-                Result.failure(it) })
+                Log.d("wap", "dataSource : 성공")
+                Result.success(it)
+            }, onFailure = {
+                Log.d("wap", "dataSource : 실패 에러내용 : " + it.toString())
+                Result.failure(it)
+            })
             .also { trySend(it) }
     }
 }

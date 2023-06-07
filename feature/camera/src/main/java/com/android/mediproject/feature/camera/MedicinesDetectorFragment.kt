@@ -4,22 +4,20 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Size
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
-import com.android.mediproject.feature.camera.tflite.CameraController
 import com.android.mediproject.feature.camera.tflite.CameraHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -32,14 +30,14 @@ class MedicinesDetectorFragment :
     BaseFragment<FragmentMedicinesDetectorBinding, MedicinesDetectorViewModel>(FragmentMedicinesDetectorBinding::inflate),
     CameraHelper.OnDetectionCallback {
 
-    override val fragmentViewModel: MedicinesDetectorViewModel by activityViewModels()
+    override val fragmentViewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav) {
+        defaultViewModelProviderFactory
+    }
 
     @Inject lateinit var systemBarStyler: SystemBarStyler
 
     // AI관련 모든 처리 담당
-    @Inject lateinit var cameraController: CameraController
-
-    private val mainScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private val mainScope = MainScope()
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         if (isGranted) {
@@ -68,69 +66,81 @@ class MedicinesDetectorFragment :
         systemBarStyler.changeMode(listOf(SystemBarStyler.ChangeView(binding.logo, SystemBarStyler.SpacingType.MARGIN)),
             listOf(SystemBarStyler.ChangeView(binding.detectionDescription, SystemBarStyler.SpacingType.MARGIN)))
 
-        // AI처리 객체를 관리하기 위해 생명주기 리스너를 설정
-        cameraController.fragmentLifeCycleOwner = this.viewLifecycleOwner
-        cameraController.activityLifecycle = requireActivity().lifecycle
+        fragmentViewModel.apply {
+            // AI처리 객체를 관리하기 위해 생명주기 리스너를 설정
+            cameraController.fragmentLifeCycleOwner = this@MedicinesDetectorFragment.viewLifecycleOwner
+            // AI처리 객체의 콜백을 현재 프래그먼트로 설정
+            cameraController.detectionCallback = this@MedicinesDetectorFragment
+        }
 
-        // AI처리 객체의 콜백을 현재 프래그먼트로 설정
-        cameraController.detectionCallback = this
 
-        viewLifecycleOwner.repeatOnStarted {
-
-            launch {
-                // AI모델 로드 상태
-                fragmentViewModel.aiModelState.collectLatest { state ->
-                    when (state) {
-                        is AiModelState.Loaded -> {
-                            LoadingDialog.dismiss()
-                        }
-
-                        is AiModelState.Loading -> {
-                            LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.loadingAiModels))
-                        }
-
-                        is AiModelState.LoadFailed -> {
-                            LoadingDialog.dismiss()
-                            findNavController().popBackStack()
-                        }
-
-                        is AiModelState.NotLoaded -> {
-
-                        }
-                    }
-
-                }
+        binding.apply {
+            backBtn.setOnClickListener {
+                findNavController().popBackStack()
             }
 
-            launch {
-                fragmentViewModel.detectionObjects.collectLatest { state ->
-                    when (state) {
-                        is DetectionState.Detected -> {
-                            cameraController.pause()
-                            findNavController().navigate(MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment())
-                        }
 
-                        is DetectionState.Detecting -> {
-                            binding.overlayView.apply {
-                                if (results.isNotEmpty()) {
-                                    fragmentViewModel.makeDetectionResult(results, imgwidth, imgHeight)
-                                } else {
-                                    toast(getString(R.string.noMedicinesDetected))
-                                }
+            viewLifecycleOwner.repeatOnStarted {
+                launch {
+                    // AI모델 로드 상태
+                    fragmentViewModel.aiModelState.collectLatest { state ->
+                        when (state) {
+                            is AiModelState.Loaded -> {
+                                LoadingDialog.dismiss()
+                            }
+
+                            is AiModelState.Loading -> {
+                                LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.loadingAiModels))
+                            }
+
+                            is AiModelState.LoadFailed -> {
+                                LoadingDialog.dismiss()
+                                findNavController().popBackStack()
+                            }
+
+                            is AiModelState.NotLoaded -> {
+
                             }
                         }
 
-                        is DetectionState.Initial -> {
-
-                        }
-
-                        is DetectionState.DetectFailed -> {
-                            toast(getString(R.string.detectionFailed))
-                        }
                     }
+                }
 
+                launch {
+                    fragmentViewModel.detectionObjects.collectLatest { state ->
+                        when (state) {
+                            is DetectionState.Detected -> {
+                                findNavController().navigate(MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment())
+                            }
+
+                            is DetectionState.Detecting -> {
+                                overlayView.apply {
+                                    if (results.isNotEmpty()) {
+                                        fragmentViewModel.cameraController.pause()
+                                        fragmentViewModel.makeDetectionResult(results,
+                                            Size(overlayView.width, overlayView.height),
+                                            Size(overlayView.resizedWidth, overlayView.resizeHeight),
+                                            previewView.bitmap)
+                                    } else {
+                                        toast(getString(R.string.noMedicinesDetected))
+                                    }
+                                }
+                            }
+
+                            is DetectionState.Initial -> {
+
+                            }
+
+                            is DetectionState.DetectFailed -> {
+                                fragmentViewModel.cameraController.resume()
+                                toast(getString(R.string.detectionFailed))
+                            }
+                        }
+
+                    }
                 }
             }
+
         }
 
     }
@@ -147,7 +157,6 @@ class MedicinesDetectorFragment :
                 // 권한 부여 받은 상태이므로 카메라 초기화
                 initializeCamera()
             }
-
             // 권한 요청 다이얼로그 표시
             shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
                 MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.cameraPermission))
@@ -156,7 +165,6 @@ class MedicinesDetectorFragment :
                         requestPermissionLauncher.launch(Manifest.permission.CAMERA)
                     }.setNegativeButton(getString(R.string.close)) { _, _ -> }.setCancelable(false).show()
             }
-
             // 권한 요청
             else -> {
                 requestPermissionLauncher.launch(Manifest.permission.CAMERA)

@@ -48,6 +48,7 @@ class LoginFragment :
     private val jobs = mutableListOf<Job>()
 
 
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         systemBarStyler.setStyle(
@@ -56,12 +57,15 @@ class LoginFragment :
         )
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setBarStyle()
 
         binding.apply {
+
+
             loginBtn.isEnabled = false
             val moveFlag = arguments?.getInt("flag", TOHOME)
             fragmentViewModel.setMoveFlag(moveFlag ?: TOHOME)
@@ -93,6 +97,7 @@ class LoginFragment :
                                 toast(getString(R.string.signInSuccess))
 
                                 when (fragmentViewModel.moveFlag.value) {
+
                                     TOHOME -> findNavController().navigate(
                                         "medilens://main/home_nav".toUri(),
                                         NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
@@ -104,6 +109,7 @@ class LoginFragment :
                                         NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
                                             .build()
                                     )
+
                                 }
                             }
 
@@ -157,11 +163,14 @@ class LoginFragment :
 
     private fun handleEvent(event: LoginViewModel.SignEvent) = when (event) {
         is LoginViewModel.SignEvent.SignIn -> {
+
+
             fragmentViewModel.signIn(
                 binding.loginEmail.getEditable(),
                 binding.loginPassword.getEditable(),
                 binding.rememberEmailCB.isChecked
             )
+
         }
 
         is LoginViewModel.SignEvent.SignUp -> findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())

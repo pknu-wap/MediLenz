@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CommentsDataSource {
 
-    suspend fun getCommentsForAMedicine(itemSeq: String): Flow<Result<CommentListResponse>>
+    suspend fun getCommentsForAMedicine(medicineId: Long): Result<CommentListResponse>
 
     fun getMyComments(userId: Int): Flow<PagingData<CommentListResponse>>
 

@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 data class ChangePasswordParamter(
     val newPassword: CharArray
 ) {
+
+    var email: CharArray = CharArray(0)
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -13,10 +15,15 @@ data class ChangePasswordParamter(
         other as ChangePasswordParamter
 
         if (!newPassword.contentEquals(other.newPassword)) return false
+        if (!email.contentEquals(other.email)) return false
+
         return true
     }
 
     override fun hashCode(): Int {
-        return newPassword.contentHashCode()
+        var result = newPassword.contentHashCode()
+        result = 31 * result + email.contentHashCode()
+        return result
     }
+
 }

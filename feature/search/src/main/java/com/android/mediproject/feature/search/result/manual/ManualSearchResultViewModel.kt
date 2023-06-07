@@ -101,7 +101,7 @@ class ManualSearchResultViewModel @Inject constructor(
                 itemSeq = e.itemSeq,
                 productType = e.prductType,
                 medicineType = e.medicineType,
-                imgUrl = e.imgUrl,
+                imgUrl = e.imgUrl ?: "",
             )))
         }
     }
