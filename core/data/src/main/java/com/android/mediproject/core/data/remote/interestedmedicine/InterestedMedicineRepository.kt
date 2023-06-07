@@ -1,7 +1,7 @@
 package com.android.mediproject.core.data.remote.interestedmedicine
 
 
-import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineListResponse
+import com.android.mediproject.core.model.medicine.interestedmedicine.InterestedMedicineListResponse
 import kotlinx.coroutines.flow.Flow
 
 interface InterestedMedicineRepository {

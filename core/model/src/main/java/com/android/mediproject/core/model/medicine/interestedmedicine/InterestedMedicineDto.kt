@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.medicine.InterestedMedicine
+package com.android.mediproject.core.model.medicine.interestedmedicine
 
 data class InterestedMedicineDto (
     val itemSeq : String,

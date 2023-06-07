@@ -5,7 +5,7 @@ import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
-import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineListResponse
+import com.android.mediproject.core.model.medicine.interestedmedicine.InterestedMedicineListResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse

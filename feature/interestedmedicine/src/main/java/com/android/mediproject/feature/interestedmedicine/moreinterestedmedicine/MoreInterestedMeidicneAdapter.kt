@@ -5,21 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.medicine.InterestedMedicine.MoreInterestedMedicineDto
+import com.android.mediproject.core.model.medicine.interestedmedicine.MoreInterestedMedicineDto
 import com.android.mediproject.feature.interestedmedicine.databinding.ItemInterestedMedicineBinding
 
 class MoreInterestedMedicineViewHolder(private val binding: ItemInterestedMedicineBinding) :
     RecyclerView.ViewHolder(binding.root) {
-
-    init {
-        binding.apply {
-            root.setOnClickListener {
-                item?.apply {
-                    onClick?.invoke()
-                }
-            }
-        }
-    }
 
     fun bind(moreInterestedMedicine: MoreInterestedMedicineDto) {
         binding.item = moreInterestedMedicine
