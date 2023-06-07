@@ -72,4 +72,5 @@
     <string name="efficacyGroupDuplicationCaution">효능군 중복</string>
     <string name="divisionCaution">분할 주의</string>
     <string name="additiveCaution">첨가제 주의</string>
+    <string name="noInternetConnection">인터넷 연결이 필요합니다.</string>
 </resources>

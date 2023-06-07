@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.search.SearchMedicinesViewModel"
-            />
+            type="com.android.mediproject.feature.search.SearchMedicinesViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:background="@color/white">
 
         <com.android.mediproject.core.ui.base.view.Bar
             android:id="@+id/searchBar"
@@ -23,8 +21,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:setTheme="white"
             app:showBackButton="true"
-            app:title="@string/medicineSearch"
-            />
+            app:title="@string/medicineSearch" />
 
         <com.android.mediproject.core.ui.base.view.MediSearchbar
             android:id="@+id/searchView"
@@ -42,8 +39,7 @@
             app:layout_constraintTop_toBottomOf="@id/searchBar"
             app:layout_goneMarginTop="30dp"
             app:search_hint="@string/search_hint"
-            app:search_icon="@drawable/baseline_search_24"
-            />
+            app:search_icon="@drawable/baseline_search_24" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/contentsFragmentContainerView"
@@ -51,11 +47,12 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
+            android:background="@color/white"
+            android:paddingHorizontal="16dp"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/searchView"
-            app:navGraph="@navigation/search_medicines_nav"
-            />
+            app:navGraph="@navigation/search_medicines_nav" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
