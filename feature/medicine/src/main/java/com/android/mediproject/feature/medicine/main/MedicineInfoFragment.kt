@@ -98,7 +98,11 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             launch {
                 fragmentViewModel.eventState.collectLatest {
                     when (it) {
-                        is EventState.Interest -> {}
+                        is EventState.Interest -> {
+                            binding.interestBtn.isEnabled = it.lockChecked
+                            binding.interestBtn.isChecked = it.isInterest
+                        }
+
                         is EventState.ScrollToBottom -> {
                             binding.topAppBar.setExpanded(false, true)
                         }

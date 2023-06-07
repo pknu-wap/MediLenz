@@ -1,10 +1,8 @@
 package com.android.mediproject.core.domain
 
 import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepository
-import com.android.mediproject.core.model.medicine.InterestedMedicine.AddInterestedMedicineResponse
-import com.android.mediproject.core.model.medicine.InterestedMedicine.DeleteInterestedMedicineResponse
-import com.android.mediproject.core.model.medicine.InterestedMedicine.IsInterestedMedicineResponse
-import com.android.mediproject.core.model.medicine.InterestedMedicine.toInterestedMedicineDto
+import com.android.mediproject.core.model.medicine.interestedMedicine.IsInterestedMedicineResponse
+import com.android.mediproject.core.model.medicine.interestedMedicine.toInterestedMedicineDto
 import com.android.mediproject.core.model.requestparameters.AddInterestedMedicineParameter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -21,16 +19,30 @@ class GetInterestedMedicineUseCase @Inject constructor(private val interestedMed
     }
 
     /**
-     * 관심 약 추가
+     * 관심 약 추가 or 해제
+     *
+     * @param medicineId 약 ID
+     * @param like 관심 약 추가 여부
+     *
+     * like가 true면 관심 약 추가, false면 관심 약 해제 요청
      */
-    fun addInterestedMedicine(addInterestedMedicineParameter: AddInterestedMedicineParameter): Flow<Result<AddInterestedMedicineResponse>> =
-        interestedMedicineRepository.addInterestedMedicine(addInterestedMedicineParameter)
+    fun interestedMedicine(medicineId: Long, like: Boolean): Flow<Result<Unit>> = channelFlow {
+        if (like) {
+            interestedMedicineRepository.addInterestedMedicine(AddInterestedMedicineParameter(medicineId))
+                .collect { addInterestedMedicineResponseResult ->
+                    val result =
+                        addInterestedMedicineResponseResult.fold(onSuccess = { Result.success(Unit) }, onFailure = { Result.failure(it) })
+                    trySend(result)
+                }
+        } else {
+            interestedMedicineRepository.deleteInterestedMedicine(medicineId).collect { deleteInterestedMedicineResponseResult ->
+                val result =
+                    deleteInterestedMedicineResponseResult.fold(onSuccess = { Result.success(Unit) }, onFailure = { Result.failure(it) })
+                trySend(result)
+            }
+        }
+    }
 
-    /**
-     * 관심 약 삭제
-     */
-    fun deleteInterestedMedicine(medicineId: Long): Flow<Result<DeleteInterestedMedicineResponse>> =
-        interestedMedicineRepository.deleteInterestedMedicine(medicineId)
 
     /**
      * 관심 약 여부 확인

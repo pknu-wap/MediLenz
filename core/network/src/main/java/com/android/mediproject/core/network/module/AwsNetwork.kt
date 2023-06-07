@@ -6,11 +6,11 @@ import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
-import com.android.mediproject.core.model.medicine.InterestedMedicine.AddInterestedMedicineResponse
-import com.android.mediproject.core.model.medicine.InterestedMedicine.DeleteInterestedMedicineResponse
-import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineListResponse
-import com.android.mediproject.core.model.medicine.InterestedMedicine.IsInterestedMedicineResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
+import com.android.mediproject.core.model.medicine.interestedMedicine.AddInterestedMedicineResponse
+import com.android.mediproject.core.model.medicine.interestedMedicine.DeleteInterestedMedicineResponse
+import com.android.mediproject.core.model.medicine.interestedMedicine.InterestedMedicineListResponse
+import com.android.mediproject.core.model.medicine.interestedMedicine.IsInterestedMedicineResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
