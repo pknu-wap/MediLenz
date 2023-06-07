@@ -150,6 +150,7 @@ class TokenDataSourceImpl @Inject constructor(
         tokenDataStore.updateData {
             it.toBuilder().clear().build()
         }
+        updateTokenState()
     }
 
     private fun updateTokenState() {

@@ -1,5 +1,6 @@
 package com.android.mediproject.core.datastore
 
+import android.util.Log
 import com.android.mediproject.core.model.remote.token.NewTokensFromAws
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +20,8 @@ class TokenServerImpl @Inject constructor() : TokenServer {
      */
     override val currentTokens: EndpointTokenState
         get() {
-            val token = tokens.replayCache.firstOrNull()
+            val token = tokens.replayCache.lastOrNull()
+            Log.d("wap","TokenServer currentTokens () : token값 : "+token.toString())
             return if (token == null) {
                 EndpointTokenState.NoToken
             } else {
