@@ -75,7 +75,9 @@ class MyPageViewModel @Inject constructor(
     val loginMode get() = _loginMode.asStateFlow()
 
     fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
-    fun loadUser() = viewModelScope.launch { userUseCase().collect { _user.value = it } }
+    fun loadUser() = viewModelScope.launch { userUseCase().collect {
+        log(it.toString())
+        _user.value = it } }
     fun loadComments() = viewModelScope.launch { _myCommentsList.emit(dummy) }
     fun setLoginMode(loginMode: LoginMode) { _loginMode.value = loginMode }
     fun signOut() = viewModelScope.launch { signUseCase.signOut() }

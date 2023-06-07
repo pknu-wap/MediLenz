@@ -22,23 +22,29 @@ class UserUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): Flow<UserDto> = channelFlow {
         appDataStore.nickName.collect { nickName ->
-            Log.d("wap", nickName)
             trySend(UserDto(nickName = nickName))
         }
     }
 
     suspend fun changeNickname(changeNicknameParameter: ChangeNicknameParameter) = channelFlow {
         userRepository.changeNickname(changeNicknameParameter).map {
-            it.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
+            it.fold(onSuccess = {
+                appDataStore.saveNickName(changeNicknameParameter.newNickname)
+                Result.success(it)
+            }, onFailure = { Result.failure(it) })
         }.collectLatest { trySend(it) }
     }
 
     suspend fun changePassword(changePasswordParamter: ChangePasswordParamter) = channelFlow {
-        val email = (getUserInfoRepository.myAccountInfo.value as AccountState.SignedIn).email.toCharArray()
+        val email =
+            (getUserInfoRepository.myAccountInfo.value as AccountState.SignedIn).email.toCharArray()
         userRepository.changePassword(changePasswordParamter.apply {
             this.email = email
         }).map {
-            it.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
+            it.fold(onSuccess = {
+                appDataStore.clearMyAccountInfo()
+                Result.success(it)
+            }, onFailure = { Result.failure(it) })
         }.collectLatest { trySend(it) }
     }
 
