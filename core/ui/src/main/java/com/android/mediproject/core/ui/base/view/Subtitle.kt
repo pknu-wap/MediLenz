@@ -67,8 +67,15 @@ class Subtitle @JvmOverloads constructor(
         inputData.hint = newHint
     }
 
-    fun setTitleStyleNormal(){
-        title.setTypeface(null,Typeface.NORMAL)
+    fun setTitleStyleNormal() {
+        title.setTypeface(null, Typeface.NORMAL)
+    }
+
+    fun setDataType(dataType: Int? = NORMAL) {
+        if (dataType == PASSWORD) inputData.inputType =
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        else if (dataType == NORMAL) inputData.inputType =
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_NORMAL
     }
 
     //EditText에 적은 값을 불러오는 함수

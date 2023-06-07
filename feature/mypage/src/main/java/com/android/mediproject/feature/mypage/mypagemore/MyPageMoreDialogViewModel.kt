@@ -47,6 +47,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
     fun completeDialog() = event(MyPageMoreDialogEvent.CompleteDialog)
     fun cancelDialog() = event(MyPageMoreDialogEvent.CancelDialog)
     fun toast(message: String) = event(MyPageMoreDialogEvent.Toast(message))
+    fun withdrawalComplete() = event(MyPageMoreDialogEvent.WithdrawalComplete)
 
     fun changeNickname(newNickname: String) = viewModelScope.launch(ioDispatcher) {
         userUseCase.changeNickname(changeNicknameParameter = ChangeNicknameParameter(newNickname))
@@ -58,17 +59,21 @@ class MyPageMoreDialogViewModel @Inject constructor(
         cancelDialog()
     }
 
-    fun withdrawal(withdrawalInput : String) = viewModelScope.launch {
+    fun withdrawal(withdrawalInput: String) = viewModelScope.launch {
 
-        if (!(withdrawalInput == "회원탈퇴")){
+        if (!(withdrawalInput == "회원탈퇴")) {
             toast("입력 문구가 잘못되었습니다.")
+            cancelDialog()
             return@launch
         }
 
         log("viewModel : withdrawal()")
         userUseCase.withdrawal().collect {
             log("viewModel : collect() 내부" + it.toString())
-            it.fold(onSuccess = { toast("회원 탈퇴가 완료되었습니다.") }, onFailure = {
+            it.fold(onSuccess = {
+                toast("회원 탈퇴가 완료되었습니다.")
+                withdrawalComplete()
+            }, onFailure = {
                 toast("회원 탈퇴에 실패하였습니다.")
             })
         }
@@ -101,6 +106,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
     sealed class MyPageMoreDialogEvent {
         object CompleteDialog : MyPageMoreDialogEvent()
         object CancelDialog : MyPageMoreDialogEvent()
+        object WithdrawalComplete : MyPageMoreDialogEvent()
         data class Toast(val message: String) : MyPageMoreDialogEvent()
     }
 }

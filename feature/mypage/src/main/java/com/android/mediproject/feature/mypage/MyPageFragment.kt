@@ -179,8 +179,9 @@ class MyPageFragment :
 
             WITHDRAWAL -> {
                 log("MyPageDialog Callback : withdrawal() ")
-                fragmentViewModel.apply{
+                fragmentViewModel.apply {
                     signOut()
+                    loadTokens()
                 }
             }
 
@@ -238,7 +239,7 @@ class MyPageFragment :
         log("MyPageFragment : guestModeScreen() 호출 ")
         guestModeCL.visibility = View.VISIBLE
         loginModeCL.visibility = View.GONE
-        log("MyPageFragment : 뷰 visibility 로직 호출")
+        log("MyPageFragment : 뷰 visibility 로직 호출 GuestModeCL Visibility : " + guestModeCL.visibility.toString() + " LoginModeCL Visibilit : " + loginModeCL.visibility.toString())
         //글자 Span 적용
         val span =
             SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {

@@ -82,25 +82,24 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         fragmentViewModel.changeNickname(newNickname)
                         setFragmentResult(TAG, bundleOf(TAG to CHANGE_NICKNAME))
                     }
-
                     is DialogFlag.ChangePassword -> {
                         val newPassword = binding.dialogSubtitle1.getEditable()
                         fragmentViewModel.changePassword(newPassword)
-                        }
-
+                    }
                     is DialogFlag.Withdrawal -> {
                         val withdrawalInput = binding.dialogSubtitle1.getValue()
                         fragmentViewModel.withdrawal(withdrawalInput)
-                        setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL))
                     }
                 }
             }
-
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> {
                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
             }
-
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> dismiss()
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.WithdrawalComplete -> setFragmentResult(
+                TAG,
+                bundleOf(TAG to WITHDRAWAL)
+            )
         }
     }
 
@@ -122,6 +121,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                     dialogTitleTV.text = getString(R.string.changePassword)
                     dialogSubtitle1.setTitle(getString(com.android.mediproject.core.ui.R.string.password))
                     dialogSubtitle1.setHint(getString(com.android.mediproject.core.ui.R.string.passwordHint))
+                    dialogSubtitle1.set
                     dialogSubtitle2.visibility = View.VISIBLE
                 }
             }

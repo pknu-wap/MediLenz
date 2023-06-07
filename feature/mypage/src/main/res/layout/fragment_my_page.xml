@@ -83,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:text="@string/guestDescription"
+                    android:bufferType="spannable"
                     android:textColor="@color/gray2"
                     android:textSize="26sp"
                     app:layout_constraintStart_toStartOf="@id/loginBTN"
