@@ -29,7 +29,7 @@ const patch = async (req, res) => {
     return res.status(result.code).send(result.response);
 }
 const del = async (req, res) => {
-    const {medicineId, commentId} = req.body;
+    const {medicineId, commentId} = req.params;
     const {userId} = req.verifiedToken;
     const result = await deleteComment(userId, medicineId, commentId);
     return res.status(result.code).send(result.response);
@@ -42,8 +42,7 @@ const likePost = async (req, res) => { //addLike
     return res.status(result.code).send(result.response);
 }
 const likeDelete = async (req, res) => { //removeLike
-    const {medicineId} = req.params;
-    const {commentId} = req.body;
+    const {medicineId, commentId} = req.params;
     const {userId} = req.verifiedToken;
     const result = await removeLike(userId, commentId);
     return res.status(result.code).send(result.response);

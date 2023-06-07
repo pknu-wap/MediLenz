@@ -9,9 +9,9 @@ router.post("/writeTest", verifyAccessToken, commentController.writeTest); //CRE
 router.post("/", commentController.get); //READ -> The function to get the medicine id, but the http body exists, so use post
 router.get("/:medicineId", commentController.getComment); //READ
 router.patch("/", verifyAccessToken, commentController.patch); //UPDATE
-router.delete("/", verifyAccessToken, commentController.del); //DELETE
+router.delete("/:medicineId/:medicineId/:commentId", verifyAccessToken, commentController.del); //DELETE
 
 // Like
 router.post("/:medicineId/like", verifyAccessToken, commentController.likePost); //CREATE
-router.delete("/:medicineId/like", verifyAccessToken, commentController.likeDelete); //DELETE
+router.delete("/:medicineId/like/:commentId", verifyAccessToken, commentController.likeDelete); //DELETE
 module.exports = router;
