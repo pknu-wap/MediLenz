@@ -8,13 +8,14 @@ import com.android.mediproject.core.common.bindingadapter.ISendText
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.CommentsUseCase
-import com.android.mediproject.core.domain.sign.GetMyUserInfoUseCase
+import com.android.mediproject.core.domain.sign.GetAccountStateUseCase
 import com.android.mediproject.core.model.comments.CommentDto
 import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
+import com.android.mediproject.core.model.user.AccountState
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.comments.commentsofamedicine.CommentActionState.CLICKED_DELETE_MY_COMMENT
 import com.android.mediproject.feature.comments.commentsofamedicine.CommentActionState.CLICKED_EDIT_COMMENT
@@ -46,7 +47,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicineCommentsViewModel @Inject constructor(
     private val commentsUseCase: CommentsUseCase,
-    private val getMyUserInfoUseCase: GetMyUserInfoUseCase,
+    private val getAccountStateUseCase: GetAccountStateUseCase,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel(), ISendText {
     private val _action =
@@ -57,20 +58,36 @@ class MedicineCommentsViewModel @Inject constructor(
         MutableSharedFlow<MedicineBasicInfoArgs>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 2)
     val medicineBasicInfo get() = _medicineBasicInfo.asSharedFlow()
 
-    private val _myUserId = MutableStateFlow<Long>(3)
-    val myUserId get() = _myUserId.asStateFlow()
+    private val _myUserId = MutableStateFlow<Long>(-1)
+    private val myUserId get() = _myUserId.asStateFlow()
+
+    private val _accountState = MutableStateFlow<AccountState>(AccountState.SignedOut)
+    val accountState get() = _accountState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            getAccountStateUseCase.invoke().let { accountState ->
+                _accountState.value = accountState
+                if (accountState is AccountState.SignedIn) {
+                    _myUserId.value = accountState.myId
+                }
+            }
+        }
+    }
 
 
     val comments: StateFlow<PagingData<CommentDto>> = medicineBasicInfo.flatMapLatest { info ->
         commentsUseCase.getCommentsForAMedicine(info.medicineIdInAws).mapLatest { pagingData ->
+            val signedIn = accountState.value is AccountState.SignedIn
+
             pagingData.map { comment ->
                 comment.apply {
                     onClickReply = ::onClickedReply
                     onClickLike = ::onClickedLike
-                    val myId = myUserId.value
 
+                    // 로그인 상태 파악 후
                     // 내가 쓴 댓글이면 수정, 삭제 가능하도록 메서드 참조 설정
-                    if (comment.userId == myId) {
+                    if (comment.userId == myUserId.value && signedIn) {
                         onClickEdit = ::onClickedEdit
                         onClickDelete = ::onClickedDelete
                         onClickApplyEdited = ::applyEditedComment

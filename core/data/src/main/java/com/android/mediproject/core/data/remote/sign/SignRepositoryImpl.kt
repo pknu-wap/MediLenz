@@ -8,7 +8,7 @@ import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.model.requestparameters.SignInParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
-import com.android.mediproject.core.model.user.remote.toUserDto
+import com.android.mediproject.core.model.user.AccountState
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -50,7 +50,7 @@ class SignRepositoryImpl @Inject constructor(
                 saveSkipIntro(true)
                 myAccountInfoResult.onSuccess {
                     // 내 계정 정보 메모리에 저장
-                    userInfoRepository.myAccountInfo = it.toUserDto()
+                    userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it.userId, it.nickname, it.email))
 
                     if (signInParameter.isSavedEmail) {
                         saveMyAccountInfo(it.email, it.nickname, it.userId)
@@ -92,7 +92,8 @@ class SignRepositoryImpl @Inject constructor(
                 saveSkipIntro(true)
                 myAccountInfoResult.onSuccess {
                     // 내 계정 정보 메모리에 저장
-                    userInfoRepository.myAccountInfo = it.toUserDto()
+
+                    userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it.userId, it.nickname, it.email))
                     saveMyAccountInfo("", it.nickname, it.userId)
                 }
             }

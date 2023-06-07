@@ -92,6 +92,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         }
     }
 
+    override fun onRestart() {
+        super.onRestart()
+
+    }
+
 
     override fun setSplash() {
         installSplashScreen()

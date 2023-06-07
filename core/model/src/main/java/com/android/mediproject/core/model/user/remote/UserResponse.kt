@@ -16,4 +16,7 @@ data class UserResponse(
     val nickname: String, val userId: Long, val email: String, val message: String
 )
 
-fun UserResponse.toUserDto() = UserDto(nickName = nickname, id = userId)
+fun UserResponse.toUserDto() = UserDto(nickName = nickname).apply {
+    id = userId
+    email = this@toUserDto.email
+}
