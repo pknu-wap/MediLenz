@@ -6,12 +6,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import asEventFlow
+import com.android.mediproject.core.common.network.Dispatcher
+import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.domain.user.UserUseCase
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -21,7 +24,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPageMoreDialogViewModel @Inject constructor(private val userUseCase: UserUseCase) :
+class MyPageMoreDialogViewModel @Inject constructor(
+    private val userUseCase: UserUseCase,
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+) :
     BaseViewModel() {
 
     private val _eventFlow = MutableEventFlow<MyPageMoreDialogEvent>()
@@ -41,13 +47,14 @@ class MyPageMoreDialogViewModel @Inject constructor(private val userUseCase: Use
     fun cancelDialog() = event(MyPageMoreDialogEvent.CancelDialog)
     fun toast(message: String) = event(MyPageMoreDialogEvent.Toast(message))
 
-    fun changeNickname(newNickname: String) = viewModelScope.launch {
+    fun changeNickname(newNickname: String) = viewModelScope.launch(ioDispatcher) {
         userUseCase.changeNickname(changeNicknameParameter = ChangeNicknameParameter(newNickname))
             .collect {
                 it.fold(
                     onSuccess = { toast("닉네임 변경이 완료되었습니다.") },
                     onFailure = { toast("닉네임 변경에 실패하였습니다.") })
             }
+        cancelDialog()
     }
 
     fun withdrawal() = viewModelScope.launch {
@@ -58,23 +65,28 @@ class MyPageMoreDialogViewModel @Inject constructor(private val userUseCase: Use
                 toast("회원 탈퇴에 실패하였습니다.")
             })
         }
+        cancelDialog()
     }
 
-    fun changePassword(newPassword: Editable) = viewModelScope.launch {
-        if (isPasswordValid(newPassword)) {
-            val password = CharArray(newPassword.length)
-            newPassword.trim().forEachIndexed { index, c ->
-                password[index] = c
-            }
+    fun changePassword(newPassword: Editable) = viewModelScope.launch(ioDispatcher) {
+        if (!isPasswordValid(newPassword)) {
+            log("viewModel : changePassword() : 비밀번호 문자열 규칙 불일치")
+            return@launch
         }
 
-        userUseCase.changePassword(changePasswordParamter = ChangePasswordParamter(newPassword))
+        val password = CharArray(newPassword.length)
+        newPassword.trim().forEachIndexed { index, c ->
+            password[index] = c
+        }
+
+        userUseCase.changePassword(changePasswordParamter = ChangePasswordParamter(password))
             .collect {
                 it.fold(
                     onSuccess = { toast("비밀번호 변경에 성공하였습니다.") },
                     onFailure = { toast("비밀번호 변경에 실패하였습니다.") }
                 )
             }
+        cancelDialog()
     }
 
     sealed class MyPageMoreDialogEvent {

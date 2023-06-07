@@ -81,26 +81,16 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         val newNickname = binding.dialogSubtitle1.getValue()
                         fragmentViewModel.changeNickname(newNickname)
                         setFragmentResult(TAG, bundleOf(TAG to CHANGE_NICKNAME))
-                        dismiss()
                     }
 
                     is DialogFlag.ChangePassword -> {
                         val newPassword = binding.dialogSubtitle1.getEditable()
                         fragmentViewModel.changePassword(newPassword)
-                        } else {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.changePasswordNotification),
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
-
-                    }
 
                     is DialogFlag.Withdrawal -> {
                         fragmentViewModel.withdrawal()
                         setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL))
-                        dismiss()
                     }
                 }
             }

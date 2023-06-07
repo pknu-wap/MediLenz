@@ -61,7 +61,7 @@ object AwsNetwork {
         @Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi
     ): InterestedMedicineDataSource = InterestedMedicineDataSourceImpl(awsNetworkApi)
 
-    @Provides()
+    @Provides
     @Named("awsNetworkApiWithAccessTokens")
     @Singleton
     fun providesAwsNetworkApi(
