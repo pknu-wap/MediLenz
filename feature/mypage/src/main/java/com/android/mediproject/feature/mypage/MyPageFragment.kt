@@ -236,10 +236,9 @@ class MyPageFragment :
 
     //비로그인 상태일 시 보여주는 화면
     private fun guestModeScreen() = binding.apply {
-        log("MyPageFragment : guestModeScreen() 호출 ")
         guestModeCL.visibility = View.VISIBLE
         loginModeCL.visibility = View.GONE
-        log("MyPageFragment : 뷰 visibility 로직 호출 GuestModeCL Visibility : " + guestModeCL.visibility.toString() + " LoginModeCL Visibilit : " + loginModeCL.visibility.toString())
+
         //글자 Span 적용
         val span =
             SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
