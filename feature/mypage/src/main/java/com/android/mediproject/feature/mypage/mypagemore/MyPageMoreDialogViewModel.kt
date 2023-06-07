@@ -69,8 +69,9 @@ class MyPageMoreDialogViewModel @Inject constructor(
     }
 
     fun changePassword(newPassword: Editable) = viewModelScope.launch(ioDispatcher) {
-        if (!isPasswordValid(newPassword)) {
+        if (isPasswordValid(newPassword)) {
             log("viewModel : changePassword() : 비밀번호 문자열 규칙 불일치")
+            toast("비밀번호 문자열 규칙 불일치")
             return@launch
         }
 

@@ -11,6 +11,7 @@ import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
@@ -175,7 +176,7 @@ interface AwsNetworkApi {
      */
     @PATCH(value = "user")
     suspend fun changePassword(
-        @Body changePasswordParamter: ChangePasswordParamter
+        @Body changePasswordRequestParameter: ChangePasswordRequestParameter
     ): Response<ChangePasswordResponse>
 
     /**
