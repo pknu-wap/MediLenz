@@ -1,6 +1,7 @@
 package com.android.mediproject.feature.intro
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -11,10 +12,12 @@ import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.common.util.delayTextChangedCallback
 import com.android.mediproject.core.model.local.navargs.TOHOME
 import com.android.mediproject.core.model.local.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.core.ui.base.view.Bar
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,16 +33,33 @@ import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(FragmentLoginBinding::inflate) {
+class LoginFragment :
+    BaseFragment<FragmentLoginBinding, LoginViewModel>(FragmentLoginBinding::inflate) {
     override val fragmentViewModel: LoginViewModel by viewModels()
 
-    @Inject @Dispatcher(MediDispatchers.Default) lateinit var defaultDispatcher: CoroutineDispatcher
+    @Inject
+    @Dispatcher(MediDispatchers.Default)
+    lateinit var defaultDispatcher: CoroutineDispatcher
+
+    @Inject
+    lateinit var systemBarStyler: SystemBarStyler
 
     private val mainScope = MainScope()
     private val jobs = mutableListOf<Job>()
 
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        systemBarStyler.setStyle(
+            SystemBarStyler.StatusBarColor.BLACK,
+            SystemBarStyler.NavigationBarColor.BLACK
+        )
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setBarStyle()
 
         binding.apply {
             loginBtn.isEnabled = false
@@ -61,7 +81,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
                         when (it) {
                             is SignInState.Signing -> {
                                 // 로그인 중
-                                LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.signing))
+                                LoadingDialog.showLoadingDialog(
+                                    requireActivity(),
+                                    getString(R.string.signing)
+                                )
                             }
 
                             is SignInState.SuccessSignIn -> {
@@ -69,9 +92,18 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
                                 LoadingDialog.dismiss()
                                 toast(getString(R.string.signInSuccess))
 
-                                when(fragmentViewModel.moveFlag.value){
-                                    TOHOME -> findNavController().navigate("medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
-                                    TOMYPAGE -> findNavController().navigate("medilens://main/mypage_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build())
+                                when (fragmentViewModel.moveFlag.value) {
+                                    TOHOME -> findNavController().navigate(
+                                        "medilens://main/home_nav".toUri(),
+                                        NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
+                                            .build()
+                                    )
+
+                                    TOMYPAGE -> findNavController().navigate(
+                                        "medilens://main/mypage_nav".toUri(),
+                                        NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
+                                            .build()
+                                    )
                                 }
                             }
 
@@ -106,6 +138,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
         }
     }
 
+    private fun setBarStyle() = binding.apply {
+        systemBarStyler.changeMode(
+            topViews = listOf(
+                SystemBarStyler.ChangeView(
+                    loginBar,
+                    SystemBarStyler.SpacingType.PADDING
+                )
+            )
+        )
+    }
+
     override fun onDestroyView() {
         mainScope.cancel()
         jobs.forEach { it.cancel() }
@@ -115,7 +158,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
     private fun handleEvent(event: LoginViewModel.SignEvent) = when (event) {
         is LoginViewModel.SignEvent.SignIn -> {
             fragmentViewModel.signIn(
-                binding.loginEmail.getEditable(), binding.loginPassword.getEditable(), binding.rememberEmailCB.isChecked
+                binding.loginEmail.getEditable(),
+                binding.loginPassword.getEditable(),
+                binding.rememberEmailCB.isChecked
             )
         }
 
