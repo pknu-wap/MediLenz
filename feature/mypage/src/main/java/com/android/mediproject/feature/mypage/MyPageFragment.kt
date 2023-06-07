@@ -12,12 +12,9 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.mediproject.core.common.CHANGE_NICKNAME_BOTTOMSHEET
-import com.android.mediproject.core.common.CHANGE_NICKNAME_DIALOG
-import com.android.mediproject.core.common.CHANGE_PASSWORD_BOTTOMSHEET
-import com.android.mediproject.core.common.CHANGE_PASSWORD_DIALOG
-import com.android.mediproject.core.common.WITHDRAWAL_BOTTOMSHEET
-import com.android.mediproject.core.common.WITHDRAWAL_DIALOG
+import com.android.mediproject.core.common.CHANGE_NICKNAME
+import com.android.mediproject.core.common.CHANGE_PASSWORD
+import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
@@ -148,28 +145,40 @@ class MyPageFragment :
     //바텀시트로 돌아왔을 때 실행되는 함수입니다.
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {
         when (bottomSheetFlag) {
-            CHANGE_NICKNAME_BOTTOMSHEET -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangeNickName).show(
+            CHANGE_NICKNAME -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangeNickName).show(
                 requireActivity().supportFragmentManager,
                 MyPageMoreDialogFragment.TAG
             )
 
-            CHANGE_PASSWORD_BOTTOMSHEET -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangePassword).show(
+            CHANGE_PASSWORD -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangePassword).show(
                 requireActivity().supportFragmentManager,
                 MyPageMoreDialogFragment.TAG
             )
 
-            WITHDRAWAL_BOTTOMSHEET -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.Withdrawal).show(
+            WITHDRAWAL -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.Withdrawal).show(
                 requireActivity().supportFragmentManager,
                 MyPageMoreDialogFragment.TAG
             )
         }
     }
 
+    //다이얼로그로 돌아왔을 때 실행되는 함수입니다.
     private fun handleDialogFlag(dialogFlag : Int) {
         when (dialogFlag) {
-            CHANGE_NICKNAME_DIALOG -> {}
-            CHANGE_PASSWORD_DIALOG -> {}
-            WITHDRAWAL_DIALOG -> {}
+            CHANGE_NICKNAME -> {
+                log("MyPageDialog Callback : changeNickname() ")
+                fragmentViewModel.loadUser()
+            }
+
+            CHANGE_PASSWORD -> {
+                log("MyPageDialog Callback : changePassword() ")
+            }
+
+            WITHDRAWAL -> {
+                log("MyPageDialog Callback : withdrawal() ")
+            fragmentViewModel.setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
+            }
+
         }
     }
 

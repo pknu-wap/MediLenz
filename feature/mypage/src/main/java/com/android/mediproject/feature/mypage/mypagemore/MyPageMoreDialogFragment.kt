@@ -15,7 +15,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.common.WITHDRAWAL_DIALOG
+import com.android.mediproject.core.common.CHANGE_NICKNAME
+import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.dialogResize
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
@@ -78,6 +79,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                     is DialogFlag.ChangeNickName -> {
                         val newNickname = binding.dialogSubtitle1.getValue()
                         fragmentViewModel.changeNickname(newNickname)
+                        setFragmentResult(TAG, bundleOf(TAG to CHANGE_NICKNAME))
                         Log.d("wap", "ChangeNickName")
                     }
 
@@ -88,7 +90,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
 
                     is DialogFlag.Withdrawal -> {
                         fragmentViewModel.withdrawal()
-                        setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL_DIALOG))
+                        setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL))
                         dismiss()
                         //회원탈퇴 로직
                     }
