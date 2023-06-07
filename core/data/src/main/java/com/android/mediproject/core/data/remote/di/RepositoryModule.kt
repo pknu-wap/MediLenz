@@ -58,16 +58,13 @@ object RepositoryModule {
         medicineApprovalDataSource: MedicineApprovalDataSource,
         searchHistoryRepository: SearchHistoryRepository,
         @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher
-    ): MedicineApprovalRepository =
-        MedicineApprovalRepositoryImpl(medicineApprovalDataSource, searchHistoryRepository, ioDispatcher)
+    ): MedicineApprovalRepository = MedicineApprovalRepositoryImpl(medicineApprovalDataSource, searchHistoryRepository, ioDispatcher)
 
     @Provides
     @Singleton
     fun provideRecallSuspensionRepository(
-        recallSuspensionDataSource: RecallSuspensionDataSource,
-        recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl
-    ): RecallSuspensionRepository =
-        RecallSuspensionRepositoryImpl(recallSuspensionDataSource, recallSuspensionListDataSource)
+        recallSuspensionDataSource: RecallSuspensionDataSource, recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl
+    ): RecallSuspensionRepository = RecallSuspensionRepositoryImpl(recallSuspensionDataSource, recallSuspensionListDataSource)
 
     @Provides
     @Singleton
@@ -79,8 +76,7 @@ object RepositoryModule {
     @Singleton
     fun providesGranuleIdentificationRepository(
         granuleIdentificationDataSource: GranuleIdentificationDataSource
-    ): GranuleIdentificationRepository =
-        GranuleIdentificationRepositoryImpl(granuleIdentificationDataSource)
+    ): GranuleIdentificationRepository = GranuleIdentificationRepositoryImpl(granuleIdentificationDataSource)
 
     @Provides
     @Singleton
@@ -96,16 +92,17 @@ object RepositoryModule {
     @Singleton
     fun providesCommentsRepository(
         commentsDataSource: CommentsDataSource, signRepository: SignRepository
-    ): CommentsRepository =
-        CommentsRepositoryImpl(commentsDataSource, signRepository)
+    ): CommentsRepository = CommentsRepositoryImpl(commentsDataSource, signRepository)
 
 
     @Provides
     @Singleton
     fun providesSignRepository(
-        signDataSource: SignDataSource, connectionTokenDataSourceImpl: TokenDataSourceImpl, appDataStore: AppDataStore
-    ): SignRepository =
-        SignRepositoryImpl(signDataSource, connectionTokenDataSourceImpl, appDataStore)
+        signDataSource: SignDataSource,
+        connectionTokenDataSourceImpl: TokenDataSourceImpl,
+        appDataStore: AppDataStore,
+        userInfoRepository: UserInfoRepository
+    ): SignRepository = SignRepositoryImpl(signDataSource, connectionTokenDataSourceImpl, appDataStore, userInfoRepository)
 
     @Provides
     @Singleton
