@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
+import androidx.navigation.navGraphViewModels
 import com.android.mediproject.feature.camera.DetectionState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
 import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentDetectedImageDialogBinding
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
@@ -20,7 +21,8 @@ class DetectedImageFragment : DialogFragment() {
     private var _binding: FragmentDetectedImageDialogBinding? = null
     private val binding get() = _binding!!
 
-    private val medicinesDetectorViewModel by activityViewModels<MedicinesDetectorViewModel>()
+    private val medicinesDetectorViewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,7 +51,11 @@ class DetectedImageFragment : DialogFragment() {
                         is DetectionState.Detected -> {
                             overlayView.apply {
                                 objs.detection.apply {
-                                    setResults(detection, height, width)
+                                    val objects = detection.map {
+                                        it.detection
+                                    }
+                                    Glide.with(requireContext()).load(backgroundImage).into(binding.imageView)
+                                    setResults(objects, width, height)
                                     invalidate()
                                 }
 
@@ -57,7 +63,7 @@ class DetectedImageFragment : DialogFragment() {
                         }
 
                         else -> {
-                            
+
                         }
                     }
                 }

@@ -4,6 +4,8 @@ import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepository
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepositoryImpl
+import com.android.mediproject.core.data.remote.ai.VertexAiRepository
+import com.android.mediproject.core.data.remote.ai.VertexAiRepositoryImpl
 import com.android.mediproject.core.data.remote.comments.CommentsRepository
 import com.android.mediproject.core.data.remote.comments.CommentsRepositoryImpl
 import com.android.mediproject.core.data.remote.dur.DurRepository
@@ -25,6 +27,7 @@ import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
+import com.android.mediproject.core.network.datasource.ai.VertextAiDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.dur.DurDataSource
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
@@ -85,8 +88,8 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun providesCommentsRepository(
-        commentsDataSource: CommentsDataSource,
-        signRepository: SignRepository): CommentsRepository = CommentsRepositoryImpl(commentsDataSource, signRepository)
+        commentsDataSource: CommentsDataSource, signRepository: SignRepository): CommentsRepository =
+        CommentsRepositoryImpl(commentsDataSource, signRepository)
 
 
     @Provides
@@ -104,4 +107,9 @@ object RepositoryModule {
     @Singleton
     fun providesMedicineIdRepository(
         medicineIdDataSource: MedicineIdDataSource): MedicineIdRepository = MedicineIdRepositoryImpl(medicineIdDataSource)
+
+    @Provides
+    @Singleton
+    fun providesVertexAiRepository(
+        vertextAiDataSource: VertextAiDataSource): VertexAiRepository = VertexAiRepositoryImpl(vertextAiDataSource)
 }

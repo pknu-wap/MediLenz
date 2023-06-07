@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.android.mediproject.feature.camera.DetectionState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
 import com.android.mediproject.feature.camera.R
@@ -24,7 +24,7 @@ class ConfirmDialogFragment : DialogFragment() {
     private var _binding: FragmentConfirmDialogBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MedicinesDetectorViewModel by activityViewModels()
+    private val viewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireActivity()).apply {
@@ -58,22 +58,21 @@ class ConfirmDialogFragment : DialogFragment() {
         }
 
         viewLifecycleOwner.repeatOnStarted {
-            viewModel.detectionObjects.collectLatest { objs ->
-                when (objs) {
+            viewModel.detectionObjects.collectLatest { detectionState ->
+                when (detectionState) {
                     is DetectionState.Detected -> {
-                        val detection = objs.detection
+                        val detection = detectionState.detection
                         val text = "${detection.detection.size} ${getString(R.string.checkCountsOfMedicinesMessage)}".toSpannable()
                         binding.confirmDialogTextView.text = text
 
-                        /**
                         binding.detectedObjectsRecyclerView.adapter = ImageListAdapter().apply {
-                        objs.map {
-                        it.onClicked = { this@ConfirmDialogFragment.onDetectedObjectClicked() }
-                        it
-                        }.let { submitList(it) }
+                            detectionState.detection.detection.map {
+                                it.onClick = { this@ConfirmDialogFragment.onDetectedObjectClicked() }
+                                it
+                            }.let {
+                                submitList(it)
+                            }
                         }
-                         */
-
                     }
 
                     else -> {

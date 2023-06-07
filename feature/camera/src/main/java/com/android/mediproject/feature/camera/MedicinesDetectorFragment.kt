@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -29,7 +29,7 @@ class MedicinesDetectorFragment :
     BaseFragment<FragmentMedicinesDetectorBinding, MedicinesDetectorViewModel>(FragmentMedicinesDetectorBinding::inflate),
     CameraHelper.OnDetectionCallback {
 
-    override val fragmentViewModel: MedicinesDetectorViewModel by viewModels()
+    override val fragmentViewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav)
 
     @Inject lateinit var systemBarStyler: SystemBarStyler
 
@@ -75,7 +75,6 @@ class MedicinesDetectorFragment :
         }
 
         viewLifecycleOwner.repeatOnStarted {
-
             launch {
                 // AI모델 로드 상태
                 fragmentViewModel.aiModelState.collectLatest { state ->
@@ -112,7 +111,7 @@ class MedicinesDetectorFragment :
                         is DetectionState.Detecting -> {
                             binding.overlayView.apply {
                                 if (results.isNotEmpty()) {
-                                    fragmentViewModel.makeDetectionResult(results, imgwidth, imgHeight)
+                                    fragmentViewModel.makeDetectionResult(results, imgwidth, imgHeight, binding.previewView.bitmap)
                                 } else {
                                     toast(getString(R.string.noMedicinesDetected))
                                 }

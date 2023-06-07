@@ -61,7 +61,7 @@ class CertificateHelper @Inject constructor(@ApplicationContext context: Context
     }
 }
 
-@Module(includes = [DataGoKrNetwork::class, AwsNetwork::class])
+@Module(includes = [DataGoKrNetwork::class, AwsNetwork::class, GoogleNetwork::class])
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
@@ -112,5 +112,17 @@ object NetworkModule {
         build()
     }
 
-
+    @Provides
+    @Singleton
+    @Named("okHttpClientWithGoogleAccessTokens")
+    fun providesOkHttpClientGoogleWithAccessTokens(
+        tokenServer: TokenServer): OkHttpClient = OkHttpClient.Builder().run {
+        addInterceptor(HttpLoggingInterceptor().apply {
+            if (BuildConfig.DEBUG) {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+        })
+        addInterceptor(TokenInterceptor(tokenServer, TokenInterceptor.TokenType.ACCESS_TOKEN))
+        build()
+    }
 }
