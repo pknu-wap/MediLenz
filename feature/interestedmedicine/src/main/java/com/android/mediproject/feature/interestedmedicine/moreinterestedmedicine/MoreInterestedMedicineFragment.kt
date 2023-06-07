@@ -51,6 +51,7 @@ class MoreInterestedMedicineFragment :
                             handleToken(it)
                         }
                     }
+                    loadTokens()
                 }
             }
 
