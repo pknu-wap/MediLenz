@@ -19,6 +19,8 @@ import com.android.mediproject.core.common.CHANGE_NICKNAME
 import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.dialogResize
 import com.android.mediproject.core.common.util.isPasswordValid
+import com.android.mediproject.core.ui.base.view.Subtitle.Companion.NORMAL
+import com.android.mediproject.core.ui.base.view.Subtitle.Companion.PASSWORD
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,19 +84,19 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         fragmentViewModel.changeNickname(newNickname)
                         setFragmentResult(TAG, bundleOf(TAG to CHANGE_NICKNAME))
                     }
+
                     is DialogFlag.ChangePassword -> {
                         val newPassword = binding.dialogSubtitle1.getEditable()
                         fragmentViewModel.changePassword(newPassword)
                     }
+
                     is DialogFlag.Withdrawal -> {
                         val withdrawalInput = binding.dialogSubtitle1.getValue()
                         fragmentViewModel.withdrawal(withdrawalInput)
                     }
                 }
             }
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> {
-                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
-            }
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> dismiss()
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.WithdrawalComplete -> setFragmentResult(
                 TAG,
@@ -109,9 +111,11 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             is DialogFlag.ChangeNickName -> {
                 binding.apply {
                     dialogTitleTV.text = getString(R.string.changeNickName)
-                    dialogSubtitle1.setTitle(getString(com.android.mediproject.core.ui.R.string.nickName))
-                    dialogSubtitle1.setHint(getString(com.android.mediproject.core.ui.R.string.nickNameHint))
-                    dialogSubtitle2.visibility = View.GONE
+                    dialogSubtitle1.apply {
+                        setTitle(getString(com.android.mediproject.core.ui.R.string.nickName))
+                        setHint(getString(com.android.mediproject.core.ui.R.string.nickNameHint))
+                        setDataType(NORMAL)
+                    }
                 }
             }
 
@@ -119,10 +123,15 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             is DialogFlag.ChangePassword -> {
                 binding.apply {
                     dialogTitleTV.text = getString(R.string.changePassword)
-                    dialogSubtitle1.setTitle(getString(com.android.mediproject.core.ui.R.string.password))
-                    dialogSubtitle1.setHint(getString(com.android.mediproject.core.ui.R.string.passwordHint))
-                    dialogSubtitle1.set
-                    dialogSubtitle2.visibility = View.VISIBLE
+                    dialogSubtitle1.apply {
+                        setTitle(getString(com.android.mediproject.core.ui.R.string.password))
+                        setHint(getString(com.android.mediproject.core.ui.R.string.passwordHint))
+                        setDataType(PASSWORD)
+                    }
+                    dialogSubtitle2.apply {
+                        setDataType(PASSWORD)
+                        visibility = View.VISIBLE
+                    }
                 }
             }
 
@@ -148,10 +157,11 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         }
 
                     dialogTitleTV.text = getString(R.string.withdrawal)
-                    dialogSubtitle1.title.text = span
-                    dialogSubtitle1.setHint(getString(R.string.withdrawalHint))
-                    dialogSubtitle1.setTitleStyleNormal()
-                    dialogSubtitle2.visibility = View.GONE
+                    dialogSubtitle1.apply{
+                        title.text = span
+                        setHint(getString(R.string.withdrawalHint))
+                        dialogSubtitle1.setTitleStyleNormal()
+                    }
                 }
             }
         }
