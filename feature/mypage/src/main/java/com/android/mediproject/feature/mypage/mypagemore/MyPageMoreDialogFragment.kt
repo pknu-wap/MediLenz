@@ -11,8 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import com.android.mediproject.core.common.WITHDRAWAL_DIALOG
 import com.android.mediproject.core.common.uiutil.dialogResize
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
@@ -67,37 +70,38 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         }
     }
 
-    private fun handleEvent(event: MyPageMoreDialogViewModel.MyPageMoreDialogEvent) = when (event) {
-        //확인 버튼을 눌렀을 때 로직
-        is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteDialog -> {
-            when (fragmentViewModel.dialogFlag.value) {
-                is DialogFlag.ChangeNickName -> {
-                    val newNickname = binding.dialogSubtitle1.getValue()
-                    fragmentViewModel.changeNickname(newNickname)
-                    Log.d("wap", "ChangeNickName")
-                }
+    private fun handleEvent(event: MyPageMoreDialogViewModel.MyPageMoreDialogEvent) {
+        when (event) {
+            //확인 버튼을 눌렀을 때 로직
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteDialog -> {
+                when (fragmentViewModel.dialogFlag.value) {
+                    is DialogFlag.ChangeNickName -> {
+                        val newNickname = binding.dialogSubtitle1.getValue()
+                        fragmentViewModel.changeNickname(newNickname)
+                        Log.d("wap", "ChangeNickName")
+                    }
 
-                is DialogFlag.ChangePassword -> {
-                    Log.d("wap", "ChangePassword")
-                    //비밀번호 변경 로직
-                }
+                    is DialogFlag.ChangePassword -> {
+                        Log.d("wap", "ChangePassword")
+                        //비밀번호 변경 로직
+                    }
 
-                is DialogFlag.Withdrawal -> {
-                    fragmentViewModel.withdrawal()
-                    Log.d("wap", "Withdrawal")
-                    //회원탈퇴 로직
+                    is DialogFlag.Withdrawal -> {
+                        fragmentViewModel.withdrawal()
+                        setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL_DIALOG))
+                        dismiss()
+                        //회원탈퇴 로직
+                    }
                 }
             }
-        }
 
-        is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> {
-            dismiss()
-            Log.d("wap", "Cancel")
-        }
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> {
+                dismiss()
+            }
 
-        is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> {
-            Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
-            Log.d("wap", "Toast")
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> {
+                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

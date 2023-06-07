@@ -11,8 +11,14 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.mediproject.core.common.CHANGE_NICKNAME_BOTTOMSHEET
+import com.android.mediproject.core.common.CHANGE_NICKNAME_DIALOG
+import com.android.mediproject.core.common.CHANGE_PASSWORD_BOTTOMSHEET
+import com.android.mediproject.core.common.CHANGE_PASSWORD_DIALOG
 import com.android.mediproject.core.common.GUEST_MODE
 import com.android.mediproject.core.common.LOGIN_MODE
+import com.android.mediproject.core.common.WITHDRAWAL_BOTTOMSHEET
+import com.android.mediproject.core.common.WITHDRAWAL_DIALOG
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
@@ -20,9 +26,6 @@ import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFragment
-import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_NICKNAME
-import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.CHANGE_PASSWORD
-import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetViewModel.Companion.WITHDRAWAL
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
@@ -57,6 +60,7 @@ class MyPageFragment :
             }
         }
 
+        //바텀시트
         parentFragmentManager.setFragmentResultListener(
             MyPageMoreBottomSheetFragment.TAG,
             viewLifecycleOwner
@@ -66,25 +70,38 @@ class MyPageFragment :
             myPageMoreBottomSheet!!.dismiss()
             myPageMoreBottomSheet = null
         }
-    }
 
+        //다이얼로그
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            MyPageMoreDialogFragment.TAG,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val flag = bundle.getInt(MyPageMoreDialogFragment.TAG)
+            handleFlag(flag)
+        }
+    }
     private fun handleFlag(flag: Int) {
         when (flag) {
-            CHANGE_NICKNAME -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangeNickName).show(
+            CHANGE_NICKNAME_BOTTOMSHEET -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangeNickName).show(
                 requireActivity().supportFragmentManager,
                 MyPageMoreDialogFragment.TAG
             )
 
-            CHANGE_PASSWORD -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangePassword).show(
+            CHANGE_PASSWORD_BOTTOMSHEET -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangePassword).show(
                 requireActivity().supportFragmentManager,
                 MyPageMoreDialogFragment.TAG
             )
 
-            WITHDRAWAL -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.Withdrawal).show(
+            WITHDRAWAL_BOTTOMSHEET -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.Withdrawal).show(
                 requireActivity().supportFragmentManager,
                 MyPageMoreDialogFragment.TAG
             )
 
+            CHANGE_NICKNAME_DIALOG -> {}
+            CHANGE_PASSWORD_DIALOG -> {}
+            WITHDRAWAL_DIALOG -> {
+                
+            }
             else -> Unit
         }
     }
