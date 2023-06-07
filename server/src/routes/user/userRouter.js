@@ -154,6 +154,7 @@ router.post("/reissue", verifyRefreshToken, userCtrl.process.reissue); // reissu
  *                  example: null
  */
 router.post("/register", userCtrl.process.register); // sign-up
+router.get("/", verifyAccessToken, userCtrl.output.getUserInfo) // get user information
 router.patch("/", verifyAccessToken, userCtrl.edit.patchUserInfo) // edit user information
 router.delete("/", verifyAccessToken, userCtrl.eliminate.deleteUser) // delete user
 

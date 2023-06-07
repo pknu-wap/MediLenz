@@ -15,6 +15,8 @@ module.exports = {
     SIGNUP_BAD_REQUEST: "paramter must include 'email(string), password(string), nickname(string)'",
 
     // Response error
+    USER_GET_COMPLETE: "user information get complete",
+    USER_GET_FAIL: "user information get fail",
     DUPLICATE_PARAMETER: (parameter) => {
         return `the ${parameter} is already in use`;
     },
