@@ -2,10 +2,17 @@
 
 const { responseFormat } = require("../../config/response")
 const responseMsg = require("../../config/responseMsg");
-const { login, createUser, reissueToken, updateUserInfo, deleteUser } = require("../../service/userService");
+const { login, createUser, reissueToken, updateUserInfo, deleteUser, getUserInfo } = require("../../service/userService");
 
 // GET
 const output = {
+    // GET user info
+    // [GET] /user
+    getUserInfo: async (req, res) => {
+        const { userId } = req.verifiedToken;
+        const result = await getUserInfo(userId); // get user info
+        return res.status(result.code).send(result.response);
+    }
 }
 
 // POST

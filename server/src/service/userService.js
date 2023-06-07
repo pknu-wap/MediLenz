@@ -58,6 +58,27 @@ const duplicateCheck = async (parameter) => {
     return false; // if user not exists
 }
 
+// get user info
+const getUserInfo = async (user_id) => {
+    try {
+        // get user
+        const user = (await User.findOne({
+            attributes: ["ID", "EMAIL", "NICKNAME"],
+            where: { ID: user_id }
+        })).dataValues;
+        return responseFormat(200, {
+            userId: user.ID,
+            email: user.EMAIL,
+            nickname: user.NICKNAME,
+            message: responseMsg.USER_GET_COMPLETE,
+        }); // get user SUCCESS
+    }
+    catch (err) {
+        console.log(err);
+        return responseFormat(500, { message: responseMsg.USER_GET_FAIL });
+    }
+}
+
 // create user
 const createUser = async (email, password, nickname) => {
     // duplicate check
@@ -150,5 +171,6 @@ module.exports = {
     createUser,
     reissueToken,
     updateUserInfo,
-    deleteUser
+    deleteUser,
+    getUserInfo
 }
