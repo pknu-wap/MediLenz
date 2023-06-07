@@ -89,7 +89,8 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         }
 
                     is DialogFlag.Withdrawal -> {
-                        fragmentViewModel.withdrawal()
+                        val withdrawalInput = binding.dialogSubtitle1.getValue()
+                        fragmentViewModel.withdrawal(withdrawalInput)
                         setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL))
                     }
                 }

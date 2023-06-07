@@ -15,6 +15,7 @@ import com.android.mediproject.core.model.requestparameters.ChangePasswordParamt
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -57,7 +58,13 @@ class MyPageMoreDialogViewModel @Inject constructor(
         cancelDialog()
     }
 
-    fun withdrawal() = viewModelScope.launch {
+    fun withdrawal(withdrawalInput : String) = viewModelScope.launch {
+
+        if (!(withdrawalInput == "회원탈퇴")){
+            toast("입력 문구가 잘못되었습니다.")
+            return@launch
+        }
+
         log("viewModel : withdrawal()")
         userUseCase.withdrawal().collect {
             log("viewModel : collect() 내부" + it.toString())
@@ -72,6 +79,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
         if (isPasswordValid(newPassword)) {
             log("viewModel : changePassword() : 비밀번호 문자열 규칙 불일치")
             toast("비밀번호 문자열 규칙 불일치")
+            cancelDialog()
             return@launch
         }
 

@@ -130,6 +130,7 @@ class MyPageFragment :
         when (loginMode) {
             MyPageViewModel.LoginMode.GUEST_MODE -> guestModeScreen()
             MyPageViewModel.LoginMode.LOGIN_MODE -> {
+                log("MyPageFragment : 로그인 모드")
                 fragmentViewModel.apply {
                     loadUser()
                     loadComments()
@@ -237,7 +238,7 @@ class MyPageFragment :
         log("MyPageFragment : guestModeScreen() 호출 ")
         guestModeCL.visibility = View.VISIBLE
         loginModeCL.visibility = View.GONE
-
+        log("MyPageFragment : 뷰 visibility 로직 호출")
         //글자 Span 적용
         val span =
             SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
