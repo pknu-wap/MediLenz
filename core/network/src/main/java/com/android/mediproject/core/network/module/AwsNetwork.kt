@@ -4,6 +4,7 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineListResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
@@ -15,6 +16,8 @@ import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
+import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
+import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSourceImpl
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
@@ -45,13 +48,20 @@ import javax.inject.Singleton
 @Module
 object AwsNetwork {
 
+    @Provides
+    @Singleton
+    fun provideInterestedMedicineDatasource(
+        @Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi
+    ): InterestedMedicineDataSource = InterestedMedicineDataSourceImpl(awsNetworkApi)
+
     @Provides()
     @Named("awsNetworkApiWithAccessTokens")
     @Singleton
     fun providesAwsNetworkApi(
         @Named("okHttpClientWithAccessTokens") okHttpClient: OkHttpClient,
     ): AwsNetworkApi =
-        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        Retrofit.Builder().client(okHttpClient)
+            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
@@ -59,7 +69,8 @@ object AwsNetwork {
     fun providesReissueTokenAwsNetworkApi(
         @Named("okHttpClientWithReissueTokens") okHttpClient: OkHttpClient,
     ): AwsNetworkApi =
-        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        Retrofit.Builder().client(okHttpClient)
+            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
@@ -81,13 +92,19 @@ object AwsNetwork {
 }
 
 interface AwsNetworkApi {
+
+    @GET(value = "medicine/favorite")
+    suspend fun getInterestedMedicineList(): Response<InterestedMedicineListResponse>
+
     @POST(value = "user/register")
     suspend fun signUp(
-        @Body signUpRequestParameter: SignUpRequestParameter): Response<SignUpResponse>
+        @Body signUpRequestParameter: SignUpRequestParameter
+    ): Response<SignUpResponse>
 
     @POST(value = "user/login")
     suspend fun signIn(
-        @Body signInRequestParameter: SignInRequestParameter): Response<SignInResponse>
+        @Body signInRequestParameter: SignInRequestParameter
+    ): Response<SignInResponse>
 
 
     @POST(value = "user/reissue")
@@ -107,33 +124,38 @@ interface AwsNetworkApi {
      */
     @PATCH(value = "medicine/comment")
     suspend fun editComment(
-        @Body editCommentParameter: EditCommentParameter): Response<CommentChangedResponse>
+        @Body editCommentParameter: EditCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 댓글 삭제
      */
     @DELETE(value = "medicine/comment")
     suspend fun deleteComment(
-        @Body deleteCommentParameter: DeleteCommentParameter): Response<CommentChangedResponse>
+        @Body deleteCommentParameter: DeleteCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 댓글 좋아요
      */
     @POST(value = "medicine/comment")
     suspend fun likeComment(
-        @Body likeCommentParameter: LikeCommentParameter): Response<CommentChangedResponse>
+        @Body likeCommentParameter: LikeCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 댓글 등록
      */
     @POST(value = "medicine/comment/writeTest")
     suspend fun applyNewComment(
-        @Body newCommentParameter: NewCommentParameter): Response<CommentChangedResponse>
+        @Body newCommentParameter: NewCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 약 ID 조회
      */
     @HTTP(method = "POST", path = "medicine/comment", hasBody = true)
     suspend fun getMedicineId(
-        @Body getMedicineIdParameter: GetMedicineIdParameter): Response<MedicineIdResponse>
+        @Body getMedicineIdParameter: GetMedicineIdParameter
+    ): Response<MedicineIdResponse>
 }

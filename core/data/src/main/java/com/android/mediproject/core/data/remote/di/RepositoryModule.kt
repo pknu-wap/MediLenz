@@ -12,6 +12,8 @@ import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRep
 import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRepositoryImpl
 import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepository
 import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepositoryImpl
+import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepository
+import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepositoryImpl
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepositoryImpl
 import com.android.mediproject.core.data.remote.medicineid.MedicineIdRepository
@@ -29,6 +31,7 @@ import com.android.mediproject.core.network.datasource.comments.CommentsDataSour
 import com.android.mediproject.core.network.datasource.dur.DurDataSource
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
+import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
@@ -45,6 +48,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object RepositoryModule {
+
+    @Provides
+    @Singleton
+    fun provideInterestedMedicineRepository(interestedMedicineDataSource: InterestedMedicineDataSource): InterestedMedicineRepository =
+        InterestedMedicineRepositoryImpl(interestedMedicineDataSource)
 
     @Provides
     @Singleton

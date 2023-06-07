@@ -53,6 +53,7 @@ class MyPageMoreBottomSheetFragment(private val backCallback : () -> Unit) : Bot
         }
     }
 
+    //바텀시트 드래그 안되게 하는 로직
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         bottomSheetDialog.setOnShowListener {
