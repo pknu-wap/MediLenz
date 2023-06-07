@@ -35,8 +35,7 @@ const del = async (req, res) => {
     return res.status(result.code).send(result.response);
 }
 const likePost = async (req, res) => { //addLike
-    const {medicineId} = req.params;
-    const {commentId} = req.body;
+    const {medicineId, commentId} = req.params;
     const {userId} = req.verifiedToken;
     const result = await addLike(userId, commentId);
     return res.status(result.code).send(result.response);

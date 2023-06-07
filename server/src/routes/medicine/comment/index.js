@@ -12,6 +12,6 @@ router.patch("/", verifyAccessToken, commentController.patch); //UPDATE
 router.delete("/:medicineId/:medicineId/:commentId", verifyAccessToken, commentController.del); //DELETE
 
 // Like
-router.post("/:medicineId/like", verifyAccessToken, commentController.likePost); //CREATE
+router.post("/:medicineId/like/:commentId", verifyAccessToken, commentController.likePost); //CREATE
 router.delete("/:medicineId/like/:commentId", verifyAccessToken, commentController.likeDelete); //DELETE
 module.exports = router;
