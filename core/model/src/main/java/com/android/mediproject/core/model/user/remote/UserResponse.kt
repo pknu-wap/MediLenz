@@ -1,27 +1,19 @@
 package com.android.mediproject.core.model.user.remote
 
 import com.android.mediproject.core.model.user.UserDto
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * 유저 정보 데이터
  *
- * @property nickName 유저 이름
+ * @property nickname 유저 이름
  * @property userId 유저 아이디
  * @property email 유저 이메일
- * @property createdAt 회원가입 날짜
+ * @property message 응답 메시지
  */
 @Serializable
 data class UserResponse(
-    @SerialName("nickname")
-    val nickName: String,
-    @SerialName("user_id")
-    val userId: Int,
-    @SerialName("email")
-    val email: String,
-    @SerialName("created_at")
-    val createdAt: String
+    val nickname: String, val userId: Long, val email: String, val message: String
 )
 
-fun UserResponse.toUserDto() = UserDto(nickName = nickName)
+fun UserResponse.toUserDto() = UserDto(nickName = nickname)

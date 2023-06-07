@@ -38,7 +38,7 @@
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconMode="clear_text"
-                app:endIconTint="@color/gray"
+                app:endIconTint="@color/main"
                 app:expandedHintEnabled="false"
                 app:hintAnimationEnabled="false"
                 app:hintEnabled="false"

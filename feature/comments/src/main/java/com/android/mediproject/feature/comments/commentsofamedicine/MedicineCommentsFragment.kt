@@ -34,7 +34,6 @@ class MedicineCommentsFragment :
         binding.apply {
             viewModel = fragmentViewModel
 
-
             val adapter = CommentsAdapter().apply {
                 setOnStateChangedListener(pagingListView.messageTextView,
                     pagingListView.pagingList,
@@ -132,7 +131,7 @@ class MedicineCommentsFragment :
                 }
             }
 
-            binding.commentInputView.setOnFocusChangeListener { v, hasFocus ->
+            binding.commentInput.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus) {
                     WindowCompat.getInsetsController(requireActivity().window, v).show(WindowInsetsCompat.Type.ime())
                 }

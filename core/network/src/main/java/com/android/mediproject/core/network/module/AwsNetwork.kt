@@ -14,12 +14,15 @@ import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
+import com.android.mediproject.core.model.user.remote.UserResponse
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
+import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
+import com.android.mediproject.core.network.datasource.user.UserInfoDataSourceImpl
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -79,24 +82,31 @@ object AwsNetwork {
 
     @Provides
     fun providesSignDataSource(
-        @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi,
-        tokenDataSourceImpl: TokenDataSourceImpl,
-        aesCoder: AesCoder): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenDataSourceImpl, aesCoder)
+        @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi, tokenDataSourceImpl: TokenDataSourceImpl, aesCoder: AesCoder
+    ): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenDataSourceImpl, aesCoder)
 
     @Provides
     @Singleton
     fun providesGetMedicineIdDataSource(@Named("awsNetworkApiWithoutTokens") awsNetworkApi: AwsNetworkApi): MedicineIdDataSource =
         MedicineIdDataSourceImpl(awsNetworkApi)
+
+    @Provides
+    @Singleton
+    fun providesUserInfosDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): UserInfoDataSource =
+        UserInfoDataSourceImpl(awsNetworkApi)
+
 }
 
 interface AwsNetworkApi {
     @POST(value = "user/register")
     suspend fun signUp(
-        @Body signUpRequestParameter: SignUpRequestParameter): Response<SignUpResponse>
+        @Body signUpRequestParameter: SignUpRequestParameter
+    ): Response<SignUpResponse>
 
     @POST(value = "user/login")
     suspend fun signIn(
-        @Body signInRequestParameter: SignInRequestParameter): Response<SignInResponse>
+        @Body signInRequestParameter: SignInRequestParameter
+    ): Response<SignInResponse>
 
 
     @POST(value = "user/reissue")
@@ -116,33 +126,44 @@ interface AwsNetworkApi {
      */
     @PATCH(value = "medicine/comment")
     suspend fun editComment(
-        @Body editCommentParameter: EditCommentParameter): Response<CommentChangedResponse>
+        @Body editCommentParameter: EditCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 댓글 삭제
      */
     @DELETE(value = "medicine/comment")
     suspend fun deleteComment(
-        @Body deleteCommentParameter: DeleteCommentParameter): Response<CommentChangedResponse>
+        @Body deleteCommentParameter: DeleteCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 댓글 좋아요
      */
     @POST(value = "medicine/comment")
     suspend fun likeComment(
-        @Body likeCommentParameter: LikeCommentParameter): Response<CommentChangedResponse>
+        @Body likeCommentParameter: LikeCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 댓글 등록
      */
     @POST(value = "medicine/comment/writeTest")
     suspend fun applyNewComment(
-        @Body newCommentParameter: NewCommentParameter): Response<CommentChangedResponse>
+        @Body newCommentParameter: NewCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 약 ID 조회
      */
     @HTTP(method = "POST", path = "medicine/comment", hasBody = true)
     suspend fun getMedicineId(
-        @Body getMedicineIdParameter: GetMedicineIdParameter): Response<MedicineIdResponse>
+        @Body getMedicineIdParameter: GetMedicineIdParameter
+    ): Response<MedicineIdResponse>
+
+    /**
+     * 약 ID 조회
+     */
+    @GET(value = "user")
+    suspend fun getUserInfo(): Response<UserResponse>
 }
