@@ -32,7 +32,7 @@ class UserDataSourceImpl @Inject constructor(private val awsNetworkApi: AwsNetwo
      */
     override suspend fun changePassword(changePasswordParamter: ChangePasswordParamter): Flow<Result<ChangePasswordResponse>> =
         channelFlow {
-            val password = changePasswordParamter.newPassword.hashCode().toString()
+            val password = WeakReference(changePasswordParamter.newPassword.hashCode().toString()).get()!!
             awsNetworkApi.changePassword(ChangePasswordRequestParameter(password)).onResponse()
                 .fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
                 .also { trySend(it) }
