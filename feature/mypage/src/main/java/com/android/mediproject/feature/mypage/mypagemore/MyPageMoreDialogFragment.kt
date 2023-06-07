@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.CHANGE_NICKNAME
 import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.dialogResize
+import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,7 +85,21 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                     }
 
                     is DialogFlag.ChangePassword -> {
-                        Log.d("wap", "ChangePassword")
+                        val newPassword = binding.dialogSubtitle1.getEditable()
+                        if (isPasswordValid(newPassword)) {
+                            val password = CharArray(newPassword.length)
+                            newPassword.trim().forEachIndexed { index, c ->
+                                password[index] = c
+                            }
+                            fragmentViewModel.cha
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.changePasswordNotification),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
                     }
 
                     is DialogFlag.Withdrawal -> {

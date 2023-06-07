@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.domain.user.UserUseCase
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,6 +56,16 @@ class MyPageMoreDialogViewModel @Inject constructor(private val userUseCase: Use
                 toast("회원 탈퇴에 실패하였습니다.")
             })
         }
+    }
+
+    fun changePassword(newPassword: CharArray) = viewModelScope.launch {
+        userUseCase.changePassword(changePasswordParamter = ChangePasswordParamter(newPassword))
+            .collect {
+                it.fold(
+                    onSuccess = { toast("비밀번호 변경에 성공하였습니다.") },
+                    onFailure = { toast("비밀번호 변경에 실패하였습니다.") }
+                )
+            }
     }
 
     sealed class MyPageMoreDialogEvent {
