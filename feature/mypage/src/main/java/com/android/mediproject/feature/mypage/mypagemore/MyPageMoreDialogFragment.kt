@@ -80,19 +80,17 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         val newNickname = binding.dialogSubtitle1.getValue()
                         fragmentViewModel.changeNickname(newNickname)
                         setFragmentResult(TAG, bundleOf(TAG to CHANGE_NICKNAME))
-                        Log.d("wap", "ChangeNickName")
+                        dismiss()
                     }
 
                     is DialogFlag.ChangePassword -> {
                         Log.d("wap", "ChangePassword")
-                        //비밀번호 변경 로직
                     }
 
                     is DialogFlag.Withdrawal -> {
                         fragmentViewModel.withdrawal()
                         setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL))
                         dismiss()
-                        //회원탈퇴 로직
                     }
                 }
             }
