@@ -67,6 +67,19 @@ const getCommentList = async (medicineId) => {
     const commentList = await _getCommentList(medicineId);
     return responseFormat(200, { message: responseMsg.COMMENT_GET_COMPLETE, commentList: commentList });
 }
+const getCommentListFromUserId = async (userId) => {
+    const commentList = await Comment.findAll({
+        where: {
+            USERID: userId
+        }
+    });
+    let _commentList = [];
+    for (let i in commentList) {
+        let _comment = commentList[i].dataValues;
+        _commentList.push(_comment);
+    }
+    return responseFormat(200, { message: responseMsg.COMMENT_GET_COMPLETE, commentList: _commentList });
+}
 const addLike = async (userId, commentId) => {
     try {
         const newLike = await Like.create({
@@ -177,6 +190,8 @@ const editComment = async (userId, medicineId, commentId, content) => {
             return responseFormat(404, { message: responseMsg.COMMENT_NOT_FOUND });
         }
         if (targetComment.USERID != userId) {
+            console.log('userId: ', userId);
+            console.log('targetComment.USERID: ', targetComment.USERID);
             return responseFormat(403, { message: responseMsg.COMMENT_EDIT_FAIL });
         }
         await Comment.update({
@@ -202,5 +217,6 @@ module.exports = {
     deleteComment,
     editComment,
     isLiked,
-    getCommentList
+    getCommentList,
+    getCommentListFromUserId
 };

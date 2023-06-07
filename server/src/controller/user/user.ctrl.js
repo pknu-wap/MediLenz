@@ -44,6 +44,7 @@ const process = {
     reissue: (req, res) => {
         const { userId } = req.verifiedToken;
         const result = reissueToken(userId); // reissuing token
+        console.log(result);
         return res.status(result.code).send(result.response);
     }
 }
