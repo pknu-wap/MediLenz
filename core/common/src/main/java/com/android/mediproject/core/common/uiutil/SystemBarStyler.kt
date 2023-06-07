@@ -18,7 +18,7 @@ import kotlin.properties.Delegates
 @SuppressLint("InternalInsetResource", "DiscouragedApi")
 @Singleton
 class SystemBarStyler @Inject constructor(
-) {
+) : LayoutController {
     enum class StatusBarColor {
         BLACK, WHITE
     }
@@ -30,6 +30,8 @@ class SystemBarStyler @Inject constructor(
     enum class SpacingType {
         MARGIN, PADDING
     }
+
+    private var acitivityLayoutController: LayoutController? = null
 
     private lateinit var window: Window
 
@@ -44,8 +46,9 @@ class SystemBarStyler @Inject constructor(
     val navigationBarHeightPx: Int
         get() = navigationBarHeight
 
-    fun init(context: Context, window: Window) {
+    fun init(context: Context, window: Window, activityLayoutController: LayoutController) {
         this.window = window
+        this.acitivityLayoutController = activityLayoutController
         context.resources.apply {
             statusBarHeight = getDimensionPixelSize(getIdentifier("status_bar_height", "dimen", "android"))
             navigationBarHeight = getDimensionPixelSize(getIdentifier("navigation_bar_height", "dimen", "android"))
@@ -112,4 +115,13 @@ class SystemBarStyler @Inject constructor(
             }
         }
     }
+
+    override fun changeFragmentContainerHeight(isFull: Boolean) {
+        acitivityLayoutController?.changeFragmentContainerHeight(isFull)
+    }
+}
+
+
+fun interface LayoutController {
+    fun changeFragmentContainerHeight(isFull: Boolean)
 }

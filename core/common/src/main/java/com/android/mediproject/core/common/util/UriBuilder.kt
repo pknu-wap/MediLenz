@@ -10,6 +10,7 @@ import androidx.navigation.NavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import com.android.mediproject.core.model.local.navargs.BaseNavArgs
@@ -117,6 +118,23 @@ fun NavController.deepNavigate(
 
     navigate(finalUri, navOptions)
 }
+
+inline fun <reified N : BaseNavArgs> NavDestination.setArguments(navArgs: N) {
+    navArgs.toMap().forEach { (key, value) ->
+        if (value == null) return@forEach
+        val navType: NavType<out Any?> = when (value) {
+            is String -> NavType.StringType
+            is Int -> NavType.IntType
+            is Long -> NavType.LongType
+            is Float -> NavType.FloatType
+            is Boolean -> NavType.BoolType
+            else -> NavType.ReferenceType
+        }
+
+        addArgument(key, NavArgument.Builder().setType(navType).setIsNullable(false).setDefaultValue(value).build())
+    }
+}
+
 
 @MainThread
 inline fun <reified Args : BaseNavArgs> Fragment.navArgs(): NavArgsLazy<out Args> = NavArgsLazy(Args::class) {

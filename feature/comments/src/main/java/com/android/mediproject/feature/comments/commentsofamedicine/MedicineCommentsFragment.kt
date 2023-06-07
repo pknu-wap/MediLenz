@@ -2,7 +2,11 @@ package com.android.mediproject.feature.comments.commentsofamedicine
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.StringRes
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.common.paging.setOnStateChangedListener
 import com.android.mediproject.core.common.util.navArgs
@@ -10,6 +14,7 @@ import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.R
 import com.android.mediproject.feature.comments.databinding.FragmentMedicineCommentsBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -29,8 +34,6 @@ class MedicineCommentsFragment :
         binding.apply {
             viewModel = fragmentViewModel
 
-            fragmentViewModel.setMedicineBasicInfo(medicineBasicInfoArgs)
-
             val adapter = CommentsAdapter().apply {
                 setOnStateChangedListener(pagingListView.messageTextView,
                     pagingListView.pagingList,
@@ -44,6 +47,11 @@ class MedicineCommentsFragment :
                캐시에 있는 뷰 홀더를 사용하면 onBindViewHolder()를 호출하지 않기 때문에 답글이나 수정 중인 댓글 아이템의 상태와
                뷰 홀더의 상태가 일치하지 않는 문제가 발생함
                 */
+                layoutManager = LinearLayoutManager(requireContext()).apply {
+                    orientation = LinearLayoutManager.VERTICAL
+                    stackFromEnd = true
+                    reverseLayout = true
+                }
                 setItemViewCacheSize(0)
                 setRecycledViewPool(RecyclerView.RecycledViewPool().apply {
                     setMaxRecycledViews(CommentsAdapter.ViewType.COMMENT.ordinal, 6)
@@ -55,9 +63,10 @@ class MedicineCommentsFragment :
 
             viewLifecycleOwner.repeatOnStarted {
                 launch {
-                    fragmentViewModel.action.collect() { action ->
+                    fragmentViewModel.action.collect { action ->
                         when (action) {
                             is CommentActionState.CLICKED_LIKE -> {
+
                             }
 
                             is CommentActionState.CLICKED_REPLY -> {
@@ -69,28 +78,45 @@ class MedicineCommentsFragment :
                             }
 
                             is CommentActionState.CLICKED_DELETE_MY_COMMENT -> {
+                                showDialog(R.string.requestToDeleteComment, onPositive = {
+                                    fragmentViewModel.deleteComment(action.commentId)
+                                }, onNegative = {
 
+                                })
                             }
 
                             is CommentActionState.COMPLETED_LIKE -> {
-                                adapter.refresh()
+                                action.result.fold(onSuccess = {
+                                    adapter.refresh()
+                                }, onFailure = {
+                                    toast(it.message.toString())
+                                })
                             }
 
                             is CommentActionState.COMPLETED_APPLY_COMMENT_REPLY -> {
-                                adapter.refresh()
+                                action.result.fold(onSuccess = {
+                                    adapter.refresh()
+                                }, onFailure = {
+                                    toast(it.message.toString())
+                                })
                             }
 
                             is CommentActionState.COMPLETED_APPLY_EDITED_COMMENT -> {
-                                adapter.refresh()
+                                action.result.fold(onSuccess = {
+                                    adapter.refresh()
+                                }, onFailure = {
+                                    toast(it.message.toString())
+                                })
                             }
 
                             is CommentActionState.COMPLETED_DELETE_COMMENT -> {
-                                adapter.refresh()
+                                action.result.fold(onSuccess = {
+                                    adapter.refresh()
+                                }, onFailure = {
+                                    toast(it.message.toString())
+                                })
                             }
 
-                            is CommentActionState.ERROR -> {
-                                toast(action.errorMessage)
-                            }
 
                             is CommentActionState.NONE -> {
                             }
@@ -105,7 +131,30 @@ class MedicineCommentsFragment :
                 }
             }
 
+            binding.commentInput.setOnFocusChangeListener { v, hasFocus ->
+                if (hasFocus) {
+                    WindowCompat.getInsetsController(requireActivity().window, v).show(WindowInsetsCompat.Type.ime())
+                }
+            }
+
         }
 
+        fragmentViewModel.setMedicineBasicInfo(medicineBasicInfoArgs)
+    }
+
+
+    private fun showDialog(@StringRes message: Int, onPositive: (Unit) -> Unit, onNegative: (Unit) -> Unit) {
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setCancelable(false)
+            setMessage(getString(message))
+            setPositiveButton(R.string.yes) { dialog, _ ->
+                dialog.dismiss()
+                onPositive(Unit)
+            }
+            setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+                onNegative(Unit)
+            }
+        }.create().show()
     }
 }

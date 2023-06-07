@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
-import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.domain.sign.SignUseCase
@@ -35,13 +34,12 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val signUseCase: SignUseCase,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-    private val aesCoder: AesCoder,
 ) : BaseViewModel() {
 
     val savedEmail = signUseCase.savedEmail.flatMapLatest {
         if (it.isEmpty()) emptyFlow()
         else flowOf(it.toCharArray())
-    }.flowOn(ioDispatcher).stateIn(viewModelScope, started = SharingStarted.WhileSubscribed(5000L), initialValue = CharArray(0))
+    }.flowOn(ioDispatcher).stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = CharArray(0))
 
     private val _signInEvent = MutableStateFlow<SignInState>(Initial)
     val signInEvent = _signInEvent.asStateFlow()

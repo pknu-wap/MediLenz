@@ -1,5 +1,6 @@
 package com.android.mediproject.core.ui.base.view.listfilter
 
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.MenuRes
@@ -19,14 +20,13 @@ object MediPopupMenu {
      * @param onMenuItemClickListener 메뉴 아이템 클릭 리스너
      */
     fun showMenu(v: View, @MenuRes menuRes: Int, onMenuItemClickListener: OnMenuItemClickListener) {
-        PopupMenu(v.context, v).apply {
+        PopupMenu(v.context, v, Gravity.END).apply {
             menuInflater.inflate(menuRes, menu)
 
             setOnMenuItemClickListener { item: MenuItem ->
                 onMenuItemClickListener.onMenuItemClick(item)
                 true
             }
-
             show()
         }
 

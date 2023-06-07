@@ -1,25 +1,18 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
 import android.os.Bundle
-import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.common.CHANGE_NICKNAME
-import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.dialogResize
-import com.android.mediproject.core.ui.base.view.Subtitle.Companion.PASSWORD
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,23 +35,18 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
     private var _binding: FragmentMyPageMoreDialogBinding? = null
     val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        this.isCancelable = false
-        _binding = FragmentMyPageMoreDialogBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onResume() {
-        super.onResume()
-        when (flag) {
-            is DialogFlag.ChangeNickName -> requireContext().dialogResize(this, 0.95f, 0.38f)
-            is DialogFlag.ChangePassword -> requireContext().dialogResize(this, 0.95f, 0.5f)
-            is DialogFlag.Withdrawal -> requireContext().dialogResize(this, 0.95f, 0.4f)
-        }
-    }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return MaterialAlertDialogBuilder(requireActivity()).apply {
+            _binding = FragmentMyPageMoreDialogBinding.inflate(layoutInflater, null, false)
+            setView(onCreateView(layoutInflater, binding.rootLayout, savedInstanceState))
+        }.create()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = binding.root
+
+
+    override fun getView(): View = binding.root
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,7 +54,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { dialogFlag.collect { handleDialogFlag(it) } }
+                    repeatOnStarted { dialogFlag.collect { handleFlag(it) } }
                 }
                 setDialogFlag(flag)
             }

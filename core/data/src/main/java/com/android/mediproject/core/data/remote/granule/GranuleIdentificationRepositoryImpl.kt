@@ -13,7 +13,7 @@ class GranuleIdentificationRepositoryImpl @Inject constructor(
         itemName: String?, entpName: String?, itemSeq: String?) =
         dataSource.getGranuleIdentificationInfo(itemName = itemName, entpName = entpName, itemSeq = itemSeq).flatMapLatest { result ->
             result.fold(onSuccess = { response ->
-                flowOf(Result.success(response.body!!.items.first()))
+                flowOf(Result.success(response.body!!.items!!.first()))
             }, onFailure = {
                 flowOf(Result.failure(it))
             })

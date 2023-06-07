@@ -22,9 +22,7 @@ import repeatOnStarted
  */
 @AndroidEntryPoint
 class RecentPenaltyListFragment :
-    BaseFragment<FragmentRecentPenaltyListBinding, RecentPenaltyListViewModel>(
-        FragmentRecentPenaltyListBinding::inflate
-    ) {
+    BaseFragment<FragmentRecentPenaltyListBinding, RecentPenaltyListViewModel>(FragmentRecentPenaltyListBinding::inflate) {
 
     enum class ResultKey {
         RESULT_KEY, PENALTY_ID
@@ -36,6 +34,7 @@ class RecentPenaltyListFragment :
         super.onViewCreated(view, savedInstanceState)
 
         initHeader()
+        fragmentViewModel.createNoHistoryText(requireContext())
         binding.apply {
             penaltyList.setHasFixedSize(true)
 
@@ -43,7 +42,7 @@ class RecentPenaltyListFragment :
             penaltyList.adapter = penaltyListAdapter
 
             viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.recallDisposalList.stateAsCollect(headerView).collect { uiState ->
+                fragmentViewModel.recallDisposalList.stateAsCollect(headerView, noHistoryTextView).collect { uiState ->
                     when (uiState) {
                         is UiState.Error -> {
 

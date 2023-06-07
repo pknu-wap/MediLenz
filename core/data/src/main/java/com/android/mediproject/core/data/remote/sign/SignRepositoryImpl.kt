@@ -1,26 +1,28 @@
 package com.android.mediproject.core.data.remote.sign
 
 import android.util.Log
+import com.android.mediproject.core.data.remote.user.UserInfoRepository
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.datastore.TokenDataSource
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.model.requestparameters.SignInParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
+import com.android.mediproject.core.model.user.AccountState
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.zip
 import javax.inject.Inject
 
 class SignRepositoryImpl @Inject constructor(
-    private val signDataSource: SignDataSource, private val tokenDataSource: TokenDataSource, private val appDataStore: AppDataStore) :
-    SignRepository {
+    private val signDataSource: SignDataSource,
+    private val tokenDataSource: TokenDataSource,
+    private val appDataStore: AppDataStore,
+    private val userInfoRepository: UserInfoRepository
+) : SignRepository {
 
-    override val myEmail: Flow<String> = appDataStore.userEmail
-
-    override val myId: Flow<Long> = appDataStore.myAccountId
 
     /**
      * 서버에 로그인 요청을 하고, 토큰 정보를 받는다.
@@ -29,25 +31,37 @@ class SignRepositoryImpl @Inject constructor(
      * @return 응답받은 토큰
      */
     override fun signIn(signInParameter: SignInParameter): Flow<Result<Unit>> = channelFlow {
-        // 로그인 요청
-        signDataSource.signIn(signInParameter).map { result ->
-            result.fold(onSuccess = { dto ->
+        signDataSource.signIn(signInParameter).zip(userInfoRepository.getMyAccountInfo()) { r1, r2 ->
+            r1 to r2
+        }.collect { resultPair ->
+            val signInResult = resultPair.first
+            val myAccountInfoResult = resultPair.second
 
-                appDataStore.apply {
-                    // 이메일 저장, 인트로 스킵, ID 저장
-                    if (signInParameter.isSavedEmail) saveUserEmail(signInParameter.email)
-                    else saveUserEmail(charArrayOf())
-                    saveSkipIntro(true)
-                }
-
-                // 로그인 성공
-                Result.success(Unit)
-            }, onFailure = { throwable ->
+            // 두개 모두 성공하지 않은 경우에는 로그인 실패 처리
+            if (signInResult.isFailure || myAccountInfoResult.isFailure) {
                 // 로그인 실패
-                Result.failure(throwable)
-            })
-        }.collectLatest {
-            trySend(it)
+                trySend(Result.failure(signInResult.exceptionOrNull() ?: myAccountInfoResult.exceptionOrNull() ?: Exception("로그인 실패")))
+                return@collect
+            }
+
+            // 로그인 성공
+            // 이메일 저장, 인트로 스킵, ID 저장
+            appDataStore.apply {
+                saveSkipIntro(true)
+                myAccountInfoResult.onSuccess {
+                    // 내 계정 정보 메모리에 저장
+                    userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it.userId, it.nickname, it.email))
+
+                    if (signInParameter.isSavedEmail) {
+                        saveMyAccountInfo(it.email, it.nickname, it.userId)
+                    } else {
+                        saveMyAccountInfo("", it.nickname, it.userId)
+                    }
+                }
+            }
+
+            // 로그인 성공
+            trySend(Result.success(Unit))
         }
     }
 
@@ -59,20 +73,35 @@ class SignRepositoryImpl @Inject constructor(
      */
     override fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>> = channelFlow {
         // 회원가입 요청
-        signDataSource.signUp(signUpParameter).map { result ->
-            result.fold(onSuccess = { dto ->
-                appDataStore.saveSkipIntro(true)
-                // 회원가입 성공
-                Result.success(Unit)
-            }, onFailure = { throwable ->
-                // 회원가입 실패
-                Result.failure(throwable)
-            })
-        }.collectLatest {
-            trySend(it)
+        signDataSource.signUp(signUpParameter).zip(userInfoRepository.getMyAccountInfo()) { r1, r2 ->
+            r1 to r2
+        }.collect { resultPair ->
+            val signUpResult = resultPair.first
+            val myAccountInfoResult = resultPair.second
+
+            // 두개 모두 성공하지 않은 경우에는 가입 실패 처리
+            if (signUpResult.isFailure || myAccountInfoResult.isFailure) {
+                // 가입 실패
+                trySend(Result.failure(signUpResult.exceptionOrNull() ?: myAccountInfoResult.exceptionOrNull() ?: Exception("로그인 실패")))
+                return@collect
+            }
+
+            // 가입 성공
+            // 인트로 스킵
+            appDataStore.apply {
+                saveSkipIntro(true)
+                myAccountInfoResult.onSuccess {
+                    // 내 계정 정보 메모리에 저장
+
+                    userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it.userId, it.nickname, it.email))
+                    saveMyAccountInfo("", it.nickname, it.userId)
+                }
+            }
+
+            // 가입 성공
+            trySend(Result.success(Unit))
         }
     }
-
 
     /**
      * 로그아웃

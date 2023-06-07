@@ -7,14 +7,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GranuleIdentificationInfoResponse(
-    @SerialName("body") val body: Body?,
+    @SerialName("body") val body: Body,
 ) : DataGoKrBaseResponse() {
     @Serializable
     data class Body(
-        @SerialName("items") val items: List<Item>, @SerialName("numOfRows") val numOfRows: Int, // 15
+        val items: List<Item> = emptyList(), @SerialName("numOfRows") val numOfRows: Int, // 15
         @SerialName("pageNo") val pageNo: Int, // 1
-        @SerialName("totalCount") val totalCount: Int // 1
-    ) {
+        @SerialName("totalCount") val totalCount: Int) {
         /**
          * 식별 정보
          *
@@ -85,8 +84,7 @@ data class GranuleIdentificationInfoResponse(
             @SerialName("MARK_CODE_FRONT_IMG") val markCodeFrontImg: String,
             @SerialName("PRINT_BACK") val printBack: String?, // null
             @SerialName("PRINT_FRONT") val printFront: String?, // A-S
-            @SerialName("THICK") val thick: String? // 7.58
-        )
+            @SerialName("THICK") val thick: String?)
     }
 
 }

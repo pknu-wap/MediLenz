@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.PrecomputedTextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
 import androidx.databinding.BindingAdapter
 import com.android.mediproject.core.common.R
@@ -66,5 +67,19 @@ object BindingAdapter {
         }
     }
 
+    /**
+     * ImageView에 이미지를 설정합니다.
+     * 이미지가 없을 경우 TextView에 메시지를 표시합니다.
+     * @param imageView 이미지를 설정할 ImageView
+     * @param img 이미지의 URL
+     * @param textView 이미지가 없을 경우 표시할 TextView
+     */
+    @BindingAdapter("img", "messageView", "message")
+    @JvmStatic
+    fun setImage(imageView: ImageView, img: String, textView: TextView, message: String) {
+        textView.text = message
+        textView.isVisible = img.isEmpty()
 
+        if (img.isNotEmpty()) GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(false).into(imageView)
+    }
 }

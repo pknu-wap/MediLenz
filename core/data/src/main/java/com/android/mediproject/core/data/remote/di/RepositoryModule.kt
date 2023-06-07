@@ -12,8 +12,6 @@ import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRep
 import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRepositoryImpl
 import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepository
 import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepositoryImpl
-import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepository
-import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepositoryImpl
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepositoryImpl
 import com.android.mediproject.core.data.remote.medicineid.MedicineIdRepository
@@ -22,8 +20,6 @@ import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensio
 import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepositoryImpl
 import com.android.mediproject.core.data.remote.sign.SignRepository
 import com.android.mediproject.core.data.remote.sign.SignRepositoryImpl
-import com.android.mediproject.core.data.remote.user.UserRepository
-import com.android.mediproject.core.data.remote.user.UserRepositoryImpl
 import com.android.mediproject.core.data.search.SearchHistoryRepository
 import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
@@ -33,14 +29,12 @@ import com.android.mediproject.core.network.datasource.comments.CommentsDataSour
 import com.android.mediproject.core.network.datasource.dur.DurDataSource
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
-import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
-import com.android.mediproject.core.network.datasource.user.UserDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -68,33 +62,25 @@ object RepositoryModule {
     fun provideMedicineApprovalRepository(
         medicineApprovalDataSource: MedicineApprovalDataSource,
         searchHistoryRepository: SearchHistoryRepository,
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher
-    ): MedicineApprovalRepository =
-        MedicineApprovalRepositoryImpl(
-            medicineApprovalDataSource,
-            searchHistoryRepository,
-            ioDispatcher
-        )
+        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher): MedicineApprovalRepository =
+        MedicineApprovalRepositoryImpl(medicineApprovalDataSource, searchHistoryRepository, ioDispatcher)
 
     @Provides
     @Singleton
     fun provideRecallSuspensionRepository(
         recallSuspensionDataSource: RecallSuspensionDataSource,
-        recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl
-    ): RecallSuspensionRepository =
+        recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl): RecallSuspensionRepository =
         RecallSuspensionRepositoryImpl(recallSuspensionDataSource, recallSuspensionListDataSource)
 
     @Provides
     @Singleton
     fun providesAdminActionRepository(
-        adminActionDataSource: AdminActionListDataSourceImpl
-    ): AdminActionRepository = AdminActionRepositoryImpl(adminActionDataSource)
+        adminActionDataSource: AdminActionListDataSourceImpl): AdminActionRepository = AdminActionRepositoryImpl(adminActionDataSource)
 
     @Provides
     @Singleton
     fun providesGranuleIdentificationRepository(
-        granuleIdentificationDataSource: GranuleIdentificationDataSource
-    ): GranuleIdentificationRepository =
+        granuleIdentificationDataSource: GranuleIdentificationDataSource): GranuleIdentificationRepository =
         GranuleIdentificationRepositoryImpl(granuleIdentificationDataSource)
 
     @Provides
@@ -104,14 +90,12 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesDurRepository(durDataSource: DurDataSource): DurRepository =
-        DurRepositoryImpl(durDataSource)
+    fun providesDurRepository(durDataSource: DurDataSource): DurRepository = DurRepositoryImpl(durDataSource)
 
 
     @Provides
     @Singleton
-    fun providesCommentsRepository(commentsDataSource: CommentsDataSource): CommentsRepository =
-        CommentsRepositoryImpl(commentsDataSource)
+    fun providesCommentsRepository(commentsDataSource: CommentsDataSource): CommentsRepository = CommentsRepositoryImpl(commentsDataSource)
 
 
     @Provides
@@ -119,9 +103,9 @@ object RepositoryModule {
     fun providesSignRepository(
         signDataSource: SignDataSource,
         connectionTokenDataSourceImpl: TokenDataSourceImpl,
-        appDataStore: AppDataStore
-    ): SignRepository =
-        SignRepositoryImpl(signDataSource, connectionTokenDataSourceImpl, appDataStore)
+        appDataStore: AppDataStore,
+        userInfoRepository: UserInfoRepository
+    ): SignRepository = SignRepositoryImpl(signDataSource, connectionTokenDataSourceImpl, appDataStore, userInfoRepository)
 
     @Provides
     @Singleton
@@ -134,4 +118,17 @@ object RepositoryModule {
     fun providesMedicineIdRepository(
         medicineIdDataSource: MedicineIdDataSource
     ): MedicineIdRepository = MedicineIdRepositoryImpl(medicineIdDataSource)
+
+    @Provides
+    @Singleton
+    fun providesVertexAiRepository(
+        vertextAiDataSource: VertextAiDataSource
+    ): VertexAiRepository = VertexAiRepositoryImpl(vertextAiDataSource)
+
+    @Provides
+    @Singleton
+    fun providesUserInfoRepository(
+        userInfoDataSource: UserInfoDataSource
+    ): UserInfoRepository = UserInfoRepositoryImpl(userInfoDataSource)
+
 }

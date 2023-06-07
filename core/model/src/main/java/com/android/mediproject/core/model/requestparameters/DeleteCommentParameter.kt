@@ -12,6 +12,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class DeleteCommentParameter(
-    @SerialName("commentId") val commentId: Int, // 1
-    @SerialName("medicineId") val medicineId: Int // 41
+    @SerialName("commentId") val commentId: Long, // 1
+    @SerialName("medicineId") val medicineId: Long
 )

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import org.tensorflow.lite.task.gms.vision.detector.Detection
 import java.util.LinkedList
@@ -19,8 +20,8 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var scaleFactor: Float = 1f
     private val roundCornerRadius = 8f
 
-    var imgwidth: Int = 0
-    var imgHeight: Int = 0
+    var resizedWidth: Int = 0
+    var resizeHeight: Int = 0
 
     init {
         initPaints()
@@ -50,6 +51,9 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             val left = boundingBox.left * scaleFactor
             val right = boundingBox.right * scaleFactor
 
+            Log.d("Overlay",
+                "draw rect : left : $left, top : $top, right : $right, bottom : $bottom, width : $width, height : $height")
+
             canvas.drawRoundRect(RectF(left, top, right, bottom), roundCornerRadius, roundCornerRadius, boxPaint)
         }
     }
@@ -61,10 +65,13 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     ) {
         _results = detectionResults
 
-        imgwidth = imageHeight
-        imgHeight = imageHeight
+        resizedWidth = imageWidth
+        resizeHeight = imageHeight
 
         scaleFactor = max(width * 1f / imageHeight, height * 1f / imageHeight)
+
+        Log.d("Overlay",
+            "setResults: scaleFactor : $scaleFactor, resizedWidth : $resizedWidth, resizeHeight : $resizeHeight, width : $width, height : $height")
     }
 
 }

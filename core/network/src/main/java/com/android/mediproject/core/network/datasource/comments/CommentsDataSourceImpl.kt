@@ -18,15 +18,15 @@ class CommentsDataSourceImpl @Inject constructor(
 
     /**
      * 약품에 대한 댓글 리스트를 가져온다.
-     * @param itemSeq: 약품 고유 번호
+     * @param medicineId: 약품 고유 번호
      */
-    override suspend fun getCommentsForAMedicine(itemSeq: String) = flow {
-        awsNetworkApi.getComments(itemSeq.toLong()).onResponse().fold(onSuccess = { response ->
+    override suspend fun getCommentsForAMedicine(medicineId: Long): Result<CommentListResponse> {
+        return awsNetworkApi.getComments(medicineId).onResponse().fold(onSuccess = { response ->
             if (response.commentList.isEmpty()) Result.failure(Exception("댓글이 없습니다."))
             else Result.success(response)
         }, onFailure = {
             Result.failure(it)
-        }).also { emit(it) }
+        })
     }
 
     override fun getMyComments(userId: Int): Flow<PagingData<CommentListResponse>> {

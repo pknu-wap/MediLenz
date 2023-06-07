@@ -1,5 +1,6 @@
 package com.android.mediproject.core.network.datasource.sign
 
+import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.datastore.TokenDataSource
 import com.android.mediproject.core.model.awscommon.BaseAwsSignResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
@@ -22,16 +23,15 @@ import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class SignDataSourceImpl @Inject constructor(
-    private val awsNetworkApi: AwsNetworkApi,
-    private val tokenDataSource: TokenDataSource,
-) : SignDataSource {
+    private val awsNetworkApi: AwsNetworkApi, private val tokenDataSource: TokenDataSource, private val aesCoder: AesCoder) :
+    SignDataSource {
 
     /**
      * 로그인
      */
     override fun signIn(signInParameter: SignInParameter): Flow<Result<SignInResponse>> = channelFlow {
         val email = WeakReference(signInParameter.email.joinToString("")).get()!!
-        val password = WeakReference(signInParameter.password.joinToString("")).get()!!
+        val password = WeakReference(aesCoder.encodePassword(signInParameter.email, signInParameter.password)).get()!!
 
         awsNetworkApi.signIn(SignInRequestParameter(email, password)).onResponseWithTokens(RequestBehavior.NewTokens).fold(onSuccess = {
             Result.success(it)

@@ -1,7 +1,7 @@
 package com.android.mediproject.core.domain
 
 import androidx.paging.PagingData
-import androidx.paging.map
+import androidx.paging.flatMap
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.data.remote.comments.CommentsRepository
@@ -14,7 +14,8 @@ import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
 
@@ -25,14 +26,18 @@ class CommentsUseCase @Inject constructor(
     /**
      * 약에 대한 댓글을 가져오는 메서드입니다.
      *
-     * @param itemSeq 약의 고유 번호
+     * @param medicineId 약의 고유 번호
      */
-    fun getCommentsForAMedicine(itemSeq: String): Flow<PagingData<CommentDto>> =
-        commentsRepository.getCommentsForAMedicine(itemSeq).map {
-            it.map { response ->
-                response.toDto()
+    fun getCommentsForAMedicine(medicineId: Long): Flow<PagingData<CommentDto>> = channelFlow {
+        commentsRepository.getCommentsForAMedicine(medicineId).collectLatest { pagingData ->
+            val result = pagingData.flatMap {
+                (it.replies.map { reply ->
+                    reply.toDto()
+                }.reversed()) + listOf(it.toDto())
             }
+            send(result)
         }
+    }
 
     /**
      * 내가 작성한 댓글을 가져오는 메서드입니다.

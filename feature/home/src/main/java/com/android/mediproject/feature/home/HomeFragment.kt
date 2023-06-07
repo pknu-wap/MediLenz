@@ -33,8 +33,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        systemBarStyler.changeMode(listOf(SystemBarStyler.ChangeView(binding.homeBar1, SystemBarStyler.SpacingType.PADDING),
-            SystemBarStyler.ChangeView(binding.homeBar2, SystemBarStyler.SpacingType.PADDING)), emptyList())
+        systemBarStyler.changeMode(listOf(
+            SystemBarStyler.ChangeView(binding.homeBar1, SystemBarStyler.SpacingType.PADDING),
+            SystemBarStyler.ChangeView(binding.homeBar2, SystemBarStyler.SpacingType.PADDING),
+            SystemBarStyler.ChangeView(binding.headerLayout, SystemBarStyler.SpacingType.PADDING),
+        ), emptyList())
 
         initSearchBar()
         initChildFragments()

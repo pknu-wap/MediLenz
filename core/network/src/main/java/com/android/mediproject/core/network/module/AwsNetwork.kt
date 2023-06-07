@@ -4,32 +4,21 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
-import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineListResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
-import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
-import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
-import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
-import com.android.mediproject.core.model.user.remote.WithdrawalResponse
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
-import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
-import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSourceImpl
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
-import com.android.mediproject.core.network.datasource.user.UserDataSource
-import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -56,6 +45,17 @@ import javax.inject.Singleton
 @Module
 object AwsNetwork {
 
+
+    @Provides()
+    @Named("awsNetworkApiWithoutTokens")
+    @Singleton
+    fun providesWithoutTokensAwsNetworkApi(
+        okHttpClient: OkHttpClient,
+    ): AwsNetworkApi =
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
+
+
     @Provides
     @Singleton
     fun provideInterestedMedicineDatasource(
@@ -68,8 +68,7 @@ object AwsNetwork {
     fun providesAwsNetworkApi(
         @Named("okHttpClientWithAccessTokens") okHttpClient: OkHttpClient,
     ): AwsNetworkApi =
-        Retrofit.Builder().client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
@@ -77,8 +76,7 @@ object AwsNetwork {
     fun providesReissueTokenAwsNetworkApi(
         @Named("okHttpClientWithReissueTokens") okHttpClient: OkHttpClient,
     ): AwsNetworkApi =
-        Retrofit.Builder().client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
@@ -88,14 +86,18 @@ object AwsNetwork {
 
     @Provides
     fun providesSignDataSource(
-        @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi,
-        tokenDataSourceImpl: TokenDataSourceImpl,
-    ): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenDataSourceImpl)
+        @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi, tokenDataSourceImpl: TokenDataSourceImpl, aesCoder: AesCoder
+    ): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenDataSourceImpl, aesCoder)
 
     @Provides
     @Singleton
-    fun providesGetMedicineIdDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): MedicineIdDataSource =
+    fun providesGetMedicineIdDataSource(@Named("awsNetworkApiWithoutTokens") awsNetworkApi: AwsNetworkApi): MedicineIdDataSource =
         MedicineIdDataSourceImpl(awsNetworkApi)
+
+    @Provides
+    @Singleton
+    fun providesUserInfosDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): UserInfoDataSource =
+        UserInfoDataSourceImpl(awsNetworkApi)
 
     @Provides
     @Singleton
@@ -126,9 +128,9 @@ interface AwsNetworkApi {
     /**
      * 특정 약에 대한 댓글 목록 조회
      */
-    @GET(value = "medicine/comment")
+    @GET(value = "medicine/comment/{medicineId}")
     suspend fun getComments(
-        @Query("medicineId", encoded = true) medicineId: Long,
+        @Path("medicineId", encoded = true) medicineId: Long,
     ): Response<CommentListResponse>
 
     /**
@@ -184,6 +186,8 @@ interface AwsNetworkApi {
      */
     @DELETE(value = "user")
     suspend fun withdrawal(): Response<WithdrawalResponse>
+        @Body newCommentParameter: NewCommentParameter
+    ): Response<CommentChangedResponse>
 
     /**
      * 약 ID 조회
@@ -192,4 +196,10 @@ interface AwsNetworkApi {
     suspend fun getMedicineId(
         @Body getMedicineIdParameter: GetMedicineIdParameter
     ): Response<MedicineIdResponse>
+
+    /**
+     * 유저 정보 조회
+     */
+    @GET(value = "user")
+    suspend fun getUserInfo(): Response<UserResponse>
 }

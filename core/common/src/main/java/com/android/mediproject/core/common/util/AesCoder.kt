@@ -20,11 +20,10 @@ class AesCoder @Inject constructor(@ApplicationContext context: Context) {
     private val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
 
     init {
-        val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) context.packageManager.getPackageInfo(
-            context.packageName,
-            PackageManager.PackageInfoFlags.of(0)
-        )
-        else context.packageManager.getPackageInfo(context.packageName, 0)
+        val packageInfo =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) context.packageManager.getPackageInfo(context.packageName,
+                PackageManager.PackageInfoFlags.of(0))
+            else context.packageManager.getPackageInfo(context.packageName, 0)
 
         var key: String? = "${packageInfo.firstInstallTime}".repeat(4).substring(0, 32)
         key?.apply {
@@ -32,6 +31,38 @@ class AesCoder @Inject constructor(@ApplicationContext context: Context) {
             ivParameterSpec = IvParameterSpec(encodeToByteArray(0, 16))
         }
         key = null
+    }
+
+    private fun createSecretKey(plainArray: CharArray): Pair<SecretKeySpec, IvParameterSpec> {
+        val keyLength = plainArray.size
+        val extraLength = 32 - keyLength
+
+        val key = ByteArray(32).apply {
+            plainArray.mapIndexed { index, c ->
+                this[index] = c.code.toByte()
+            }
+            if (extraLength > 0) {
+                val extra = "5".toByte()
+                IntRange(0, extraLength).forEachIndexed { index, i ->
+                    this[keyLength + index] = extra
+                }
+            }
+        }
+        key.fill(0)
+        return (SecretKeySpec(key, "AES") to IvParameterSpec(key.copyOfRange(0, 16)))
+    }
+
+    /**
+     * 비밀번호 암호화
+     */
+    @OptIn(ExperimentalEncodingApi::class)
+    fun encodePassword(email: CharArray, password: CharArray): String {
+        val (pwSecretKey, pwIvParameterSpec) = createSecretKey(email)
+        cipher.init(Cipher.ENCRYPT_MODE, pwSecretKey, pwIvParameterSpec)
+        val encrpytionByte = cipher.doFinal(ByteArray(password.size) { password[it].code.toByte() })
+        val result = Base64.encode(encrpytionByte, 0, encrpytionByte.size)
+        encrpytionByte.fill(0)
+        return result
     }
 
     /**

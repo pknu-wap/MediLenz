@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.android.mediproject.core.common.util.setArguments
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.feature.medicine.databinding.FragmentCommentsHostBinding
@@ -36,9 +37,11 @@ class HostCommentsFragment : Fragment() {
         val graph = navInflater.inflate(com.android.mediproject.feature.comments.R.navigation.medicine_comments_nav)
 
         val args = (viewModel.medicineDetails.value as UiState.Success).data
-        graph.addInDefaultArgs(MedicineBasicInfoArgs(args.itemSequence.toLong(), args.medicineIdInAws).toBundle())
+        graph.findNode(com.android.mediproject.feature.comments.R.id.medicineCommentsFragment)
+            ?.setArguments(MedicineBasicInfoArgs(args.itemSequence.toLong(), args.medicineIdInAws))
 
         navHostFragment.navController.graph = graph
+        viewModel.scrollToBottom()
     }
 
 

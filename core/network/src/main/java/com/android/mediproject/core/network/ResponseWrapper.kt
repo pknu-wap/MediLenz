@@ -1,5 +1,6 @@
 package com.android.mediproject.core.network
 
+import com.android.mediproject.core.model.ai.BaseVertexAiResponse
 import retrofit2.Response
 
 /**
@@ -13,6 +14,21 @@ fun <T> Response<T>.onResponse(): Result<T> {
     if (isSuccessful) {
         body()?.let { body ->
             return Result.success(body)
+        } ?: return Result.failure(Throwable("Response Body is Null"))
+    } else {
+        return Result.failure(errorBody()?.string()?.let { Throwable(it) } ?: Throwable("Response Error"))
+    }
+}
+
+
+inline fun <reified T : BaseVertexAiResponse> Response<T>.onGoogleResponse(): Result<T> {
+    if (isSuccessful) {
+        body()?.let { body ->
+            if (body.error != null) {
+                return Result.failure(Throwable(body.error!!.message))
+            } else {
+                return Result.success(body)
+            }
         } ?: return Result.failure(Throwable("Response Body is Null"))
     } else {
         return Result.failure(errorBody()?.string()?.let { Throwable(it) } ?: Throwable("Response Error"))
