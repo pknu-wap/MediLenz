@@ -66,10 +66,10 @@ class MedicineCommentsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getAccountStateUseCase.invoke().let { accountState ->
-                _accountState.value = accountState
-                if (accountState is AccountState.SignedIn) {
-                    _myUserId.value = accountState.myId
+            getAccountStateUseCase.invoke().collectLatest {
+                _accountState.value = it
+                if (it is AccountState.SignedIn) {
+                    _myUserId.value = it.myId
                 }
             }
         }

@@ -12,8 +12,10 @@ import kotlinx.coroutines.flow.zip
 import javax.inject.Inject
 
 class UserInfoRepositoryImpl @Inject constructor(
-    private val userInfoDataSource: UserInfoDataSource, private val signRepository: SignRepository
+    private val userInfoDataSource: UserInfoDataSource
 ) : UserInfoRepository {
+
+    @Inject lateinit var signRepository: SignRepository
 
     private val _myAccountInfo = MutableStateFlow<AccountState>(AccountState.Unknown)
 
