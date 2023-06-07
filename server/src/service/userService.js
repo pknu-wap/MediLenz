@@ -7,14 +7,14 @@ const { createAccessToken, createRefreshToken } = require("../config/jwt");
 
 // sign-in response format
 const tokenResponseFormat = (message, userId = null, nickname = null, email = null, access_token = null, refresh_token = null) => {
-    return {
-        userId,
-        nickname,
-        email,
-        message,
-        access_token,
-        refresh_token
-    }
+   let struct = {};
+   struct.message = message;
+    if (userId) struct.userId = userId;
+    if (nickname) struct.nickname = nickname;
+    if (email) struct.email = email;
+    if (access_token) struct.access_token = access_token;
+    if (refresh_token) struct.refresh_token = refresh_token;
+    return struct;
 }
 const _getUserNickname = async (userId) => { //NOT FOR EXPORT
     try {
@@ -119,7 +119,7 @@ const reissueToken = (userId) => {
     const message = responseMsg.REISSUE_SUCCESS;
     const accessToken = createAccessToken(userId); // generate access token
     const refreshToken = createRefreshToken(userId); // generate refresh token
-    return responseFormat(200, tokenResponseFormat(message, accessToken, refreshToken));
+    return responseFormat(200, tokenResponseFormat(message, null, null, null, accessToken, refreshToken));
 }
 
 // update user information
