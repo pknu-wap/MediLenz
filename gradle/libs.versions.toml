@@ -88,7 +88,10 @@ googleAutoCommon = "1.2.1"
 taskVision = "0.4.3"
 playServicesTflite = "16.1.0"
 tflite = "2.12.0"
+tfliteSupport = "0.4.3"
 gpuDelegate = "0.4.3"
+tfliteMetadata = "0.4.3"
+tfliteGpu = "2.12.0"
 
 # 라이브러리 의존성------------------------------------------------------------------------------------------------------------------------
 [libraries]
@@ -98,7 +101,10 @@ tensorflow-lite-taskVisionPlayServices = { module = "org.tensorflow:tensorflow-l
 tensorflow-lite-playServicesTfliteGpu = { module = "com.google.android.gms:play-services-tflite-gpu", version.ref = "playServicesTflite" }
 tensorflow-lite-playServicesTfliteJava = { module = "com.google.android.gms:play-services-tflite-java", version.ref = "playServicesTflite" }
 tensorflow-lite-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tflite" }
+tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tfliteSupport" }
 tensorflow-lite-gpuDelegate = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "gpuDelegate" }
+tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tfliteGpu" }
+tensorflow-lite-metadata = { module = "org.tensorflow:tensorflow-lite-metadata", version.ref = "tfliteMetadata" }
 
 
 
@@ -301,7 +307,8 @@ workManagers = ["androidx-work-ktx"]
 testUIs = ["androidx-test-espresso-core", "androidx-test-runner", "androidx-test-rules", "androidx-test-core", "androidx-test-junit", "androidx-test-junit-ktx", "androidx-test-truth", "junit"]
 
 tflite = ["tensorflow-lite-lite", "tensorflow-lite-playServicesTfliteGpu", "tensorflow-lite-taskVisionPlayServices",
-    "tensorflow-lite-playServicesTfliteJava", "tensorflow-lite-gpuDelegate"]
+    "tensorflow-lite-playServicesTfliteJava", "tensorflow-lite-gpuDelegate", "tensorflow-lite-metadata",
+    "tensorflow-lite-support", "tensorflow-lite-gpu"]
 
 # ------------------------------------------------------------------------------------------------------------------------
 [plugins]

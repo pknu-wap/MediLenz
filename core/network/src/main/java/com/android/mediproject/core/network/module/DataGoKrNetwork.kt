@@ -4,12 +4,12 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.model.remote.adminaction.AdminActionListResponse
 import com.android.mediproject.core.model.remote.dur.DurResponse
 import com.android.mediproject.core.model.remote.elderlycaution.ElderlyCautionResponse
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
-import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
 import com.android.mediproject.core.network.datasource.dur.DurDataSource
@@ -48,9 +48,8 @@ object DataGoKrNetwork {
     @Provides
     @Singleton
     fun providesDataGoKrNetworkApi(okHttpClient: OkHttpClient): DataGoKrNetworkApi =
-        Retrofit.Builder().client(okHttpClient).addConverterFactory(
-            Json.asConverterFactory("application/json".toMediaType())
-        ).baseUrl(DATA_GO_KR_BASEURL).build().create(DataGoKrNetworkApi::class.java)
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .baseUrl(DATA_GO_KR_BASEURL).build().create(DataGoKrNetworkApi::class.java)
 
 
     @Provides
@@ -105,7 +104,8 @@ interface DataGoKrNetworkApi {
     @GET(value = "DrugPrdtPrmsnInfoService04/getDrugPrdtPrmsnDtlInq03")
     suspend fun getMedicineDetailInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("item_name", encoded = true) itemName: String,
+        @Query("item_name", encoded = true) itemName: String = "",
+        @Query("item_seq", encoded = true) itemSeq: String = "",
         @Query("pageNo") pageNo: Int = 1,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = 100

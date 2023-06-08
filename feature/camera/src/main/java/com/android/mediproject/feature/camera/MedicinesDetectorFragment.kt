@@ -8,6 +8,9 @@ import android.util.Size
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
@@ -15,6 +18,7 @@ import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
 import com.android.mediproject.feature.camera.tflite.CameraHelper
+import com.android.mediproject.feature.search.result.ai.AiSearchResultViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
@@ -33,6 +37,8 @@ class MedicinesDetectorFragment :
     override val fragmentViewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav) {
         defaultViewModelProviderFactory
     }
+
+    private val aiSearchResultViewModel by activityViewModels<AiSearchResultViewModel>()
 
     @Inject lateinit var systemBarStyler: SystemBarStyler
 
@@ -71,7 +77,7 @@ class MedicinesDetectorFragment :
             // AI처리 객체의 콜백을 현재 프래그먼트로 설정
             cameraController.detectionCallback = this@MedicinesDetectorFragment
         }
-        
+
         binding.apply {
             backBtn.setOnClickListener {
                 findNavController().popBackStack()
@@ -106,13 +112,13 @@ class MedicinesDetectorFragment :
                 }
 
                 launch {
-                    fragmentViewModel.detectionObjects.collectLatest { state ->
+                    fragmentViewModel.inferenceState.collectLatest { state ->
                         when (state) {
-                            is DetectionState.Detected -> {
+                            is InferenceState.Detected -> {
                                 findNavController().navigate(MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment())
                             }
 
-                            is DetectionState.Detecting -> {
+                            is InferenceState.Detecting -> {
                                 overlayView.apply {
                                     if (results.isNotEmpty()) {
                                         fragmentViewModel.cameraController.pause()
@@ -126,13 +132,21 @@ class MedicinesDetectorFragment :
                                 }
                             }
 
-                            is DetectionState.Initial -> {
+                            is InferenceState.Initial -> {
 
                             }
 
-                            is DetectionState.DetectFailed -> {
+                            is InferenceState.DetectFailed -> {
                                 fragmentViewModel.cameraController.resume()
                                 toast(getString(R.string.detectionFailed))
+                            }
+
+                            is InferenceState.Classified -> {
+                                aiSearchResultViewModel.setClassificationResult(state.classificationResult)
+                                findNavController().navigate("medilens://main/search/search_medicines/airesult".toUri(),
+                                    NavOptions.Builder()
+                                        .setPopUpTo(com.android.mediproject.feature.search.R.id.aiSearchResultFragment, true).build())
+                                LoadingDialog.dismiss()
                             }
                         }
 

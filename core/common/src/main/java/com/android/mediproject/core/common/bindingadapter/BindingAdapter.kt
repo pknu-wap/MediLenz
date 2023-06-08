@@ -1,5 +1,6 @@
 package com.android.mediproject.core.common.bindingadapter
 
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.text.Spanned
 import android.view.View
@@ -29,6 +30,11 @@ object BindingAdapter {
     @BindingAdapter("img")
     @JvmStatic
     fun loadImage(imageView: ImageView, img: String) {
+        if (img.isEmpty()) {
+            imageView.setBackgroundResource(R.drawable.baseline_hide_image_24)
+            imageView.imageTintList = ColorStateList.valueOf(android.graphics.Color.BLUE)
+            return
+        }
         GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(false).into(imageView)
     }
 

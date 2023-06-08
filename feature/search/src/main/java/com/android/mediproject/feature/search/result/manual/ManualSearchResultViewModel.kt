@@ -14,6 +14,7 @@ import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto
 import com.android.mediproject.core.model.requestparameters.ApprovalListSearchParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
+import com.android.mediproject.feature.search.result.EventState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,8 +36,8 @@ import javax.inject.Inject
 class ManualSearchResultViewModel @Inject constructor(
     private val getMedicineApprovalListUseCase: GetMedicineApprovalListUseCase,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher) : BaseViewModel(),
-    ISendEvent<ApprovedMedicineItemDto> {
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
+) : BaseViewModel(), ISendEvent<ApprovedMedicineItemDto> {
 
     private val _searchParameter =
         MutableStateFlow(ApprovalListSearchParameter(itemName = null, entpName = null, medicationType = MedicationType.ALL))
@@ -105,8 +106,4 @@ class ManualSearchResultViewModel @Inject constructor(
             )))
         }
     }
-}
-
-sealed class EventState {
-    data class OpenMedicineInfo(val medicineInfoArgs: MedicineInfoArgs) : EventState()
 }

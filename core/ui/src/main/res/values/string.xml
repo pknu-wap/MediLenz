@@ -24,6 +24,6 @@
     <string name="option_show_all_medicines">모두 보기</string>
     <string name="option_show_only_generic_medicines">일반 의약품만 보기</string>
     <string name="option_show_only_specialty_medicines">전문 의약품만 보기</string>
-    <string name="detectioned_medicine_counts">개의 의약품이\n검색되었습니다</string>
+    <string name="detectioned_medicine_counts">개의 의약품이 검색되었습니다</string>
 
 </resources>

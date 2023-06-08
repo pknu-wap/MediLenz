@@ -10,7 +10,8 @@ import androidx.core.text.toSpannable
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import com.android.mediproject.feature.camera.DetectionState
+import com.android.mediproject.core.common.dialog.LoadingDialog
+import com.android.mediproject.feature.camera.InferenceState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
 import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentConfirmDialogBinding
@@ -35,7 +36,8 @@ class ConfirmDialogFragment : DialogFragment() {
             _binding = FragmentConfirmDialogBinding.inflate(layoutInflater, null, false)
             setView(onCreateView(layoutInflater, binding.root, savedInstanceState))
             setPositiveButton(getString(R.string.search)) { _, _ ->
-                findNavController().popBackStack()
+                LoadingDialog.showLoadingDialog(requireContext(), getString(R.string.classifyingMedicines))
+                viewModel.classifyMedicine((viewModel.inferenceState.replayCache.last() as InferenceState.Detected).detection)
             }
             setNegativeButton(getString(R.string.close)) { _, _ ->
                 findNavController().popBackStack()
@@ -60,9 +62,9 @@ class ConfirmDialogFragment : DialogFragment() {
         }
 
         viewLifecycleOwner.repeatOnStarted {
-            viewModel.detectionObjects.collectLatest { detectionState ->
+            viewModel.inferenceState.collectLatest { detectionState ->
                 when (detectionState) {
-                    is DetectionState.Detected -> {
+                    is InferenceState.Detected -> {
                         val detection = detectionState.detection
                         val text = "${detection.detection.size} ${getString(R.string.checkCountsOfMedicinesMessage)}".toSpannable()
                         binding.confirmDialogTextView.text = text

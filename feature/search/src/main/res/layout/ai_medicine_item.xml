@@ -1,107 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:paddingHorizontal="24dp"
-    android:paddingVertical="8dp">
+<layout>
 
-    <ImageView
-        android:id="@+id/capturedImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:contentDescription="@string/medicineImage"
-        android:scaleType="fitCenter"
-        android:src="@drawable/logo"
-        app:layout_constraintBottom_toTopOf="@id/inferedImageView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <ImageView
-        android:id="@+id/inferedImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="4dp"
-        android:contentDescription="@string/medicineImage"
-        android:scaleType="fitCenter"
-        android:src="@drawable/logo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/capturedImageView" />
+        <variable
+            name="item"
+            type="com.android.mediproject.core.model.ai.ClassificationResult" />
+    </data>
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/rootLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:barrierDirection="right"
-        app:barrierMargin="8dp"
-        app:constraint_referenced_ids="capturedImageView, inferedImageView" />
+        android:layout_marginVertical="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true">
 
-    <TextView
-        android:id="@+id/medicineNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="@string/medicineName"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/mainIngredientTextView"
-        app:layout_constraintStart_toEndOf="@id/barrier"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        <ImageView
+            android:id="@+id/capturedImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:contentDescription="@string/medicineImage"
+            android:scaleType="fitCenter"
+            app:img="@{item.medicineDetatilInfoDto.insertFileUrl}"
+            app:layout_constraintBottom_toTopOf="@id/inferedImageView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/mainIngredientTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="@string/mainIngredient"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/mainEffectTextView"
-        app:layout_constraintStart_toEndOf="@id/barrier"
+        <ImageView
+            android:id="@+id/inferedImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="4dp"
+            android:clickable="true"
+            android:contentDescription="@string/medicineImage"
+            android:scaleType="fitCenter"
+            app:img="@{item.detectionObject.image}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/capturedImageView" />
 
-        app:layout_constraintTop_toBottomOf="@id/medicineNameTextView" />
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="right"
+            app:barrierMargin="8dp"
+            app:constraint_referenced_ids="capturedImageView, inferedImageView" />
 
-    <TextView
-        android:id="@+id/mainEffectTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="@string/mainEffect"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/companyNameTextView"
-        app:layout_constraintStart_toEndOf="@id/barrier"
-        app:layout_constraintTop_toBottomOf="@id/mainIngredientTextView" />
+        <TextView
+            android:id="@+id/medicineNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-condensed-light"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/ingredientTextView"
+            app:layout_constraintEnd_toStartOf="@id/medicineTypeTextView"
+            app:layout_constraintStart_toEndOf="@id/barrier"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-    <TextView
-        android:id="@+id/companyNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/companyName"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/barrier"
-        app:layout_constraintTop_toBottomOf="@id/mainEffectTextView" />
+        <TextView
+            android:id="@+id/ingredientTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:text="@{item.medicineDetatilInfoDto.mainItemIngredient}"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/effectTextView"
+            app:layout_constraintEnd_toStartOf="@id/medicineTypeTextView"
+            app:layout_constraintStart_toEndOf="@id/barrier"
+            app:layout_constraintTop_toBottomOf="@id/medicineNameTextView" />
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/medicineTypeTextView"
-        style="@style/Widget.Material3.Chip.Assist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/medicineType"
-        android:textColor="@color/medicineTypeChipStrokeColor"
-        android:textSize="13sp"
-        app:chipStrokeColor="@color/medicineTypeChipStrokeColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_min="wrap"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toEndOf="@id/medicineNameTextView"
-        app:layout_constraintTop_toTopOf="@id/medicineNameTextView"
-        app:layout_constraintWidth_min="wrap" />
+        <TextView
+            android:id="@+id/effectTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="@{item.medicineDetatilInfoDto.itemEnglishName}"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/manufacturerTextView"
+            app:layout_constraintStart_toEndOf="@id/barrier"
+            app:layout_constraintTop_toBottomOf="@id/ingredientTextView" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/manufacturerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{item.medicineDetatilInfoDto.entpName}"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/barrier"
+            app:layout_constraintTop_toBottomOf="@id/effectTextView" />
+
+        <TextView
+            android:id="@+id/medicineTypeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/medicine_type_background"
+            android:maxLines="1"
+            android:text="@{item.medicineDetatilInfoDto.etcOtcCode}"
+            android:textColor="@color/medicineType"
+            android:textSize="11sp"
+            app:layout_constraintLeft_toRightOf="@id/medicineNameTextView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

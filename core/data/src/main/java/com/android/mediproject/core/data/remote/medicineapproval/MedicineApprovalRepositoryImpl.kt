@@ -20,7 +20,8 @@ import javax.inject.Inject
 class MedicineApprovalRepositoryImpl @Inject constructor(
     private val medicineApprovalDataSource: MedicineApprovalDataSource,
     private val searchHistoryRepository: SearchHistoryRepository,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher) : MedicineApprovalRepository {
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+) : MedicineApprovalRepository {
 
     /**
      * PagingData를 사용하여 페이징 처리를 하기 위해 Pager를 사용
@@ -45,6 +46,17 @@ class MedicineApprovalRepositoryImpl @Inject constructor(
         medicineApprovalDataSource.getMedicineDetailInfo(itemName).map { result ->
             result.fold(onSuccess = {
                 Result.success(it.body.items.first())
+            }, onFailure = {
+                Result.failure(it)
+            })
+        }
+
+    override fun getMedicineDetailInfoByItemSeq(itemSeqs: List<String>) =
+        medicineApprovalDataSource.getMedicineDetailInfoByItemSeq(itemSeqs).map { result ->
+            result.fold(onSuccess = { medicineDetailInfoResponses ->
+                Result.success(medicineDetailInfoResponses.map {
+                    it.body.items.first()
+                })
             }, onFailure = {
                 Result.failure(it)
             })

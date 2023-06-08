@@ -18,16 +18,16 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
 
     override suspend fun getMedicineApprovalList(
         itemName: String?, entpName: String?, medicationType: String?, pageNo: Int
-    ): Result<MedicineApprovalListResponse> = dataGoKrNetworkApi.getApprovalList(
-        itemName = itemName, entpName = entpName, pageNo = pageNo, medicationType = medicationType
-    ).onResponse().fold(onSuccess = { response ->
-        response.isSuccess().let {
-            if (it == DataGoKrResult.isSuccess) Result.success(response)
-            else Result.failure(Throwable(it.failedMessage))
-        }
-    }, onFailure = {
-        Result.failure(it)
-    })
+    ): Result<MedicineApprovalListResponse> =
+        dataGoKrNetworkApi.getApprovalList(itemName = itemName, entpName = entpName, pageNo = pageNo, medicationType = medicationType)
+            .onResponse().fold(onSuccess = { response ->
+                response.isSuccess().let {
+                    if (it == DataGoKrResult.isSuccess) Result.success(response)
+                    else Result.failure(Throwable(it.failedMessage))
+                }
+            }, onFailure = {
+                Result.failure(it)
+            })
 
     override fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse>> = channelFlow {
         dataGoKrNetworkApi.getMedicineDetailInfo(itemName = itemName).onResponse().fold(onSuccess = { response ->
@@ -40,5 +40,26 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
         }).also {
             send(it)
         }
+    }
+
+    override fun getMedicineDetailInfoByItemSeq(itemSeqs: List<String>) = channelFlow {
+        val responses = itemSeqs.map { itemSeq ->
+            dataGoKrNetworkApi.getMedicineDetailInfo(itemSeq = itemSeq).onResponse().fold(onSuccess = { response ->
+                response.isSuccess().let {
+                    if (it is DataGoKrResult.isSuccess) Result.success(response)
+                    else Result.failure(Throwable(it.failedMessage))
+                }
+            }, onFailure = {
+                Result.failure<MedicineDetailInfoResponse>(it)
+            })
+        }
+
+        val results = responses.let {
+            val failed = it.any { result -> result.isFailure }
+            if (failed) Result.failure(Throwable("약품 상세 정보 조회에 실패했습니다."))
+            else Result.success(it.map { result -> result.getOrNull()!! })
+        }
+
+        trySend(results)
     }
 }

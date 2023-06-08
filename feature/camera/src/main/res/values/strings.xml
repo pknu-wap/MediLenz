@@ -18,5 +18,6 @@
     <string name="zoomOut">축소</string>
     <string name="zoomIn">확대</string>
     <string name="detectionFailed">인식 실패</string>
+    <string name="classifyingMedicines">인공지능이 약을 분류하고 있습니다</string>
 
 </resources>

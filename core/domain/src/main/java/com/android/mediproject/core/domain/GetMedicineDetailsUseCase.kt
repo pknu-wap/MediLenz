@@ -17,10 +17,12 @@ import javax.inject.Inject
 class GetMedicineDetailsUseCase @Inject constructor(
     private val medicineApprovalRepository: MedicineApprovalRepository,
     private val medicineIdRepository: MedicineIdRepository,
-    private val signRepository: SignRepository) {
+    private val signRepository: SignRepository
+) {
 
     operator fun invoke(
-        medicineInfoArgs: MedicineInfoArgs): Flow<Result<MedicineDetatilInfoDto>> = channelFlow {
+        medicineInfoArgs: MedicineInfoArgs
+    ): Flow<Result<MedicineDetatilInfoDto>> = channelFlow {
         medicineApprovalRepository.getMedicineDetailInfo(
             itemName = medicineInfoArgs.itemKorName,
         ).zip(medicineIdRepository.getMedicineId(GetMedicineIdParameter(entpName = medicineInfoArgs.entpKorName,
@@ -44,6 +46,21 @@ class GetMedicineDetailsUseCase @Inject constructor(
 
             val medicineInfo = medicineInfoResult.fold(onSuccess = { item ->
                 Result.success(item.toDto(medicineId))
+            }, onFailure = {
+                Result.failure(it)
+            })
+
+            trySend(medicineInfo)
+        }
+    }
+
+
+    fun getMedicineDetailInfoByItemSeq(itemSeqs: List<String>): Flow<Result<List<MedicineDetatilInfoDto>>> = channelFlow {
+        medicineApprovalRepository.getMedicineDetailInfoByItemSeq(itemSeqs).collectLatest { medicineInfoResult ->
+            val medicineInfo = medicineInfoResult.fold(onSuccess = { item ->
+                Result.success(item.map {
+                    it.toDto()
+                })
             }, onFailure = {
                 Result.failure(it)
             })
