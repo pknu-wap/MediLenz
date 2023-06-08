@@ -231,7 +231,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             is DialogFlag.Logout -> {
                 binding.apply {
                     val span =
-                        SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
+                        SpannableStringBuilder(getString(R.string.logout)).apply {
                             setSpan(
                                 ForegroundColorSpan(
                                     ContextCompat.getColor(
@@ -247,6 +247,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         }
                     dialogTitleTV.text = getString(R.string.logout)
                     dialogSubtitle1.visibility = View.GONE
+                    logoutDescriptionTV.visibility = View.VISIBLE
                 }
             }
         }
