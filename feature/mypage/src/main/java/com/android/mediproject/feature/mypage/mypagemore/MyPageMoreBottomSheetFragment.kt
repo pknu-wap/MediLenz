@@ -13,6 +13,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.CHANGE_NICKNAME
 import com.android.mediproject.core.common.CHANGE_PASSWORD
+import com.android.mediproject.core.common.LOGOUT
 import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -22,7 +23,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class MyPageMoreBottomSheetFragment(private val backCallback : () -> Unit) : BottomSheetDialogFragment() {
+class MyPageMoreBottomSheetFragment(private val backCallback: () -> Unit) :
+    BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "MyPageMoreBottomSheetFragment"
@@ -75,11 +77,12 @@ class MyPageMoreBottomSheetFragment(private val backCallback : () -> Unit) : Bot
                     CHANGE_NICKNAME -> setFragmentResult(TAG, bundleOf(TAG to CHANGE_NICKNAME))
                     CHANGE_PASSWORD -> setFragmentResult(TAG, bundleOf(TAG to CHANGE_PASSWORD))
                     WITHDRAWAL -> setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL))
+                    LOGOUT -> setFragmentResult(TAG, bundleOf(TAG to LOGOUT))
                     else -> Unit
                 }
             }
         }
-    
+
     private fun handleFlag(flag: Int) {
         when (flag) {
             CHANGE_NICKNAME -> {
@@ -103,6 +106,15 @@ class MyPageMoreBottomSheetFragment(private val backCallback : () -> Unit) : Bot
                         setTypeface(null, Typeface.NORMAL)
                     }
                     withdrawalTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                    logoutTV.apply {
                         setTextColor(
                             ContextCompat.getColor(
                                 requireContext(),
@@ -143,6 +155,15 @@ class MyPageMoreBottomSheetFragment(private val backCallback : () -> Unit) : Bot
                         )
                         setTypeface(null, Typeface.NORMAL)
                     }
+                    logoutTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
                 }
             }
 
@@ -167,6 +188,56 @@ class MyPageMoreBottomSheetFragment(private val backCallback : () -> Unit) : Bot
                         setTypeface(null, Typeface.NORMAL)
                     }
                     withdrawalTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.main
+                            )
+                        )
+                        setTypeface(null, Typeface.BOLD)
+                    }
+                    logoutTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                }
+            }
+
+            LOGOUT -> {
+                binding.apply {
+                    changeNickNameTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                    changePasswordTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                    withdrawalTV.apply {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.android.mediproject.core.ui.R.color.gray3
+                            )
+                        )
+                        setTypeface(null, Typeface.NORMAL)
+                    }
+                    logoutTV.apply {
                         setTextColor(
                             ContextCompat.getColor(
                                 requireContext(),
