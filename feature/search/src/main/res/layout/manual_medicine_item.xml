@@ -18,10 +18,9 @@
 
         <ImageView
             android:id="@+id/medicineImgView"
-            android:src="@drawable/logo"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/circle_image_background"
+            app:img="@{item.imgUrl}"
             android:contentDescription="@string/medicineImage"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
