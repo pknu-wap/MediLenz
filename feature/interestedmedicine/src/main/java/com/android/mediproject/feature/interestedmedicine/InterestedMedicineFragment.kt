@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.android.mediproject.core.model.medicine.InterestedMedicine.InterestedMedicineDto
+import com.android.mediproject.core.model.interestedmedicine.InterestedMedicineDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.R

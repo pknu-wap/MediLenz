@@ -36,24 +36,25 @@ import kotlin.coroutines.suspendCoroutine
  * 카메라 제어, ai처리 담당
  */
 class CameraHelper @Inject constructor(
-    private val context: Context) : LifecycleEventObserver, AiController, CameraController {
+    private val context: Context
+) : LifecycleEventObserver, AiController, CameraController {
 
     private var camera: Camera? = null
 
     private var _preview: Preview? = null
-    private var preview: Preview = _preview!!
+    private val preview: Preview get() = _preview!!
 
     private var _previewView: PreviewView? = null
-    private val previewView: PreviewView = _previewView!!
+    private val previewView: PreviewView get() = _previewView!!
 
     private var _imageAnalyzer: ImageAnalysis? = null
-    private val imageAnalyzer: ImageAnalysis = _imageAnalyzer!!
+    private val imageAnalyzer: ImageAnalysis get() = _imageAnalyzer!!
 
     private var _cameraProvider: ProcessCameraProvider? = null
-    private val cameraProvider = _cameraProvider!!
+    private val cameraProvider get() = _cameraProvider!!
 
     private var _objectDetector: ObjectDetector? = null
-    private val objectDetector = _objectDetector!!
+    private val objectDetector get() = _objectDetector!!
 
     private val cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
 

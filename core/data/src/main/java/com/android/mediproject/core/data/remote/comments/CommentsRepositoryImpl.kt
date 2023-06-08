@@ -7,6 +7,7 @@ import com.android.mediproject.core.common.AWS_LOAD_PAGE_SIZE
 import com.android.mediproject.core.data.remote.sign.SignRepository
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.comments.LikeResponse
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
@@ -23,7 +24,8 @@ import kotlinx.coroutines.flow.lastOrNull
 import javax.inject.Inject
 
 class CommentsRepositoryImpl @Inject constructor(
-    private val commentsDataSource: CommentsDataSource, private val signRepository: SignRepository) : CommentsRepository {
+    private val commentsDataSource: CommentsDataSource, private val signRepository: SignRepository
+) : CommentsRepository {
     override fun getCommentsForAMedicine(medicineId: Long): Flow<PagingData<CommentListResponse.Comment>> =
         Pager(config = PagingConfig(pageSize = AWS_LOAD_PAGE_SIZE, prefetchDistance = 5), pagingSourceFactory = {
             CommentsListDataSourceImpl(commentsDataSource, medicineId)
@@ -70,7 +72,7 @@ class CommentsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun likeComment(parameter: LikeCommentParameter): Flow<Result<CommentChangedResponse>> = channelFlow {
+    override fun likeComment(parameter: LikeCommentParameter): Flow<Result<LikeResponse>> = channelFlow {
         checkToken().collectLatest { tokenState ->
             tokenState.onSuccess {
                 commentsDataSource.likeComment(parameter).collectLatest {

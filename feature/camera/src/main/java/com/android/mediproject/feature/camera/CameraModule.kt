@@ -23,5 +23,4 @@ class CameraModule {
 
     @Provides
     fun providesAiController(cameraHelper: CameraHelper): AiController = cameraHelper
-
 }

@@ -58,12 +58,12 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, CommentsAdapter.BaseCommen
             binding.apply {
                 replyButton.setOnClickListener {
                     comment?.apply {
-                        onClickReply?.invoke(absoluteAdapterPosition)
+                        onClickReply?.invoke(content, commentId)
                     }
                 }
                 likeButton.setOnClickListener {
                     comment?.apply {
-                        onClickLike?.invoke(commentId)
+                        onClickLike?.invoke(commentId, !isLiked)
                     }
                 }
                 moreButton.setOnClickListener {
@@ -90,6 +90,7 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, CommentsAdapter.BaseCommen
             binding.apply {
                 comment = commentDto
                 moreButton.isVisible = commentDto.isMine
+                likeButton.setBackgroundResource(if (commentDto.isLiked) R.drawable.baseline_thumb_up_24 else R.drawable.outline_thumb_up_24)
                 executePendingBindings()
             }
         }
@@ -106,12 +107,12 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, CommentsAdapter.BaseCommen
             binding.apply {
                 commentView.replyButton.setOnClickListener {
                     commentView.comment?.apply {
-                        onClickReply?.invoke(absoluteAdapterPosition)
+                        onClickReply?.invoke(content, commentId)
                     }
                 }
                 commentView.likeButton.setOnClickListener {
                     commentView.comment?.apply {
-                        onClickLike?.invoke(commentId)
+                        onClickLike?.invoke(commentId, !isLiked)
                     }
                 }
                 commentView.moreButton.setOnClickListener {
@@ -138,6 +139,7 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, CommentsAdapter.BaseCommen
             binding.apply {
                 commentView.comment = commentDto
                 commentView.moreButton.isVisible = commentDto.isMine
+                commentView.likeButton.setBackgroundResource(if (commentDto.isLiked) R.drawable.baseline_thumb_up_24 else R.drawable.outline_thumb_up_24)
                 commentView.executePendingBindings()
             }
         }

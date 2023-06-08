@@ -45,7 +45,7 @@ class SignRepositoryImpl @Inject constructor(
                 signInResult.onSuccess {
                     // 내 계정 정보 메모리에 저장
                     userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it._userId!!.toLong(), it._nickName!!, it._email!!))
-                    saveMyAccountInfo(if (signInParameter.isSavedEmail) it._email!! else "", it._nickName!!, it._userId!!.toLong())
+                    saveMyAccountInfo(it._email!!, it._nickName!!, it._userId!!.toLong())
                 }
             }
 
@@ -78,7 +78,7 @@ class SignRepositoryImpl @Inject constructor(
                 signUpResult.onSuccess {
                     // 내 계정 정보 메모리에 저장
                     userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it._userId!!.toLong(), it._nickName!!, it._email!!))
-                    saveMyAccountInfo("", it._nickName!!, it._userId!!.toLong())
+                    saveMyAccountInfo(it._email!!, it._nickName!!, it._userId!!.toLong())
                 }
             }
 

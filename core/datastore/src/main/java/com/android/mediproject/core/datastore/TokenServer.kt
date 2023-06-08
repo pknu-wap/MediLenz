@@ -21,7 +21,6 @@ class TokenServerImpl @Inject constructor() : TokenServer {
     override val currentTokens: EndpointTokenState
         get() {
             val token = tokens.replayCache.lastOrNull()
-            Log.d("wap","TokenServer currentTokens () : token값 : "+token.toString())
             return if (token == null) {
                 EndpointTokenState.NoToken
             } else {
