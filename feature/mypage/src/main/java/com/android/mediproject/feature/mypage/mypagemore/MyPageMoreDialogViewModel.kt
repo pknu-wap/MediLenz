@@ -58,6 +58,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
 
     fun logout() = viewModelScope.launch{
         logoutComplete()
+        toast("로그아웃이 완료되었습니다.")
         cancelDialog()
     }
 
