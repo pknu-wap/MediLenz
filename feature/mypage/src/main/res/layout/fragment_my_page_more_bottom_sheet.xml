@@ -34,7 +34,7 @@
             android:id="@+id/changePasswordTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="15dp"
             android:gravity="center"
             android:onClick="@{()->viewModel.changePassword()}"
             android:padding="10dp"
@@ -46,11 +46,23 @@
             android:id="@+id/withdrawalTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="15dp"
             android:gravity="center"
             android:onClick="@{()->viewModel.withdrawal()}"
             android:padding="10dp"
             android:text="@string/withdrawal"
+            android:textColor="@color/gray3"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/logoutTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.withdrawal()}"
+            android:padding="10dp"
+            android:text="@string/logout"
             android:textColor="@color/gray3"
             android:textSize="18sp" />
 
