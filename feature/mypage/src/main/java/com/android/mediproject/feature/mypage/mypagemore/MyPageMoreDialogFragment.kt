@@ -37,6 +37,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         object ChangeNickName : DialogFlag()
         object ChangePassword : DialogFlag()
         object Withdrawal : DialogFlag()
+        object Logout : DialogFlag()
     }
 
     private val fragmentViewModel: MyPageMoreDialogViewModel by viewModels()
