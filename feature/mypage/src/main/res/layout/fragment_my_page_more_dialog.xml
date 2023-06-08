@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/white"
         android:paddingHorizontal="20dp">
 
         <TextView
@@ -31,6 +32,15 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/logoutDescriptionTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:text="완료 버튼을 누르면 로그아웃 됩니다."
+            android:layout_marginTop="25dp"/>
 
         <com.android.mediproject.core.ui.base.view.Subtitle
             android:id="@+id/dialogSubtitle1"

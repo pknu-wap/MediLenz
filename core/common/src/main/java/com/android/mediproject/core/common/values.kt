@@ -7,3 +7,4 @@ const val AWS_LOAD_PAGE_SIZE = 100
 const val CHANGE_NICKNAME = 301
 const val CHANGE_PASSWORD = 302
 const val WITHDRAWAL = 303
+const val LOGOUT = 304

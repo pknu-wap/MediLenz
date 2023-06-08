@@ -7,10 +7,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
-import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto
+import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedicineDto
+import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.interestedmedicine.databinding.FragmentMoreInterestedMedicineBinding
 import dagger.hilt.android.AndroidEntryPoint
+import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,7 +39,13 @@ class MoreInterestedMedicineFragment :
         super.onViewCreated(view, savedInstanceState)
         setBarStyle()
         binding.apply {
-            viewModel = fragmentViewModel
+            viewModel = fragmentViewModel.apply {
+                viewLifecycleOwner.apply {
+                    repeatOnStarted { interstedMedicineList.collect { setInterstedMedicineList(it) } }
+                    repeatOnStarted { token.collect { handleToken(it) } }
+                    loadTokens()
+                }
+            }
 
             interestedMedicineListRV.apply {
                 adapter = moreInterestedMedicineAdapter
@@ -45,132 +54,22 @@ class MoreInterestedMedicineFragment :
                 addItemDecoration(DividerItemDecoration(requireContext(), 1))
             }
         }
+    }
 
-        moreInterestedMedicineAdapter.submitList(
-            mutableListOf(
-                ApprovedMedicineItemDto(
-                    itemName = "탁센연질캡슐",
-                    entpName = "(주)녹십자",
-                    entpEngName = "GreenSipja",
-                    medicineType = "일반의약품",
-                    itemIngrName = "나프록센",
-                    itemEngName = "Naproxen",
-                    itemSeq = 0,
-                    entpSeq = "iisque",
-                    entpNo = "eius",
-                    itemPermitDate = null,
-                    induty = null,
-                    prdlstStdrCode = null,
-                    prductType = "consectetuer",
-                    prductPrmisnNo = null,
-                    itemIngrCnt = "quaerendum",
-                    imgUrl = "http://www.bing.com/search?q=etiam",
-                    permitKindCode = null,
-                    cancelDate = null,
-                    cancelName = null,
-                    ediCode = null,
-                    bizrno = null,
-                    onClick = {},
-                ),
-                ApprovedMedicineItemDto(
-                    itemName = "탁센연질캡슐",
-                    entpName = "(주)녹십자",
-                    entpEngName = "GreenSipja",
-                    medicineType = "일반의약품",
-                    itemIngrName = "나프록센",
-                    itemEngName = "Naproxen",
-                    itemSeq = 0,
-                    entpSeq = "iisque",
-                    entpNo = "eius",
-                    itemPermitDate = null,
-                    induty = null,
-                    prdlstStdrCode = null,
-                    prductType = "consectetuer",
-                    prductPrmisnNo = null,
-                    itemIngrCnt = "quaerendum",
-                    imgUrl = "http://www.bing.com/search?q=etiam",
-                    permitKindCode = null,
-                    cancelDate = null,
-                    cancelName = null,
-                    ediCode = null,
-                    bizrno = null,
-                    onClick = {},
-                ),
-                ApprovedMedicineItemDto(
-                    itemName = "탁센연질캡슐",
-                    entpName = "(주)녹십자",
-                    entpEngName = "GreenSipja",
-                    medicineType = "일반의약품",
-                    itemIngrName = "나프록센",
-                    itemEngName = "Naproxen",
-                    itemSeq = 0,
-                    entpSeq = "iisque",
-                    entpNo = "eius",
-                    itemPermitDate = null,
-                    induty = null,
-                    prdlstStdrCode = null,
-                    prductType = "consectetuer",
-                    prductPrmisnNo = null,
-                    itemIngrCnt = "quaerendum",
-                    imgUrl = "http://www.bing.com/search?q=etiam",
-                    permitKindCode = null,
-                    cancelDate = null,
-                    cancelName = null,
-                    ediCode = null,
-                    bizrno = null,
-                    onClick = {},
-                ),
-                ApprovedMedicineItemDto(
-                    itemName = "탁센연질캡슐",
-                    entpName = "(주)녹십자",
-                    entpEngName = "GreenSipja",
-                    medicineType = "일반의약품",
-                    itemIngrName = "나프록센",
-                    itemEngName = "Naproxen",
-                    itemSeq = 0,
-                    entpSeq = "iisque",
-                    entpNo = "eius",
-                    itemPermitDate = null,
-                    induty = null,
-                    prdlstStdrCode = null,
-                    prductType = "consectetuer",
-                    prductPrmisnNo = null,
-                    itemIngrCnt = "quaerendum",
-                    imgUrl = "http://www.bing.com/search?q=etiam",
-                    permitKindCode = null,
-                    cancelDate = null,
-                    cancelName = null,
-                    ediCode = null,
-                    bizrno = null,
-                    onClick = {},
-                ),
-                ApprovedMedicineItemDto(
-                    itemName = "탁센연질캡슐",
-                    entpName = "(주)녹십자",
-                    entpEngName = "GreenSipja",
-                    medicineType = "일반의약품",
-                    itemIngrName = "나프록센",
-                    itemEngName = "Naproxen",
-                    itemSeq = 0,
-                    entpSeq = "iisque",
-                    entpNo = "eius",
-                    itemPermitDate = null,
-                    induty = null,
-                    prdlstStdrCode = null,
-                    prductType = "consectetuer",
-                    prductPrmisnNo = null,
-                    itemIngrCnt = "quaerendum",
-                    imgUrl = "http://www.bing.com/search?q=etiam",
-                    permitKindCode = null,
-                    cancelDate = null,
-                    cancelName = null,
-                    ediCode = null,
-                    bizrno = null,
-                    onClick = {},
-                ),
-            )
-        )
+    private fun handleToken(token: TokenState<CurrentTokenDto>) {
+        when (token) {
+            is TokenState.Empty -> {}
+            is TokenState.Error -> {}
+            is TokenState.RefreshExpiration -> {}
+            is TokenState.AccessExpiration -> {}
+            is TokenState.Valid -> {
+                fragmentViewModel.loadInterestedMedicines()
+            }
+        }
+    }
 
+    private fun setInterstedMedicineList(medicineList: List<MoreInterestedMedicineDto>) {
+        moreInterestedMedicineAdapter.submitList(medicineList)
     }
 
     private fun setBarStyle() = binding.apply {

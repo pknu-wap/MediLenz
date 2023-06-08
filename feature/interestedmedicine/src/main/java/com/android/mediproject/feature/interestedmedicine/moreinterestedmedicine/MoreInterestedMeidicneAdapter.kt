@@ -5,42 +5,32 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto
+import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedicineDto
 import com.android.mediproject.feature.interestedmedicine.databinding.ItemInterestedMedicineBinding
 
 class MoreInterestedMedicineViewHolder(private val binding: ItemInterestedMedicineBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    init {
-        binding.apply {
-            root.setOnClickListener {
-                item?.apply {
-                    onClick?.invoke(this)
-                }
-            }
-        }
-    }
-
-    fun bind(interestedMedicine: ApprovedMedicineItemDto) {
-        binding.item = interestedMedicine
+    fun bind(moreInterestedMedicine: MoreInterestedMedicineDto) {
+        binding.item = moreInterestedMedicine
     }
 }
 
 class MoreInterestedMeidicneAdapter :
-    ListAdapter<ApprovedMedicineItemDto, MoreInterestedMedicineViewHolder>(diffUtil) {
+    ListAdapter<MoreInterestedMedicineDto, MoreInterestedMedicineViewHolder>(diffUtil) {
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<ApprovedMedicineItemDto>() {
+        val diffUtil = object : DiffUtil.ItemCallback<MoreInterestedMedicineDto>() {
             override fun areItemsTheSame(
-                oldItem: ApprovedMedicineItemDto,
-                newItem: ApprovedMedicineItemDto
+                oldItem: MoreInterestedMedicineDto,
+                newItem: MoreInterestedMedicineDto
             ): Boolean {
                 return oldItem === newItem
             }
 
             override fun areContentsTheSame(
-                oldItem: ApprovedMedicineItemDto,
-                newItem: ApprovedMedicineItemDto
+                oldItem: MoreInterestedMedicineDto,
+                newItem: MoreInterestedMedicineDto
             ): Boolean {
                 return oldItem == newItem
             }

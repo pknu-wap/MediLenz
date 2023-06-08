@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto" />
+            type="com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedicineDto" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:text="@{item.entpEngName}"
+            android:text="@{item.entpName}"
             android:textColor="@android:color/darker_gray"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/manufacturerTextView"
@@ -86,7 +86,7 @@
             android:id="@+id/manufacturerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{item.entpName}"
+            android:text="STUDIO GHIBLI"
             android:textColor="@android:color/darker_gray"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/medicine_type_background"
-            android:text="@{item.medicineType}"
+            android:text="@{item.spcltyPblc}"
             android:textColor="@color/medicineType"
             android:textSize="11sp"
             app:layout_constraintLeft_toRightOf="@id/medicineNameTextView"

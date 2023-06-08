@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.CHANGE_NICKNAME
+import com.android.mediproject.core.common.LOGOUT
 import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.ui.base.view.Subtitle.Companion.PASSWORD
 import com.android.mediproject.feature.mypage.R
@@ -37,6 +38,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         object ChangeNickName : DialogFlag()
         object ChangePassword : DialogFlag()
         object Withdrawal : DialogFlag()
+        object Logout : DialogFlag()
     }
 
     private val fragmentViewModel: MyPageMoreDialogViewModel by viewModels()
@@ -93,6 +95,10 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         val withdrawalInput = binding.dialogSubtitle1.getValue()
                         fragmentViewModel.withdrawal(withdrawalInput)
                     }
+
+                    is DialogFlag.Logout -> {
+                        fragmentViewModel.logout()
+                    }
                 }
             }
 
@@ -113,6 +119,10 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                 TAG,
                 bundleOf(TAG to CHANGE_NICKNAME)
             )
+
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.LogoutComplete -> setFragmentResult(
+                TAG,
+                bundleOf(TAG to LOGOUT))
         }
     }
 
@@ -220,6 +230,30 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                             }
                         })
                     }
+                }
+            }
+
+            is DialogFlag.Logout -> {
+                binding.apply {
+                    val span =
+                        SpannableStringBuilder(getString(R.string.logoutDescription)).apply {
+                            setSpan(
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        com.android.mediproject.core.ui.R.color.red
+                                    )
+                                ),
+                                4,
+                                8,
+                                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                            )
+                            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                        }
+                    dialogTitleTV.text = getString(R.string.logout)
+                    dialogSubtitle1.visibility = View.GONE
+                    logoutDescriptionTV.visibility = View.VISIBLE
+                    logoutDescriptionTV.text = span
                 }
             }
         }

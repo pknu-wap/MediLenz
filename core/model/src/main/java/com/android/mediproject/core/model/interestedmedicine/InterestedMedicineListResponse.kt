@@ -1,13 +1,13 @@
 package com.android.mediproject.core.model.interestedmedicine
 
+import com.android.mediproject.core.model.awscommon.BaseAwsQueryResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class InterestedMedicineListResponse(
-    val medicineList: List<Medicine>,
-    val message: String
-) {
+    val medicineList: List<Medicine>
+) : BaseAwsQueryResponse() {
     @Serializable
     data class Medicine(
         @SerialName("ENTP_NAME")
@@ -26,6 +26,3 @@ data class InterestedMedicineListResponse(
         val spcltyPblc: String
     )
 }
-
-fun InterestedMedicineListResponse.Medicine.toInterestedMedicineDto() =
-    InterestedMedicineDto(itemSeq = itemSeq, medicineName = itemName)

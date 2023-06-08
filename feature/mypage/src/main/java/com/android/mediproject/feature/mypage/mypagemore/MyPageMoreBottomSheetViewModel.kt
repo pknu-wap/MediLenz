@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.common.CHANGE_NICKNAME
 import com.android.mediproject.core.common.CHANGE_PASSWORD
+import com.android.mediproject.core.common.LOGOUT
 import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ class MyPageMoreBottomSheetViewModel @Inject constructor() : BaseViewModel() {
     fun changeNickName(){ _bottomsheetFlag.value = CHANGE_NICKNAME }
     fun changePassword(){ _bottomsheetFlag.value = CHANGE_PASSWORD }
     fun withdrawal(){ _bottomsheetFlag.value = WITHDRAWAL }
+    fun logout(){ _bottomsheetFlag.value = LOGOUT }
 
     sealed class MyPageMoreBottomSheetEvent{
         data class Confirm(val flag : Int? = CHANGE_NICKNAME) : MyPageMoreBottomSheetEvent()

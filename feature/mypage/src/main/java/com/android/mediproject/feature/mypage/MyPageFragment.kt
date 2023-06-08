@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.CHANGE_NICKNAME
 import com.android.mediproject.core.common.CHANGE_PASSWORD
+import com.android.mediproject.core.common.LOGOUT
 import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.model.comments.MyCommentDto
@@ -162,6 +163,11 @@ class MyPageFragment :
                 requireActivity().supportFragmentManager,
                 MyPageMoreDialogFragment.TAG
             )
+
+            LOGOUT -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.Logout).show(
+                requireActivity().supportFragmentManager,
+                MyPageMoreDialogFragment.TAG
+            )
         }
     }
 
@@ -180,6 +186,14 @@ class MyPageFragment :
             WITHDRAWAL -> {
                 log("MyPageDialog Callback : withdrawal() ")
                 fragmentViewModel.apply {
+                    signOut()
+                    setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
+                }
+            }
+
+            LOGOUT -> {
+                log("MyPageDialog Callback : logout() ")
+                fragmentViewModel.apply{
                     signOut()
                     setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
                 }

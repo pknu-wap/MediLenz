@@ -3,6 +3,7 @@ package com.android.mediproject.core.domain
 import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepository
 import com.android.mediproject.core.model.interestedmedicine.IsInterestedMedicineResponse
 import com.android.mediproject.core.model.interestedmedicine.toInterestedMedicineDto
+import com.android.mediproject.core.model.interestedmedicine.toMoreInterestedMedicineDto
 import com.android.mediproject.core.model.requestparameters.AddInterestedMedicineParameter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -15,6 +16,12 @@ class GetInterestedMedicineUseCase @Inject constructor(private val interestedMed
     suspend fun getInterestedMedicineList() = channelFlow {
         interestedMedicineRepository.getInterestedMedicineList().map { result ->
             result.fold(onSuccess = { Result.success(it.map { it.toInterestedMedicineDto() }) }, onFailure = { Result.failure(it) })
+        }.collectLatest { trySend(it) }
+    }
+
+    suspend fun getMoreInterestedMedicineList() = channelFlow {
+        interestedMedicineRepository.getInterestedMedicineList().map { result ->
+            result.fold(onSuccess = { Result.success(it.map { it.toMoreInterestedMedicineDto() }) }, onFailure = { Result.failure(it) })
         }.collectLatest { trySend(it) }
     }
 
