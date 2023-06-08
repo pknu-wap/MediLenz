@@ -60,6 +60,8 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                 // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
                 topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
                     medicineInfoBar.alpha = 1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat())
+                    medicineInfoBar2.alpha = -(verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat())
+
                     // 스크롤 할 때 마다 medicinePrimaryInfoViewgroup의 투명도 조정
                     medicinePrimaryInfoViewgroup.alpha = 1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
                         if (this == -1.0f) {
@@ -118,6 +120,15 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             topViews = listOf(
                 SystemBarStyler.ChangeView(
                     medicineInfoBar,
+                    SystemBarStyler.SpacingType.PADDING
+                )
+            )
+        )
+
+        systemBarStyler.changeMode(
+            topViews = listOf(
+                SystemBarStyler.ChangeView(
+                    medicineInfoBar2,
                     SystemBarStyler.SpacingType.PADDING
                 )
             )

@@ -28,6 +28,18 @@
             app:setTheme="white"
             app:title="의약품 정보" />
 
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/medicineInfoBar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:alpha="0"
+            android:backgroundTint="@color/design_default_color_on_primary"
+            app:showBackButton="true"
+            app:setTheme="medicine_info"
+            app:title="의약품 정보" />
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/rootLayout"
             android:layout_width="match_parent"

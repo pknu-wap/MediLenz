@@ -23,6 +23,7 @@ class Bar @JvmOverloads constructor(
         const val WHITE = 1
         const val HOME_BLUE = 2
         const val HOME_WHITE = 3
+        const val MEDICINE_INFO = 4
     }
 
     lateinit var backButton: ImageView
@@ -84,6 +85,12 @@ class Bar @JvmOverloads constructor(
                 title.visibility = View.GONE
                 logo.setImageResource(com.android.mediproject.core.common.R.drawable.medilenz_original_logo)
                 logo.visibility = View.VISIBLE
+            }
+
+            MEDICINE_INFO -> {
+                bar.setBackgroundColor(ContextCompat.getColor(context, R.color.purple))
+                title.setTextColor(ContextCompat.getColor(context, R.color.white))
+                backButton.setImageResource(R.drawable.left_arrow)
             }
         }
 
