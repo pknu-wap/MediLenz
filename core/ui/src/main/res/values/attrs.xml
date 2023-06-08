@@ -10,6 +10,7 @@
             <enum name="white" value="1" />
             <enum name="home_blue" value="2" />
             <enum name="home_white" value="3" />
+            <enum name="medicine_info" value="4" />
         </attr>
     </declare-styleable>
 
