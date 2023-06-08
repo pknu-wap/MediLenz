@@ -95,9 +95,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         fragmentViewModel.withdrawal(withdrawalInput)
                     }
 
-                    is DialogFlag.Logout -> {
-
-                    }
+                    is DialogFlag.Logout -> fragmentViewModel.logout()
                 }
             }
 

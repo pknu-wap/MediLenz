@@ -192,7 +192,11 @@ class MyPageFragment :
             }
 
             LOGOUT -> {
-
+                log("MyPageDialog Callback : logout() ")
+                fragmentViewModel.apply{
+                    signOut()
+                    setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
+                }
             }
 
         }
