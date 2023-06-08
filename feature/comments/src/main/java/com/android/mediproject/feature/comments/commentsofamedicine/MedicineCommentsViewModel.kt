@@ -29,7 +29,6 @@ import com.android.mediproject.feature.comments.commentsofamedicine.CommentActio
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -113,7 +112,6 @@ class MedicineCommentsViewModel @Inject constructor(
                 subOrdinationId = replyId.value.toString())).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 등록 성공
-                    delay(200)
                     commentsUseCase.scrollChannel.send(Unit)
                     _action.emit(CommentActionState.COMPLETED_APPLY_COMMENT_REPLY(Result.success(Unit)))
                 }.onFailure {
@@ -134,7 +132,6 @@ class MedicineCommentsViewModel @Inject constructor(
                 subOrdinationId = "0")).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 등록 성공
-                    delay(200)
                     commentsUseCase.scrollChannel.send(Unit)
                     _action.emit(CommentActionState.COMPLETED_APPLY_COMMENT_REPLY(Result.success(Unit)))
                 }.onFailure {
@@ -156,7 +153,6 @@ class MedicineCommentsViewModel @Inject constructor(
                 medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws)).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 수정 성공
-                    delay(200)
                     _action.emit(CommentActionState.COMPLETED_APPLY_EDITED_COMMENT(Result.success(Unit)))
                 }.onFailure {
                     _action.emit(CommentActionState.COMPLETED_APPLY_EDITED_COMMENT(Result.failure(it)))
@@ -201,7 +197,6 @@ class MedicineCommentsViewModel @Inject constructor(
                 .collectLatest { result ->
                     result.onSuccess {
                         // 댓글 삭제 성공
-                        delay(200)
                         commentsUseCase.scrollChannel.send(Unit)
                         _action.emit(CommentActionState.COMPLETED_DELETE_COMMENT(Result.success(Unit)))
                     }.onFailure {
@@ -223,7 +218,6 @@ class MedicineCommentsViewModel @Inject constructor(
                 .collectLatest { result ->
                     result.onSuccess {
                         // like 처리 완료
-                        delay(200)
                         _action.emit(CommentActionState.COMPLETED_LIKE(Result.success(Unit)))
                     }.onFailure {
                         _action.emit(CommentActionState.COMPLETED_LIKE(Result.failure(it)))

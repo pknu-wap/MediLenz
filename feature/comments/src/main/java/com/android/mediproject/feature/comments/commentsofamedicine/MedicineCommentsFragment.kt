@@ -92,7 +92,7 @@ class MedicineCommentsFragment :
 
                             is CommentActionState.COMPLETED_LIKE -> {
                                 action.result.fold(onSuccess = {
-                                    adapter.retry()
+                                    adapter.refresh()
                                 }, onFailure = {
                                     toast(it.message.toString())
                                 })
@@ -103,7 +103,7 @@ class MedicineCommentsFragment :
                                 action.result.fold(onSuccess = {
                                     replyHeader.isVisible = false
                                     toast(getString(R.string.appliedComment))
-                                    adapter.retry()
+                                    adapter.refresh()
                                 }, onFailure = {
                                     toast(it.message.toString())
                                 })
@@ -111,7 +111,7 @@ class MedicineCommentsFragment :
 
                             is CommentActionState.COMPLETED_APPLY_EDITED_COMMENT -> {
                                 action.result.fold(onSuccess = {
-                                    adapter.retry()
+                                    adapter.refresh()
                                     toast(getString(R.string.appliedEditComment))
                                 }, onFailure = {
                                     toast(it.message.toString())
@@ -120,7 +120,7 @@ class MedicineCommentsFragment :
 
                             is CommentActionState.COMPLETED_DELETE_COMMENT -> {
                                 action.result.fold(onSuccess = {
-                                    adapter.retry()
+                                    adapter.refresh()
                                     toast(getString(R.string.deletedComment))
                                 }, onFailure = {
                                     toast(it.message.toString())
