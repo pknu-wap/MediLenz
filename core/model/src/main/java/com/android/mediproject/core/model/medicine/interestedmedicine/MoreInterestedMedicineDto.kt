@@ -7,3 +7,12 @@ data class MoreInterestedMedicineDto(
     val itemIngrName: String,
     val spcltyPblc: String
 )
+
+fun InterestedMedicineListResponse.Medicine.toMoreInterestedMedicineDto() =
+    MoreInterestedMedicineDto(
+        id = id,
+        itemName = itemName,
+        entpName = entpName,
+        itemIngrName = itemIngrName,
+        spcltyPblc = spcltyPblc
+    )

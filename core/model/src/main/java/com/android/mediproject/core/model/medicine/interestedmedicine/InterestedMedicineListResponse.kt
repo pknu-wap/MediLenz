@@ -26,15 +26,3 @@ data class InterestedMedicineListResponse(
         val spcltyPblc: String
     )
 }
-
-fun InterestedMedicineListResponse.Medicine.toInterestedMedicineDto() =
-    InterestedMedicineDto(itemSeq = itemSeq, medicineName = itemName)
-
-fun InterestedMedicineListResponse.Medicine.toMoreInterestedMedicineDto() =
-    MoreInterestedMedicineDto(
-        id = id,
-        itemName = itemName,
-        entpName = entpName,
-        itemIngrName = itemIngrName,
-        spcltyPblc = spcltyPblc
-    )
