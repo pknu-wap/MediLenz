@@ -94,6 +94,10 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         val withdrawalInput = binding.dialogSubtitle1.getValue()
                         fragmentViewModel.withdrawal(withdrawalInput)
                     }
+
+                    is DialogFlag.Logout -> {
+
+                    }
                 }
             }
 
@@ -221,6 +225,28 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                             }
                         })
                     }
+                }
+            }
+
+            is DialogFlag.Logout -> {
+                binding.apply {
+                    val span =
+                        SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
+                            setSpan(
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        com.android.mediproject.core.ui.R.color.red
+                                    )
+                                ),
+                                4,
+                                8,
+                                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                            )
+                            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                        }
+                    dialogTitleTV.text = getString(R.string.logout)
+                    dialogSubtitle1.visibility = View.GONE
                 }
             }
         }
