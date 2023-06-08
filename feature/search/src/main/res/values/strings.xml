@@ -11,5 +11,6 @@
     <string name="medicineType">의약품 종류</string>
     <string name="searchResultIsEmpty">검색 결과가 없습니다</string>
     <string name="noHistoryOfSearch">최근 검색한 약품이 없습니다.</string>
+    <string name="aiCamera">AI Camera</string>
 
 </resources>

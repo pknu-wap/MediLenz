@@ -101,8 +101,7 @@ data class MedicineDetatilInfoDto(
     val hasMedicineIdInAws: Boolean
 )
 
-fun MedicineDetailInfoResponse.Body.Item.toDto(medicineIdInAws: Long) = MedicineDetatilInfoDto(
-    atcCode = atcCode,
+fun MedicineDetailInfoResponse.Body.Item.toDto(medicineIdInAws: Long = 0L) = MedicineDetatilInfoDto(atcCode = atcCode,
     barCode = barCode,
     businessRegistrationNumber = businessRegistrationNumber,
     cancelDate = cancelDate.toLocalDate(),
@@ -145,8 +144,7 @@ fun MedicineDetailInfoResponse.Body.Item.toDto(medicineIdInAws: Long) = Medicine
     uDocUid = uDDOCID,
     validTerm = validTerm,
     medicineIdInAws = medicineIdInAws,
-    hasMedicineIdInAws = medicineIdInAws != 0L
-)
+    hasMedicineIdInAws = medicineIdInAws != 0L)
 
 private fun String?.toLocalDate(): LocalDate? = this?.let {
     java.time.LocalDate.parse(it, dateTimeFormatter).toKotlinLocalDate()

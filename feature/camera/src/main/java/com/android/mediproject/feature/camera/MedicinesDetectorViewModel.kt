@@ -6,11 +6,13 @@ import androidx.camera.view.PreviewView
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.model.ai.ClassificationResult
 import com.android.mediproject.core.model.ai.DetectionObject
 import com.android.mediproject.core.model.ai.DetectionObjects
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.camera.tflite.AiController
 import com.android.mediproject.feature.camera.tflite.CameraController
+import com.android.mediproject.feature.camera.tflite.classification.MedicineClassifionHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.BufferOverflow
@@ -30,16 +32,18 @@ class MedicinesDetectorViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
     val aiController: AiController,
-    val cameraController: CameraController) : BaseViewModel() {
+    val cameraController: CameraController,
+    val medicineClassifionHelper: MedicineClassifionHelper
+) : BaseViewModel() {
 
 
     private val _aiModelState = MutableStateFlow<AiModelState>(AiModelState.NotLoaded)
     val aiModelState get() = _aiModelState.asStateFlow()
 
     // 검출 정보 가록
-    private val _detectionObjects =
-        MutableSharedFlow<DetectionState>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 5)
-    val detectionObjects get() = _detectionObjects.asSharedFlow()
+    private val _inferenceState =
+        MutableSharedFlow<InferenceState>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 5)
+    val inferenceState get() = _inferenceState.asSharedFlow()
 
     fun loadModel(previewView: PreviewView) {
         viewModelScope.launch {
@@ -60,12 +64,13 @@ class MedicinesDetectorViewModel @Inject constructor(
 
     fun capture() {
         viewModelScope.launch(defaultDispatcher) {
-            _detectionObjects.emit(DetectionState.Detecting)
+            _inferenceState.emit(InferenceState.Detecting)
         }
     }
 
     fun makeDetectionResult(
-        objects: List<Detection>, realWindowSize: Size, resizedWindowSize: Size, backgroundImage: Bitmap?) {
+        objects: List<Detection>, realWindowSize: Size, resizedWindowSize: Size, backgroundImage: Bitmap?
+    ) {
         viewModelScope.launch(defaultDispatcher) {
             // 처리중 오류 발생시 DetectFailed 상태로 변경
             val scaleFactor =
@@ -87,14 +92,21 @@ class MedicinesDetectorViewModel @Inject constructor(
 
                     DetectionObject(it, croppedBitmap)
                 }
-                _detectionObjects.emit(DetectionState.Detected(DetectionObjects(cutted, backgroundImage)))
-            } ?: _detectionObjects.emit(DetectionState.DetectFailed)
+                _inferenceState.emit(InferenceState.Detected(DetectionObjects(cutted, backgroundImage)))
+            } ?: _inferenceState.emit(InferenceState.DetectFailed)
         }
     }
 
     override fun onCleared() {
-        _detectionObjects.resetReplayCache()
+        _inferenceState.resetReplayCache()
         super.onCleared()
+    }
+
+    fun classifyMedicine(detectionObjects: DetectionObjects) {
+        viewModelScope.launch(defaultDispatcher) {
+            val classified = medicineClassifionHelper.analyze(detectionObjects)
+            _inferenceState.emit(InferenceState.Classified(classified))
+        }
     }
 }
 
@@ -105,9 +117,11 @@ sealed class AiModelState {
     object LoadFailed : AiModelState()
 }
 
-sealed class DetectionState {
-    object Initial : DetectionState()
-    object Detecting : DetectionState()
-    data class Detected(val detection: DetectionObjects) : DetectionState()
-    object DetectFailed : DetectionState()
+sealed class InferenceState {
+    object Initial : InferenceState()
+    object Detecting : InferenceState()
+    data class Detected(val detection: DetectionObjects) : InferenceState()
+    object DetectFailed : InferenceState()
+
+    data class Classified(val classificationResult: List<ClassificationResult>) : InferenceState()
 }

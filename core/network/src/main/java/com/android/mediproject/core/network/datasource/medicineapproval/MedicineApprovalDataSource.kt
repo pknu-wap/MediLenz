@@ -23,4 +23,8 @@ interface MedicineApprovalDataSource {
     fun getMedicineDetailInfo(
         itemName: String,
     ): Flow<Result<MedicineDetailInfoResponse>>
+
+    fun getMedicineDetailInfoByItemSeq(
+        itemSeqs: List<String>
+    ): Flow<Result<List<MedicineDetailInfoResponse>>>
 }

@@ -12,26 +12,30 @@ android {
     androidResources {
         noCompress += listOf("tflite")
     }
-    /*
 
-        externalNativeBuild {
-            cmake {
-                version = "3.22.1"
-                path = file("src/main/jni/CMakeLists.txt")
+    @Suppress("UnstableApiUsage") buildFeatures {
+        buildConfig = true
+        mlModelBinding = true
+    }/*
+
+            externalNativeBuild {
+                cmake {
+                    version = "3.22.1"
+                    path = file("src/main/jni/CMakeLists.txt")
+                }
             }
-        }
 
-        defaultConfig {
+            defaultConfig {
 
-            ndk {
-                version = "25.2.9519653"
-                abiFilters += listOf(
-                    "armeabi-v7a", "arm64-v8a"
-                )
+                ndk {
+                    version = "25.2.9519653"
+                    abiFilters += listOf(
+                        "armeabi-v7a", "arm64-v8a"
+                    )
+                }
             }
-        }
 
-     */
+         */
 
 }
 
@@ -44,6 +48,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
+    implementation(project(":feature:search"))
     implementation(libs.bundles.glides)
     kapt(libs.bundles.glides.kapt)
     implementation(libs.bundles.kotlins)

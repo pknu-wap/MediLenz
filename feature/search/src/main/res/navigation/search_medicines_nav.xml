@@ -41,6 +41,8 @@
             app:destination="@id/aiSearchResultFragment"
             app:popUpTo="@id/aiSearchResultFragment"
             app:popUpToInclusive="true" />
+
+        <deepLink app:uri="medilens://main/search/search_medicines/airesult" />
     </fragment>
 
     <deepLink app:uri="medilens://main/search/search_medicines" />

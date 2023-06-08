@@ -13,4 +13,5 @@ interface MedicineApprovalRepository {
     ): Flow<PagingData<Item>>
 
     fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Body.Item>>
+    fun getMedicineDetailInfoByItemSeq(itemSeqs: List<String>): Flow<Result<List<MedicineDetailInfoResponse.Body.Item>>>
 }

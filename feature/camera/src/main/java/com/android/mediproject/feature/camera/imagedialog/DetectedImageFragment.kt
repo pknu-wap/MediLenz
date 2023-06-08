@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.navGraphViewModels
-import com.android.mediproject.feature.camera.DetectionState
+import com.android.mediproject.feature.camera.InferenceState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
 import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentDetectedImageDialogBinding
@@ -47,9 +47,9 @@ class DetectedImageFragment : DialogFragment() {
             }
 
             viewLifecycleOwner.repeatOnStarted {
-                medicinesDetectorViewModel.detectionObjects.collectLatest { objs ->
+                medicinesDetectorViewModel.inferenceState.collectLatest { objs ->
                     when (objs) {
-                        is DetectionState.Detected -> {
+                        is InferenceState.Detected -> {
                             overlayView.apply {
                                 objs.detection.apply {
                                     val objects = detection.map {

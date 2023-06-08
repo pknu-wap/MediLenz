@@ -15,6 +15,7 @@ import com.android.mediproject.core.ui.base.view.listfilter.MediPopupMenu
 import com.android.mediproject.feature.search.R
 import com.android.mediproject.feature.search.SearchMedicinesViewModel
 import com.android.mediproject.feature.search.databinding.FragmentManualSearchResultBinding
+import com.android.mediproject.feature.search.result.EventState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

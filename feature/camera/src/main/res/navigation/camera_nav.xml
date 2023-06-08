@@ -29,8 +29,7 @@
         android:id="@+id/detectedImageFragment"
         android:name="com.android.mediproject.feature.camera.imagedialog.DetectedImageFragment"
         android:label="DetectedImageFragment">
-
-
+        
     </dialog>
 
     <deepLink app:uri="medilens://main/camera_nav" />
