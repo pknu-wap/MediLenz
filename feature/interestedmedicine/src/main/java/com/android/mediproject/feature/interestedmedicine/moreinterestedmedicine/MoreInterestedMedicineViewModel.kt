@@ -3,7 +3,7 @@ package com.android.mediproject.feature.interestedmedicine.moreinterestedmedicin
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.domain.GetInterestedMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
-import com.android.mediproject.core.model.medicine.interestedmedicine.MoreInterestedMedicineDto
+import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedicineDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseViewModel

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.medicine.interestedmedicine.MoreInterestedMedicineDto
+import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedicineDto
 import com.android.mediproject.feature.interestedmedicine.databinding.ItemInterestedMedicineBinding
 
 class MoreInterestedMedicineViewHolder(private val binding: ItemInterestedMedicineBinding) :
