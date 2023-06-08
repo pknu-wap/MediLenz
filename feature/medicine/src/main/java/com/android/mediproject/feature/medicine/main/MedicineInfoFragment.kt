@@ -48,6 +48,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentViewModel.setMedicinePrimaryInfo(navArgs)
+        setBarStyle()
 
         binding.apply {
             systemBarStyler.changeMode(topViews = listOf(SystemBarStyler.ChangeView(topAppBar, SystemBarStyler.SpacingType.PADDING)))
@@ -58,14 +59,13 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                 topAppBar.removeOnOffsetChangedListener(null)
                 // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
                 topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+                    medicineInfoBar.alpha = 1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat())
                     // 스크롤 할 때 마다 medicinePrimaryInfoViewgroup의 투명도 조정
                     medicinePrimaryInfoViewgroup.alpha = 1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
                         if (this == -1.0f) {
                             medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
-                            systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
                         } else if (this > -0.8f) {
                             medicinePrimaryInfoViewgroup.isVisible = true
-                            systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
                         }
                     }
                 }
@@ -112,6 +112,16 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             }
         }
 
+    }
+    private fun setBarStyle() = binding.apply {
+        systemBarStyler.changeMode(
+            topViews = listOf(
+                SystemBarStyler.ChangeView(
+                    medicineInfoBar,
+                    SystemBarStyler.SpacingType.PADDING
+                )
+            )
+        )
     }
 
 
