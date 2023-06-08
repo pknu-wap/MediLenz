@@ -5,17 +5,21 @@ import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
-import com.android.mediproject.core.model.medicine.interestedmedicine.InterestedMedicineListResponse
+import com.android.mediproject.core.model.comments.LikeResponse
+import com.android.mediproject.core.model.interestedmedicine.DeleteInterestedMedicineResponse
+import com.android.mediproject.core.model.interestedmedicine.InterestedMedicineListResponse
+import com.android.mediproject.core.model.interestedmedicine.IsInterestedMedicineResponse
+import com.android.mediproject.core.model.interestedmedicine.NewInterestedMedicineResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
+import com.android.mediproject.core.model.requestparameters.AddInterestedMedicineParameter
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
-import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
 import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
@@ -52,6 +56,7 @@ import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -164,12 +169,22 @@ interface AwsNetworkApi {
     ): Response<CommentChangedResponse>
 
     /**
-     * 댓글 좋아요
+     * 댓글 좋아요 추가
      */
-    @POST(value = "medicine/comment")
+    @POST(value = "medicine/comment/{medicineId}/like/{commentId}")
     suspend fun likeComment(
-        @Body likeCommentParameter: LikeCommentParameter
-    ): Response<CommentChangedResponse>
+        @Path("medicineId", encoded = true) medicineId: Long,
+        @Path("commentId", encoded = true) commentId: Long,
+    ): Response<LikeResponse>
+
+    /**
+     * 댓글 좋아요 해제
+     */
+    @DELETE(value = "medicine/comment/{medicineId}/like/{commentId}")
+    suspend fun unlikeComment(
+        @Path("medicineId", encoded = true) medicineId: Long,
+        @Path("commentId", encoded = true) commentId: Long,
+    ): Response<LikeResponse>
 
     /**
      * 댓글 등록
@@ -214,4 +229,28 @@ interface AwsNetworkApi {
      */
     @GET(value = "user")
     suspend fun getUserInfo(): Response<UserResponse>
+
+    /**
+     * 관심 약 조회
+     */
+    @GET(value = "medicine/favorite")
+    suspend fun isInterestedMedicine(
+        @Query("ITEM_SEQ") itemSeq: Long
+    ): Response<IsInterestedMedicineResponse>
+
+    /**
+     * 관심 약 추가
+     */
+    @POST(value = "medicine/favorite")
+    suspend fun addInterestedMedicine(
+        @Body addInterestedMedicineParameter: AddInterestedMedicineParameter
+    ): Response<NewInterestedMedicineResponse>
+
+    /**
+     * 관심 약 삭제
+     */
+    @DELETE(value = "medicine/favorite")
+    suspend fun deleteInterestedMedicine(
+        @Query("medicineId") medicineId: Long
+    ): Response<DeleteInterestedMedicineResponse>
 }

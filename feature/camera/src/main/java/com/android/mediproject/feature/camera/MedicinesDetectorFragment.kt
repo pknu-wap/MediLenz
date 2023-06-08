@@ -61,7 +61,6 @@ class MedicinesDetectorFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = fragmentViewModel
 
         systemBarStyler.changeMode(listOf(SystemBarStyler.ChangeView(binding.logo, SystemBarStyler.SpacingType.MARGIN)),
             listOf(SystemBarStyler.ChangeView(binding.detectionDescription, SystemBarStyler.SpacingType.MARGIN)))
@@ -72,13 +71,13 @@ class MedicinesDetectorFragment :
             // AI처리 객체의 콜백을 현재 프래그먼트로 설정
             cameraController.detectionCallback = this@MedicinesDetectorFragment
         }
-
-
+        
         binding.apply {
             backBtn.setOnClickListener {
                 findNavController().popBackStack()
             }
 
+            viewModel = fragmentViewModel
 
             viewLifecycleOwner.repeatOnStarted {
                 launch {

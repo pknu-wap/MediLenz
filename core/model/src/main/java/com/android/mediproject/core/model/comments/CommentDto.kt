@@ -32,14 +32,16 @@ data class CommentDto(
     val content: String,
     val createdAt: String,
     val updatedAt: String,
-    var onClickReply: ((Int) -> Unit)?,
-    var onClickLike: ((Long) -> Unit)?,
+    var onClickReply: ((String, Long) -> Unit)?,
+    var onClickLike: ((Long, Boolean) -> Unit)?,
     var onClickDelete: ((Long) -> Unit)?,
     var onClickEdit: ((CommentDto, Int) -> Unit)?,
     var onClickApplyEdited: ((CommentDto) -> Unit)?,
-    var isMine: Boolean = false) {
+    var isMine: Boolean = false
+) {
 
     var isEditing: Boolean = false
+    var isLiked: Boolean = false
 }
 
 
@@ -60,8 +62,8 @@ fun CommentListResponse.Comment.toDto() = CommentDto(
     isReply = false,
     subordinationId = subordination,
     content = content,
-    createdAt = ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).format(dateTimeFormatter),
-    updatedAt = ZonedDateTime.parse(updatedAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).format(dateTimeFormatter),
+    createdAt = ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).plusHours(10L).format(dateTimeFormatter),
+    updatedAt = ZonedDateTime.parse(updatedAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).plusHours(10L).format(dateTimeFormatter),
     onClickReply = null,
     onClickLike = null,
     onClickDelete = null,
@@ -76,8 +78,8 @@ fun CommentListResponse.Comment.Reply.toDto() = CommentDto(
     isReply = true,
     subordinationId = subordination,
     content = content,
-    createdAt = ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).format(dateTimeFormatter),
-    updatedAt = ZonedDateTime.parse(updatedAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).format(dateTimeFormatter),
+    createdAt = ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).plusHours(10L).format(dateTimeFormatter),
+    updatedAt = ZonedDateTime.parse(updatedAt, DateTimeFormatter.ISO_ZONED_DATE_TIME).plusHours(10L).format(dateTimeFormatter),
     onClickReply = null,
     onClickLike = null,
     onClickDelete = null,

@@ -18,6 +18,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.android.mediproject.core.common.uiutil.LayoutController
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
+import com.android.mediproject.core.network.InternetNetworkListener
 import com.android.mediproject.core.ui.WindowViewModel
 import com.android.mediproject.core.ui.base.BaseActivity
 import com.android.mediproject.databinding.ActivityMainBinding
@@ -32,6 +33,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
 
     @Inject lateinit var systemBarStyler: SystemBarStyler
 
+    @Inject lateinit var internetNetworkListener: InternetNetworkListener
+
     companion object {
         const val VISIBLE = 0
         const val INVISIBLE = 1
@@ -43,6 +46,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
     override fun afterBinding() {
         systemBarStyler.init(this, window, this::changeFragmentContainerHeight)
         systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
+
+        internetNetworkListener.activityLifeCycle = this.lifecycle
+        internetNetworkListener.networkStateCallback = InternetNetworkListener.NetworkStateCallback { isConnected ->
+            if (!isConnected) {
+                val modalBottomSheet = NetworkStateDialogFragment()
+                modalBottomSheet.show(supportFragmentManager, NetworkStateDialogFragment::class.java.name)
+            }
+        }
 
         //SDK 31이상일 때 Splash가 소소하게 사라지는 이펙트 입니다. 추후 걸리적거리면 삭제해도 됌
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

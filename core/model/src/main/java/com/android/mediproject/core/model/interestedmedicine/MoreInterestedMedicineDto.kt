@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.medicine.interestedmedicine
+package com.android.mediproject.core.model.interestedmedicine
 
 data class MoreInterestedMedicineDto(
     val id: Int,

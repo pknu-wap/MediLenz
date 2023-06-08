@@ -3,6 +3,7 @@ package com.android.mediproject.core.data.remote.comments
 import androidx.paging.PagingData
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.comments.LikeResponse
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
@@ -39,5 +40,5 @@ interface CommentsRepository {
     /**
      * 댓글 좋아요 클릭
      */
-    fun likeComment(parameter: LikeCommentParameter): Flow<Result<CommentChangedResponse>>
+    fun likeComment(parameter: LikeCommentParameter): Flow<Result<LikeResponse>>
 }

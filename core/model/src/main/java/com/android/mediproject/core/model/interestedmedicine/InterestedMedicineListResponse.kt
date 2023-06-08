@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.medicine.interestedmedicine
+package com.android.mediproject.core.model.interestedmedicine
 
 import com.android.mediproject.core.model.awscommon.BaseAwsQueryResponse
 import kotlinx.serialization.SerialName
