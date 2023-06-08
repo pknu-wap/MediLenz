@@ -51,5 +51,14 @@ class AppDataStoreImpl @Inject constructor(
     override suspend fun saveSkipIntro(skipIntro: Boolean) {
         context.dataStore.edit { it[KEY_SKIP_INTRO] = skipIntro }
     }
-    
+
+    override suspend fun clearMyAccountInfo() {
+        context.dataStore.edit {
+            it[KEY_USER_EMAIL] = ""
+            it[KEY_NICK_NAME] = ""
+            it[KEY_MY_ACCOUNT_ID] = 0
+            it[KEY_SKIP_INTRO] = false
+        }
+    }
+
 }

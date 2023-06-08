@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.intro
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.common.util.delayTextChangedCallback
 import com.android.mediproject.core.model.local.navargs.TOHOME
 import com.android.mediproject.core.model.local.navargs.TOMYPAGE
@@ -38,13 +40,25 @@ class SignUpFragment :
     @Dispatcher(MediDispatchers.Default)
     lateinit var defaultDispatcher: CoroutineDispatcher
 
+    @Inject
+    lateinit var systemBarStyler: SystemBarStyler
+
     private val mainScope = MainScope()
 
     private val jobs = mutableListOf<Job>()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        systemBarStyler.setStyle(
+            SystemBarStyler.StatusBarColor.BLACK,
+            SystemBarStyler.NavigationBarColor.BLACK
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setBarStyle()
 
         val moveFlag = arguments?.getInt("flag", TOHOME)
         fragmentViewModel.setMoveFlag(moveFlag ?: TOHOME)
@@ -116,6 +130,17 @@ class SignUpFragment :
                 }
             }
         }
+    }
+
+    private fun setBarStyle() = binding.apply {
+        systemBarStyler.changeMode(
+            topViews = listOf(
+                SystemBarStyler.ChangeView(
+                    signUpBar,
+                    SystemBarStyler.SpacingType.PADDING
+                )
+            )
+        )
     }
 
     override fun onDestroyView() {

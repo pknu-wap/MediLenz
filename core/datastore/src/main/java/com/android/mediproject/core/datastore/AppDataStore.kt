@@ -10,4 +10,5 @@ interface AppDataStore {
     suspend fun saveMyAccountInfo(userEmail: String, nickName: String, myAccountId: Long)
     suspend fun saveNickName(nickName: String)
     suspend fun saveSkipIntro(skipIntro: Boolean)
+    suspend fun clearMyAccountInfo()
 }

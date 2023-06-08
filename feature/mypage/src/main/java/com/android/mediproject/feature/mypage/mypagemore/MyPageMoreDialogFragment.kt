@@ -51,7 +51,11 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         }.create()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = binding.root
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = binding.root
 
 
     override fun getView(): View = binding.root
@@ -78,7 +82,6 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                     is DialogFlag.ChangeNickName -> {
                         val newNickname = binding.dialogSubtitle1.getValue()
                         fragmentViewModel.changeNickname(newNickname)
-                        setFragmentResult(TAG, bundleOf(TAG to CHANGE_NICKNAME))
                     }
 
                     is DialogFlag.ChangePassword -> {
@@ -93,11 +96,23 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                 }
             }
 
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT)
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> Toast.makeText(
+                requireContext(),
+                event.message,
+                Toast.LENGTH_SHORT
+            )
                 .show()
 
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> dismiss()
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.WithdrawalComplete -> setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL))
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.WithdrawalComplete -> setFragmentResult(
+                TAG,
+                bundleOf(TAG to WITHDRAWAL)
+            )
+
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.ChangeNicknameComplete -> setFragmentResult(
+                TAG,
+                bundleOf(TAG to CHANGE_NICKNAME)
+            )
         }
     }
 
@@ -167,13 +182,21 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             //회원 탈퇴 다이얼로그
             is DialogFlag.Withdrawal -> {
                 binding.apply {
-                    val span = SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
-                        setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), com.android.mediproject.core.ui.R.color.red)),
-                            4,
-                            8,
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                        setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                    }
+                    val span =
+                        SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
+                            setSpan(
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        com.android.mediproject.core.ui.R.color.red
+                                    )
+                                ),
+                                4,
+                                8,
+                                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                            )
+                            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                        }
                     completeButtonDisEnabled()
                     dialogTitleTV.text = getString(R.string.withdrawal)
                     dialogSubtitle1.apply {

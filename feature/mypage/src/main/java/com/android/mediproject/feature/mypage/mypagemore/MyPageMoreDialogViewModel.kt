@@ -42,6 +42,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
     fun cancelDialog() = event(MyPageMoreDialogEvent.CancelDialog)
     fun toast(message: String) = event(MyPageMoreDialogEvent.Toast(message))
     fun withdrawalComplete() = event(MyPageMoreDialogEvent.WithdrawalComplete)
+    fun changeNicknameComplete() = event(MyPageMoreDialogEvent.ChangeNicknameComplete)
 
     fun changeNickname(newNickname: String) = viewModelScope.launch(ioDispatcher) {
         userUseCase.changeNickname(changeNicknameParameter = ChangeNicknameParameter(newNickname))
@@ -50,6 +51,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
                     onSuccess = { toast("닉네임 변경이 완료되었습니다.") },
                     onFailure = { toast("닉네임 변경에 실패하였습니다.") })
             }
+        changeNicknameComplete()
         cancelDialog()
     }
 
@@ -91,6 +93,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
         object CompleteDialog : MyPageMoreDialogEvent()
         object CancelDialog : MyPageMoreDialogEvent()
         object WithdrawalComplete : MyPageMoreDialogEvent()
+        object ChangeNicknameComplete : MyPageMoreDialogEvent()
         data class Toast(val message: String) : MyPageMoreDialogEvent()
     }
 }
