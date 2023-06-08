@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.CHANGE_NICKNAME
+import com.android.mediproject.core.common.LOGOUT
 import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.ui.base.view.Subtitle.Companion.PASSWORD
 import com.android.mediproject.feature.mypage.R
@@ -95,7 +96,9 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                         fragmentViewModel.withdrawal(withdrawalInput)
                     }
 
-                    is DialogFlag.Logout -> fragmentViewModel.logout()
+                    is DialogFlag.Logout -> {
+                        fragmentViewModel.logout()
+                    }
                 }
             }
 
@@ -116,6 +119,10 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
                 TAG,
                 bundleOf(TAG to CHANGE_NICKNAME)
             )
+
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.LogoutComplete -> setFragmentResult(
+                TAG,
+                bundleOf(TAG to LOGOUT))
         }
     }
 
