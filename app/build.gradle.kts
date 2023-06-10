@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     id("mediproject.android.application")
     id("mediproject.android.hilt")
@@ -7,6 +9,17 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        val properties = Properties()
+        properties.load(project.rootProject.file("/apikey.properties").bufferedReader())
+        create("release") {
+            storeFile = project.rootProject.file(properties["SIGNED_STORE_FILE"] as String)
+            storePassword = properties["SIGNED_STORE_PASSWORD"] as String
+            keyAlias = properties["SIGNED_KEY_ALIAS"] as String
+            keyPassword = properties["SIGNED_KEY_PASSWORD"] as String
+        }
+    }
+
     defaultConfig {
         applicationId = "com.android.mediproject"
         versionCode = 1
@@ -28,6 +41,7 @@ android {
                     "proguard-okhttp3.pro",
                     "proguard-room.pro",
                     "proguard-retrofit2.pro")
+                signingConfig = signingConfigs.getByName("release")
             }
         }
     }
