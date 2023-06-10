@@ -55,7 +55,5 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    sealed class HomeEvent {
-
-    }
+    sealed class HomeEvent
 }

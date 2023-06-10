@@ -129,7 +129,7 @@ class TokenDataSourceImpl @Inject constructor(
                                 refreshToken = newTokensFromAws.refreshToken,
                                 accessToken = newTokensFromAws.accessToken,
                                 accessTokenExpiresIn = newTokensFromAws.accessTokenExpireDateTime,
-                                refreshTokenExpiresIn = (savedToken as EndpointTokenState.SavedToken).token.refreshTokenExpiresIn,
+                                refreshTokenExpiresIn = savedToken.token.refreshTokenExpiresIn,
                             ))
 
                             updateTokenState()

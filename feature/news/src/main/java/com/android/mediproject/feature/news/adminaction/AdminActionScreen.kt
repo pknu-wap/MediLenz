@@ -100,7 +100,7 @@ fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
                     fontSize = 14.sp,
                     color = Color.Black,
                     modifier = Modifier
-                        .align(Alignment.CenterVertically)
+                        .align(CenterVertically)
                         .weight(1f),
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
@@ -108,7 +108,7 @@ fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
                 Text(
                     text = adminActionListItemDto.lastSettleDate.format(dateFormat),
                     fontSize = 12.sp,
-                    modifier = Modifier.align(Alignment.CenterVertically),
+                    modifier = Modifier.align(CenterVertically),
                     color = Color.Gray,
                     maxLines = 1,
                 )

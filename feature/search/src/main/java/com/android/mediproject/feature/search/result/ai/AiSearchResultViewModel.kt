@@ -72,7 +72,7 @@ class AiSearchResultViewModel @Inject constructor(
                 entpEngName = e.entpEnglishName ?: "",
                 itemIngrName = e.mainItemIngredient,
                 itemKorName = e.itemName,
-                itemEngName = e.itemEnglishName ?: "",
+                itemEngName = e.itemEnglishName,
                 itemSeq = e.itemSequence.toLong(),
                 productType = e.industryType ?: "",
                 medicineType = e.etcOtcCode,

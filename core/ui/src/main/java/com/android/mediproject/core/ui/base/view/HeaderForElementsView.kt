@@ -92,7 +92,7 @@ class HeaderForElementsView constructor(
 
                 // title
                 titleView = TextView(context).apply {
-                    layoutParams = ConstraintLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
                         topToTop = LayoutParams.PARENT_ID
                         bottomToBottom = LayoutParams.PARENT_ID
                         leftToLeft = LayoutParams.PARENT_ID
@@ -119,7 +119,7 @@ class HeaderForElementsView constructor(
 
                     layoutParams =
                         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics).toInt().let { size ->
-                            ConstraintLayout.LayoutParams(size, size).apply {
+                            LayoutParams(size, size).apply {
                                 topToTop = LayoutParams.PARENT_ID
                                 bottomToBottom = LayoutParams.PARENT_ID
                                 leftToRight = titleView.id
@@ -137,7 +137,7 @@ class HeaderForElementsView constructor(
 
                 CircularProgressIndicator(context).apply {
                     layoutParams =
-                        ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                        LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                             topToTop = LayoutParams.PARENT_ID
                             bottomToBottom = LayoutParams.PARENT_ID
                             leftToRight = expandBtnView.id
@@ -154,7 +154,7 @@ class HeaderForElementsView constructor(
 
                 // 더 보기 버튼
                 moreBtnView = TextView(context).apply {
-                    layoutParams = ConstraintLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
                         topToTop = LayoutParams.PARENT_ID
                         bottomToBottom = LayoutParams.PARENT_ID
                         rightToRight = LayoutParams.PARENT_ID

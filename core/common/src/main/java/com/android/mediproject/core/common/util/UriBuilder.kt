@@ -70,15 +70,14 @@ private fun toBaseUri(deepLinkUrl: String, parameter: Map<String, Any?>): Uri = 
  * @param parameter DeepLink에 들어갈 파라미터
  */
 fun NavController.navigateByDeepLink(
-    deepLinkUrl: String, parameter: BaseNavArgs, navOptions: NavOptions? = null) {
+    deepLinkUrl: String, parameter: BaseNavArgs, navOptions: NavOptions? = null
+) {
     val parameterMap = parameter.toMap()
     toQueryUri(deepLinkUrl, parameterMap).also { finalUri ->
         graph.matchDeepLink(NavDeepLinkRequest(finalUri, null, null))?.also { deepLinkMatch ->
             parameterMap.takeIf {
                 it.isNotEmpty()
             }?.forEach { (key, value) ->
-
-                value ?: return@forEach
 
                 val navType: NavType<out Any?> = when (value) {
                     is String -> NavType.StringType
@@ -100,7 +99,8 @@ fun NavController.navigateByDeepLink(
 
 
 fun NavController.deepNavigate(
-    deepLinkUrl: String, parameter: BaseNavArgs, navOptions: NavOptions? = null) {
+    deepLinkUrl: String, parameter: BaseNavArgs, navOptions: NavOptions? = null
+) {
     val parameterMap = parameter.toMap()
 
     // "medilenz://main?name={name}&age={age}"
