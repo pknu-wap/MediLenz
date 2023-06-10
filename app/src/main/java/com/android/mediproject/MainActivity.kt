@@ -99,6 +99,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
                     return true
                 }
             })
+
+            DevDialogFragment().show(supportFragmentManager, DevDialogFragment::class.java.name)
         }
     }
 
