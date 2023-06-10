@@ -31,13 +31,6 @@ class InternetNetworkListener @Inject constructor(@ApplicationContext private va
             networkStateCallback?.onChangedState(false)
         }
 
-        override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
-            super.onCapabilitiesChanged(network, networkCapabilities)
-        }
-
-        override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
-            super.onLinkPropertiesChanged(network, linkProperties)
-        }
     }
 
     fun interface NetworkStateCallback {

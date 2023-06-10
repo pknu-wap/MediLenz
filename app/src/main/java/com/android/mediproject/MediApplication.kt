@@ -7,7 +7,4 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class MediApplication : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-    }
 }

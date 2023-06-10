@@ -25,7 +25,7 @@ class SettingFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK,SystemBarStyler.NavigationBarColor.BLACK)
+        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,11 +41,11 @@ class SettingFragment :
     private fun handleEvent(event: SettingViewModel.SettingEvent) {
         val intent = Intent(Intent.ACTION_VIEW)
         when (event) {
-            is SettingViewModel.SettingEvent.Notice -> intent.setData("https://www.notion.so/c4f400e9e9ed46b19a20375028c3a0df".toUri())
-            is SettingViewModel.SettingEvent.Privacy -> intent.setData("https://www.notion.so/95b9e085523b4a21ae2624f7813bf5d1".toUri())
-            is SettingViewModel.SettingEvent.Policy -> intent.setData("https://www.notion.so/78f48ae1e85942c2bda087529717ca91".toUri())
-            is SettingViewModel.SettingEvent.Communicate -> intent.setData("https://www.notion.so/b8f23da7037d4f148e83a4c464b6b88c".toUri())
-            is SettingViewModel.SettingEvent.Introduce -> intent.setData("https://www.notion.so/e689497e3321452ab9826768a038681c".toUri())
+            is SettingViewModel.SettingEvent.Notice -> intent.data = "https://www.notion.so/c4f400e9e9ed46b19a20375028c3a0df".toUri()
+            is SettingViewModel.SettingEvent.Privacy -> intent.data = "https://www.notion.so/95b9e085523b4a21ae2624f7813bf5d1".toUri()
+            is SettingViewModel.SettingEvent.Policy -> intent.data = "https://www.notion.so/78f48ae1e85942c2bda087529717ca91".toUri()
+            is SettingViewModel.SettingEvent.Communicate -> intent.data = "https://www.notion.so/b8f23da7037d4f148e83a4c464b6b88c".toUri()
+            is SettingViewModel.SettingEvent.Introduce -> intent.data = "https://www.notion.so/e689497e3321452ab9826768a038681c".toUri()
         }
         startActivity(intent)
     }

@@ -113,9 +113,9 @@ class MedicineCommentsViewModel @Inject constructor(
                 result.onSuccess {
                     // 댓글 등록 성공
                     commentsUseCase.scrollChannel.send(Unit)
-                    _action.emit(CommentActionState.COMPLETED_APPLY_COMMENT_REPLY(Result.success(Unit)))
+                    _action.emit(COMPLETED_APPLY_COMMENT_REPLY(Result.success(Unit)))
                 }.onFailure {
-                    _action.emit(CommentActionState.COMPLETED_APPLY_COMMENT_REPLY(Result.failure(it)))
+                    _action.emit(COMPLETED_APPLY_COMMENT_REPLY(Result.failure(it)))
                 }
             }
         }
@@ -133,9 +133,9 @@ class MedicineCommentsViewModel @Inject constructor(
                 result.onSuccess {
                     // 댓글 등록 성공
                     commentsUseCase.scrollChannel.send(Unit)
-                    _action.emit(CommentActionState.COMPLETED_APPLY_COMMENT_REPLY(Result.success(Unit)))
+                    _action.emit(COMPLETED_APPLY_COMMENT_REPLY(Result.success(Unit)))
                 }.onFailure {
-                    _action.emit(CommentActionState.COMPLETED_APPLY_COMMENT_REPLY(Result.failure(it)))
+                    _action.emit(COMPLETED_APPLY_COMMENT_REPLY(Result.failure(it)))
                 }
             }
         }
@@ -153,9 +153,9 @@ class MedicineCommentsViewModel @Inject constructor(
                 medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws)).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 수정 성공
-                    _action.emit(CommentActionState.COMPLETED_APPLY_EDITED_COMMENT(Result.success(Unit)))
+                    _action.emit(COMPLETED_APPLY_EDITED_COMMENT(Result.success(Unit)))
                 }.onFailure {
-                    _action.emit(CommentActionState.COMPLETED_APPLY_EDITED_COMMENT(Result.failure(it)))
+                    _action.emit(COMPLETED_APPLY_EDITED_COMMENT(Result.failure(it)))
                 }
             }
         }
@@ -172,7 +172,7 @@ class MedicineCommentsViewModel @Inject constructor(
     private fun onClickedReply(comment: String, commentId: Long) {
         viewModelScope.launch {
             replyId.emit(commentId)
-            _action.emit(CommentActionState.CLICKED_REPLY(comment))
+            _action.emit(CLICKED_REPLY(comment))
         }
     }
 
@@ -184,7 +184,7 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     private fun onClickedDelete(commentId: Long) {
         viewModelScope.launch {
-            _action.tryEmit(CommentActionState.CLICKED_DELETE_MY_COMMENT(commentId))
+            _action.tryEmit(CLICKED_DELETE_MY_COMMENT(commentId))
         }
     }
 
@@ -198,9 +198,9 @@ class MedicineCommentsViewModel @Inject constructor(
                     result.onSuccess {
                         // 댓글 삭제 성공
                         commentsUseCase.scrollChannel.send(Unit)
-                        _action.emit(CommentActionState.COMPLETED_DELETE_COMMENT(Result.success(Unit)))
+                        _action.emit(COMPLETED_DELETE_COMMENT(Result.success(Unit)))
                     }.onFailure {
-                        _action.emit(CommentActionState.COMPLETED_DELETE_COMMENT(Result.failure(it)))
+                        _action.emit(COMPLETED_DELETE_COMMENT(Result.failure(it)))
                     }
                 }
         }
@@ -218,9 +218,9 @@ class MedicineCommentsViewModel @Inject constructor(
                 .collectLatest { result ->
                     result.onSuccess {
                         // like 처리 완료
-                        _action.emit(CommentActionState.COMPLETED_LIKE(Result.success(Unit)))
+                        _action.emit(COMPLETED_LIKE(Result.success(Unit)))
                     }.onFailure {
-                        _action.emit(CommentActionState.COMPLETED_LIKE(Result.failure(it)))
+                        _action.emit(COMPLETED_LIKE(Result.failure(it)))
                     }
                 }
         }
@@ -237,7 +237,7 @@ class MedicineCommentsViewModel @Inject constructor(
         viewModelScope.launch {
             // 수정 상태 변경
             item.isEditing = !item.isEditing
-            _action.tryEmit(CommentActionState.CLICKED_EDIT_COMMENT(position))
+            _action.tryEmit(CLICKED_EDIT_COMMENT(position))
         }
     }
 
@@ -250,7 +250,7 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     override fun onClickedSendButton(text: CharSequence) {
         viewModelScope.launch {
-            if (text.isEmpty()) _action.tryEmit(CommentActionState.COMPLETED_APPLY_COMMENT_REPLY(Result.failure(IllegalArgumentException("댓글 내용이 없습니다."))))
+            if (text.isEmpty()) _action.tryEmit(COMPLETED_APPLY_COMMENT_REPLY(Result.failure(IllegalArgumentException("댓글 내용이 없습니다."))))
             else {
                 if (replyId.value == -1L) {
                     applyNewComment(text.toString())

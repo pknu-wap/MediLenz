@@ -80,10 +80,6 @@ class RecentSearchListFragment :
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
     private fun onClicked(query: String) {
         parentFragmentManager.apply {
             setFragmentResult(ResultKey.RESULT_KEY.name, bundleOf(ResultKey.WORD.name to query))

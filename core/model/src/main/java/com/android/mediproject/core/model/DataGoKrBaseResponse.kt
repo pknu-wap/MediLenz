@@ -4,8 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class DataGoKrBaseResponse(
-) {
+abstract class DataGoKrBaseResponse {
     @SerialName("header") val header: Header? = null
 
     @Serializable
