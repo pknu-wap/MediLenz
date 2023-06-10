@@ -24,20 +24,20 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:showBackButton="true"
             app:setTheme="white"
+            app:showBackButton="true"
             app:title="의약품 정보" />
 
         <com.android.mediproject.core.ui.base.view.Bar
             android:id="@+id/medicineInfoBar2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:alpha="0"
             android:backgroundTint="@color/design_default_color_on_primary"
-            app:showBackButton="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:setTheme="medicine_info"
+            app:showBackButton="true"
             app:title="의약품 정보" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -52,7 +52,8 @@
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white">
+                android:backgroundTint="@color/white"
+                app:expanded="false">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/collapsingToolbarLayout"
@@ -156,11 +157,6 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.appbar.MaterialToolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_collapseMode="pin" />
 
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 

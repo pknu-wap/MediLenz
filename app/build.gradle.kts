@@ -1,33 +1,42 @@
 plugins {
-
     id("mediproject.android.application")
     id("mediproject.android.hilt")
     id("androidx.navigation.safeargs.kotlin")
+    alias(libs.plugins.gms)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
     defaultConfig {
         applicationId = "com.android.mediproject"
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "1.0.0-alpha01"
 
         vectorDrawables {
             useSupportLibrary = true
         }
 
-        //  testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildTypes {
+            debug {
+
+            }
+            release {
+                isMinifyEnabled = true
+                proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro",
+                    "proguard-glide.pro",
+                    "proguard-okhttp3.pro",
+                    "proguard-room.pro",
+                    "proguard-retrofit2.pro")
+            }
+        }
     }
     namespace = "com.android.mediproject"
-
-    buildFeatures {
-        buildConfig = true
-    }
 
     lint {
         checkDependencies = true
         ignoreTestSources = true
     }
-
 
 }
 
@@ -68,6 +77,9 @@ dependencies {
     implementation(libs.bundles.glides)
     implementation(libs.androidx.splash)
     kapt(libs.bundles.glides.kapt)
+
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 
     /*
     androidTestImplementation(libs.bundles.testUIs)

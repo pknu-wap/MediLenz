@@ -10,7 +10,7 @@ plugins {
 android {
     namespace = "com.android.mediproject.core.common"
 
-    buildFeatures {
+    @Suppress("UnstableApiUsage") buildFeatures {
         buildConfig = true
     }
 

@@ -77,8 +77,9 @@ targetSdk = "33"
 minSdk = "28"
 
 #firebase
-firebaseCrashlytics = "2.9.4"
-firebaseBom = "31.2.3"
+firebaseCrashlytics = "18.3.7"
+firebaseCrashlyticsGradlePlugin = "2.9.5"
+firebaseAnalytics = "21.3.0"
 
 googleAutoService = "1.0.1"
 googleAutoServiceAnnotation = "1.0.1"
@@ -201,8 +202,8 @@ junit = { module = "junit:junit", version.ref = "jUnit" }
 android-flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 
 # firebase--------------------------------------------------------------------------------------------------------------------
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlytics" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx", version.ref = "firebaseAnalytics" }
 
 # hilt------------------------------------------------------------------------------------------------------------------------
 androidx-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "androidxHilt" }
@@ -293,8 +294,6 @@ glides = ["glide-main"]
 
 glides-kapt = ["glide-kapt"]
 
-firebases = ["firebase-bom", "firebase-crashlytics"]
-
 hilts = ["androidx-hilt-navigation-compose", "androidx-hilt-android", "androidx-hilt-navigation-fragment",
     "androidx-hilt-work", "androidx-hilt-navigation-compose"]
 
@@ -315,7 +314,7 @@ tflite = ["tensorflow-lite-lite", "tensorflow-lite-playServicesTfliteGpu", "tens
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradlePlugin" }
 gms = { id = "com.google.gms.google-services", version.ref = "gms" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "androidxHilt" }
 

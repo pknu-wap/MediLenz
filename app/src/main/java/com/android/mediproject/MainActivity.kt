@@ -50,8 +50,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         internetNetworkListener.activityLifeCycle = this.lifecycle
         internetNetworkListener.networkStateCallback = InternetNetworkListener.NetworkStateCallback { isConnected ->
             if (!isConnected) {
-                //val modalBottomSheet = NetworkStateDialogFragment()
-                //modalBottomSheet.show(supportFragmentManager, NetworkStateDialogFragment::class.java.name)
+                NetworkStateDialogFragment().show(supportFragmentManager, NetworkStateDialogFragment::class.java.name)
             }
         }
 

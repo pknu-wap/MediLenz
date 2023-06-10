@@ -7,9 +7,6 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.news"
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 hilt {

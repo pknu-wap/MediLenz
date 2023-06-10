@@ -31,15 +31,15 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,6 +48,7 @@ class MedicineCommentsViewModel @Inject constructor(
     private val commentsUseCase: CommentsUseCase,
     private val getAccountStateUseCase: GetAccountStateUseCase,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel(), ISendText {
     private val _action =
         MutableSharedFlow<CommentActionState>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 3)
@@ -77,8 +78,8 @@ class MedicineCommentsViewModel @Inject constructor(
     }
 
 
-    val comments: SharedFlow<PagingData<CommentDto>> = medicineBasicInfo.flatMapLatest { info ->
-        commentsUseCase.getCommentsForAMedicine(info.medicineIdInAws, myUserId.value).mapLatest { pagingData ->
+    val comments: StateFlow<PagingData<CommentDto>> = medicineBasicInfo.flatMapLatest { info ->
+        commentsUseCase.getCommentsForAMedicine(info.medicineIdInAws, myUserId.value).cachedIn(viewModelScope).mapLatest { pagingData ->
             val signedIn = accountState.value is AccountState.SignedIn
             pagingData.map { comment ->
                 comment.apply {
@@ -96,7 +97,7 @@ class MedicineCommentsViewModel @Inject constructor(
                 }
             }
         }
-    }.flowOn(defaultDispatcher).cachedIn(viewModelScope).shareIn(viewModelScope, SharingStarted.Lazily, replay = 1)
+    }.flowOn(ioDispatcher).stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
 
 
     /**

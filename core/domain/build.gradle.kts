@@ -7,10 +7,6 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.core.domain"
-
-    buildFeatures {
-        buildConfig = true
-    }
 }
 hilt {
     enableAggregatingTask = true

@@ -6,9 +6,6 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.search"
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 hilt {

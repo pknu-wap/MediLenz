@@ -3,6 +3,8 @@
 
     <style name="MediBaseTheme" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/main</item>
+        <item name="colorSurfaceVariant">@color/white</item>
+        <item name="colorSurface">@color/white</item>
     </style>
 
     <style name="ButtonChip" parent="@style/Widget.Material3.Chip.Assist" />
