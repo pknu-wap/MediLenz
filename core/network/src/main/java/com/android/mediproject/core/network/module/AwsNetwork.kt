@@ -65,7 +65,7 @@ import javax.inject.Singleton
 object AwsNetwork {
 
 
-    @Provides()
+    @Provides
     @Named("awsNetworkApiWithoutTokens")
     @Singleton
     fun providesWithoutTokensAwsNetworkApi(
@@ -127,7 +127,7 @@ object AwsNetwork {
 interface AwsNetworkApi {
 
     @GET(value = "medicine/favorite")
-    suspend fun getInterestedMedicineList(): Response<InterestedMedicineListResponse>
+    suspend fun getInterestedMedicineList(): Response<InterestedqMedicineListResponse>
 
     @POST(value = "user/register")
     suspend fun signUp(

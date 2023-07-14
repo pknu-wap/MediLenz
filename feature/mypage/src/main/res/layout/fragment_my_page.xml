@@ -180,7 +180,7 @@
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/interestedMedicineList"
-                        android:name="com.android.mediproject.feature.interestedmedicine.InterestedMedicineFragment"
+                        android:name="com.android.mediproject.feature.favoritemedicine.FavoriteMedicineFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

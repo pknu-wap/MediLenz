@@ -1,9 +1,9 @@
-package com.android.mediproject.feature.interestedmedicine
+package com.android.mediproject.feature.favoritemedicine.moreinterestedmedicine
 
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.domain.GetInterestedMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
-import com.android.mediproject.core.model.interestedmedicine.InterestedMedicineDto
+import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedicineDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -14,12 +14,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class InterstedMedicineViewModel @Inject constructor(
+class MoreInterestedMedicineViewModel @Inject constructor(
     private val getTokenUseCase: GetTokenUseCase,
     private val getInterestedMedicineUseCase: GetInterestedMedicineUseCase
 ) : BaseViewModel() {
 
-    private val _interstedMedicineList = MutableStateFlow<List<InterestedMedicineDto>>(listOf())
+    private val _interstedMedicineList = MutableStateFlow<List<MoreInterestedMedicineDto>>(listOf())
     val interstedMedicineList get() = _interstedMedicineList
 
     private val _token = MutableStateFlow<TokenState<CurrentTokenDto>>(TokenState.Empty)
@@ -28,7 +28,7 @@ class InterstedMedicineViewModel @Inject constructor(
     fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
     fun loadInterestedMedicines() =
         viewModelScope.launch {
-            getInterestedMedicineUseCase.getInterestedMedicineList()
+            getInterestedMedicineUseCase.getMoreInterestedMedicineList()
                 .collect {
                     it.fold(
                         onSuccess = { _interstedMedicineList.value = it },

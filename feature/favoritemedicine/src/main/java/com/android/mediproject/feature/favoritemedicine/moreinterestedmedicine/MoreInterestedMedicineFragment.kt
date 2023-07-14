@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.interestedmedicine.moreinterestedmedicine
+package com.android.mediproject.feature.favoritemedicine.moreinterestedmedicine
 
 import android.content.Context
 import android.os.Bundle
@@ -11,7 +11,7 @@ import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedic
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.interestedmedicine.databinding.FragmentMoreInterestedMedicineBinding
+import com.android.mediproject.feature.favoritemedicine.databinding.FragmentMoreInterestedMedicineBinding
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 import javax.inject.Inject

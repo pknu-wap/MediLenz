@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.interestedmedicine.moreinterestedmedicine
+package com.android.mediproject.feature.favoritemedicine.moreinterestedmedicine
 
 import android.content.Context
 import android.graphics.Rect

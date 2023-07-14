@@ -6,12 +6,12 @@
 
     <fragment
         android:id="@+id/interestedMedicineFragment"
-        android:name="com.android.mediproject.feature.interestedmedicine.InterestedMedicineFragment"
+        android:name="com.android.mediproject.feature.favoritemedicine.FavoriteMedicineFragment"
         android:label="InterestedMedicineFragment" />
 
     <fragment
         android:id="@+id/moreInterestedMedicineFragment"
-        android:name="com.android.mediproject.feature.interestedmedicine.moreinterestedmedicine.MoreInterestedMedicineFragment"
+        android:name="com.android.mediproject.feature.favoritemedicine.moreinterestedmedicine.MoreInterestedMedicineFragment"
         android:label="MoreInterestedMedicineFragment" >
         <deepLink app:uri="medilens://main/moreInterestedMedicine_nav" />
     </fragment>

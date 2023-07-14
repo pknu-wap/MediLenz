@@ -23,7 +23,7 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
-    implementation(project(":feature:interestedmedicine"))
+    implementation(project(":feature:favoritemedicine"))
     implementation(project(":feature:comments"))
     implementation(libs.bundles.glides)
     kapt(libs.bundles.glides.kapt)

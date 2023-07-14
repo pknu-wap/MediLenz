@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.interestedmedicine
+package com.android.mediproject.feature.favoritemedicine
 
 import android.os.Bundle
 import android.text.Spannable
@@ -17,31 +17,31 @@ import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
-import com.android.mediproject.feature.interestedmedicine.databinding.FragmentInterestedMedicineBinding
+import com.android.mediproject.feature.interestedmedicine.databinding.FragmentFavoriteMedicineBinding
 import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 
 @AndroidEntryPoint
-class InterestedMedicineFragment :
-    BaseFragment<FragmentInterestedMedicineBinding, InterstedMedicineViewModel>(
-        FragmentInterestedMedicineBinding::inflate
+class FavoriteMedicineFragment :
+    BaseFragment<FragmentFavoriteMedicineBinding, FavoriteMedicineViewModel>(
+        FragmentFavoriteMedicineBinding::inflate
     ) {
 
-    override val fragmentViewModel: InterstedMedicineViewModel by viewModels()
+    override val fragmentViewModel: FavoriteMedicineViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addInterestedMedicinesChips()
+        addFavoriteMedicinesChips()
         initHeader()
     }
 
-    private fun addInterestedMedicinesChips() {
+    private fun addFavoriteMedicinesChips() {
         binding.apply {
             fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
                     repeatOnStarted {
-                        interstedMedicineList.collect {
+                        favoriteMedicineList.collect {
                             setInterstedMedicineList(it)
                         }
                     }
@@ -63,7 +63,7 @@ class InterestedMedicineFragment :
             is TokenState.RefreshExpiration -> {}
             is TokenState.AccessExpiration -> {}
             is TokenState.Valid -> {
-                fragmentViewModel.loadInterestedMedicines()
+                fragmentViewModel.loadFavoriteMedicines()
             }
         }
     }
@@ -74,7 +74,7 @@ class InterestedMedicineFragment :
      * 확장 버튼 리스너, 더 보기 버튼 리스너
      */
     private fun initHeader() {
-        binding.interstedMedicineHeaderView.apply {
+        binding.favoriteMedicineHeaderView.apply {
             setOnMoreClickListener {
                 findNavController().navigate("medilens://main/moreInterestedMedicine_nav".toUri())
             }
@@ -87,7 +87,7 @@ class InterestedMedicineFragment :
      */
     private fun setInterstedMedicineList(medicineList: List<InterestedMedicineDto>) {
         //다른화면 갔다올 경우 이전에 있는 약품에 더해서 더 생기기 때문에 제거해줘야 함
-        binding.interestedMedicineList.removeAllViews()
+        binding.favoriteMedicineList.removeAllViews()
 
         //즐겨찾기 목록 약의 개수가 0개가 아닐 경우
         if (medicineList.size != 0) {
@@ -96,7 +96,7 @@ class InterestedMedicineFragment :
 
             medicineList.forEach { medicine ->
                 log(medicine.toString())
-                binding.interestedMedicineList.addView(
+                binding.favoriteMedicineList.addView(
                     ButtonChip<String>(
                         requireContext()
                     ).apply {
@@ -122,11 +122,11 @@ class InterestedMedicineFragment :
     private fun showNoInterestedMedicine() {
         log("즐겨찾기 없음")
         binding.apply {
-            interestedMedicineList.visibility = View.GONE
-            noInterstedMedicineTV.visibility = View.VISIBLE
+            favoriteMedicineList.visibility = View.GONE
+            noFavoriteMedicineTV.visibility = View.VISIBLE
 
             val span =
-                SpannableStringBuilder(getString(com.android.mediproject.feature.interestedmedicine.R.string.noInterstedMedicine)).apply {
+                SpannableStringBuilder(getString(com.android.mediproject.feature.interestedmedicine.R.string.noFavoriteMedicine)).apply {
                     setSpan(
                         ForegroundColorSpan(
                             ContextCompat.getColor(
@@ -156,9 +156,9 @@ class InterestedMedicineFragment :
                         Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
-            noInterstedMedicineTV.text = span
-            interstedMedicineHeaderView.setMoreVisiblity(false)
-            interstedMedicineHeaderView.setExpandVisiblity(false)
+            noFavoriteMedicineTV.text = span
+            favoriteMedicineHeaderView.setMoreVisiblity(false)
+            favoriteMedicineHeaderView.setExpandVisiblity(false)
         }
     }
 }
