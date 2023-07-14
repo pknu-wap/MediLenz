@@ -23,7 +23,6 @@ internal fun Project.configureKotlinAndroid(
     commonExtension.apply {
         compileSdk = libs.findVersion("compileSdk").get().toString().toInt()
 
-
         defaultConfig {
             minSdk = libs.findVersion("minSdk").get().toString().toInt()
         }
@@ -60,7 +59,6 @@ internal fun Project.configureKotlinJvm() {
 }
 
 private fun Project.configureKotlin() {
-    // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
             val warningsAsErrors: String? by project
@@ -70,13 +68,10 @@ private fun Project.configureKotlin() {
                 "-opt-in=kotlin.RequiresOptIn",
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=kotlinx.coroutines.FlowPreview",
-                "-opt-in=kotlin.Experimental",
-                "-Xdebug",
+                "-opt-in=kotlin.Experimental"
             )
 
             jvmTarget = JavaVersion.VERSION_17.toString()
-
-
         }
     }
 }

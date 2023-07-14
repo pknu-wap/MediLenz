@@ -1,8 +1,6 @@
 plugins {
-
     id("mediproject.android.feature")
     id(libs.plugins.kapt.get().pluginId)
-
 }
 
 android {

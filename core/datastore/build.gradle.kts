@@ -6,10 +6,6 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.core.datastore"
-
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 protobuf {

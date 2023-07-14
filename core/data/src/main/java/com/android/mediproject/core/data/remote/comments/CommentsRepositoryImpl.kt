@@ -27,7 +27,7 @@ class CommentsRepositoryImpl @Inject constructor(
     private val commentsDataSource: CommentsDataSource, private val signRepository: SignRepository
 ) : CommentsRepository {
     override fun getCommentsForAMedicine(medicineId: Long): Flow<PagingData<CommentListResponse.Comment>> =
-        Pager(config = PagingConfig(pageSize = AWS_LOAD_PAGE_SIZE, prefetchDistance = 5), pagingSourceFactory = {
+        Pager(config = PagingConfig(pageSize = AWS_LOAD_PAGE_SIZE, prefetchDistance = 0), pagingSourceFactory = {
             CommentsListDataSourceImpl(commentsDataSource, medicineId)
         }).flow
 

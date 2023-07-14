@@ -19,7 +19,7 @@ internal fun Project.configureAndroidCompose(
     commonExtension.apply {
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-        buildFeatures {
+        @Suppress("UnstableApiUsage") buildFeatures {
             compose = true
         }
 
@@ -48,9 +48,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
     if (enableMetrics) {
         val metricsFolder = File(project.buildDir, "compose-metrics")
         metricParameters.add("-P")
-        metricParameters.add(
-            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" + metricsFolder.absolutePath
-        )
+        metricParameters.add("plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" + metricsFolder.absolutePath)
     }
 
     val enableReportsProvider = project.providers.gradleProperty("enableComposeCompilerReports")
@@ -58,9 +56,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
     if (enableReports) {
         val reportsFolder = File(project.buildDir, "compose-reports")
         metricParameters.add("-P")
-        metricParameters.add(
-            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" + reportsFolder.absolutePath
-        )
+        metricParameters.add("plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" + reportsFolder.absolutePath)
     }
     return metricParameters.toList()
 }
