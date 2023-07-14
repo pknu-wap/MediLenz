@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/moreInterestedMedicineFragment"
-        android:name="com.android.mediproject.feature.favoritemedicine.moreinterestedmedicine.MoreInterestedMedicineFragment"
+        android:name="com.android.mediproject.feature.favoritemedicine.favoritemedicinemore.FavoriteMedicineMoreFragment"
         android:label="MoreInterestedMedicineFragment" >
         <deepLink app:uri="medilens://main/moreInterestedMedicine_nav" />
     </fragment>

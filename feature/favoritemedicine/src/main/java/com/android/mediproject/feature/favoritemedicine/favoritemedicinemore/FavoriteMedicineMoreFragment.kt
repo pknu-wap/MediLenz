@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.favoritemedicine.moreinterestedmedicine
+package com.android.mediproject.feature.favoritemedicine.favoritemedicinemore
 
 import android.content.Context
 import android.os.Bundle
@@ -11,18 +11,19 @@ import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedic
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.favoritemedicine.databinding.FragmentMoreInterestedMedicineBinding
+import com.android.mediproject.feature.favoritemedicine.favoritemedicinemore.recyclerview.FavoriteMedcineMoreDecoration
+import com.android.mediproject.feature.interestedmedicine.databinding.FragmentFavoriteMedicineMoreBinding
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MoreInterestedMedicineFragment :
-    BaseFragment<FragmentMoreInterestedMedicineBinding, MoreInterestedMedicineViewModel>(
-        FragmentMoreInterestedMedicineBinding::inflate
+class FavoriteMedicineMoreFragment :
+    BaseFragment<FragmentFavoriteMedicineMoreBinding, FavoriteMedicineMoreViewModel>(
+        FragmentFavoriteMedicineMoreBinding::inflate
     ) {
-    override val fragmentViewModel: MoreInterestedMedicineViewModel by viewModels()
-    private val moreInterestedMedicineAdapter: MoreInterestedMeidicneAdapter by lazy { MoreInterestedMeidicneAdapter() }
+    override val fragmentViewModel: FavoriteMedicineMoreViewModel by viewModels()
+    private val favoriteMedicineMoreAdapter: FavoriteMeidicneMoreAdapter by lazy { FavoriteMeidicneMoreAdapter() }
 
     @Inject
     lateinit var systemBarStyler: SystemBarStyler
@@ -41,16 +42,16 @@ class MoreInterestedMedicineFragment :
         binding.apply {
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
-                    repeatOnStarted { interstedMedicineList.collect { setInterstedMedicineList(it) } }
+                    repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineMoreList(it) } }
                     repeatOnStarted { token.collect { handleToken(it) } }
                     loadTokens()
                 }
             }
 
-            interestedMedicineListRV.apply {
-                adapter = moreInterestedMedicineAdapter
+            favoriteMedicineListRV.apply {
+                adapter = favoriteMedicineMoreAdapter
                 layoutManager = LinearLayoutManager(requireContext())
-                addItemDecoration(MoreInterestedMedcineDecoration(requireContext()))
+                addItemDecoration(FavoriteMedcineMoreDecoration(requireContext()))
                 addItemDecoration(DividerItemDecoration(requireContext(), 1))
             }
         }
@@ -63,20 +64,20 @@ class MoreInterestedMedicineFragment :
             is TokenState.RefreshExpiration -> {}
             is TokenState.AccessExpiration -> {}
             is TokenState.Valid -> {
-                fragmentViewModel.loadInterestedMedicines()
+                fragmentViewModel.loadFavoriteMedicines()
             }
         }
     }
 
-    private fun setInterstedMedicineList(medicineList: List<MoreInterestedMedicineDto>) {
-        moreInterestedMedicineAdapter.submitList(medicineList)
+    private fun setFavoriteMedicineMoreList(medicineList: List<MoreInterestedMedicineDto>) {
+        favoriteMedicineMoreAdapter.submitList(medicineList)
     }
 
     private fun setBarStyle() = binding.apply {
         systemBarStyler.changeMode(
             topViews = listOf(
                 SystemBarStyler.ChangeView(
-                    interestedMedicineListBar,
+                    favoriteMedicineListBar,
                     SystemBarStyler.SpacingType.PADDING
                 )
             )

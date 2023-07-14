@@ -42,7 +42,7 @@ class FavoriteMedicineFragment :
                 viewLifecycleOwner.apply {
                     repeatOnStarted {
                         favoriteMedicineList.collect {
-                            setInterstedMedicineList(it)
+                            setFavoriteMedicineList(it)
                         }
                     }
                     repeatOnStarted {
@@ -68,11 +68,6 @@ class FavoriteMedicineFragment :
         }
     }
 
-    /**
-     * 헤더 초기화
-     *
-     * 확장 버튼 리스너, 더 보기 버튼 리스너
-     */
     private fun initHeader() {
         binding.favoriteMedicineHeaderView.apply {
             setOnMoreClickListener {
@@ -82,14 +77,10 @@ class FavoriteMedicineFragment :
 
     }
 
-    /**
-     * 마이페이지 즐겨찾기 목록 화면 로직
-     */
-    private fun setInterstedMedicineList(medicineList: List<InterestedMedicineDto>) {
+    private fun setFavoriteMedicineList(medicineList: List<InterestedMedicineDto>) {
         //다른화면 갔다올 경우 이전에 있는 약품에 더해서 더 생기기 때문에 제거해줘야 함
         binding.favoriteMedicineList.removeAllViews()
 
-        //즐겨찾기 목록 약의 개수가 0개가 아닐 경우
         if (medicineList.size != 0) {
 
             val horizontalSpace = resources.getDimension(R.dimen.dp_4).toInt()
@@ -115,11 +106,11 @@ class FavoriteMedicineFragment :
             }
         } else {
             //0개 일 경우
-            showNoInterestedMedicine()
+            showNoFavoriteMedicine()
         }
     }
 
-    private fun showNoInterestedMedicine() {
+    private fun showNoFavoriteMedicine() {
         log("즐겨찾기 없음")
         binding.apply {
             favoriteMedicineList.visibility = View.GONE

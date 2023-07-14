@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.favoritemedicine.moreinterestedmedicine
+package com.android.mediproject.feature.favoritemedicine.favoritemedicinemore
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedicineDto
-import com.android.mediproject.feature.favoritemedicine.databinding.ItemInterestedMedicineBinding
+import com.android.mediproject.feature.interestedmedicine.databinding.ItemFavoriteMedicineBinding
 
-class MoreInterestedMedicineViewHolder(private val binding: ItemInterestedMedicineBinding) :
+class FavoriteMedicineMoreViewHolder(private val binding: ItemFavoriteMedicineBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(moreInterestedMedicine: MoreInterestedMedicineDto) {
@@ -16,8 +16,8 @@ class MoreInterestedMedicineViewHolder(private val binding: ItemInterestedMedici
     }
 }
 
-class MoreInterestedMeidicneAdapter :
-    ListAdapter<MoreInterestedMedicineDto, MoreInterestedMedicineViewHolder>(diffUtil) {
+class FavoriteMeidicneMoreAdapter :
+    ListAdapter<MoreInterestedMedicineDto, FavoriteMedicineMoreViewHolder>(diffUtil) {
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<MoreInterestedMedicineDto>() {
@@ -40,16 +40,16 @@ class MoreInterestedMeidicneAdapter :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MoreInterestedMedicineViewHolder {
-        val binding = ItemInterestedMedicineBinding.inflate(
+    ): FavoriteMedicineMoreViewHolder {
+        val binding = ItemFavoriteMedicineBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return MoreInterestedMedicineViewHolder(binding)
+        return FavoriteMedicineMoreViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: MoreInterestedMedicineViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavoriteMedicineMoreViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 }

@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.favoritemedicine.moreinterestedmedicine.MoreInterestedMedicineViewModel" />
+            type="com.android.mediproject.feature.favoritemedicine.favoritemedicinemore.FavoriteMedicineMoreViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".moreinterestedmedicine.MoreInterestedMedicineFragment">
+        tools:context=".favoritemedicinemore.FavoriteMedicineMoreViewModel">
 
         <com.android.mediproject.core.ui.base.view.Bar
             android:id="@+id/favoriteMedicineListBar"
