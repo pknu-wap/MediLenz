@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.android.mediproject.feature.interestedmedicine"
+    namespace = "com.android.mediproject.feature.favoritemedicine"
     buildFeatures {
         buildConfig = true
     }
