@@ -31,7 +31,7 @@ include(":core:network")
 include(":core:datastore")
 include(":core:domain")
 
-include(":feature:interestedmedicine")
+include(":feature:favoritemedicine")
 include(":feature:intro")
 include(":feature:home")
 include(":feature:comments")

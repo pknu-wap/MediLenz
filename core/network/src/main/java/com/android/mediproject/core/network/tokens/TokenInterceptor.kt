@@ -8,7 +8,8 @@ import okhttp3.Response
 import javax.inject.Inject
 
 class TokenInterceptor @Inject constructor(
-    private val tokenServer: TokenServer, private val tokenType: TokenType) : Interceptor {
+    private val tokenServer: TokenServer, private val tokenType: TokenType
+) : Interceptor {
 
     enum class TokenType {
         ACCESS_TOKEN, REFRESH_TOKEN
@@ -25,11 +26,10 @@ class TokenInterceptor @Inject constructor(
             val token = if (tokenType == TokenType.ACCESS_TOKEN) tokenOnTokenServer.accessToken
             else tokenOnTokenServer.refreshToken
 
-            val response = chain.request().newBuilder().header("Authorization", "Bearer ${token.joinToString("")}").build()
-            Log.d("wap", "TokenInterceptor : "+response.toString())
+            val response = chain.request().newBuilder()
+                .header("Authorization", "Bearer ${token.joinToString("")}").build()
+            Log.d("wap", "TokenInterceptor : " + response.toString())
             return chain.proceed(response)
         }
     }
-
-
 }

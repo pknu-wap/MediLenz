@@ -68,8 +68,8 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
+    implementation(project(":feature:favoritemedicine"))
 
-    implementation(project(":feature:interestedmedicine"))
     implementation(project(":feature:home"))
     implementation(project(":feature:intro"))
     implementation(project(":feature:comments"))

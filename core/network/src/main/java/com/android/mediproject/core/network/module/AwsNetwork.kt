@@ -6,15 +6,15 @@ import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
-import com.android.mediproject.core.model.interestedmedicine.DeleteInterestedMedicineResponse
-import com.android.mediproject.core.model.interestedmedicine.InterestedMedicineListResponse
-import com.android.mediproject.core.model.interestedmedicine.IsInterestedMedicineResponse
-import com.android.mediproject.core.model.interestedmedicine.NewInterestedMedicineResponse
+import com.android.mediproject.core.model.favoritemedicine.DeleteFavoriteMedicineResponse
+import com.android.mediproject.core.model.favoritemedicine.CheckFavoriteMedicineResponse
+import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineListResponse
+import com.android.mediproject.core.model.favoritemedicine.NewFavoriteMedicineResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
-import com.android.mediproject.core.model.requestparameters.AddInterestedMedicineParameter
+import com.android.mediproject.core.model.requestparameters.AddFavoriteMedicineParameter
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
@@ -27,8 +27,8 @@ import com.android.mediproject.core.model.user.remote.UserResponse
 import com.android.mediproject.core.model.user.remote.WithdrawalResponse
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
-import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
-import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSourceImpl
+import com.android.mediproject.core.network.datasource.favoritemedicine.FavoriteMedicineDataSource
+import com.android.mediproject.core.network.datasource.favoritemedicine.FavoriteMedicineDataSourceImpl
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
@@ -65,7 +65,7 @@ import javax.inject.Singleton
 object AwsNetwork {
 
 
-    @Provides()
+    @Provides
     @Named("awsNetworkApiWithoutTokens")
     @Singleton
     fun providesWithoutTokensAwsNetworkApi(
@@ -77,9 +77,9 @@ object AwsNetwork {
 
     @Provides
     @Singleton
-    fun provideInterestedMedicineDatasource(
+    fun provideFavoriteMedicineDatasource(
         @Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi
-    ): InterestedMedicineDataSource = InterestedMedicineDataSourceImpl(awsNetworkApi)
+    ): FavoriteMedicineDataSource = FavoriteMedicineDataSourceImpl(awsNetworkApi)
 
     @Provides
     @Named("awsNetworkApiWithAccessTokens")
@@ -127,7 +127,7 @@ object AwsNetwork {
 interface AwsNetworkApi {
 
     @GET(value = "medicine/favorite")
-    suspend fun getInterestedMedicineList(): Response<InterestedMedicineListResponse>
+    suspend fun getFavoriteMedicineList(): Response<FavoriteMedicineListResponse>
 
     @POST(value = "user/register")
     suspend fun signUp(
@@ -234,23 +234,23 @@ interface AwsNetworkApi {
      * 관심 약 조회
      */
     @GET(value = "medicine/favorite")
-    suspend fun isInterestedMedicine(
+    suspend fun checkFavoriteMedicine(
         @Query("ITEM_SEQ") itemSeq: Long
-    ): Response<IsInterestedMedicineResponse>
+    ): Response<CheckFavoriteMedicineResponse>
 
     /**
      * 관심 약 추가
      */
     @POST(value = "medicine/favorite")
-    suspend fun addInterestedMedicine(
-        @Body addInterestedMedicineParameter: AddInterestedMedicineParameter
-    ): Response<NewInterestedMedicineResponse>
+    suspend fun addFavoriteMedicine(
+        @Body addFavoriteMedicineParameter: AddFavoriteMedicineParameter
+    ): Response<NewFavoriteMedicineResponse>
 
     /**
      * 관심 약 삭제
      */
     @DELETE(value = "medicine/favorite")
-    suspend fun deleteInterestedMedicine(
+    suspend fun deleteFavoriteMedicine(
         @Query("medicineId") medicineId: Long
-    ): Response<DeleteInterestedMedicineResponse>
+    ): Response<DeleteFavoriteMedicineResponse>
 }

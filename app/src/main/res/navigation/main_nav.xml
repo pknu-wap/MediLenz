@@ -11,7 +11,7 @@
     <include app:graph="@navigation/home_nav" />
     <include app:graph="@navigation/news_nav" />
     <include app:graph="@navigation/comments_nav" />
-    <include app:graph="@navigation/interestedmedicine_nav" />
+    <include app:graph="@navigation/favoritemedicine_nav" />
     <include app:graph="@navigation/camera_nav" />
     <include app:graph="@navigation/medicine_details_nav" />
     <include app:graph="@navigation/search_medicines_nav" />

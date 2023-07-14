@@ -7,7 +7,7 @@ import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.domain.CommentsUseCase
-import com.android.mediproject.core.domain.GetInterestedMedicineUseCase
+import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
@@ -33,7 +33,7 @@ import javax.inject.Inject
 class MedicineInfoViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
     private val commentsUseCase: CommentsUseCase,
-    private val interestedMedicineUseCase: GetInterestedMedicineUseCase,
+    private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
 ) : BaseViewModel() {
 
@@ -52,7 +52,7 @@ class MedicineInfoViewModel @Inject constructor(
     private val _medicinePrimaryInfo = MutableSharedFlow<MedicineInfoArgs>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val medicinePrimaryInfo get() = _medicinePrimaryInfo.asSharedFlow()
 
-    private val isInterestedMedicine = MutableStateFlow(EventState.Interest(isInterest = false, lockChecked = true))
+    private val checkFavoriteMedicine = MutableStateFlow(EventState.Interest(isInterest = false, lockChecked = true))
 
     val medicineDetails: StateFlow<UiState<MedicineDetatilInfoDto>> = medicinePrimaryInfo.flatMapLatest { primaryInfo ->
         getMedicineDetailsUseCase(primaryInfo).mapLatest { result ->
@@ -68,9 +68,9 @@ class MedicineInfoViewModel @Inject constructor(
         }
     }
 
-    private fun loadInterestedMedicine(medicineIdInAws: Long) {
+    private fun loadFavoriteMedicine(medicineIdInAws: Long) {
         viewModelScope.launch {
-            interestedMedicineUseCase.isInterestedMedicine(medicineIdInAws).collect { responseResult ->
+            getFavoriteMedicineUseCase.checkFavoriteMedicine(medicineIdInAws).collect { responseResult ->
                 responseResult.onSuccess {
                     // 관심약 여부를 보여줍니다.
                     _eventState.emit(EventState.Interest(it.isFavorite, false))
@@ -85,9 +85,9 @@ class MedicineInfoViewModel @Inject constructor(
 
     fun checkInterestMedicine() {
         viewModelScope.launch {
-            if (!isInterestedMedicine.value.lockChecked) {
-                val newState = !isInterestedMedicine.value.isInterest
-                interestedMedicineUseCase.interestedMedicine(medicinePrimaryInfo.replayCache.last().itemSeq, newState)
+            if (!checkFavoriteMedicine.value.lockChecked) {
+                val newState = !checkFavoriteMedicine.value.isInterest
+                getFavoriteMedicineUseCase.favoriteMedicine(medicinePrimaryInfo.replayCache.last().itemSeq, newState)
                     .collect { responseResult ->
                         responseResult.onSuccess {
                             _eventState.emit(EventState.Interest(newState, false))

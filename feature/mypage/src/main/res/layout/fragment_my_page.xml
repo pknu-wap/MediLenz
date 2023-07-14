@@ -165,7 +165,7 @@
                     app:layout_constraintTop_toTopOf="@id/userImageIV" />
 
                 <LinearLayout
-                    android:id="@+id/interestedMedicineListLL"
+                    android:id="@+id/favoriteMedicineListLL"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
@@ -179,8 +179,8 @@
                     app:layout_constraintTop_toBottomOf="@id/userImageIV">
 
                     <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/interestedMedicineList"
-                        android:name="com.android.mediproject.feature.interestedmedicine.InterestedMedicineFragment"
+                        android:id="@+id/favoriteMedicineList"
+                        android:name="com.android.mediproject.feature.favoritemedicine.FavoriteMedicineFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -197,7 +197,7 @@
                     android:paddingVertical="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/interestedMedicineListLL">
+                    app:layout_constraintTop_toBottomOf="@id/favoriteMedicineListLL">
 
                     <com.android.mediproject.core.ui.base.view.HeaderForElementsView
                         android:id="@+id/myCommentsListHeaderView"

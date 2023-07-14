@@ -1,12 +1,13 @@
 plugins {
-
     id("mediproject.android.feature")
-    id("org.jetbrains.kotlin.android")
-
+    id(libs.plugins.kapt.get().pluginId)
 }
 
 android {
-    namespace = "com.android.mediproject.feature.mypage"
+    namespace = "com.android.mediproject.feature.favoritemedicine"
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 hilt {
@@ -14,16 +15,15 @@ hilt {
 }
 
 dependencies {
+
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
-    implementation(project(":core:model"))
-    implementation(project(":core:data"))
     implementation(project(":core:domain"))
-    implementation(project(":feature:favoritemedicine"))
-    implementation(project(":feature:comments"))
+    implementation(project(":core:model"))
     implementation(libs.bundles.glides)
     kapt(libs.bundles.glides.kapt)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
+    implementation(libs.android.flexbox)
 }

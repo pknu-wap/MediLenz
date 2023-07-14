@@ -39,7 +39,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import javax.inject.Singleton
 
-const val DATA_GO_KR_BASEURL = "https://apis.data.go.kr/1471000/"
+const val DATA_GO_KR_BASEURL = "https://reqres.in/"
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -88,6 +88,7 @@ object DataGoKrNetwork {
 }
 
 interface DataGoKrNetworkApi {
+
 
     @GET(value = "DrugPrdtPrmsnInfoService04/getDrugPrdtPrmsnInq04")
     suspend fun getApprovalList(
