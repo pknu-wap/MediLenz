@@ -174,9 +174,11 @@ class MyPageFragment :
     }
 
     private fun guestModeScreen() = binding.apply {
-        guestModeCL.visibility = View.VISIBLE
-        loginModeCL.visibility = View.GONE
+        guestTV.text = setGuestModeScreenSpan()
+        setGuestModeScreenVisible()
+    }
 
+    private fun setGuestModeScreenSpan(): SpannableStringBuilder {
         val span =
             SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
                 setSpan(
@@ -190,14 +192,17 @@ class MyPageFragment :
                 )
                 setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-        guestTV.text = span
+        return span
     }
 
-    private fun loginModeScreen() {
-        fragmentViewModel.apply {
-            loadUser()
-            loadComments()
-        }
+    private fun setGuestModeScreenVisible() = binding.apply {
+        guestModeCL.visibility = View.VISIBLE
+        loginModeCL.visibility = View.GONE
+    }
+
+    private fun loginModeScreen() = fragmentViewModel.apply {
+        loadUser()
+        loadComments()
     }
 
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {
