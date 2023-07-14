@@ -1,11 +1,11 @@
-package com.android.mediproject.core.model.interestedmedicine
+package com.android.mediproject.core.model.favoritemedicine
 
 import com.android.mediproject.core.model.awscommon.BaseAwsQueryResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class InterestedMedicineListResponse(
+data class FavoriteMedicineListResponse(
     val medicineList: List<Medicine>
 ) : BaseAwsQueryResponse() {
     @Serializable

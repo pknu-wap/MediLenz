@@ -38,7 +38,7 @@ import com.android.mediproject.core.network.datasource.comments.CommentsDataSour
 import com.android.mediproject.core.network.datasource.dur.DurDataSource
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
-import com.android.mediproject.core.network.datasource.interestedmedicine.InterestedMedicineDataSource
+import com.android.mediproject.core.network.datasource.favoritemedicine.FavoriteMedicineDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
@@ -66,8 +66,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideInterestedMedicineRepository(interestedMedicineDataSource: InterestedMedicineDataSource): InterestedMedicineRepository =
-        InterestedMedicineRepositoryImpl(interestedMedicineDataSource)
+    fun provideInterestedMedicineRepository(favoriteMedicineDataSource: FavoriteMedicineDataSource): InterestedMedicineRepository =
+        InterestedMedicineRepositoryImpl(favoriteMedicineDataSource)
 
     @Provides
     @Singleton

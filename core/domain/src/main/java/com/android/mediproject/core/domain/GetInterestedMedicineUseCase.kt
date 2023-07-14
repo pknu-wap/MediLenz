@@ -1,9 +1,9 @@
 package com.android.mediproject.core.domain
 
 import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepository
-import com.android.mediproject.core.model.interestedmedicine.IsInterestedMedicineResponse
-import com.android.mediproject.core.model.interestedmedicine.toInterestedMedicineDto
-import com.android.mediproject.core.model.interestedmedicine.toMoreInterestedMedicineDto
+import com.android.mediproject.core.model.favoritemedicine.CheckFavoriteMedicineResponse
+import com.android.mediproject.core.model.favoritemedicine.toInterestedMedicineDto
+import com.android.mediproject.core.model.favoritemedicine.toFavoriteMedicineMoreDto
 import com.android.mediproject.core.model.requestparameters.AddInterestedMedicineParameter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -21,7 +21,7 @@ class GetInterestedMedicineUseCase @Inject constructor(private val interestedMed
 
     suspend fun getMoreInterestedMedicineList() = channelFlow {
         interestedMedicineRepository.getInterestedMedicineList().map { result ->
-            result.fold(onSuccess = { Result.success(it.map { it.toMoreInterestedMedicineDto() }) }, onFailure = { Result.failure(it) })
+            result.fold(onSuccess = { Result.success(it.map { it.toFavoriteMedicineMoreDto() }) }, onFailure = { Result.failure(it) })
         }.collectLatest { trySend(it) }
     }
 
@@ -54,6 +54,6 @@ class GetInterestedMedicineUseCase @Inject constructor(private val interestedMed
     /**
      * 관심 약 여부 확인
      */
-    fun isInterestedMedicine(medicineId: Long): Flow<Result<IsInterestedMedicineResponse>> =
+    fun isInterestedMedicine(medicineId: Long): Flow<Result<CheckFavoriteMedicineResponse>> =
         interestedMedicineRepository.isInterestedMedicine(medicineId)
 }

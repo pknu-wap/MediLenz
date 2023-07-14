@@ -3,7 +3,7 @@ package com.android.mediproject.feature.favoritemedicine.favoritemedicinemore
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.domain.GetInterestedMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
-import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedicineDto
+import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -19,7 +19,7 @@ class FavoriteMedicineMoreViewModel @Inject constructor(
     private val getInterestedMedicineUseCase: GetInterestedMedicineUseCase
 ) : BaseViewModel() {
 
-    private val _favoriteMedicineList = MutableStateFlow<List<MoreInterestedMedicineDto>>(listOf())
+    private val _favoriteMedicineList = MutableStateFlow<List<FavoriteMedicineMoreDto>>(listOf())
     val favoriteMedicineList get() = _favoriteMedicineList
 
     private val _token = MutableStateFlow<TokenState<CurrentTokenDto>>(TokenState.Empty)

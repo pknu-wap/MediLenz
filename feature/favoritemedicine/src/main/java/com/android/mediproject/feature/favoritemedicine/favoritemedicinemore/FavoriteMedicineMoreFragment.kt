@@ -7,7 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
-import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedicineDto
+import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -69,7 +69,7 @@ class FavoriteMedicineMoreFragment :
         }
     }
 
-    private fun setFavoriteMedicineMoreList(medicineList: List<MoreInterestedMedicineDto>) {
+    private fun setFavoriteMedicineMoreList(medicineList: List<FavoriteMedicineMoreDto>) {
         favoriteMedicineMoreAdapter.submitList(medicineList)
     }
 

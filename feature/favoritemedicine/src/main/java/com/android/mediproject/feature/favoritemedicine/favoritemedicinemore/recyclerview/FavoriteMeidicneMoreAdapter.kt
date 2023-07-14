@@ -5,32 +5,32 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.interestedmedicine.MoreInterestedMedicineDto
+import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreDto
 import com.android.mediproject.feature.interestedmedicine.databinding.ItemFavoriteMedicineBinding
 
 class FavoriteMedicineMoreViewHolder(private val binding: ItemFavoriteMedicineBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(moreInterestedMedicine: MoreInterestedMedicineDto) {
+    fun bind(moreInterestedMedicine: FavoriteMedicineMoreDto) {
         binding.item = moreInterestedMedicine
     }
 }
 
 class FavoriteMeidicneMoreAdapter :
-    ListAdapter<MoreInterestedMedicineDto, FavoriteMedicineMoreViewHolder>(diffUtil) {
+    ListAdapter<FavoriteMedicineMoreDto, FavoriteMedicineMoreViewHolder>(diffUtil) {
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<MoreInterestedMedicineDto>() {
+        val diffUtil = object : DiffUtil.ItemCallback<FavoriteMedicineMoreDto>() {
             override fun areItemsTheSame(
-                oldItem: MoreInterestedMedicineDto,
-                newItem: MoreInterestedMedicineDto
+                oldItem: FavoriteMedicineMoreDto,
+                newItem: FavoriteMedicineMoreDto
             ): Boolean {
                 return oldItem === newItem
             }
 
             override fun areContentsTheSame(
-                oldItem: MoreInterestedMedicineDto,
-                newItem: MoreInterestedMedicineDto
+                oldItem: FavoriteMedicineMoreDto,
+                newItem: FavoriteMedicineMoreDto
             ): Boolean {
                 return oldItem == newItem
             }

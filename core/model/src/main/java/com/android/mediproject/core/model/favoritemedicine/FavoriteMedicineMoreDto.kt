@@ -1,6 +1,6 @@
-package com.android.mediproject.core.model.interestedmedicine
+package com.android.mediproject.core.model.favoritemedicine
 
-data class MoreInterestedMedicineDto(
+data class FavoriteMedicineMoreDto(
     val id: Int,
     val itemName: String,
     val entpName: String,
@@ -8,8 +8,8 @@ data class MoreInterestedMedicineDto(
     val spcltyPblc: String
 )
 
-fun InterestedMedicineListResponse.Medicine.toMoreInterestedMedicineDto() =
-    MoreInterestedMedicineDto(
+fun FavoriteMedicineListResponse.Medicine.toFavoriteMedicineMoreDto() =
+    FavoriteMedicineMoreDto(
         id = id,
         itemName = itemName,
         entpName = entpName,

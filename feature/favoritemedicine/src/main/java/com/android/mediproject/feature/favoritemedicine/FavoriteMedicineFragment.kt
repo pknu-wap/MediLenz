@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.android.mediproject.core.model.interestedmedicine.InterestedMedicineDto
+import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.R
@@ -77,7 +77,7 @@ class FavoriteMedicineFragment :
 
     }
 
-    private fun setFavoriteMedicineList(medicineList: List<InterestedMedicineDto>) {
+    private fun setFavoriteMedicineList(medicineList: List<FavoriteMedicineDto>) {
         //다른화면 갔다올 경우 이전에 있는 약품에 더해서 더 생기기 때문에 제거해줘야 함
         binding.favoriteMedicineList.removeAllViews()
 
