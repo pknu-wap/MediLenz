@@ -5,10 +5,6 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.core.network"
-
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 hilt {

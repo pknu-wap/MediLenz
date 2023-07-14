@@ -14,7 +14,6 @@ android {
     }
 
     @Suppress("UnstableApiUsage") buildFeatures {
-        buildConfig = true
         mlModelBinding = true
     }/*
 

@@ -1,8 +1,8 @@
 package com.android.mediproject.core.network.module
 
 import android.content.Context
+import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.datastore.TokenServer
-import com.android.mediproject.core.network.BuildConfig
 import com.android.mediproject.core.network.R
 import com.android.mediproject.core.network.tokens.TokenInterceptor
 import dagger.Module
@@ -88,7 +88,8 @@ object NetworkModule {
     @Singleton
     @Named("okHttpClientWithAccessTokens")
     fun providesOkHttpClientWithAccessTokens(
-        tokenServer: TokenServer): OkHttpClient = OkHttpClient.Builder().run {
+        tokenServer: TokenServer
+    ): OkHttpClient = OkHttpClient.Builder().run {
         addInterceptor(HttpLoggingInterceptor().apply {
             if (BuildConfig.DEBUG) {
                 level = HttpLoggingInterceptor.Level.BODY
@@ -102,7 +103,8 @@ object NetworkModule {
     @Singleton
     @Named("okHttpClientWithReissueTokens")
     fun providesOkHttpClientWithReissueTokens(
-        tokenServer: TokenServer): OkHttpClient = OkHttpClient.Builder().run {
+        tokenServer: TokenServer
+    ): OkHttpClient = OkHttpClient.Builder().run {
         addInterceptor(HttpLoggingInterceptor().apply {
             if (BuildConfig.DEBUG) {
                 level = HttpLoggingInterceptor.Level.BODY
@@ -116,7 +118,8 @@ object NetworkModule {
     @Singleton
     @Named("okHttpClientWithGoogleAccessTokens")
     fun providesOkHttpClientGoogleWithAccessTokens(
-        tokenServer: TokenServer): OkHttpClient = OkHttpClient.Builder().run {
+        tokenServer: TokenServer
+    ): OkHttpClient = OkHttpClient.Builder().run {
         addInterceptor(HttpLoggingInterceptor().apply {
             if (BuildConfig.DEBUG) {
                 level = HttpLoggingInterceptor.Level.BODY

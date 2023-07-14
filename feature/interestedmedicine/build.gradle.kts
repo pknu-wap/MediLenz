@@ -1,15 +1,10 @@
 plugins {
-
     id("mediproject.android.feature")
     id(libs.plugins.kapt.get().pluginId)
-
 }
 
 android {
     namespace = "com.android.mediproject.feature.interestedmedicine"
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 hilt {

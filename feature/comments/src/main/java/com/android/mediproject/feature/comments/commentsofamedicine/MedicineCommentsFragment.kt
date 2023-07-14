@@ -18,6 +18,7 @@ import com.android.mediproject.feature.comments.R
 import com.android.mediproject.feature.comments.databinding.FragmentMedicineCommentsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import repeatOnStarted
 
@@ -92,6 +93,7 @@ class MedicineCommentsFragment :
 
                             is CommentActionState.COMPLETED_LIKE -> {
                                 action.result.fold(onSuccess = {
+                                    toast(getString(R.string.completedLike))
                                     adapter.refresh()
                                 }, onFailure = {
                                     toast(it.message.toString())
@@ -111,8 +113,9 @@ class MedicineCommentsFragment :
 
                             is CommentActionState.COMPLETED_APPLY_EDITED_COMMENT -> {
                                 action.result.fold(onSuccess = {
-                                    adapter.refresh()
                                     toast(getString(R.string.appliedEditComment))
+                                    adapter.refresh()
+
                                 }, onFailure = {
                                     toast(it.message.toString())
                                 })
@@ -120,8 +123,9 @@ class MedicineCommentsFragment :
 
                             is CommentActionState.COMPLETED_DELETE_COMMENT -> {
                                 action.result.fold(onSuccess = {
-                                    adapter.refresh()
                                     toast(getString(R.string.deletedComment))
+                                    adapter.refresh()
+
                                 }, onFailure = {
                                     toast(it.message.toString())
                                 })
@@ -138,7 +142,7 @@ class MedicineCommentsFragment :
                 }
 
                 launch {
-                    fragmentViewModel.comments.collect {
+                    fragmentViewModel.comments.collectLatest {
                         adapter.submitData(it)
                     }
                 }
