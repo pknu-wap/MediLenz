@@ -34,7 +34,6 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(private val 
         _binding = null
     }
 
-
     fun log(str: String) = Log.d("wap", str)
 
     fun toast(str: String) = Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
