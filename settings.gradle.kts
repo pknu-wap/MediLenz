@@ -37,7 +37,7 @@ include(":feature:comments")
 include(":feature:search")
 include(":feature:penalties")
 include(":feature:mypage")
-include(":feature:setting")
+include(":feature:etc")
 include(":feature:medicine")
 
 include(":feature:news")
