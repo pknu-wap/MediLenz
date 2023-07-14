@@ -93,10 +93,6 @@ class ConfirmDialogFragment : DialogFragment() {
         viewModel.cameraController.resume()
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

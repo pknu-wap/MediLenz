@@ -5,5 +5,4 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class RecentCommentListViewModel @Inject constructor() : BaseViewModel() {
-}
+class RecentCommentListViewModel @Inject constructor() : BaseViewModel()

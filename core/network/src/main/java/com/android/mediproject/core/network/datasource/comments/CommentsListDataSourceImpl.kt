@@ -14,7 +14,7 @@ class CommentsListDataSourceImpl(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CommentListResponse.Comment> {
         return try {
             commentsDataSource.getCommentsForAMedicine(medicineId).fold(onSuccess = {
-                PagingSource.LoadResult.Page(
+                LoadResult.Page(
                     data = it.commentList.asReversed(),
                     prevKey = null,
                     nextKey = if (it.commentList.size > 100000) 1 else null,

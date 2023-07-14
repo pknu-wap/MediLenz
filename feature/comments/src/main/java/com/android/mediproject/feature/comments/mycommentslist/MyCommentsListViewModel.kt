@@ -9,13 +9,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyCommentsListViewModel @Inject constructor(): BaseViewModel() {
+class MyCommentsListViewModel @Inject constructor() : BaseViewModel() {
     private val _eventFlow = MutableEventFlow<MyCommentsListEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
-    fun event(event : MyCommentsListEvent) = viewModelScope.launch{ _eventFlow.emit(event)}
+    fun event(event: MyCommentsListEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
-    sealed class MyCommentsListEvent{
-
-    }
+    sealed class MyCommentsListEvent
 }

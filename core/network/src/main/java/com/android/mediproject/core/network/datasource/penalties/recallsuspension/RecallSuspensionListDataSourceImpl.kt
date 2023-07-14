@@ -17,7 +17,7 @@ class RecallSuspensionListDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): PagingSource.LoadResult<Int, Item> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Item> {
         val currentPage = params.key ?: 1
 
         return try {
