@@ -14,8 +14,8 @@ import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRep
 import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRepositoryImpl
 import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepository
 import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepositoryImpl
-import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepository
-import com.android.mediproject.core.data.remote.interestedmedicine.InterestedMedicineRepositoryImpl
+import com.android.mediproject.core.data.remote.favoritemedicine.FavoriteMedicineRepository
+import com.android.mediproject.core.data.remote.favoritemedicine.FavoriteMedicineRepositoryImpl
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepositoryImpl
 import com.android.mediproject.core.data.remote.medicineid.MedicineIdRepository
@@ -66,8 +66,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideInterestedMedicineRepository(favoriteMedicineDataSource: FavoriteMedicineDataSource): InterestedMedicineRepository =
-        InterestedMedicineRepositoryImpl(favoriteMedicineDataSource)
+    fun provideFavoriteMedicineRepository(favoriteMedicineDataSource: FavoriteMedicineDataSource): FavoriteMedicineRepository =
+        FavoriteMedicineRepositoryImpl(favoriteMedicineDataSource)
 
     @Provides
     @Singleton

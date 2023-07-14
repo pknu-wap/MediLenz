@@ -1,4 +1,5 @@
-package com.android.mediproject.core.network.datasource.favoritemedicine
+package com.android.mediproject.core.data.remote.favoritemedicine
+
 
 import com.android.mediproject.core.model.favoritemedicine.DeleteFavoriteMedicineResponse
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineListResponse
@@ -7,12 +8,12 @@ import com.android.mediproject.core.model.favoritemedicine.NewFavoriteMedicineRe
 import com.android.mediproject.core.model.requestparameters.AddFavoriteMedicineParameter
 import kotlinx.coroutines.flow.Flow
 
-interface FavoriteMedicineDataSource {
-    suspend fun getFavoriteMedicineList(): Flow<Result<FavoriteMedicineListResponse>>
+interface FavoriteMedicineRepository {
+    suspend fun getFavoriteMedicineList(): Flow<Result<List<FavoriteMedicineListResponse.Medicine>>>
 
-    fun addFavoriteMedicine(addFavoriteMedicineParameter: AddFavoriteMedicineParameter): Flow<Result<NewFavoriteMedicineResponse>>
+    fun addFavortieMedicine(addFavoriteMedicineParameter: AddFavoriteMedicineParameter): Flow<Result<NewFavoriteMedicineResponse>>
 
     fun deleteFavoriteMedicine(medicineId: Long): Flow<Result<DeleteFavoriteMedicineResponse>>
 
-    fun checkFavoriteMedicine(medicineId: Long): Flow<Result<CheckFavoriteMedicineResponse>>
+    fun checkFavoriteMedicine(itemSeq: Long): Flow<Result<CheckFavoriteMedicineResponse>>
 }

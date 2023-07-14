@@ -4,7 +4,7 @@ import com.android.mediproject.core.model.favoritemedicine.DeleteFavoriteMedicin
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineListResponse
 import com.android.mediproject.core.model.favoritemedicine.CheckFavoriteMedicineResponse
 import com.android.mediproject.core.model.favoritemedicine.NewFavoriteMedicineResponse
-import com.android.mediproject.core.model.requestparameters.AddInterestedMedicineParameter
+import com.android.mediproject.core.model.requestparameters.AddFavoriteMedicineParameter
 import com.android.mediproject.core.network.module.AwsNetworkApi
 import com.android.mediproject.core.network.onResponse
 import kotlinx.coroutines.flow.Flow
@@ -22,9 +22,9 @@ class FavoriteMedicineDataSourceImpl @Inject constructor(private val awsNetworkA
                 }
         }
 
-    override fun addFavoriteMedicine(addInterestedMedicineParameter: AddInterestedMedicineParameter): Flow<Result<NewFavoriteMedicineResponse>> =
+    override fun addFavoriteMedicine(addFavoriteMedicineParameter: AddFavoriteMedicineParameter): Flow<Result<NewFavoriteMedicineResponse>> =
         channelFlow {
-            awsNetworkApi.addFavoriteMedicine(addInterestedMedicineParameter).onResponse()
+            awsNetworkApi.addFavoriteMedicine(addFavoriteMedicineParameter).onResponse()
                 .fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) }).also {
                     trySend(it)
                 }

@@ -1,7 +1,7 @@
 package com.android.mediproject.feature.favoritemedicine
 
 import androidx.lifecycle.viewModelScope
-import com.android.mediproject.core.domain.GetInterestedMedicineUseCase
+import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteMedicineViewModel @Inject constructor(
     private val getTokenUseCase: GetTokenUseCase,
-    private val getInterestedMedicineUseCase: GetInterestedMedicineUseCase
+    private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase
 ) : BaseViewModel() {
 
     private val _favoriteMedicineList = MutableStateFlow<List<FavoriteMedicineDto>>(listOf())
@@ -28,7 +28,7 @@ class FavoriteMedicineViewModel @Inject constructor(
     fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
     fun loadFavoriteMedicines() =
         viewModelScope.launch {
-            getInterestedMedicineUseCase.getInterestedMedicineList()
+            getFavoriteMedicineUseCase.getFavoriteMedicineList()
                 .collect {
                     it.fold(
                         onSuccess = { _favoriteMedicineList.value = it },

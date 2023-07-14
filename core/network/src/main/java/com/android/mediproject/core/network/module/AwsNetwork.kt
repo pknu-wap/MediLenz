@@ -14,7 +14,7 @@ import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
-import com.android.mediproject.core.model.requestparameters.AddInterestedMedicineParameter
+import com.android.mediproject.core.model.requestparameters.AddFavoriteMedicineParameter
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
@@ -77,7 +77,7 @@ object AwsNetwork {
 
     @Provides
     @Singleton
-    fun provideInterestedMedicineDatasource(
+    fun provideFavoriteMedicineDatasource(
         @Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi
     ): FavoriteMedicineDataSource = FavoriteMedicineDataSourceImpl(awsNetworkApi)
 
@@ -243,7 +243,7 @@ interface AwsNetworkApi {
      */
     @POST(value = "medicine/favorite")
     suspend fun addFavoriteMedicine(
-        @Body addInterestedMedicineParameter: AddInterestedMedicineParameter
+        @Body addFavoriteMedicineParameter: AddFavoriteMedicineParameter
     ): Response<NewFavoriteMedicineResponse>
 
     /**

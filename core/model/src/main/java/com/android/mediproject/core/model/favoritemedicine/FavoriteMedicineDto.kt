@@ -6,5 +6,5 @@ data class FavoriteMedicineDto(
     val medicineName: String
 )
 
-fun FavoriteMedicineListResponse.Medicine.toInterestedMedicineDto() =
+fun FavoriteMedicineListResponse.Medicine.toFavoriteMedicineDto() =
     FavoriteMedicineDto(itemSeq = itemSeq, medicineName = itemName)
