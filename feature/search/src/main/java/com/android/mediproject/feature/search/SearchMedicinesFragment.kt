@@ -30,12 +30,10 @@ class SearchMedicinesFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
     }
 
     override fun onDetach() {
         super.onDetach()
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,8 +69,10 @@ class SearchMedicinesFragment :
 
         childFragmentManager.findFragmentById(R.id.contentsFragmentContainerView)?.also { navHostFragment ->
             val childFragmentManager = navHostFragment.childFragmentManager
-            childFragmentManager.setFragmentResultListener(RecentSearchListFragment.ResultKey.RESULT_KEY.name,
-                navHostFragment.viewLifecycleOwner) { _, bundle ->
+            childFragmentManager.setFragmentResultListener(
+                RecentSearchListFragment.ResultKey.RESULT_KEY.name,
+                navHostFragment.viewLifecycleOwner,
+            ) { _, bundle ->
                 bundle.getString(RecentSearchListFragment.ResultKey.WORD.name)?.also {
                     binding.searchView.searchWithQuery(it)
                 }
@@ -86,8 +86,10 @@ class SearchMedicinesFragment :
             binding.contentsFragmentContainerView.findNavController().apply {
                 if (currentDestination?.id != R.id.manualSearchResultFragment) {
                     fragmentViewModel.setQuery(it)
-                    navigate(RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment(),
-                        NavOptions.Builder().setPopUpTo(R.id.manualSearchResultFragment, true).build())
+                    navigate(
+                        RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment(),
+                        NavOptions.Builder().setPopUpTo(R.id.manualSearchResultFragment, true).build(),
+                    )
                 }
             }
         }
@@ -101,16 +103,18 @@ class SearchMedicinesFragment :
             findNavController().navigate("medilens://main/camera_nav".toUri())
         }
 
-        binding.searchView.setOnSearchBtnClickListener(object : MediSearchbar.SearchQueryCallback {
-            override fun onSearchQuery(query: String) {
-                hideKeyboard()
-                fragmentViewModel.setQuery(query)
-                moveToManualSearchResultFragment()
-            }
+        binding.searchView.setOnSearchBtnClickListener(
+            object : MediSearchbar.SearchQueryCallback {
+                override fun onSearchQuery(query: String) {
+                    hideKeyboard()
+                    fragmentViewModel.setQuery(query)
+                    moveToManualSearchResultFragment()
+                }
 
-            override fun onEmptyQuery() {
-                toast(getString(com.android.mediproject.core.ui.R.string.search_empty_query))
-            }
-        })
+                override fun onEmptyQuery() {
+                    toast(getString(com.android.mediproject.core.ui.R.string.search_empty_query))
+                }
+            },
+        )
     }
 }

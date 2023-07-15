@@ -33,7 +33,6 @@ class AiSearchResultFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -53,9 +52,11 @@ class AiSearchResultFragment :
             listViewGroup.pagingList.apply {
                 setHasFixedSize(true)
                 setItemViewCacheSize(10)
-                addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-                    setDrawable(resources.getDrawable(com.android.mediproject.core.ui.R.drawable.divider, null))
-                })
+                addItemDecoration(
+                    DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                        setDrawable(resources.getDrawable(com.android.mediproject.core.ui.R.drawable.divider, null))
+                    },
+                )
                 adapter = searchResultListAdapter
             }
 

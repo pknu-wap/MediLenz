@@ -49,10 +49,6 @@ class LoginFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(
-            SystemBarStyler.StatusBarColor.BLACK,
-            SystemBarStyler.NavigationBarColor.BLACK
-        )
     }
 
 
@@ -85,7 +81,7 @@ class LoginFragment :
                                 // 로그인 중
                                 LoadingDialog.showLoadingDialog(
                                     requireActivity(),
-                                    getString(R.string.signing)
+                                    getString(R.string.signing),
                                 )
                             }
 
@@ -99,13 +95,13 @@ class LoginFragment :
                                     TOHOME -> findNavController().navigate(
                                         "medilens://main/home_nav".toUri(),
                                         NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
-                                            .build()
+                                            .build(),
                                     )
 
                                     TOMYPAGE -> findNavController().navigate(
                                         "medilens://main/mypage_nav".toUri(),
                                         NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
-                                            .build()
+                                            .build(),
                                     )
 
                                 }
@@ -147,9 +143,9 @@ class LoginFragment :
             topViews = listOf(
                 SystemBarStyler.ChangeView(
                     loginBar,
-                    SystemBarStyler.SpacingType.PADDING
-                )
-            )
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
         )
     }
 
@@ -166,7 +162,7 @@ class LoginFragment :
             fragmentViewModel.signIn(
                 binding.loginEmail.getEditable(),
                 binding.loginPassword.getEditable(),
-                binding.rememberEmailCB.isChecked
+                binding.rememberEmailCB.isChecked,
             )
 
         }
@@ -175,9 +171,11 @@ class LoginFragment :
     }
 
     private fun addDelayTextWatcher(editText: EditText) {
-        mainScope.launch(context = defaultDispatcher + Job().apply {
-            jobs.add(this)
-        }) {
+        mainScope.launch(
+            context = defaultDispatcher + Job().apply {
+                jobs.add(this)
+            },
+        ) {
             editText.delayTextChangedCallback().debounce(500L).onEach { seq ->
                 mainScope.launch {
                     binding.loginBtn.isEnabled = !seq.isNullOrEmpty()

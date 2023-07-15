@@ -9,4 +9,49 @@
         <item>@id/signUpFragment</item>
         <item>@id/introFragment</item>
     </array>
+
+    <!-- color to black of statusbar on these fragments -->
+    <array name="blackStatusBarDestinationIds">
+        <item>@id/myCommentsListFragment</item>
+        <item>@id/etcFragment</item>
+        <item>@id/FavoriteMedicineMoreFragment</item>
+        <item>@id/loginFragment</item>
+        <item>@id/myPageFragment</item>
+        <item>@id/newsFragment</item>
+        <item>@id/searchMedicinesFragment</item>
+        <item>@id/aiSearchResultFragment</item>
+        <item>@id/medicineInfoFragment</item>
+    </array>
+
+    <!-- color to white of statusbar on these fragments -->
+    <array name="whiteStatusBarDestinationIds">
+        <item>@id/medicinesDetectorFragment</item>
+        <item>@id/signUpFragment</item>
+        <item>@id/homeFragment</item>
+    </array>
+
+    <!-- color to black of navbar on these fragments -->
+    <array name="blackNavbarDestinationIds">
+        <item>@id/myCommentsListFragment</item>
+        <item>@id/etcFragment</item>
+        <item>@id/FavoriteMedicineMoreFragment</item>
+        <item>@id/homeFragment</item>
+        <item>@id/loginFragment</item>
+        <item>@id/myPageFragment</item>
+        <item>@id/newsFragment</item>
+        <item>@id/searchMedicinesFragment</item>
+        <item>@id/aiSearchResultFragment</item>
+        <item>@id/medicineInfoFragment</item>
+    </array>
+
+    <!-- color to white of navbar on these fragments -->
+    <array name="whiteNavbarDestinationIds">
+        <item>@id/medicinesDetectorFragment</item>
+    </array>
+
+    <!-- fix height to fragmentContainer on these fragments -->
+    <array name="fixFragmentContainerHeightDestinationIds">
+        <item>@id/medicineInfoFragment</item>
+    </array>
+
 </resources>

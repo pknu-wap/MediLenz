@@ -36,13 +36,10 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
-        systemBarStyler.changeFragmentContainerHeight(false)
     }
 
     override fun onDetach() {
         super.onDetach()
-        systemBarStyler.changeFragmentContainerHeight(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,23 +112,24 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
         }
 
     }
+
     private fun setBarStyle() = binding.apply {
         systemBarStyler.changeMode(
             topViews = listOf(
                 SystemBarStyler.ChangeView(
                     medicineInfoBar,
-                    SystemBarStyler.SpacingType.PADDING
-                )
-            )
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
         )
 
         systemBarStyler.changeMode(
             topViews = listOf(
                 SystemBarStyler.ChangeView(
                     medicineInfoBar2,
-                    SystemBarStyler.SpacingType.PADDING
-                )
-            )
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
         )
     }
 

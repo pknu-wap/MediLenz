@@ -17,6 +17,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.android.mediproject.core.common.uiutil.LayoutController
+import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
+import com.android.mediproject.core.common.uiutil.SystemBarController
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.network.InternetNetworkListener
 import com.android.mediproject.core.ui.WindowViewModel
@@ -31,9 +33,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
 
     private val windowViewModel: WindowViewModel by viewModels()
 
-    @Inject lateinit var systemBarStyler: SystemBarStyler
-
+    @Inject lateinit var layoutController: LayoutController
+    @Inject lateinit var systemBarController: SystemBarController
     @Inject lateinit var internetNetworkListener: InternetNetworkListener
+
+    private val systemBarColorAnalyzer = SystemBarColorAnalyzer
 
     companion object {
         const val VISIBLE = 0
@@ -44,10 +48,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
     private lateinit var navController: NavController
 
     override fun afterBinding() {
-        systemBarStyler.init(this, window, this::changeFragmentContainerHeight)
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
+        systemBarController.init(this, window, this)
+        systemBarColorAnalyzer.init(this, systemBarController, lifecycle)
 
-        internetNetworkListener.activityLifeCycle = this.lifecycle
+        internetNetworkListener.activityLifeCycle = lifecycle
         internetNetworkListener.networkStateCallback = InternetNetworkListener.NetworkStateCallback { isConnected ->
             if (!isConnected) {
                 NetworkStateDialogFragment().show(supportFragmentManager, NetworkStateDialogFragment::class.java.name)
@@ -83,41 +87,35 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
             }
 
-            root.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    if (bottomNav.marginBottom == 0) {
-                        systemBarStyler.changeMode(emptyList(),
-                            listOf(SystemBarStyler.ChangeView(bottomNav, SystemBarStyler.SpacingType.MARGIN)))
+            root.viewTreeObserver.addOnPreDrawListener(
+                object : ViewTreeObserver.OnPreDrawListener {
+                    override fun onPreDraw(): Boolean {
+                        if (bottomNav.marginBottom == 0) {
+                            systemBarController.changeMode(
+                                emptyList(),
+                                listOf(SystemBarStyler.ChangeView(bottomNav, SystemBarStyler.SpacingType.MARGIN)),
+                            )
+                        }
+
+                        if (bottomAppBar.height > 0 && bottomNav.marginBottom == systemBarController.navigationBarHeightPx) {
+                            root.viewTreeObserver.removeOnPreDrawListener(this)
+                            windowViewModel.bottomNavHeightInPx = bottomAppBar.height
+                            this@MainActivity.changeFragmentContainerHeight(false)
+                        }
                         return true
                     }
+                },
+            )
 
-                    if (bottomAppBar.height > 0 && bottomNav.marginBottom == systemBarStyler.navigationBarHeightPx) {
-                        root.viewTreeObserver.removeOnPreDrawListener(this)
-                        windowViewModel.bottomNavHeightInPx = bottomAppBar.height
-                        this@MainActivity.changeFragmentContainerHeight(false)
-                    }
-                    return true
-                }
-            })
-
-            DevDialogFragment().show(supportFragmentManager, DevDialogFragment::class.java.name)
+            //DevDialogFragment().show(supportFragmentManager, DevDialogFragment::class.java.name)
         }
     }
+
 
     override fun setSplash() {
         installSplashScreen()
     }
 
-    private val hideBottomNavDestinationIds: Set<Int> by lazy {
-        resources.obtainTypedArray(R.array.hideBottomNavDestinationIds).let { typedArray ->
-            val destinationIds = mutableSetOf<Int>()
-            for (i in 0 until typedArray.length()) {
-                destinationIds.add(typedArray.getResourceId(i, 0))
-            }
-            typedArray.recycle()
-            destinationIds
-        }
-    }
 
     /**
      * <2번째 방법>
@@ -130,9 +128,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
      *
      * argument 를 통해 bottomNav 를 숨길지 말지 결정한다.
      */
-    private fun setDestinationListener() = navController.addOnDestinationChangedListener { _, destination, arg ->
-        log(arg.toString())
-        bottomVisible(destination.id !in hideBottomNavDestinationIds)
+    private fun setDestinationListener() {
+        val hideBottomNavDestinationIds = activityViewModel.getHideBottomNavDestinationIds(resources)
+
+        navController.addOnDestinationChangedListener { _, destination, arg ->
+            log(arg.toString())
+            bottomVisible(destination.id !in hideBottomNavDestinationIds)
+            systemBarColorAnalyzer.convert()
+        }
     }
 
     private fun bottomVisible(visible: Boolean) {

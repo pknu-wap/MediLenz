@@ -23,12 +23,10 @@ class NewsFragment : BaseFragment<FragmentNewsBinding, NewsViewModel>(FragmentNe
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
     }
 
     override fun onDetach() {
         super.onDetach()
-        systemBarStyler.defaultStyle()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
