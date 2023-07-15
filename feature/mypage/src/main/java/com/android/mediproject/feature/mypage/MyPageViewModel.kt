@@ -27,10 +27,6 @@ class MyPageViewModel @Inject constructor(
     private val signUseCase: SignUseCase,
 ) : BaseViewModel() {
 
-    init{
-        loadTokens()
-    }
-
     private val _eventFlow = MutableEventFlow<MyPageEvent>()
     val eventFlow get() = _eventFlow.asEventFlow()
 
