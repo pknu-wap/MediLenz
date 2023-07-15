@@ -105,7 +105,6 @@ class MyPageMoreBottomSheetFragment(private val backCallback: () -> Unit) :
             BottomSheetFlag.CHANGE_PASSWORD -> highlight(binding.changePasswordTV)
             BottomSheetFlag.WITHDRAWAL -> highlight(binding.withdrawalTV)
             BottomSheetFlag.LOGOUT -> highlight(binding.logoutTV)
-            else -> Unit
         }
     }
 

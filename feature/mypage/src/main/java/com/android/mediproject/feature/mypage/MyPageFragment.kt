@@ -10,10 +10,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.mediproject.core.common.CHANGE_NICKNAME
-import com.android.mediproject.core.common.CHANGE_PASSWORD
-import com.android.mediproject.core.common.LOGOUT
-import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
