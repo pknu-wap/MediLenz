@@ -52,7 +52,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
     }
 
     private val _dialogFlag =
-        MutableStateFlow<MyPageMoreDialogFragment.DialogFlag>(MyPageMoreDialogFragment.DialogFlag.ChangeNickName)
+        MutableStateFlow<MyPageMoreDialogFragment.DialogFlag>(MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME)
     val dialogFlag = _dialogFlag.asStateFlow()
 
     fun setDialogFlag(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
@@ -113,6 +113,4 @@ class MyPageMoreDialogViewModel @Inject constructor(
             cancelDialog()
         }
     }
-
->>>>>>> upstream/android_develop
 }
