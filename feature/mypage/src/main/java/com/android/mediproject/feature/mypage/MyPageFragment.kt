@@ -33,33 +33,11 @@ class MyPageFragment :
     private val myCommentListAdapter: MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
     private var myPageMoreBottomSheet: MyPageMoreBottomSheetFragment? = null
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFragmentResultListner()
         setBinding()
     }
-
-    private fun setBarStyle() = binding.apply {
-        systemBarStyler.changeMode(
-            topViews = listOf(
-                SystemBarStyler.ChangeView(
-                    mypageBar,
-                    SystemBarStyler.SpacingType.PADDING,
-                ),
-            ),
-        )
-    }
-
-    private fun setRecyclerView() = binding.myCommentsListRV.apply {
-        adapter = myCommentListAdapter
-        layoutManager = LinearLayoutManager(requireActivity())
-        addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
-    }
-
 
     private fun setFragmentResultListner() {
         setBottomsheetFragmentResultListner()
