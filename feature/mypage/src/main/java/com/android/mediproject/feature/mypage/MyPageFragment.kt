@@ -208,10 +208,10 @@ class MyPageFragment :
 
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {
         when (bottomSheetFlag) {
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.ChangeNickName)
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.ChangePassword)
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.Withdrawal)
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.Logout)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.CHANGE_PASSWORD)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.WITHDRAWAL)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.LOGOUT)
         }
     }
 
@@ -224,10 +224,10 @@ class MyPageFragment :
 
     private fun handleDialogCallback(dialogFlag: Int) {
         when (dialogFlag) {
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME -> changeNicknameCallback()
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD -> changePasswordCallback()
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL -> withdrawalCallback()
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT -> logoutCallback()
+            MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME.value -> changeNicknameCallback()
+            MyPageMoreDialogFragment.DialogFlag.CHANGE_PASSWORD.value -> changePasswordCallback()
+            MyPageMoreDialogFragment.DialogFlag.WITHDRAWAL.value -> withdrawalCallback()
+            MyPageMoreDialogFragment.DialogFlag.LOGOUT.value -> logoutCallback()
         }
     }
 

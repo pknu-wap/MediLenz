@@ -21,16 +21,15 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageMoreDialogViewModel @Inject constructor(
     private val userUseCase: UserUseCase,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) :
     BaseViewModel() {
 
     private val _eventFlow = MutableEventFlow<MyPageMoreDialogEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
-    private val _dialogFlag =
-        MutableStateFlow<MyPageMoreDialogFragment.DialogFlag>(MyPageMoreDialogFragment.DialogFlag.ChangeNickName)
-    val dialogFlag = _dialogFlag.asStateFlow()
+    private val _dialogFlag = MutableStateFlow(MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME)
+    val dialogFlag get() = _dialogFlag.asStateFlow()
 
     fun setDialogFlag(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
         _dialogFlag.value = dialogFlag
@@ -50,13 +49,14 @@ class MyPageMoreDialogViewModel @Inject constructor(
             .collect {
                 it.fold(
                     onSuccess = { toast("닉네임 변경이 완료되었습니다.") },
-                    onFailure = { toast("닉네임 변경에 실패하였습니다.") })
+                    onFailure = { toast("닉네임 변경에 실패하였습니다.") },
+                )
             }
         changeNicknameComplete()
         cancelDialog()
     }
 
-    fun logout() = viewModelScope.launch{
+    fun logout() = viewModelScope.launch {
         logoutComplete()
         toast("로그아웃이 완료되었습니다.")
         cancelDialog()
@@ -64,12 +64,15 @@ class MyPageMoreDialogViewModel @Inject constructor(
 
     fun withdrawal(withdrawalInput: String) = viewModelScope.launch {
         userUseCase.withdrawal().collect {
-            it.fold(onSuccess = {
-                toast("회원 탈퇴가 완료되었습니다.")
-                withdrawalComplete()
-            }, onFailure = {
-                toast("회원 탈퇴에 실패하였습니다.")
-            })
+            it.fold(
+                onSuccess = {
+                    toast("회원 탈퇴가 완료되었습니다.")
+                    withdrawalComplete()
+                },
+                onFailure = {
+                    toast("회원 탈퇴에 실패하였습니다.")
+                },
+            )
         }
         cancelDialog()
     }
@@ -90,7 +93,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
             .collect {
                 it.fold(
                     onSuccess = { toast("비밀번호 변경에 성공하였습니다.") },
-                    onFailure = { toast("비밀번호 변경에 실패하였습니다.") }
+                    onFailure = { toast("비밀번호 변경에 실패하였습니다.") },
                 )
             }
         cancelDialog()
