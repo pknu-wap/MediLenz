@@ -11,8 +11,8 @@ import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreD
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.feature.favoritemedicine.databinding.FragmentFavoriteMedicineMoreBinding
 import com.android.mediproject.feature.favoritemedicine.favoritemedicinemore.recyclerview.FavoriteMedcineMoreDecoration
-import com.android.mediproject.feature.interestedmedicine.databinding.FragmentFavoriteMedicineMoreBinding
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 import javax.inject.Inject
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FavoriteMedicineMoreFragment :
     BaseFragment<FragmentFavoriteMedicineMoreBinding, FavoriteMedicineMoreViewModel>(
-        FragmentFavoriteMedicineMoreBinding::inflate
+        FragmentFavoriteMedicineMoreBinding::inflate,
     ) {
     override val fragmentViewModel: FavoriteMedicineMoreViewModel by viewModels()
     private val favoriteMedicineMoreAdapter: FavoriteMeidicneMoreAdapter by lazy { FavoriteMeidicneMoreAdapter() }
@@ -32,7 +32,7 @@ class FavoriteMedicineMoreFragment :
         super.onAttach(context)
         systemBarStyler.setStyle(
             SystemBarStyler.StatusBarColor.BLACK,
-            SystemBarStyler.NavigationBarColor.BLACK
+            SystemBarStyler.NavigationBarColor.BLACK,
         )
     }
 
@@ -78,9 +78,9 @@ class FavoriteMedicineMoreFragment :
             topViews = listOf(
                 SystemBarStyler.ChangeView(
                     favoriteMedicineListBar,
-                    SystemBarStyler.SpacingType.PADDING
-                )
-            )
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
         )
     }
 

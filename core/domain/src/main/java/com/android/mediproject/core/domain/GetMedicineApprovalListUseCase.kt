@@ -16,16 +16,18 @@ class GetMedicineApprovalListUseCase @Inject constructor(
      * 약품 목록 조회 UseCase
      */
     operator fun invoke(
-        parameter: ApprovalListSearchParameter) =
-        medicineApprovalRepository.getMedicineApprovalList(itemName = parameter.itemName,
-            entpName = parameter.entpName,
-            medicationType = when (parameter.medicationType) {
-                MedicationType.ALL -> null
-                else -> parameter.medicationType.description
-            }).map { pagingData ->
-            pagingData.map { item ->
-                // 데이터 변환
-                item.toDto()
-            }
+        parameter: ApprovalListSearchParameter,
+    ) = medicineApprovalRepository.getMedicineApprovalList(
+        itemName = parameter.itemName,
+        entpName = parameter.entpName,
+        medicationType = when (parameter.medicationType) {
+            MedicationType.ALL -> null
+            else -> parameter.medicationType.description
+        },
+    ).map { pagingData ->
+        pagingData.map { item ->
+            // 데이터 변환
+            item.toDto()
         }
+    }
 }

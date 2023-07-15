@@ -21,6 +21,9 @@ plugins {
     // alias(libs.plugins.ksp) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.firebase.crashlytics) apply false
+
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.detekt)
 }
 
 
@@ -33,5 +36,30 @@ gradle.allprojects {
         kotlinOptions {
             //languageVersion = "2.0"
         }
+    }
+}
+
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    apply(plugin = "io.gitlab.arturbosch.detekt")
+
+    configurations {
+        ktlint
+        detekt
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    detekt {
+        parallel = true
+        buildUponDefaultConfig = true
+        config.setFrom(files("$rootDir/detekt-config.yml"))
+    }
+
+    ktlint {
+        debug.set(true)
+        verbose.set(true)
     }
 }

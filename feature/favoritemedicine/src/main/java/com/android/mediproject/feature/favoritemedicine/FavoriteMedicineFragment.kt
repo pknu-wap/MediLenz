@@ -17,7 +17,7 @@ import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
-import com.android.mediproject.feature.interestedmedicine.databinding.FragmentFavoriteMedicineBinding
+import com.android.mediproject.feature.favoritemedicine.databinding.FragmentFavoriteMedicineBinding
 import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
@@ -25,7 +25,7 @@ import repeatOnStarted
 @AndroidEntryPoint
 class FavoriteMedicineFragment :
     BaseFragment<FragmentFavoriteMedicineBinding, FavoriteMedicineViewModel>(
-        FragmentFavoriteMedicineBinding::inflate
+        FragmentFavoriteMedicineBinding::inflate,
     ) {
 
     override val fragmentViewModel: FavoriteMedicineViewModel by viewModels()
@@ -89,11 +89,11 @@ class FavoriteMedicineFragment :
                 log(medicine.toString())
                 binding.favoriteMedicineList.addView(
                     ButtonChip<String>(
-                        requireContext()
+                        requireContext(),
                     ).apply {
                         layoutParams = FlexboxLayout.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
                         ).apply {
                             setMargins(horizontalSpace, 0, horizontalSpace, 0)
                         }
@@ -102,7 +102,8 @@ class FavoriteMedicineFragment :
                         setOnChipClickListener {
                             toast(it.toString())
                         }
-                    })
+                    },
+                )
             }
         } else {
             //0개 일 경우
@@ -117,34 +118,36 @@ class FavoriteMedicineFragment :
             noFavoriteMedicineTV.visibility = View.VISIBLE
 
             val span =
-                SpannableStringBuilder(getString(com.android.mediproject.feature.interestedmedicine.R.string.noFavoriteMedicine)).apply {
+                SpannableStringBuilder(getString(com.android.mediproject.feature.favoritemedicine.R.string.noFavoriteMedicine)).apply {
                     setSpan(
                         ForegroundColorSpan(
                             ContextCompat.getColor(
                                 requireContext(),
-                                R.color.main
-                            )
-                        ), 0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                R.color.main,
+                            ),
+                        ),
+                        0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
                     )
                     setSpan(
                         UnderlineSpan(),
                         0,
                         4,
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE,
                     )
                     setSpan(
                         ForegroundColorSpan(
                             ContextCompat.getColor(
                                 requireContext(),
-                                R.color.main
-                            )
-                        ), 6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                                R.color.main,
+                            ),
+                        ),
+                        6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
                     )
                     setSpan(
                         UnderlineSpan(),
                         6,
                         8,
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE,
                     )
                 }
             noFavoriteMedicineTV.text = span
