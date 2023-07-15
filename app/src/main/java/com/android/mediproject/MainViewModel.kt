@@ -21,16 +21,6 @@ class MainViewModel @Inject constructor(
 
     fun getHideBottomNavDestinationIds(resources: Resources): Set<Int> = resources.getArray(R.array.hideBottomNavDestinationIds)
 
-    fun getBlackStatusBarNavDestinationIds(resources: Resources): Set<Int> = resources.getArray(R.array.blackStatusBarDestinationIds)
-
-    fun getWhiteStatusBarNavDestinationIds(resources: Resources): Set<Int> = resources.getArray(R.array.whiteStatusBarDestinationIds)
-
-    fun getWhiteNavigationBarNavDestinationIds(resources: Resources): Set<Int> = resources.getArray(R.array.whiteNavbarDestinationIds)
-
-    fun getBlackNavigationBarNavDestinationIds(resources: Resources): Set<Int> = resources.getArray(R.array.blackNavbarDestinationIds)
-
-    fun getFixFragmentContainerDestinationIds(resources: Resources): Set<Int> = resources.getArray(R.array.fixFragmentContainerHeightDestinationIds)
-
     private fun Resources.getArray(@ArrayRes id: Int): Set<Int> {
         return obtainTypedArray(id).let { typedArray ->
             val destinationIds = mutableSetOf<Int>()

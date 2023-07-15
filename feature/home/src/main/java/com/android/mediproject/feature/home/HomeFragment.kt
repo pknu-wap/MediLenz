@@ -63,11 +63,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
                 log(scrollY.toString())
                 log((scrollY / initialHeight).toString())
                 binding.homeBar2.alpha = (scrollY / initialHeight)
+
                 if (binding.homeBar2.alpha > 0.7) systemBarStyler.setStyle(
-                    SystemBarStyler.StatusBarColor.BLACK,
-                    SystemBarStyler.NavigationBarColor.BLACK,
+                    SystemBarStyler.SystemBarColor.BLACK,
+                    SystemBarStyler.SystemBarColor.BLACK,
                 )
-                else systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
+                else systemBarStyler.setStyle(SystemBarStyler.SystemBarColor.WHITE, SystemBarStyler.SystemBarColor.BLACK)
             }
 
         }

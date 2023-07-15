@@ -13,11 +13,14 @@ import android.view.View
 import android.view.Window
 import androidx.core.graphics.get
 import androidx.core.view.doOnPreDraw
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -26,76 +29,45 @@ import kotlin.properties.Delegates
 
 @SuppressLint("InternalInsetResource", "DiscouragedApi")
 object SystemBarColorAnalyzer {
-
-    private val onChangedFragment = Channel<Unit>(onBufferOverflow = BufferOverflow.SUSPEND, capacity = Channel.BUFFERED)
+    private val onChangedFragmentFlow = MutableSharedFlow<Unit>(onBufferOverflow = BufferOverflow.DROP_OLDEST, replay = 1, extraBufferCapacity = 4)
 
     private var decorView by Delegates.notNull<View>()
     private var window by Delegates.notNull<Window>()
     private val resource = Resources.getSystem()
     private val statusBarHeight = resource.getDimensionPixelSize(resource.getIdentifier("status_bar_height", "dimen", "android"))
     private val navigationBarHeight = resource.getDimensionPixelSize(resource.getIdentifier("navigation_bar_height", "dimen", "android"))
-    private var windowHeight by Delegates.notNull<Int>()
 
-    private const val criteriaColor = 140
-
-    private fun Int.toGrayScale(): Int {
-        val r = Color.red(this)
-        val g = Color.green(this)
-        val b = Color.blue(this)
-
-        return (0.2989 * r + 0.5870 * g + 0.1140 * b).toInt()
-    }
-
+    private const val criteriaColor = 100
     private var systemBarController: SystemBarController? = null
 
-    fun init(activity: Activity, systemBarController: SystemBarController) {
-        decorView = activity.window.decorView
-        this.systemBarController = systemBarController
-        window = activity.window
-        windowHeight = decorView.height
-    }
-
     private val job = MainScope().launch {
-        onChangedFragment.consumeAsFlow().collect {
-            if (decorView.width == 0 || decorView.height == 0) return@collect
+        onChangedFragmentFlow.collect {
             decorView.doOnPreDraw {
                 launch(Dispatchers.Default) {
                     val statusBarBitmap = Bitmap.createBitmap(decorView.width, statusBarHeight, Bitmap.Config.ARGB_8888)
                     val navigationBarBitmap = Bitmap.createBitmap(decorView.width, navigationBarHeight, Bitmap.Config.ARGB_8888)
 
-                    suspendCancellableCoroutine { continuation ->
-                        PixelCopy.request(
-                            window, Rect(0, 0, decorView.width, statusBarHeight), statusBarBitmap,
-                            {
-                                continuation.resume(Unit)
-                            },
-                            Handler(Looper.getMainLooper()),
-                        )
+                    val statusBarCopyResult = async {
+                        pixelCopy(Rect(0, 0, decorView.width, statusBarHeight), statusBarBitmap)
                     }
 
-                    suspendCancellableCoroutine { continuation ->
-                        PixelCopy.request(
-                            window, Rect(0, windowHeight - navigationBarHeight, decorView.width, windowHeight), navigationBarBitmap,
-                            {
-                                continuation.resume(Unit)
-                            },
-                            Handler(Looper.getMainLooper()),
-                        )
+                    val navBarCopyResult = async {
+                        pixelCopy(Rect(0, decorView.height - navigationBarHeight, decorView.width, decorView.height), navigationBarBitmap)
                     }
 
-                    println("whiteCriteria: $criteriaColor")
-                    println("statusBarBitmap[0, 0]: ${statusBarBitmap[0, 0].toGrayScale()}")
-                    println("navigationBarBitmap[0, 0]: ${navigationBarBitmap[0, 0].toGrayScale()}")
+                    if (!statusBarCopyResult.await() || !navBarCopyResult.await()) return@launch
+
+                    val statusBarColor = statusBarBitmap[10, 10].toColor()
+                    val navigationBarColor = navigationBarBitmap[10, 10].toColor()
+
+                    statusBarBitmap.recycle()
+                    navigationBarBitmap.recycle()
 
                     withContext(Dispatchers.Main) {
                         systemBarController?.setStyle(
-                            if (statusBarBitmap[0, 0].toGrayScale() <= criteriaColor) SystemBarStyler.StatusBarColor.BLACK else SystemBarStyler
-                                .StatusBarColor.WHITE,
-                            if (navigationBarBitmap[0, 0].toGrayScale() == 0) SystemBarStyler.NavigationBarColor.BLACK else SystemBarStyler
-                                .NavigationBarColor.WHITE,
+                            statusBarColor,
+                            navigationBarColor,
                         )
-                        statusBarBitmap.recycle()
-                        navigationBarBitmap.recycle()
                     }
 
                 }
@@ -103,12 +75,53 @@ object SystemBarColorAnalyzer {
         }
     }
 
-    fun convert() {
-        onChangedFragment.trySend(Unit)
-        println("convert")
+    fun init(activity: Activity, systemBarController: SystemBarController, lifecycle: Lifecycle) {
+        decorView = activity.window.decorView
+        this.systemBarController = systemBarController
+        window = activity.window
+        lifecycle.addObserver(
+            object : DefaultLifecycleObserver {
+                override fun onCreate(owner: LifecycleOwner) {
+                    super.onCreate(owner)
+                }
+
+                override fun onStart(owner: LifecycleOwner) {
+                    super.onStart(owner)
+                    convert()
+                }
+
+                override fun onDestroy(owner: LifecycleOwner) {
+                    super.onDestroy(owner)
+                    release()
+                }
+            },
+        )
     }
 
-    fun release() {
+
+    private fun Int.toGrayScale(): Int = (0.2989 * Color.red(this) + 0.5870 * Color.green(this) + 0.1140 * Color.blue(this)).toInt()
+
+    private fun Int.toColor() = toGrayScale().let { gray ->
+        if (gray == 0) SystemBarStyler.SystemBarColor.BLACK
+        else if (gray <= criteriaColor) SystemBarStyler.SystemBarColor.WHITE
+        else SystemBarStyler.SystemBarColor.BLACK
+    }
+
+    private suspend fun pixelCopy(rect: Rect, bitmap: Bitmap) = suspendCancellableCoroutine { cancellableContinuation ->
+        PixelCopy.request(
+            window, rect, bitmap,
+            {
+                cancellableContinuation.resume(it == PixelCopy.SUCCESS)
+            },
+            Handler(Looper.getMainLooper()),
+        )
+    }
+
+    fun convert() {
+        onChangedFragmentFlow.tryEmit(Unit)
+    }
+
+    private fun release() {
         job.cancel()
     }
 }

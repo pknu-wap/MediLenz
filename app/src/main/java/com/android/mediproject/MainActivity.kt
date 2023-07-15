@@ -48,17 +48,15 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
     private lateinit var navController: NavController
 
     override fun afterBinding() {
-        systemBarController.init(this, window, this::changeFragmentContainerHeight)
-        //systemBarController.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
+        systemBarController.init(this, window, this)
+        systemBarColorAnalyzer.init(this, systemBarController, lifecycle)
 
-        internetNetworkListener.activityLifeCycle = this.lifecycle
+        internetNetworkListener.activityLifeCycle = lifecycle
         internetNetworkListener.networkStateCallback = InternetNetworkListener.NetworkStateCallback { isConnected ->
             if (!isConnected) {
                 NetworkStateDialogFragment().show(supportFragmentManager, NetworkStateDialogFragment::class.java.name)
             }
         }
-
-        systemBarColorAnalyzer.init(this, systemBarController)
 
         //SDK 31이상일 때 Splash가 소소하게 사라지는 이펙트 입니다. 추후 걸리적거리면 삭제해도 됌
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -97,7 +95,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
                                 emptyList(),
                                 listOf(SystemBarStyler.ChangeView(bottomNav, SystemBarStyler.SpacingType.MARGIN)),
                             )
-                            return true
                         }
 
                         if (bottomAppBar.height > 0 && bottomNav.marginBottom == systemBarController.navigationBarHeightPx) {
@@ -116,7 +113,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
 
     override fun onDestroy() {
         super.onDestroy()
-        systemBarColorAnalyzer.release()
     }
 
     override fun setSplash() {
@@ -137,26 +133,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
      */
     private fun setDestinationListener() {
         val hideBottomNavDestinationIds = activityViewModel.getHideBottomNavDestinationIds(resources)
-        val whiteStatusBarDestinationIds = activityViewModel.getWhiteStatusBarNavDestinationIds(resources)
-        val whiteNavigationBarDestinationIds = activityViewModel.getWhiteNavigationBarNavDestinationIds(resources)
-        val blackStatusBarDestinationIds = activityViewModel.getBlackStatusBarNavDestinationIds(resources)
-        val blackNavigationBarDestinationIds = activityViewModel.getBlackNavigationBarNavDestinationIds(resources)
-        val fixFragmentContainerHeightDestinationIds = activityViewModel.getFixFragmentContainerDestinationIds(resources)
 
         navController.addOnDestinationChangedListener { _, destination, arg ->
             log(arg.toString())
             bottomVisible(destination.id !in hideBottomNavDestinationIds)
-            /**
-            if (destination.id in whiteNavigationBarDestinationIds || destination.id in blackNavigationBarDestinationIds || destination.id in whiteStatusBarDestinationIds || destination.id in blackStatusBarDestinationIds) {
-            systemBarController.setStyle(
-            if (destination.id in whiteStatusBarDestinationIds) SystemBarStyler.StatusBarColor.WHITE else SystemBarStyler.StatusBarColor.BLACK,
-            if (destination.id in whiteNavigationBarDestinationIds) SystemBarStyler.NavigationBarColor.WHITE else SystemBarStyler.NavigationBarColor.BLACK,
-            )
-            }
-
-             */
             systemBarColorAnalyzer.convert()
-            changeFragmentContainerHeight(destination.id !in fixFragmentContainerHeightDestinationIds)
         }
     }
 

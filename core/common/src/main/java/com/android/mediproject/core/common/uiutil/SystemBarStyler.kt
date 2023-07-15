@@ -17,11 +17,7 @@ import kotlin.properties.Delegates
 @SuppressLint("InternalInsetResource", "DiscouragedApi", "Deprecation")
 class SystemBarStyler @Inject constructor(
 ) : LayoutController, SystemBarController {
-    enum class StatusBarColor {
-        BLACK, WHITE
-    }
-
-    enum class NavigationBarColor {
+    enum class SystemBarColor {
         BLACK, WHITE
     }
 
@@ -53,28 +49,28 @@ class SystemBarStyler @Inject constructor(
             navigationBarHeight = getDimensionPixelSize(getIdentifier("navigation_bar_height", "dimen", "android"))
         }
 
+        WindowCompat.setDecorFitsSystemWindows(window, true)
         window.apply {
             setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
             navigationBarColor = Color.TRANSPARENT
             statusBarColor = Color.TRANSPARENT
         }
-
     }
 
 
-    override fun setStyle(statusBarColor: StatusBarColor, navigationBarColor: NavigationBarColor) {
-        window.navigationBarColor = Color.TRANSPARENT
-        window.statusBarColor = Color.TRANSPARENT
+    override fun setStyle(systemBarColor: SystemBarColor, navigationBarSystemBarColor: SystemBarColor) {
+        window.navigationBarColor = android.graphics.Color.TRANSPARENT
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
 
         WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = statusBarColor == StatusBarColor.BLACK
-            isAppearanceLightNavigationBars = navigationBarColor == NavigationBarColor.BLACK
+            isAppearanceLightStatusBars = systemBarColor == SystemBarColor.BLACK
+            isAppearanceLightNavigationBars = navigationBarSystemBarColor == SystemBarColor.BLACK
         }
     }
 
     override fun defaultStyle() {
-        window.navigationBarColor = Color.TRANSPARENT
-        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = android.graphics.Color.TRANSPARENT
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
 
         WindowCompat.getInsetsController(window, window.decorView).apply {
             isAppearanceLightStatusBars = false
@@ -121,7 +117,7 @@ interface SystemBarController {
     val navigationBarHeightPx: Int
 
     fun init(context: Context, window: Window, activityLayoutController: LayoutController)
-    fun setStyle(statusBarColor: SystemBarStyler.StatusBarColor, navigationBarColor: SystemBarStyler.NavigationBarColor)
+    fun setStyle(systemBarColor: SystemBarStyler.SystemBarColor, navigationBarSystemBarColor: SystemBarStyler.SystemBarColor)
     fun defaultStyle()
 
     fun changeMode(topViews: List<SystemBarStyler.ChangeView> = emptyList(), bottomViews: List<SystemBarStyler.ChangeView> = emptyList())

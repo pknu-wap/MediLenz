@@ -27,7 +27,6 @@ class NewsFragment : BaseFragment<FragmentNewsBinding, NewsViewModel>(FragmentNe
 
     override fun onDetach() {
         super.onDetach()
-        systemBarStyler.defaultStyle()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
