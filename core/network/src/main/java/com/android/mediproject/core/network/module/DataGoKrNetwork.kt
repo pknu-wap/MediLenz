@@ -39,7 +39,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import javax.inject.Singleton
 
-const val DATA_GO_KR_BASEURL = "https://reqres.in/"
+const val DATA_GO_KR_BASEURL = "https://apis.data.go.kr/1471000/"
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -55,20 +55,20 @@ object DataGoKrNetwork {
     @Provides
     @Singleton
     fun providesRecallSuspensionDataSource(
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, dataGoKrNetworkApi: DataGoKrNetworkApi
+        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, dataGoKrNetworkApi: DataGoKrNetworkApi,
     ): RecallSuspensionDataSource = RecallSuspensionDataSourceImpl(ioDispatcher, dataGoKrNetworkApi)
 
     @Provides
     @Singleton
     fun providesAdminActionDataSource(
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, dataGoKrNetworkApi: DataGoKrNetworkApi
+        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, dataGoKrNetworkApi: DataGoKrNetworkApi,
     ): AdminActionDataSource = AdminActionDataSourceImpl(ioDispatcher, dataGoKrNetworkApi)
 
 
     @Provides
     @Singleton
     fun provideMedicineApprovalDataSource(
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, dataGoKrNetworkApi: DataGoKrNetworkApi
+        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, dataGoKrNetworkApi: DataGoKrNetworkApi,
     ): MedicineApprovalDataSource = MedicineApprovalDataSourceImpl(ioDispatcher, dataGoKrNetworkApi)
 
     @Provides
@@ -98,7 +98,7 @@ interface DataGoKrNetworkApi {
         @Query("spclty_pblc", encoded = true) medicationType: String?,
         @Query("pageNo") pageNo: Int,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
     ): Response<MedicineApprovalListResponse>
 
 
@@ -109,7 +109,7 @@ interface DataGoKrNetworkApi {
         @Query("item_seq", encoded = true) itemSeq: String = "",
         @Query("pageNo") pageNo: Int = 1,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = 100
+        @Query("numOfRows") numOfRows: Int = 100,
     ): Response<MedicineDetailInfoResponse>
 
     /**
@@ -120,7 +120,7 @@ interface DataGoKrNetworkApi {
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
     ): Response<RecallSuspensionListResponse>
 
     /**
@@ -136,7 +136,7 @@ interface DataGoKrNetworkApi {
         @Query("type") type: String = JSON,
         @Query("Entrps", encoded = true) company: String?,
         @Query("Prduct", encoded = true) product: String?,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
     ): Response<DetailRecallSuspensionResponse>
 
     /**
@@ -148,7 +148,7 @@ interface DataGoKrNetworkApi {
         @Query("pageNo") pageNo: Int,
         @Query("type") type: String = JSON,
         @Query("order", encoded = true) order: String = "Y",
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
     ): Response<AdminActionListResponse>
 
     /**
@@ -166,7 +166,7 @@ interface DataGoKrNetworkApi {
         @Query("entp_name") entpName: String?,
         @Query("item_seq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
     ): Response<GranuleIdentificationInfoResponse>
 
 
@@ -185,7 +185,7 @@ interface DataGoKrNetworkApi {
         @Query("itemName") itemName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
     ): Response<GranuleIdentificationInfoResponse>
 
 
@@ -204,7 +204,7 @@ interface DataGoKrNetworkApi {
         @Query("itemName") itemName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
     ): Response<ElderlyCautionResponse>
 
     /**
@@ -221,7 +221,7 @@ interface DataGoKrNetworkApi {
         @Query("itemName") itemName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = 1
+        @Query("numOfRows") numOfRows: Int = 1,
     ): Response<DurResponse>
 }
 
