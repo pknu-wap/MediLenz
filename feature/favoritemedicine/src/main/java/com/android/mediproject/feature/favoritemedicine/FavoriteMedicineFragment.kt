@@ -32,27 +32,25 @@ class FavoriteMedicineFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addFavoriteMedicinesChips()
+        setBinding()
         initHeader()
     }
 
-    private fun addFavoriteMedicinesChips() {
-        binding.apply {
-            fragmentViewModel.apply {
-                viewLifecycleOwner.apply {
-                    repeatOnStarted {
-                        favoriteMedicineList.collect {
-                            setFavoriteMedicineList(it)
-                        }
-                    }
-                    repeatOnStarted {
-                        token.collect {
-                            handleToken(it)
-                        }
+    private fun setBinding() = binding.apply {
+        fragmentViewModel.apply {
+            viewLifecycleOwner.apply {
+                repeatOnStarted {
+                    favoriteMedicineList.collect {
+                        setFavoriteMedicineList(it)
                     }
                 }
-                loadTokens()
+                repeatOnStarted {
+                    token.collect {
+                        handleToken(it)
+                    }
+                }
             }
+            loadTokens()
         }
     }
 
@@ -71,17 +69,16 @@ class FavoriteMedicineFragment :
     private fun initHeader() {
         binding.favoriteMedicineHeaderView.apply {
             setOnMoreClickListener {
-                findNavController().navigate("medilens://main/moreInterestedMedicine_nav".toUri())
+                navigateWithUri("medilens://main/favoriteMedicineMore_nav")
             }
         }
 
     }
 
     private fun setFavoriteMedicineList(medicineList: List<FavoriteMedicineDto>) {
-        //다른화면 갔다올 경우 이전에 있는 약품에 더해서 더 생기기 때문에 제거해줘야 함
-        binding.favoriteMedicineList.removeAllViews()
 
-        if (medicineList.size != 0) {
+        clearFavoriteMedicineListView()
+        if (checkMedicineListSize(medicineList)) {
 
             val horizontalSpace = resources.getDimension(R.dimen.dp_4).toInt()
 
@@ -109,6 +106,12 @@ class FavoriteMedicineFragment :
             //0개 일 경우
             showNoFavoriteMedicine()
         }
+    }
+
+    private fun clearFavoriteMedicineListView() = binding.favoriteMedicineList.removeAllViews()
+
+    private fun checkMedicineListSize(medicineList : List<FavoriteMedicineDto>) : Boolean {
+        return (medicineList.size != 0)
     }
 
     private fun showNoFavoriteMedicine() {
