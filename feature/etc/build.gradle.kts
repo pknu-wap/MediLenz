@@ -4,10 +4,6 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.etc"
-
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 hilt {

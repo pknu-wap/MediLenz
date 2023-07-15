@@ -1,8 +1,6 @@
 plugins {
-
     id("mediproject.android.feature.compose")
     alias(libs.plugins.kotlin.parcelize)
-
 }
 
 android {

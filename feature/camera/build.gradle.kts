@@ -1,7 +1,5 @@
 plugins {
-
     id("mediproject.android.feature")
-
 }
 
 
