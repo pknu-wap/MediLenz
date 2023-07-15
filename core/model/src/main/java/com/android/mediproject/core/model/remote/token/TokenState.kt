@@ -9,11 +9,10 @@ package com.android.mediproject.core.model.remote.token
  * @see TokenState.Empty 토큰이 없음
  * @see TokenState.Error 에러
  */
-sealed class TokenState<out T> {
-    data class AccessExpiration<out T>(val data: T) : TokenState<T>()
-    data class RefreshExpiration<out T>(val data: T) : TokenState<T>()
-    data class Valid<out T>(val data: T) : TokenState<T>()
-    object Empty : TokenState<Nothing>()
-
-    data class Error(val exception: Throwable) : TokenState<Nothing>()
+sealed interface TokenState<out T : Any> {
+    data class AccessExpiration<out T : Any>(val data: T) : TokenState<T>
+    data class RefreshExpiration<out T : Any>(val data: T) : TokenState<T>
+    data class Valid<out T : Any>(val data: T) : TokenState<T>
+    object Empty : TokenState<Nothing>
+    data class Error(val exception: Throwable) : TokenState<Nothing>
 }

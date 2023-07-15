@@ -4,7 +4,7 @@ import android.util.Log
 import com.android.mediproject.core.data.remote.user.UserInfoRepository
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.datastore.TokenDataSource
-import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.model.requestparameters.SignInParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
@@ -19,7 +19,7 @@ class SignRepositoryImpl @Inject constructor(
     private val signDataSource: SignDataSource,
     private val tokenDataSource: TokenDataSource,
     private val appDataStore: AppDataStore,
-    private val userInfoRepository: UserInfoRepository
+    private val userInfoRepository: UserInfoRepository,
 ) : SignRepository {
 
 
@@ -102,7 +102,7 @@ class SignRepositoryImpl @Inject constructor(
      *
      * 만약 호출 했을 때, 만료되었으면 reissueToken()을 자동으로 호출해서 새로운 토큰을 반환한다.
      */
-    override fun getCurrentTokens(): Flow<TokenState<CurrentTokenDto>> = channelFlow {
+    override fun getCurrentTokens(): Flow<TokenState<CurrentTokens>> = channelFlow {
         when (val tokenState = tokenDataSource.currentTokenState) {
             is TokenState.AccessExpiration -> {
                 // access token이 만료되었으므로 토큰 재발급 요청

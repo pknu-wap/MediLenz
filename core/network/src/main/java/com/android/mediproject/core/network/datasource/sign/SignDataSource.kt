@@ -2,7 +2,7 @@ package com.android.mediproject.core.network.datasource.sign
 
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
-import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.model.requestparameters.SignInParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
@@ -23,5 +23,5 @@ interface SignDataSource {
      *
      * return  Result<Unit>.success()
      */
-    fun reissueToken(currentToken: TokenState.AccessExpiration<CurrentTokenDto>): Flow<Result<Unit>>
+    fun reissueToken(currentToken: TokenState.AccessExpiration<CurrentTokens>): Flow<Result<Unit>>
 }

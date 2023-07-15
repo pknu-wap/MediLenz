@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineDto
-import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -44,7 +44,7 @@ class FavoriteMedicineFragment :
         }
     }
 
-    private fun handleToken(token: TokenState<CurrentTokenDto>) {
+    private fun handleToken(token: TokenState<CurrentTokens>) {
         when (token) {
             is TokenState.Empty -> {}
             is TokenState.Error -> {}

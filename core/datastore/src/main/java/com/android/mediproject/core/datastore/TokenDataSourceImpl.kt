@@ -3,8 +3,8 @@ package com.android.mediproject.core.datastore
 import android.util.Log
 import androidx.datastore.core.DataStore
 import com.android.mediproject.core.common.util.AesCoder
-import com.android.mediproject.core.model.remote.token.CurrentTokenDto
-import com.android.mediproject.core.model.remote.token.NewTokensFromAws
+import com.android.mediproject.core.model.remote.token.CurrentTokens
+import com.android.mediproject.core.model.remote.token.NewTokensFromServer
 import com.android.mediproject.core.model.remote.token.RequestBehavior
 import com.android.mediproject.core.model.remote.token.TokenState
 import kotlinx.coroutines.flow.first
@@ -29,9 +29,10 @@ class TokenDataSourceImpl @Inject constructor(
     private val aesCoder: AesCoder,
     private val tokenServer: TokenServer,
 ) : TokenDataSource {
-    private var _currentTokenState: TokenState<CurrentTokenDto> = TokenState.Empty
+    
+    private var _currentTokenState: TokenState<CurrentTokens> = TokenState.Empty
 
-    override val currentTokenState: TokenState<CurrentTokenDto>
+    override val currentTokenState: TokenState<CurrentTokens>
         get() = _currentTokenState
 
     init {
@@ -61,17 +62,21 @@ class TokenDataSourceImpl @Inject constructor(
                 val accessToken = aesCoder.decode(savedTokens.accessToken)
 
                 Log.d("wap", "토큰이 로컬에 저장되어있음")
-                Log.d("wap",
+                Log.d(
+                    "wap",
                     "저장된 토큰 정보 -> 액세스 : ${accessToken.joinToString("")}, 갱신 : ${refreshToken.joinToString("")}, 액세스 만료 : ${
                         savedTokens
                             .accessTokenExpiresIn
-                    }, 갱신 만료 : ${savedTokens.refreshTokenExpiresIn}")
-                tokenServer.tokens.emit(TokenServer.Tokens(
-                    refreshToken = refreshToken,
-                    accessToken = accessToken,
-                    accessTokenExpiresIn = LocalDateTime.parse(savedTokens.accessTokenExpiresIn),
-                    refreshTokenExpiresIn = LocalDateTime.parse(savedTokens.refreshTokenExpiresIn),
-                ))
+                    }, 갱신 만료 : ${savedTokens.refreshTokenExpiresIn}",
+                )
+                tokenServer.tokens.emit(
+                    TokenServer.Tokens(
+                        refreshToken = refreshToken,
+                        accessToken = accessToken,
+                        accessTokenExpiresIn = LocalDateTime.parse(savedTokens.accessTokenExpiresIn),
+                        refreshTokenExpiresIn = LocalDateTime.parse(savedTokens.refreshTokenExpiresIn),
+                    ),
+                )
                 updateTokenState()
             } else {
                 Log.d("wap", "토큰이 로컬에 저장되어있지 않음")
@@ -83,57 +88,63 @@ class TokenDataSourceImpl @Inject constructor(
     /**
      * 토큰을 로컬에 저장한다.
      *
-     * @param newTokensFromAws 새로 발급받은 토큰
+     * @param newTokensFromServer 새로 발급받은 토큰
      *
      * 서버에서 응답 받으면 가장 먼저 호출되는 함수이다.
      */
-    override suspend fun saveTokensToLocal(newTokensFromAws: NewTokensFromAws) {
+    override suspend fun saveTokensToLocal(newTokensFromServer: NewTokensFromServer) {
         Log.d("wap", "saveTokensToLocal() 호출됨")
         tokenDataStore.updateData { newToken ->
-            newToken.toBuilder().setAccessToken(aesCoder.encode(newTokensFromAws.accessToken))
-                .setRefreshToken(aesCoder.encode(newTokensFromAws.refreshToken)).let { builder ->
+            newToken.toBuilder().setAccessToken(aesCoder.encode(newTokensFromServer.accessToken))
+                .setRefreshToken(aesCoder.encode(newTokensFromServer.refreshToken)).let { builder ->
                     val savedToken = tokenServer.currentTokens
-                    when (newTokensFromAws.requestBehavior) {
+                    when (newTokensFromServer.requestBehavior) {
                         is RequestBehavior.NewTokens -> {
                             Log.d("wap", "saveTokensToLocal() : NewTokens")
                             // 새로 모든 토큰을 받았으므로 모든 시각을 저장한다.
-                            Log.d("wap",
-                                "새로운 토큰 정보 -> 액세스 : ${newTokensFromAws.accessToken.joinToString("")}, 갱신 : ${
-                                    newTokensFromAws
+                            Log.d(
+                                "wap",
+                                "새로운 토큰 정보 -> 액세스 : ${newTokensFromServer.accessToken.joinToString("")}, 갱신 : ${
+                                    newTokensFromServer
                                         .refreshToken.joinToString("")
                                 }," +
-                                        " 액세스 만료" +
-                                        " " +
-                                        ": ${newTokensFromAws.accessTokenExpireDateTime}, 갱신 만료 : ${newTokensFromAws.refreshTokenExpireDateTime}")
+                                    " 액세스 만료" +
+                                    " " +
+                                    ": ${newTokensFromServer.accessTokenExpireDateTime}, 갱신 만료 : ${newTokensFromServer.refreshTokenExpireDateTime}",
+                            )
 
-                            tokenServer.tokens.emit(newTokensFromAws.toTokens())
+                            tokenServer.tokens.emit(newTokensFromServer.toTokens())
                             updateTokenState()
 
-                            builder.setAccessTokenExpiresIn(newTokensFromAws.accessTokenExpireDateTime.toString())
-                                .setRefreshTokenExpiresIn(newTokensFromAws.refreshTokenExpireDateTime.toString())
+                            builder.setAccessTokenExpiresIn(newTokensFromServer.accessTokenExpireDateTime.toString())
+                                .setRefreshTokenExpiresIn(newTokensFromServer.refreshTokenExpireDateTime.toString())
                         }
 
                         is RequestBehavior.ReissueTokens -> {
                             Log.d("wap", "saveTokensToLocal() : ReissueTokens")
                             // 액세스 만료 시각만 저장한다.
-                            Log.d("wap",
-                                "새로운 토큰 정보 -> 액세스 : ${newTokensFromAws.accessToken.joinToString("")}, 갱신 : ${
-                                    newTokensFromAws
+                            Log.d(
+                                "wap",
+                                "새로운 토큰 정보 -> 액세스 : ${newTokensFromServer.accessToken.joinToString("")}, 갱신 : ${
+                                    newTokensFromServer
                                         .refreshToken.joinToString("")
                                 }}, 액세스 만료" + " " +
-                                        ": ${newTokensFromAws.accessTokenExpireDateTime}, 갱신 만료 : ${
-                                            (savedToken as EndpointTokenState.SavedToken).token.refreshTokenExpiresIn
-                                        }")
+                                    ": ${newTokensFromServer.accessTokenExpireDateTime}, 갱신 만료 : ${
+                                        (savedToken as EndpointTokenState.SavedToken).token.refreshTokenExpiresIn
+                                    }",
+                            )
 
-                            tokenServer.tokens.emit(TokenServer.Tokens(
-                                refreshToken = newTokensFromAws.refreshToken,
-                                accessToken = newTokensFromAws.accessToken,
-                                accessTokenExpiresIn = newTokensFromAws.accessTokenExpireDateTime,
-                                refreshTokenExpiresIn = savedToken.token.refreshTokenExpiresIn,
-                            ))
+                            tokenServer.tokens.emit(
+                                TokenServer.Tokens(
+                                    refreshToken = newTokensFromServer.refreshToken,
+                                    accessToken = newTokensFromServer.accessToken,
+                                    accessTokenExpiresIn = newTokensFromServer.accessTokenExpireDateTime,
+                                    refreshTokenExpiresIn = savedToken.token.refreshTokenExpiresIn,
+                                ),
+                            )
 
                             updateTokenState()
-                            builder.setAccessTokenExpiresIn(newTokensFromAws.accessTokenExpireDateTime.toString())
+                            builder.setAccessTokenExpiresIn(newTokensFromServer.accessTokenExpireDateTime.toString())
                         }
 
                     }
@@ -160,12 +171,15 @@ class TokenDataSourceImpl @Inject constructor(
 
         when (tokenState) {
             is EndpointTokenState.SavedToken -> {
-                Log.d("wap", "현재 토큰 정보 -> 액세스 : ${tokenState.token.accessToken.joinToString("")}, 갱신 : ${
-                    tokenState.token.refreshToken
-                        .joinToString("")
-                }, 액세스 만료 : ${
-                    tokenState.token.accessTokenExpiresIn
-                }, 갱신 만료 : ${tokenState.token.refreshTokenExpiresIn}")
+                Log.d(
+                    "wap",
+                    "현재 토큰 정보 -> 액세스 : ${tokenState.token.accessToken.joinToString("")}, 갱신 : ${
+                        tokenState.token.refreshToken
+                            .joinToString("")
+                    }, 액세스 만료 : ${
+                        tokenState.token.accessTokenExpiresIn
+                    }, 갱신 만료 : ${tokenState.token.refreshTokenExpiresIn}",
+                )
 
                 // 만료 확인
                 val currentToken = tokenState.token
@@ -174,18 +188,26 @@ class TokenDataSourceImpl @Inject constructor(
                 if (now > currentToken.accessTokenExpiresIn) {
                     Log.d("wap", "updateTokenState() : 액세스 만료")
                     // 액세스 만료
-                    _currentTokenState = TokenState.AccessExpiration(CurrentTokenDto(accessToken = currentToken.accessToken,
-                        refreshToken = currentToken.refreshToken))
+                    _currentTokenState = TokenState.AccessExpiration(
+                        CurrentTokens(
+                            accessToken = currentToken.accessToken,
+                            refreshToken = currentToken.refreshToken,
+                        ),
+                    )
                 } else if (now > currentToken.refreshTokenExpiresIn) {
                     Log.d("wap", "updateTokenState() : 리프레시 만료")
                     // 리프레시 만료
-                    _currentTokenState = TokenState.RefreshExpiration(CurrentTokenDto(accessToken = currentToken.accessToken,
-                        refreshToken = currentToken.refreshToken))
+                    _currentTokenState = TokenState.RefreshExpiration(
+                        CurrentTokens(
+                            accessToken = currentToken.accessToken,
+                            refreshToken = currentToken.refreshToken,
+                        ),
+                    )
                 } else {
                     // 토큰 유효
                     Log.d("wap", "updateTokenState() : 토큰 유효")
                     _currentTokenState =
-                        TokenState.Valid(CurrentTokenDto(accessToken = currentToken.accessToken, refreshToken = currentToken.refreshToken))
+                        TokenState.Valid(CurrentTokens(accessToken = currentToken.accessToken, refreshToken = currentToken.refreshToken))
                 }
             }
 

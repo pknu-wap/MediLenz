@@ -1,6 +1,5 @@
 package com.android.mediproject.core.datastore
 
-import android.util.Log
 import com.android.mediproject.core.model.remote.token.NewTokensFromAws
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -9,8 +8,10 @@ import javax.inject.Inject
 
 class TokenServerImpl @Inject constructor() : TokenServer {
 
-    override val tokens = MutableSharedFlow<TokenServer.Tokens?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST,
-        extraBufferCapacity = 20)
+    override val tokens = MutableSharedFlow<TokenServer.Tokens?>(
+        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        extraBufferCapacity = 20,
+    )
 
     /**
      * 토큰을 저장할 채널을 열고
@@ -44,8 +45,6 @@ interface TokenServer {
         val refreshTokenExpiresIn: LocalDateTime,
     ) {
 
-        fun isEmpty(): Boolean = accessToken.isEmpty() || refreshToken.isEmpty()
-
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
@@ -55,15 +54,12 @@ interface TokenServer {
             if (!accessToken.contentEquals(other.accessToken)) return false
             if (!refreshToken.contentEquals(other.refreshToken)) return false
 
-
             return true
         }
 
         override fun hashCode(): Int {
             var result = accessToken.contentHashCode()
             result = 31 * result + refreshToken.contentHashCode()
-
-
             return result
         }
 
@@ -77,11 +73,10 @@ interface TokenServer {
 /**
  * Retrofit, DataStore와 직접 연결되는 토큰의 상태를 나타내는 클래스
  */
-sealed class EndpointTokenState {
-    object NoToken : EndpointTokenState()
-    data class SavedToken(val token: TokenServer.Tokens) : EndpointTokenState()
+sealed interface EndpointTokenState {
+    object NoToken : EndpointTokenState
+    data class SavedToken(val token: TokenServer.Tokens) : EndpointTokenState
 }
-
 
 fun NewTokensFromAws.toTokens(): TokenServer.Tokens {
     return TokenServer.Tokens(

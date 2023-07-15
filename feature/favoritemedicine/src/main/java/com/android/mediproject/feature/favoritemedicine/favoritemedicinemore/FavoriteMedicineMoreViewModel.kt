@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreDto
-import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,7 @@ class FavoriteMedicineMoreViewModel @Inject constructor(
     private val _favoriteMedicineList = MutableStateFlow<List<FavoriteMedicineMoreDto>>(listOf())
     val favoriteMedicineList get() = _favoriteMedicineList
 
-    private val _token = MutableStateFlow<TokenState<CurrentTokenDto>>(TokenState.Empty)
+    private val _token = MutableStateFlow<TokenState<CurrentTokens>>(TokenState.Empty)
     val token get() = _token.asStateFlow()
 
     fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }

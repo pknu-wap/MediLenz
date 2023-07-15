@@ -5,8 +5,8 @@ import com.android.mediproject.core.datastore.TokenDataSource
 import com.android.mediproject.core.model.awscommon.BaseAwsSignResponse
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
-import com.android.mediproject.core.model.remote.token.CurrentTokenDto
-import com.android.mediproject.core.model.remote.token.NewTokensFromAws
+import com.android.mediproject.core.model.remote.token.CurrentTokens
+import com.android.mediproject.core.model.remote.token.NewTokensFromServer
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
 import com.android.mediproject.core.model.remote.token.RequestBehavior
 import com.android.mediproject.core.model.remote.token.TokenState
@@ -23,22 +23,26 @@ import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class SignDataSourceImpl @Inject constructor(
-    private val awsNetworkApi: AwsNetworkApi, private val tokenDataSource: TokenDataSource, private val aesCoder: AesCoder
-) :
-    SignDataSource {
+    private val awsNetworkApi: AwsNetworkApi, private val tokenDataSource: TokenDataSource, private val aesCoder: AesCoder,
+) : SignDataSource {
 
     /**
      * 로그인
      */
     override fun signIn(signInParameter: SignInParameter): Flow<Result<SignInResponse>> = channelFlow {
-        val email = WeakReference(signInParameter.email.joinToString("")).get()!!
-        val password = WeakReference(aesCoder.encodePassword(signInParameter.email, signInParameter.password)).get()!!
-
-        awsNetworkApi.signIn(SignInRequestParameter(email, password)).onResponseWithTokens(RequestBehavior.NewTokens).fold(onSuccess = {
-            Result.success(it)
-        }, onFailure = {
-            Result.failure(it)
-        }).also {
+        awsNetworkApi.signIn(
+            SignInRequestParameter(
+                WeakReference(signInParameter.email.joinToString("")).get()!!,
+                WeakReference(aesCoder.encodePassword(signInParameter.email, signInParameter.password)).get()!!,
+            ),
+        ).onResponseWithTokens(RequestBehavior.NewTokens).fold(
+            onSuccess = {
+                Result.success(it)
+            },
+            onFailure = {
+                Result.failure(it)
+            },
+        ).also {
             trySend(it)
         }
     }
@@ -47,15 +51,19 @@ class SignDataSourceImpl @Inject constructor(
      * 회원가입
      */
     override fun signUp(signUpParameter: SignUpParameter): Flow<Result<SignUpResponse>> = channelFlow {
-        val email = WeakReference(signUpParameter.email.joinToString("")).get()!!
-        val password = WeakReference(aesCoder.encodePassword(signUpParameter.email, signUpParameter.password)).get()!!
-
-        awsNetworkApi.signUp(SignUpRequestParameter(email, password, signUpParameter.nickName))
-            .onResponseWithTokens(RequestBehavior.NewTokens).fold(onSuccess = {
+        awsNetworkApi.signUp(
+            SignUpRequestParameter(
+                WeakReference(signUpParameter.email.joinToString("")).get()!!,
+                WeakReference(aesCoder.encodePassword(signUpParameter.email, signUpParameter.password)).get()!!, signUpParameter.nickName,
+            ),
+        ).onResponseWithTokens(RequestBehavior.NewTokens).fold(
+            onSuccess = {
                 Result.success(it)
-            }, onFailure = { Result.failure(it) }).also {
-                trySend(it)
-            }
+            },
+            onFailure = { Result.failure(it) },
+        ).also {
+            trySend(it)
+        }
     }
 
 
@@ -63,9 +71,12 @@ class SignDataSourceImpl @Inject constructor(
      * 토큰 갱신
      */
     private fun reissueTokens(refreshToken: CharArray): Flow<Result<ReissueTokenResponse>> = channelFlow {
-        awsNetworkApi.reissueTokens().onResponseWithTokens(RequestBehavior.ReissueTokens).fold(onSuccess = {
-            Result.success(it)
-        }, onFailure = { Result.failure(it) }).also {
+        awsNetworkApi.reissueTokens().onResponseWithTokens(RequestBehavior.ReissueTokens).fold(
+            onSuccess = {
+                Result.success(it)
+            },
+            onFailure = { Result.failure(it) },
+        ).also {
             trySend(it)
         }
     }
@@ -81,9 +92,13 @@ class SignDataSourceImpl @Inject constructor(
             body()?.let { body ->
                 if (body.isSuccess()) {
                     // 토큰 저장
-                    tokenDataSource.saveTokensToLocal(NewTokensFromAws(accessToken = body.accessToken!!.toCharArray(),
-                        refreshToken = body.refreshToken!!.toCharArray(),
-                        requestBehavior = requestBehavior))
+                    tokenDataSource.saveTokensToLocal(
+                        NewTokensFromServer(
+                            accessToken = body.accessToken!!.toCharArray(),
+                            refreshToken = body.refreshToken!!.toCharArray(),
+                            requestBehavior = requestBehavior,
+                        ),
+                    )
                     Result.success(body)
                 } else {
                     Result.failure(Throwable(body.message))
@@ -103,7 +118,7 @@ class SignDataSourceImpl @Inject constructor(
      *
      * return  Result<Unit>.success()
      */
-    override fun reissueToken(currentToken: TokenState.AccessExpiration<CurrentTokenDto>): Flow<Result<Unit>> = channelFlow {
+    override fun reissueToken(currentToken: TokenState.AccessExpiration<CurrentTokens>): Flow<Result<Unit>> = channelFlow {
         reissueTokens(currentToken.data.refreshToken).collectLatest { result ->
             trySend(result.fold(onSuccess = { Result.success(Unit) }, onFailure = { Result.failure(it) }))
         }

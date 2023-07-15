@@ -1,6 +1,6 @@
 package com.android.mediproject.core.data.remote.sign
 
-import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.model.requestparameters.SignInParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
@@ -14,5 +14,5 @@ interface SignRepository {
 
     suspend fun signOut()
 
-    fun getCurrentTokens(): Flow<TokenState<CurrentTokenDto>>
+    fun getCurrentTokens(): Flow<TokenState<CurrentTokens>>
 }

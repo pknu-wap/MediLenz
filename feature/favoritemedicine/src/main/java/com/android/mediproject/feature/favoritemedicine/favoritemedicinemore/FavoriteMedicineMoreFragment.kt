@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreDto
-import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.favoritemedicine.databinding.FragmentFavoriteMedicineMoreBinding
@@ -72,7 +72,7 @@ class FavoriteMedicineMoreFragment :
         favoriteMedicineMoreAdapter.submitList(medicineList)
     }
 
-    private fun handleToken(token: TokenState<CurrentTokenDto>) {
+    private fun handleToken(token: TokenState<CurrentTokens>) {
         when (token) {
             is TokenState.Empty -> {}
             is TokenState.Error -> {}

@@ -1,15 +1,19 @@
 package com.android.mediproject.core.model.remote.token
 
+import java.time.Duration
 import java.time.LocalDateTime
 
-val REFRESH_TOKEN_EXPIRES_IN = java.time.Duration.ofDays(180L)
-val ACCESS_TOKEN_EXPIRES_IN = java.time.Duration.ofMinutes(30L)
+// 리프레시 토큰 만료 시간
+val REFRESH_TOKEN_EXPIRES_IN: Duration = Duration.ofDays(180L)
+
+// 액세스 토큰 만료 시간
+val ACCESS_TOKEN_EXPIRES_IN: Duration = Duration.ofMinutes(30L)
 
 /**
- * 서버로 부터 응답으로 받은 토큰 정보
+ * 서버로 부터 응답받은 토큰
  *
  */
-data class NewTokensFromAws(
+data class NewTokensFromServer(
     val accessToken: CharArray,
     val refreshToken: CharArray,
     val requestBehavior: RequestBehavior,
@@ -25,14 +29,18 @@ data class NewTokensFromAws(
         get() = _accessTokenExpireDateTime!!
 
     init {
-        if (requestBehavior == RequestBehavior.NewTokens) {
-            // 토큰 만료 예정 시각을 설정
-            val now = LocalDateTime.now()
-            _accessTokenExpireDateTime = now.plus(ACCESS_TOKEN_EXPIRES_IN)
-            _refreshTokenExpireDateTime = now.plus(REFRESH_TOKEN_EXPIRES_IN)
-        } else {
-            // 토큰 재발급이므로 액세스 토큰만 저장
-            _accessTokenExpireDateTime = LocalDateTime.now().plus(ACCESS_TOKEN_EXPIRES_IN)
+        when (requestBehavior) {
+            RequestBehavior.NewTokens -> {
+                // 토큰 만료 예정 시각을 설정
+                val now = LocalDateTime.now()
+                _accessTokenExpireDateTime = now.plus(ACCESS_TOKEN_EXPIRES_IN)
+                _refreshTokenExpireDateTime = now.plus(REFRESH_TOKEN_EXPIRES_IN)
+            }
+
+            RequestBehavior.ReissueTokens -> {
+                // 토큰 재발급이므로 액세스 토큰만 저장
+                _accessTokenExpireDateTime = LocalDateTime.now().plus(ACCESS_TOKEN_EXPIRES_IN)
+            }
         }
     }
 
@@ -40,7 +48,7 @@ data class NewTokensFromAws(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as NewTokensFromAws
+        other as NewTokensFromServer
 
         if (!accessToken.contentEquals(other.accessToken)) return false
         if (!refreshToken.contentEquals(other.refreshToken)) return false
