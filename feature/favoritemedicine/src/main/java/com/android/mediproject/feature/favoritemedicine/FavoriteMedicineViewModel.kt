@@ -25,6 +25,9 @@ class FavoriteMedicineViewModel @Inject constructor(
     private val _token = MutableStateFlow<TokenState<CurrentTokenDto>>(TokenState.Empty)
     val token get() = _token.asStateFlow()
 
+    fun navigateToFavoriteMeidcineMore() {
+
+    }
     fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
     fun loadFavoriteMedicines() =
         viewModelScope.launch {
