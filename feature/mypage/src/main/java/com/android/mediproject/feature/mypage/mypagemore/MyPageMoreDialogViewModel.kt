@@ -28,21 +28,36 @@ class MyPageMoreDialogViewModel @Inject constructor(
     private val _eventFlow = MutableEventFlow<MyPageMoreDialogEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
-    private val _dialogFlag = MutableStateFlow(MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME)
-    val dialogFlag get() = _dialogFlag.asStateFlow()
+    fun event(event: MyPageMoreDialogEvent) = viewModelScope.launch { _eventFlow.emit(event) }
+
+    fun completeDialog() = event(MyPageMoreDialogEvent.CompleteDialog)
+
+    fun cancelDialog() = event(MyPageMoreDialogEvent.CancelDialog)
+
+    fun toast(message: String) = event(MyPageMoreDialogEvent.Toast(message))
+
+    fun withdrawalComplete() = event(MyPageMoreDialogEvent.WithdrawalComplete)
+
+    fun changeNicknameComplete() = event(MyPageMoreDialogEvent.ChangeNicknameComplete)
+
+    fun logoutComplete() = event(MyPageMoreDialogEvent.LogoutComplete)
+
+    sealed class MyPageMoreDialogEvent {
+        object CompleteDialog : MyPageMoreDialogEvent()
+        object CancelDialog : MyPageMoreDialogEvent()
+        object WithdrawalComplete : MyPageMoreDialogEvent()
+        object ChangeNicknameComplete : MyPageMoreDialogEvent()
+        object LogoutComplete : MyPageMoreDialogEvent()
+        data class Toast(val message: String) : MyPageMoreDialogEvent()
+    }
+
+    private val _dialogFlag =
+        MutableStateFlow<MyPageMoreDialogFragment.DialogFlag>(MyPageMoreDialogFragment.DialogFlag.ChangeNickName)
+    val dialogFlag = _dialogFlag.asStateFlow()
 
     fun setDialogFlag(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
         _dialogFlag.value = dialogFlag
     }
-
-    fun event(event: MyPageMoreDialogEvent) = viewModelScope.launch { _eventFlow.emit(event) }
-
-    fun completeDialog() = event(MyPageMoreDialogEvent.CompleteDialog)
-    fun cancelDialog() = event(MyPageMoreDialogEvent.CancelDialog)
-    fun toast(message: String) = event(MyPageMoreDialogEvent.Toast(message))
-    fun withdrawalComplete() = event(MyPageMoreDialogEvent.WithdrawalComplete)
-    fun changeNicknameComplete() = event(MyPageMoreDialogEvent.ChangeNicknameComplete)
-    fun logoutComplete() = event(MyPageMoreDialogEvent.LogoutComplete)
 
     fun changeNickname(newNickname: String) = viewModelScope.launch(ioDispatcher) {
         userUseCase.changeNickname(changeNicknameParameter = ChangeNicknameParameter(newNickname))
@@ -62,7 +77,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
         cancelDialog()
     }
 
-    fun withdrawal(withdrawalInput: String) = viewModelScope.launch {
+    fun withdrawal() = viewModelScope.launch {
         userUseCase.withdrawal().collect {
             it.fold(
                 onSuccess = {
@@ -81,30 +96,23 @@ class MyPageMoreDialogViewModel @Inject constructor(
         if (isPasswordValid(newPassword)) {
             toast("비밀번호는 영어 + 숫자로 이루어진 4~10자로 설정해주세요.")
             cancelDialog()
-            return@launch
-        }
+        } else {
 
-        val password = CharArray(newPassword.length)
-        newPassword.trim().forEachIndexed { index, c ->
-            password[index] = c
-        }
-
-        userUseCase.changePassword(changePasswordParamter = ChangePasswordParamter(password))
-            .collect {
-                it.fold(
-                    onSuccess = { toast("비밀번호 변경에 성공하였습니다.") },
-                    onFailure = { toast("비밀번호 변경에 실패하였습니다.") },
-                )
+            val password = CharArray(newPassword.length)
+            newPassword.trim().forEachIndexed { index, c ->
+                password[index] = c
             }
-        cancelDialog()
+
+            userUseCase.changePassword(changePasswordParamter = ChangePasswordParamter(password))
+                .collect {
+                    it.fold(
+                        onSuccess = { toast("비밀번호 변경에 성공하였습니다.") },
+                        onFailure = { toast("비밀번호 변경에 실패하였습니다.") },
+                    )
+                }
+            cancelDialog()
+        }
     }
 
-    sealed class MyPageMoreDialogEvent {
-        object CompleteDialog : MyPageMoreDialogEvent()
-        object CancelDialog : MyPageMoreDialogEvent()
-        object WithdrawalComplete : MyPageMoreDialogEvent()
-        object ChangeNicknameComplete : MyPageMoreDialogEvent()
-        object LogoutComplete : MyPageMoreDialogEvent()
-        data class Toast(val message: String) : MyPageMoreDialogEvent()
-    }
+>>>>>>> upstream/android_develop
 }

@@ -13,6 +13,7 @@ class MyCommentListViewHolder(private val binding: ItemMypageMycommentBinding) :
     fun bind(myCommentDto: MyCommentDto) {
         binding.myCommentDto = myCommentDto
     }
+
 }
 
 class MyPageMyCommentAdapter : ListAdapter<MyCommentDto, MyCommentListViewHolder>(object :

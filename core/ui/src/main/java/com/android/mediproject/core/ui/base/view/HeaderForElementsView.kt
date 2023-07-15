@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.databinding.BindingAdapter
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.ui.R
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -30,7 +31,7 @@ private const val DOT_CHAR = "• "
  */
 @SuppressLint("ResourceType")
 class HeaderForElementsView constructor(
-    context: Context, attrs: AttributeSet
+    context: Context, attrs: AttributeSet,
 ) : ConstraintLayout(context, attrs), OnIndicatorVisibilityChangedListener {
     private val expandBtnView: ImageView
     private val moreBtnView: TextView
@@ -38,8 +39,12 @@ class HeaderForElementsView constructor(
     private var expanded = true
         set(value) {
             field = value
-            expandBtnView.setImageDrawable(AppCompatResources.getDrawable(context,
-                if (value) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24))
+            expandBtnView.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    context,
+                    if (value) R.drawable.baseline_expand_more_24 else R.drawable.baseline_expand_less_24,
+                ),
+            )
 
             takeIf { targetViewId != -1 }?.let {
                 (parent.parent as View).findViewById<View>(targetViewId)?.apply {
@@ -255,7 +260,7 @@ fun interface OnIndicatorVisibilityChangedListener {
 
 
 suspend inline fun <reified T> Flow<UiState<T>>.stateAsCollect(
-    headerForElementsView: HeaderForElementsView, noDataWarningView: View?
+    headerForElementsView: HeaderForElementsView, noDataWarningView: View?,
 ): Flow<UiState<T>> = flatMapLatest {
     when (it) {
         is UiState.Error -> {
@@ -279,4 +284,12 @@ suspend inline fun <reified T> Flow<UiState<T>>.stateAsCollect(
         }
     }
     flowOf(it)
+}
+
+object BindingAdpater {
+    @JvmStatic
+    @BindingAdapter("onMoreClick")
+    fun setOnMoreClick(view: HeaderForElementsView, onClickListenr: View.OnClickListener) {
+        view.findViewById<TextView>(30).setOnClickListener(onClickListenr)
+    }
 }

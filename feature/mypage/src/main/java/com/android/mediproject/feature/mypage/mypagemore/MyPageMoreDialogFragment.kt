@@ -118,7 +118,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
     }
 
     private fun withdrawal() {
-        fragmentViewModel.withdrawal(getSubtitleValue(binding.dialogSubtitle1))
+        fragmentViewModel.withdrawal()
     }
 
     private fun logout() {

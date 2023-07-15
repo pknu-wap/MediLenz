@@ -128,8 +128,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/loginModeCL"
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mypageBar">
 
@@ -158,8 +158,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
+                    android:onClick="@{()->viewModel.navigateToMyPageMore()}"
                     android:src="@drawable/dot_3_vertical"
-                    android:onClick="@{()->viewModel.myPageMore()}"
                     app:layout_constraintBottom_toBottomOf="@id/userImageIV"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/userImageIV" />
@@ -201,6 +201,7 @@
 
                     <com.android.mediproject.core.ui.base.view.HeaderForElementsView
                         android:id="@+id/myCommentsListHeaderView"
+                        onMoreClick="@{()-> viewModel.navigateToMyCommnetList()}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
@@ -215,9 +216,9 @@
                         android:id="@+id/noMyCommentTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginTop="40dp"
                         android:layout_marginBottom="40dp"
-                        android:layout_gravity="center"
                         android:textColor="@color/gray2"
                         android:textSize="20sp"
                         android:visibility="gone" />
