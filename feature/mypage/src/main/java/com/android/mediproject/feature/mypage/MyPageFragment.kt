@@ -8,9 +8,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.CHANGE_NICKNAME
 import com.android.mediproject.core.common.CHANGE_PASSWORD
@@ -50,31 +48,10 @@ class MyPageFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setRecyclerView()
         setBarStyle()
+        setRecyclerView()
         setFragmentResultListner()
-
-        binding.apply {
-            viewModel = fragmentViewModel.apply {
-                viewLifecycleOwner.apply {
-                    repeatOnStarted { token.collect { handleToken(it) } }
-                    repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { user.collect { userDto = it } }
-                    repeatOnStarted { loginMode.collect { handleLoginMode(it) } }
-                    repeatOnStarted {
-                        myCommentsList.collect { commentList ->
-                            if (commentList.size != 0) showCommentList(commentList)
-                            else showNoCommentList()
-                        }
-                    }
-                }
-                loadTokens()
-            }
-
-            myCommentsListHeaderView.setOnMoreClickListener {
-                findNavController().navigate("medilens://main/comments_nav/myCommentsListFragment".toUri())
-            }
-        }
+        setBinding()
     }
 
     private fun setBarStyle() = binding.apply {
@@ -95,6 +72,11 @@ class MyPageFragment :
     }
 
     private fun setFragmentResultListner() {
+        setBottomsheetFragmentResultListner()
+        setDialogFragmentResultListner()
+    }
+
+    private fun setBottomsheetFragmentResultListner() {
         parentFragmentManager.setFragmentResultListener(
             MyPageMoreBottomSheetFragment.TAG,
             viewLifecycleOwner
@@ -104,121 +86,181 @@ class MyPageFragment :
             myPageMoreBottomSheet!!.dismiss()
             myPageMoreBottomSheet = null
         }
+    }
 
-        //다이얼로그
+    private fun setDialogFragmentResultListner() {
         requireActivity().supportFragmentManager.setFragmentResultListener(
             MyPageMoreDialogFragment.TAG,
             viewLifecycleOwner
         ) { _, bundle ->
             val flag = bundle.getInt(MyPageMoreDialogFragment.TAG)
-            handleDialogFlag(flag)
+            handleDialogCallback(flag)
         }
     }
 
-    //가장 처음 토큰 값을 식별하는 함수입니다.
+    private fun setBinding() =
+        binding.apply {
+            viewModel = fragmentViewModel.apply {
+                viewLifecycleOwner.apply {
+                    repeatOnStarted { token.collect { handleToken(it) } }
+                    repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+                    repeatOnStarted { user.collect { userDto = it } }
+                    repeatOnStarted { loginMode.collect { handleLoginMode(it) } }
+                    repeatOnStarted {
+                        myCommentsList.collect { commentList ->
+                            if (checkCommentListSize(commentList)) showCommentList(commentList)
+                            else noShowCommentList()
+                        }
+                    }
+                }
+                loadTokens()
+            }
+
+            myCommentsListHeaderView.setOnMoreClickListener {
+                navigateWithUri("medilens://main/comments_nav/myCommentsListFragment")
+            }
+        }
+
+    private fun checkCommentListSize(commentList: List<MyCommentDto>): Boolean {
+        return (commentList.size != 0)
+    }
+
     private fun handleToken(tokenState: TokenState<CurrentTokenDto>) {
         log(tokenState.toString())
-
         when (tokenState) {
-            is TokenState.Empty -> fragmentViewModel.setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
+            is TokenState.Empty -> setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
             is TokenState.AccessExpiration -> {}
-            is TokenState.Valid -> fragmentViewModel.setLoginMode(MyPageViewModel.LoginMode.LOGIN_MODE)
+            is TokenState.Valid -> setLoginMode(MyPageViewModel.LoginMode.LOGIN_MODE)
             else -> {}
         }
+    }
+
+    private fun setLoginMode(loginMode: MyPageViewModel.LoginMode) {
+        fragmentViewModel.setLoginMode(loginMode)
+    }
+
+    private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
+        is MyPageViewModel.MyPageEvent.Login -> navigateWithUri("medilens://main/intro_nav/login")
+        is MyPageViewModel.MyPageEvent.SignUp -> navigateWithUri("medilens://main/intro_nav/signUp")
+        is MyPageViewModel.MyPageEvent.MyPageMore -> showMyPageBottomSheet()
+    }
+
+    private fun showMyPageBottomSheet() {
+        if (isMyPageMoreBottomSheetNull()) {
+            showMyPageMoreBottomSheet()
+        }
+    }
+
+    private fun isMyPageMoreBottomSheetNull(): Boolean {
+        return myPageMoreBottomSheet == null
+    }
+
+    private fun showMyPageMoreBottomSheet() {
+        myPageMoreBottomSheet = MyPageMoreBottomSheetFragment {
+            myPageMoreBottomSheet = null
+        }
+
+        myPageMoreBottomSheet!!.show(
+            parentFragmentManager,
+            MyPageMoreBottomSheetFragment.TAG
+        )
     }
 
     private fun handleLoginMode(loginMode: MyPageViewModel.LoginMode) {
         when (loginMode) {
             MyPageViewModel.LoginMode.GUEST_MODE -> guestModeScreen()
-            MyPageViewModel.LoginMode.LOGIN_MODE -> {
-                log("MyPageFragment : 로그인 모드")
-                fragmentViewModel.apply {
-                    loadUser()
-                    loadComments()
-                }
-            }
+            MyPageViewModel.LoginMode.LOGIN_MODE -> loginModeScreen()
         }
     }
 
-    private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
-        is MyPageViewModel.MyPageEvent.Login -> findNavController().navigate("medilens://main/intro_nav/login".toUri())
-        is MyPageViewModel.MyPageEvent.SignUp -> findNavController().navigate("medilens://main/intro_nav/signUp".toUri())
-        is MyPageViewModel.MyPageEvent.MyPageMore -> showMyPageBottomSheet()
+    private fun guestModeScreen() = binding.apply {
+        guestTV.text = setGuestModeScreenSpan()
+        setGuestModeScreenVisible()
     }
 
-    //바텀시트로 돌아왔을 때 실행되는 함수입니다.
+    private fun setGuestModeScreenSpan(): SpannableStringBuilder {
+        val span =
+            SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
+                setSpan(
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.main
+                        )
+                    ), 15, 18,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        return span
+    }
+
+    private fun setGuestModeScreenVisible() = binding.apply {
+        guestModeCL.visibility = View.VISIBLE
+        loginModeCL.visibility = View.GONE
+    }
+
+    private fun loginModeScreen() = fragmentViewModel.apply {
+        loadUser()
+        loadComments()
+    }
+
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {
         when (bottomSheetFlag) {
-            CHANGE_NICKNAME -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangeNickName).show(
-                requireActivity().supportFragmentManager,
-                MyPageMoreDialogFragment.TAG
-            )
-
-            CHANGE_PASSWORD -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.ChangePassword).show(
-                requireActivity().supportFragmentManager,
-                MyPageMoreDialogFragment.TAG
-            )
-
-            WITHDRAWAL -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.Withdrawal).show(
-                requireActivity().supportFragmentManager,
-                MyPageMoreDialogFragment.TAG
-            )
-
-            LOGOUT -> MyPageMoreDialogFragment(MyPageMoreDialogFragment.DialogFlag.Logout).show(
-                requireActivity().supportFragmentManager,
-                MyPageMoreDialogFragment.TAG
-            )
+            CHANGE_NICKNAME -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.ChangeNickName)
+            CHANGE_PASSWORD -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.ChangePassword)
+            WITHDRAWAL -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.Withdrawal)
+            LOGOUT -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.Logout)
         }
     }
 
-    //다이얼로그로 돌아왔을 때 실행되는 함수입니다.
-    private fun handleDialogFlag(dialogFlag: Int) {
+    private fun showMyPageMoreDialog(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
+        MyPageMoreDialogFragment(dialogFlag).show(
+            requireActivity().supportFragmentManager,
+            MyPageMoreDialogFragment.TAG
+        )
+    }
+
+    private fun handleDialogCallback(dialogFlag: Int) {
         when (dialogFlag) {
-            CHANGE_NICKNAME -> {
-                log("MyPageDialog Callback : changeNickname() ")
-                fragmentViewModel.loadUser()
-            }
-
-            CHANGE_PASSWORD -> {
-                log("MyPageDialog Callback : changePassword() ")
-            }
-
-            WITHDRAWAL -> {
-                log("MyPageDialog Callback : withdrawal() ")
-                fragmentViewModel.apply {
-                    signOut()
-                    setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
-                }
-            }
-
-            LOGOUT -> {
-                log("MyPageDialog Callback : logout() ")
-                fragmentViewModel.apply{
-                    signOut()
-                    setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
-                }
-            }
-
+            CHANGE_NICKNAME -> changeNicknameCallback()
+            CHANGE_PASSWORD -> changePasswordCallback()
+            WITHDRAWAL -> withdrawalCallback()
+            LOGOUT -> logoutCallback()
         }
     }
 
-    private fun showMyPageBottomSheet() {
-        if (myPageMoreBottomSheet == null) {
-            myPageMoreBottomSheet = MyPageMoreBottomSheetFragment {
-                myPageMoreBottomSheet = null
-            }
-            myPageMoreBottomSheet!!.show(
-                parentFragmentManager,
-                MyPageMoreBottomSheetFragment.TAG
-            )
+    private fun changeNicknameCallback() {
+        log("MyPageDialog Callback : changeNickname() ")
+        fragmentViewModel.loadUser()
+    }
+
+    private fun changePasswordCallback() {
+        log("MyPageDialog Callback : changePassword() ")
+    }
+
+    private fun withdrawalCallback() {
+        log("MyPageDialog Callback : withdrawal() ")
+        fragmentViewModel.apply {
+            signOut()
+            setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
         }
     }
 
-    //로그인 상태일 시 보여주는 화면 (댓글 없을 시)
-    private fun showNoCommentList() = binding.apply {
-        myCommentsListRV.visibility = View.GONE
-        noMyCommentTV.visibility = View.VISIBLE
+    private fun logoutCallback() {
+        log("MyPageDialog Callback : logout() ")
+        fragmentViewModel.apply {
+            signOut()
+            setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
+        }
+    }
 
+    private fun noShowCommentList() = binding.apply {
+        noMyCommentTV.text = setNoShowCommentListSpan()
+        setNoShowCommentListVisible()
+    }
+
+    private fun setNoShowCommentListSpan(): SpannableStringBuilder {
         val span =
             SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.noMyComment)).apply {
                 setSpan(
@@ -236,37 +278,23 @@ class MyPageFragment :
                     Spannable.SPAN_INCLUSIVE_INCLUSIVE
                 )
             }
-        noMyCommentTV.text = span
+        return span
+    }
+
+    private fun setNoShowCommentListVisible() = binding.apply {
+        myCommentsListRV.visibility = View.GONE
+        noMyCommentTV.visibility = View.VISIBLE
         myCommentsListHeaderView.setMoreVisiblity(false)
         myCommentsListHeaderView.setExpandVisiblity(false)
     }
 
-    //로그인 상태일 시 보여주는 화면 (댓글 있을 시)
     private fun showCommentList(myCommentList: List<MyCommentDto>) = binding.apply {
-        guestModeCL.visibility = View.GONE
-        loginModeCL.visibility = View.VISIBLE
+        setShowCommentListVisible()
         myCommentListAdapter.submitList(myCommentList)
     }
 
-    //비로그인 상태일 시 보여주는 화면
-    private fun guestModeScreen() = binding.apply {
-        guestModeCL.visibility = View.VISIBLE
-        loginModeCL.visibility = View.GONE
-
-        //글자 Span 적용
-        val span =
-            SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
-                setSpan(
-                    ForegroundColorSpan(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.main
-                        )
-                    ), 15, 18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            }
-        guestTV.text = span
+    private fun setShowCommentListVisible() = binding.apply {
+        guestModeCL.visibility = View.GONE
+        loginModeCL.visibility = View.VISIBLE
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/etc_nav"
+    app:startDestination="@id/etcFragment">
+
+    <fragment
+        android:id="@+id/etcFragment"
+        android:name="com.android.mediproject.feature.etc.EtcFragment"
+        android:label="EtcFragment" />
+
+    <deepLink app:uri="medilens://main/etc_nav" />
+</navigation>

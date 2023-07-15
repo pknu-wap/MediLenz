@@ -75,8 +75,8 @@ dependencies {
     implementation(project(":feature:comments"))
     implementation(project(":feature:search"))
     implementation(project(":feature:mypage"))
+    implementation(project(":feature:etc"))
 
-    implementation(project(":feature:setting"))
     implementation(project(":feature:penalties"))
     implementation(project(":feature:medicine"))
     implementation(project(":feature:news"))
