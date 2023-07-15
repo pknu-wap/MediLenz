@@ -78,21 +78,10 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         when (event) {
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteDialog -> handleCompleteDialog()
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> dismiss()
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteWithdrawal -> completeWithdrawal()
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteChangeNickname -> completeChangeNickName()
+            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteLogout -> completeLogout()
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> toast(event.message)
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.WithdrawalComplete -> setFragmentResult(
-                TAG,
-                bundleOf(TAG to MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value),
-            )
-
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.ChangeNicknameComplete -> setFragmentResult(
-                TAG,
-                bundleOf(TAG to MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value),
-            )
-
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.LogoutComplete -> setFragmentResult(
-                TAG,
-                bundleOf(TAG to MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value),
-            )
         }
     }
 
@@ -103,6 +92,27 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             DialogFlag.WITHDRAWAL -> withdrawal()
             DialogFlag.LOGOUT -> logout()
         }
+    }
+
+    private fun completeWithdrawal() {
+        setFragmentResult(
+            TAG,
+            bundleOf(TAG to MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value),
+        )
+    }
+
+    private fun completeChangeNickName() {
+        setFragmentResult(
+            TAG,
+            bundleOf(TAG to MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value),
+        )
+    }
+
+    private fun completeLogout() {
+        setFragmentResult(
+            TAG,
+            bundleOf(TAG to MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value),
+        )
     }
 
     private fun getDialogFlag(): DialogFlag {
@@ -140,108 +150,9 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
     private fun handleDialogFlag(dialogFlag: DialogFlag) {
         when (dialogFlag) {
             DialogFlag.CHANGE_NICKNAME -> setChangeNickNameDialog()
-            DialogFlag.CHANGE_PASSWORD -> {
-                binding.apply {
-                    completeButtonDisEnabled()
-                    dialogTitleTV.text = getString(R.string.changePassword)
-                    dialogSubtitle1.apply {
-                        setTitle(getString(com.android.mediproject.core.ui.R.string.password))
-                        setHint(getString(com.android.mediproject.core.ui.R.string.passwordHint))
-                        setDataType(PASSWORD)
-                    }
-                    dialogSubtitle2.apply {
-                        setDataType(PASSWORD)
-                        visibility = View.VISIBLE
-                        inputData.addTextChangedListener(
-                            object : TextWatcher {
-                                override fun beforeTextChanged(
-                                    s: CharSequence?, start: Int, count: Int, after: Int,
-                                ) {
-                                }
-
-                                override fun onTextChanged(
-                                    s: CharSequence?, start: Int, before: Int, count: Int,
-                                ) {
-                                }
-
-                                override fun afterTextChanged(s: Editable?) {
-                                    if (s.toString().length != 0 && (s.toString() == dialogSubtitle1.getValue())) completeButtonEnabled()
-                                    else completeButtonDisEnabled()
-                                }
-                            },
-                        )
-                    }
-                }
-            }
-
-            DialogFlag.WITHDRAWAL -> {
-                binding.apply {
-                    val span =
-                        SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
-                            setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        com.android.mediproject.core.ui.R.color.red,
-                                    ),
-                                ),
-                                4,
-                                8,
-                                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                            )
-                            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                        }
-                    completeButtonDisEnabled()
-                    dialogTitleTV.text = getString(R.string.withdrawal)
-                    dialogSubtitle1.apply {
-                        title.text = span
-                        setHint(getString(R.string.withdrawalHint))
-                        setTitleStyleNormal()
-                        inputData.addTextChangedListener(
-                            object : TextWatcher {
-                                override fun beforeTextChanged(
-                                    s: CharSequence?, start: Int, count: Int, after: Int,
-                                ) {
-                                }
-
-                                override fun onTextChanged(
-                                    s: CharSequence?, start: Int, before: Int, count: Int,
-                                ) {
-                                }
-
-                                override fun afterTextChanged(s: Editable?) {
-                                    if (s.toString() == "회원탈퇴") completeButtonEnabled()
-                                    else completeButtonDisEnabled()
-                                }
-                            },
-                        )
-                    }
-                }
-            }
-
-            DialogFlag.LOGOUT -> {
-                binding.apply {
-                    val span =
-                        SpannableStringBuilder(getString(R.string.logoutDescription)).apply {
-                            setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        com.android.mediproject.core.ui.R.color.red,
-                                    ),
-                                ),
-                                4,
-                                8,
-                                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                            )
-                            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                        }
-                    dialogTitleTV.text = getString(R.string.logout)
-                    dialogSubtitle1.visibility = View.GONE
-                    logoutDescriptionTV.visibility = View.VISIBLE
-                    logoutDescriptionTV.text = span
-                }
-            }
+            DialogFlag.CHANGE_PASSWORD -> setChangePasswordDialog()
+            DialogFlag.WITHDRAWAL -> setWithdrawalDialog()
+            DialogFlag.LOGOUT -> setLogoutDialog()
         }
     }
 
@@ -249,6 +160,24 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         completeButtonDisEnabled()
         dialogTitleTV.text = getString(R.string.changeNickName)
         setChangeNickNameSubtitle()
+    }
+
+    private fun setChangePasswordDialog() = binding.apply {
+        completeButtonDisEnabled()
+        dialogTitleTV.text = getString(R.string.changePassword)
+        setChangePasswordSubtitle()
+    }
+
+    private fun setWithdrawalDialog() = binding.apply {
+        completeButtonDisEnabled()
+        dialogTitleTV.text = getString(R.string.withdrawal)
+        setWithdrawalSubtitle()
+    }
+
+    private fun setLogoutDialog() = binding.apply {
+        dialogTitleTV.text = getString(R.string.logout)
+        logoutDescriptionTV.text = getLogoutSpan()
+        setLogoutVisible()
     }
 
     private fun setChangeNickNameSubtitle() = binding.dialogSubtitle1.apply {
@@ -274,9 +203,107 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         )
     }
 
+    private fun setChangePasswordSubtitle() = binding.apply {
+        dialogSubtitle1.apply {
+            setTitle(getString(com.android.mediproject.core.ui.R.string.password))
+            setHint(getString(com.android.mediproject.core.ui.R.string.passwordHint))
+            setDataType(PASSWORD)
+        }
+        dialogSubtitle2.apply {
+            setDataType(PASSWORD)
+            visibility = View.VISIBLE
+            inputData.addTextChangedListener(
+                object : TextWatcher {
+                    override fun beforeTextChanged(
+                        s: CharSequence?, start: Int, count: Int, after: Int,
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        s: CharSequence?, start: Int, before: Int, count: Int,
+                    ) {
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {
+                        if (s.toString().length != 0 && (s.toString() == dialogSubtitle1.getValue())) completeButtonEnabled()
+                        else completeButtonDisEnabled()
+                    }
+                },
+            )
+        }
+    }
+
+    private fun setWithdrawalSubtitle() = binding.dialogSubtitle1.apply {
+        title.text = getWithdrawalSpan()
+        setHint(getString(R.string.withdrawalHint))
+        setTitleStyleNormal()
+        inputData.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int, after: Int,
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?, start: Int, before: Int, count: Int,
+                ) {
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (checkEditableWithdrawal(s)) completeButtonEnabled()
+                    else completeButtonDisEnabled()
+                }
+            },
+        )
+    }
+
+    private fun getWithdrawalSpan(): SpannableStringBuilder {
+        return SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
+            setSpan(
+                ForegroundColorSpan(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        com.android.mediproject.core.ui.R.color.red,
+                    ),
+                ),
+                4,
+                8,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        }
+    }
+
+    private fun setLogoutVisible() = binding.apply {
+        dialogSubtitle1.visibility = View.GONE
+        logoutDescriptionTV.visibility = View.VISIBLE
+    }
+
+    private fun getLogoutSpan(): SpannableStringBuilder {
+        return SpannableStringBuilder(getString(R.string.logoutDescription)).apply {
+            setSpan(
+                ForegroundColorSpan(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        com.android.mediproject.core.ui.R.color.red,
+                    ),
+                ),
+                4,
+                8,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        }
+    }
+
     private fun isEditableNotEmpty(editable: Editable): Boolean {
         return editable.toString().length != 0
     }
+
+    private fun checkEditableWithdrawal(editable: Editable?): Boolean {
+        return editable.toString() == "회원탈퇴"
+    }
+
 
     private fun completeButtonDisEnabled() = binding.myPageDialogCompleteTV.apply {
         isEnabled = false

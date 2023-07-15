@@ -32,27 +32,26 @@ class MyPageMoreDialogViewModel @Inject constructor(
 
     fun completeDialog() = event(MyPageMoreDialogEvent.CompleteDialog)
 
-    fun cancelDialog() = event(MyPageMoreDialogEvent.CancelDialog)
-
     fun toast(message: String) = event(MyPageMoreDialogEvent.Toast(message))
 
-    fun withdrawalComplete() = event(MyPageMoreDialogEvent.WithdrawalComplete)
+    fun completeWithdrawal() = event(MyPageMoreDialogEvent.CompleteWithdrawal)
 
-    fun changeNicknameComplete() = event(MyPageMoreDialogEvent.ChangeNicknameComplete)
+    fun completeChangeNickname() = event(MyPageMoreDialogEvent.CompleteChangeNickname)
 
-    fun logoutComplete() = event(MyPageMoreDialogEvent.LogoutComplete)
+    fun completeLogout() = event(MyPageMoreDialogEvent.CompleteLogout)
+
+    fun cancelDialog() = event(MyPageMoreDialogEvent.CancelDialog)
 
     sealed class MyPageMoreDialogEvent {
         object CompleteDialog : MyPageMoreDialogEvent()
         object CancelDialog : MyPageMoreDialogEvent()
-        object WithdrawalComplete : MyPageMoreDialogEvent()
-        object ChangeNicknameComplete : MyPageMoreDialogEvent()
-        object LogoutComplete : MyPageMoreDialogEvent()
+        object CompleteWithdrawal : MyPageMoreDialogEvent()
+        object CompleteChangeNickname : MyPageMoreDialogEvent()
+        object CompleteLogout : MyPageMoreDialogEvent()
         data class Toast(val message: String) : MyPageMoreDialogEvent()
     }
 
-    private val _dialogFlag =
-        MutableStateFlow<MyPageMoreDialogFragment.DialogFlag>(MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME)
+    private val _dialogFlag = MutableStateFlow(MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME)
     val dialogFlag = _dialogFlag.asStateFlow()
 
     fun setDialogFlag(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
@@ -67,12 +66,12 @@ class MyPageMoreDialogViewModel @Inject constructor(
                     onFailure = { toast("닉네임 변경에 실패하였습니다.") },
                 )
             }
-        changeNicknameComplete()
+        completeChangeNickname()
         cancelDialog()
     }
 
     fun logout() = viewModelScope.launch {
-        logoutComplete()
+        completeLogout()
         toast("로그아웃이 완료되었습니다.")
         cancelDialog()
     }
@@ -82,7 +81,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
             it.fold(
                 onSuccess = {
                     toast("회원 탈퇴가 완료되었습니다.")
-                    withdrawalComplete()
+                    completeWithdrawal()
                 },
                 onFailure = {
                     toast("회원 탈퇴에 실패하였습니다.")
