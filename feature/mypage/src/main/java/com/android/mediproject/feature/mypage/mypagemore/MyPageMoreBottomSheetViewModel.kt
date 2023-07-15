@@ -21,7 +21,7 @@ class MyPageMoreBottomSheetViewModel @Inject constructor() : BaseViewModel() {
 
     fun event(event: MyPageMoreBottomSheetEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
-    fun confirm() = event(MyPageMoreBottomSheetEvent.Confirm(_bottomsheetFlag.value))
+    fun completeBottomSheet() = event(MyPageMoreBottomSheetEvent.CompleteBottomSheet(_bottomsheetFlag.value))
 
     fun changeNickName() {
         _bottomsheetFlag.value = MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME
@@ -40,7 +40,7 @@ class MyPageMoreBottomSheetViewModel @Inject constructor() : BaseViewModel() {
     }
 
     sealed class MyPageMoreBottomSheetEvent {
-        data class Confirm(val flag: MyPageMoreBottomSheetFragment.BottomSheetFlag = MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME) :
+        data class CompleteBottomSheet(val flag: MyPageMoreBottomSheetFragment.BottomSheetFlag = MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME) :
             MyPageMoreBottomSheetEvent()
     }
 }
