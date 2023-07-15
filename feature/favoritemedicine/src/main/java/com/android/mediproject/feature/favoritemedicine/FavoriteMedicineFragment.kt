@@ -40,6 +40,7 @@ class FavoriteMedicineFragment :
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
                 repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineList(it) } }
             }
+            loadTokens()
         }
     }
 

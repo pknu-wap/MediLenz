@@ -104,11 +104,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         }
     }
 
-
     override fun setSplash() {
         installSplashScreen()
     }
-
 
     private val hideBottomNavDestinationIds: Set<Int> by lazy {
         resources.obtainTypedArray(R.array.hideBottomNavDestinationIds).let { typedArray ->
@@ -120,7 +118,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
             destinationIds
         }
     }
-
 
     /**
      * <2번째 방법>

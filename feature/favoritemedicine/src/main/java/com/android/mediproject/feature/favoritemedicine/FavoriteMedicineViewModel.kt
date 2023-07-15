@@ -21,10 +21,6 @@ class FavoriteMedicineViewModel @Inject constructor(
     private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase,
 ) : BaseViewModel() {
 
-    init {
-        loadTokens()
-    }
-
     fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
 
     private val _eventFlow = MutableEventFlow<FavoriteMedicineEvent>()

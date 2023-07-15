@@ -10,10 +10,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.mediproject.core.common.CHANGE_NICKNAME
-import com.android.mediproject.core.common.CHANGE_PASSWORD
-import com.android.mediproject.core.common.LOGOUT
-import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
@@ -97,9 +93,9 @@ class MyPageFragment :
                         }
                     }
                 }
+                loadTokens()
             }
         }
-
 
     private fun setBarStyle() = binding.apply {
         systemBarStyler.changeMode(
@@ -206,10 +202,10 @@ class MyPageFragment :
 
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {
         when (bottomSheetFlag) {
-            CHANGE_NICKNAME -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.ChangeNickName)
-            CHANGE_PASSWORD -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.ChangePassword)
-            WITHDRAWAL -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.Withdrawal)
-            LOGOUT -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.Logout)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.CHANGE_PASSWORD)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.WITHDRAWAL)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.LOGOUT)
         }
     }
 
@@ -222,10 +218,10 @@ class MyPageFragment :
 
     private fun handleDialogCallback(dialogFlag: Int) {
         when (dialogFlag) {
-            CHANGE_NICKNAME -> changeNicknameCallback()
-            CHANGE_PASSWORD -> changePasswordCallback()
-            WITHDRAWAL -> withdrawalCallback()
-            LOGOUT -> logoutCallback()
+            MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME.value -> changeNicknameCallback()
+            MyPageMoreDialogFragment.DialogFlag.CHANGE_PASSWORD.value -> changePasswordCallback()
+            MyPageMoreDialogFragment.DialogFlag.WITHDRAWAL.value -> withdrawalCallback()
+            MyPageMoreDialogFragment.DialogFlag.LOGOUT.value -> logoutCallback()
         }
     }
 
