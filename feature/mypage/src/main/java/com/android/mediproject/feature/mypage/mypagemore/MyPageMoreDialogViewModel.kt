@@ -96,7 +96,6 @@ class MyPageMoreDialogViewModel @Inject constructor(
             toast("비밀번호는 영어 + 숫자로 이루어진 4~10자로 설정해주세요.")
             cancelDialog()
         } else {
-
             val password = CharArray(newPassword.length)
             newPassword.trim().forEachIndexed { index, c ->
                 password[index] = c
