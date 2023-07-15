@@ -8,15 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.common.CHANGE_NICKNAME
-import com.android.mediproject.core.common.CHANGE_PASSWORD
-import com.android.mediproject.core.common.LOGOUT
-import com.android.mediproject.core.common.WITHDRAWAL
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,6 +25,13 @@ class MyPageMoreBottomSheetFragment(private val backCallback: () -> Unit) :
 
     companion object {
         const val TAG = "MyPageMoreBottomSheetFragment"
+    }
+
+    enum class BottomSheetFlag(val value : Int) {
+        CHANGE_NICKNAME(301),
+        CHANGE_PASSWORD(302),
+        WITHDRAWAL(303),
+        LOGOUT(304)
     }
 
     private var _binding: FragmentMyPageMoreBottomSheetBinding? = null
@@ -89,21 +91,20 @@ class MyPageMoreBottomSheetFragment(private val backCallback: () -> Unit) :
         when (event) {
             is MyPageMoreBottomSheetViewModel.MyPageMoreBottomSheetEvent.Confirm -> {
                 when (event.flag) {
-                    CHANGE_NICKNAME -> setFragmentResult(TAG, bundleOf(TAG to CHANGE_NICKNAME))
-                    CHANGE_PASSWORD -> setFragmentResult(TAG, bundleOf(TAG to CHANGE_PASSWORD))
-                    WITHDRAWAL -> setFragmentResult(TAG, bundleOf(TAG to WITHDRAWAL))
-                    LOGOUT -> setFragmentResult(TAG, bundleOf(TAG to LOGOUT))
-                    else -> Unit
+                    BottomSheetFlag.CHANGE_NICKNAME -> setFragmentResult(TAG, bundleOf(TAG to BottomSheetFlag.CHANGE_NICKNAME.value))
+                    BottomSheetFlag.CHANGE_PASSWORD -> setFragmentResult(TAG, bundleOf(TAG to BottomSheetFlag.CHANGE_PASSWORD.value))
+                    BottomSheetFlag.WITHDRAWAL -> setFragmentResult(TAG, bundleOf(TAG to BottomSheetFlag.WITHDRAWAL.value))
+                    BottomSheetFlag.LOGOUT -> setFragmentResult(TAG, bundleOf(TAG to BottomSheetFlag.LOGOUT.value))
                 }
             }
         }
 
-    private fun handleFlag(flag: Int) {
+    private fun handleFlag(flag: BottomSheetFlag) {
         when (flag) {
-            CHANGE_NICKNAME -> highlight(binding.changeNickNameTV)
-            CHANGE_PASSWORD -> highlight(binding.changePasswordTV)
-            WITHDRAWAL -> highlight(binding.withdrawalTV)
-            LOGOUT -> highlight(binding.logoutTV)
+            BottomSheetFlag.CHANGE_NICKNAME -> highlight(binding.changeNickNameTV)
+            BottomSheetFlag.CHANGE_PASSWORD -> highlight(binding.changePasswordTV)
+            BottomSheetFlag.WITHDRAWAL -> highlight(binding.withdrawalTV)
+            BottomSheetFlag.LOGOUT -> highlight(binding.logoutTV)
             else -> Unit
         }
     }

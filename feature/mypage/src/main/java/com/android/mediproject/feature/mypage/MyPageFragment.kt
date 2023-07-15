@@ -41,7 +41,7 @@ class MyPageFragment :
         super.onAttach(context)
         systemBarStyler.setStyle(
             SystemBarStyler.StatusBarColor.BLACK,
-            SystemBarStyler.NavigationBarColor.BLACK
+            SystemBarStyler.NavigationBarColor.BLACK,
         )
     }
 
@@ -59,9 +59,9 @@ class MyPageFragment :
             topViews = listOf(
                 SystemBarStyler.ChangeView(
                     mypageBar,
-                    SystemBarStyler.SpacingType.PADDING
-                )
-            )
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
         )
     }
 
@@ -79,7 +79,7 @@ class MyPageFragment :
     private fun setBottomsheetFragmentResultListner() {
         parentFragmentManager.setFragmentResultListener(
             MyPageMoreBottomSheetFragment.TAG,
-            viewLifecycleOwner
+            viewLifecycleOwner,
         ) { _, bundle ->
             val flag = bundle.getInt(MyPageMoreBottomSheetFragment.TAG)
             handleBottomSheetFlag(flag)
@@ -91,7 +91,7 @@ class MyPageFragment :
     private fun setDialogFragmentResultListner() {
         requireActivity().supportFragmentManager.setFragmentResultListener(
             MyPageMoreDialogFragment.TAG,
-            viewLifecycleOwner
+            viewLifecycleOwner,
         ) { _, bundle ->
             val flag = bundle.getInt(MyPageMoreDialogFragment.TAG)
             handleDialogCallback(flag)
@@ -162,7 +162,7 @@ class MyPageFragment :
 
         myPageMoreBottomSheet!!.show(
             parentFragmentManager,
-            MyPageMoreBottomSheetFragment.TAG
+            MyPageMoreBottomSheetFragment.TAG,
         )
     }
 
@@ -185,10 +185,11 @@ class MyPageFragment :
                     ForegroundColorSpan(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.main
-                        )
-                    ), 15, 18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            R.color.main,
+                        ),
+                    ),
+                    15, 18,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
                 setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -207,26 +208,26 @@ class MyPageFragment :
 
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {
         when (bottomSheetFlag) {
-            CHANGE_NICKNAME -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.ChangeNickName)
-            CHANGE_PASSWORD -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.ChangePassword)
-            WITHDRAWAL -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.Withdrawal)
-            LOGOUT -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.Logout)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.ChangeNickName)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.ChangePassword)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.Withdrawal)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.Logout)
         }
     }
 
     private fun showMyPageMoreDialog(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
         MyPageMoreDialogFragment(dialogFlag).show(
             requireActivity().supportFragmentManager,
-            MyPageMoreDialogFragment.TAG
+            MyPageMoreDialogFragment.TAG,
         )
     }
 
     private fun handleDialogCallback(dialogFlag: Int) {
         when (dialogFlag) {
-            CHANGE_NICKNAME -> changeNicknameCallback()
-            CHANGE_PASSWORD -> changePasswordCallback()
-            WITHDRAWAL -> withdrawalCallback()
-            LOGOUT -> logoutCallback()
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME -> changeNicknameCallback()
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD -> changePasswordCallback()
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL -> withdrawalCallback()
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT -> logoutCallback()
         }
     }
 
@@ -267,15 +268,16 @@ class MyPageFragment :
                     ForegroundColorSpan(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.main
-                        )
-                    ), 7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                            R.color.main,
+                        ),
+                    ),
+                    7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
                 )
                 setSpan(
                     UnderlineSpan(),
                     7,
                     9,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE,
                 )
             }
         return span
