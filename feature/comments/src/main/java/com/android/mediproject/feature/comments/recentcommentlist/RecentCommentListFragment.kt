@@ -20,20 +20,6 @@ class RecentCommentListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-
         }
-        initHeader()
-    }
-
-
-    /**
-     * 헤더 초기화
-     *
-     * 확장 버튼 리스너, 더 보기 버튼 리스너
-     */
-    private fun initHeader() {
-        binding.headerView.setOnExpandClickListener {}
-
-        binding.headerView.setOnMoreClickListener {}
     }
 }
