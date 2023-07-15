@@ -30,10 +30,6 @@ class FavoriteMedicineMoreFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(
-            SystemBarStyler.StatusBarColor.BLACK,
-            SystemBarStyler.NavigationBarColor.BLACK,
-        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

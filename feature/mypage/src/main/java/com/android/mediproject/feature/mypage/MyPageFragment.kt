@@ -39,10 +39,6 @@ class MyPageFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(
-            SystemBarStyler.StatusBarColor.BLACK,
-            SystemBarStyler.NavigationBarColor.BLACK
-        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,9 +55,9 @@ class MyPageFragment :
             topViews = listOf(
                 SystemBarStyler.ChangeView(
                     mypageBar,
-                    SystemBarStyler.SpacingType.PADDING
-                )
-            )
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
         )
     }
 
@@ -79,7 +75,7 @@ class MyPageFragment :
     private fun setBottomsheetFragmentResultListner() {
         parentFragmentManager.setFragmentResultListener(
             MyPageMoreBottomSheetFragment.TAG,
-            viewLifecycleOwner
+            viewLifecycleOwner,
         ) { _, bundle ->
             val flag = bundle.getInt(MyPageMoreBottomSheetFragment.TAG)
             handleBottomSheetFlag(flag)
@@ -91,7 +87,7 @@ class MyPageFragment :
     private fun setDialogFragmentResultListner() {
         requireActivity().supportFragmentManager.setFragmentResultListener(
             MyPageMoreDialogFragment.TAG,
-            viewLifecycleOwner
+            viewLifecycleOwner,
         ) { _, bundle ->
             val flag = bundle.getInt(MyPageMoreDialogFragment.TAG)
             handleDialogCallback(flag)
@@ -162,7 +158,7 @@ class MyPageFragment :
 
         myPageMoreBottomSheet!!.show(
             parentFragmentManager,
-            MyPageMoreBottomSheetFragment.TAG
+            MyPageMoreBottomSheetFragment.TAG,
         )
     }
 
@@ -185,10 +181,11 @@ class MyPageFragment :
                     ForegroundColorSpan(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.main
-                        )
-                    ), 15, 18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            R.color.main,
+                        ),
+                    ),
+                    15, 18,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
                 setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -217,7 +214,7 @@ class MyPageFragment :
     private fun showMyPageMoreDialog(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
         MyPageMoreDialogFragment(dialogFlag).show(
             requireActivity().supportFragmentManager,
-            MyPageMoreDialogFragment.TAG
+            MyPageMoreDialogFragment.TAG,
         )
     }
 
@@ -267,15 +264,16 @@ class MyPageFragment :
                     ForegroundColorSpan(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.main
-                        )
-                    ), 7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                            R.color.main,
+                        ),
+                    ),
+                    7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
                 )
                 setSpan(
                     UnderlineSpan(),
                     7,
                     9,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE,
                 )
             }
         return span

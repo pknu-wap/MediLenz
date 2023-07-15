@@ -57,19 +57,19 @@ class MedicinesDetectorFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.WHITE)
     }
 
     override fun onDetach() {
         super.onDetach()
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        systemBarStyler.changeMode(listOf(SystemBarStyler.ChangeView(binding.logo, SystemBarStyler.SpacingType.MARGIN)),
-            listOf(SystemBarStyler.ChangeView(binding.detectionDescription, SystemBarStyler.SpacingType.MARGIN)))
+        systemBarStyler.changeMode(
+            listOf(SystemBarStyler.ChangeView(binding.logo, SystemBarStyler.SpacingType.MARGIN)),
+            listOf(SystemBarStyler.ChangeView(binding.detectionDescription, SystemBarStyler.SpacingType.MARGIN)),
+        )
 
         fragmentViewModel.apply {
             // AI처리 객체를 관리하기 위해 생명주기 리스너를 설정
@@ -122,10 +122,12 @@ class MedicinesDetectorFragment :
                                 overlayView.apply {
                                     if (results.isNotEmpty()) {
                                         fragmentViewModel.cameraController.pause()
-                                        fragmentViewModel.makeDetectionResult(results,
+                                        fragmentViewModel.makeDetectionResult(
+                                            results,
                                             Size(overlayView.width, overlayView.height),
                                             Size(overlayView.resizedWidth, overlayView.resizeHeight),
-                                            previewView.bitmap)
+                                            previewView.bitmap,
+                                        )
                                     } else {
                                         toast(getString(R.string.noMedicinesDetected))
                                     }
@@ -143,9 +145,11 @@ class MedicinesDetectorFragment :
 
                             is InferenceState.Classified -> {
                                 aiSearchResultViewModel.setClassificationResult(state.classificationResult)
-                                findNavController().navigate("medilens://main/search/search_medicines/airesult".toUri(),
+                                findNavController().navigate(
+                                    "medilens://main/search/search_medicines/airesult".toUri(),
                                     NavOptions.Builder()
-                                        .setPopUpTo(com.android.mediproject.feature.search.R.id.aiSearchResultFragment, true).build())
+                                        .setPopUpTo(com.android.mediproject.feature.search.R.id.aiSearchResultFragment, true).build(),
+                                )
                                 LoadingDialog.dismiss()
                             }
                         }

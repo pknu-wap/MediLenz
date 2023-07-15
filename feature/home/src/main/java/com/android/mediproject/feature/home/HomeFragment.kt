@@ -23,21 +23,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
     }
 
     override fun onDetach() {
         super.onDetach()
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        systemBarStyler.changeMode(listOf(
-            SystemBarStyler.ChangeView(binding.homeBar1, SystemBarStyler.SpacingType.PADDING),
-            SystemBarStyler.ChangeView(binding.homeBar2, SystemBarStyler.SpacingType.PADDING),
-            SystemBarStyler.ChangeView(binding.headerLayout, SystemBarStyler.SpacingType.PADDING),
-        ), emptyList())
+        systemBarStyler.changeMode(
+            listOf(
+                SystemBarStyler.ChangeView(binding.homeBar1, SystemBarStyler.SpacingType.PADDING),
+                SystemBarStyler.ChangeView(binding.homeBar2, SystemBarStyler.SpacingType.PADDING),
+                SystemBarStyler.ChangeView(binding.headerLayout, SystemBarStyler.SpacingType.PADDING),
+            ),
+            emptyList(),
+        )
 
         initSearchBar()
         initChildFragments()
@@ -62,8 +63,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
                 log(scrollY.toString())
                 log((scrollY / initialHeight).toString())
                 binding.homeBar2.alpha = (scrollY / initialHeight)
-                if (binding.homeBar2.alpha > 0.7) systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK,
-                    SystemBarStyler.NavigationBarColor.BLACK)
+                if (binding.homeBar2.alpha > 0.7) systemBarStyler.setStyle(
+                    SystemBarStyler.StatusBarColor.BLACK,
+                    SystemBarStyler.NavigationBarColor.BLACK,
+                )
                 else systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.WHITE, SystemBarStyler.NavigationBarColor.BLACK)
             }
 
@@ -96,8 +99,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
                 }
             }
             setFragmentResultListener(RecentSearchListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment(bundle.getString(
-                    RecentSearchListFragment.ResultKey.WORD.name) ?: ""))
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment(
+                        bundle.getString(
+                            RecentSearchListFragment.ResultKey.WORD.name,
+                        ) ?: "",
+                    ),
+                )
             }
         }
     }

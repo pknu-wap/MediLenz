@@ -49,10 +49,6 @@ class SignUpFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(
-            SystemBarStyler.StatusBarColor.BLACK,
-            SystemBarStyler.NavigationBarColor.BLACK
-        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,7 +83,7 @@ class SignUpFragment :
                         is SignUpState.SigningUp -> {
                             LoadingDialog.showLoadingDialog(
                                 requireActivity(),
-                                getString(R.string.signingUp)
+                                getString(R.string.signingUp),
                             )
                         }
 
@@ -98,13 +94,13 @@ class SignUpFragment :
                                 TOHOME -> findNavController().navigate(
                                     "medilens://main/home_nav".toUri(),
                                     NavOptions.Builder().setPopUpTo(R.id.signUpFragment, true)
-                                        .build()
+                                        .build(),
                                 )
 
                                 TOMYPAGE -> findNavController().navigate(
                                     "medilens://main/mypage_nav".toUri(),
                                     NavOptions.Builder().setPopUpTo(R.id.signUpFragment, true)
-                                        .build()
+                                        .build(),
                                 )
                             }
                         }
@@ -137,9 +133,9 @@ class SignUpFragment :
             topViews = listOf(
                 SystemBarStyler.ChangeView(
                     signUpBar,
-                    SystemBarStyler.SpacingType.PADDING
-                )
-            )
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
         )
     }
 
@@ -155,7 +151,7 @@ class SignUpFragment :
                 binding.signUpEmail.getEditable(),
                 binding.signUpPassword.getEditable(),
                 binding.signUpPasswordCheck.getEditable(),
-                binding.signUpNickName.getEditable()
+                binding.signUpNickName.getEditable(),
             )
         }
 
@@ -163,9 +159,11 @@ class SignUpFragment :
     }
 
     private fun addDelayTextWatcher(editText: EditText) {
-        mainScope.launch(context = defaultDispatcher + Job().apply {
-            jobs.add(this)
-        }) {
+        mainScope.launch(
+            context = defaultDispatcher + Job().apply {
+                jobs.add(this)
+            },
+        ) {
             editText.delayTextChangedCallback().debounce(500L).onEach { seq ->
                 mainScope.launch {
                     binding.signUpComplete.isEnabled = !seq.isNullOrEmpty()

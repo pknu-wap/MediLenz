@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCommentsListViewModel>(
-    FragmentMyCommnetsListBinding::inflate
+    FragmentMyCommnetsListBinding::inflate,
 ) {
     override val fragmentViewModel: MyCommentsListViewModel by viewModels()
     private val myCommentsListAdapter: MyCommentsListAdapter by lazy { MyCommentsListAdapter() }
@@ -26,10 +26,6 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        systemBarStyler.setStyle(
-            SystemBarStyler.StatusBarColor.BLACK,
-            SystemBarStyler.NavigationBarColor.BLACK
-        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,7 +56,8 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
                     2,
                     { comment ->
                         log(comment.medicineName + "을 누르셨습니다.")
-                    }),
+                    },
+                ),
                 MyCommentDto(
                     12346,
                     "코메키나",
@@ -69,8 +66,9 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
                     3,
                     { comment ->
                         log(comment.medicineName + "을 누르셨습니다.")
-                    })
-            )
+                    },
+                ),
+            ),
         )
     }
 
@@ -79,9 +77,9 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
             topViews = listOf(
                 SystemBarStyler.ChangeView(
                     myCommentsListBar,
-                    SystemBarStyler.SpacingType.PADDING
-                )
-            )
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
         )
     }
 
