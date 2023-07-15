@@ -22,6 +22,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            onMoreClick=""
             app:more_title="@string/read_more"
             app:visibility_target_view="@id/favoriteMedicineList" />
 

@@ -39,38 +39,8 @@ class FavoriteMedicineMoreFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBarStyle()
-        binding.apply {
-            viewModel = fragmentViewModel.apply {
-                viewLifecycleOwner.apply {
-                    repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineMoreList(it) } }
-                    repeatOnStarted { token.collect { handleToken(it) } }
-                    loadTokens()
-                }
-            }
-
-            favoriteMedicineListRV.apply {
-                adapter = favoriteMedicineMoreAdapter
-                layoutManager = LinearLayoutManager(requireContext())
-                addItemDecoration(FavoriteMedcineMoreDecoration(requireContext()))
-                addItemDecoration(DividerItemDecoration(requireContext(), 1))
-            }
-        }
-    }
-
-    private fun handleToken(token: TokenState<CurrentTokenDto>) {
-        when (token) {
-            is TokenState.Empty -> {}
-            is TokenState.Error -> {}
-            is TokenState.RefreshExpiration -> {}
-            is TokenState.AccessExpiration -> {}
-            is TokenState.Valid -> {
-                fragmentViewModel.loadFavoriteMedicines()
-            }
-        }
-    }
-
-    private fun setFavoriteMedicineMoreList(medicineList: List<FavoriteMedicineMoreDto>) {
-        favoriteMedicineMoreAdapter.submitList(medicineList)
+        setRecyclerView()
+        setBinding()
     }
 
     private fun setBarStyle() = binding.apply {
@@ -84,4 +54,38 @@ class FavoriteMedicineMoreFragment :
         )
     }
 
+    private fun setRecyclerView() = binding.favoriteMedicineListRV.apply {
+        adapter = favoriteMedicineMoreAdapter
+        layoutManager = LinearLayoutManager(requireContext())
+        addItemDecoration(FavoriteMedcineMoreDecoration(requireContext()))
+        addItemDecoration(DividerItemDecoration(requireContext(), 1))
+    }
+
+    private fun setBinding() = binding.apply {
+        viewModel = fragmentViewModel.apply {
+            viewLifecycleOwner.apply {
+                repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineMoreList(it) } }
+                repeatOnStarted { token.collect { handleToken(it) } }
+                loadTokens()
+            }
+        }
+    }
+
+    private fun setFavoriteMedicineMoreList(medicineList: List<FavoriteMedicineMoreDto>) {
+        favoriteMedicineMoreAdapter.submitList(medicineList)
+    }
+
+    private fun handleToken(token: TokenState<CurrentTokenDto>) {
+        when (token) {
+            is TokenState.Empty -> {}
+            is TokenState.Error -> {}
+            is TokenState.RefreshExpiration -> {}
+            is TokenState.AccessExpiration -> {}
+            is TokenState.Valid -> loadFavoriteMedicines()
+        }
+    }
+
+    private fun loadFavoriteMedicines() {
+        fragmentViewModel.loadFavoriteMedicines()
+    }
 }
