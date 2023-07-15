@@ -39,11 +39,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
 
     private val systemBarColorAnalyzer = SystemBarColorAnalyzer
 
-    companion object {
-        const val VISIBLE = 0
-        const val INVISIBLE = 1
-    }
-
     override val activityViewModel: MainViewModel by viewModels()
     private lateinit var navController: NavController
 
@@ -55,18 +50,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         internetNetworkListener.networkStateCallback = InternetNetworkListener.NetworkStateCallback { isConnected ->
             if (!isConnected) {
                 NetworkStateDialogFragment().show(supportFragmentManager, NetworkStateDialogFragment::class.java.name)
-            }
-        }
-
-        //SDK 31이상일 때 Splash가 소소하게 사라지는 이펙트 입니다. 추후 걸리적거리면 삭제해도 됌
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            splashScreen.setOnExitAnimationListener { splashScreenView ->
-                ObjectAnimator.ofFloat(splashScreenView, View.ALPHA, 1f, 0f).run {
-                    interpolator = AnticipateInterpolator()
-                    duration = 1000L
-                    doOnEnd { splashScreenView.remove() }
-                    start()
-                }
             }
         }
 
@@ -110,24 +93,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
             //DevDialogFragment().show(supportFragmentManager, DevDialogFragment::class.java.name)
         }
     }
-
-
+    
     override fun setSplash() {
         installSplashScreen()
     }
 
-
-    /**
-     * <2번째 방법>
-     *
-     * 1번째 방법은 nav_graph.xml 에서 destination 에서 argument 를 추가해주고
-     *
-     * 2번째 방법은 navController.addOnDestinationChangedListener 에서
-     *
-     * destination.id 를 통해 destination 을 구분하고
-     *
-     * argument 를 통해 bottomNav 를 숨길지 말지 결정한다.
-     */
     private fun setDestinationListener() {
         val hideBottomNavDestinationIds = activityViewModel.getHideBottomNavDestinationIds(resources)
 
