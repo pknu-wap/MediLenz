@@ -24,27 +24,29 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
     @Inject
     lateinit var systemBarStyler: SystemBarStyler
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBarStyle()
-
-        binding.apply {
-            viewModel = fragmentViewModel.apply {
-                repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-            }
-
-            myCommentsListRV.apply {
-                adapter = myCommentsListAdapter
-                layoutManager = LinearLayoutManager(requireActivity())
-                addItemDecoration(MyCommentsListDecoration(requireContext()))
-                addItemDecoration(DividerItemDecoration(requireContext(), 1))
-            }
-        }
+        setBinding()
         testDummyData()
+    }
+
+    private fun setBinding() = binding.apply {
+        viewModel = fragmentViewModel.apply {
+            repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+        }
+        setBarStyle()
+        setRecyclerView()
+    }
+
+    private fun handleEvent(event: MyCommentsListViewModel.MyCommentsListEvent) = when (event) {
+        else -> {}
+    }
+
+    private fun setRecyclerView() = binding.myCommentsListRV.apply {
+        adapter = myCommentsListAdapter
+        layoutManager = LinearLayoutManager(requireActivity())
+        addItemDecoration(MyCommentsListDecoration(requireContext()))
+        addItemDecoration(DividerItemDecoration(requireContext(), 1))
     }
 
     private fun setBarStyle() = binding.apply {
@@ -81,10 +83,5 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
                 },
             ),
         )
-    }
-
-
-    private fun handleEvent(event: MyCommentsListViewModel.MyCommentsListEvent) = when (event) {
-        else -> {}
     }
 }

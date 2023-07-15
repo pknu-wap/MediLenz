@@ -50,6 +50,7 @@ class MedicineCommentsViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel(), ISendText {
+
     private val _action =
         MutableSharedFlow<CommentActionState>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 3)
     val action get() = _action.asSharedFlow()
@@ -68,7 +69,7 @@ class MedicineCommentsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getAccountStateUseCase.invoke().collectLatest {
+            getAccountStateUseCase().collectLatest {
                 _accountState.value = it
                 if (it is AccountState.SignedIn) {
                     _myUserId.value = it.myId
