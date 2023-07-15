@@ -111,9 +111,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 
     override fun setSplash() {
         installSplashScreen()

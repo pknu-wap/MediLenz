@@ -74,7 +74,7 @@
             android:layout_marginBottom="30dp"
             android:background="@drawable/rectangle_20_main"
             android:gravity="center"
-            android:onClick="@{()->viewModel.confirm()}"
+            android:onClick="@{()->viewModel.completeBottomSheet()}"
             android:paddingVertical="10dp"
             android:text="@string/confirm"
             android:textColor="@color/white"

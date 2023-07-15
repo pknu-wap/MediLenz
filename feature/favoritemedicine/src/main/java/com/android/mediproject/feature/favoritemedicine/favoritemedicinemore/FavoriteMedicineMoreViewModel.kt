@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteMedicineMoreViewModel @Inject constructor(
     private val getTokenUseCase: GetTokenUseCase,
-    private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase
+    private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase,
 ) : BaseViewModel() {
 
     private val _favoriteMedicineList = MutableStateFlow<List<FavoriteMedicineMoreDto>>(listOf())
@@ -32,7 +32,8 @@ class FavoriteMedicineMoreViewModel @Inject constructor(
                 .collect {
                     it.fold(
                         onSuccess = { _favoriteMedicineList.value = it },
-                        onFailure = { })
+                        onFailure = { },
+                    )
                 }
         }
 }
