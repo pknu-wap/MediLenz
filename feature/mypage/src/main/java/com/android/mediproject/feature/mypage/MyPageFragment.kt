@@ -41,34 +41,15 @@ class MyPageFragment :
         super.onAttach(context)
         systemBarStyler.setStyle(
             SystemBarStyler.StatusBarColor.BLACK,
-            SystemBarStyler.NavigationBarColor.BLACK
+            SystemBarStyler.NavigationBarColor.BLACK,
         )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setBarStyle()
-        setRecyclerView()
         setFragmentResultListner()
         setBinding()
-    }
-
-    private fun setBarStyle() = binding.apply {
-        systemBarStyler.changeMode(
-            topViews = listOf(
-                SystemBarStyler.ChangeView(
-                    mypageBar,
-                    SystemBarStyler.SpacingType.PADDING
-                )
-            )
-        )
-    }
-
-    private fun setRecyclerView() = binding.myCommentsListRV.apply {
-        adapter = myCommentListAdapter
-        layoutManager = LinearLayoutManager(requireActivity())
-        addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
     }
 
     private fun setFragmentResultListner() {
@@ -79,7 +60,7 @@ class MyPageFragment :
     private fun setBottomsheetFragmentResultListner() {
         parentFragmentManager.setFragmentResultListener(
             MyPageMoreBottomSheetFragment.TAG,
-            viewLifecycleOwner
+            viewLifecycleOwner,
         ) { _, bundle ->
             val flag = bundle.getInt(MyPageMoreBottomSheetFragment.TAG)
             handleBottomSheetFlag(flag)
@@ -91,7 +72,7 @@ class MyPageFragment :
     private fun setDialogFragmentResultListner() {
         requireActivity().supportFragmentManager.setFragmentResultListener(
             MyPageMoreDialogFragment.TAG,
-            viewLifecycleOwner
+            viewLifecycleOwner,
         ) { _, bundle ->
             val flag = bundle.getInt(MyPageMoreDialogFragment.TAG)
             handleDialogCallback(flag)
@@ -100,6 +81,9 @@ class MyPageFragment :
 
     private fun setBinding() =
         binding.apply {
+            setBarStyle()
+            setRecyclerView()
+
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
                     repeatOnStarted { token.collect { handleToken(it) } }
@@ -113,13 +97,26 @@ class MyPageFragment :
                         }
                     }
                 }
-                loadTokens()
-            }
-
-            myCommentsListHeaderView.setOnMoreClickListener {
-                navigateWithUri("medilens://main/comments_nav/myCommentsListFragment")
             }
         }
+
+
+    private fun setBarStyle() = binding.apply {
+        systemBarStyler.changeMode(
+            topViews = listOf(
+                SystemBarStyler.ChangeView(
+                    mypageBar,
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
+        )
+    }
+
+    private fun setRecyclerView() = binding.myCommentsListRV.apply {
+        adapter = myCommentListAdapter
+        layoutManager = LinearLayoutManager(requireActivity())
+        addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
+    }
 
     private fun checkCommentListSize(commentList: List<MyCommentDto>): Boolean {
         return (commentList.size != 0)
@@ -142,7 +139,8 @@ class MyPageFragment :
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
         is MyPageViewModel.MyPageEvent.Login -> navigateWithUri("medilens://main/intro_nav/login")
         is MyPageViewModel.MyPageEvent.SignUp -> navigateWithUri("medilens://main/intro_nav/signUp")
-        is MyPageViewModel.MyPageEvent.MyPageMore -> showMyPageBottomSheet()
+        is MyPageViewModel.MyPageEvent.NavigateToMyCommentList -> navigateWithUri("medilens://main/comments_nav/myCommentsListFragment")
+        is MyPageViewModel.MyPageEvent.NavigateToMyPageMore -> showMyPageBottomSheet()
     }
 
     private fun showMyPageBottomSheet() {
@@ -162,7 +160,7 @@ class MyPageFragment :
 
         myPageMoreBottomSheet!!.show(
             parentFragmentManager,
-            MyPageMoreBottomSheetFragment.TAG
+            MyPageMoreBottomSheetFragment.TAG,
         )
     }
 
@@ -185,10 +183,11 @@ class MyPageFragment :
                     ForegroundColorSpan(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.main
-                        )
-                    ), 15, 18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            R.color.main,
+                        ),
+                    ),
+                    15, 18,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
                 setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -217,7 +216,7 @@ class MyPageFragment :
     private fun showMyPageMoreDialog(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
         MyPageMoreDialogFragment(dialogFlag).show(
             requireActivity().supportFragmentManager,
-            MyPageMoreDialogFragment.TAG
+            MyPageMoreDialogFragment.TAG,
         )
     }
 
@@ -267,15 +266,16 @@ class MyPageFragment :
                     ForegroundColorSpan(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.main
-                        )
-                    ), 7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                            R.color.main,
+                        ),
+                    ),
+                    7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
                 )
                 setSpan(
                     UnderlineSpan(),
                     7,
                     9,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE,
                 )
             }
         return span

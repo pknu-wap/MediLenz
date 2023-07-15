@@ -30,24 +30,16 @@ class FavoriteMedicineFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initHeader()
         setBinding()
     }
-
-    private fun initHeader() = binding.favoriteMedicineHeaderView.apply {
-        setOnMoreClickListener {
-            navigateWithUri("medilens://main/favoriteMedicineMore_nav")
-        }
-    }
-
 
     private fun setBinding() = binding.apply {
         fragmentViewModel.apply {
             viewLifecycleOwner.apply {
                 repeatOnStarted { token.collect { handleToken(it) } }
+                repeatOnStarted { eventFlow.collect { handleEvent(it) } }
                 repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineList(it) } }
             }
-            loadTokens()
         }
     }
 
@@ -63,6 +55,12 @@ class FavoriteMedicineFragment :
 
     private fun loadFavoriteMedicines() {
         fragmentViewModel.loadFavoriteMedicines()
+    }
+
+    private fun handleEvent(event: FavoriteMedicineViewModel.FavoriteMedicineEvent) {
+        when (event) {
+            is FavoriteMedicineViewModel.FavoriteMedicineEvent.NavigateToFavoriteMedicineMore -> navigateWithUri("medilens://main/favoriteMedicineMore_nav")
+        }
     }
 
     private fun setFavoriteMedicineList(medicineList: List<FavoriteMedicineDto>) {
@@ -109,40 +107,38 @@ class FavoriteMedicineFragment :
     }
 
     private fun showNoFavoriteMedicineSpan(): SpannableStringBuilder {
-        val span =
-            SpannableStringBuilder(getString(com.android.mediproject.feature.favoritemedicine.R.string.noFavoriteMedicine)).apply {
-                setSpan(
-                    ForegroundColorSpan(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.main,
-                        ),
+        return SpannableStringBuilder(getString(com.android.mediproject.feature.favoritemedicine.R.string.noFavoriteMedicine)).apply {
+            setSpan(
+                ForegroundColorSpan(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.main,
                     ),
-                    0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                )
-                setSpan(
-                    UnderlineSpan(),
-                    0,
-                    4,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                )
-                setSpan(
-                    ForegroundColorSpan(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.main,
-                        ),
+                ),
+                0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+            setSpan(
+                UnderlineSpan(),
+                0,
+                4,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+            setSpan(
+                ForegroundColorSpan(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.main,
                     ),
-                    6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                )
-                setSpan(
-                    UnderlineSpan(),
-                    6,
-                    8,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                )
-            }
-        return span
+                ),
+                6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+            setSpan(
+                UnderlineSpan(),
+                6,
+                8,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+        }
     }
 
     private fun showNoFavoriteMedicineVisibie() = binding.apply {

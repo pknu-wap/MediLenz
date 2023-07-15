@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.comments.databinding.FragmentMyCommnetsListBinding
+import com.android.mediproject.feature.comments.databinding.FragmentMyCommentsListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCommentsListViewModel>(
-    FragmentMyCommnetsListBinding::inflate
+class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCommentsListViewModel>(
+    FragmentMyCommentsListBinding::inflate,
 ) {
     override val fragmentViewModel: MyCommentsListViewModel by viewModels()
     private val myCommentsListAdapter: MyCommentsListAdapter by lazy { MyCommentsListAdapter() }
@@ -28,7 +28,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
         super.onAttach(context)
         systemBarStyler.setStyle(
             SystemBarStyler.StatusBarColor.BLACK,
-            SystemBarStyler.NavigationBarColor.BLACK
+            SystemBarStyler.NavigationBarColor.BLACK,
         )
     }
 
@@ -48,8 +48,21 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
                 addItemDecoration(DividerItemDecoration(requireContext(), 1))
             }
         }
+        testDummyData()
+    }
 
-        //for Test
+    private fun setBarStyle() = binding.apply {
+        systemBarStyler.changeMode(
+            topViews = listOf(
+                SystemBarStyler.ChangeView(
+                    myCommentsListBar,
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
+        )
+    }
+
+    private fun testDummyData() = binding.apply {
         myCommentsListAdapter.submitList(
             mutableListOf(
                 MyCommentDto(
@@ -60,7 +73,8 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
                     2,
                     { comment ->
                         log(comment.medicineName + "을 누르셨습니다.")
-                    }),
+                    },
+                ),
                 MyCommentDto(
                     12346,
                     "코메키나",
@@ -69,21 +83,12 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommnetsListBinding, MyCom
                     3,
                     { comment ->
                         log(comment.medicineName + "을 누르셨습니다.")
-                    })
-            )
+                    },
+                ),
+            ),
         )
     }
 
-    private fun setBarStyle() = binding.apply {
-        systemBarStyler.changeMode(
-            topViews = listOf(
-                SystemBarStyler.ChangeView(
-                    myCommentsListBar,
-                    SystemBarStyler.SpacingType.PADDING
-                )
-            )
-        )
-    }
 
     private fun handleEvent(event: MyCommentsListViewModel.MyCommentsListEvent) = when (event) {
         else -> {}

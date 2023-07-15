@@ -15,7 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -28,20 +27,28 @@ class MyPageViewModel @Inject constructor(
     private val signUseCase: SignUseCase,
 ) : BaseViewModel() {
 
+    init{
+        loadTokens()
+    }
+
     private val _eventFlow = MutableEventFlow<MyPageEvent>()
     val eventFlow get() = _eventFlow.asEventFlow()
 
     fun event(event: MyPageEvent) = viewModelScope.launch { _eventFlow.emit(event) }
+
     fun login() = event(MyPageEvent.Login)
+
     fun signUp() = event(MyPageEvent.SignUp)
-    fun myPageMore() = event(MyPageEvent.MyPageMore)
-    fun myCommnetList() = event(MyPageEvent.MyCommentList)
+
+    fun navigateToMyPageMore() = event(MyPageEvent.NavigateToMyPageMore)
+
+    fun navigateToMyCommnetList() = event(MyPageEvent.NavigateToMyCommentList)
 
     sealed class MyPageEvent {
         object Login : MyPageEvent()
         object SignUp : MyPageEvent()
-        object MyPageMore : MyPageEvent()
-        object MyCommentList : MyPageEvent()
+        object NavigateToMyPageMore : MyPageEvent()
+        object NavigateToMyCommentList : MyPageEvent()
     }
 
     private val _token = MutableStateFlow<TokenState<CurrentTokenDto>>(TokenState.Empty)
@@ -67,11 +74,12 @@ class MyPageViewModel @Inject constructor(
     val loginMode get() = _loginMode.asStateFlow()
 
     fun setLoginMode(loginMode: LoginMode) { _loginMode.value = loginMode }
-    fun signOut() = viewModelScope.launch { signUseCase.signOut() }
 
     enum class LoginMode {
         LOGIN_MODE, GUEST_MODE
     }
+
+    fun signOut() = viewModelScope.launch { signUseCase.signOut() }
 
     val dummy = listOf(
         MyCommentDto(20230528, "타이레놀", "아따 좋습니다 좋아요", System.currentTimeMillis().toString(), 3),

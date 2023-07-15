@@ -38,10 +38,21 @@ class FavoriteMedicineMoreFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBarStyle()
-        setRecyclerView()
         setBinding()
     }
+
+    private fun setBinding() = binding.apply {
+        viewModel = fragmentViewModel.apply {
+            viewLifecycleOwner.apply {
+                repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineMoreList(it) } }
+                repeatOnStarted { token.collect { handleToken(it) } }
+                loadTokens()
+            }
+        }
+        setBarStyle()
+        setRecyclerView()
+    }
+
 
     private fun setBarStyle() = binding.apply {
         systemBarStyler.changeMode(
@@ -59,16 +70,6 @@ class FavoriteMedicineMoreFragment :
         layoutManager = LinearLayoutManager(requireContext())
         addItemDecoration(FavoriteMedcineMoreDecoration(requireContext()))
         addItemDecoration(DividerItemDecoration(requireContext(), 1))
-    }
-
-    private fun setBinding() = binding.apply {
-        viewModel = fragmentViewModel.apply {
-            viewLifecycleOwner.apply {
-                repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineMoreList(it) } }
-                repeatOnStarted { token.collect { handleToken(it) } }
-                loadTokens()
-            }
-        }
     }
 
     private fun setFavoriteMedicineMoreList(medicineList: List<FavoriteMedicineMoreDto>) {
