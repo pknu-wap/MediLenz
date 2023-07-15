@@ -8,9 +8,7 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineDto
 import com.android.mediproject.core.model.remote.token.CurrentTokenDto
 import com.android.mediproject.core.model.remote.token.TokenState
@@ -32,23 +30,22 @@ class FavoriteMedicineFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBinding()
         initHeader()
+        setBinding()
     }
+
+    private fun initHeader() = binding.favoriteMedicineHeaderView.apply {
+        setOnMoreClickListener {
+            navigateWithUri("medilens://main/favoriteMedicineMore_nav")
+        }
+    }
+
 
     private fun setBinding() = binding.apply {
         fragmentViewModel.apply {
             viewLifecycleOwner.apply {
-                repeatOnStarted {
-                    favoriteMedicineList.collect {
-                        setFavoriteMedicineList(it)
-                    }
-                }
-                repeatOnStarted {
-                    token.collect {
-                        handleToken(it)
-                    }
-                }
+                repeatOnStarted { token.collect { handleToken(it) } }
+                repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineList(it) } }
             }
             loadTokens()
         }
@@ -60,102 +57,98 @@ class FavoriteMedicineFragment :
             is TokenState.Error -> {}
             is TokenState.RefreshExpiration -> {}
             is TokenState.AccessExpiration -> {}
-            is TokenState.Valid -> {
-                fragmentViewModel.loadFavoriteMedicines()
-            }
+            is TokenState.Valid -> loadFavoriteMedicines()
         }
     }
 
-    private fun initHeader() {
-        binding.favoriteMedicineHeaderView.apply {
-            setOnMoreClickListener {
-                navigateWithUri("medilens://main/favoriteMedicineMore_nav")
-            }
-        }
-
+    private fun loadFavoriteMedicines() {
+        fragmentViewModel.loadFavoriteMedicines()
     }
 
     private fun setFavoriteMedicineList(medicineList: List<FavoriteMedicineDto>) {
-
         clearFavoriteMedicineListView()
         if (checkMedicineListSize(medicineList)) {
-
-            val horizontalSpace = resources.getDimension(R.dimen.dp_4).toInt()
-
-            medicineList.forEach { medicine ->
-                log(medicine.toString())
-                binding.favoriteMedicineList.addView(
-                    ButtonChip<String>(
-                        requireContext(),
-                    ).apply {
-                        layoutParams = FlexboxLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ).apply {
-                            setMargins(horizontalSpace, 0, horizontalSpace, 0)
-                        }
-                        setChipText(medicine.medicineName)
-                        data = medicine.itemSeq
-                        setOnChipClickListener {
-                            toast(it.toString())
-                        }
-                    },
-                )
-            }
+            showFavorteMedicine(medicineList)
         } else {
-            //0개 일 경우
             showNoFavoriteMedicine()
         }
     }
 
     private fun clearFavoriteMedicineListView() = binding.favoriteMedicineList.removeAllViews()
 
-    private fun checkMedicineListSize(medicineList : List<FavoriteMedicineDto>) : Boolean {
+    private fun checkMedicineListSize(medicineList: List<FavoriteMedicineDto>): Boolean {
         return (medicineList.size != 0)
     }
 
-    private fun showNoFavoriteMedicine() {
-        log("즐겨찾기 없음")
-        binding.apply {
-            favoriteMedicineList.visibility = View.GONE
-            noFavoriteMedicineTV.visibility = View.VISIBLE
-
-            val span =
-                SpannableStringBuilder(getString(com.android.mediproject.feature.favoritemedicine.R.string.noFavoriteMedicine)).apply {
-                    setSpan(
-                        ForegroundColorSpan(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.main,
-                            ),
-                        ),
-                        0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                    )
-                    setSpan(
-                        UnderlineSpan(),
-                        0,
-                        4,
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                    )
-                    setSpan(
-                        ForegroundColorSpan(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.main,
-                            ),
-                        ),
-                        6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                    )
-                    setSpan(
-                        UnderlineSpan(),
-                        6,
-                        8,
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                    )
-                }
-            noFavoriteMedicineTV.text = span
-            favoriteMedicineHeaderView.setMoreVisiblity(false)
-            favoriteMedicineHeaderView.setExpandVisiblity(false)
+    private fun showFavorteMedicine(medicineList: List<FavoriteMedicineDto>) {
+        val horizontalSpace = resources.getDimension(R.dimen.dp_4).toInt()
+        medicineList.forEach { medicine ->
+            binding.favoriteMedicineList.addView(
+                ButtonChip<String>(
+                    requireContext(),
+                ).apply {
+                    layoutParams = FlexboxLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ).apply {
+                        setMargins(horizontalSpace, 0, horizontalSpace, 0)
+                    }
+                    setChipText(medicine.medicineName)
+                    data = medicine.itemSeq
+                    setOnChipClickListener {
+                        toast(it.toString())
+                    }
+                },
+            )
         }
+    }
+
+    private fun showNoFavoriteMedicine() {
+        binding.noFavoriteMedicineTV.text = showNoFavoriteMedicineSpan()
+        showNoFavoriteMedicineVisibie()
+    }
+
+    private fun showNoFavoriteMedicineSpan(): SpannableStringBuilder {
+        val span =
+            SpannableStringBuilder(getString(com.android.mediproject.feature.favoritemedicine.R.string.noFavoriteMedicine)).apply {
+                setSpan(
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.main,
+                        ),
+                    ),
+                    0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+                )
+                setSpan(
+                    UnderlineSpan(),
+                    0,
+                    4,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+                )
+                setSpan(
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.main,
+                        ),
+                    ),
+                    6, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+                )
+                setSpan(
+                    UnderlineSpan(),
+                    6,
+                    8,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+                )
+            }
+        return span
+    }
+
+    private fun showNoFavoriteMedicineVisibie() = binding.apply {
+        favoriteMedicineHeaderView.setMoreVisiblity(false)
+        favoriteMedicineHeaderView.setExpandVisiblity(false)
+        favoriteMedicineList.visibility = View.GONE
+        noFavoriteMedicineTV.visibility = View.VISIBLE
     }
 }
