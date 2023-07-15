@@ -15,7 +15,6 @@ class FavoriteMedcineMoreDecoration(private val context : Context) : RecyclerVie
     ) {
         super.getItemOffsets(outRect, view, parent, state)
 
-        //좌,상,우,하
         outRect.set(0, dpToPx(context,10),0, dpToPx(context,10))
 
     }
