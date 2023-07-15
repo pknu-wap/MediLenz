@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.android.mediproject.feature.etc`"
+    namespace = "com.android.mediproject.feature.etc"
 
     buildFeatures {
         buildConfig = true
