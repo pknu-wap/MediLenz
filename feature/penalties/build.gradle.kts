@@ -6,9 +6,6 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.penalties"
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 hilt {

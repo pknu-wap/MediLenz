@@ -1,33 +1,56 @@
-plugins {
+import org.jetbrains.kotlin.konan.properties.Properties
 
+plugins {
     id("mediproject.android.application")
     id("mediproject.android.hilt")
     id("androidx.navigation.safeargs.kotlin")
+    alias(libs.plugins.gms)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
+    signingConfigs {
+        val properties = Properties()
+        properties.load(project.rootProject.file("/apikey.properties").bufferedReader())
+        create("release") {
+            storeFile = project.rootProject.file(properties["SIGNED_STORE_FILE"] as String)
+            storePassword = properties["SIGNED_STORE_PASSWORD"] as String
+            keyAlias = properties["SIGNED_KEY_ALIAS"] as String
+            keyPassword = properties["SIGNED_KEY_PASSWORD"] as String
+        }
+    }
+
     defaultConfig {
         applicationId = "com.android.mediproject"
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "1.0.0-alpha01"
 
         vectorDrawables {
             useSupportLibrary = true
         }
 
-        //  testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildTypes {
+            debug {
+
+            }
+            release {
+                isMinifyEnabled = true
+                proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro",
+                    "proguard-glide.pro",
+                    "proguard-okhttp3.pro",
+                    "proguard-room.pro",
+                    "proguard-retrofit2.pro")
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
     }
     namespace = "com.android.mediproject"
-
-    buildFeatures {
-        buildConfig = true
-    }
 
     lint {
         checkDependencies = true
         ignoreTestSources = true
     }
-
 
 }
 
@@ -68,6 +91,9 @@ dependencies {
     implementation(libs.bundles.glides)
     implementation(libs.androidx.splash)
     kapt(libs.bundles.glides.kapt)
+
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 
     /*
     androidTestImplementation(libs.bundles.testUIs)

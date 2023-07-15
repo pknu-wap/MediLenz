@@ -6,10 +6,6 @@ plugins {
 android {
     namespace = "com.android.mediproject.core.data"
 
-    @Suppress("UnstableApiUsage") buildFeatures {
-        buildConfig = true
-    }
-
 }
 hilt {
     enableAggregatingTask = true

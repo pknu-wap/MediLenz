@@ -4,10 +4,6 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.comments"
-
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 hilt {

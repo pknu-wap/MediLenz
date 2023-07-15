@@ -49,13 +49,13 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             // 이메일 또는 비밀번호 형식 오류 검사
             if (!isEmailValid(emailEditable)) {
-                _signUpEvent.value = SignUpState.RegexError
+                _signUpEvent.value = RegexError
                 return@launch
             } else if (isPasswordValid(passwordEditable)) {
-                _signUpEvent.value = SignUpState.RegexError
+                _signUpEvent.value = RegexError
                 return@launch
             } else if (passwordEditable.contentEquals(checkPasswordEditable).not()) {
-                _signUpEvent.value = SignUpState.PasswordError
+                _signUpEvent.value = PasswordError
                 return@launch
             }
 

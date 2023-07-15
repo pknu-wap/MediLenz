@@ -37,7 +37,7 @@ class MyPageMoreBottomSheetFragment(private val backCallback: () -> Unit) :
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMyPageMoreBottomSheetBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this.viewLifecycleOwner
         return binding.root

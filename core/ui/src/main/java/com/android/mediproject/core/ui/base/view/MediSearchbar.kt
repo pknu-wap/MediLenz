@@ -67,7 +67,7 @@ class MediSearchbar constructor(
 
                     layoutParams =
                         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 28f, resources.displayMetrics).toInt().let { size ->
-                            ConstraintLayout.LayoutParams(size, size).apply {
+                            LayoutParams(size, size).apply {
                                 topToTop = LayoutParams.PARENT_ID
                                 bottomToBottom = LayoutParams.PARENT_ID
                                 rightToRight = LayoutParams.PARENT_ID
@@ -81,7 +81,7 @@ class MediSearchbar constructor(
                 searchAiBtnView = TextView(context).apply {
                     layoutParams =
                         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 28f, resources.displayMetrics).toInt().let { height ->
-                            ConstraintLayout.LayoutParams(LayoutParams.WRAP_CONTENT, height).apply {
+                            LayoutParams(LayoutParams.WRAP_CONTENT, height).apply {
                                 topToTop = LayoutParams.PARENT_ID
                                 bottomToBottom = LayoutParams.PARENT_ID
                                 rightToLeft = searchManualBtnView.id
@@ -124,7 +124,7 @@ class MediSearchbar constructor(
 
                 // edittext
                 searchEditView = EditText(context).apply {
-                    layoutParams = ConstraintLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = LayoutParams(0, LayoutParams.WRAP_CONTENT).apply {
                         topToTop = LayoutParams.PARENT_ID
                         bottomToBottom = LayoutParams.PARENT_ID
                         rightToLeft = searchAiBtnView.id

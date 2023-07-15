@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-open class BaseAwsQueryResponse() {
+open class BaseAwsQueryResponse {
     @SerialName("message") val message: String = ""
 }

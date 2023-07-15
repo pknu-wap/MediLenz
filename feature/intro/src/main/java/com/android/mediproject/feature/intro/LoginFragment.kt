@@ -17,7 +17,6 @@ import com.android.mediproject.core.common.util.delayTextChangedCallback
 import com.android.mediproject.core.model.local.navargs.TOHOME
 import com.android.mediproject.core.model.local.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.core.ui.base.view.Bar
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
@@ -46,7 +45,6 @@ class LoginFragment :
 
     private val mainScope = MainScope()
     private val jobs = mutableListOf<Job>()
-
 
 
     override fun onAttach(context: Context) {

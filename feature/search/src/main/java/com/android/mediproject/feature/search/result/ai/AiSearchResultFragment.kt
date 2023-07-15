@@ -1,6 +1,7 @@
 package com.android.mediproject.feature.search.result.ai
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.text.Html
 import android.view.View
@@ -29,6 +30,11 @@ class AiSearchResultFragment :
     override val fragmentViewModel: AiSearchResultViewModel by activityViewModels()
 
     @Inject lateinit var systemBarStyler: SystemBarStyler
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
+    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,11 +90,6 @@ class AiSearchResultFragment :
                 }
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        systemBarStyler.setStyle(SystemBarStyler.StatusBarColor.BLACK, SystemBarStyler.NavigationBarColor.BLACK)
     }
 
     private fun onChangedResult(isEmpty: Boolean, isLoading: Boolean) {
