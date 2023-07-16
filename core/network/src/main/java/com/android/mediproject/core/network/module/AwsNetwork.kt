@@ -2,12 +2,11 @@ package com.android.mediproject.core.network.module
 
 import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.util.AesCoder
-import com.android.mediproject.core.datastore.TokenDataSourceImpl
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
-import com.android.mediproject.core.model.favoritemedicine.DeleteFavoriteMedicineResponse
 import com.android.mediproject.core.model.favoritemedicine.CheckFavoriteMedicineResponse
+import com.android.mediproject.core.model.favoritemedicine.DeleteFavoriteMedicineResponse
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineListResponse
 import com.android.mediproject.core.model.favoritemedicine.NewFavoriteMedicineResponse
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
@@ -33,12 +32,15 @@ import com.android.mediproject.core.network.datasource.medicineid.MedicineIdData
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
+import com.android.mediproject.core.network.datasource.tokens.TokenDataSource
+import com.android.mediproject.core.network.datasource.tokens.TokenDataSourceImpl
 import com.android.mediproject.core.network.datasource.user.UserDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSourceImpl
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
+import com.android.mediproject.core.network.tokens.TokenServer
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -64,7 +66,6 @@ import javax.inject.Singleton
 @Module
 object AwsNetwork {
 
-
     @Provides
     @Named("awsNetworkApiWithoutTokens")
     @Singleton
@@ -78,7 +79,7 @@ object AwsNetwork {
     @Provides
     @Singleton
     fun provideFavoriteMedicineDatasource(
-        @Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi
+        @Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi,
     ): FavoriteMedicineDataSource = FavoriteMedicineDataSourceImpl(awsNetworkApi)
 
     @Provides
@@ -105,8 +106,8 @@ object AwsNetwork {
 
     @Provides
     fun providesSignDataSource(
-        @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi, tokenDataSourceImpl: TokenDataSourceImpl, aesCoder: AesCoder
-    ): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenDataSourceImpl, aesCoder)
+        @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi, TokenServer: TokenServer, aesCoder: AesCoder,
+    ): SignDataSource = SignDataSourceImpl(awsNetworkApi, TokenServer, aesCoder)
 
     @Provides
     @Singleton
@@ -122,6 +123,13 @@ object AwsNetwork {
     @Singleton
     fun providesUserDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi, aesCoder: AesCoder): UserDataSource =
         UserDataSourceImpl(awsNetworkApi, aesCoder)
+
+    @Provides
+    @Singleton
+    fun providesTokenDataSource(
+        @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi,
+        tokenServer: TokenServer,
+    ): TokenDataSource = TokenDataSourceImpl(awsNetworkApi, tokenServer)
 }
 
 interface AwsNetworkApi {
@@ -131,12 +139,12 @@ interface AwsNetworkApi {
 
     @POST(value = "user/register")
     suspend fun signUp(
-        @Body signUpRequestParameter: SignUpRequestParameter
+        @Body signUpRequestParameter: SignUpRequestParameter,
     ): Response<SignUpResponse>
 
     @POST(value = "user/login")
     suspend fun signIn(
-        @Body signInRequestParameter: SignInRequestParameter
+        @Body signInRequestParameter: SignInRequestParameter,
     ): Response<SignInResponse>
 
 
@@ -157,7 +165,7 @@ interface AwsNetworkApi {
      */
     @PATCH(value = "medicine/comment")
     suspend fun editComment(
-        @Body editCommentParameter: EditCommentParameter
+        @Body editCommentParameter: EditCommentParameter,
     ): Response<CommentChangedResponse>
 
     /**
@@ -165,7 +173,7 @@ interface AwsNetworkApi {
      */
     @DELETE(value = "medicine/comment")
     suspend fun deleteComment(
-        @Body deleteCommentParameter: DeleteCommentParameter
+        @Body deleteCommentParameter: DeleteCommentParameter,
     ): Response<CommentChangedResponse>
 
     /**
@@ -191,7 +199,7 @@ interface AwsNetworkApi {
      */
     @POST(value = "medicine/comment/writeTest")
     suspend fun applyNewComment(
-        @Body newCommentParameter: NewCommentParameter
+        @Body newCommentParameter: NewCommentParameter,
     ): Response<CommentChangedResponse>
 
     /**
@@ -199,7 +207,7 @@ interface AwsNetworkApi {
      */
     @PATCH(value = "user")
     suspend fun changeNickname(
-        @Body changeNicknameParameter: ChangeNicknameParameter
+        @Body changeNicknameParameter: ChangeNicknameParameter,
     ): Response<ChangeNicknameResponse>
 
     /**
@@ -207,7 +215,7 @@ interface AwsNetworkApi {
      */
     @PATCH(value = "user")
     suspend fun changePassword(
-        @Body changePasswordRequestParameter: ChangePasswordRequestParameter
+        @Body changePasswordRequestParameter: ChangePasswordRequestParameter,
     ): Response<ChangePasswordResponse>
 
     /**
@@ -221,7 +229,7 @@ interface AwsNetworkApi {
      */
     @HTTP(method = "POST", path = "medicine/comment", hasBody = true)
     suspend fun getMedicineId(
-        @Body getMedicineIdParameter: GetMedicineIdParameter
+        @Body getMedicineIdParameter: GetMedicineIdParameter,
     ): Response<MedicineIdResponse>
 
     /**
@@ -235,7 +243,7 @@ interface AwsNetworkApi {
      */
     @GET(value = "medicine/favorite")
     suspend fun checkFavoriteMedicine(
-        @Query("ITEM_SEQ") itemSeq: Long
+        @Query("ITEM_SEQ") itemSeq: Long,
     ): Response<CheckFavoriteMedicineResponse>
 
     /**
@@ -243,7 +251,7 @@ interface AwsNetworkApi {
      */
     @POST(value = "medicine/favorite")
     suspend fun addFavoriteMedicine(
-        @Body addFavoriteMedicineParameter: AddFavoriteMedicineParameter
+        @Body addFavoriteMedicineParameter: AddFavoriteMedicineParameter,
     ): Response<NewFavoriteMedicineResponse>
 
     /**
@@ -251,6 +259,6 @@ interface AwsNetworkApi {
      */
     @DELETE(value = "medicine/favorite")
     suspend fun deleteFavoriteMedicine(
-        @Query("medicineId") medicineId: Long
+        @Query("medicineId") medicineId: Long,
     ): Response<DeleteFavoriteMedicineResponse>
 }

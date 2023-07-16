@@ -117,8 +117,8 @@ class MyPageFragment :
         log(tokenState.toString())
         when (tokenState) {
             is TokenState.Empty -> setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
-            is TokenState.AccessExpiration -> {}
-            is TokenState.Valid -> setLoginMode(MyPageViewModel.LoginMode.LOGIN_MODE)
+            is TokenState.Tokens.AccessExpiration -> {}
+            is TokenState.Tokens.Valid -> setLoginMode(MyPageViewModel.LoginMode.LOGIN_MODE)
             else -> {}
         }
     }

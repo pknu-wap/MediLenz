@@ -6,7 +6,6 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
-import com.android.mediproject.core.common.util.AesCoder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +20,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
 
-    
     @Provides
     @Singleton
     fun providesTokenDataStore(
@@ -34,19 +32,6 @@ object DataStoreModule {
     ) {
         context.dataStoreFile("saved_token.pb")
     }
-
-
-    @Provides
-    @Singleton
-    fun providesTokenDataSource(
-        tokenDataStore: DataStore<SavedToken>,
-        aesCoder: AesCoder,
-        tokenServer: TokenServer,
-    ): TokenDataSource = TokenDataSourceImpl(tokenDataStore, aesCoder, tokenServer)
-
-    @Provides
-    @Singleton
-    fun providesTokenServer(): TokenServer = TokenServerImpl()
 
     @Provides
     @Singleton

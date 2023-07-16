@@ -76,9 +76,9 @@ class FavoriteMedicineMoreFragment :
         when (token) {
             is TokenState.Empty -> {}
             is TokenState.Error -> {}
-            is TokenState.RefreshExpiration -> {}
-            is TokenState.AccessExpiration -> {}
-            is TokenState.Valid -> loadFavoriteMedicines()
+            is TokenState.Tokens.RefreshExpiration -> {}
+            is TokenState.Tokens.AccessExpiration -> {}
+            is TokenState.Tokens.Valid -> loadFavoriteMedicines()
         }
     }
 
