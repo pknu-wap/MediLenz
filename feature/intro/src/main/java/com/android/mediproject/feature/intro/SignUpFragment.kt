@@ -87,7 +87,7 @@ class SignUpFragment :
                             )
                         }
 
-                        is SignUpState.SuccessSignUp -> {
+                        is SignUpState.SignUpSuccess -> {
                             LoadingDialog.dismiss()
                             toast(getString(R.string.signUpSuccess))
                             when (fragmentViewModel.moveFlag.value) {
@@ -105,7 +105,7 @@ class SignUpFragment :
                             }
                         }
 
-                        is SignUpState.FailedSignUp -> {
+                        is SignUpState.SignUpFailed -> {
                             // 실패
                             LoadingDialog.dismiss()
                             toast(getString(R.string.signUpFailed))

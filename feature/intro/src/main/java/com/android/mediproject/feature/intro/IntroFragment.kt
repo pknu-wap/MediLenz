@@ -25,7 +25,7 @@ class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(Fragmen
 
     private fun handleEvent(event: IntroViewModel.IntroEvent) {
         when (event) {
-            is IntroViewModel.IntroEvent.NonMemberLogin, IntroViewModel.IntroEvent.SkipIntro -> skipIntro()
+            is IntroViewModel.IntroEvent.GuestLogin, IntroViewModel.IntroEvent.SkipIntro -> skipIntro()
             is IntroViewModel.IntroEvent.ShowIntro -> nonSkipIntro()
             is IntroViewModel.IntroEvent.MemberLogin -> memberLogin()
             is IntroViewModel.IntroEvent.SignUp -> signUp()

@@ -10,7 +10,7 @@ import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.model.local.navargs.TOHOME
-import com.android.mediproject.core.model.requestparameters.SignInParameter
+import com.android.mediproject.core.model.requestparameters.LoginParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -104,7 +104,7 @@ class LoginViewModel @Inject constructor(
 
             setLoginState(LoginState.Logining)
 
-            signUseCase.signIn(SignInParameter(email, password, checkedSaveEmail)).collect { result ->
+            signUseCase.login(LoginParameter(email, password, checkedSaveEmail)).collect { result ->
                 result.fold(
                     onSuccess = { loginSuccess() }, onFailure = { loginFailed() },
                 )

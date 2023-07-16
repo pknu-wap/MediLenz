@@ -67,11 +67,11 @@ class LoginFragment :
     }
 
     private fun handleEvent(event: LoginViewModel.LoginEvent) = when (event) {
-        is LoginViewModel.LoginEvent.Login -> signIn()
+        is LoginViewModel.LoginEvent.Login -> login()
         is LoginViewModel.LoginEvent.SignUp -> signUp()
     }
 
-    private fun signIn() {
+    private fun login() {
         fragmentViewModel.loginWithCheckRegex(
             binding.loginEmail.getEditable(),
             binding.loginPassword.getEditable(),

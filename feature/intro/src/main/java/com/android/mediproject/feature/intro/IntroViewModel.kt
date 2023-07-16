@@ -43,14 +43,14 @@ class IntroViewModel @Inject constructor(
         _eventFlow.emit(event)
     }
 
-    fun nonMemberLogin() = event(IntroEvent.NonMemberLogin)
+    fun nonMemberLogin() = event(IntroEvent.GuestLogin)
 
     fun memberLogin() = event(IntroEvent.MemberLogin)
 
     fun signUp() = event(IntroEvent.SignUp)
 
     sealed class IntroEvent {
-        object NonMemberLogin : IntroEvent()
+        object GuestLogin : IntroEvent()
         object MemberLogin : IntroEvent()
         object SignUp : IntroEvent()
         object SkipIntro : IntroEvent()

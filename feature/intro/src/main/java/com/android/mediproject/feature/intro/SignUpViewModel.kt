@@ -11,11 +11,11 @@ import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.model.local.navargs.TOHOME
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.intro.SignUpState.FailedSignUp
+import com.android.mediproject.feature.intro.SignUpState.SignUpFailed
 import com.android.mediproject.feature.intro.SignUpState.PasswordError
 import com.android.mediproject.feature.intro.SignUpState.RegexError
 import com.android.mediproject.feature.intro.SignUpState.SigningUp
-import com.android.mediproject.feature.intro.SignUpState.SuccessSignUp
+import com.android.mediproject.feature.intro.SignUpState.SignUpSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -74,9 +74,9 @@ class SignUpViewModel @Inject constructor(
             _signUpEvent.value = SigningUp
             signUseCase.signUp(SignUpParameter(email, password, nickNameEditable.toString())).collect { result ->
                 result.fold(onSuccess = {
-                    _signUpEvent.value = SuccessSignUp
+                    _signUpEvent.value = SignUpSuccess
                 }, onFailure = {
-                    _signUpEvent.value = FailedSignUp(it.message ?: "가입 실패")
+                    _signUpEvent.value = SignUpFailed(it.message ?: "가입 실패")
                 })
             }
 
@@ -88,26 +88,15 @@ class SignUpViewModel @Inject constructor(
 
     sealed class SignUpEvent {
         object SignUpComplete : SignUpEvent()
-
         object SignUp : SignUpEvent()
-
     }
 }
 
-/**
- * 로그인 상태
- *
- * @property SigningUp 가입 처리 중 상태
- * @property RegexError 이메일 또는 비밀번호 형식 오류
- * @property PasswordError 비밀번호 미 일치
- * @property SuccessSignUp 가입 성공
- * @property FailedSignUp 가입 실패
- */
 sealed class SignUpState {
     object SigningUp : SignUpState()
     object Initial : SignUpState()
     object RegexError : SignUpState()
     object PasswordError : SignUpState()
-    object SuccessSignUp : SignUpState()
-    data class FailedSignUp(val message: String) : SignUpState()
+    object SignUpSuccess : SignUpState()
+    data class SignUpFailed(val message: String) : SignUpState()
 }
