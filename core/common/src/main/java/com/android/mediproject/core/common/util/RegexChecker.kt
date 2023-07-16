@@ -8,4 +8,4 @@ fun isEmailValid(email: CharSequence) = email.matches(
     Regex(emailReg)
 )
 
-fun isPasswordValid(password: CharSequence) = (password.length !in 4..16)
+fun isPasswordValid(password: CharSequence) = (password.length in 4..16)

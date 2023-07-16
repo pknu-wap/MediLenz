@@ -7,14 +7,14 @@ package com.android.mediproject.core.model.requestparameters
  * @property password 비밀번호
  * @property isSavedEmail 이메일 저장 여부
  */
-data class SignInParameter(
+data class LoginParameter(
     val email: CharArray, val password: CharArray, val isSavedEmail: Boolean
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as SignInParameter
+        other as LoginParameter
 
         if (!email.contentEquals(other.email)) return false
         if (!password.contentEquals(other.password)) return false
