@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
@@ -22,7 +23,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(private val 
     protected abstract val fragmentViewModel: V
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View? {
         _binding = inflate.invoke(inflater, container, false)
         binding.lifecycleOwner = this.viewLifecycleOwner
@@ -39,4 +40,6 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(private val 
     fun toast(str: String) = Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
 
     fun navigateWithUri(deepLinkUri: String) = findNavController().navigate(deepLinkUri.toUri())
+
+    fun navigateWithUriNavOptions(deepLinkUri: String, navOptions : NavOptions) = navigateWithUri(deepLinkUri).
 }

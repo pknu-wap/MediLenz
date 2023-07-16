@@ -16,31 +16,36 @@ import javax.inject.Inject
 @HiltViewModel
 class IntroViewModel @Inject constructor(
     private val getSkippableIntroUseCase: GetSkippableIntroUseCase,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
-    private val _eventFlow = MutableEventFlow<IntroEvent>(replay = 1)
-    val eventFlow = _eventFlow.asEventFlow()
 
     init {
+        skipIntro()
+    }
+
+    private fun skipIntro() {
         viewModelScope.launch(ioDispatcher) {
-            getSkippableIntroUseCase().collectLatest {
-                if (it) event(IntroEvent.SkipIntro)
+            getSkippableIntroUseCase().collectLatest { canSkip ->
+                if (canSkip) event(IntroEvent.SkipIntro)
                 else event(IntroEvent.NonSkipIntro)
             }
         }
     }
 
+    private val _eventFlow = MutableEventFlow<IntroEvent>(replay = 1)
+    val eventFlow = _eventFlow.asEventFlow()
+
     fun event(event: IntroEvent) = viewModelScope.launch {
         _eventFlow.emit(event)
     }
 
-
     fun nonMemberLogin() = event(IntroEvent.NonMemberLogin)
+
     fun memberLogin() = event(IntroEvent.MemberLogin)
+
     fun signUp() = event(IntroEvent.SignUp)
 
     sealed class IntroEvent {
-
         object NonMemberLogin : IntroEvent()
         object MemberLogin : IntroEvent()
         object SignUp : IntroEvent()
