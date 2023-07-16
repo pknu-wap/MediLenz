@@ -20,17 +20,21 @@ class IntroViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     init {
-        skipIntro()
+        checkSkipIntro()
     }
 
-    private fun skipIntro() {
+    private fun checkSkipIntro() {
         viewModelScope.launch(ioDispatcher) {
             getSkippableIntroUseCase().collectLatest { canSkip ->
-                if (canSkip) event(IntroEvent.SkipIntro)
-                else event(IntroEvent.NonSkipIntro)
+                if (canSkip) skipIntro()
+                else showIntro()
             }
         }
     }
+
+    fun skipIntro() = event(IntroEvent.SkipIntro)
+
+    fun showIntro() = event(IntroEvent.ShowIntro)
 
     private val _eventFlow = MutableEventFlow<IntroEvent>(replay = 1)
     val eventFlow = _eventFlow.asEventFlow()
@@ -50,6 +54,6 @@ class IntroViewModel @Inject constructor(
         object MemberLogin : IntroEvent()
         object SignUp : IntroEvent()
         object SkipIntro : IntroEvent()
-        object NonSkipIntro : IntroEvent()
+        object ShowIntro : IntroEvent()
     }
 }

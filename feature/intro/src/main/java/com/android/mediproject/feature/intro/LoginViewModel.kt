@@ -12,11 +12,6 @@ import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.model.local.navargs.TOHOME
 import com.android.mediproject.core.model.requestparameters.SignInParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.intro.SignInState.FailedSignIn
-import com.android.mediproject.feature.intro.SignInState.Initial
-import com.android.mediproject.feature.intro.SignInState.RegexError
-import com.android.mediproject.feature.intro.SignInState.Signing
-import com.android.mediproject.feature.intro.SignInState.SuccessSignIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,90 +36,111 @@ class LoginViewModel @Inject constructor(
         else flowOf(it.toCharArray())
     }.flowOn(ioDispatcher).stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = CharArray(0))
 
-    private val _signInEvent = MutableStateFlow<SignInState>(Initial)
-    val signInEvent = _signInEvent.asStateFlow()
+    private val _loginState = MutableStateFlow<LoginState>(LoginState.Initial)
+    val loginState = _loginState.asStateFlow()
 
-    private val _eventFlow = MutableEventFlow<SignEvent>(replay = 1)
-    val eventFlow = _eventFlow.asEventFlow()
-
-    private val _moveFlag = MutableStateFlow(TOHOME)
-    val moveFlag get() = _moveFlag.asStateFlow()
-
-    fun event(event: SignEvent) = viewModelScope.launch { _eventFlow.emit(event) }
-    fun login() = event(SignEvent.SignIn)
-    fun signUp() = event(SignEvent.SignUp)
-    fun setMoveFlag(flag: Int) {
-        _moveFlag.value = flag
+    private fun setLoginState(state: LoginState) {
+        _loginState.value = state
     }
 
-    /**
-     * 로그인 요청
-     *
-     * @param emailEditable 이메일
-     * @param passwordEditable 비밀번호
-     *
-     * 1. 이메일 또는 비밀번호 형식 오류 검사
-     * 2. 로그인
-     * 3. 로그인 결과 이벤트 발생
-     */
-    fun signIn(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) {
-        viewModelScope.launch(ioDispatcher) {
-            // 이메일 또는 비밀번호 형식 오류 검사
-            if (!isEmailValid(emailEditable)) {
-                _signInEvent.value = RegexError
-                return@launch
-            } else if (isPasswordValid(passwordEditable)) {
-                _signInEvent.value = RegexError
-                return@launch
-            }
+    sealed class LoginState {
+        object Initial : LoginState()
+        object Logining : LoginState()
+        object RegexError : LoginState()
+        object LoginSuccess : LoginState()
+        data class LoginFailed(val message: String) : LoginState()
+    }
 
-            val email = CharArray(emailEditable.length)
-            emailEditable.trim().forEachIndexed { index, c ->
-                email[index] = c
-            }
-            val password = CharArray(passwordEditable.length)
-            passwordEditable.trim().forEachIndexed { index, c ->
-                password[index] = c
-            }
+    private val _callBackMoveFlag = MutableStateFlow(TOHOME)
+    val callBackMoveFlag get() = _callBackMoveFlag.asStateFlow()
 
-            _signInEvent.value = Signing
-            // 로그인
-            signUseCase.signIn(SignInParameter(email, password, checkedSaveEmail)).collect { result ->
-                result.fold(onSuccess = {
-                    _signInEvent.value = SuccessSignIn
-                }, onFailure = {
-                    _signInEvent.value = FailedSignIn(it.message ?: "로그인 실패")
-                })
-            }
+    fun setMoveFlag(flag: Int) {
+        _callBackMoveFlag.value = flag
+    }
 
-            // 이메일과 비밀번호 배열 초기화
-            email.fill('\u0000')
-            password.fill('\u0000')
+    private val _eventFlow = MutableEventFlow<LoginEvent>(replay = 1)
+    val eventFlow = _eventFlow.asEventFlow()
+
+    fun event(event: LoginEvent) = viewModelScope.launch { _eventFlow.emit(event) }
+
+    fun loginWithCheckRegex() = event(LoginEvent.Login)
+
+    fun signUp() = event(LoginEvent.SignUp)
+
+    sealed class LoginEvent {
+        object Login : LoginEvent()
+        object SignUp : LoginEvent()
+    }
+
+    fun loginWithCheckRegex(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) {
+        if (!checkEmailPasswordRegex(emailEditable, passwordEditable)) {
+            login(emailEditable, passwordEditable, checkedSaveEmail)
+        } else {
+            loginFaledWithRegexError()
         }
     }
 
-    sealed class SignEvent {
-        object SignIn : SignEvent()
-        object SignUp : SignEvent()
+    private fun clearEmailPasswordCharArray(email: CharArray, password: CharArray) {
+        email.fill('\u0000')
+        password.fill('\u0000')
     }
 
+    private fun checkEmailPasswordRegex(emailEditable: Editable, passwordEditable: Editable): Boolean {
+        return checkEmailRegex(emailEditable) && checkPasswordRegex(passwordEditable)
+    }
 
-}
+    private fun checkEmailRegex(emailEditable: Editable): Boolean {
+        return !isEmailValid(emailEditable)
+    }
 
-/**
- * 로그인 상태
- *
- * @property Initial 로그아웃 상태
- * @property Signing 로그인 중 상태
- * @property RegexError 이메일 또는 비밀번호 형식 오류
- * @property SuccessSignIn 로그인 성공
- * @property FailedSignIn 로그인 실패
- */
-sealed class SignInState {
-    object Initial : SignInState()
-    object Signing : SignInState()
+    private fun checkPasswordRegex(passwordEditable: Editable): Boolean {
+        return !isPasswordValid(passwordEditable)
+    }
 
-    object RegexError : SignInState()
-    object SuccessSignIn : SignInState()
-    data class FailedSignIn(val message: String) : SignInState()
+    private fun login(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) =
+        viewModelScope.launch(ioDispatcher) {
+            val pair = initEmailPasswordCharArray(emailEditable, passwordEditable)
+            val (email, password) = pair.first to pair.second
+
+            setLoginState(LoginState.Logining)
+
+            signUseCase.signIn(SignInParameter(email, password, checkedSaveEmail)).collect { result ->
+                result.fold(
+                    onSuccess = { loginSuccess() }, onFailure = { loginFailed() },
+                )
+            }
+            clearEmailPasswordCharArray(email, password)
+        }
+
+    private fun initEmailPasswordCharArray(emailEditable: Editable, passwordEditable: Editable): Pair<CharArray, CharArray> {
+        return Pair(initEmailCharArray(emailEditable), initPasswordCharArray(passwordEditable))
+    }
+
+    private fun initEmailCharArray(emailEditable: Editable): CharArray {
+        val email = CharArray(emailEditable.length)
+        emailEditable.trim().forEachIndexed { index, c ->
+            email[index] = c
+        }
+        return email
+    }
+
+    private fun initPasswordCharArray(passwordEditable: Editable): CharArray {
+        val password = CharArray(passwordEditable.length)
+        passwordEditable.trim().forEachIndexed { index, c ->
+            password[index] = c
+        }
+        return password
+    }
+
+    private fun loginFailed() {
+        setLoginState(LoginState.LoginFailed("로그인 실패"))
+    }
+
+    private fun loginSuccess() {
+        setLoginState(LoginState.LoginSuccess)
+    }
+
+    private fun loginFaledWithRegexError() {
+        setLoginState(LoginState.RegexError)
+    }
 }

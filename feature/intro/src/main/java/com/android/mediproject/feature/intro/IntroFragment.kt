@@ -2,11 +2,8 @@ package com.android.mediproject.feature.intro
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentIntroBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +26,7 @@ class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(Fragmen
     private fun handleEvent(event: IntroViewModel.IntroEvent) {
         when (event) {
             is IntroViewModel.IntroEvent.NonMemberLogin, IntroViewModel.IntroEvent.SkipIntro -> skipIntro()
-            is IntroViewModel.IntroEvent.NonSkipIntro -> nonSkipIntro()
+            is IntroViewModel.IntroEvent.ShowIntro -> nonSkipIntro()
             is IntroViewModel.IntroEvent.MemberLogin -> memberLogin()
             is IntroViewModel.IntroEvent.SignUp -> signUp()
         }
@@ -53,10 +50,6 @@ class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(Fragmen
 
     private fun signUp() {
         navigateWithNavDirections(IntroFragmentDirections.actionIntroFragmentToSignUpFragment())
-    }
-
-    private fun navigateWithNavDirections(navDirections: NavDirections) {
-        findNavController().navigate(navDirections)
     }
 
 }

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 
@@ -41,5 +42,9 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(private val 
 
     fun navigateWithUri(deepLinkUri: String) = findNavController().navigate(deepLinkUri.toUri())
 
-    fun navigateWithUriNavOptions(deepLinkUri: String, navOptions : NavOptions) = navigateWithUri(deepLinkUri).
+    fun navigateWithUriNavOptions(deepLinkUri: String, navOptions: NavOptions) = navigateWithUri(deepLinkUri)
+
+    fun navigateWithNavDirections(navDirections: NavDirections) {
+        findNavController().navigate(navDirections)
+    }
 }
