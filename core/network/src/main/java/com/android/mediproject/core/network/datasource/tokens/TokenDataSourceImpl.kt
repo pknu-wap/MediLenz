@@ -1,5 +1,6 @@
 package com.android.mediproject.core.network.datasource.tokens
 
+import android.util.Log
 import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
 import com.android.mediproject.core.model.remote.token.RequestBehavior
@@ -60,6 +61,7 @@ class TokenDataSourceImpl @Inject constructor(
      * return  Result<Unit>.success()
      */
     override fun reissueToken(currentToken: TokenState.Tokens.AccessExpiration<CurrentTokens>): Flow<Result<Unit>> = channelFlow {
+        Log.d("wap", "reissueToken, currentToken : $currentToken")
         if (processingTokenReissuance) {
             // 이미 토큰 재발급 처리 중인 경우, 기다렸다가 현재 처리 중인 토큰 재발급의 결과를 반환한다.
             lastTokenReissueResult.collect {
@@ -70,6 +72,8 @@ class TokenDataSourceImpl @Inject constructor(
         mutex.withLock { processingTokenReissuance = true }
         reissueTokens(currentToken.data.refreshToken).collectLatest { reissueTokenResponseResult ->
             val result = reissueTokenResponseResult.fold(onSuccess = { Result.success(Unit) }, onFailure = { Result.failure(it) })
+
+            Log.d("wap", "reissueToken, result : $result")
             lastTokenReissueResult.emit(result)
             trySend(result)
 

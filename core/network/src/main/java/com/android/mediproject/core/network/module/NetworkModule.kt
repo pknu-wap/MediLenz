@@ -11,9 +11,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.security.KeyStore
@@ -27,43 +24,42 @@ import javax.inject.Singleton
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
+import kotlin.properties.Delegates
 
 @OptIn(DelicateCoroutinesApi::class)
 @Module
 @InstallIn(SingletonComponent::class)
 class CertificateHelper @Inject constructor(@ApplicationContext context: Context) {
 
-    lateinit var tmf: TrustManagerFactory
-    lateinit var sslContext: SSLContext
+    var tmf: TrustManagerFactory by Delegates.notNull()
+    var sslContext: SSLContext by Delegates.notNull()
 
     init {
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                context.resources.openRawResource(R.raw.gsrsaovsslca2018).use { caInput ->
-                    val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
-                    val ca: Certificate = cf.generateCertificate(caInput)
-                    println("ca = ${(ca as X509Certificate).subjectDN}")
+        try {
+            context.resources.openRawResource(R.raw.gsrsaovsslca2018).use { caInput ->
+                val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
+                val ca: Certificate = cf.generateCertificate(caInput)
+                println("ca = ${(ca as X509Certificate).subjectDN}")
 
-                    val keyStoreType = KeyStore.getDefaultType()
-                    val keyStore = KeyStore.getInstance(keyStoreType)
-                    with(keyStore) {
-                        load(null, null)
-                        keyStore.setCertificateEntry("ca", ca)
-                    }
-
-                    val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
-                    tmf = TrustManagerFactory.getInstance(tmfAlgorithm).apply {
-                        init(keyStore)
-                    }
-
-                    sslContext = SSLContext.getInstance("TLS").apply {
-                        init(null, tmf.trustManagers, java.security.SecureRandom())
-                    }
+                val keyStoreType = KeyStore.getDefaultType()
+                val keyStore = KeyStore.getInstance(keyStoreType)
+                with(keyStore) {
+                    load(null, null)
+                    keyStore.setCertificateEntry("ca", ca)
                 }
 
-            } catch (e: Exception) {
-                e.printStackTrace()
+                val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
+                tmf = TrustManagerFactory.getInstance(tmfAlgorithm).apply {
+                    init(keyStore)
+                }
+
+                sslContext = SSLContext.getInstance("TLS").apply {
+                    init(null, tmf.trustManagers, java.security.SecureRandom())
+                }
             }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }
@@ -83,7 +79,7 @@ object NetworkModule {
                     }
                 },
             )
-            readTimeout(Duration.ofSeconds(15))
+            readTimeout(Duration.ofSeconds(10))
             connectTimeout(Duration.ofSeconds(10))
             callTimeout(Duration.ofSeconds(10))
             certificateHelper.apply {

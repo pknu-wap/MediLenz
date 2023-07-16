@@ -1,7 +1,7 @@
 package com.android.mediproject.core.network.datasource.tokens
 
+import android.util.Log
 import com.android.mediproject.core.model.awscommon.BaseAwsSignResponse
-import com.android.mediproject.core.model.remote.token.NewTokensFromServer
 import com.android.mediproject.core.model.remote.token.RequestBehavior
 import com.android.mediproject.core.network.tokens.TokenServer
 import retrofit2.Response
@@ -19,6 +19,7 @@ internal suspend inline fun <reified T : BaseAwsSignResponse> Response<T>.onResp
         body()?.let { body ->
             if (body.isSuccess()) {
                 // 토큰 저장
+                Log.d("wap", "onResponseWithTokens, tokenServer.saveTokens")
                 tokenServer.saveTokens(
                     NewTokensFromServer(
                         accessToken = body.accessToken!!.toCharArray(),

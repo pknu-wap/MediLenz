@@ -1,5 +1,6 @@
 package com.android.mediproject.core.network.tokens
 
+import android.util.Log
 import com.android.mediproject.core.model.remote.token.TokenState
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -17,6 +18,7 @@ class TokenRequestInterceptor @Inject constructor(
                 is TokenType.RefreshToken -> tokenState.data.refreshToken
             }
 
+            Log.d("wap", "intercept, tokenType : $tokenType token : $tokenState.data")
             val response = chain.request().newBuilder().header("Authorization", "Bearer ${token.joinToString("")}").build()
             chain.proceed(response)
         }
@@ -24,6 +26,7 @@ class TokenRequestInterceptor @Inject constructor(
         else -> {
             // 저장된 토큰이 없는 경우
             // 로그인, 회원가입을 새롭게 하는 경우
+            Log.d("wap", "intercept, 저장된 토큰 없음")
             chain.proceed(chain.request())
         }
     }

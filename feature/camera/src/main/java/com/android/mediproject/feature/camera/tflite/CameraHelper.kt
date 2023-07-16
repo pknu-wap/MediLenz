@@ -36,7 +36,7 @@ import kotlin.coroutines.suspendCoroutine
  * 카메라 제어, ai처리 담당
  */
 class CameraHelper @Inject constructor(
-    private val context: Context
+    private val context: Context,
 ) : LifecycleEventObserver, AiController, CameraController {
 
     private var camera: Camera? = null
@@ -59,7 +59,7 @@ class CameraHelper @Inject constructor(
     private val cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
 
     private val _detectionResult =
-        MutableSharedFlow<List<Detection>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 7)
+        MutableSharedFlow<List<Detection>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 3)
 
     override val detectionResult get() = _detectionResult.asSharedFlow()
 
@@ -103,9 +103,11 @@ class CameraHelper @Inject constructor(
                     val modelFile = context.assets.open("automl_tflite3.tflite")
 
                     val objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setMaxResults(8).setScoreThreshold(0.46f)
-                        .setBaseOptions(BaseOptions.builder().apply {
-                            useNnapi()
-                        }.build()).build()
+                        .setBaseOptions(
+                            BaseOptions.builder().apply {
+                                useNnapi()
+                            }.build(),
+                        ).build()
 
                     val bytes = modelFile.readBytes()
                     val byteBuffer = ByteBuffer.allocateDirect(bytes.size)
@@ -134,9 +136,12 @@ class CameraHelper @Inject constructor(
         val imageProcessor = ImageProcessor.Builder().add(Rot90Op((-image.imageInfo.rotationDegrees) / 90)).build()
         val tensorImage = imageProcessor.process(TensorImage.fromBitmap(bitmapBuffer))
 
-        detectionCallback?.onDetectedResult(objectDetector.detect(tensorImage).apply {
-            _detectionResult.tryEmit(this)
-        }, tensorImage.width, tensorImage.height)
+        detectionCallback?.onDetectedResult(
+            objectDetector.detect(tensorImage).apply {
+                _detectionResult.tryEmit(this)
+            },
+            tensorImage.width, tensorImage.height,
+        )
     }
 
     // fragment view의 생명주기 변화 수신
@@ -177,11 +182,14 @@ class CameraHelper @Inject constructor(
             _cameraExecutor = Executors.newSingleThreadExecutor()
 
             ProcessCameraProvider.getInstance(context).also { cameraProviderFuture ->
-                cameraProviderFuture.addListener(Runnable {
-                    _cameraProvider = cameraProviderFuture.get()
-                    camera(true)
-                    continuation.resume(Result.success(Unit))
-                }, ContextCompat.getMainExecutor(context))
+                cameraProviderFuture.addListener(
+                    Runnable {
+                        _cameraProvider = cameraProviderFuture.get()
+                        camera(true)
+                        continuation.resume(Result.success(Unit))
+                    },
+                    ContextCompat.getMainExecutor(context),
+                )
             }
         } catch (e: Exception) {
             continuation.resume(Result.failure(e))

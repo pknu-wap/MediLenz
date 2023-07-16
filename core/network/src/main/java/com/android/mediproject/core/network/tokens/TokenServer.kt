@@ -1,8 +1,8 @@
 package com.android.mediproject.core.network.tokens
 
 import com.android.mediproject.core.model.remote.token.CurrentTokens
-import com.android.mediproject.core.model.remote.token.NewTokensFromServer
 import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.network.datasource.tokens.NewTokensFromServer
 import java.time.LocalDateTime
 
 
@@ -47,7 +47,7 @@ interface TokenServer {
 }
 
 
-fun NewTokensFromServer.toServerTokens(): TokenServer.Tokens {
+internal fun NewTokensFromServer.toServerTokens(): TokenServer.Tokens {
     return TokenServer.Tokens(
         accessToken = accessToken,
         refreshToken = refreshToken,

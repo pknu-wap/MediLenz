@@ -1,13 +1,15 @@
-package com.android.mediproject.core.model.remote.token
+package com.android.mediproject.core.network.datasource.tokens
 
+import com.android.mediproject.core.model.remote.token.RequestBehavior
 import java.time.Duration
 import java.time.LocalDateTime
 
 // 리프레시 토큰 만료 시간
-val REFRESH_TOKEN_EXPIRES_IN: Duration = Duration.ofDays(180L)
+private val REFRESH_TOKEN_EXPIRES_IN: Duration = Duration.ofDays(180L)
 
 // 액세스 토큰 만료 시간
-val ACCESS_TOKEN_EXPIRES_IN: Duration = Duration.ofMinutes(30L)
+private val ACCESS_TOKEN_EXPIRES_IN: Duration = Duration.ofMinutes(30L)
+
 
 /**
  * 서버로 부터 응답받은 토큰
@@ -29,17 +31,18 @@ data class NewTokensFromServer(
         get() = _accessTokenExpireDateTime!!
 
     init {
+        val now = LocalDateTime.now()
+
         when (requestBehavior) {
             RequestBehavior.NewTokens -> {
                 // 토큰 만료 예정 시각을 설정
-                val now = LocalDateTime.now()
                 _accessTokenExpireDateTime = now.plus(ACCESS_TOKEN_EXPIRES_IN)
                 _refreshTokenExpireDateTime = now.plus(REFRESH_TOKEN_EXPIRES_IN)
             }
 
             RequestBehavior.ReissueTokens -> {
                 // 토큰 재발급이므로 액세스 토큰만 저장
-                _accessTokenExpireDateTime = LocalDateTime.now().plus(ACCESS_TOKEN_EXPIRES_IN)
+                _accessTokenExpireDateTime = now.plus(ACCESS_TOKEN_EXPIRES_IN)
             }
         }
     }

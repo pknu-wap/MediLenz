@@ -5,9 +5,9 @@ import androidx.datastore.core.DataStore
 import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.datastore.SavedToken
 import com.android.mediproject.core.model.remote.token.CurrentTokens
-import com.android.mediproject.core.model.remote.token.NewTokensFromServer
 import com.android.mediproject.core.model.remote.token.RequestBehavior
 import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.network.datasource.tokens.NewTokensFromServer
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,7 +18,8 @@ import kotlinx.coroutines.sync.withLock
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class TokenServerImpl @Inject constructor(
+
+internal class TokenServerImpl @Inject constructor(
     private val tokenDataStore: DataStore<SavedToken>,
     private val aesCoder: AesCoder,
 ) : TokenServer {
@@ -52,7 +53,7 @@ class TokenServerImpl @Inject constructor(
         Log.d("wap", "loadSavedTokens")
 
         val savedTokens = tokenDataStore.data.first()
-        if (savedTokens.accessToken.isNotEmpty() || savedTokens.refreshToken.isNotEmpty()) {
+        if (savedTokens.accessToken.isEmpty() || savedTokens.refreshToken.isEmpty()) {
             Log.d("wap", "토큰이 로컬에 저장되어있지 않음")
             return
         }
@@ -119,6 +120,8 @@ class TokenServerImpl @Inject constructor(
             _accessTokenExpiresIn = tokens.accessTokenExpiresIn
         }
 
+        Log.d("wap", "updateTokenState() 호출됨, $tokens")
+
         // 만료 확인
         val now = LocalDateTime.now()
 
@@ -142,6 +145,8 @@ class TokenServerImpl @Inject constructor(
             // 토큰 유효
             _tokenState = TokenState.Tokens.Valid(CurrentTokens(accessToken = tokens.accessToken, refreshToken = tokens.refreshToken))
         }
+
+        Log.d("wap", "updateTokenState() 호출됨, tokenState : $tokenState")
     }
 
     override suspend fun removeTokens() {
