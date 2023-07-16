@@ -11,11 +11,6 @@ import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.model.local.navargs.TOHOME
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.intro.SignUpState.SignUpFailed
-import com.android.mediproject.feature.intro.SignUpState.PasswordError
-import com.android.mediproject.feature.intro.SignUpState.RegexError
-import com.android.mediproject.feature.intro.SignUpState.SigningUp
-import com.android.mediproject.feature.intro.SignUpState.SignUpSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,78 +20,120 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUseCase: SignUseCase, @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    private val signUseCase: SignUseCase, @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
-    private val _signUpEvent = MutableStateFlow<SignUpState>(SignUpState.Initial)
-    val signInEvent = _signUpEvent.asStateFlow()
+    private val _signUpState = MutableStateFlow<SignUpState>(SignUpState.Initial)
+    val signUpState = _signUpState.asStateFlow()
+
+    private fun setSignUpState(state: SignUpState) {
+        _signUpState.value = state
+    }
+
+    sealed class SignUpState {
+        object SigningUp : SignUpState()
+        object Initial : SignUpState()
+        object RegexError : SignUpState()
+        object PasswordError : SignUpState()
+        object SignUpSuccess : SignUpState()
+        data class SignUpFailed(val message: String) : SignUpState()
+    }
 
     private val _eventFlow = MutableEventFlow<SignUpEvent>(replay = 1)
     val eventFlow = _eventFlow.asEventFlow()
 
-    private val _moveFlag = MutableStateFlow(TOHOME)
-    val moveFlag get() = _moveFlag.asStateFlow()
-
     fun event(event: SignUpEvent) = viewModelScope.launch { _eventFlow.emit(event) }
+
     fun signUp() = event(SignUpEvent.SignUp)
-    fun setMoveFlag(flag: Int) {
-        _moveFlag.value = flag
+
+
+    sealed class SignUpEvent {
+        object SignUp : SignUpEvent()
     }
 
-    fun signUp(
-        emailEditable: CharSequence, passwordEditable: CharSequence, checkPasswordEditable: CharSequence, nickNameEditable: CharSequence
+    private val _callBackMoveFlag = MutableStateFlow(TOHOME)
+    val callBackMoveFlag get() = _callBackMoveFlag.asStateFlow()
+
+    fun setCallBackMoveFlag(flag: Int) {
+        _callBackMoveFlag.value = flag
+    }
+
+    fun signUpWithCheckRegex(
+        emailEditable: CharSequence, passwordEditable: CharSequence, checkPasswordEditable: CharSequence, nickNameEditable: CharSequence,
     ) {
-        viewModelScope.launch(ioDispatcher) {
-            // 이메일 또는 비밀번호 형식 오류 검사
-            if (!isEmailValid(emailEditable)) {
-                _signUpEvent.value = RegexError
-                return@launch
-            } else if (isPasswordValid(passwordEditable)) {
-                _signUpEvent.value = RegexError
-                return@launch
-            } else if (passwordEditable.contentEquals(checkPasswordEditable).not()) {
-                _signUpEvent.value = PasswordError
-                return@launch
+        if (checkEmailPasswordRegex(emailEditable, passwordEditable)) {
+            if (passwordEditable.contentEquals(checkPasswordEditable)) {
+                signUp(emailEditable, passwordEditable, nickNameEditable)
+            } else {
+                isNotEqualPasswordCheck()
             }
-
-            val email = CharArray(emailEditable.length).also {
-                emailEditable.trim().forEachIndexed { index, c ->
-                    it[index] = c
-                }
-            }
-
-            val password = CharArray(passwordEditable.length).also {
-                passwordEditable.trim().forEachIndexed { index, c ->
-                    it[index] = c
-                }
-            }
-
-            _signUpEvent.value = SigningUp
-            signUseCase.signUp(SignUpParameter(email, password, nickNameEditable.toString())).collect { result ->
-                result.fold(onSuccess = {
-                    _signUpEvent.value = SignUpSuccess
-                }, onFailure = {
-                    _signUpEvent.value = SignUpFailed(it.message ?: "가입 실패")
-                })
-            }
-
-            // 이메일과 비밀번호 배열 초기화
-            email.fill('\u0000')
-            password.fill('\u0000')
+        } else {
+            signUpFaledWithRegexError()
         }
     }
 
-    sealed class SignUpEvent {
-        object SignUpComplete : SignUpEvent()
-        object SignUp : SignUpEvent()
+    private fun checkEmailPasswordRegex(emailEditable: CharSequence, passwordEditable: CharSequence): Boolean {
+        return checkEmailRegex(emailEditable) && checkPasswordRegex(passwordEditable)
     }
-}
 
-sealed class SignUpState {
-    object SigningUp : SignUpState()
-    object Initial : SignUpState()
-    object RegexError : SignUpState()
-    object PasswordError : SignUpState()
-    object SignUpSuccess : SignUpState()
-    data class SignUpFailed(val message: String) : SignUpState()
+    private fun checkEmailRegex(emailEditable: CharSequence): Boolean {
+        return !isEmailValid(emailEditable)
+    }
+
+    private fun checkPasswordRegex(passwordEditable: CharSequence): Boolean {
+        return !isPasswordValid(passwordEditable)
+    }
+
+    private fun signUp(
+        emailEditable: CharSequence,
+        passwordEditable: CharSequence,
+        nickNameEditable: CharSequence,
+    ) {
+        val pair = initEmailPasswordCharArray(emailEditable, passwordEditable)
+        val (email, password) = pair.first to pair.second
+
+        setSignUpState(SignUpState.SigningUp)
+        viewModelScope.launch(ioDispatcher) {
+            signUseCase.signUp(SignUpParameter(email, password, nickNameEditable.toString())).collect { result ->
+                result.fold(
+                    onSuccess = { setSignUpState(SignUpState.SignUpSuccess) },
+                    onFailure = { setSignUpState(SignUpState.SignUpFailed(it.message ?: "가입 실패")) },
+                )
+            }
+        }
+        clearEmailPasswordCharArray(email, password)
+    }
+
+    private fun isNotEqualPasswordCheck() {
+        setSignUpState(SignUpState.PasswordError)
+    }
+
+    private fun initEmailPasswordCharArray(emailEditable: CharSequence, passwordEditable: CharSequence): Pair<CharArray, CharArray> {
+        return Pair(initEmailCharArray(emailEditable), initPasswordCharArray(passwordEditable))
+    }
+
+    private fun initEmailCharArray(emailEditable: CharSequence): CharArray {
+        val email = CharArray(emailEditable.length)
+        emailEditable.trim().forEachIndexed { index, c ->
+            email[index] = c
+        }
+        return email
+    }
+
+    private fun initPasswordCharArray(passwordEditable: CharSequence): CharArray {
+        val password = CharArray(passwordEditable.length)
+        passwordEditable.trim().forEachIndexed { index, c ->
+            password[index] = c
+        }
+        return password
+    }
+
+    private fun signUpFaledWithRegexError() {
+        setSignUpState(SignUpState.RegexError)
+    }
+
+    private fun clearEmailPasswordCharArray(email: CharArray, password: CharArray) {
+        email.fill('\u0000')
+        password.fill('\u0000')
+    }
 }

@@ -73,10 +73,10 @@ class LoginViewModel @Inject constructor(
     }
 
     fun loginWithCheckRegex(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) {
-        if (!checkEmailPasswordRegex(emailEditable, passwordEditable)) {
+        if (checkEmailPasswordRegex(emailEditable, passwordEditable)) {
             login(emailEditable, passwordEditable, checkedSaveEmail)
         } else {
-            loginFaledWithRegexError()
+            loginFailedWithRegexError()
         }
     }
 
@@ -140,7 +140,7 @@ class LoginViewModel @Inject constructor(
         setLoginState(LoginState.LoginSuccess)
     }
 
-    private fun loginFaledWithRegexError() {
+    private fun loginFailedWithRegexError() {
         setLoginState(LoginState.RegexError)
     }
 }

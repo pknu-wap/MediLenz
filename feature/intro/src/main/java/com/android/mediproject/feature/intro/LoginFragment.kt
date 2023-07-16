@@ -63,7 +63,7 @@ class LoginFragment :
         setBarStyle()
         setCallBackMoveFlag()
         setDelayTextWatcher()
-        setLoginButtonDisEabled()
+        setLoginButtonDisenabled()
     }
 
     private fun handleEvent(event: LoginViewModel.LoginEvent) = when (event) {
@@ -175,7 +175,7 @@ class LoginFragment :
         addDelayTextWatcher(loginPassword.inputData)
     }
 
-    private fun setLoginButtonDisEabled() {
+    private fun setLoginButtonDisenabled() {
         binding.loginBtn.isEnabled = false
     }
 
