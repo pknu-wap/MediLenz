@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
     implementation(libs.bundles.rooms)
+    implementation(libs.lz4)
     implementation(libs.kotlinx.coroutines.android)
     kapt(libs.androidx.room.compileKsp)
 }
