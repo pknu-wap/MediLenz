@@ -1,13 +1,10 @@
 package com.android.mediproject.feature.intro
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -47,115 +44,112 @@ class SignUpFragment :
 
     private val jobs = mutableListOf<Job>()
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setBinding()
+    }
 
+    private fun setBinding() = binding.apply {
+        viewModel = fragmentViewModel.apply {
+            viewLifecycleOwner.apply {
+                repeatOnStarted { eventFlow.collectLatest { handleEvent(it) } }
+                repeatOnStarted { signUpState.collectLatest { handleSignUpState(it) } }
+            }
+        }
+        setDelayTextWatcher()
         setBarStyle()
+        setCallBackMoveFlag()
+        setSignUpButtonDisenabled()
+    }
 
-        val moveFlag = arguments?.getInt("flag", TOHOME)
-        fragmentViewModel.setMoveFlag(moveFlag ?: TOHOME)
-
-        binding.apply {
-
-
-            viewModel = fragmentViewModel.apply {
-                viewLifecycleOwner.repeatOnStarted {
-                    eventFlow.collectLatest {
-                        handleEvent(it)
-                    }
-                }
-            }
-
-            binding.signUpComplete.isEnabled = false
-
-            addDelayTextWatcher(signUpEmail.inputData)
-            addDelayTextWatcher(signUpPassword.inputData)
-            addDelayTextWatcher(signUpPasswordCheck.inputData)
-            addDelayTextWatcher(signUpNickName.inputData)
-
-            viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.signInEvent.collectLatest {
-                    when (it) {
-                        is SignUpState.SigningUp -> {
-                            LoadingDialog.showLoadingDialog(
-                                requireActivity(),
-                                getString(R.string.signingUp),
-                            )
-                        }
-
-                        is SignUpState.SuccessSignUp -> {
-                            LoadingDialog.dismiss()
-                            toast(getString(R.string.signUpSuccess))
-                            when (fragmentViewModel.moveFlag.value) {
-                                TOHOME -> findNavController().navigate(
-                                    "medilens://main/home_nav".toUri(),
-                                    NavOptions.Builder().setPopUpTo(R.id.signUpFragment, true)
-                                        .build(),
-                                )
-
-                                TOMYPAGE -> findNavController().navigate(
-                                    "medilens://main/mypage_nav".toUri(),
-                                    NavOptions.Builder().setPopUpTo(R.id.signUpFragment, true)
-                                        .build(),
-                                )
-                            }
-                        }
-
-                        is SignUpState.FailedSignUp -> {
-                            // 실패
-                            LoadingDialog.dismiss()
-                            toast(getString(R.string.signUpFailed))
-                        }
-
-                        is SignUpState.RegexError -> {
-                            // 이메일 또는 비밀번호 형식 오류
-                            toast(getString(R.string.signInRegexError))
-                        }
-
-                        is SignUpState.Initial -> {
-                        }
-
-                        is SignUpState.PasswordError -> {
-                            toast(getString(R.string.signUpPasswordError))
-                        }
-                    }
-                }
-            }
+    private fun handleEvent(event: SignUpViewModel.SignUpEvent) {
+        when (event) {
+            is SignUpViewModel.SignUpEvent.SignUp -> signUp()
         }
     }
 
-    private fun setBarStyle() = binding.apply {
-        systemBarStyler.changeMode(
-            topViews = listOf(
-                SystemBarStyler.ChangeView(
-                    signUpBar,
-                    SystemBarStyler.SpacingType.PADDING,
-                ),
-            ),
+    private fun signUp() {
+        fragmentViewModel.signUpWithCheckRegex(
+            binding.signUpEmail.getEditable(),
+            binding.signUpPassword.getEditable(),
+            binding.signUpPasswordCheck.getEditable(),
+            binding.signUpNickName.getEditable(),
         )
     }
 
-    override fun onDestroyView() {
-        mainScope.cancel()
-        jobs.forEach { it.cancel() }
-        super.onDestroyView()
+    private fun handleSignUpState(signUpState: SignUpViewModel.SignUpState) {
+        when (signUpState) {
+            is SignUpViewModel.SignUpState.SigningUp -> signingUp()
+            is SignUpViewModel.SignUpState.SignUpSuccess -> signUpSuccess()
+            is SignUpViewModel.SignUpState.SignUpFailed -> signUpFailed()
+            is SignUpViewModel.SignUpState.RegexError -> regexError()
+            is SignUpViewModel.SignUpState.Initial -> initial()
+            is SignUpViewModel.SignUpState.PasswordError -> passwordError()
+        }
     }
 
-    private fun handleEvent(event: SignUpViewModel.SignUpEvent) = when (event) {
-        is SignUpViewModel.SignUpEvent.SignUp -> {
-            fragmentViewModel.signUp(
-                binding.signUpEmail.getEditable(),
-                binding.signUpPassword.getEditable(),
-                binding.signUpPasswordCheck.getEditable(),
-                binding.signUpNickName.getEditable(),
-            )
-        }
+    private fun signingUp() {
+        LoadingDialog.showLoadingDialog(
+            requireActivity(),
+            getString(R.string.signingUp),
+        )
+    }
 
-        is SignUpViewModel.SignUpEvent.SignUpComplete -> {}
+    private fun signUpSuccess() {
+        LoadingDialog.dismiss()
+        toast(getString(R.string.signUpSuccess))
+        handleCallBackMoveFlag()
+    }
+
+    private fun handleCallBackMoveFlag() {
+        when (getCallBackMoveFlag()) {
+            TOHOME -> navigateToHome()
+            TOMYPAGE -> navigateToMyPage()
+        }
+    }
+
+    private fun getCallBackMoveFlag(): Int {
+        return fragmentViewModel.callBackMoveFlag.value
+    }
+
+    private fun navigateToHome() {
+        navigateWithUriNavOptions(
+            "medilens://main/home_nav",
+            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
+                .build(),
+        )
+    }
+
+    private fun navigateToMyPage() {
+        navigateWithUriNavOptions(
+            "medilens://main/mypage_nav",
+            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
+                .build(),
+        )
+    }
+
+    private fun signUpFailed() {
+        LoadingDialog.dismiss()
+        toast(getString(R.string.signUpFailed))
+    }
+
+    private fun regexError() {
+        toast(getString(R.string.signInRegexError))
+    }
+
+    private fun initial() {
+    }
+
+    private fun passwordError() {
+        toast(getString(R.string.signUpPasswordError))
+    }
+
+    private fun setDelayTextWatcher() = binding.apply {
+        addDelayTextWatcher(signUpEmail.inputData)
+        addDelayTextWatcher(signUpPassword.inputData)
+        addDelayTextWatcher(signUpPasswordCheck.inputData)
+        addDelayTextWatcher(signUpNickName.inputData)
     }
 
     private fun addDelayTextWatcher(editText: EditText) {
@@ -171,4 +165,31 @@ class SignUpFragment :
             }.launchIn(this)
         }
     }
+
+    private fun setBarStyle() = binding.apply {
+        systemBarStyler.changeMode(
+            topViews = listOf(
+                SystemBarStyler.ChangeView(
+                    signUpBar,
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
+        )
+    }
+
+    private fun setCallBackMoveFlag() {
+        val moveFlag = arguments?.getInt("flag", TOHOME)
+        fragmentViewModel.setCallBackMoveFlag(moveFlag ?: TOHOME)
+    }
+
+    private fun setSignUpButtonDisenabled() {
+        binding.signUpComplete.isEnabled = false
+    }
+
+    override fun onDestroyView() {
+        mainScope.cancel()
+        jobs.forEach { it.cancel() }
+        super.onDestroyView()
+    }
+
 }

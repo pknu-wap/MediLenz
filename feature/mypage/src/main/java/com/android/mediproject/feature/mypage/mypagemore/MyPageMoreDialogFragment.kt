@@ -120,11 +120,11 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
     }
 
     private fun changeNickname() {
-        fragmentViewModel.changeNickname(getSubtitleValue(binding.dialogSubtitle1))
+        fragmentViewModel.changeNickname(binding.dialogSubtitle1.getValue())
     }
 
     private fun changePassword() {
-        fragmentViewModel.changePassword(getSubtitleEditable(binding.dialogSubtitle1))
+        fragmentViewModel.changePassword(binding.dialogSubtitle1.getEditable())
     }
 
     private fun withdrawal() {
@@ -133,14 +133,6 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
 
     private fun logout() {
         fragmentViewModel.logout()
-    }
-
-    private fun getSubtitleValue(subtitle: Subtitle): String {
-        return subtitle.getValue()
-    }
-
-    private fun getSubtitleEditable(subtitle: Subtitle): Editable {
-        return subtitle.getEditable()
     }
 
     private fun toast(str: String) {
@@ -183,24 +175,26 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
     private fun setChangeNickNameSubtitle() = binding.dialogSubtitle1.apply {
         setTitle(getString(com.android.mediproject.core.ui.R.string.nickName))
         setHint(getString(com.android.mediproject.core.ui.R.string.nickNameHint))
-        inputData.addTextChangedListener(
-            object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?, start: Int, count: Int, after: Int,
-                ) {
-                }
+        inputData.addTextChangedListener(getChangeNicknameTextChangedListner())
+    }
 
-                override fun onTextChanged(
-                    s: CharSequence?, start: Int, before: Int, count: Int,
-                ) {
-                }
+    private fun getChangeNicknameTextChangedListner(): TextWatcher {
+        return object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?, start: Int, count: Int, after: Int,
+            ) {
+            }
 
-                override fun afterTextChanged(s: Editable?) {
-                    if (isEditableNotEmpty(s!!)) completeButtonEnabled()
-                    else completeButtonDisEnabled()
-                }
-            },
-        )
+            override fun onTextChanged(
+                s: CharSequence?, start: Int, before: Int, count: Int,
+            ) {
+            }
+
+            override fun afterTextChanged(editable: Editable?) {
+                if (editable?.isNotEmpty()!!) completeButtonEnabled()
+                else completeButtonDisEnabled()
+            }
+        }
     }
 
     private fun setChangePasswordSubtitle() = binding.apply {
@@ -212,49 +206,57 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         dialogSubtitle2.apply {
             setDataType(PASSWORD)
             visibility = View.VISIBLE
-            inputData.addTextChangedListener(
-                object : TextWatcher {
-                    override fun beforeTextChanged(
-                        s: CharSequence?, start: Int, count: Int, after: Int,
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        s: CharSequence?, start: Int, before: Int, count: Int,
-                    ) {
-                    }
-
-                    override fun afterTextChanged(s: Editable?) {
-                        if (s.toString().length != 0 && (s.toString() == dialogSubtitle1.getValue())) completeButtonEnabled()
-                        else completeButtonDisEnabled()
-                    }
-                },
-            )
+            inputData.addTextChangedListener(getChangePasswordTextChangedListner())
         }
+    }
+
+    private fun getChangePasswordTextChangedListner(): TextWatcher {
+        return object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?, start: Int, count: Int, after: Int,
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence?, start: Int, before: Int, count: Int,
+            ) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (checkChangePasswordEditable(s)) completeButtonEnabled()
+                else completeButtonDisEnabled()
+            }
+        }
+    }
+
+    private fun checkChangePasswordEditable(editable: Editable?): Boolean {
+        return (editable?.isNotEmpty()!!) && (editable.toString() == binding.dialogSubtitle1.getValue())
     }
 
     private fun setWithdrawalSubtitle() = binding.dialogSubtitle1.apply {
         title.text = getWithdrawalSpan()
         setHint(getString(R.string.withdrawalHint))
         setTitleStyleNormal()
-        inputData.addTextChangedListener(
-            object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?, start: Int, count: Int, after: Int,
-                ) {
-                }
+        inputData.addTextChangedListener(getWithdrawalTextChangedListner())
+    }
 
-                override fun onTextChanged(
-                    s: CharSequence?, start: Int, before: Int, count: Int,
-                ) {
-                }
+    private fun getWithdrawalTextChangedListner(): TextWatcher {
+        return object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?, start: Int, count: Int, after: Int,
+            ) {
+            }
 
-                override fun afterTextChanged(s: Editable?) {
-                    if (checkEditableWithdrawal(s)) completeButtonEnabled()
-                    else completeButtonDisEnabled()
-                }
-            },
-        )
+            override fun onTextChanged(
+                s: CharSequence?, start: Int, before: Int, count: Int,
+            ) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (checkEditableWithdrawal(s)) completeButtonEnabled()
+                else completeButtonDisEnabled()
+            }
+        }
     }
 
     private fun getWithdrawalSpan(): SpannableStringBuilder {
@@ -294,10 +296,6 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
             )
             setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         }
-    }
-
-    private fun isEditableNotEmpty(editable: Editable): Boolean {
-        return editable.toString().length != 0
     }
 
     private fun checkEditableWithdrawal(editable: Editable?): Boolean {

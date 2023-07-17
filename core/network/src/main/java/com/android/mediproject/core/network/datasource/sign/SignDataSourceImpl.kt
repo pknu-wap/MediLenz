@@ -10,7 +10,7 @@ import com.android.mediproject.core.model.remote.token.NewTokensFromAws
 import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
 import com.android.mediproject.core.model.remote.token.RequestBehavior
 import com.android.mediproject.core.model.remote.token.TokenState
-import com.android.mediproject.core.model.requestparameters.SignInParameter
+import com.android.mediproject.core.model.requestparameters.LoginParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import com.android.mediproject.core.network.module.AwsNetworkApi
 import com.android.mediproject.core.network.parameter.SignInRequestParameter
@@ -27,14 +27,11 @@ class SignDataSourceImpl @Inject constructor(
 ) :
     SignDataSource {
 
-    /**
-     * 로그인
-     */
-    override fun signIn(signInParameter: SignInParameter): Flow<Result<SignInResponse>> = channelFlow {
-        val email = WeakReference(signInParameter.email.joinToString("")).get()!!
-        val password = WeakReference(aesCoder.encodePassword(signInParameter.email, signInParameter.password)).get()!!
+    override fun logIn(loginParameter: LoginParameter): Flow<Result<SignInResponse>> = channelFlow {
+        val email = WeakReference(loginParameter.email.joinToString("")).get()!!
+        val password = WeakReference(aesCoder.encodePassword(loginParameter.email, loginParameter.password)).get()!!
 
-        awsNetworkApi.signIn(SignInRequestParameter(email, password)).onResponseWithTokens(RequestBehavior.NewTokens).fold(onSuccess = {
+        awsNetworkApi.login(SignInRequestParameter(email, password)).onResponseWithTokens(RequestBehavior.NewTokens).fold(onSuccess = {
             Result.success(it)
         }, onFailure = {
             Result.failure(it)
@@ -43,9 +40,6 @@ class SignDataSourceImpl @Inject constructor(
         }
     }
 
-    /**
-     * 회원가입
-     */
     override fun signUp(signUpParameter: SignUpParameter): Flow<Result<SignUpResponse>> = channelFlow {
         val email = WeakReference(signUpParameter.email.joinToString("")).get()!!
         val password = WeakReference(aesCoder.encodePassword(signUpParameter.email, signUpParameter.password)).get()!!
@@ -58,10 +52,6 @@ class SignDataSourceImpl @Inject constructor(
             }
     }
 
-
-    /**
-     * 토큰 갱신
-     */
     private fun reissueTokens(refreshToken: CharArray): Flow<Result<ReissueTokenResponse>> = channelFlow {
         awsNetworkApi.reissueTokens().onResponseWithTokens(RequestBehavior.ReissueTokens).fold(onSuccess = {
             Result.success(it)

@@ -135,7 +135,7 @@ interface AwsNetworkApi {
     ): Response<SignUpResponse>
 
     @POST(value = "user/login")
-    suspend fun signIn(
+    suspend fun login(
         @Body signInRequestParameter: SignInRequestParameter
     ): Response<SignInResponse>
 

@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.mypage
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -68,9 +67,6 @@ class MyPageFragment :
 
     private fun setBinding() =
         binding.apply {
-            setBarStyle()
-            setRecyclerView()
-
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
                     repeatOnStarted { token.collect { handleToken(it) } }
@@ -79,13 +75,15 @@ class MyPageFragment :
                     repeatOnStarted { loginMode.collect { handleLoginMode(it) } }
                     repeatOnStarted {
                         myCommentsList.collect { commentList ->
-                            if (checkCommentListSize(commentList)) showCommentList(commentList)
+                            if (isCommentListNotEmpty(commentList)) showCommentList(commentList)
                             else noShowCommentList()
                         }
                     }
                 }
                 loadTokens()
             }
+            setBarStyle()
+            setRecyclerView()
         }
 
     private fun setBarStyle() = binding.apply {
@@ -105,7 +103,7 @@ class MyPageFragment :
         addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
     }
 
-    private fun checkCommentListSize(commentList: List<MyCommentDto>): Boolean {
+    private fun isCommentListNotEmpty(commentList: List<MyCommentDto>): Boolean {
         return (commentList.size != 0)
     }
 
