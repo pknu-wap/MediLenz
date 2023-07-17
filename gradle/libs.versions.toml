@@ -238,6 +238,7 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 
 # retrofit2--------------------------------------------------------------------------------------------------------------
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
+retrofit-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit2" }
 retrofit-kotlinx-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationJson" }
 
 # okhttp3--------------------------------------------------------------------------------------------------------------
@@ -303,7 +304,7 @@ uiAndroidx = ["androidx-appcompat", "androidx-preference-ktx", "androidx-core-kt
 lifecycles = ["androidx-lifecycle-livedata-ktx", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx",
     "androidx-lifecycle-viewmodel-savedstate", "androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-runtime-compose"]
 
-retrofits = ["retrofit-core", "retrofit-kotlinx-serialization"]
+retrofits = ["retrofit-core", "retrofit-kotlinx-serialization", "retrofit-scalars"]
 
 navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-compose", "androidx-navigation-dynamic"]
 

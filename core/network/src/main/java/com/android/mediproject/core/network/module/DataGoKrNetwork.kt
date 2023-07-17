@@ -85,7 +85,6 @@ object DataGoKrNetwork {
     @Provides
     @Singleton
     fun providesDurDataSource(dataGoKrNetworkApi: DataGoKrNetworkApi): DurDataSource = DurDataSourceImpl(dataGoKrNetworkApi)
-
 }
 
 interface DataGoKrNetworkApi {

@@ -1,14 +1,31 @@
 package com.android.mediproject.core.network.datasource.image
 
+import com.android.mediproject.core.network.module.GoogleSearchNetworkApi
+import com.android.mediproject.core.network.onResponse
+import com.android.mediproject.core.network.parser.HtmlParser
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class GoogleImageDownloadDataSourceImpl @Inject constructor() {
+class GoogleImageDownloadDataSourceImpl @Inject constructor(
+    private val googleSearchNetworkApi: GoogleSearchNetworkApi,
+    private val htmlParser: HtmlParser,
+    private val defaultDispatcher: CoroutineDispatcher,
+) {
 
+    fun getImageUrl(medicineName: String): Flow<Result<String>> = channelFlow {
+        val response = googleSearchNetworkApi.getImageUrl(medicineName)
+        withContext(defaultDispatcher) {
+            response.onResponse().fold(
+                onSuccess = { response ->
+                    send(Result.success(htmlParser.parse(response)))
+                },
+                onFailure = {
+                    send(Result.failure(it))
+                },
+            )
+        }
+    }
 }
-
-/*
-
-http://www.health.kr/searchDrug/result_drug.asp?drug_cd%3DA11AGGGGA0316&sa=U&ved=2ahUKEwjQjPmIuJWAAxV7F1kFHa5YCXAQr4kDegQIAxAC&usg=AOvVaw2YUothcZPgQRba0qSGbEYN
-
-http://www.health.kr/searchDrug/result_drug.asp?drug_cd%3DA11AGGGGA0316&sa=U&ved=2ahUKEwjQjPmIuJWAAxV7F1kFHa5YCXAQqoUBegQIAxAB&usg=AOvVaw11R0-6T5j2dbXTEXHKOdo0
- */
