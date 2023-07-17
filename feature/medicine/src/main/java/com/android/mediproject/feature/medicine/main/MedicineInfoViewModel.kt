@@ -34,7 +34,7 @@ class MedicineInfoViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
     private val commentsUseCase: CommentsUseCase,
     private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
     init {
@@ -56,15 +56,19 @@ class MedicineInfoViewModel @Inject constructor(
 
     val medicineDetails: StateFlow<UiState<MedicineDetatilInfoDto>> = medicinePrimaryInfo.flatMapLatest { primaryInfo ->
         getMedicineDetailsUseCase(primaryInfo).mapLatest { result ->
-            result.fold(onSuccess = {
-                UiState.Success(it)
-            }, onFailure = { UiState.Error(it.message ?: "failed") })
+            result.fold(
+                onSuccess = {
+                    UiState.Success(it)
+                },
+                onFailure = { UiState.Error(it.message ?: "failed") },
+            )
         }.flowOn(defaultDispatcher)
     }.stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = UiState.Loading)
 
     fun setMedicinePrimaryInfo(medicineArgs: MedicineInfoArgs) {
         viewModelScope.launch {
             _medicinePrimaryInfo.emit(medicineArgs)
+            getMedicineDetailsUseCase.updateImageCache(medicineArgs.itemSeq.toString(), medicineArgs.imgUrl)
         }
     }
 
@@ -83,7 +87,7 @@ class MedicineInfoViewModel @Inject constructor(
         }
     }
 
-    fun checkInterestMedicine() {
+    fun checkFavoriteMedicine() {
         viewModelScope.launch {
             if (!checkFavoriteMedicine.value.lockChecked) {
                 val newState = !checkFavoriteMedicine.value.isInterest

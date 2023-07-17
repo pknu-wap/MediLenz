@@ -2,7 +2,8 @@ package com.android.mediproject.core.database
 
 import android.content.Context
 import androidx.room.Room
-import com.android.mediproject.core.database.cache.MedicineCacheDao
+import com.android.mediproject.core.database.cache.MedicineDetailCacheDao
+import com.android.mediproject.core.database.cache.MedicineImageCacheDao
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
 import dagger.Module
 import dagger.Provides
@@ -31,5 +32,8 @@ object DaoModule {
     fun provideSearchHistoryDao(roomDB: RoomDB): SearchHistoryDao = roomDB.searchHistoryDao()
 
     @Provides
-    fun provideMedicineCacheDao(roomDB: RoomDB): MedicineCacheDao = roomDB.medicineCacheDao()
+    fun provideMedicineDetailCacheDao(roomDB: RoomDB): MedicineDetailCacheDao = roomDB.medicineDetailCacheDao()
+
+    @Provides
+    fun provideMedicineImageCacheDao(roomDB: RoomDB): MedicineImageCacheDao = roomDB.medicineImageCacheDao()
 }

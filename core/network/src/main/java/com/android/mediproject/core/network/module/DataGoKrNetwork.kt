@@ -4,6 +4,7 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
 import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.model.remote.adminaction.AdminActionListResponse
@@ -68,8 +69,8 @@ object DataGoKrNetwork {
     @Provides
     @Singleton
     fun provideMedicineApprovalDataSource(
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, dataGoKrNetworkApi: DataGoKrNetworkApi,
-    ): MedicineApprovalDataSource = MedicineApprovalDataSourceImpl(ioDispatcher, dataGoKrNetworkApi)
+        dataGoKrNetworkApi: DataGoKrNetworkApi, medicineDataCacheManager: MedicineDataCacheManager,
+    ): MedicineApprovalDataSource = MedicineApprovalDataSourceImpl(dataGoKrNetworkApi, medicineDataCacheManager)
 
     @Provides
     @Singleton

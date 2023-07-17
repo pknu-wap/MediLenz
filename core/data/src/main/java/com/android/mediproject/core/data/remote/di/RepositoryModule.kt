@@ -2,7 +2,6 @@ package com.android.mediproject.core.data.remote.di
 
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
-import com.android.mediproject.core.data.cache.repository.MedicineDataCacheRepository
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepository
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepositoryImpl
 import com.android.mediproject.core.data.remote.comments.CommentsRepository
@@ -31,6 +30,7 @@ import com.android.mediproject.core.data.remote.user.UserRepository
 import com.android.mediproject.core.data.remote.user.UserRepositoryImpl
 import com.android.mediproject.core.data.search.SearchHistoryRepository
 import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
+import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
@@ -76,7 +76,7 @@ object RepositoryModule {
         medicineApprovalDataSource: MedicineApprovalDataSource,
         searchHistoryRepository: SearchHistoryRepository,
         @Dispatcher(MediDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
-        medicineDataCacheRepository: MedicineDataCacheRepository,
+        medicineDataCacheRepository: MedicineDataCacheManager,
     ): MedicineApprovalRepository =
         MedicineApprovalRepositoryImpl(medicineApprovalDataSource, searchHistoryRepository, defaultDispatcher, medicineDataCacheRepository)
 

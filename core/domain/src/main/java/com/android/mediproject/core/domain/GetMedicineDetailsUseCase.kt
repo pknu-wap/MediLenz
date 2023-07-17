@@ -2,8 +2,10 @@ package com.android.mediproject.core.domain
 
 import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
 import com.android.mediproject.core.data.remote.medicineid.MedicineIdRepository
+import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.MedicineCacheEntity
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.toDto
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +18,7 @@ import javax.inject.Inject
 class GetMedicineDetailsUseCase @Inject constructor(
     private val medicineApprovalRepository: MedicineApprovalRepository,
     private val medicineIdRepository: MedicineIdRepository,
+    private val medicineDataCacheManager: MedicineDataCacheManager,
 ) {
 
     operator fun invoke(
@@ -62,6 +65,15 @@ class GetMedicineDetailsUseCase @Inject constructor(
 
             trySend(medicineInfo)
         }
+    }
+
+    fun updateImageCache(itemSeq: String, imageUrl: String) {
+        medicineDataCacheManager.updateImage(
+            MedicineCacheEntity(
+                itemSequence = itemSeq,
+                imageUrl = imageUrl,
+            ),
+        )
     }
 
 

@@ -4,8 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
-import com.android.mediproject.core.data.cache.repository.MedicineDataCacheRepository
 import com.android.mediproject.core.data.search.SearchHistoryRepository
+import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDto
 import com.android.mediproject.core.model.medicine.medicineapproval.Item
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
@@ -20,7 +20,7 @@ class MedicineApprovalRepositoryImpl @Inject constructor(
     private val medicineApprovalDataSource: MedicineApprovalDataSource,
     private val searchHistoryRepository: SearchHistoryRepository,
     private val defaultDispatcher: CoroutineDispatcher,
-    private val medicineDataCacheRepository: MedicineDataCacheRepository,
+    private val medicineDataCacheRepository: MedicineDataCacheManager,
 ) : MedicineApprovalRepository {
 
     /**
