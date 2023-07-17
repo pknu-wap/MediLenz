@@ -4,10 +4,6 @@ import com.android.mediproject.core.database.cache.MedicineCacheDao
 import com.android.mediproject.core.database.cache.MedicineCacheDto
 import com.android.mediproject.core.database.zip.Zipper
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.MedicineCacheEntity
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.plus
 import javax.inject.Inject
 
 class MedicineDataCacheRepositoryImpl @Inject constructor(
@@ -15,13 +11,29 @@ class MedicineDataCacheRepositoryImpl @Inject constructor(
     private val zipper: Zipper,
 ) : MedicineDataCacheRepository(medicineCacheDao) {
 
-    @OptIn(DelicateCoroutinesApi::class) private val scope = GlobalScope + Dispatchers.Default
+    override suspend fun selectAll() = medicineCacheDao.selectAll().map {
+        MedicineCacheEntity(
+            itemSequence = it.itemSeq,
+            json = decompress(it),
+            imageUrl = it.imageUrl,
+        )
+    }
 
-    override suspend fun selectAll() = medicineCacheDao.selectAll()
+    override suspend fun selectAll(ids: List<String>) = medicineCacheDao.selectAll(ids).map {
+        MedicineCacheEntity(
+            itemSequence = it.itemSeq,
+            json = decompress(it),
+            imageUrl = it.imageUrl,
+        )
+    }
 
-    override suspend fun selectAll(ids: List<String>) = medicineCacheDao.selectAll(ids)
-
-    override suspend fun selectAllImageUrls(ids: List<String>) = medicineCacheDao.selectAllImageUrls(ids)
+    override suspend fun selectAllImageUrls(ids: List<String>) = medicineCacheDao.selectAllImageUrls(ids).map {
+        MedicineCacheEntity(
+            itemSequence = it.itemSeq,
+            json = decompress(it),
+            imageUrl = it.imageUrl,
+        )
+    }
 
     override suspend fun updates(entities: List<MedicineCacheEntity>) {
         val list = entities.map {
@@ -34,5 +46,13 @@ class MedicineDataCacheRepositoryImpl @Inject constructor(
         medicineCacheDao.update(list)
     }
 
-    override suspend fun select(id: String): MedicineCacheDto = medicineCacheDao.select(id)
+    override suspend fun select(id: String) = medicineCacheDao.select(id).run {
+        MedicineCacheEntity(
+            itemSequence = itemSeq,
+            json = decompress(this),
+            imageUrl = imageUrl,
+        )
+    }
+
+    private suspend fun decompress(dto: MedicineCacheDto): String = zipper.decompress(dto.data)
 }

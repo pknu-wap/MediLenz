@@ -2,6 +2,7 @@ package com.android.mediproject.core.data.remote.di
 
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.data.cache.repository.MedicineDataCacheRepository
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepository
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepositoryImpl
 import com.android.mediproject.core.data.remote.comments.CommentsRepository
@@ -74,8 +75,10 @@ object RepositoryModule {
     fun provideMedicineApprovalRepository(
         medicineApprovalDataSource: MedicineApprovalDataSource,
         searchHistoryRepository: SearchHistoryRepository,
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher,
-    ): MedicineApprovalRepository = MedicineApprovalRepositoryImpl(medicineApprovalDataSource, searchHistoryRepository, ioDispatcher)
+        @Dispatcher(MediDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
+        medicineDataCacheRepository: MedicineDataCacheRepository,
+    ): MedicineApprovalRepository =
+        MedicineApprovalRepositoryImpl(medicineApprovalDataSource, searchHistoryRepository, defaultDispatcher, medicineDataCacheRepository)
 
     @Provides
     @Singleton
@@ -130,7 +133,7 @@ object RepositoryModule {
     fun providesMedicineIdRepository(
         medicineIdDataSource: MedicineIdDataSource,
     ): MedicineIdRepository = MedicineIdRepositoryImpl(medicineIdDataSource)
-    
+
 
     @Provides
     @Singleton

@@ -29,12 +29,12 @@ class Zipper @Inject constructor() {
     /**
      * 압축된 ByteArray를 문자열로 반환
      */
-    suspend fun decompress(compressed: ByteArray): Result<String> {
+    suspend fun decompress(compressed: ByteArray): String {
         return WeakReference(ByteArray(compressed.size * 4)).get()?.let { decomp ->
             val decompressor = lz4Factory.safeDecompressor()
             val decompressedLength = decompressor.decompress(compressed, decomp)
-            Result.success(String(decomp.copyOf(decompressedLength)))
-        } ?: Result.failure(Throwable("Failed to decompress"))
+            String(decomp.copyOf(decompressedLength))
+        } ?: ""
     }
 
 }
