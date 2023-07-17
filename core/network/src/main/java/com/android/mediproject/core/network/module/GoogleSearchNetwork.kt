@@ -36,9 +36,16 @@ object GoogleSearchNetwork {
 
 }
 
+private const val encoding = "utf8"
+private const val isch = "isch"
 
 interface GoogleSearchNetworkApi {
 
     @GET(value = "search")
-    suspend fun getImageUrl(@Query("q", encoded = true) query: String, @Query("tbm") tbm: String = "isch"): Response<String>
+    suspend fun getImageUrl(
+        @Query("q", encoded = true) query: String,
+        @Query("tbm", encoded = true) tbm: String = isch,
+        @Query("ie", encoded = true) ie: String = encoding,
+        @Query("oe", encoded = true) oe: String = encoding,
+    ): Response<String>
 }

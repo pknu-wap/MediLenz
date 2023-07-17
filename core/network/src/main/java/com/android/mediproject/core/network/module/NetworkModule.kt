@@ -136,9 +136,9 @@ object NetworkModule {
                     }
                 },
             )
-            readTimeout(Duration.ofSeconds(10))
-            connectTimeout(Duration.ofSeconds(10))
-            callTimeout(Duration.ofSeconds(10))
+            readTimeout(Duration.ofSeconds(5))
+            connectTimeout(Duration.ofSeconds(5))
+            callTimeout(Duration.ofSeconds(5))
             build()
         }
     }

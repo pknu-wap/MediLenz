@@ -104,22 +104,29 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
     }
 
     private suspend fun loadMedicineImageUrl(medicineApprovalListResponse: MedicineApprovalListResponse) {
-        val itemSeqs = medicineApprovalListResponse.body.items.filter { it.bigPrdtImgUrl == null }.map { it.itemSeq }
-        if (itemSeqs.isEmpty()) return
+        val items = mutableListOf<Pair<Int, String>>()
+        medicineApprovalListResponse.body.items.forEachIndexed { index, item ->
+            if (item.bigPrdtImgUrl.isEmpty())
+                items.add(index to item.itemName)
+        }
+        if (items.isEmpty()) return
 
         return withContext(dispatchers) {
             val map = mutableMapOf<String, String>()
-            val asyncList = itemSeqs.map { itemSeq ->
+            val asyncList = items.map { (i, name) ->
                 async {
-                    val imageUrl = googleSearchDataSource.getImageUrl(itemSeq)
+                    val imageUrl = googleSearchDataSource.getImageUrl(name)
                     synchronized(map) {
-                        map[itemSeq] = imageUrl.getOrDefault("")
+                        map[name] = imageUrl.getOrDefault("")
                     }
                 }
             }
+
             asyncList.forEach { it.await() }
-            medicineApprovalListResponse.body.items.filter { it.bigPrdtImgUrl == null }.forEach { item ->
-                item.bigPrdtImgUrl = map[item.itemSeq]
+            medicineApprovalListResponse.body.items.run {
+                items.forEach { (i, seq) ->
+                    this[i].bigPrdtImgUrl = map.getOrDefault(seq, "")
+                }
             }
         }
     }
