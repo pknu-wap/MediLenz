@@ -13,6 +13,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import androidx.core.view.marginBottom
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -104,8 +106,17 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         navController.addOnDestinationChangedListener { _, destination, arg ->
             log(arg.toString())
             bottomVisible(destination.id !in hideBottomNavDestinationIds)
-            systemBarColorAnalyzer.convert()
         }
+
+        supportFragmentManager.registerFragmentLifecycleCallbacks(
+            object : FragmentManager.FragmentLifecycleCallbacks() {
+                override fun onFragmentStarted(fm: FragmentManager, f: Fragment) {
+                    super.onFragmentStarted(fm, f)
+                    systemBarColorAnalyzer.convert()
+                }
+            },
+            true,
+        )
     }
 
     private fun bottomVisible(visible: Boolean) {

@@ -29,7 +29,7 @@ import kotlin.properties.Delegates
 
 @SuppressLint("InternalInsetResource", "DiscouragedApi")
 object SystemBarColorAnalyzer {
-    private val onChangedFragmentFlow = MutableSharedFlow<Unit>(onBufferOverflow = BufferOverflow.DROP_OLDEST, replay = 1, extraBufferCapacity = 4)
+    private val onChangedFragmentFlow = MutableSharedFlow<Unit>(onBufferOverflow = BufferOverflow.DROP_OLDEST, replay = 1, extraBufferCapacity = 2)
 
     private var decorView by Delegates.notNull<View>()
     private var window by Delegates.notNull<Window>()
@@ -37,13 +37,14 @@ object SystemBarColorAnalyzer {
     private val statusBarHeight = resource.getDimensionPixelSize(resource.getIdentifier("status_bar_height", "dimen", "android"))
     private val navigationBarHeight = resource.getDimensionPixelSize(resource.getIdentifier("navigation_bar_height", "dimen", "android"))
 
-    private const val criteriaColor = 100
+    private const val criteriaColor = 135
     private var systemBarController: SystemBarController? = null
 
     private val job = MainScope().launch {
         onChangedFragmentFlow.collect {
             decorView.doOnPreDraw {
                 launch(Dispatchers.Default) {
+                    val start = System.currentTimeMillis()
                     val statusBarBitmap = Bitmap.createBitmap(decorView.width, statusBarHeight, Bitmap.Config.ARGB_8888)
                     val navigationBarBitmap = Bitmap.createBitmap(decorView.width, navigationBarHeight, Bitmap.Config.ARGB_8888)
 
@@ -70,6 +71,7 @@ object SystemBarColorAnalyzer {
                         )
                     }
 
+                    println("systembar end ${System.currentTimeMillis() - start}, $statusBarColor, $navigationBarColor")
                 }
             }
         }
@@ -99,10 +101,21 @@ object SystemBarColorAnalyzer {
     }
 
 
-    private fun Int.toGrayScale(): Int = (0.2989 * Color.red(this) + 0.5870 * Color.green(this) + 0.1140 * Color.blue(this)).toInt()
+    private fun Int.toGrayScale(): Int = kotlin.run {
+        val r = Color.red(this)
+        val g = Color.green(this)
+        val b = Color.blue(this)
+        val a = Color.alpha(this)
+        println("systembar r : $r, g : $g, b : $b, a : $a")
+
+        if (a == 255 && r == 0 && g == 0 && b == 0) -1
+        else (0.2989 * Color.red(this) + 0.5870 * Color.green(this) + 0.1140 * Color.blue(this)).toInt()
+    }
 
     private fun Int.toColor() = toGrayScale().let { gray ->
+        println("systembar gray : $gray")
         if (gray == 0) SystemBarStyler.SystemBarColor.BLACK
+        else if (gray == -1) SystemBarStyler.SystemBarColor.WHITE
         else if (gray <= criteriaColor) SystemBarStyler.SystemBarColor.WHITE
         else SystemBarStyler.SystemBarColor.BLACK
     }

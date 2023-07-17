@@ -2,14 +2,15 @@ package com.android.mediproject.core.network.module
 
 import android.content.Context
 import com.android.mediproject.core.common.BuildConfig
-import com.android.mediproject.core.datastore.TokenServer
 import com.android.mediproject.core.network.R
-import com.android.mediproject.core.network.tokens.TokenInterceptor
+import com.android.mediproject.core.network.tokens.TokenRequestInterceptor
+import com.android.mediproject.core.network.tokens.TokenServer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.DelicateCoroutinesApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.security.KeyStore
@@ -23,13 +24,15 @@ import javax.inject.Singleton
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
+import kotlin.properties.Delegates
 
+@OptIn(DelicateCoroutinesApi::class)
 @Module
 @InstallIn(SingletonComponent::class)
 class CertificateHelper @Inject constructor(@ApplicationContext context: Context) {
 
-    lateinit var tmf: TrustManagerFactory
-    lateinit var sslContext: SSLContext
+    var tmf: TrustManagerFactory by Delegates.notNull()
+    var sslContext: SSLContext by Delegates.notNull()
 
     init {
         try {
@@ -61,7 +64,7 @@ class CertificateHelper @Inject constructor(@ApplicationContext context: Context
     }
 }
 
-@Module(includes = [DataGoKrNetwork::class, AwsNetwork::class, GoogleNetwork::class])
+@Module(includes = [DataGoKrNetwork::class, AwsNetwork::class])
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
@@ -69,12 +72,14 @@ object NetworkModule {
     @Singleton
     fun providesOkHttpClient(certificateHelper: CertificateHelper): OkHttpClient {
         return OkHttpClient.Builder().run {
-            addInterceptor(HttpLoggingInterceptor().apply {
-                if (BuildConfig.DEBUG) {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }
-            })
-            readTimeout(Duration.ofSeconds(15))
+            addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    if (BuildConfig.DEBUG) {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+                },
+            )
+            readTimeout(Duration.ofSeconds(10))
             connectTimeout(Duration.ofSeconds(10))
             callTimeout(Duration.ofSeconds(10))
             certificateHelper.apply {
@@ -88,14 +93,16 @@ object NetworkModule {
     @Singleton
     @Named("okHttpClientWithAccessTokens")
     fun providesOkHttpClientWithAccessTokens(
-        tokenServer: TokenServer
+        tokenServer: TokenServer,
     ): OkHttpClient = OkHttpClient.Builder().run {
-        addInterceptor(HttpLoggingInterceptor().apply {
-            if (BuildConfig.DEBUG) {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-        })
-        addInterceptor(TokenInterceptor(tokenServer, TokenInterceptor.TokenType.ACCESS_TOKEN))
+        addInterceptor(
+            HttpLoggingInterceptor().apply {
+                if (BuildConfig.DEBUG) {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            },
+        )
+        addInterceptor(TokenRequestInterceptor(tokenServer, TokenRequestInterceptor.TokenType.AccessToken))
         build()
     }
 
@@ -103,14 +110,16 @@ object NetworkModule {
     @Singleton
     @Named("okHttpClientWithReissueTokens")
     fun providesOkHttpClientWithReissueTokens(
-        tokenServer: TokenServer
+        tokenServer: TokenServer,
     ): OkHttpClient = OkHttpClient.Builder().run {
-        addInterceptor(HttpLoggingInterceptor().apply {
-            if (BuildConfig.DEBUG) {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-        })
-        addInterceptor(TokenInterceptor(tokenServer, TokenInterceptor.TokenType.REFRESH_TOKEN))
+        addInterceptor(
+            HttpLoggingInterceptor().apply {
+                if (BuildConfig.DEBUG) {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            },
+        )
+        addInterceptor(TokenRequestInterceptor(tokenServer, TokenRequestInterceptor.TokenType.RefreshToken))
         build()
     }
 
@@ -118,14 +127,16 @@ object NetworkModule {
     @Singleton
     @Named("okHttpClientWithGoogleAccessTokens")
     fun providesOkHttpClientGoogleWithAccessTokens(
-        tokenServer: TokenServer
+        tokenServer: TokenServer,
     ): OkHttpClient = OkHttpClient.Builder().run {
-        addInterceptor(HttpLoggingInterceptor().apply {
-            if (BuildConfig.DEBUG) {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-        })
-        addInterceptor(TokenInterceptor(tokenServer, TokenInterceptor.TokenType.ACCESS_TOKEN))
+        addInterceptor(
+            HttpLoggingInterceptor().apply {
+                if (BuildConfig.DEBUG) {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            },
+        )
+        addInterceptor(TokenRequestInterceptor(tokenServer, TokenRequestInterceptor.TokenType.AccessToken))
         build()
     }
 }

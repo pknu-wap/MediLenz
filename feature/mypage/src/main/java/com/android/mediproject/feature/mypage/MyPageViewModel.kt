@@ -7,7 +7,7 @@ import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.domain.user.UserUseCase
 import com.android.mediproject.core.model.comments.MyCommentDto
-import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.model.user.UserDto
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -47,7 +47,7 @@ class MyPageViewModel @Inject constructor(
         object NavigateToMyCommentList : MyPageEvent()
     }
 
-    private val _token = MutableStateFlow<TokenState<CurrentTokenDto>>(TokenState.Empty)
+    private val _token = MutableStateFlow<TokenState<CurrentTokens>>(TokenState.Empty)
     val token get() = _token.asStateFlow()
 
     fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
@@ -69,7 +69,9 @@ class MyPageViewModel @Inject constructor(
     private val _loginMode = MutableStateFlow(LoginMode.GUEST_MODE)
     val loginMode get() = _loginMode.asStateFlow()
 
-    fun setLoginMode(loginMode: LoginMode) { _loginMode.value = loginMode }
+    fun setLoginMode(loginMode: LoginMode) {
+        _loginMode.value = loginMode
+    }
 
     enum class LoginMode {
         LOGIN_MODE, GUEST_MODE

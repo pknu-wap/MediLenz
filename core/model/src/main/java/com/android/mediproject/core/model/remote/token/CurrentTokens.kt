@@ -7,22 +7,19 @@ package com.android.mediproject.core.model.remote.token
  * @property accessToken
  * @property refreshToken
  */
-data class CurrentTokenDto(
+data class CurrentTokens(
     val accessToken: CharArray,
     val refreshToken: CharArray,
 ) {
-
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as CurrentTokenDto
+        other as CurrentTokens
 
         if (!accessToken.contentEquals(other.accessToken)) return false
         if (!refreshToken.contentEquals(other.refreshToken)) return false
-
-
 
         return true
     }

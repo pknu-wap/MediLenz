@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.model.comments.MyCommentDto
-import com.android.mediproject.core.model.remote.token.CurrentTokenDto
+import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.TokenState
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -107,12 +107,12 @@ class MyPageFragment :
         return (commentList.size != 0)
     }
 
-    private fun handleToken(tokenState: TokenState<CurrentTokenDto>) {
+    private fun handleToken(tokenState: TokenState<CurrentTokens>) {
         log(tokenState.toString())
         when (tokenState) {
             is TokenState.Empty -> setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
-            is TokenState.AccessExpiration -> {}
-            is TokenState.Valid -> setLoginMode(MyPageViewModel.LoginMode.LOGIN_MODE)
+            is TokenState.Tokens.AccessExpiration -> {}
+            is TokenState.Tokens.Valid -> setLoginMode(MyPageViewModel.LoginMode.LOGIN_MODE)
             else -> {}
         }
     }

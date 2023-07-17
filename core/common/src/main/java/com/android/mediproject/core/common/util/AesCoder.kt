@@ -20,10 +20,11 @@ class AesCoder @Inject constructor(@ApplicationContext context: Context) {
     private val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
 
     init {
-        val packageInfo =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) context.packageManager.getPackageInfo(context.packageName,
-                PackageManager.PackageInfoFlags.of(0))
-            else context.packageManager.getPackageInfo(context.packageName, 0)
+        val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) context.packageManager.getPackageInfo(
+            context.packageName,
+            PackageManager.PackageInfoFlags.of(0),
+        )
+        else context.packageManager.getPackageInfo(context.packageName, 0)
 
         var key: String? = "${packageInfo.firstInstallTime}".repeat(4).substring(0, 32)
         key?.apply {
