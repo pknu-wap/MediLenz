@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -19,18 +18,51 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
 
     override val fragmentViewModel by viewModels<HomeViewModel>()
 
-    @Inject lateinit var systemBarStyler: SystemBarStyler
+    @Inject
+    lateinit var systemBarStyler: SystemBarStyler
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    private fun setBarScrollEffect() = binding.apply {
+        homeBar1.bringToFront()
+        homeBar2.bringToFront()
+
+        val headerLayoutHeight = getViewHeightInPercent(binding.headerLayout, 1.2F)
+
+        scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            binding.homeBar2.alpha = (scrollY / headerLayoutHeight)
+
+            if (binding.homeBar2.alpha > 0.7) systemBarStyler.setStyle(
+                SystemBarStyler.SystemBarColor.BLACK,
+                SystemBarStyler.SystemBarColor.BLACK,
+            )
+            else systemBarStyler.setStyle(SystemBarStyler.SystemBarColor.WHITE, SystemBarStyler.SystemBarColor.BLACK)
+        }
     }
 
-    override fun onDetach() {
-        super.onDetach()
+    private fun getViewHeightInPercent(view: View, percent: Float): Float {
+        return measureViewHeight(view) * percent
+    }
+
+    private fun measureViewHeight(view: View): Int {
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+        return view.measuredHeight
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setBinding()
+    }
+
+    private fun setBinding() {
+        binding.apply {
+            viewModel = fragmentViewModel
+            fragmentViewModel.createHeaderText(getString(R.string.headerTextOnHome))
+        }
+        initSearchBar()
+        initChildFragments()
+        setBarStyle()
+    }
+
+    private fun setBarStyle() {
         systemBarStyler.changeMode(
             listOf(
                 SystemBarStyler.ChangeView(binding.homeBar1, SystemBarStyler.SpacingType.PADDING),
@@ -39,47 +71,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
             ),
             emptyList(),
         )
-
-        initSearchBar()
-        initChildFragments()
-
-        binding.apply {
-            viewModel = fragmentViewModel
-
-            homeBar1.bringToFront()
-            homeBar2.bringToFront()
-
-            /**
-             * 일반 적인 경우에는 emasredHeight로 그냥 측정되지만, 현재 headerLayout에 크기가 wrap_content이며,
-             * headerLayout의 부모뷰인 ConstrainyLayout도 wrap_content라서 UNSPECIFED모드로 측정해주어야 합니다.
-             * 다른 모드들은 전부 0으로 측정됩니다.
-             */
-
-            headerLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-            val initialHeight = (headerLayout.measuredHeight * 1.2).toFloat()
-            log(initialHeight.toString())
-
-            scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-                log(scrollY.toString())
-                log((scrollY / initialHeight).toString())
-                binding.homeBar2.alpha = (scrollY / initialHeight)
-
-                if (binding.homeBar2.alpha > 0.7) systemBarStyler.setStyle(
-                    SystemBarStyler.SystemBarColor.BLACK,
-                    SystemBarStyler.SystemBarColor.BLACK,
-                )
-                else systemBarStyler.setStyle(SystemBarStyler.SystemBarColor.WHITE, SystemBarStyler.SystemBarColor.BLACK)
-            }
-
-        }
-
-        fragmentViewModel.createHeaderText(getString(R.string.headerTextOnHome))
     }
 
-
-    /**
-     * 검색바 검색 가능하도록 설정하고, 검색버튼과 AI검색 버튼이 동작하도록 초기화합니다.
-     */
     private fun initSearchBar() {
         binding.searchView.setOnBarClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment())
@@ -87,7 +80,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     }
 
     private fun initChildFragments() {
-        // 아이템 클릭 시 처리 로직
         childFragmentManager.apply {
             setFragmentResultListener(RecentCommentListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
                 bundle.apply {
