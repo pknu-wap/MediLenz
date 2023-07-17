@@ -13,14 +13,14 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class MedicineApprovalListResponse(
-    @SerialName("body") val body: Body
+    @SerialName("body") val body: Body,
 ) : DataGoKrBaseResponse()
 
 @Serializable
 data class Body(
     val items: List<Item> = emptyList(), @SerialName("numOfRows") val numOfRows: Int, // 15
     @SerialName("pageNo") val pageNo: Int, // 1
-    @SerialName("totalCount") val totalCount: Int // 245
+    @SerialName("totalCount") val totalCount: Int, // 245
 )
 
 /**
@@ -50,7 +50,7 @@ data class Body(
  */
 @Serializable
 data class Item(
-    @SerialName("BIG_PRDT_IMG_URL") val bigPrdtImgUrl: String?,
+    @SerialName("BIG_PRDT_IMG_URL") var bigPrdtImgUrl: String?,
     @SerialName("BIZRNO") val bizrno: String?,
     @SerialName("CANCEL_DATE") val cancelDate: String?,
     @SerialName("CANCEL_NAME") val cancelName: String?,
@@ -70,5 +70,5 @@ data class Item(
     @SerialName("PRDLST_STDR_CODE") val prdlstStdrCode: String?,
     @SerialName("PRDUCT_PRMISN_NO") val prductPrmisnNo: String?,
     @SerialName("PRDUCT_TYPE") val prductType: String,
-    @SerialName("SPCLTY_PBLC") val medicineType: String
+    @SerialName("SPCLTY_PBLC") val medicineType: String,
 )

@@ -19,6 +19,7 @@ import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCau
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSourceImpl
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSourceImpl
+import com.android.mediproject.core.network.datasource.image.GoogleSearchDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionDataSource
@@ -31,6 +32,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -66,11 +69,16 @@ object DataGoKrNetwork {
     ): AdminActionDataSource = AdminActionDataSourceImpl(ioDispatcher, dataGoKrNetworkApi)
 
 
+    @OptIn(DelicateCoroutinesApi::class)
     @Provides
     @Singleton
     fun provideMedicineApprovalDataSource(
         dataGoKrNetworkApi: DataGoKrNetworkApi, medicineDataCacheManager: MedicineDataCacheManager,
-    ): MedicineApprovalDataSource = MedicineApprovalDataSourceImpl(dataGoKrNetworkApi, medicineDataCacheManager)
+        googleSearchDataSource: GoogleSearchDataSource,
+    ): MedicineApprovalDataSource = MedicineApprovalDataSourceImpl(
+        dataGoKrNetworkApi, medicineDataCacheManager, googleSearchDataSource,
+        newFixedThreadPoolContext(3, "GoogleSearchThreads"),
+    )
 
     @Provides
     @Singleton

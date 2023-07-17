@@ -5,15 +5,21 @@ import com.android.mediproject.core.model.DataGoKrResult
 import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.MedicineCacheEntity
+import com.android.mediproject.core.network.datasource.image.GoogleSearchDataSource
 import com.android.mediproject.core.network.module.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onResponse
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MedicineApprovalDataSourceImpl @Inject constructor(
     private val dataGoKrNetworkApi: DataGoKrNetworkApi,
     private val medicineDataCacheManager: MedicineDataCacheManager,
+    private val googleSearchDataSource: GoogleSearchDataSource,
+    private val dispatchers: ExecutorCoroutineDispatcher,
 ) : MedicineApprovalDataSource {
 
     override suspend fun getMedicineApprovalList(
@@ -23,8 +29,11 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
             .fold(
                 onSuccess = { response ->
                     response.isSuccess().let {
-                        if (it == DataGoKrResult.isSuccess) Result.success(response)
-                        else Result.failure(Throwable(it.failedMessage))
+                        if (it == DataGoKrResult.isSuccess) {
+                            // 이미지가 없는 경우 구글 검색을 통해 이미지를 가져온다.
+                            loadMedicineImageUrl(response)
+                            Result.success(response)
+                        } else Result.failure(Throwable(it.failedMessage))
                     }
                 },
                 onFailure = {
@@ -92,5 +101,26 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
                 changeDate = changeDate,
             ),
         )
+    }
+
+    private suspend fun loadMedicineImageUrl(medicineApprovalListResponse: MedicineApprovalListResponse) {
+        val itemSeqs = medicineApprovalListResponse.body.items.filter { it.bigPrdtImgUrl == null }.map { it.itemSeq }
+        if (itemSeqs.isEmpty()) return
+
+        return withContext(dispatchers) {
+            val map = mutableMapOf<String, String>()
+            val asyncList = itemSeqs.map { itemSeq ->
+                async {
+                    val imageUrl = googleSearchDataSource.getImageUrl(itemSeq)
+                    synchronized(map) {
+                        map[itemSeq] = imageUrl.getOrDefault("")
+                    }
+                }
+            }
+            asyncList.forEach { it.await() }
+            medicineApprovalListResponse.body.items.filter { it.bigPrdtImgUrl == null }.forEach { item ->
+                item.bigPrdtImgUrl = map[item.itemSeq]
+            }
+        }
     }
 }
