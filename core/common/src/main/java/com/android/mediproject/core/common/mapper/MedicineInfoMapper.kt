@@ -1,8 +1,13 @@
 package com.android.mediproject.core.common.mapper
 
 import android.content.Context
+import android.graphics.Typeface
 import android.text.Html
+import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import androidx.core.text.toSpanned
 import com.android.mediproject.core.common.R
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoDto
@@ -19,6 +24,11 @@ import javax.inject.Singleton
  */
 @Singleton
 class MedicineInfoMapper @Inject constructor() {
+
+    companion object {
+        private const val TEXT_SIZE_PERCENT = 1.2F
+    }
+
     /**
      * 용법용량 정보 데이터를 UI에 맞게 변환
      */
@@ -92,21 +102,21 @@ class MedicineInfoMapper @Inject constructor() {
             // 그룹 1: 의약품 정보
             context.resources.getStringArray(R.array.medicineInfo).also {
                 this[context.getString(R.string.medicineInfoTitle)] = listOf(
-                    it[0] to granuleDto.itemSeq, it[1] to granuleDto.itemName, it[2] to granuleDto.itemEngName
+                    it[0] to granuleDto.itemSeq, it[1] to granuleDto.itemName, it[2] to granuleDto.itemEngName,
                 )
             }
 
             // 그룹 2: 업체 정보
             context.resources.getStringArray(R.array.companyInfo).also {
                 this[context.getString(R.string.companyInfoTitle)] = listOf(
-                    it[0] to granuleDto.entpSeq, it[1] to granuleDto.entpName, it[2] to granuleDto.bizrNo
+                    it[0] to granuleDto.entpSeq, it[1] to granuleDto.entpName, it[2] to granuleDto.bizrNo,
                 )
             }
 
             // 그룹 3: 의약품 분류 정보
             context.resources.getStringArray(R.array.classificationInfo).also {
                 this[context.getString(R.string.classificationInfoTitle)] = listOf(
-                    it[0] to granuleDto.classNo, it[1] to granuleDto.className, it[2] to granuleDto.etcOtcName
+                    it[0] to granuleDto.classNo, it[1] to granuleDto.className, it[2] to granuleDto.etcOtcName,
                 )
             }
 
@@ -115,7 +125,7 @@ class MedicineInfoMapper @Inject constructor() {
                 this[context.getString(R.string.miscInfoTitle)] = listOf(
                     it[0] to granuleDto.formCodeName,
                     it[1] to granuleDto.itemPermitDate.toString(),
-                    it[2] to granuleDto.changeDate.toString()
+                    it[2] to granuleDto.changeDate.toString(),
                 )
             }
 
@@ -127,7 +137,7 @@ class MedicineInfoMapper @Inject constructor() {
                     it[2] to granuleDto.markCodeFrontAnal,
                     it[3] to granuleDto.markCodeBackAnal,
                     it[4] to granuleDto.markCodeFrontImg,
-                    it[5] to granuleDto.markCodeBackImg
+                    it[5] to granuleDto.markCodeBackImg,
                 )
             }
 
@@ -176,4 +186,19 @@ class MedicineInfoMapper @Inject constructor() {
             result
         }
 
+    fun initHeaderSpan(context: Context, text: String): SpannableStringBuilder {
+        return SpannableStringBuilder(text).apply {
+            val underline1Idx = text.indexOf(context.getString(R.string.highlightWord1)) to text.indexOf(context.getString(R.string.highlightWord1)) + 2
+
+            setSpan(UnderlineSpan(), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+            setSpan(StyleSpan(Typeface.BOLD), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+            setSpan(RelativeSizeSpan(TEXT_SIZE_PERCENT), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+
+            val underline2Idx = text.indexOf(context.getString(R.string.highlightWord2)) to text.indexOf(context.getString(R.string.highlightWord2)) + 2
+
+            setSpan(UnderlineSpan(), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+            setSpan(StyleSpan(Typeface.BOLD), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+            setSpan(RelativeSizeSpan(TEXT_SIZE_PERCENT), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+        }
+    }
 }

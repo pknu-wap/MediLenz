@@ -73,4 +73,7 @@
     <string name="divisionCaution">분할 주의</string>
     <string name="additiveCaution">첨가제 주의</string>
     <string name="noInternetConnection">인터넷 연결이 필요합니다.</string>
+
+    <string name="highlightWord1">찾고</string>
+    <string name="highlightWord2">소통</string>
 </resources>

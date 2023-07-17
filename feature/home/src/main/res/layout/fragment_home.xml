@@ -43,7 +43,6 @@
                         android:layout_marginBottom="58dp"
                         android:bufferType="spannable"
                         android:lineSpacingMultiplier="1.1"
-                        android:text="@{viewModel.headerText}"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         app:layout_constraintBottom_toBottomOf="parent"

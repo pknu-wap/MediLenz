@@ -14,10 +14,6 @@ class SearchMedicinesViewModel @Inject constructor() : BaseViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery get() = _searchQuery.asStateFlow()
 
-
-    /**
-     * 검색어 저장
-     */
     fun setQuery(query: String) = viewModelScope.launch {
         _searchQuery.value = query
     }

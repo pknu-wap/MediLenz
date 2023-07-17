@@ -1,8 +1,15 @@
 package com.android.mediproject.feature.home
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.android.mediproject.core.common.mapper.MedicineInfoMapper
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment
@@ -14,16 +21,20 @@ import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHomeBinding::inflate) {
+class HomeFragment :
+    BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHomeBinding::inflate) {
 
-    override val fragmentViewModel by viewModels<HomeViewModel>()
+    companion object {
+        private const val THRESHOLD = 0.7
+    }
+
+    override val fragmentViewModel: HomeViewModel by viewModels()
 
     @Inject
     lateinit var systemBarStyler: SystemBarStyler
 
-    companion object {
-        const val THRESHOLD = 0.7
-    }
+    @Inject
+    lateinit var medicineInfoMapper: MedicineInfoMapper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,15 +44,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     private fun setBinding() {
         binding.apply {
             viewModel = fragmentViewModel.apply {
-                initHeaderText(getString(R.string.headerTextOnHome))
                 viewLifecycleOwner.apply {
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
                 }
             }
         }
         setBarStyle()
-        setBarScrollEffect()
         setFragmentResultListener()
+        setHeaderText()
     }
 
     private fun handleEvent(event: HomeViewModel.HomeEvent) {
@@ -59,6 +69,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
             ),
             emptyList(),
         )
+        setBarScrollEffect()
     }
 
     private fun setBarScrollEffect() = binding.apply {
@@ -125,5 +136,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
                 ),
             )
         }
+    }
+
+    private fun setHeaderText() {
+        val span: SpannableStringBuilder
+        viewLifecycleOwner.apply {
+            span = medicineInfoMapper.initHeaderSpan(requireContext(), getString(R.string.headerTextOnHome))
+        }
+        binding.headerText.text = span
     }
 }
