@@ -1,14 +1,11 @@
 package com.android.mediproject.feature.intro
 
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -46,94 +43,113 @@ class LoginFragment :
     private val mainScope = MainScope()
     private val jobs = mutableListOf<Job>()
 
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setBinding()
+    }
 
+    private fun setBinding() = binding.apply {
+        viewModel = fragmentViewModel.apply {
+            viewLifecycleOwner.apply {
+                repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+                repeatOnStarted {
+                    loginState.collectLatest { handleSignInState(it) }
+                }
+                repeatOnStarted {
+                    savedEmail.collectLatest { callSavedEmail(it) }
+                }
+            }
+        }
         setBarStyle()
+        setCallBackMoveFlag()
+        setDelayTextWatcher()
+        setLoginButtonDisenabled()
+    }
 
-        binding.apply {
+    private fun handleEvent(event: LoginViewModel.LoginEvent) = when (event) {
+        is LoginViewModel.LoginEvent.Login -> login()
+        is LoginViewModel.LoginEvent.SignUp -> signUp()
+    }
 
+    private fun login() {
+        fragmentViewModel.loginWithCheckRegex(
+            binding.loginEmail.getEditable(),
+            binding.loginPassword.getEditable(),
+            binding.rememberEmailCB.isChecked,
+        )
+    }
 
-            loginBtn.isEnabled = false
-            val moveFlag = arguments?.getInt("flag", TOHOME)
-            fragmentViewModel.setMoveFlag(moveFlag ?: TOHOME)
+    private fun signUp() {
+        navigateWithNavDirections(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
+    }
 
-            addDelayTextWatcher(loginEmail.inputData)
-            addDelayTextWatcher(loginPassword.inputData)
+    private fun handleSignInState(loginState: LoginViewModel.LoginState) {
+        when (loginState) {
+            is LoginViewModel.LoginState.Logining -> showLoadingDialog()
+            is LoginViewModel.LoginState.LoginSuccess -> loginSuccess()
+            is LoginViewModel.LoginState.LoginFailed -> loginFailed()
+            is LoginViewModel.LoginState.RegexError -> regexError()
+            is LoginViewModel.LoginState.Initial -> initial()
+        }
+    }
 
-            viewLifecycleOwner.repeatOnStarted {
-                viewModel = fragmentViewModel
+    private fun showLoadingDialog() {
+        LoadingDialog.showLoadingDialog(
+            requireActivity(),
+            getString(R.string.signing),
+        )
+    }
 
-                launch {
-                    fragmentViewModel.eventFlow.collect { handleEvent(it) }
-                }
+    private fun loginSuccess() {
+        LoadingDialog.dismiss()
+        toast(getString(R.string.signInSuccess))
+        handleCallBackMoveFlag()
+    }
 
-                launch {
-                    fragmentViewModel.signInEvent.collectLatest {
-                        when (it) {
-                            is SignInState.Signing -> {
-                                // 로그인 중
-                                LoadingDialog.showLoadingDialog(
-                                    requireActivity(),
-                                    getString(R.string.signing),
-                                )
-                            }
+    private fun handleCallBackMoveFlag() {
+        when (getCallBackMoveFlag()) {
+            TOHOME -> navigateToHome()
+            TOMYPAGE -> navigateToMyPage()
+        }
+    }
 
-                            is SignInState.SuccessSignIn -> {
-                                // 로그인 성공
-                                LoadingDialog.dismiss()
-                                toast(getString(R.string.signInSuccess))
+    private fun getCallBackMoveFlag(): Int {
+        return fragmentViewModel.callBackMoveFlag.value
+    }
 
-                                when (fragmentViewModel.moveFlag.value) {
+    private fun navigateToHome() {
+        navigateWithUriNavOptions(
+            "medilens://main/home_nav",
+            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
+                .build(),
+        )
+    }
 
-                                    TOHOME -> findNavController().navigate(
-                                        "medilens://main/home_nav".toUri(),
-                                        NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
-                                            .build(),
-                                    )
+    private fun navigateToMyPage() {
+        navigateWithUriNavOptions(
+            "medilens://main/mypage_nav",
+            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
+                .build(),
+        )
+    }
 
-                                    TOMYPAGE -> findNavController().navigate(
-                                        "medilens://main/mypage_nav".toUri(),
-                                        NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
-                                            .build(),
-                                    )
+    private fun loginFailed() {
+        LoadingDialog.dismiss()
+        toast(getString(R.string.signInFailed))
+    }
 
-                                }
-                            }
+    private fun regexError() {
+        toast(getString(R.string.signInRegexError))
+    }
 
-                            is SignInState.FailedSignIn -> {
-                                // 로그인 실패
-                                LoadingDialog.dismiss()
-                                toast(getString(R.string.signInFailed))
-                            }
+    private fun initial() {
+    }
 
-                            is SignInState.RegexError -> {
-                                // 이메일 또는 비밀번호 형식 오류
-                                toast(getString(R.string.signInRegexError))
-                            }
-
-                            is SignInState.Initial -> {
-                                // 로그아웃 상태
-                            }
-                        }
-                    }
-                }
-
-                launch {
-                    fragmentViewModel.savedEmail.collectLatest {
-                        if (it.isNotEmpty()) {
-                            binding.rememberEmailCB.isChecked = true
-                            binding.loginEmail.inputData.setText(it, 0, it.size)
-                        }
-                    }
-                }
-
+    private fun callSavedEmail(savedEmail: CharArray) {
+        if (savedEmail.isNotEmpty()) {
+            binding.apply {
+                rememberEmailCB.isChecked = true
+                loginEmail.inputData.setText(savedEmail, 0, savedEmail.size)
             }
         }
     }
@@ -149,25 +165,18 @@ class LoginFragment :
         )
     }
 
-    override fun onDestroyView() {
-        mainScope.cancel()
-        jobs.forEach { it.cancel() }
-        super.onDestroyView()
+    private fun setCallBackMoveFlag() {
+        val moveFlag = arguments?.getInt("flag", TOHOME)
+        fragmentViewModel.setMoveFlag(moveFlag ?: TOHOME)
     }
 
-    private fun handleEvent(event: LoginViewModel.SignEvent) = when (event) {
-        is LoginViewModel.SignEvent.SignIn -> {
+    private fun setDelayTextWatcher() = binding.apply {
+        addDelayTextWatcher(loginEmail.inputData)
+        addDelayTextWatcher(loginPassword.inputData)
+    }
 
-
-            fragmentViewModel.signIn(
-                binding.loginEmail.getEditable(),
-                binding.loginPassword.getEditable(),
-                binding.rememberEmailCB.isChecked,
-            )
-
-        }
-
-        is LoginViewModel.SignEvent.SignUp -> findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
+    private fun setLoginButtonDisenabled() {
+        binding.loginBtn.isEnabled = false
     }
 
     private fun addDelayTextWatcher(editText: EditText) {
@@ -183,4 +192,11 @@ class LoginFragment :
             }.launchIn(this)
         }
     }
+
+    override fun onDestroyView() {
+        mainScope.cancel()
+        jobs.forEach { it.cancel() }
+        super.onDestroyView()
+    }
+
 }

@@ -4,6 +4,7 @@ import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.model.remote.sign.SignInResponse
 import com.android.mediproject.core.model.remote.sign.SignUpResponse
 import com.android.mediproject.core.model.remote.token.RequestBehavior
+
 import com.android.mediproject.core.model.requestparameters.SignInParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import com.android.mediproject.core.network.datasource.tokens.onResponseWithTokens
@@ -21,10 +22,11 @@ class SignDataSourceImpl @Inject constructor(
 ) : SignDataSource {
 
 
+
     /**
      * 로그인
      */
-    override fun signIn(signInParameter: SignInParameter): Flow<Result<SignInResponse>> = channelFlow {
+    override fun logIn(signInParameter: SignInParameter): Flow<Result<SignInResponse>> = channelFlow {
         awsNetworkApi.signIn(
             SignInRequestParameter(
                 WeakReference(signInParameter.email.joinToString("")).get()!!,
@@ -38,13 +40,11 @@ class SignDataSourceImpl @Inject constructor(
                 Result.failure(it)
             },
         ).also {
+
             trySend(it)
         }
     }
 
-    /**
-     * 회원가입
-     */
     override fun signUp(signUpParameter: SignUpParameter): Flow<Result<SignUpResponse>> = channelFlow {
         awsNetworkApi.signUp(
             SignUpRequestParameter(
@@ -54,6 +54,7 @@ class SignDataSourceImpl @Inject constructor(
         ).onResponseWithTokens(RequestBehavior.NewTokens, tokenServer).fold(
             onSuccess = {
                 Result.success(it)
+
             },
             onFailure = { Result.failure(it) },
         ).also {

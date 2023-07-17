@@ -2,10 +2,8 @@ package com.android.mediproject.feature.intro
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentIntroBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,24 +16,40 @@ class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(Fragmen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setBinding()
+    }
+
+    private fun setBinding() = binding.apply {
         viewLifecycleOwner.repeatOnStarted { fragmentViewModel.eventFlow.collect { handleEvent(it) } }
     }
 
-    private fun handleEvent(event: IntroViewModel.IntroEvent) = when (event) {
-        is IntroViewModel.IntroEvent.NonMemberLogin, IntroViewModel.IntroEvent.SkipIntro -> {
-            findNavController().navigate(
-                "medilens://main/home_nav".toUri(), NavOptions.Builder().setPopUpTo(R.id.introFragment, true).build()
-            )
+    private fun handleEvent(event: IntroViewModel.IntroEvent) {
+        when (event) {
+            is IntroViewModel.IntroEvent.GuestLogin, IntroViewModel.IntroEvent.SkipIntro -> skipIntro()
+            is IntroViewModel.IntroEvent.ShowIntro -> nonSkipIntro()
+            is IntroViewModel.IntroEvent.MemberLogin -> memberLogin()
+            is IntroViewModel.IntroEvent.SignUp -> signUp()
         }
+    }
 
-        is IntroViewModel.IntroEvent.NonSkipIntro -> {
-            binding.viewStub.viewStub?.inflate()
-            binding.viewStub.binding?.setVariable(BR.viewModel, fragmentViewModel)
-            binding.viewStub.binding?.executePendingBindings()
+    private fun skipIntro() {
+        navigateWithUriNavOptions("medilens://main/home_nav", NavOptions.Builder().setPopUpTo(R.id.introFragment, true).build())
+    }
+
+    private fun nonSkipIntro() = binding.viewStub.apply {
+        viewStub?.inflate()
+        binding?.apply {
+            setVariable(BR.viewModel, fragmentViewModel)
+            executePendingBindings()
         }
+    }
 
-        is IntroViewModel.IntroEvent.MemberLogin -> findNavController().navigate(IntroFragmentDirections.actionIntroFragmentToLoginFragment())
-        is IntroViewModel.IntroEvent.SignUp -> findNavController().navigate(IntroFragmentDirections.actionIntroFragmentToSignUpFragment())
+    private fun memberLogin() {
+        navigateWithNavDirections(IntroFragmentDirections.actionIntroFragmentToLoginFragment())
+    }
+
+    private fun signUp() {
+        navigateWithNavDirections(IntroFragmentDirections.actionIntroFragmentToSignUpFragment())
     }
 
 }
