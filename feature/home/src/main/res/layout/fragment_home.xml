@@ -97,6 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="38dp"
+                    android:onClick="@{() -> viewModel.navigateToSearch()}"
                     app:ai_text="@string/searchWithAi"
                     app:camera_icon="@drawable/baseline_camera_24"
                     app:is_all_btn="true"
