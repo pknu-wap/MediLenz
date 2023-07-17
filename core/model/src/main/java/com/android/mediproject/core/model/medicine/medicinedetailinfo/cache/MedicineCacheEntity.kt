@@ -5,8 +5,10 @@ package com.android.mediproject.core.model.medicine.medicinedetailinfo.cache
  *
  * @param itemSequence 의약품 고유코드
  * @param json 의약품 상세정보 JSON 응답 문자열
+ * @param imageUrl 의약품 이미지 URL
  */
-data class MedicineDetailCacheEntity(
+data class MedicineCacheEntity(
     val itemSequence: String,
     val json: String,
+    val imageUrl: String,
 )

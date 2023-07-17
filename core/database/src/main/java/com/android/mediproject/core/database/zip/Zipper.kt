@@ -15,15 +15,15 @@ class Zipper @Inject constructor() {
     /**
      * 문자열을 압축하여 ByteArray로 반환
      */
-    suspend fun compress(src: String): Result<ByteArray> {
+    suspend fun compress(src: String): ByteArray {
         return WeakReference(src.toByteArray()).get()?.let { srcArr ->
             val compressor: LZ4Compressor = lz4Factory.fastCompressor()
             val maxCompressedLength = compressor.maxCompressedLength(srcArr.size)
 
             val compressed = ByteArray(maxCompressedLength)
             val compressedLength = compressor.compress(srcArr, 0, srcArr.size, compressed, 0, maxCompressedLength)
-            Result.success(compressed.copyOf(compressedLength))
-        } ?: Result.failure(Throwable("Failed to compress"))
+            compressed.copyOf(compressedLength)
+        } ?: byteArrayOf()
     }
 
     /**

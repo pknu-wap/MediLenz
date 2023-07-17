@@ -15,8 +15,8 @@ abstract class SearchHistoryDao {
      * @param searchHistoryDto
      */
     @Transaction
-    open suspend fun insert(SearchHistoryDto: SearchHistoryDto) {
-        if (!isExist(SearchHistoryDto.query)) realInsert(SearchHistoryDto)
+    open suspend fun insert(searchHistoryDto: SearchHistoryDto) {
+        if (!isExist(searchHistoryDto.query)) realInsert(searchHistoryDto)
     }
 
     @Insert(entity = SearchHistoryDto::class, onConflict = OnConflictStrategy.IGNORE)
