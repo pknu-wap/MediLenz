@@ -103,6 +103,8 @@ ktlint = "0.50.0"
 ktlint_gradle_plugin = "11.5.0"
 detekt = "1.23.0"
 
+jsoup = "1.16.1"
+
 # 라이브러리 의존성------------------------------------------------------------------------------------------------------------------------
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -264,6 +266,8 @@ kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-p
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 
 google-protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protocolBuffer" }
 google-protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protocolBuffer" }

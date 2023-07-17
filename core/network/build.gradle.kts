@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.okhttp.logginginterceptor)
     implementation(libs.okhttp)
+    implementation(libs.jsoup)
     kapt(libs.androidx.hilt.compilerKapt)
     kapt(libs.androidx.hilt.work.compilerKapt)
 }
