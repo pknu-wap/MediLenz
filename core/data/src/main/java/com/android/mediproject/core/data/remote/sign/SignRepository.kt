@@ -1,7 +1,7 @@
 package com.android.mediproject.core.data.remote.sign
 
 
-import com.android.mediproject.core.model.requestparameters.SignInParameter
+import com.android.mediproject.core.model.requestparameters.LoginParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import kotlinx.coroutines.flow.Flow
 

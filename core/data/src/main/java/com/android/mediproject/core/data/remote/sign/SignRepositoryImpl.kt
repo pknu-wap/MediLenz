@@ -2,8 +2,8 @@ package com.android.mediproject.core.data.remote.sign
 
 import com.android.mediproject.core.data.remote.user.UserInfoRepository
 import com.android.mediproject.core.datastore.AppDataStore
+import com.android.mediproject.core.model.requestparameters.LoginParameter
 
-import com.android.mediproject.core.model.requestparameters.SignInParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import com.android.mediproject.core.model.user.AccountState
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
@@ -21,7 +21,7 @@ class SignRepositoryImpl @Inject constructor(
     /**
      * 서버에 로그인 요청을 하고, 토큰 정보를 받는다.
      *
-     * @param signInParameter 로그인 요청 파라미터
+     * @param loginParameter 로그인 요청 파라미터
      * @return 응답받은 토큰
      */
     override fun login(loginParameter: LoginParameter): Flow<Result<Unit>> = channelFlow {
