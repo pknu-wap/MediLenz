@@ -23,5 +23,6 @@ dependencies {
     implementation(libs.android.flexbox)
     implementation(libs.androidx.paging.runtime)
     kapt(libs.bundles.glides.kapt)
+    //implementation(libs.smartdeeplink.core)
 
 }

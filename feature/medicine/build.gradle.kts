@@ -26,5 +26,6 @@ dependencies {
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.androidx.asynclayoutinflater)
+    //implementation(libs.smartdeeplink.core)
 
 }

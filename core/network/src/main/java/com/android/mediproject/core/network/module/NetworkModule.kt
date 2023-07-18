@@ -123,20 +123,23 @@ object NetworkModule {
         build()
     }
 
+
     @Provides
     @Singleton
-    @Named("okHttpClientWithGoogleAccessTokens")
-    fun providesOkHttpClientGoogleWithAccessTokens(
-        tokenServer: TokenServer,
-    ): OkHttpClient = OkHttpClient.Builder().run {
-        addInterceptor(
-            HttpLoggingInterceptor().apply {
-                if (BuildConfig.DEBUG) {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }
-            },
-        )
-        addInterceptor(TokenRequestInterceptor(tokenServer, TokenRequestInterceptor.TokenType.AccessToken))
-        build()
+    @Named("okHttpClientWithoutAny")
+    fun providesOkHttpClientWithoutAny(): OkHttpClient {
+        return OkHttpClient.Builder().run {
+            addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    if (BuildConfig.DEBUG) {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+                },
+            )
+            readTimeout(Duration.ofSeconds(5))
+            connectTimeout(Duration.ofSeconds(5))
+            callTimeout(Duration.ofSeconds(5))
+            build()
+        }
     }
 }

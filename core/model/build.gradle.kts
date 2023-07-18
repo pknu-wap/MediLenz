@@ -3,6 +3,7 @@ plugins {
     id(libs.plugins.kotlin.serialization.get().pluginId)
     id(libs.plugins.nav.safeargs.kotlin.get().pluginId)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kapt)
 }
 
 android {
@@ -15,4 +16,6 @@ dependencies {
     implementation(libs.kotlin.reflection)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.tensorflow.lite.taskVisionPlayServices)
+    //implementation(libs.smartdeeplink.core)
+    //implementation(libs.smartdeeplink.annotation)
 }

@@ -30,6 +30,7 @@ import com.android.mediproject.core.data.remote.user.UserRepository
 import com.android.mediproject.core.data.remote.user.UserRepositoryImpl
 import com.android.mediproject.core.data.search.SearchHistoryRepository
 import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
+import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
@@ -74,8 +75,10 @@ object RepositoryModule {
     fun provideMedicineApprovalRepository(
         medicineApprovalDataSource: MedicineApprovalDataSource,
         searchHistoryRepository: SearchHistoryRepository,
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher,
-    ): MedicineApprovalRepository = MedicineApprovalRepositoryImpl(medicineApprovalDataSource, searchHistoryRepository, ioDispatcher)
+        @Dispatcher(MediDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
+        medicineDataCacheRepository: MedicineDataCacheManager,
+    ): MedicineApprovalRepository =
+        MedicineApprovalRepositoryImpl(medicineApprovalDataSource, searchHistoryRepository, defaultDispatcher, medicineDataCacheRepository)
 
     @Provides
     @Singleton
@@ -130,7 +133,7 @@ object RepositoryModule {
     fun providesMedicineIdRepository(
         medicineIdDataSource: MedicineIdDataSource,
     ): MedicineIdRepository = MedicineIdRepositoryImpl(medicineIdDataSource)
-    
+
 
     @Provides
     @Singleton

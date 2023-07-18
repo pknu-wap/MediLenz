@@ -61,4 +61,6 @@ dependencies {
     implementation(libs.photo.view)
 
     implementation(libs.bundles.tflite)
+
+    implementation(libs.smartdeeplink.core)
 }

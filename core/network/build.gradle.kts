@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:database"))
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
@@ -26,6 +27,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.okhttp.logginginterceptor)
     implementation(libs.okhttp)
+    implementation(libs.jsoup)
     kapt(libs.androidx.hilt.compilerKapt)
     kapt(libs.androidx.hilt.work.compilerKapt)
 }

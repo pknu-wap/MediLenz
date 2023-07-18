@@ -9,17 +9,19 @@ import kotlinx.serialization.Serializable
  * 의약품 상세 허가 정보 응답
  *
  * @param body
- * @param header
  */
 @Serializable
 data class MedicineDetailInfoResponse(
     @SerialName("body") val body: Body,
 ) : DataGoKrBaseResponse() {
+
+    val CHANGE_DATE_FORMAT = "yyyyMMdd"
+
     @Serializable
     data class Body(
         @SerialName("items") val items: List<Item>, @SerialName("numOfRows") val numOfRows: Int, // 100
         @SerialName("pageNo") val pageNo: Int, // 1
-        @SerialName("totalCount") val totalCount: Int // 1
+        @SerialName("totalCount") val totalCount: Int, // 1
     ) {
         /**
          * 의약품 상세 허가 정보
@@ -74,7 +76,7 @@ data class MedicineDetailInfoResponse(
             @SerialName("BIZRNO") val businessRegistrationNumber: String?,
             @SerialName("CANCEL_DATE") val cancelDate: String?,
             @SerialName("CANCEL_NAME") val cancelName: String?,
-            @SerialName("CHANGE_DATE") val changeDate: String?,
+            @SerialName("CHANGE_DATE") val changeDate: String,
             @SerialName("CHART") val chart: String?,
             @SerialName("CNSGN_MANUF") val consignmentManufacturer: String?,
             @SerialName("DOC_TEXT") val docText: String?,
@@ -110,7 +112,7 @@ data class MedicineDetailInfoResponse(
             @SerialName("TOTAL_CONTENT") val totalContent: String?,
             @SerialName("UD_DOC_DATA") val udDocData: String,
             @SerialName("UD_DOC_ID") val uDDOCID: String?,
-            @SerialName("VALID_TERM") val validTerm: String?
+            @SerialName("VALID_TERM") val validTerm: String?,
         )
     }
 

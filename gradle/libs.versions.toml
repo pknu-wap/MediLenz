@@ -12,6 +12,8 @@ androidGradlePlugin = "8.0.2"
 androidDesugarJdkLibs = "2.0.3"
 photoview = "2.3.0"
 
+lz4Java = "1.8.0"
+
 # androidx
 androidXPagingCompose = "1.0.0-alpha19"
 androidxCore = "1.10.1"
@@ -94,12 +96,15 @@ gpuDelegate = "0.4.3"
 tfliteMetadata = "0.4.3"
 tfliteGpu = "2.12.0"
 
-smart_deeplink = "1.0.0-rc02"
+smart_deeplink_core = "1.0.0-rc06"
+smart_deeplink_annotation = "1.0.0-rc05"
 simple_dialog = "1.0.1"
 
 ktlint = "0.50.0"
 ktlint_gradle_plugin = "11.5.0"
 detekt = "1.23.0"
+
+jsoup = "1.16.1"
 
 # 라이브러리 의존성------------------------------------------------------------------------------------------------------------------------
 [libraries]
@@ -234,6 +239,7 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 
 # retrofit2--------------------------------------------------------------------------------------------------------------
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
+retrofit-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit2" }
 retrofit-kotlinx-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationJson" }
 
 # okhttp3--------------------------------------------------------------------------------------------------------------
@@ -263,16 +269,20 @@ ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devt
 
 kotlin-reflection = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+
 google-protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protocolBuffer" }
 google-protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protocolBuffer" }
 google-oss-licenses-plugin = { module = "com.google.android.gms:oss-licenses-plugin", version.ref = "googleOssPlugin" }
 
-smartdeeplink-core = { module = "io.github.pknujsp:smartdeeplink.core", version.ref = "smart_deeplink" }
-smartdeeplink-annotation = { module = "io.github.pknujsp:smartdeeplink.annotation", version.ref = "smart_deeplink" }
+smartdeeplink-core = { module = "io.github.pknujsp:smartdeeplink-core", version.ref = "smart_deeplink_core" }
+smartdeeplink-annotation = { module = "io.github.pknujsp:smartdeeplink-annotation", version.ref = "smart_deeplink_annotation" }
 simpledialog = { module = "io.github.pknujsp:simpledialog", version.ref = "simple_dialog" }
 
 ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+
+lz4 = { module = "org.lz4:lz4-java", version.ref = "lz4Java" }
 
 # 라이브러리들을 묶어서 한번에 선언------------------------------------------------------------------------------------------------------------------------
 [bundles]
@@ -295,7 +305,7 @@ uiAndroidx = ["androidx-appcompat", "androidx-preference-ktx", "androidx-core-kt
 lifecycles = ["androidx-lifecycle-livedata-ktx", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx",
     "androidx-lifecycle-viewmodel-savedstate", "androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-runtime-compose"]
 
-retrofits = ["retrofit-core", "retrofit-kotlinx-serialization"]
+retrofits = ["retrofit-core", "retrofit-kotlinx-serialization", "retrofit-scalars"]
 
 navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-compose", "androidx-navigation-dynamic"]
 

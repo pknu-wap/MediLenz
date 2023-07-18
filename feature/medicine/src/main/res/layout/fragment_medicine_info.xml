@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
-                app:expanded="false">
+                app:expanded="true">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/collapsingToolbarLayout"
@@ -147,7 +147,7 @@
                             android:button="@drawable/checkbox_interest"
                             android:checked="false"
                             android:contentDescription="@string/interestBtn"
-                            android:onClick="@{() -> viewModel.checkInterestMedicine()}"
+                            android:onClick="@{() -> viewModel.checkFavoriteMedicine()}"
                             android:scaleX="1.4"
                             android:scaleY="1.4"
                             app:layout_constraintBottom_toBottomOf="parent"

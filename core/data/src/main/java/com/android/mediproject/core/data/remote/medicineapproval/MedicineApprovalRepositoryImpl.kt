@@ -4,9 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
-import com.android.mediproject.core.common.network.Dispatcher
-import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.data.search.SearchHistoryRepository
+import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDto
 import com.android.mediproject.core.model.medicine.medicineapproval.Item
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
@@ -20,7 +19,8 @@ import javax.inject.Inject
 class MedicineApprovalRepositoryImpl @Inject constructor(
     private val medicineApprovalDataSource: MedicineApprovalDataSource,
     private val searchHistoryRepository: SearchHistoryRepository,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    private val defaultDispatcher: CoroutineDispatcher,
+    private val medicineDataCacheRepository: MedicineDataCacheManager,
 ) : MedicineApprovalRepository {
 
     /**
@@ -36,30 +36,41 @@ class MedicineApprovalRepositoryImpl @Inject constructor(
      */
     override fun getMedicineApprovalList(itemName: String?, entpName: String?, medicationType: String?): Flow<PagingData<Item>> {
         searchHistoryRepository.insertSearchHistory(SearchHistoryDto(itemName ?: entpName!!))
-        return Pager(config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5), pagingSourceFactory = {
-            MedicineApprovalListDataSourceImpl(medicineApprovalDataSource, itemName, entpName, medicationType)
-        }).flow
+        return Pager(
+            config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5),
+            pagingSourceFactory = {
+                MedicineApprovalListDataSourceImpl(medicineApprovalDataSource, itemName, entpName, medicationType)
+            },
+        ).flow
     }
 
 
     override fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Body.Item>> =
         medicineApprovalDataSource.getMedicineDetailInfo(itemName).map { result ->
-            result.fold(onSuccess = {
-                Result.success(it.body.items.first())
-            }, onFailure = {
-                Result.failure(it)
-            })
+            result.fold(
+                onSuccess = {
+                    Result.success(it.body.items.first())
+                },
+                onFailure = {
+                    Result.failure(it)
+                },
+            )
         }
 
     override fun getMedicineDetailInfoByItemSeq(itemSeqs: List<String>) =
         medicineApprovalDataSource.getMedicineDetailInfoByItemSeq(itemSeqs).map { result ->
-            result.fold(onSuccess = { medicineDetailInfoResponses ->
-                Result.success(medicineDetailInfoResponses.map {
-                    it.body.items.first()
-                })
-            }, onFailure = {
-                Result.failure(it)
-            })
+            result.fold(
+                onSuccess = { medicineDetailInfoResponses ->
+                    Result.success(
+                        medicineDetailInfoResponses.map {
+                            it.body.items.first()
+                        },
+                    )
+                },
+                onFailure = {
+                    Result.failure(it)
+                },
+            )
         }
 
 }
