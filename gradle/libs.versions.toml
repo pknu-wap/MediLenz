@@ -96,7 +96,8 @@ gpuDelegate = "0.4.3"
 tfliteMetadata = "0.4.3"
 tfliteGpu = "2.12.0"
 
-smart_deeplink = "1.0.0-rc05"
+smart_deeplink_core = "1.0.0-rc06"
+smart_deeplink_annotation = "1.0.0-rc05"
 simple_dialog = "1.0.1"
 
 ktlint = "0.50.0"
@@ -274,8 +275,8 @@ google-protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-li
 google-protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protocolBuffer" }
 google-oss-licenses-plugin = { module = "com.google.android.gms:oss-licenses-plugin", version.ref = "googleOssPlugin" }
 
-smartdeeplink-core = { module = "io.github.pknujsp:smartdeeplink-core", version.ref = "smart_deeplink" }
-smartdeeplink-annotation = { module = "io.github.pknujsp:smartdeeplink-annotation", version.ref = "smart_deeplink" }
+smartdeeplink-core = { module = "io.github.pknujsp:smartdeeplink-core", version.ref = "smart_deeplink_core" }
+smartdeeplink-annotation = { module = "io.github.pknujsp:smartdeeplink-annotation", version.ref = "smart_deeplink_annotation" }
 simpledialog = { module = "io.github.pknujsp:simpledialog", version.ref = "simple_dialog" }
 
 ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
