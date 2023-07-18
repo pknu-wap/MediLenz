@@ -13,6 +13,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class MedicineApprovalDataSourceImpl @Inject constructor(
@@ -48,7 +50,7 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
                     entity.isSuccess().let {
                         if (it is DataGoKrResult.isSuccess) {
                             entity.body.items[0].run {
-                                cache(itemSequence, response.raw().body!!.string(), changeDate)
+                                cache(itemSequence, Json.encodeToString(response.body()), changeDate)
                             }
                             Result.success(entity)
                         } else Result.failure(Throwable(it.failedMessage))

@@ -33,7 +33,7 @@ class Zipper @Inject constructor() {
         return WeakReference(ByteArray(compressed.size * 4)).get()?.let { decomp ->
             val decompressor = lz4Factory.safeDecompressor()
             val decompressedLength = decompressor.decompress(compressed, decomp)
-            String(decomp.copyOf(decompressedLength))
+            String(decomp.copyOf(decompressedLength), Charsets.UTF_8)
         } ?: ""
     }
 

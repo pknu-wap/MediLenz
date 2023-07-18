@@ -37,21 +37,27 @@ class ManualSearchResultFragment :
         binding.apply {
             viewModel = fragmentViewModel
             val searchResultListAdapter = ApprovedMedicinesAdapter().also {
-                it.withLoadStateHeaderAndFooter(header = PagingLoadStateAdapter { it.retry() },
-                    footer = PagingLoadStateAdapter { it.retry() })
+                it.withLoadStateHeaderAndFooter(
+                    header = PagingLoadStateAdapter { it.retry() },
+                    footer = PagingLoadStateAdapter { it.retry() },
+                )
 
-                it.setOnStateChangedListener(pagingListViewGroup.messageTextView,
+                it.setOnStateChangedListener(
+                    pagingListViewGroup.messageTextView,
                     pagingListViewGroup.pagingList,
                     pagingListViewGroup.progressIndicator,
-                    getString(R.string.searchResultIsEmpty))
+                    getString(R.string.searchResultIsEmpty),
+                )
             }
 
             pagingListViewGroup.pagingList.apply {
                 setHasFixedSize(true)
                 setItemViewCacheSize(10)
-                addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-                    setDrawable(resources.getDrawable(com.android.mediproject.core.ui.R.drawable.divider, null))
-                })
+                addItemDecoration(
+                    DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                        setDrawable(resources.getDrawable(com.android.mediproject.core.ui.R.drawable.divider, null))
+                    },
+                )
                 adapter = searchResultListAdapter
             }
 

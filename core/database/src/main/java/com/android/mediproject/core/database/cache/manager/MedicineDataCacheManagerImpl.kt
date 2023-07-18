@@ -46,6 +46,9 @@ class MedicineDataCacheManagerImpl @Inject constructor(
                             changeDate = cacheType.entity.changeDate,
                         ),
                     )
+
+                    val decompressed = select(cacheType.entity.itemSequence)
+                    decompressed
                 }
             }
         }

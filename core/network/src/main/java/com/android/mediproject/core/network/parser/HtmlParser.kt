@@ -54,7 +54,7 @@ class HtmlParser @Inject constructor() {
         val maxLen = maxOf(length, comp.length)
         val similarity = (maxLen - distance).toDouble() / maxLen
         if (similarity >= minSimilarity)
-            Log.d("wap", "$this - $comp, 유사도 : $similarity")
+            Log.d("wap", "$this vs $comp, 유사도 : ${similarity * 100.0}%")
 
         return similarity
     }

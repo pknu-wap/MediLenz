@@ -1,12 +1,12 @@
 package com.android.mediproject.feature.medicine.main
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
+import com.android.mediproject.core.common.uiutil.SystemBarController
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.common.util.navArgs
 import com.android.mediproject.core.common.viewmodel.UiState
@@ -32,15 +32,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
     private val navArgs by navArgs<MedicineInfoArgs>()
 
-    @Inject lateinit var systemBarStyler: SystemBarStyler
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-    }
+    @Inject lateinit var systemBarStyler: SystemBarController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -97,9 +89,9 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             launch {
                 fragmentViewModel.eventState.collectLatest {
                     when (it) {
-                        is EventState.Interest -> {
+                        is EventState.Favorite -> {
                             binding.interestBtn.isEnabled = it.lockChecked
-                            binding.interestBtn.isChecked = it.isInterest
+                            binding.interestBtn.isChecked = it.isFavorite
                         }
 
                         is EventState.ScrollToBottom -> {
