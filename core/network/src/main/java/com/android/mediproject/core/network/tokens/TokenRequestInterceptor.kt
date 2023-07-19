@@ -11,7 +11,6 @@ class TokenRequestInterceptor @Inject constructor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response = when (val tokenState = tokenServer.tokenState) {
         is TokenState.Tokens -> {
-            // 토큰을 재발급 받는 경우
             // 리프레시 토큰(재발급)을 보낼지 액세스 토큰(댓글, 좋아요 등)을 보낼지 분기
             val token = when (tokenType) {
                 is TokenType.AccessToken -> tokenState.data.accessToken

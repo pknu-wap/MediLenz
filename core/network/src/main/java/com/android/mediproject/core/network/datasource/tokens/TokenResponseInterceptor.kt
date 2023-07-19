@@ -18,7 +18,6 @@ internal suspend inline fun <reified T : BaseAwsSignResponse> Response<T>.onResp
     if (isSuccessful) {
         body()?.let { body ->
             if (body.isSuccess()) {
-                // 토큰 저장
                 Log.d("wap", "onResponseWithTokens, tokenServer.saveTokens")
                 tokenServer.saveTokens(
                     NewTokensFromServer(

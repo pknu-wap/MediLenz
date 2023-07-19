@@ -38,9 +38,6 @@ interface TokenServer {
 
     val tokenState: TokenState<CurrentTokens>
 
-    /**
-     * 토큰을 저장한다.
-     */
     suspend fun saveTokens(newTokensFromServer: NewTokensFromServer)
 
     suspend fun removeTokens()

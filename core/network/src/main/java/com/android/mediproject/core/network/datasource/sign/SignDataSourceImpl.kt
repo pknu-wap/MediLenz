@@ -25,11 +25,11 @@ class SignDataSourceImpl @Inject constructor(
     /**
      * 로그인
      */
-    override fun logIn(signInParameter: LoginParameter): Flow<Result<SignInResponse>> = channelFlow {
+    override fun logIn(loginParameter: LoginParameter): Flow<Result<SignInResponse>> = channelFlow {
         awsNetworkApi.login(
             SignInRequestParameter(
-                WeakReference(signInParameter.email.joinToString("")).get()!!,
-                WeakReference(aesCoder.encodePassword(signInParameter.email, signInParameter.password)).get()!!,
+                WeakReference(loginParameter.email.joinToString("")).get()!!,
+                WeakReference(aesCoder.encodePassword(loginParameter.email, loginParameter.password)).get()!!,
             ),
         ).onResponseWithTokens(RequestBehavior.NewTokens, tokenServer).fold(
             onSuccess = {

@@ -21,7 +21,7 @@ interface MedicineDetailCacheDao : DataCacheDao {
     override suspend fun isExist(id: String): Boolean
 
     @Query("SELECT COUNT(*) FROM medicine_detail_cache_table")
-    override suspend fun counts(): Int
+    override suspend fun count(): Int
 
 
     @Query("SELECT * FROM medicine_detail_cache_table as detail INNER JOIN medicine_image_cache_table as image ON detail.item_seq = image.item_seq WHERE detail.item_seq IN (:itemSeqs)")

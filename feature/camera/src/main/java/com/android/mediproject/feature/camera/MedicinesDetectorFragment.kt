@@ -8,7 +8,6 @@ import android.util.Size
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -145,10 +144,9 @@ class MedicinesDetectorFragment :
 
                             is InferenceState.Classified -> {
                                 aiSearchResultViewModel.setClassificationResult(state.classificationResult)
-                                findNavController().navigate(
-                                    "medilens://main/search/search_medicines/airesult".toUri(),
-                                    NavOptions.Builder()
-                                        .setPopUpTo(com.android.mediproject.feature.search.R.id.aiSearchResultFragment, true).build(),
+                                navigateWithUriNavOptions(
+                                    "medilens://main/search/search_medicines/airesult",
+                                    NavOptions.Builder().setPopUpTo(com.android.mediproject.feature.search.R.id.aiSearchResultFragment, true).build(),
                                 )
                                 LoadingDialog.dismiss()
                             }

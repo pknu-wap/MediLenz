@@ -39,7 +39,6 @@ internal class TokenServerImpl @Inject constructor(
 
     init {
         @OptIn(DelicateCoroutinesApi::class) GlobalScope.launch(Dispatchers.Default) {
-            // 앱 프로세스가 첫 시작된 직후에 로컬에 저장된 토큰을 불러온다.
             loadSavedTokens()
         }
     }
