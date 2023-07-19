@@ -1,6 +1,5 @@
 package com.android.mediproject.core.network.parser
 
-import android.util.Log
 import org.jsoup.Jsoup
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -50,13 +49,8 @@ class HtmlParser @Inject constructor() {
     }
 
     private fun String.similarity(comp: String): Double {
-        val distance = levenshtein(comp)
         val maxLen = maxOf(length, comp.length)
-        val similarity = (maxLen - distance).toDouble() / maxLen
-        if (similarity >= minSimilarity)
-            Log.d("wap", "$this vs $comp, 유사도 : ${similarity * 100.0}%")
-
-        return similarity
+        return (maxLen - levenshtein(comp)).toDouble() / maxLen
     }
 
 }
