@@ -61,4 +61,7 @@ class SignDataSourceImpl @Inject constructor(
         }
     }
 
+    override fun signOut() {
+        tokenServer.removeTokens()
+    }
 }

@@ -20,7 +20,7 @@ internal suspend inline fun <reified T : BaseAwsSignResponse> Response<T>.onResp
             if (body.isSuccess()) {
                 Log.d("wap", "onResponseWithTokens, tokenServer.saveTokens")
                 tokenServer.saveTokens(
-                    NewTokensFromServer(
+                    NewTokens(
                         accessToken = body.accessToken!!.toCharArray(),
                         refreshToken = body.refreshToken!!.toCharArray(),
                         requestBehavior = requestBehavior,

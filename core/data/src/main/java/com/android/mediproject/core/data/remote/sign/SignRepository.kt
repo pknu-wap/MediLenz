@@ -11,6 +11,6 @@ interface SignRepository {
 
     fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>>
 
-    suspend fun signOut()
+    fun signOut()
 
 }
