@@ -3,12 +3,12 @@ package com.android.mediproject.feature.intro
 
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.uiutil.SystemBarController
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.common.util.delayTextChangedCallback
 import com.android.mediproject.core.model.local.navargs.TOHOME
@@ -17,31 +17,29 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LoginFragment :
-    BaseFragment<FragmentLoginBinding, LoginViewModel>(FragmentLoginBinding::inflate) {
+class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(FragmentLoginBinding::inflate) {
     override val fragmentViewModel: LoginViewModel by viewModels()
 
-    @Inject
-    @Dispatcher(MediDispatchers.Default)
-    lateinit var defaultDispatcher: CoroutineDispatcher
+    @Inject @Dispatcher(MediDispatchers.Default) lateinit var defaultDispatcher: CoroutineDispatcher
 
-    @Inject
-    lateinit var systemBarStyler: SystemBarStyler
+    @Inject lateinit var systemBarStyler: SystemBarController
 
-    private val mainScope = MainScope()
-    private val jobs = mutableListOf<Job>()
+    private val mainScope = MainScope() + SupervisorJob()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -120,16 +118,14 @@ class LoginFragment :
     private fun navigateToHome() {
         navigateWithUriNavOptions(
             "medilens://main/home_nav",
-            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
-                .build(),
+            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build(),
         )
     }
 
     private fun navigateToMyPage() {
         navigateWithUriNavOptions(
             "medilens://main/mypage_nav",
-            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
-                .build(),
+            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build(),
         )
     }
 
@@ -171,31 +167,22 @@ class LoginFragment :
     }
 
     private fun setDelayTextWatcher() = binding.apply {
-        addDelayTextWatcher(loginEmail.inputData)
-        addDelayTextWatcher(loginPassword.inputData)
+        loginEmail.inputData.delayTextChangedCallback().debounce(500L).combine(
+            loginPassword.inputData.delayTextChangedCallback().debounce(500L),
+        ) { e, p ->
+            e to p
+        }.flowOn(defaultDispatcher).onEach {
+            log("loginBtn 활성화 : ${!it.first.isNullOrEmpty() && !it.second.isNullOrEmpty()}")
+            binding.loginBtn.isEnabled = !it.first.isNullOrEmpty() && !it.second.isNullOrEmpty()
+        }.flowOn(Dispatchers.Main).launchIn(mainScope)
     }
 
     private fun setLoginButtonDisenabled() {
         binding.loginBtn.isEnabled = false
     }
 
-    private fun addDelayTextWatcher(editText: EditText) {
-        mainScope.launch(
-            context = defaultDispatcher + Job().apply {
-                jobs.add(this)
-            },
-        ) {
-            editText.delayTextChangedCallback().debounce(500L).onEach { seq ->
-                mainScope.launch {
-                    binding.loginBtn.isEnabled = !seq.isNullOrEmpty()
-                }
-            }.launchIn(this)
-        }
-    }
-
     override fun onDestroyView() {
         mainScope.cancel()
-        jobs.forEach { it.cancel() }
         super.onDestroyView()
     }
 

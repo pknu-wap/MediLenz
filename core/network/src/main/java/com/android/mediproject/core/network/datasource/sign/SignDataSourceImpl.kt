@@ -9,7 +9,7 @@ import com.android.mediproject.core.model.requestparameters.LoginParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import com.android.mediproject.core.network.datasource.tokens.onResponseWithTokens
 import com.android.mediproject.core.network.module.AwsNetworkApi
-import com.android.mediproject.core.network.parameter.SignInRequestParameter
+import com.android.mediproject.core.network.parameter.LoginRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
 import com.android.mediproject.core.network.tokens.TokenServer
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +27,7 @@ class SignDataSourceImpl @Inject constructor(
      */
     override fun logIn(loginParameter: LoginParameter): Flow<Result<SignInResponse>> = channelFlow {
         awsNetworkApi.login(
-            SignInRequestParameter(
+            LoginRequestParameter(
                 WeakReference(loginParameter.email.joinToString("")).get()!!,
                 WeakReference(aesCoder.encodePassword(loginParameter.email, loginParameter.password)).get()!!,
             ),
@@ -39,7 +39,6 @@ class SignDataSourceImpl @Inject constructor(
                 Result.failure(it)
             },
         ).also {
-
             trySend(it)
         }
     }

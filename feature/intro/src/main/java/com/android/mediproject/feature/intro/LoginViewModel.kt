@@ -14,6 +14,7 @@ import com.android.mediproject.core.model.requestparameters.LoginParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,13 +29,13 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val signUseCase: SignUseCase,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
     val savedEmail = signUseCase.savedEmail.flatMapLatest {
         if (it.isEmpty()) emptyFlow()
         else flowOf(it.toCharArray())
-    }.flowOn(ioDispatcher).stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = CharArray(0))
+    }.flowOn(defaultDispatcher).stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = CharArray(0))
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Initial)
     val loginState = _loginState.asStateFlow()
@@ -90,15 +91,19 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun checkEmailRegex(emailEditable: Editable): Boolean {
-        return !isEmailValid(emailEditable)
+        return isEmailValid(emailEditable)
     }
 
     private fun checkPasswordRegex(passwordEditable: Editable): Boolean {
-        return !isPasswordValid(passwordEditable)
+        return isPasswordValid(passwordEditable)
     }
 
-    private fun login(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) =
-        viewModelScope.launch(ioDispatcher) {
+    private fun login(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) {
+        val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            throwable.printStackTrace()
+            loginFailed()
+        }
+        viewModelScope.launch(defaultDispatcher + exceptionHandler) {
             val pair = initEmailPasswordCharArray(emailEditable, passwordEditable)
             val (email, password) = pair.first to pair.second
 
@@ -111,6 +116,7 @@ class LoginViewModel @Inject constructor(
             }
             clearEmailPasswordCharArray(email, password)
         }
+    }
 
     private fun initEmailPasswordCharArray(emailEditable: Editable, passwordEditable: Editable): Pair<CharArray, CharArray> {
         return Pair(initEmailCharArray(emailEditable), initPasswordCharArray(passwordEditable))
@@ -133,14 +139,14 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun loginFailed() {
-        setLoginState(LoginState.LoginFailed("로그인 실패"))
+        setLoginState(LoginViewModel.LoginState.LoginFailed("로그인 실패"))
     }
 
     private fun loginSuccess() {
-        setLoginState(LoginState.LoginSuccess)
+        setLoginState(LoginViewModel.LoginState.LoginSuccess)
     }
 
     private fun loginFailedWithRegexError() {
-        setLoginState(LoginState.RegexError)
+        setLoginState(LoginViewModel.LoginState.RegexError)
     }
 }
