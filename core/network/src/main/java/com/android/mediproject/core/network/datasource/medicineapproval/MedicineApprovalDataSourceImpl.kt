@@ -8,7 +8,7 @@ import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.Medi
 import com.android.mediproject.core.network.datasource.image.GoogleSearchDataSource
 import com.android.mediproject.core.network.module.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onResponse
-import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -21,7 +21,6 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
     private val dataGoKrNetworkApi: DataGoKrNetworkApi,
     private val medicineDataCacheManager: MedicineDataCacheManager,
     private val googleSearchDataSource: GoogleSearchDataSource,
-    private val dispatchers: ExecutorCoroutineDispatcher,
 ) : MedicineApprovalDataSource {
 
     override suspend fun getMedicineApprovalList(
@@ -106,14 +105,13 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
     }
 
     private suspend fun loadMedicineImageUrl(medicineApprovalListResponse: MedicineApprovalListResponse) {
-        val items = mutableListOf<Pair<Int, String>>()
-        medicineApprovalListResponse.body.items.forEachIndexed { index, item ->
-            if (item.bigPrdtImgUrl.isEmpty())
-                items.add(index to item.itemName)
-        }
-        if (items.isEmpty()) return
+        return withContext(Dispatchers.Default) {
+            val items = mutableListOf<Pair<Int, String>>()
+            medicineApprovalListResponse.body.items.forEachIndexed { index, item ->
+                if (item.bigPrdtImgUrl.isEmpty()) items.add(index to item.itemName)
+            }
+            if (items.isEmpty()) return@withContext
 
-        return withContext(dispatchers) {
             val map = mutableMapOf<String, String>()
             val asyncList = items.map { (i, name) ->
                 async {

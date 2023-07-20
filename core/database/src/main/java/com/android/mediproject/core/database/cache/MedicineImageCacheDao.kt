@@ -20,7 +20,7 @@ interface MedicineImageCacheDao : DataCacheDao {
     override suspend fun isExist(id: String): Boolean
 
     @Query("SELECT COUNT(*) FROM medicine_image_cache_table")
-    override suspend fun counts(): Int
+    override suspend fun count(): Int
 
     @Query("SELECT * FROM medicine_image_cache_table")
     suspend fun selectAll(): List<MedicineImageCacheDto>

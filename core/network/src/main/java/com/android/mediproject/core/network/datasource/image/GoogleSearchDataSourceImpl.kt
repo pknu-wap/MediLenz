@@ -13,8 +13,7 @@ class GoogleSearchDataSourceImpl @Inject constructor(
 
     private val additionalQuery = "의약품 "
 
-    // url 캐시
-    private val urlCache = LruCache<String, String>(50)
+    private val urlCache = LruCache<String, String>(60)
 
     override suspend fun getImageUrl(medicineName: String): Result<String> {
         val query = additionalQuery + medicineName

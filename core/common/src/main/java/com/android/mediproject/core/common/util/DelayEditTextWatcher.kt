@@ -21,11 +21,8 @@ fun EditText.delayTextChangedCallback(): Flow<CharSequence?> = callbackFlow {
             trySend(text)
         }
     }
-    // TextWatcher를 등록
     addTextChangedListener(listener)
-    // Flow가 종료되면 TextWatcher를 제거
     awaitClose { removeTextChangedListener(listener) }
 }.onStart {
-    // Flow가 시작되면 EditText의 text를 emit
     emit(text)
 }

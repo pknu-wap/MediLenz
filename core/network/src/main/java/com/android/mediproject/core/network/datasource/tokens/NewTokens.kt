@@ -15,7 +15,7 @@ private val ACCESS_TOKEN_EXPIRES_IN: Duration = Duration.ofMinutes(30L)
  * 서버로 부터 응답받은 토큰
  *
  */
-data class NewTokensFromServer(
+data class NewTokens(
     val accessToken: CharArray,
     val refreshToken: CharArray,
     val requestBehavior: RequestBehavior,
@@ -51,7 +51,7 @@ data class NewTokensFromServer(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as NewTokensFromServer
+        other as NewTokens
 
         if (!accessToken.contentEquals(other.accessToken)) return false
         if (!refreshToken.contentEquals(other.refreshToken)) return false

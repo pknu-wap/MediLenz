@@ -26,7 +26,6 @@ class GetMedicineApprovalListUseCase @Inject constructor(
         },
     ).map { pagingData ->
         pagingData.map { item ->
-            // 데이터 변환
             item.toDto()
         }
     }

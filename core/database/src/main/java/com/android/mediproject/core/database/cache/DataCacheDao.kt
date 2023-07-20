@@ -7,5 +7,5 @@ interface DataCacheDao {
 
     suspend fun isExist(id: String): Boolean
 
-    suspend fun counts(): Int
+    suspend fun count(): Int
 }

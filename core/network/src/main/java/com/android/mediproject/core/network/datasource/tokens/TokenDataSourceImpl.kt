@@ -63,7 +63,6 @@ class TokenDataSourceImpl @Inject constructor(
     override fun reissueToken(currentToken: TokenState.Tokens.AccessExpiration<CurrentTokens>): Flow<Result<Unit>> = channelFlow {
         Log.d("wap", "reissueToken, currentToken : $currentToken")
         if (processingTokenReissuance) {
-            // 이미 토큰 재발급 처리 중인 경우, 기다렸다가 현재 처리 중인 토큰 재발급의 결과를 반환한다.
             lastTokenReissueResult.collect {
                 trySend(it)
             }

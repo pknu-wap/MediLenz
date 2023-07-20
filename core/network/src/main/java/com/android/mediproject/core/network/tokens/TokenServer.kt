@@ -2,7 +2,7 @@ package com.android.mediproject.core.network.tokens
 
 import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.TokenState
-import com.android.mediproject.core.network.datasource.tokens.NewTokensFromServer
+import com.android.mediproject.core.network.datasource.tokens.NewTokens
 import java.time.LocalDateTime
 
 
@@ -38,20 +38,15 @@ interface TokenServer {
 
     val tokenState: TokenState<CurrentTokens>
 
-    /**
-     * 토큰을 저장한다.
-     */
-    suspend fun saveTokens(newTokensFromServer: NewTokensFromServer)
+    suspend fun saveTokens(newTokens: NewTokens)
 
-    suspend fun removeTokens()
+    fun removeTokens()
 }
 
 
-internal fun NewTokensFromServer.toServerTokens(): TokenServer.Tokens {
-    return TokenServer.Tokens(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        accessTokenExpiresIn = accessTokenExpireDateTime,
-        refreshTokenExpiresIn = refreshTokenExpireDateTime,
-    )
-}
+internal fun NewTokens.toServerTokens(): TokenServer.Tokens = TokenServer.Tokens(
+    accessToken = accessToken,
+    refreshToken = refreshToken,
+    accessTokenExpiresIn = accessTokenExpireDateTime,
+    refreshTokenExpiresIn = refreshTokenExpireDateTime,
+)

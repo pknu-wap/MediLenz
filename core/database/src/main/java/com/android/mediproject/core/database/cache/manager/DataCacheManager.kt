@@ -10,6 +10,6 @@ abstract class DataCacheManager(private val dao: DataCacheDao) {
 
     open suspend fun isExist(id: String) = dao.isExist(id)
 
-    open suspend fun counts() = dao.counts()
+    open suspend fun count() = dao.count()
 
 }

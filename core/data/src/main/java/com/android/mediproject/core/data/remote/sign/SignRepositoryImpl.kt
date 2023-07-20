@@ -67,6 +67,6 @@ class SignRepositoryImpl @Inject constructor(
      *
      * 저장된 토큰 정보를 삭제한다.
      */
-    override suspend fun signOut() = TODO()
+    override fun signOut() = signDataSource.signOut()
 
 }

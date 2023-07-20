@@ -15,8 +15,7 @@ import androidx.navigation.fragment.findNavController
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
-abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(private val inflate: Inflate<T>) :
-    Fragment() {
+abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(private val inflate: Inflate<T>) : Fragment() {
 
     private var _binding: T? = null
     val binding get() = _binding!!
@@ -42,7 +41,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(private val 
 
     fun navigateWithUri(deepLinkUri: String) = findNavController().navigate(deepLinkUri.toUri())
 
-    fun navigateWithUriNavOptions(deepLinkUri: String, navOptions: NavOptions) = navigateWithUri(deepLinkUri)
+    fun navigateWithUriNavOptions(deepLinkUri: String, navOptions: NavOptions) = findNavController().navigate(deepLinkUri.toUri(), navOptions)
 
     fun navigateWithNavDirections(navDirections: NavDirections) {
         findNavController().navigate(navDirections)

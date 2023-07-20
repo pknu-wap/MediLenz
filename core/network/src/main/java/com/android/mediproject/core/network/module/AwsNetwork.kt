@@ -38,7 +38,7 @@ import com.android.mediproject.core.network.datasource.user.UserDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSourceImpl
-import com.android.mediproject.core.network.parameter.SignInRequestParameter
+import com.android.mediproject.core.network.parameter.LoginRequestParameter
 import com.android.mediproject.core.network.parameter.SignUpRequestParameter
 import com.android.mediproject.core.network.tokens.TokenServer
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -70,7 +70,7 @@ object AwsNetwork {
     @Named("awsNetworkApiWithoutTokens")
     @Singleton
     fun providesWithoutTokensAwsNetworkApi(
-        okHttpClient: OkHttpClient,
+        @Named("okHttpClientWithoutAny") okHttpClient: OkHttpClient,
     ): AwsNetworkApi =
         Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
@@ -106,7 +106,7 @@ object AwsNetwork {
 
     @Provides
     fun providesSignDataSource(
-        @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi, TokenServer: TokenServer, aesCoder: AesCoder,
+        @Named("awsNetworkApiWithoutTokens") awsNetworkApi: AwsNetworkApi, TokenServer: TokenServer, aesCoder: AesCoder,
     ): SignDataSource = SignDataSourceImpl(awsNetworkApi, TokenServer, aesCoder)
 
     @Provides
@@ -144,7 +144,7 @@ interface AwsNetworkApi {
 
     @POST(value = "user/login")
     suspend fun login(
-        @Body signInRequestParameter: SignInRequestParameter
+        @Body loginRequestParameter: LoginRequestParameter,
     ): Response<SignInResponse>
 
 

@@ -7,7 +7,7 @@ import com.android.mediproject.core.datastore.SavedToken
 import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.RequestBehavior
 import com.android.mediproject.core.model.remote.token.TokenState
-import com.android.mediproject.core.network.datasource.tokens.NewTokensFromServer
+import com.android.mediproject.core.network.datasource.tokens.NewTokens
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,7 +18,7 @@ import kotlinx.coroutines.sync.withLock
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-
+@OptIn(DelicateCoroutinesApi::class)
 internal class TokenServerImpl @Inject constructor(
     private val tokenDataStore: DataStore<SavedToken>,
     private val aesCoder: AesCoder,
@@ -38,8 +38,7 @@ internal class TokenServerImpl @Inject constructor(
         get() = _accessTokenExpiresIn!!
 
     init {
-        @OptIn(DelicateCoroutinesApi::class) GlobalScope.launch(Dispatchers.Default) {
-            // 앱 프로세스가 첫 시작된 직후에 로컬에 저장된 토큰을 불러온다.
+        GlobalScope.launch(Dispatchers.Default) {
             loadSavedTokens()
         }
     }
@@ -77,35 +76,35 @@ internal class TokenServerImpl @Inject constructor(
     /**
      * 토큰을 로컬에 저장한다.
      *
-     * @param newTokensFromServer 새로 발급받은 토큰
+     * @param newTokens 새로 발급받은 토큰
      *
      * 서버에서 응답 받으면 가장 먼저 호출되는 함수이다.
      */
-    override suspend fun saveTokens(newTokensFromServer: NewTokensFromServer) {
+    override suspend fun saveTokens(newTokens: NewTokens) {
         tokenDataStore.updateData { newToken ->
-            newToken.toBuilder().setAccessToken(aesCoder.encode(newTokensFromServer.accessToken))
-                .setRefreshToken(aesCoder.encode(newTokensFromServer.refreshToken)).let { builder ->
-                    when (newTokensFromServer.requestBehavior) {
+            newToken.toBuilder().setAccessToken(aesCoder.encode(newTokens.accessToken))
+                .setRefreshToken(aesCoder.encode(newTokens.refreshToken)).let { builder ->
+                    when (newTokens.requestBehavior) {
                         is RequestBehavior.NewTokens -> {
                             // 새로운 토큰을 받았으므로 모든 시각을 저장한다.
-                            updateTokenState(newTokensFromServer.toServerTokens())
+                            updateTokenState(newTokens.toServerTokens())
 
-                            builder.setAccessTokenExpiresIn(newTokensFromServer.accessTokenExpireDateTime.toString())
-                                .setRefreshTokenExpiresIn(newTokensFromServer.refreshTokenExpireDateTime.toString())
+                            builder.setAccessTokenExpiresIn(newTokens.accessTokenExpireDateTime.toString())
+                                .setRefreshTokenExpiresIn(newTokens.refreshTokenExpireDateTime.toString())
                         }
 
                         is RequestBehavior.ReissueTokens -> {
                             // 액세스 만료 시각만 저장한다.
                             updateTokenState(
                                 TokenServer.Tokens(
-                                    refreshToken = newTokensFromServer.refreshToken,
-                                    accessToken = newTokensFromServer.accessToken,
-                                    accessTokenExpiresIn = newTokensFromServer.accessTokenExpireDateTime,
+                                    refreshToken = newTokens.refreshToken,
+                                    accessToken = newTokens.accessToken,
+                                    accessTokenExpiresIn = newTokens.accessTokenExpireDateTime,
                                     refreshTokenExpiresIn = refreshTokenExpiresIn,
                                 ),
                             )
 
-                            builder.setAccessTokenExpiresIn(newTokensFromServer.accessTokenExpireDateTime.toString())
+                            builder.setAccessTokenExpiresIn(newTokens.accessTokenExpireDateTime.toString())
                         }
 
                     }
@@ -149,11 +148,16 @@ internal class TokenServerImpl @Inject constructor(
         Log.d("wap", "updateTokenState() 호출됨, tokenState : $tokenState")
     }
 
-    override suspend fun removeTokens() {
-        Log.d("wap", "removeTokens() 호출됨")
-        _tokenState = TokenState.Empty
-        tokenDataStore.updateData {
-            it.toBuilder().clear().build()
+    override fun removeTokens() {
+        GlobalScope.launch {
+            Log.d("wap", "removeTokens() 호출됨")
+            _tokenState = TokenState.Empty
+            _refreshTokenExpiresIn = null
+            _accessTokenExpiresIn = null
+            
+            tokenDataStore.updateData {
+                it.toBuilder().clear().build()
+            }
         }
     }
 }

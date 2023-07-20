@@ -1,13 +1,8 @@
 package com.android.mediproject
 
-import android.animation.ObjectAnimator
-import android.os.Build
-import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.view.ViewTreeObserver
-import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
-import androidx.core.animation.doOnEnd
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
@@ -95,7 +90,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
             //DevDialogFragment().show(supportFragmentManager, DevDialogFragment::class.java.name)
         }
     }
-    
+
     override fun setSplash() {
         installSplashScreen()
     }
@@ -110,8 +105,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
 
         supportFragmentManager.registerFragmentLifecycleCallbacks(
             object : FragmentManager.FragmentLifecycleCallbacks() {
-                override fun onFragmentStarted(fm: FragmentManager, f: Fragment) {
-                    super.onFragmentStarted(fm, f)
+                override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
+                    super.onFragmentResumed(fm, f)
                     systemBarColorAnalyzer.convert()
                 }
             },
