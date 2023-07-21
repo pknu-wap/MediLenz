@@ -32,7 +32,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -68,7 +67,6 @@ object DataGoKrNetwork {
     ): AdminActionDataSource = AdminActionDataSourceImpl(ioDispatcher, dataGoKrNetworkApi)
 
 
-    @OptIn(DelicateCoroutinesApi::class)
     @Provides
     @Singleton
     fun provideMedicineApprovalDataSource(
@@ -94,7 +92,6 @@ object DataGoKrNetwork {
 }
 
 interface DataGoKrNetworkApi {
-
 
     @GET(value = "DrugPrdtPrmsnInfoService04/getDrugPrdtPrmsnInq04")
     suspend fun getApprovalList(

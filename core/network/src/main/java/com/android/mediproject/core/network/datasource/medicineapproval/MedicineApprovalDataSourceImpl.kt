@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class MedicineApprovalDataSourceImpl @Inject constructor(
@@ -48,9 +49,7 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
                 onSuccess = { entity ->
                     entity.isSuccess().let {
                         if (it is DataGoKrResult.isSuccess) {
-                            entity.body.items[0].run {
-                                cache(itemSequence, Json.encodeToString(response.body()), changeDate)
-                            }
+                            cache(response.body()!!)
                             Result.success(entity)
                         } else Result.failure(Throwable(it.failedMessage))
                     }
@@ -71,9 +70,7 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
                     onSuccess = { entity ->
                         entity.isSuccess().let {
                             if (it is DataGoKrResult.isSuccess) {
-                                entity.body.items[0].run {
-                                    cache(itemSequence, response.raw().body!!.string(), changeDate)
-                                }
+                                cache(response.body()!!)
                                 Result.success(entity)
                             } else Result.failure(Throwable(it.failedMessage))
                         }
@@ -94,14 +91,16 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
         trySend(results)
     }
 
-    private fun cache(itemSequence: String, responseRaw: String, changeDate: String) {
-        medicineDataCacheManager.updateDetail(
-            MedicineCacheEntity(
-                itemSequence = itemSequence,
-                json = responseRaw,
-                changeDate = changeDate,
-            ),
-        )
+    private fun cache(response: MedicineDetailInfoResponse) {
+        with(response.body.items[0]) {
+            medicineDataCacheManager.updateDetail(
+                MedicineCacheEntity(
+                    itemSequence = itemSequence,
+                    json = WeakReference(Json.encodeToString(response.body)).get()!!,
+                    changeDate = changeDate,
+                ),
+            )
+        }
     }
 
     private suspend fun loadMedicineImageUrl(medicineApprovalListResponse: MedicineApprovalListResponse) {

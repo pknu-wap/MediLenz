@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import javax.inject.Inject
@@ -26,6 +27,7 @@ class SystemBarStyler @Inject constructor(
     }
 
     private var acitivityLayoutController: LayoutController? = null
+    private var windowInsetsController: WindowInsetsControllerCompat? = null
 
     private var window: Window by Delegates.notNull()
 
@@ -49,32 +51,23 @@ class SystemBarStyler @Inject constructor(
             navigationBarHeight = getDimensionPixelSize(getIdentifier("navigation_bar_height", "dimen", "android"))
         }
 
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         window.apply {
             setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
             navigationBarColor = Color.TRANSPARENT
             statusBarColor = Color.TRANSPARENT
         }
+        windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
     }
 
 
     override fun setStyle(systemBarColor: SystemBarColor, navigationBarSystemBarColor: SystemBarColor) {
-        window.navigationBarColor = android.graphics.Color.TRANSPARENT
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        //window.navigationBarColor = android.graphics.Color.TRANSPARENT
+        //window.statusBarColor = android.graphics.Color.TRANSPARENT
 
-        WindowCompat.getInsetsController(window, window.decorView).apply {
+        windowInsetsController?.apply {
             isAppearanceLightStatusBars = systemBarColor == SystemBarColor.BLACK
             isAppearanceLightNavigationBars = navigationBarSystemBarColor == SystemBarColor.BLACK
-        }
-    }
-
-    override fun defaultStyle() {
-        window.navigationBarColor = android.graphics.Color.TRANSPARENT
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
-
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = true
         }
     }
 
@@ -118,7 +111,6 @@ interface SystemBarController {
 
     fun init(context: Context, window: Window, activityLayoutController: LayoutController)
     fun setStyle(systemBarColor: SystemBarStyler.SystemBarColor, navigationBarSystemBarColor: SystemBarStyler.SystemBarColor)
-    fun defaultStyle()
 
     fun changeMode(topViews: List<SystemBarStyler.ChangeView> = emptyList(), bottomViews: List<SystemBarStyler.ChangeView> = emptyList())
 }

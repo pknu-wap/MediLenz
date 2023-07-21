@@ -10,5 +10,4 @@ import org.tensorflow.lite.task.gms.vision.detector.Detection
 interface AiController {
     val detectionResult: SharedFlow<List<Detection>>
 
-    suspend fun loadModel(): Result<Unit>
 }

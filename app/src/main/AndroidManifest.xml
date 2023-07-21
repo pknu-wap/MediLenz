@@ -35,6 +35,10 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name=".feature.camera.tflite.CameraHelper"
+            android:authorities="${applicationId}.camera.helper"
+            android:exported="false" />
     </application>
 
 </manifest>

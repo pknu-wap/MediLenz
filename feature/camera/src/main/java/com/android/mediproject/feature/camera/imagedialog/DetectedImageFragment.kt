@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.camera.imagedialog
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,6 @@ import com.android.mediproject.feature.camera.InferenceState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
 import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentDetectedImageDialogBinding
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import repeatOnStarted
@@ -23,6 +23,12 @@ class DetectedImageFragment : DialogFragment() {
 
     private val medicinesDetectorViewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav) {
         defaultViewModelProviderFactory
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            isCancelable = true
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,16 +56,16 @@ class DetectedImageFragment : DialogFragment() {
                 medicinesDetectorViewModel.inferenceState.collectLatest { objs ->
                     when (objs) {
                         is InferenceState.Detected -> {
-                            overlayView.apply {
-                                objs.detection.apply {
-                                    val objects = detection.map {
+                            objs.detection.run {
+                                image = backgroundImage
+                                executePendingBindings()
+                                overlayView.setResults(
+                                    detection.map {
                                         it.detection
-                                    }
-                                    Glide.with(requireContext()).load(backgroundImage).into(binding.imageView)
-                                    setResults(objects, backgroundImage.width, backgroundImage.height)
-                                    invalidate()
-                                }
-
+                                    },
+                                    backgroundImage.width, backgroundImage.height,
+                                )
+                                overlayView.invalidate()
                             }
                         }
 
@@ -81,9 +87,8 @@ class DetectedImageFragment : DialogFragment() {
     override fun getTheme(): Int = R.style.DialogFullscreen
 
     override fun onDestroyView() {
-        _binding = null
+        binding.image?.recycle()
         super.onDestroyView()
+        _binding = null
     }
-
-    override fun isCancelable(): Boolean = false
 }
