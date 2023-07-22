@@ -76,9 +76,7 @@ class SystemBarStyler @Inject constructor(
                     topMargin += statusBarHeight
                 }
             } else {
-                val topPadding = topView.view.paddingTop + statusBarHeight
-                val bottomPadding = topView.view.paddingBottom + navigationBarHeight
-                topView.view.updatePadding(left = 0, right = 0, top = topPadding, bottom = bottomPadding)
+                topView.view.updatePadding(top = topView.view.paddingTop + statusBarHeight)
             }
         }
         bottomViews.forEach { bottomView ->
@@ -88,8 +86,7 @@ class SystemBarStyler @Inject constructor(
                 }
             } else {
                 bottomView.view.updatePadding(
-                    left = 0, right = 0, top = if (bottomView in topViews) statusBarHeight else 0,
-                    bottom = navigationBarHeight,
+                    bottom = bottomView.view.paddingBottom + navigationBarHeight,
                 )
             }
         }
