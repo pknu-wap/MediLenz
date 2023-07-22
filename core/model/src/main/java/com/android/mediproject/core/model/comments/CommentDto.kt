@@ -37,7 +37,7 @@ data class CommentDto(
     var onClickDelete: ((Long) -> Unit)?,
     var onClickEdit: ((CommentDto, Int) -> Unit)?,
     var onClickApplyEdited: ((CommentDto) -> Unit)?,
-    var isMine: Boolean = false
+    var isMine: Boolean = false,
 ) {
 
     var isEditing: Boolean = false
@@ -55,7 +55,7 @@ CREATED_AT	DATETIME	작성 시각
 UPDATED_AT	DATETIME	수정 시각
  */
 
-fun CommentListResponse.Comment.toDto() = CommentDto(
+fun CommentListResponse.Comment.toCommentDto() = CommentDto(
     commentId = id,
     userId = userId,
     userName = nickName,
@@ -71,7 +71,7 @@ fun CommentListResponse.Comment.toDto() = CommentDto(
     onClickApplyEdited = null,
 )
 
-fun CommentListResponse.Comment.Reply.toDto() = CommentDto(
+fun CommentListResponse.Comment.Reply.toCommentDto() = CommentDto(
     commentId = id,
     userId = userId,
     userName = nickName,
@@ -87,4 +87,4 @@ fun CommentListResponse.Comment.Reply.toDto() = CommentDto(
     onClickApplyEdited = null,
 )
 
-internal val dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd HH:mm")
+private val dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd HH:mm")

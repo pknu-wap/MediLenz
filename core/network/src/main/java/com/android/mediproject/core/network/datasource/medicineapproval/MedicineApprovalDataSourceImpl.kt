@@ -1,10 +1,10 @@
 package com.android.mediproject.core.network.datasource.medicineapproval
 
 import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
-import com.android.mediproject.core.model.DataGoKrResult
 import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.MedicineCacheEntity
+import com.android.mediproject.core.model.toResult
 import com.android.mediproject.core.network.datasource.image.GoogleSearchDataSource
 import com.android.mediproject.core.network.module.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onResponse
@@ -30,12 +30,10 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
         dataGoKrNetworkApi.getApprovalList(itemName = itemName, entpName = entpName, pageNo = pageNo, medicationType = medicationType).onResponse()
             .fold(
                 onSuccess = { response ->
-                    response.isSuccess().let {
-                        if (it == DataGoKrResult.isSuccess) {
-                            // 이미지가 없는 경우 구글 검색을 통해 이미지를 가져온다.
-                            loadMedicineImageUrl(response)
-                            Result.success(response)
-                        } else Result.failure(Throwable(it.failedMessage))
+                    response.toResult().onSuccess {
+                        // 이미지가 없는 경우 구글 검색을 통해 이미지를 가져온다.
+                        loadMedicineImageUrl(response)
+                        Result.success(response)
                     }
                 },
                 onFailure = {
@@ -47,11 +45,9 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
         dataGoKrNetworkApi.getMedicineDetailInfo(itemName = itemName).let { response ->
             response.onResponse().fold(
                 onSuccess = { entity ->
-                    entity.isSuccess().let {
-                        if (it is DataGoKrResult.isSuccess) {
-                            cache(response.body()!!)
-                            Result.success(entity)
-                        } else Result.failure(Throwable(it.failedMessage))
+                    entity.toResult().onSuccess {
+                        response.body()?.run { cache(this) }
+                        Result.success(entity)
                     }
                 },
                 onFailure = {
@@ -68,11 +64,9 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
             dataGoKrNetworkApi.getMedicineDetailInfo(itemSeq = itemSeq).let { response ->
                 response.onResponse().fold(
                     onSuccess = { entity ->
-                        entity.isSuccess().let {
-                            if (it is DataGoKrResult.isSuccess) {
-                                cache(response.body()!!)
-                                Result.success(entity)
-                            } else Result.failure(Throwable(it.failedMessage))
+                        entity.toResult().onSuccess {
+                            response.body()?.run { cache(this) }
+                            Result.success(entity)
                         }
                     },
                     onFailure = {
@@ -112,7 +106,7 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
             if (items.isEmpty()) return@withContext
 
             val map = mutableMapOf<String, String>()
-            val asyncList = items.map { (i, name) ->
+            val asyncList = items.map { (_, name) ->
                 async {
                     val imageUrl = googleSearchDataSource.getImageUrl(name)
                     synchronized(map) {

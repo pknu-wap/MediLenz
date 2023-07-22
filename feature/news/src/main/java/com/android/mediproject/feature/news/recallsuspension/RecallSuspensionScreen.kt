@@ -15,7 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,7 +31,6 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItemDto
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
-import kotlinx.datetime.toJavaLocalDate
 import java.time.format.DateTimeFormatter
 
 
@@ -40,17 +39,18 @@ import java.time.format.DateTimeFormatter
  */
 @Composable
 fun RecallDisposalScreen(
-    viewModel: RecallSuspensionViewModel = hiltViewModel(), navController: NavController
+    viewModel: RecallSuspensionViewModel = hiltViewModel(), navController: NavController,
 ) {
 
     val list = viewModel.recallDisposalList.collectAsLazyPagingItems()
 
-    LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+    ) {
         items(
-            count = list.itemCount, key = list.itemKey(), contentType = list.itemContentType(
-            )
+            count = list.itemCount, key = list.itemKey(),
+            contentType = list.itemContentType(
+            ),
         ) { index ->
             list[index]?.run {
                 onClick = {
@@ -86,16 +86,14 @@ fun RecallDisposalScreen(
 @Composable
 fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 20.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 20.dp),
         shape = RectangleShape,
         onClick = {
             recallSuspensionListItemDto.onClick?.invoke(recallSuspensionListItemDto)
         },
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -106,17 +104,15 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 14.sp,
                     color = Color.Black,
-                    modifier = Modifier
-                        .align(CenterVertically)
-                        .weight(1f),
+                    modifier = Modifier.align(CenterVertically).weight(1f),
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                    maxLines = 1,
                 )
                 Text(
-                    text = recallSuspensionListItemDto.let {
-                        if (it.recallCommandDate != null) it.recallCommandDate
-                        else it.destructionOrderDate
-                    }!!.toJavaLocalDate().format(dateFormat),
+                    text = recallSuspensionListItemDto.run {
+                        if (recallCommandDate != null) recallCommandDate
+                        else destructionOrderDate
+                    }!!.format(dateFormat),
                     fontSize = 12.sp,
                     modifier = Modifier.align(CenterVertically),
                     color = Color.Gray,
@@ -125,11 +121,11 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = recallSuspensionListItemDto.reason, fontSize = 12.sp, color = Color.Gray, maxLines = 1
+                text = recallSuspensionListItemDto.reason, fontSize = 12.sp, color = Color.Gray, maxLines = 1,
             )
         }
     }
 }
 
 
-private val dateFormat by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd") }
+private val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")

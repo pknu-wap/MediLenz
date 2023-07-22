@@ -5,7 +5,7 @@ import androidx.paging.flatMap
 import com.android.mediproject.core.data.remote.comments.CommentsRepository
 import com.android.mediproject.core.model.comments.CommentDto
 import com.android.mediproject.core.model.comments.MyCommentDto
-import com.android.mediproject.core.model.comments.toDto
+import com.android.mediproject.core.model.comments.toCommentDto
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
@@ -35,16 +35,18 @@ class CommentsUseCase @Inject constructor(
         commentsRepository.getCommentsForAMedicine(medicineId).collectLatest { pagingData ->
             val result = pagingData.flatMap {
                 (it.replies.map { reply ->
-                    reply.toDto().apply {
+                    reply.toCommentDto().apply {
                         reply.likeList.forEach { like ->
                             if (like.userId == myUserId) this.isLiked = true
                         }
                     }
-                }.toList().reversed()) + listOf(it.toDto().apply {
-                    it.likeList.forEach { like ->
-                        if (like.userId == myUserId) this.isLiked = true
-                    }
-                })
+                }.toList().reversed()) + listOf(
+                    it.toCommentDto().apply {
+                        it.likeList.forEach { like ->
+                            if (like.userId == myUserId) this.isLiked = true
+                        }
+                    },
+                )
             }
             send(result)
         }
@@ -72,9 +74,12 @@ class CommentsUseCase @Inject constructor(
      */
     fun applyNewComment(parameter: NewCommentParameter): Flow<Result<Unit>> =
         commentsRepository.applyNewComment(parameter).mapLatest { result ->
-            result.fold(onSuccess = {
-                Result.success(Unit)
-            }, onFailure = { Result.failure(it) })
+            result.fold(
+                onSuccess = {
+                    Result.success(Unit)
+                },
+                onFailure = { Result.failure(it) },
+            )
         }
 
 

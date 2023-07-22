@@ -31,7 +31,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(project(":core:model"))
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.datetime)
+    //implementation(libs.kotlinx.datetime)
     implementation(libs.kotlin.reflection)
     implementation(libs.bundles.glides)
     implementation(libs.lottie)

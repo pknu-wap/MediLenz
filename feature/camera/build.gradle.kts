@@ -57,7 +57,7 @@ dependencies {
 
     implementation(libs.bundles.navigations)
     implementation(libs.bundles.lifecycles)
-    implementation(libs.kotlinx.datetime)
+    //implementation(libs.kotlinx.datetime)
     implementation(libs.photo.view)
 
     implementation(libs.bundles.tflite)

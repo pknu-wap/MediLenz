@@ -37,10 +37,10 @@ data class DetailRecallSuspensionItemDto(
     val rm: String?, // 비고
     val approvalDate: LocalDate?, // 20221004000000
     val reasonForRecall: String, // 정량법 부적합
-    val usagePeriod: String? // 제조일로부터36개월
+    val usagePeriod: String?, // 제조일로부터36개월
 )
 
-fun DetailRecallSuspensionResponse.Body.Item.Item.toDto(): DetailRecallSuspensionItemDto = DetailRecallSuspensionItemDto(
+fun DetailRecallSuspensionResponse.Body.Item.Item.toRecallSuspensionItemDto(): DetailRecallSuspensionItemDto = DetailRecallSuspensionItemDto(
     bIZRNO = bIZRNO ?: "",
     enterprise = eNTRPS ?: "",
     enterpriseAddress = eNTRPSADRES ?: "",
@@ -54,7 +54,7 @@ fun DetailRecallSuspensionResponse.Body.Item.Item.toDto(): DetailRecallSuspensio
     rm = rM,
     approvalDate = null,
     reasonForRecall = retrievalReason ?: "",
-    usagePeriod = usagePeriod
+    usagePeriod = usagePeriod,
 )
 
 private val dateFormat by lazy { DateTimeFormatter.ofPattern("yyyyMMdd") }
