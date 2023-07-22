@@ -30,11 +30,16 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
         dataGoKrNetworkApi.getApprovalList(itemName = itemName, entpName = entpName, pageNo = pageNo, medicationType = medicationType).onResponse()
             .fold(
                 onSuccess = { response ->
-                    response.toResult().onSuccess {
-                        // 이미지가 없는 경우 구글 검색을 통해 이미지를 가져온다.
-                        loadMedicineImageUrl(response)
-                        Result.success(response)
-                    }
+                    response.toResult().fold(
+                        onSuccess = {
+                            // 이미지가 없는 경우 구글 검색을 통해 이미지를 가져온다.
+                            loadMedicineImageUrl(response)
+                            Result.success(response)
+                        },
+                        onFailure = {
+                            Result.failure(it)
+                        },
+                    )
                 },
                 onFailure = {
                     Result.failure(it)
@@ -45,10 +50,15 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
         dataGoKrNetworkApi.getMedicineDetailInfo(itemName = itemName).let { response ->
             response.onResponse().fold(
                 onSuccess = { entity ->
-                    entity.toResult().onSuccess {
-                        response.body()?.run { cache(this) }
-                        Result.success(entity)
-                    }
+                    entity.toResult().fold(
+                        onSuccess = {
+                            response.body()?.run { cache(this) }
+                            Result.success(entity)
+                        },
+                        onFailure = {
+                            Result.failure(it)
+                        },
+                    )
                 },
                 onFailure = {
                     Result.failure(it)
@@ -64,10 +74,15 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
             dataGoKrNetworkApi.getMedicineDetailInfo(itemSeq = itemSeq).let { response ->
                 response.onResponse().fold(
                     onSuccess = { entity ->
-                        entity.toResult().onSuccess {
-                            response.body()?.run { cache(this) }
-                            Result.success(entity)
-                        }
+                        entity.toResult().fold(
+                            onSuccess = {
+                                response.body()?.run { cache(this) }
+                                Result.success(entity)
+                            },
+                            onFailure = {
+                                Result.failure(it)
+                            },
+                        )
                     },
                     onFailure = {
                         Result.failure(it)
