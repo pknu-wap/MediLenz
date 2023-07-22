@@ -1,12 +1,7 @@
 package com.android.mediproject.feature.home
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.RelativeSizeSpan
-import android.text.style.StyleSpan
-import android.text.style.UnderlineSpan
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.mapper.MedicineInfoMapper

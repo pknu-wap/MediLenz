@@ -15,7 +15,6 @@ import androidx.core.view.updatePadding
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
-@SuppressLint("InternalInsetResource", "DiscouragedApi", "Deprecation")
 class SystemBarStyler @Inject constructor(
 ) : LayoutController, SystemBarController {
     enum class SystemBarColor {
@@ -42,6 +41,7 @@ class SystemBarStyler @Inject constructor(
     override val navigationBarHeightPx: Int
         get() = navigationBarHeight
 
+    @SuppressLint("InternalInsetResource", "DiscouragedApi")
     override fun init(context: Context, window: Window, activityLayoutController: LayoutController) {
         this.window = window
         this.acitivityLayoutController = activityLayoutController
@@ -61,13 +61,10 @@ class SystemBarStyler @Inject constructor(
     }
 
 
-    override fun setStyle(systemBarColor: SystemBarColor, navigationBarSystemBarColor: SystemBarColor) {
-        //window.navigationBarColor = android.graphics.Color.TRANSPARENT
-        //window.statusBarColor = android.graphics.Color.TRANSPARENT
-
+    override fun setStyle(statusBarColor: SystemBarColor, navBarColor: SystemBarColor) {
         windowInsetsController?.apply {
-            isAppearanceLightStatusBars = systemBarColor == SystemBarColor.BLACK
-            isAppearanceLightNavigationBars = navigationBarSystemBarColor == SystemBarColor.BLACK
+            isAppearanceLightStatusBars = statusBarColor == SystemBarColor.BLACK
+            isAppearanceLightNavigationBars = navBarColor == SystemBarColor.BLACK
         }
     }
 
@@ -75,15 +72,19 @@ class SystemBarStyler @Inject constructor(
     override fun changeMode(topViews: List<ChangeView>, bottomViews: List<ChangeView>) {
         topViews.forEach { topView ->
             if (topView.type == SpacingType.MARGIN) {
-                topView.view.updateLayoutParams {
-                    (this as ViewGroup.MarginLayoutParams).topMargin += statusBarHeight
+                topView.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    topMargin += statusBarHeight
                 }
-            } else topView.view.updatePadding(left = 0, right = 0, top = statusBarHeight, bottom = 0)
+            } else {
+                val topPadding = topView.view.paddingTop + statusBarHeight
+                val bottomPadding = topView.view.paddingBottom + navigationBarHeight
+                topView.view.updatePadding(left = 0, right = 0, top = topPadding, bottom = bottomPadding)
+            }
         }
         bottomViews.forEach { bottomView ->
             if (bottomView.type == SpacingType.MARGIN) {
-                bottomView.view.updateLayoutParams {
-                    (this as ViewGroup.MarginLayoutParams).bottomMargin += navigationBarHeight
+                bottomView.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin += navigationBarHeight
                 }
             } else {
                 bottomView.view.updatePadding(
@@ -110,7 +111,7 @@ interface SystemBarController {
     val navigationBarHeightPx: Int
 
     fun init(context: Context, window: Window, activityLayoutController: LayoutController)
-    fun setStyle(systemBarColor: SystemBarStyler.SystemBarColor, navigationBarSystemBarColor: SystemBarStyler.SystemBarColor)
+    fun setStyle(statusBarColor: SystemBarStyler.SystemBarColor, navBarColor: SystemBarStyler.SystemBarColor)
 
     fun changeMode(topViews: List<SystemBarStyler.ChangeView> = emptyList(), bottomViews: List<SystemBarStyler.ChangeView> = emptyList())
 }

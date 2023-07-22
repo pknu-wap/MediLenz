@@ -12,8 +12,8 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object CameraModule {
     @Provides
-    fun providesCameraController(cameraHelper: CameraHelper): CameraController = CameraHelper.instance
+    fun providesCameraController(): CameraController = CameraHelper.instance
 
     @Provides
-    fun providesAiController(cameraHelper: CameraHelper): AiController = CameraHelper.instance
+    fun providesAiController(): AiController = CameraHelper.instance
 }

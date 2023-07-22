@@ -17,11 +17,11 @@ import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
@@ -39,7 +39,7 @@ import kotlin.properties.Delegates
 object SystemBarColorAnalyzer {
     private val waitLock = Mutex()
     private var waiting: Job? = null
-    private val coroutineScope = MainScope() + SupervisorJob()
+    private val coroutineScope = MainScope() + CoroutineName("SystemBarColorAnalyzer")
     private val onChangedFragmentFlow = MutableSharedFlow<Unit>(onBufferOverflow = BufferOverflow.SUSPEND, replay = 1, extraBufferCapacity = 5)
 
     private var decorView by Delegates.notNull<View>()
@@ -105,7 +105,7 @@ object SystemBarColorAnalyzer {
 
                 override fun onDestroy(owner: LifecycleOwner) {
                     super.onDestroy(owner)
-                    release()
+                    coroutineScope.cancel()
                 }
             },
         )
@@ -153,7 +153,4 @@ object SystemBarColorAnalyzer {
         }
     }
 
-    private fun release() {
-        coroutineScope.cancel()
-    }
 }
