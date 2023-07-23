@@ -22,11 +22,9 @@ class LibraryConventionPlugin : Plugin<Project> {
                 defaultConfig.targetSdk = libs.findVersion("targetSdk").get().toString().toInt()
             }
 
-            //val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
             dependencies {
-                // "testImplementation"(kotlin("test"))
-                // "androidTestImplementation"(kotlin("test"))
+                "testImplementation"(libs.findBundle("testLocal").get())
+                "androidTestImplementation"(libs.findBundle("testAndroid").get())
             }
         }
     }

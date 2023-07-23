@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.search
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.net.toUri
@@ -8,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.common.uiutil.SystemBarController
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.common.uiutil.hideKeyboard
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -24,17 +24,9 @@ import javax.inject.Inject
 class SearchMedicinesFragment :
     BaseFragment<FragmentSearchMedicinesBinding, SearchMedicinesViewModel>(FragmentSearchMedicinesBinding::inflate) {
 
-    @Inject lateinit var systemBarStyler: SystemBarStyler
+    @Inject lateinit var systemBarStyler: SystemBarController
 
     override val fragmentViewModel by viewModels<SearchMedicinesViewModel>()
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

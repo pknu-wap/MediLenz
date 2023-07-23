@@ -12,7 +12,7 @@ android {
 
 dependencies {
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.datetime)
+    //implementation(libs.kotlinx.datetime)
     implementation(libs.kotlin.reflection)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.tensorflow.lite.taskVisionPlayServices)

@@ -41,4 +41,11 @@
         <item name="postSplashScreenTheme">@style/Theme.MediProject</item>
     </style>
 
+    <style name="Widget.Button.Circle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@drawable/circle_image_background</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
 </resources>

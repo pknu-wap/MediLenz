@@ -27,6 +27,6 @@ dependencies {
     implementation(libs.bundles.navigations)
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.composes)
-    implementation(libs.kotlinx.datetime)
+    //implementation(libs.kotlinx.datetime)
     kapt(libs.bundles.glides.kapt)
 }

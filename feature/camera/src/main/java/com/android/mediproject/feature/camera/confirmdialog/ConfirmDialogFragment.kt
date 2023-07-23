@@ -1,7 +1,6 @@
 package com.android.mediproject.feature.camera.confirmdialog
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +31,6 @@ class ConfirmDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireActivity()).apply {
             setTitle(getString(R.string.checkCountsOfMedicines))
-
             _binding = FragmentConfirmDialogBinding.inflate(layoutInflater, null, false)
             setView(onCreateView(layoutInflater, binding.root, savedInstanceState))
             setPositiveButton(getString(R.string.search)) { _, _ ->
@@ -41,7 +39,7 @@ class ConfirmDialogFragment : DialogFragment() {
             }
             setNegativeButton(getString(R.string.close)) { _, _ ->
                 findNavController().popBackStack()
-            }.setCancelable(false)
+            }.setCancelable(true)
         }.create()
     }
 
@@ -55,10 +53,12 @@ class ConfirmDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         dialog?.apply {
+            setOnDismissListener {
+                viewModel.cameraController.resume()
+            }
             setCanceledOnTouchOutside(false)
-            setCancelable(false)
+            setCancelable(true)
         }
 
         viewLifecycleOwner.repeatOnStarted {
@@ -66,7 +66,7 @@ class ConfirmDialogFragment : DialogFragment() {
                 when (detectionState) {
                     is InferenceState.Detected -> {
                         val detection = detectionState.detection
-                        val text = "${detection.detection.size} ${getString(R.string.checkCountsOfMedicinesMessage)}".toSpannable()
+                        val text = "${detection.detection.size}${getString(R.string.checkCountsOfMedicinesMessage)}".toSpannable()
                         binding.confirmDialogTextView.text = text
 
                         binding.detectedObjectsRecyclerView.adapter = ImageListAdapter().apply {
@@ -88,19 +88,12 @@ class ConfirmDialogFragment : DialogFragment() {
         }
     }
 
-    override fun dismiss() {
-        super.dismiss()
-        viewModel.cameraController.resume()
-    }
-
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 
     private fun onDetectedObjectClicked() {
         findNavController().navigate(ConfirmDialogFragmentDirections.actionConfirmDialogFragmentToDetectedImageFragment())
     }
-
-    override fun isCancelable(): Boolean = false
 }

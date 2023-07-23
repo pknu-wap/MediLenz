@@ -24,7 +24,7 @@ dependencies {
     implementation(libs.bundles.retrofits)
     implementation(libs.bundles.dataStores)
     implementation(libs.google.protobuf.kotlin.lite)
-    implementation(libs.kotlinx.datetime)
+    //implementation(libs.kotlinx.datetime)
     implementation(libs.okhttp.logginginterceptor)
     implementation(libs.okhttp)
     implementation(libs.jsoup)

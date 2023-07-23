@@ -32,16 +32,19 @@
             android:layout_marginStart="24dp"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="@string/back"
+            android:elevation="4dp"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:src="@drawable/left_arrow"
             app:layout_constraintBottom_toBottomOf="@id/title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/logo"
-            app:strokeColor="@null" />
+            app:strokeColor="@color/transparent" />
 
         <ImageView
             android:id="@+id/logo"
             android:layout_width="wrap_content"
-            android:layout_height="22dp"
+            android:layout_height="24dp"
             android:layout_marginTop="48dp"
             android:contentDescription="@string/appLogo"
             android:src="@drawable/medilenz_white_logo"
@@ -56,7 +59,7 @@
             android:gravity="center"
             android:text="@string/aiCamera"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="@id/logo"
             app:layout_constraintStart_toStartOf="@id/logo"
             app:layout_constraintTop_toBottomOf="@id/logo" />
@@ -69,15 +72,16 @@
             android:background="@drawable/detection_button_background"
             android:contentDescription="@string/search_with_ai"
             android:elevation="3dp"
-            android:onClick="@{() ->viewModel.capture()}"
             android:paddingHorizontal="36dp"
             android:paddingVertical="12dp"
             android:src="@drawable/baseline_search_24"
             app:layout_constraintBottom_toTopOf="@id/detectionDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:strokeColor="@null" />
-
+            app:strokeColor="@android:color/transparent"
+            app:onCapture="@{viewModel.captureFunc}"
+            app:overlayView="@{overlayView}"
+            app:srcPreview="@{previewView}" />
 
         <TextView
             android:id="@+id/detectionDescription"

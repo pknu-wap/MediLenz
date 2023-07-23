@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
-@SuppressLint("InternalInsetResource", "DiscouragedApi", "Deprecation")
 class SystemBarStyler @Inject constructor(
 ) : LayoutController, SystemBarController {
     enum class SystemBarColor {
@@ -26,6 +26,7 @@ class SystemBarStyler @Inject constructor(
     }
 
     private var acitivityLayoutController: LayoutController? = null
+    private var windowInsetsController: WindowInsetsControllerCompat? = null
 
     private var window: Window by Delegates.notNull()
 
@@ -40,6 +41,7 @@ class SystemBarStyler @Inject constructor(
     override val navigationBarHeightPx: Int
         get() = navigationBarHeight
 
+    @SuppressLint("InternalInsetResource", "DiscouragedApi")
     override fun init(context: Context, window: Window, activityLayoutController: LayoutController) {
         this.window = window
         this.acitivityLayoutController = activityLayoutController
@@ -49,32 +51,20 @@ class SystemBarStyler @Inject constructor(
             navigationBarHeight = getDimensionPixelSize(getIdentifier("navigation_bar_height", "dimen", "android"))
         }
 
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         window.apply {
             setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
             navigationBarColor = Color.TRANSPARENT
             statusBarColor = Color.TRANSPARENT
         }
+        windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
     }
 
 
-    override fun setStyle(systemBarColor: SystemBarColor, navigationBarSystemBarColor: SystemBarColor) {
-        window.navigationBarColor = android.graphics.Color.TRANSPARENT
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
-
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = systemBarColor == SystemBarColor.BLACK
-            isAppearanceLightNavigationBars = navigationBarSystemBarColor == SystemBarColor.BLACK
-        }
-    }
-
-    override fun defaultStyle() {
-        window.navigationBarColor = android.graphics.Color.TRANSPARENT
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
-
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = true
+    override fun setStyle(statusBarColor: SystemBarColor, navBarColor: SystemBarColor) {
+        windowInsetsController?.apply {
+            isAppearanceLightStatusBars = statusBarColor == SystemBarColor.BLACK
+            isAppearanceLightNavigationBars = navBarColor == SystemBarColor.BLACK
         }
     }
 
@@ -82,20 +72,21 @@ class SystemBarStyler @Inject constructor(
     override fun changeMode(topViews: List<ChangeView>, bottomViews: List<ChangeView>) {
         topViews.forEach { topView ->
             if (topView.type == SpacingType.MARGIN) {
-                topView.view.updateLayoutParams {
-                    (this as ViewGroup.MarginLayoutParams).topMargin += statusBarHeight
+                topView.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    topMargin += statusBarHeight
                 }
-            } else topView.view.updatePadding(left = 0, right = 0, top = statusBarHeight, bottom = 0)
+            } else {
+                topView.view.updatePadding(top = topView.view.paddingTop + statusBarHeight)
+            }
         }
         bottomViews.forEach { bottomView ->
             if (bottomView.type == SpacingType.MARGIN) {
-                bottomView.view.updateLayoutParams {
-                    (this as ViewGroup.MarginLayoutParams).bottomMargin += navigationBarHeight
+                bottomView.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin += navigationBarHeight
                 }
             } else {
                 bottomView.view.updatePadding(
-                    left = 0, right = 0, top = if (bottomView in topViews) statusBarHeight else 0,
-                    bottom = navigationBarHeight,
+                    bottom = bottomView.view.paddingBottom + navigationBarHeight,
                 )
             }
         }
@@ -117,8 +108,7 @@ interface SystemBarController {
     val navigationBarHeightPx: Int
 
     fun init(context: Context, window: Window, activityLayoutController: LayoutController)
-    fun setStyle(systemBarColor: SystemBarStyler.SystemBarColor, navigationBarSystemBarColor: SystemBarStyler.SystemBarColor)
-    fun defaultStyle()
+    fun setStyle(statusBarColor: SystemBarStyler.SystemBarColor, navBarColor: SystemBarStyler.SystemBarColor)
 
     fun changeMode(topViews: List<SystemBarStyler.ChangeView> = emptyList(), bottomViews: List<SystemBarStyler.ChangeView> = emptyList())
 }

@@ -21,9 +21,11 @@ class HostCommentsFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val viewModel: MedicineInfoViewModel by viewModels({
-        requireParentFragment()
-    })
+    private val viewModel: MedicineInfoViewModel by viewModels(
+        {
+            requireParentFragment()
+        },
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCommentsHostBinding.inflate(inflater, container, false)
@@ -38,7 +40,7 @@ class HostCommentsFragment : Fragment() {
 
         val args = (viewModel.medicineDetails.value as UiState.Success).data
         graph.findNode(com.android.mediproject.feature.comments.R.id.medicineCommentsFragment)
-            ?.setArguments(MedicineBasicInfoArgs(args.itemSequence.toLong(), args.medicineIdInAws))
+            ?.setArguments(MedicineBasicInfoArgs(args.itemSequence.toLong(), args.medicineIdInServer))
 
         navHostFragment.navController.graph = graph
         viewModel.scrollToBottom()

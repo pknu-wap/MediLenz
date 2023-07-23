@@ -1,8 +1,7 @@
 package com.android.mediproject.core.model.remote.elderlycaution
 
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toKotlinLocalDate
-import java.time.format.DateTimeFormatter
+import com.android.mediproject.core.toLocalDate
+import java.time.LocalDate
 
 /**
  * 노인안전정보
@@ -50,13 +49,11 @@ data class ElderlyCautionDto(
     val notificationDate: LocalDate, // 20150728
     val prohibitionContent: String, // 노인에서의 삼환계 항우울제 사용은 기립성 저혈압, 비틀거림, 항콜린작용에 의한 구갈, 배뇨곤란, 변비, 안내압항진 등이 나타나기 쉬움으로 소량으로 신중투여
     val remark: String?, // null
-    val typeName: String // 노인주의
+    val typeName: String, // 노인주의
 )
 
-fun ElderlyCautionResponse.Body.Item.toDto() = ElderlyCautionDto(
-    changeDate = changeDate.let {
-        java.time.LocalDate.parse(it, dateFormatter).toKotlinLocalDate()
-    },
+fun ElderlyCautionResponse.Body.Item.toElderlyCautionDto() = ElderlyCautionDto(
+    changeDate = changeDate.toLocalDate("yyyyMMdd"),
     chart = cHART,
     classCode = cLASSCODE,
     className = cLASSNAME,
@@ -68,22 +65,13 @@ fun ElderlyCautionResponse.Body.Item.toDto() = ElderlyCautionDto(
     ingrEngNameFull = iNGRENGNAMEFULL,
     ingrName = iNGRNAME,
     itemName = iTEMNAME,
-    itemPermitDate = iTEMPERMITDATE.let {
-        java.time.LocalDate.parse(it, dateFormatter).toKotlinLocalDate()
-    },
+    itemPermitDate = iTEMPERMITDATE.toLocalDate("yyyyMMdd"),
     itemSeq = iTEMSEQ,
     mainIngr = mAININGR,
     minIngr = mIXINGR,
     mixType = mIXTYPE,
-    notificationDate = nOTIFICATIONDATE.let {
-        java.time.LocalDate.parse(it, dateFormatter).toKotlinLocalDate()
-    },
+    notificationDate = nOTIFICATIONDATE.toLocalDate("yyyyMMdd"),
     prohibitionContent = pROHBTCONTENT,
     remark = rEMARK,
-    typeName = tYPENAME
+    typeName = tYPENAME,
 )
-
-
-private val dateFormatter: DateTimeFormatter by lazy {
-    DateTimeFormatter.ofPattern("yyyyMMdd")
-}

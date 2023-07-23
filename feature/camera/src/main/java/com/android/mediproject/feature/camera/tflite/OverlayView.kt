@@ -6,16 +6,17 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import org.tensorflow.lite.task.gms.vision.detector.Detection
 import java.util.LinkedList
-import kotlin.math.max
 
 class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) {
-    private var _results: List<Detection> = LinkedList<Detection>()
+    private val _results = LinkedList<Detection>()
+
+    private val capturedObjects = mutableListOf<Detection>()
+
     val results: List<Detection>
-        get() = _results.toMutableList()
+        get() = _results
     private val boxPaint = Paint()
     private var scaleFactor: Float = 1f
     private val roundCornerRadius = 8f
@@ -28,9 +29,7 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }
 
     fun clear() {
-        boxPaint.reset()
-        invalidate()
-        initPaints()
+        _results.clear()
     }
 
     private fun initPaints() {
@@ -51,9 +50,6 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             val left = boundingBox.left * scaleFactor
             val right = boundingBox.right * scaleFactor
 
-            Log.d("Overlay",
-                "draw rect : left : $left, top : $top, right : $right, bottom : $bottom, width : $width, height : $height")
-
             canvas.drawRoundRect(RectF(left, top, right, bottom), roundCornerRadius, roundCornerRadius, boxPaint)
         }
     }
@@ -63,15 +59,20 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         imageWidth: Int,
         imageHeight: Int,
     ) {
-        _results = detectionResults
-
+        synchronized(_results) {
+            _results.clear()
+            _results.addAll(detectionResults)
+        }
         resizedWidth = imageWidth
         resizeHeight = imageHeight
 
-        scaleFactor = max(width * 1f / imageHeight, height * 1f / imageHeight)
+        scaleFactor = maxOf(width.toFloat() / imageHeight, height.toFloat() / imageHeight)
+    }
 
-        Log.d("Overlay",
-            "setResults: scaleFactor : $scaleFactor, resizedWidth : $resizedWidth, resizeHeight : $resizeHeight, width : $width, height : $height")
+    fun capture() = synchronized(_results) {
+        capturedObjects.clear()
+        capturedObjects.addAll(_results.toList())
+        capturedObjects.toList()
     }
 
 }

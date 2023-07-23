@@ -6,23 +6,22 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.xml.sax.InputSource
 import java.io.StringReader
-import javax.xml.parsers.DocumentBuilder
+import java.lang.ref.WeakReference
 import javax.xml.parsers.DocumentBuilderFactory
 
 
-private val factory by lazy { DocumentBuilderFactory.newInstance() }
+private val factory = DocumentBuilderFactory.newInstance()
 
 /**
  * XML 파싱
  *
- * @param xml XML 데이터
  * @return XML 파싱 결과
  *
  */
-fun String.parseXmlString(): XMLParsedResult {
-    val dBuilder: DocumentBuilder = factory.newDocumentBuilder()
-    val xmlInput = InputSource(StringReader(this))
-    val doc = dBuilder.parse(xmlInput)
+internal fun String?.parseXmlString(): XMLParsedResult {
+    if (this == null) return XMLParsedResult("", emptyList())
+
+    val doc = WeakReference(factory.newDocumentBuilder().parse(InputSource(StringReader(this)))).get()!!
     doc.documentElement.normalize()
 
     return doc.getElementsByTagName("DOC").let { docs ->
@@ -34,20 +33,19 @@ fun String.parseXmlString(): XMLParsedResult {
                 val articleTitle = article.getAttribute("title")
                 getElementsByTagName(article, "PARAGRAPH").map { paragraph ->
                     Html.fromHtml(paragraph.textContent.trim(), Html.FROM_HTML_MODE_COMPACT).toString()
-                }.toList().let { paragraphContents ->
+                }.let { paragraphContents ->
                     XMLParsedResult.Article(
                         title = articleTitle,
                         contentList = paragraphContents,
                     )
                 }
             }
-        }.toList().let { articleList ->
+        }.let { articleList ->
             XMLParsedResult(
                 title = title,
                 articleList = articleList,
             )
         }
-
     }
 }
 
@@ -55,7 +53,7 @@ fun String.parseXmlString(): XMLParsedResult {
 private fun getElementsByTagName(element: Element, tagName: String): List<Element> = element.getElementsByTagName(tagName).let { elements ->
     (0 until elements.length).filter { elements.item(it).nodeType == Node.ELEMENT_NODE }.map { elementIdx ->
         elements.item(elementIdx) as Element
-    }.toList()
+    }
 }
 
 
@@ -63,6 +61,9 @@ data class XMLParsedResult(
     val title: String,
     val articleList: List<Article>,
 ) {
+
+    fun isEmpty(): Boolean = articleList.isEmpty()
+
     data class Article(
         val title: String,
         val contentList: List<String>,

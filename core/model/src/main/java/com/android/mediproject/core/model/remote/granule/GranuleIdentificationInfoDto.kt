@@ -1,8 +1,7 @@
 package com.android.mediproject.core.model.remote.granule
 
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toKotlinLocalDate
-import java.time.format.DateTimeFormatter
+import com.android.mediproject.core.toLocalDate
+import java.time.LocalDate
 
 
 /**
@@ -70,14 +69,12 @@ data class GranuleIdentificationInfoDto(
     val markCodeBackAnal: String, val markCodeBackImg: String, val markCodeFront: String?, // null
     val markCodeFrontAnal: String, val markCodeFrontImg: String, val printBack: String?, // null
     val printFront: String?, // A-S
-    val thick: String? // 7.58
+    val thick: String?, // 7.58
 )
 
 fun GranuleIdentificationInfoResponse.Body.Item.toDto() = GranuleIdentificationInfoDto(
     bizrNo = bizrNo,
-    changeDate = changeDate.let {
-        java.time.LocalDate.parse(it, dateFormatter).toKotlinLocalDate()
-    },
+    changeDate = changeDate.toLocalDate("yyyyMMdd"),
     chart = chart,
     className = className,
     classNo = classNo,
@@ -89,15 +86,11 @@ fun GranuleIdentificationInfoResponse.Body.Item.toDto() = GranuleIdentificationI
     entpSeq = entpSeq,
     etcOtcName = etcOtcName,
     formCodeName = formCodeName,
-    imgRegistTs = imgRegistTs.let {
-        java.time.LocalDate.parse(it, dateFormatter).toKotlinLocalDate()
-    },
+    imgRegistTs = imgRegistTs.toLocalDate("yyyyMMdd"),
     itemEngName = itemEngName,
     itemImage = itemImage,
     itemName = itemName,
-    itemPermitDate = itemPermitDate.let {
-        java.time.LocalDate.parse(it, dateFormatter).toKotlinLocalDate()
-    },
+    itemPermitDate = itemPermitDate.toLocalDate("yyyyMMdd"),
     itemSeq = itemSeq,
     lengLong = lengLong,
     lengShort = lengShort,
@@ -111,9 +104,5 @@ fun GranuleIdentificationInfoResponse.Body.Item.toDto() = GranuleIdentificationI
     markCodeFrontImg = markCodeFrontImg,
     printBack = printBack,
     printFront = printFront,
-    thick = thick
+    thick = thick,
 )
-
-private val dateFormatter: DateTimeFormatter by lazy {
-    DateTimeFormatter.ofPattern("yyyyMMdd")
-}

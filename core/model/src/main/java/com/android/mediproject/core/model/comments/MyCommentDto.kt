@@ -1,7 +1,5 @@
 package com.android.mediproject.core.model.comments
 
-import kotlinx.datetime.LocalDateTime
-
 
 /**
  * 댓글 정보를 담는 데이터 클래스입니다.

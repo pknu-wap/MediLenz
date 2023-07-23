@@ -11,7 +11,8 @@ interface CameraController {
     fun pause()
     fun resume()
     suspend fun setupCamera(previewView: PreviewView): Result<Unit>
-    var detectionCallback: CameraHelper.OnDetectionCallback?
+
+    var detectionCallback: CameraHelper.OnDetectionCallback
 
     var fragmentLifeCycleOwner: LifecycleOwner
 }

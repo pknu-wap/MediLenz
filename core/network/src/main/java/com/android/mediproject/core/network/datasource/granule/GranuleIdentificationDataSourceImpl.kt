@@ -1,32 +1,32 @@
 package com.android.mediproject.core.network.datasource.granule
 
-import com.android.mediproject.core.model.DataGoKrResult
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
+import com.android.mediproject.core.model.toResult
 import com.android.mediproject.core.network.module.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onResponse
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.channelFlow
 import javax.inject.Inject
 
-class GranuleIdentificationDataSourceImpl @Inject constructor(private val networkApi: DataGoKrNetworkApi) :
-    GranuleIdentificationDataSource {
+class GranuleIdentificationDataSourceImpl @Inject constructor(private val networkApi: DataGoKrNetworkApi) : GranuleIdentificationDataSource {
 
     override fun getGranuleIdentificationInfo(
         itemName: String?,
         entpName: String?,
         itemSeq: String?,
-    ): Flow<Result<GranuleIdentificationInfoResponse>> = flow {
-        networkApi.getGranuleIdentificationInfo(itemName = itemName, entpName = entpName, itemSeq = itemSeq).onResponse()
-            .fold(onSuccess = { response ->
-                response.isSuccess().let {
-                    if (it is DataGoKrResult.isSuccess && response.body.items.isNotEmpty()) {
-                        emit(Result.success(response))
-                    } else {
-                        emit(Result.failure(Throwable(it.failedMessage)))
-                    }
+    ): Flow<Result<GranuleIdentificationInfoResponse>> = channelFlow {
+        networkApi.getGranuleIdentificationInfo(itemName = itemName, entpName = entpName, itemSeq = itemSeq).onResponse().fold(
+            onSuccess = { response ->
+                response.toResult().onSuccess {
+                    if (it.body.items.isNotEmpty()) send(Result.success(it))
+                    else send(Result.failure(Throwable("No Data")))
+                }.onFailure {
+                    send(Result.failure(it))
                 }
-            }, onFailure = {
-                emit(Result.failure(it))
-            })
+            },
+            onFailure = {
+                send(Result.failure(it))
+            },
+        )
     }
 }

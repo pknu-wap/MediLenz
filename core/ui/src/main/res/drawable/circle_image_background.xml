@@ -3,8 +3,8 @@
     android:color="@color/default_ripple_color">
 
     <item android:id="@android:id/background">
-        <shape>
-            <corners android:radius="8dp" />
+        <shape android:shape="oval">
+            <solid android:color="@color/white" />
         </shape>
     </item>
 

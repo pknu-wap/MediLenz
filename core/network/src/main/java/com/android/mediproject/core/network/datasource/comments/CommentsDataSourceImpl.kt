@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class CommentsDataSourceImpl @Inject constructor(
-    private val awsNetworkApi: AwsNetworkApi
+    private val awsNetworkApi: AwsNetworkApi,
 ) : CommentsDataSource {
 
     /**
@@ -23,12 +23,15 @@ class CommentsDataSourceImpl @Inject constructor(
      * @param medicineId: 약품 고유 번호
      */
     override suspend fun getCommentsForAMedicine(medicineId: Long): Result<CommentListResponse> {
-        return awsNetworkApi.getComments(medicineId).onResponse().fold(onSuccess = { response ->
-            if (response.commentList.isEmpty()) Result.failure(Exception("댓글이 없습니다."))
-            else Result.success(response)
-        }, onFailure = {
-            Result.failure(it)
-        })
+        return awsNetworkApi.getComments(medicineId).onResponse().fold(
+            onSuccess = { response ->
+                if (response.commentList.isEmpty()) Result.failure(Exception("댓글이 없습니다."))
+                else Result.success(response)
+            },
+            onFailure = {
+                Result.failure(it)
+            },
+        )
     }
 
     override fun getMyComments(userId: Int): Flow<PagingData<CommentListResponse>> {
@@ -36,38 +39,50 @@ class CommentsDataSourceImpl @Inject constructor(
     }
 
     override fun applyEditedComment(parameter: EditCommentParameter): Flow<Result<CommentChangedResponse>> = flow {
-        awsNetworkApi.editComment(parameter).onResponse().fold(onSuccess = { response ->
-            Result.success(response)
-        }, onFailure = {
-            Result.failure(it)
-        }).also { emit(it) }
+        awsNetworkApi.editComment(parameter).onResponse().fold(
+            onSuccess = { response ->
+                Result.success(response)
+            },
+            onFailure = {
+                Result.failure(it)
+            },
+        ).also { emit(it) }
     }
 
     override fun applyNewComment(parameter: NewCommentParameter): Flow<Result<CommentChangedResponse>> = flow {
-        awsNetworkApi.applyNewComment(parameter).onResponse().fold(onSuccess = { response ->
-            Result.success(response)
-        }, onFailure = {
-            Result.failure(it)
-        }).also { emit(it) }
+        awsNetworkApi.applyNewComment(parameter).onResponse().fold(
+            onSuccess = { response ->
+                Result.success(response)
+            },
+            onFailure = {
+                Result.failure(it)
+            },
+        ).also { emit(it) }
     }
 
     override fun deleteComment(parameter: DeleteCommentParameter): Flow<Result<CommentChangedResponse>> = flow {
-        awsNetworkApi.deleteComment(parameter).onResponse().fold(onSuccess = { response ->
-            Result.success(response)
-        }, onFailure = {
-            Result.failure(it)
-        }).also { emit(it) }
+        awsNetworkApi.deleteComment(parameter).onResponse().fold(
+            onSuccess = { response ->
+                Result.success(response)
+            },
+            onFailure = {
+                Result.failure(it)
+            },
+        ).also { emit(it) }
     }
 
-    override fun likeComment(parameter: LikeCommentParameter): Flow<Result<LikeResponse>> = flow {
-        parameter.let {
-            if (it.toLike) awsNetworkApi.likeComment(parameter.medicineId, parameter.commentId)
-            else awsNetworkApi.unlikeComment(parameter.medicineId, parameter.commentId)
-        }.onResponse().fold(onSuccess = { response ->
-            Result.success(response)
-        }, onFailure = {
-            Result.failure(it)
-        }).also { emit(it) }
+    override fun likeComment(likeCommentParameter: LikeCommentParameter): Flow<Result<LikeResponse>> = flow {
+        likeCommentParameter.let {
+            if (it.toLike) awsNetworkApi.likeComment(likeCommentParameter.medicineId, likeCommentParameter.commentId)
+            else awsNetworkApi.unlikeComment(likeCommentParameter.medicineId, likeCommentParameter.commentId)
+        }.onResponse().fold(
+            onSuccess = { response ->
+                Result.success(response)
+            },
+            onFailure = {
+                Result.failure(it)
+            },
+        ).also { emit(it) }
     }
 
 }

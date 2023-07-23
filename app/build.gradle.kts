@@ -35,12 +35,14 @@ android {
             }
             release {
                 isMinifyEnabled = true
-                proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro",
                     "proguard-glide.pro",
                     "proguard-okhttp3.pro",
                     "proguard-room.pro",
-                    "proguard-retrofit2.pro")
+                    "proguard-retrofit2.pro",
+                )
                 signingConfig = signingConfigs.getByName("release")
             }
         }
@@ -94,11 +96,4 @@ dependencies {
 
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
-
-    /*
-    androidTestImplementation(libs.bundles.testUIs)
-    testImplementation(libs.bundles.testUIs)
-    androidTestUtil(libs.androidx.test.orchestrator)
-
-     */
 }

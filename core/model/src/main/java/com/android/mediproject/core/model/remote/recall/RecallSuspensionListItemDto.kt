@@ -1,10 +1,8 @@
 package com.android.mediproject.core.model.remote.recall
 
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.datetime.toKotlinLocalDateTime
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+
+import com.android.mediproject.core.toLocalDate
+import java.time.LocalDate
 
 
 /**
@@ -27,24 +25,15 @@ data class RecallSuspensionListItemDto(
     val recallCommandDate: LocalDate?, // 20230504
     val destructionOrderDate: LocalDate?, // 20230503000000
     val reason: String, // 안정성 시험결과 NDMA 기준 초과에 따른 사전예방적 조치로 시중 유통품에 대해 영업자회수
-    var onClick: ((RecallSuspensionListItemDto) -> Unit)? = null
+    var onClick: ((RecallSuspensionListItemDto) -> Unit)? = null,
 )
 
-fun RecallSuspensionListResponse.Body.Item.Item.toDto(): RecallSuspensionListItemDto {
-    return RecallSuspensionListItemDto(
-        enfrcYn = enfrcYn,
-        entrps = entrps ?: "",
-        itemSeq = itemSeq ?: "",
-        product = product ?: "",
-        recallCommandDate = recallCommandDate?.let {
-            java.time.LocalDate.parse(it.toString(), dateFormatter).toKotlinLocalDate()
-        },
-        destructionOrderDate = rtrlCommandDt?.let {
-            LocalDateTime.parse(it.toString(), dateTimeFormatter).toKotlinLocalDateTime().date
-        },
-        reason = rtrvlResn ?: ""
-    )
-}
-
-private val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+fun RecallSuspensionListResponse.Body.Item.Item.toRecallSuspensionItemDto() = RecallSuspensionListItemDto(
+    enfrcYn = enfrcYn,
+    entrps = entrps ?: "",
+    itemSeq = itemSeq ?: "",
+    product = product ?: "",
+    recallCommandDate = recallCommandDate?.toLocalDate("yyyyMMdd"),
+    destructionOrderDate = rtrlCommandDt?.toLocalDate("yyyyMMddHHmmss"),
+    reason = rtrvlResn ?: "",
+)

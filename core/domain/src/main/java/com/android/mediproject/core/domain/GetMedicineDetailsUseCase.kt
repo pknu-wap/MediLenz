@@ -6,7 +6,7 @@ import com.android.mediproject.core.database.cache.manager.MedicineDataCacheMana
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.MedicineCacheEntity
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.toDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.toMedicineDetailInfoDto
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -56,7 +56,7 @@ class GetMedicineDetailsUseCase @Inject constructor(
 
             val medicineInfo = medicineInfoResult.fold(
                 onSuccess = { item ->
-                    Result.success(item.toDto(medicineId))
+                    Result.success(item.toMedicineDetailInfoDto(medicineId))
                 },
                 onFailure = {
                     Result.failure(it)
@@ -83,7 +83,7 @@ class GetMedicineDetailsUseCase @Inject constructor(
                 onSuccess = { item ->
                     Result.success(
                         item.map {
-                            it.toDto()
+                            it.toMedicineDetailInfoDto()
                         },
                     )
                 },

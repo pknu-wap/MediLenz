@@ -2,9 +2,8 @@ package com.android.mediproject.core.model.medicine.medicinedetailinfo
 
 import com.android.mediproject.core.model.util.XMLParsedResult
 import com.android.mediproject.core.model.util.parseXmlString
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toKotlinLocalDate
-import java.time.format.DateTimeFormatter
+import com.android.mediproject.core.toLocalDate
+import java.time.LocalDate
 
 /**
  * 의약품 상세 허가 정보
@@ -51,8 +50,8 @@ import java.time.format.DateTimeFormatter
  * @param udDocData 용법 용량
  * @param uDocUid UD 문서의 식별자(ID)입니다.
  * @param validTerm 유효 기간입니다. 제조일로부터의 개월 수를 나타냅니다.
- * @param medicineIdInAws AWS에 저장된 의약품 ID
- * @param hasMedicineIdInAws AWS에 저장된 의약품 ID가 있는지 여부
+ * @param medicineIdInServer AWS에 저장된 의약품 ID
+ * @param existsMedicineIdInServer AWS에 저장된 의약품 ID가 있는지 여부
  */
 data class MedicineDetatilInfoDto(
     val atcCode: String?,
@@ -77,7 +76,7 @@ data class MedicineDetatilInfoDto(
     val insertFileUrl: String?,
     val itemEnglishName: String,
     val itemName: String,
-    val itemPermitDate: LocalDate,
+    val itemPermitDate: LocalDate?,
     val itemSequence: String,
     val mainIngredientEnglish: String?,
     val mainItemIngredient: String,
@@ -97,16 +96,17 @@ data class MedicineDetatilInfoDto(
     val udDocData: XMLParsedResult,
     val uDocUid: String?,
     val validTerm: String?,
-    val medicineIdInAws: Long,
-    val hasMedicineIdInAws: Boolean
+    val medicineIdInServer: Long,
+    val existsMedicineIdInServer: Boolean,
 )
 
-fun MedicineDetailInfoResponse.Body.Item.toDto(medicineIdInAws: Long = 0L) = MedicineDetatilInfoDto(atcCode = atcCode,
+fun MedicineDetailInfoResponse.Body.Item.toMedicineDetailInfoDto(medicineIdInServer: Long = 0L) = MedicineDetatilInfoDto(
+    atcCode = atcCode,
     barCode = barCode,
     businessRegistrationNumber = businessRegistrationNumber,
-    cancelDate = cancelDate.toLocalDate(),
+    cancelDate = cancelDate?.toLocalDate("yyyyMMdd"),
     cancelName = cancelName,
-    changeDate = changeDate.toLocalDate(),
+    changeDate = changeDate.toLocalDate("yyyyMMdd"),
     chart = chart,
     consignmentManufacturer = consignmentManufacturer,
     docText = docText,
@@ -123,7 +123,7 @@ fun MedicineDetailInfoResponse.Body.Item.toDto(medicineIdInAws: Long = 0L) = Med
     insertFileUrl = insertFileUrl,
     itemEnglishName = itemEnglishName,
     itemName = itemName,
-    itemPermitDate = itemPermitDate.toLocalDate()!!,
+    itemPermitDate = itemPermitDate.toLocalDate("yyyyMMdd"),
     itemSequence = itemSequence,
     mainIngredientEnglish = mainIngredientEnglish,
     mainItemIngredient = mainItemIngredient,
@@ -135,19 +135,14 @@ fun MedicineDetailInfoResponse.Body.Item.toDto(medicineIdInAws: Long = 0L) = Med
     newDrugClassName = newDrugClassName,
     packUnit = packUnit,
     permitKindName = permitKindName,
-    pnDocData = pnDocData?.parseXmlString(),
-    reexamDate = reexamDate.toLocalDate(),
+    pnDocData = pnDocData.parseXmlString(),
+    reexamDate = reexamDate?.toLocalDate("yyyyMMdd"),
     reexamTarget = reexamTarget,
     storageMethod = storageMethod,
     totalContent = totalContent,
     udDocData = udDocData.parseXmlString(),
     uDocUid = uDDOCID,
     validTerm = validTerm,
-    medicineIdInAws = medicineIdInAws,
-    hasMedicineIdInAws = medicineIdInAws != 0L)
-
-private fun String?.toLocalDate(): LocalDate? = this?.let {
-    java.time.LocalDate.parse(it, dateTimeFormatter).toKotlinLocalDate()
-}
-
-private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+    medicineIdInServer = medicineIdInServer,
+    existsMedicineIdInServer = medicineIdInServer != 0L,
+)
