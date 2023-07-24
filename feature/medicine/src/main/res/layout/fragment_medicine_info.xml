@@ -51,7 +51,7 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:title="@string/medicineInfo"
                 app:titleCollapseMode="scale"
-                app:titleEnabled="true"
+                app:titleEnabled="false"
                 app:toolbarId="@id/toolbar">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -142,12 +142,15 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.appbar.MaterialToolbar
+                <com.android.mediproject.core.ui.base.view.Bar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/left_arrow_black" />
+                    app:navigationIcon="@drawable/left_arrow_black"
+                    app:setTheme="white"
+                    app:showBackButton="true"
+                    app:title="@string/medicineInfo" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 

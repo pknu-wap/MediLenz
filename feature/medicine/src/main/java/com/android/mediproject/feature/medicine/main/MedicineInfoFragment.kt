@@ -1,11 +1,10 @@
 package com.android.mediproject.feature.medicine.main
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
 import com.android.mediproject.core.common.uiutil.SystemBarController
@@ -46,14 +45,9 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             viewModel = fragmentViewModel
             medicineInfoArgs = navArgs
 
-            toolbar.setNavigationOnClickListener {
-                findNavController().popBackStack()
-            }
-
-            root.doOnPreDraw {
-                topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-                    SystemBarColorAnalyzer.convert()
-                }
+            toolbar.bar.setBackgroundColor(Color.TRANSPARENT)
+            topAppBar.addOnOffsetChangedListener { _, _ ->
+                SystemBarColorAnalyzer.convert()
             }
         }
 
@@ -98,11 +92,14 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
             launch {
                 SystemBarColorAnalyzer.statusBarColor.collect {
-                    binding.toolbar.setNavigationIconTint(if (it == SystemBarStyler.SystemBarColor.WHITE) Color.WHITE else Color.BLACK)
+                    (if (it == SystemBarStyler.SystemBarColor.WHITE) Color.WHITE else Color.BLACK).also { color ->
+                        binding.toolbar.backButton.imageTintList =
+                            ColorStateList.valueOf(color)
+                        binding.toolbar.title.setTextColor(color)
+                    }
                 }
             }
         }
-        androidx.appcompat.R.style.Base_Widget_AppCompat_Toolbar_Button_Navigation
     }
 
     private fun setBarStyle() = binding.apply {
