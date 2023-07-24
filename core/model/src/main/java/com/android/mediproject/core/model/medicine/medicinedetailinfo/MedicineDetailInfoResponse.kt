@@ -15,8 +15,6 @@ data class MedicineDetailInfoResponse(
     @SerialName("body") val body: Body,
 ) : DataGoKrBaseResponse() {
 
-    val CHANGE_DATE_FORMAT = "yyyyMMdd"
-
     @Serializable
     data class Body(
         @SerialName("items") val items: List<Item>, @SerialName("numOfRows") val numOfRows: Int, // 100

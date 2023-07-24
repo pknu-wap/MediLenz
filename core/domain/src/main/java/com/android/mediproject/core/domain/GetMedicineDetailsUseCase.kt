@@ -9,7 +9,6 @@ import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.Medi
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.toMedicineDetailInfoDto
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.zip
@@ -39,8 +38,6 @@ class GetMedicineDetailsUseCase @Inject constructor(
             ),
         ) { r1, r2 ->
             r1 to r2
-        }.catch {
-            trySend(Result.failure(it))
         }.collectLatest { result ->
             val medicineInfoResult = result.first
             val medicineIdResult = result.second

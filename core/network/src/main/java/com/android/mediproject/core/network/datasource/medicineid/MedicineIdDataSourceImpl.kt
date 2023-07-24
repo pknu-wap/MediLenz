@@ -5,16 +5,21 @@ import com.android.mediproject.core.model.requestparameters.GetMedicineIdParamet
 import com.android.mediproject.core.network.module.AwsNetworkApi
 import com.android.mediproject.core.network.onResponse
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.channelFlow
 import javax.inject.Inject
 
 class MedicineIdDataSourceImpl @Inject constructor(private val awsNetworkApi: AwsNetworkApi) : MedicineIdDataSource {
-    override fun getMedicineId(getMedicineIdParameter: GetMedicineIdParameter): Flow<Result<MedicineIdResponse>> = flow {
-        awsNetworkApi.getMedicineId(getMedicineIdParameter).onResponse().fold(onSuccess = { response ->
-            Result.success(response)
-        }, onFailure = {
-            Result.failure(it)
-        }).also { emit(it) }
+    override fun getMedicineId(getMedicineIdParameter: GetMedicineIdParameter): Flow<Result<MedicineIdResponse>> = channelFlow {
+        runCatching {
+            awsNetworkApi.getMedicineId(getMedicineIdParameter)
+        }.fold(
+            onSuccess = { response ->
+                send(response.onResponse())
+            },
+            onFailure = { error ->
+                send(Result.failure(error))
+            },
+        )
     }
 
 }
