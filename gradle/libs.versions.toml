@@ -62,7 +62,7 @@ accompanist = "0.30.1"
 jUnit = "4.12"
 mockit = "5.4.0"
 mockitKotlin = "5.0.0"
-
+robolectric = "4.10.3"
 lottie = "6.0.0"
 
 material = "1.9.0"
@@ -215,6 +215,7 @@ androidx-test-ext-truth = { module = "androidx.test.ext:truth", version.ref = "a
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockit" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitKotlin" }
 junit = { module = "junit:junit", version.ref = "jUnit" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 android-flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 
@@ -332,7 +333,7 @@ dataStores = ["androidx-datastore-preferences", "androidx-datastore"]
 
 workManagers = ["androidx-work-ktx"]
 
-testLocal = ["junit", "mockito-core", "mockito-kotlin", "kotlinx-coroutines-testImplementation"]
+testLocal = ["junit", "mockito-core", "mockito-kotlin", "kotlinx-coroutines-testImplementation", "robolectric"]
 
 testAndroid = ["androidx-test-espresso-core", "androidx-test-runner", "androidx-test-rules", "androidx-test-core", "androidx-test-ext-truth",
     "androidx-test-core-ktx", "androidx-test-ext-junit", "androidx-test-ext-junit-ktx", "kotlinx-coroutines-testImplementation"]
