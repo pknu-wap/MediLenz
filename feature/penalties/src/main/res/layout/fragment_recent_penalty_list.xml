@@ -41,7 +41,6 @@
             android:layout_marginBottom="40dp"
             android:bufferType="spannable"
             android:gravity="center"
-            android:text="@{viewModel.noHistoryText}"
             android:textColor="@color/gray2"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
