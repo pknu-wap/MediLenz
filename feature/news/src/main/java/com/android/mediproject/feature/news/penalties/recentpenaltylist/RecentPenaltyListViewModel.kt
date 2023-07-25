@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RecentPenaltyListViewModel @Inject constructor(
     private val getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase) : BaseViewModel() {
-    
+
     init {
         viewModelScope.launch {
             getRecallSuspensionInfoUseCase.getRecentRecallDisposalList(numOfRows = 5).fold(onSuccess = {
