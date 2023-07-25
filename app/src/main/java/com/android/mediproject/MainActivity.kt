@@ -1,5 +1,6 @@
 package com.android.mediproject
 
+import android.os.Bundle
 import android.view.ViewGroup.MarginLayoutParams
 import android.view.ViewTreeObserver
 import androidx.activity.viewModels
@@ -12,16 +13,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUiSaveStateControl
 import androidx.navigation.ui.setupWithNavController
 import com.android.mediproject.core.common.uiutil.LayoutController
 import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
 import com.android.mediproject.core.common.uiutil.SystemBarController
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
+import com.android.mediproject.core.common.util.SavingFragmentNavigator
 import com.android.mediproject.core.network.InternetNetworkListener
 import com.android.mediproject.core.ui.WindowViewModel
 import com.android.mediproject.core.ui.base.BaseActivity
 import com.android.mediproject.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.lastOrNull
 import repeatOnStarted
 import javax.inject.Inject
 
@@ -33,12 +37,13 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
     @Inject lateinit var layoutController: LayoutController
     @Inject lateinit var systemBarController: SystemBarController
     @Inject lateinit var internetNetworkListener: InternetNetworkListener
-
-    private val systemBarColorAnalyzer = SystemBarColorAnalyzer
+    @Inject lateinit var systemBarColorAnalyzer: SystemBarColorAnalyzer
 
     override val activityViewModel: MainViewModel by viewModels()
     private lateinit var navController: NavController
 
+
+    @OptIn(NavigationUiSaveStateControl::class)
     override fun afterBinding() {
         systemBarController.init(this, window, this)
         systemBarColorAnalyzer.init(this, systemBarController, lifecycle)
@@ -51,18 +56,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         }
 
         binding.apply {
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-            navController = navHostFragment.navController
-
-            bottomNav.apply {
-                itemIconTintList = null
-                setupWithNavController(navController)
-                background = null
-                menu.getItem(2).isEnabled = false
-            }
-            R.array.hideBottomNavDestinationIds
-            setDestinationListener()
-
+            initNav()
             viewModel = activityViewModel.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
             }
@@ -95,9 +89,39 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
         installSplashScreen()
     }
 
+    private fun initNav() {
+        binding.apply {
+            val navHostFragment = supportFragmentManager.findFragmentById(fragmentContainerView.id) as NavHostFragment
+            navController = navHostFragment.navController
+
+            bottomNav.apply {
+                itemIconTintList = null
+                background = null
+                menu.getItem(2).isEnabled = false
+
+                navController.navigatorProvider.addNavigator(
+                    SavingFragmentNavigator(
+                        fragmentContainerView.id,
+                        navHostFragment.childFragmentManager,
+                        systemBarColorAnalyzer,
+                    ),
+                )
+
+                navController.setGraph(R.navigation.main_nav)
+                bottomNav.setupWithNavController(navController)
+            }
+            setDestinationListener()
+
+            repeatOnStarted {
+                activityViewModel.selectedBottomNavFragmentId.lastOrNull()?.let { lastSelectedId ->
+                    //bottomNav.selectedItemId = lastSelectedId
+                }
+            }
+        }
+    }
+
     private fun setDestinationListener() {
         val hideBottomNavDestinationIds = activityViewModel.getHideBottomNavDestinationIds(resources)
-
         navController.addOnDestinationChangedListener { _, destination, arg ->
             log(arg.toString())
             bottomVisible(destination.id !in hideBottomNavDestinationIds)
@@ -140,6 +164,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
                 bottomMargin = if (!isFull) (windowViewModel.bottomNavHeight.value) else 0
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(activityViewModel.lastSelectedBottomNavFragmentIdKey, binding.bottomNav.selectedItemId)
     }
 
 }

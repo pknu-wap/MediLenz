@@ -33,11 +33,14 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.properties.Delegates
 
+@Singleton
 @SuppressLint("InternalInsetResource", "DiscouragedApi")
-object SystemBarColorAnalyzer {
+class SystemBarColorAnalyzer @Inject constructor() {
     private val waitLock = Mutex()
     private var waiting: Job? = null
     private val coroutineScope = MainScope() + CoroutineName("SystemBarColorAnalyzer")
@@ -49,7 +52,7 @@ object SystemBarColorAnalyzer {
     private val statusBarHeight = resource.getDimensionPixelSize(resource.getIdentifier("status_bar_height", "dimen", "android"))
     private val navigationBarHeight = resource.getDimensionPixelSize(resource.getIdentifier("navigation_bar_height", "dimen", "android"))
 
-    private const val criteriaColor = 140
+    private val criteriaColor = 140
     private var systemBarController: SystemBarController? = null
 
     private val _statusBarColor = MutableSharedFlow<SystemBarStyler.SystemBarColor>(

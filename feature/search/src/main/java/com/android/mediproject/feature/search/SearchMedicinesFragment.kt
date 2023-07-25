@@ -42,7 +42,10 @@ class SearchMedicinesFragment :
                 if (!binding.searchView.getText().contentEquals(query)) binding.searchView.setText(query)
             }
         }
+    }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
     }
 
     private fun moveToManualSearchResultFragment() {

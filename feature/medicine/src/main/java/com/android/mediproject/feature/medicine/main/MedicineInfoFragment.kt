@@ -34,6 +34,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
     private val navArgs by navArgs<MedicineInfoArgs>()
 
     @Inject lateinit var systemBarStyler: SystemBarController
+    @Inject lateinit var systemBarColorAnalyzer: SystemBarColorAnalyzer
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,7 +48,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
 
             toolbar.bar.setBackgroundColor(Color.TRANSPARENT)
             topAppBar.addOnOffsetChangedListener { _, _ ->
-                SystemBarColorAnalyzer.convert()
+                systemBarColorAnalyzer.convert()
             }
         }
 
@@ -91,7 +92,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             }
 
             launch {
-                SystemBarColorAnalyzer.statusBarColor.collect {
+                systemBarColorAnalyzer.statusBarColor.collect {
                     (if (it == SystemBarStyler.SystemBarColor.WHITE) Color.WHITE else Color.BLACK).also { color ->
                         binding.toolbar.backButton.imageTintList =
                             ColorStateList.valueOf(color)
