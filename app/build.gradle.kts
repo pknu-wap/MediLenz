@@ -71,15 +71,12 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
     implementation(project(":feature:favoritemedicine"))
-
     implementation(project(":feature:home"))
     implementation(project(":feature:intro"))
     implementation(project(":feature:comments"))
     implementation(project(":feature:search"))
     implementation(project(":feature:mypage"))
     implementation(project(":feature:etc"))
-
-    implementation(project(":feature:penalties"))
     implementation(project(":feature:medicine"))
     implementation(project(":feature:news"))
     implementation(project(":feature:camera"))
@@ -93,7 +90,6 @@ dependencies {
     implementation(libs.bundles.glides)
     implementation(libs.androidx.splash)
     kapt(libs.bundles.glides.kapt)
-
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
 }
