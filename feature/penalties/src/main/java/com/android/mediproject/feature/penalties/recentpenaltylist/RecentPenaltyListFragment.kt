@@ -17,12 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 import javax.inject.Inject
 
-
-/**
- * 행정 처분 목록 프래그먼트
- *
- * Material3 Chip으로 의약품 명 보여주고, ViewModel로 관리
- */
 @AndroidEntryPoint
 class RecentPenaltyListFragment :
     BaseFragment<FragmentRecentPenaltyListBinding, RecentPenaltyListViewModel>(FragmentRecentPenaltyListBinding::inflate) {
@@ -36,6 +30,13 @@ class RecentPenaltyListFragment :
 
     @Inject
     lateinit var medicineInfoMapper: MedicineInfoMapper
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initHeader()
+        setBinding()
+    }
+
 
     private fun setRecyclerView() {
         penaltyListAdapter = PenaltyListAdapter()
@@ -65,10 +66,17 @@ class RecentPenaltyListFragment :
 
     private fun setBinding() {
         binding.apply {
-            viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.apply {
-                    recallDisposalList.stateAsCollect(headerView, noHistoryTextView).collect { uiState ->
-                        handleUiState(uiState)
+            fragmentViewModel.apply {
+                viewLifecycleOwner.apply {
+                    repeatOnStarted {
+                        recallDisposalList.stateAsCollect(headerView, noHistoryTextView).collect { uiState ->
+                            handleUiState(uiState)
+                        }
+                    }
+                    repeatOnStarted {
+                        eventFlow.collect { event ->
+                            handleEvent(event)
+                        }
                     }
                 }
                 noHistoryTextView.text = medicineInfoMapper.getNoHistorySpan(requireContext())
@@ -77,25 +85,15 @@ class RecentPenaltyListFragment :
         setRecyclerView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initHeader()
-        setBinding()
+    private fun handleEvent(event: RecentPenaltyListViewModel.PenaltyListEvent) {
+        when (event) {
+            is RecentPenaltyListViewModel.PenaltyListEvent.NavigateToNews -> navigateToNews()
+        }
     }
 
-
-    /**
-     * 헤더 초기화
-     *
-     * 확장 버튼 리스너, 더 보기 버튼 리스너
-     */
-    private fun initHeader() {
-        binding.headerView.setOnExpandClickListener {}
-
-        binding.headerView.setOnMoreClickListener {
-            findNavController().navigateByDeepLink(
-                "medilens://main/news_nav", RecallDisposalArgs(""),
-            )
-        }
+    private fun navigateToNews() {
+        findNavController().navigateByDeepLink(
+            "medilens://main/news_nav", RecallDisposalArgs(""),
+        )
     }
 }

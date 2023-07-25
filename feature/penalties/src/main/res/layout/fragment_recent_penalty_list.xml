@@ -22,6 +22,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:more_title="@string/read_more"
+            onMoreClick="@{()->viewModel.navigateToNews()}"
             app:visibility_target_view="@id/penaltyList" />
 
         <androidx.recyclerview.widget.RecyclerView
