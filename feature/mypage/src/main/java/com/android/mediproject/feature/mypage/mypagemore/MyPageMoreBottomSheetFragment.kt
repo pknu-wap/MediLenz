@@ -57,13 +57,9 @@ class MyPageMoreBottomSheetFragment(private val backCallback: () -> Unit) :
         val bottomSheet = bottomSheetDialog
             .findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
 
-        if (isBottomSheetNotNull(bottomSheet)) {
-            blockBottomSheetDragging(bottomSheet!!)
+        if (bottomSheet != null) {
+            blockBottomSheetDragging(bottomSheet)
         }
-    }
-
-    private fun isBottomSheetNotNull(bottomSheet: FrameLayout?): Boolean {
-        return bottomSheet != null
     }
 
     private fun blockBottomSheetDragging(bottomSheet: FrameLayout) {
