@@ -10,7 +10,8 @@ import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.full.starProjectedType
 
 abstract class BaseNavArgs(
-    val className: String) : NavArgs {
+    val className: String,
+) : NavArgs {
     fun toBundle(): Bundle {
         return bundleOf(*toMap().toList().toTypedArray())
     }
@@ -137,6 +138,8 @@ abstract class BaseNavArgs(
 
     // 속성 값이 NULL이면 빈 값을 넣어준다.
     fun toMap(): Map<String, Any> = this::class.memberProperties.associate { property ->
-        property.name to (property.getter.call(this) ?: emptyValue(property.returnType))
+        property.name to (property.getter.call(this).run {
+            if (this is String) replace("%", "%25") else this
+        } ?: emptyValue(property.returnType))
     }
 }

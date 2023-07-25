@@ -140,3 +140,5 @@ object NetworkModule {
         }
     }
 }
+
+internal fun String.safetyEncode(): String = replace("%", "%25").replace("&", "%26").replace("?", "%3F")

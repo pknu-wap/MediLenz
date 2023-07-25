@@ -571,11 +571,41 @@ val ubDocData = """
  """.trimIndent()
 
 val eeDocData = """
-    <DOC title="효능효과" type="EE">
+<DOC title="효능효과" type="EE">
                         <SECTION title="">
                             <ARTICLE title="">
-                                <PARAGRAPH tagName="p" textIndent="0" marginLeft="0">
-                                    <![CDATA[체질량지수(BMI) 30kg/m<sup>2</sup> 이상의 비만환자 또는 다른 위험인자(예. 제2형 당뇨, 이상지질혈증, 고혈압)가 있는 체질량지수(BMI) 27kg/m<sup>2</sup> 이상 30kg/m<sup>2</sup> 미만인 과체중 환자의 체중조절을 위한 식이 및 운동요법의 보조요법]]>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[○ 유효균종]]>
+                                </PARAGRAPH>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[피페라실린에 감수성인 녹농균, 프로테우스, 시트로박터, 클레브시엘라, 엔테로박터, 세라티아, 대장균, 인플루엔자균, 임균, 박테로이드, 클로스트리듐, 펩토구균, 펩토연쇄구균, 연쇄구균, 폐렴연쇄구균, 포도구균, 장내구균]]>
+                                </PARAGRAPH>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[○ 적응증]]>
+                                </PARAGRAPH>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[- 패혈증]]>
+                                </PARAGRAPH>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[- 급만성기관지염, 농흉, 폐렴, 폐농양, 기관지확장증, 만성호흡기질환의 2차감염]]>
+                                </PARAGRAPH>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[- 신우신염, 방광염, 임균성요도염]]>
+                                </PARAGRAPH>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[- 자궁내막염, 골반사강염]]>
+                                </PARAGRAPH>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[- 복막염, 복강내농양, 골반농양, 난관염]]>
+                                </PARAGRAPH>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[- 피부 및 연조직감염증]]>
+                                </PARAGRAPH>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[- 담관염]]>
+                                </PARAGRAPH>
+                                <PARAGRAPH tagName="p" textIndent="" marginLeft="">
+                                    <![CDATA[- 호기성균 및 혐기성균의 혼합감염증]]>
                                 </PARAGRAPH>
                             </ARTICLE>
                         </SECTION>

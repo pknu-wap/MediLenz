@@ -6,7 +6,6 @@ import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
 import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.model.remote.adminaction.AdminActionListResponse
 import com.android.mediproject.core.model.remote.dur.DurResponse
 import com.android.mediproject.core.model.remote.elderlycaution.ElderlyCautionResponse
@@ -37,8 +36,10 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import javax.inject.Named
 import javax.inject.Singleton
 
 const val DATA_GO_KR_BASEURL = "https://apis.data.go.kr/1471000/"
@@ -49,46 +50,63 @@ object DataGoKrNetwork {
 
     @Provides
     @Singleton
-    fun providesDataGoKrNetworkApi(okHttpClient: OkHttpClient): DataGoKrNetworkApi =
+    @Named("dataGoKrNetworkApiWithJsonResponse")
+    fun providesDataGoKrNetworkApiWithJson(okHttpClient: OkHttpClient): DataGoKrNetworkApi =
         Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(DATA_GO_KR_BASEURL).build().create(DataGoKrNetworkApi::class.java)
+
+    @Provides
+    @Singleton
+    @Named("dataGoKrNetworkApiWithStringResponse")
+    fun providesDataGoKrNetworkApiWithString(okHttpClient: OkHttpClient): DataGoKrNetworkApi =
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(ScalarsConverterFactory.create()).baseUrl(DATA_GO_KR_BASEURL).build()
+            .create(DataGoKrNetworkApi::class.java)
 
 
     @Provides
     @Singleton
     fun providesRecallSuspensionDataSource(
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, dataGoKrNetworkApi: DataGoKrNetworkApi,
-    ): RecallSuspensionDataSource = RecallSuspensionDataSourceImpl(ioDispatcher, dataGoKrNetworkApi)
+        @Dispatcher(MediDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
+        @Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi,
+    ): RecallSuspensionDataSource = RecallSuspensionDataSourceImpl(defaultDispatcher, dataGoKrNetworkApi)
 
     @Provides
     @Singleton
     fun providesAdminActionDataSource(
-        @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher, dataGoKrNetworkApi: DataGoKrNetworkApi,
-    ): AdminActionDataSource = AdminActionDataSourceImpl(ioDispatcher, dataGoKrNetworkApi)
+        @Dispatcher(MediDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
+        @Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi,
+    ): AdminActionDataSource = AdminActionDataSourceImpl(defaultDispatcher, dataGoKrNetworkApi)
 
 
     @Provides
     @Singleton
     fun provideMedicineApprovalDataSource(
-        dataGoKrNetworkApi: DataGoKrNetworkApi, medicineDataCacheManager: MedicineDataCacheManager,
+        @Named("dataGoKrNetworkApiWithStringResponse") dataGoKrNetworkApiWithString: DataGoKrNetworkApi,
+        @Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApiWithJson: DataGoKrNetworkApi,
+        medicineDataCacheManager: MedicineDataCacheManager,
         googleSearchDataSource: GoogleSearchDataSource,
-    ): MedicineApprovalDataSource = MedicineApprovalDataSourceImpl(
-        dataGoKrNetworkApi, medicineDataCacheManager, googleSearchDataSource,
+        @Dispatcher(MediDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
+
+        ): MedicineApprovalDataSource = MedicineApprovalDataSourceImpl(
+        dataGoKrNetworkApiWithString, dataGoKrNetworkApiWithJson, medicineDataCacheManager, googleSearchDataSource, defaultDispatcher,
     )
 
     @Provides
     @Singleton
-    fun providesGranuleIdentificationDataSource(dataGoKrNetworkApi: DataGoKrNetworkApi): GranuleIdentificationDataSource =
-        GranuleIdentificationDataSourceImpl(dataGoKrNetworkApi)
+    fun providesGranuleIdentificationDataSource(
+        @Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi,
+    ): GranuleIdentificationDataSource = GranuleIdentificationDataSourceImpl(dataGoKrNetworkApi)
 
     @Provides
     @Singleton
-    fun providesElderlyCautionDataSource(dataGoKrNetworkApi: DataGoKrNetworkApi): ElderlyCautionDataSource =
-        ElderlyCautionDataSourceImpl(dataGoKrNetworkApi)
+    fun providesElderlyCautionDataSource(
+        @Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi,
+    ): ElderlyCautionDataSource = ElderlyCautionDataSourceImpl(dataGoKrNetworkApi)
 
     @Provides
     @Singleton
-    fun providesDurDataSource(dataGoKrNetworkApi: DataGoKrNetworkApi): DurDataSource = DurDataSourceImpl(dataGoKrNetworkApi)
+    fun providesDurDataSource(@Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi): DurDataSource =
+        DurDataSourceImpl(dataGoKrNetworkApi)
 }
 
 interface DataGoKrNetworkApi {
@@ -96,8 +114,8 @@ interface DataGoKrNetworkApi {
     @GET(value = "DrugPrdtPrmsnInfoService04/getDrugPrdtPrmsnInq04")
     suspend fun getApprovalList(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("item_name", encoded = true) itemName: String?,
-        @Query("entp_name", encoded = true) entpName: String?,
+        @Query("item_name", encoded = false) itemName: String?,
+        @Query("entp_name", encoded = false) entpName: String?,
         @Query("spclty_pblc", encoded = true) medicationType: String?,
         @Query("pageNo") pageNo: Int,
         @Query("type") type: String = JSON,
@@ -108,12 +126,12 @@ interface DataGoKrNetworkApi {
     @GET(value = "DrugPrdtPrmsnInfoService04/getDrugPrdtPrmsnDtlInq03")
     suspend fun getMedicineDetailInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("item_name", encoded = true) itemName: String = "",
+        @Query("item_name", encoded = false) itemName: String = "",
         @Query("item_seq", encoded = true) itemSeq: String = "",
         @Query("pageNo") pageNo: Int = 1,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = 1,
-    ): Response<MedicineDetailInfoResponse>
+    ): Response<String>
 
     /**
      * 의약품 회수·판매중지 목록 조회
