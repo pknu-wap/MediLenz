@@ -21,14 +21,6 @@ class NewsFragment : BaseFragment<FragmentNewsBinding, NewsViewModel>(FragmentNe
 
     @Inject lateinit var systemBarStyler: SystemBarStyler
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {

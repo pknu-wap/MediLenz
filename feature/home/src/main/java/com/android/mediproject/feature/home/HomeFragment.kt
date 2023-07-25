@@ -9,7 +9,7 @@ import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment
 import com.android.mediproject.feature.home.databinding.FragmentHomeBinding
-import com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListFragment
+import com.android.mediproject.feature.news.penalties.recentpenaltylist.RecentPenaltyListFragment
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted

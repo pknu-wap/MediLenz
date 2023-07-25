@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.penalties.recentpenaltylist
+package com.android.mediproject.feature.news.penalties.recentpenaltylist
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItemDto
 import com.android.mediproject.core.ui.base.view.SimpleListItemView
-import com.android.mediproject.feature.penalties.R
+import com.android.mediproject.feature.news.R
 
 class PenaltyListAdapter :
     ListAdapter<RecallSuspensionListItemDto, PenaltyListAdapter.PenaltyViewHolder>(object :
