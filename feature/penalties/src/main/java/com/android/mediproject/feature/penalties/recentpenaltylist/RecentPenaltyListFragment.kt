@@ -33,10 +33,23 @@ class RecentPenaltyListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initHeader()
         setBinding()
     }
 
+    private fun setBinding() = binding.apply {
+        fragmentViewModel.apply {
+            viewLifecycleOwner.apply {
+                repeatOnStarted {
+                    recallDisposalList.stateAsCollect(headerView, noHistoryTextView).collect { uiState ->
+                        handleUiState(uiState)
+                    }
+                }
+                repeatOnStarted { eventFlow.collect { event -> handleEvent(event) } }
+            }
+            noHistoryTextView.text = medicineInfoMapper.getNoHistorySpan(requireContext())
+        }
+        setRecyclerView()
+    }
 
     private fun setRecyclerView() {
         penaltyListAdapter = PenaltyListAdapter()
@@ -62,27 +75,6 @@ class RecentPenaltyListFragment :
                 penaltyListAdapter.submitList(uiState.data)
             }
         }
-    }
-
-    private fun setBinding() {
-        binding.apply {
-            fragmentViewModel.apply {
-                viewLifecycleOwner.apply {
-                    repeatOnStarted {
-                        recallDisposalList.stateAsCollect(headerView, noHistoryTextView).collect { uiState ->
-                            handleUiState(uiState)
-                        }
-                    }
-                    repeatOnStarted {
-                        eventFlow.collect { event ->
-                            handleEvent(event)
-                        }
-                    }
-                }
-                noHistoryTextView.text = medicineInfoMapper.getNoHistorySpan(requireContext())
-            }
-        }
-        setRecyclerView()
     }
 
     private fun handleEvent(event: RecentPenaltyListViewModel.PenaltyListEvent) {
