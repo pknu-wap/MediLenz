@@ -9,36 +9,40 @@ import com.android.mediproject.core.ui.base.view.SimpleListItemView
 import com.android.mediproject.feature.news.R
 
 class PenaltyListAdapter :
-    ListAdapter<RecallSuspensionListItemDto, PenaltyListAdapter.PenaltyViewHolder>(object :
-        DiffUtil.ItemCallback<RecallSuspensionListItemDto>() {
-        override fun areItemsTheSame(
-            oldItem: RecallSuspensionListItemDto, newItem: RecallSuspensionListItemDto
-        ): Boolean = oldItem == newItem
+    ListAdapter<RecallSuspensionListItemDto, PenaltyListAdapter.PenaltyViewHolder>(
+        object :
+            DiffUtil.ItemCallback<RecallSuspensionListItemDto>() {
+            override fun areItemsTheSame(
+                oldItem: RecallSuspensionListItemDto, newItem: RecallSuspensionListItemDto,
+            ): Boolean = oldItem == newItem
 
-        override fun areContentsTheSame(
-            oldItem: RecallSuspensionListItemDto, newItem: RecallSuspensionListItemDto
-        ): Boolean = oldItem == newItem
-    }) {
+            override fun areContentsTheSame(
+                oldItem: RecallSuspensionListItemDto, newItem: RecallSuspensionListItemDto,
+            ): Boolean = oldItem == newItem
+        },
+    ) {
 
     class PenaltyViewHolder(private val view: SimpleListItemView<RecallSuspensionListItemDto>) :
         RecyclerView.ViewHolder(view) {
-
         init {
-            view.setTitleColor(view.context.resources.getColor(R.color.newsChipColor, null))
-            view.setContentTextColor(view.context.resources.getColor(R.color.newsContentColor, null))
-            view.setChipStrokeColor(R.color.newsChipColor)
-
-            view.setOnItemClickListener {
-                it?.apply {
-                    onClick?.invoke(this)
+            view.apply {
+                setTitleColor(view.context.resources.getColor(R.color.newsChipColor, null))
+                setContentTextColor(view.context.resources.getColor(R.color.newsContentColor, null))
+                setChipStrokeColor(R.color.newsChipColor)
+                setOnItemClickListener {
+                    it?.apply {
+                        onClick?.invoke(this)
+                    }
                 }
             }
         }
 
         fun bind(data: RecallSuspensionListItemDto) {
-            view.data = data
-            view.setTitle(data.product)
-            view.setContent(data.reason)
+            view.apply {
+                this.data = data
+                setTitle(data.product)
+                setContent(data.reason)
+            }
         }
     }
 

@@ -16,6 +16,16 @@ import javax.inject.Inject
 @HiltViewModel
 class RecentPenaltyListViewModel @Inject constructor(
     private val getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase) : BaseViewModel() {
+    
+    init {
+        viewModelScope.launch {
+            getRecallSuspensionInfoUseCase.getRecentRecallDisposalList(numOfRows = 5).fold(onSuccess = {
+                _recallDisposalList.value = UiState.Success(it)
+            }, onFailure = {
+                _recallDisposalList.value = UiState.Error(it.message ?: "failed")
+            })
+        }
+    }
 
     private val _eventFlow = MutableEventFlow<PenaltyListEvent>()
     val eventFlow get() = _eventFlow.asEventFlow()
@@ -30,15 +40,4 @@ class RecentPenaltyListViewModel @Inject constructor(
 
     private val _recallDisposalList = MutableStateFlow<UiState<List<RecallSuspensionListItemDto>>>(UiState.Initial)
     val recallDisposalList get() = _recallDisposalList.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            getRecallSuspensionInfoUseCase.getRecentRecallDisposalList(numOfRows = 5).fold(onSuccess = {
-                _recallDisposalList.value = UiState.Success(it)
-            }, onFailure = {
-                _recallDisposalList.value = UiState.Error(it.message ?: "failed")
-            })
-        }
-    }
-
 }
