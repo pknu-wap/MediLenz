@@ -112,7 +112,7 @@ interface DataGoKrNetworkApi {
         @Query("item_seq", encoded = true) itemSeq: String = "",
         @Query("pageNo") pageNo: Int = 1,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = 100,
+        @Query("numOfRows") numOfRows: Int = 1,
     ): Response<MedicineDetailInfoResponse>
 
     /**
