@@ -7,7 +7,7 @@ import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.data.search.SearchHistoryRepository
 import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDto
-import com.android.mediproject.core.model.medicine.medicineapproval.Item
+import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalListDataSourceImpl
@@ -34,7 +34,8 @@ class MedicineApprovalRepositoryImpl @Inject constructor(
      * @param entpName 업체명
      *
      */
-    override fun getMedicineApprovalList(itemName: String?, entpName: String?, medicationType: String?): Flow<PagingData<Item>> {
+    override fun getMedicineApprovalList(itemName: String?, entpName: String?, medicationType: String?):
+        Flow<PagingData<MedicineApprovalListResponse.Item>> {
         searchHistoryRepository.insertSearchHistory(SearchHistoryDto(itemName ?: entpName!!))
         return Pager(
             config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5),
@@ -45,7 +46,7 @@ class MedicineApprovalRepositoryImpl @Inject constructor(
     }
 
 
-    override fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Body.Item>> =
+    override fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse.Item>> =
         medicineApprovalDataSource.getMedicineDetailInfo(itemName).map { result ->
             result.fold(
                 onSuccess = {

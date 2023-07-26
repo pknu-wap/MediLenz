@@ -19,9 +19,9 @@ fun PagingDataAdapter<*, *>.setOnStateChangedListener(
     msgTextView: TextView,
     listView: RecyclerView,
     progressBar: CircularProgressIndicator,
-    emptyMsg: String
+    emptyMsg: String,
 ) {
-    var isFirstLoad = true
+    var isFirstLoad: Boolean
     addLoadStateListener { loadState ->
         isFirstLoad = loadState.refresh is LoadState.Loading
         if (isFirstLoad) listView.scrollToPosition(0)

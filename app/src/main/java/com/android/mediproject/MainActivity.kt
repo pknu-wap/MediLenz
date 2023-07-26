@@ -24,7 +24,7 @@ import com.android.mediproject.core.ui.WindowViewModel
 import com.android.mediproject.core.ui.base.BaseActivity
 import com.android.mediproject.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,7 +41,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
     private lateinit var navController: NavController
 
 
-    @OptIn(NavigationUiSaveStateControl::class)
     override fun afterBinding() {
         systemBarController.init(this, window, this)
         systemBarColorAnalyzer.init(this, systemBarController, lifecycle)

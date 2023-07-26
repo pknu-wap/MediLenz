@@ -4,5 +4,5 @@ import android.text.Editable
 
 
 fun Editable?.isNotEmpty(): Boolean {
-    return this?.toString()?.length != (0 ?: false)
+    return this?.toString()?.length != 0
 }

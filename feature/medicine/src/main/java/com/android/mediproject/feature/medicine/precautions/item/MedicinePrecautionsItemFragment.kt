@@ -11,7 +11,7 @@ import com.android.mediproject.feature.medicine.precautions.host.MedicinePrecaut
 import com.android.mediproject.feature.medicine.precautions.item.precautions.PrecautionsListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 /**
  * 의약품 사용 상 주의사항 Fragment

@@ -19,7 +19,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 /**

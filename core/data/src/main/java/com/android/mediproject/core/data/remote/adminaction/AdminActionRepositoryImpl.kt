@@ -12,9 +12,12 @@ import javax.inject.Inject
 class AdminActionRepositoryImpl @Inject constructor(
     private val adminActionListDataSource: AdminActionListDataSourceImpl,
 ) : AdminActionRepository {
-    override suspend fun getAdminActionList(): Flow<PagingData<AdminActionListResponse.Body.Item>> =
-        Pager(config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5), pagingSourceFactory = {
-            adminActionListDataSource
-        }).flow
+    override suspend fun getAdminActionList(): Flow<PagingData<AdminActionListResponse.Item>> =
+        Pager(
+            config = PagingConfig(pageSize = DATA_GO_KR_PAGE_SIZE, prefetchDistance = 5),
+            pagingSourceFactory = {
+                adminActionListDataSource
+            },
+        ).flow
 
 }

@@ -1,8 +1,8 @@
 package com.android.mediproject.feature.intro
 
-import MutableEventFlow
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
-import asEventFlow
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.isEmailValid

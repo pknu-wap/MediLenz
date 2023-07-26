@@ -8,5 +8,5 @@ interface GranuleIdentificationRepository {
         itemName: String?,
         entpName: String?,
         itemSeq: String?,
-    ): Flow<Result<GranuleIdentificationInfoResponse.Body.Item>>
+    ): Flow<Result<GranuleIdentificationInfoResponse.Item>>
 }

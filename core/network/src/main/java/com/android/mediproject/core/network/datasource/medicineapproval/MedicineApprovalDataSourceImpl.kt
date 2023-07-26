@@ -6,7 +6,6 @@ import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDe
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.MedicineCacheEntity
 import com.android.mediproject.core.model.toResult
 import com.android.mediproject.core.network.datasource.image.GoogleSearchDataSource
-import com.android.mediproject.core.network.module.DataGoKrNetworkApi
 import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
 import com.android.mediproject.core.network.module.safetyEncode
 import com.android.mediproject.core.network.onResponse

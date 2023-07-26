@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.comments.mycommentslist
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -11,7 +10,7 @@ import com.android.mediproject.core.model.comments.MyCommentDto
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.databinding.FragmentMyCommentsListBinding
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.android.mediproject.feature.medicine.databinding.FragmentEfficacyInfoItemBinding
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 /**
  * 효능 효과 정보
@@ -12,7 +12,7 @@ import repeatOnStarted
  */
 @AndroidEntryPoint
 class EfficacyEffectItemFragment : BaseMedicineInfoItemFragment<FragmentEfficacyInfoItemBinding>(
-    FragmentEfficacyInfoItemBinding::inflate
+    FragmentEfficacyInfoItemBinding::inflate,
 ) {
 
     companion object : MedicineInfoItemFragmentFactory by BaseMedicineInfoItemFragment.Companion

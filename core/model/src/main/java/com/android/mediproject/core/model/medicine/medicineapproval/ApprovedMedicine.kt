@@ -25,8 +25,7 @@ package com.android.mediproject.core.model.medicine.medicineapproval
  * @property ediCode EDI코드
  * @property bizrno 사업자등록번호
  */
-
-data class ApprovedMedicineItemDto(
+data class ApprovedMedicine(
     val itemSeq: Long,
     val itemName: String,
     val itemEngName: String?,
@@ -48,10 +47,11 @@ data class ApprovedMedicineItemDto(
     val cancelName: String? = null,
     val ediCode: String? = null,
     val bizrno: String? = null,
-    var onClick: ((ApprovedMedicineItemDto) -> Unit)? = null,
+    var onClick: ((ApprovedMedicine) -> Unit)? = null,
 )
 
-fun Item.toDto() = ApprovedMedicineItemDto(itemSeq = itemSeq.toLong(),
+fun MedicineApprovalListResponse.Item.toApprovedMedicine() = ApprovedMedicine(
+    itemSeq = itemSeq.toLong(),
     itemName = itemName,
     itemEngName = itemEngName,
     entpName = entpName,
@@ -71,4 +71,5 @@ fun Item.toDto() = ApprovedMedicineItemDto(itemSeq = itemSeq.toLong(),
     cancelDate = cancelDate,
     cancelName = cancelName,
     ediCode = ediCode,
-    bizrno = bizrno)
+    bizrno = bizrno,
+)

@@ -2,7 +2,6 @@ package com.android.mediproject.core.network.datasource.granule
 
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
 import com.android.mediproject.core.model.toResult
-import com.android.mediproject.core.network.module.DataGoKrNetworkApi
 import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onResponse
 import kotlinx.coroutines.flow.Flow

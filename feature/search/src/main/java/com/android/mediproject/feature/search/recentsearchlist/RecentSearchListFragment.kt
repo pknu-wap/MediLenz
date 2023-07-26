@@ -15,7 +15,7 @@ import com.android.mediproject.feature.search.databinding.FragmentRecentSearchLi
 import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 
 /**
@@ -67,16 +67,18 @@ class RecentSearchListFragment :
     private fun addHistoryItemChips(searchHistoryItemDto: SearchHistoryItemDto) {
         binding.apply {
             val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
-            this.searchHistoryList.addView(ButtonChip<String>(requireContext()).apply {
-                layoutParams = FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-                    setMargins(horizontalSpace, 0, horizontalSpace, 0)
-                }
-                data = searchHistoryItemDto.query
-                setChipText(data.toString())
-                setOnChipClickListener {
-                    onClicked(searchHistoryItemDto.query)
-                }
-            })
+            this.searchHistoryList.addView(
+                ButtonChip<String>(requireContext()).apply {
+                    layoutParams = FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                        setMargins(horizontalSpace, 0, horizontalSpace, 0)
+                    }
+                    data = searchHistoryItemDto.query
+                    setChipText(data.toString())
+                    setOnChipClickListener {
+                        onClicked(searchHistoryItemDto.query)
+                    }
+                },
+            )
         }
     }
 

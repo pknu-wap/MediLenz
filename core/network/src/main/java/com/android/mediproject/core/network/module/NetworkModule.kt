@@ -26,7 +26,6 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 import kotlin.properties.Delegates
 
-@OptIn(DelicateCoroutinesApi::class)
 @Module
 @InstallIn(SingletonComponent::class)
 class CertificateHelper @Inject constructor(@ApplicationContext context: Context) {

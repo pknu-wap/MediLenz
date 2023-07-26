@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineDto
 import com.android.mediproject.core.model.remote.token.CurrentTokens
 import com.android.mediproject.core.model.remote.token.TokenState
@@ -18,7 +19,6 @@ import com.android.mediproject.core.ui.base.view.ButtonChip
 import com.android.mediproject.feature.favoritemedicine.databinding.FragmentFavoriteMedicineBinding
 import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
 
 @AndroidEntryPoint
 class FavoriteMedicineFragment :
@@ -76,7 +76,7 @@ class FavoriteMedicineFragment :
     private fun clearFavoriteMedicineListView() = binding.favoriteMedicineList.removeAllViews()
 
     private fun checkMedicineListSize(medicineList: List<FavoriteMedicineDto>): Boolean {
-        return (medicineList.size != 0)
+        return (medicineList.isNotEmpty())
     }
 
     private fun showFavorteMedicine(medicineList: List<FavoriteMedicineDto>) {

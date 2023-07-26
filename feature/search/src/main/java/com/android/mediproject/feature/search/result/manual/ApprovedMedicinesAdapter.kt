@@ -6,10 +6,10 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.common.bindingadapter.GlideApp
-import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto
+import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicine
 import com.android.mediproject.feature.search.databinding.ManualMedicineItemBinding
 
-class ApprovedMedicinesAdapter : PagingDataAdapter<ApprovedMedicineItemDto, ApprovedMedicinesAdapter.ViewHolder>(MedicineComparator) {
+class ApprovedMedicinesAdapter : PagingDataAdapter<ApprovedMedicine, ApprovedMedicinesAdapter.ViewHolder>(MedicineComparator) {
 
 
     class ViewHolder(val binding: ManualMedicineItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -21,7 +21,7 @@ class ApprovedMedicinesAdapter : PagingDataAdapter<ApprovedMedicineItemDto, Appr
             }
         }
 
-        fun bind(item: ApprovedMedicineItemDto) {
+        fun bind(item: ApprovedMedicine) {
             binding.apply {
                 this.item = item
                 executePendingBindings()
@@ -35,7 +35,7 @@ class ApprovedMedicinesAdapter : PagingDataAdapter<ApprovedMedicineItemDto, Appr
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int
+        parent: ViewGroup, viewType: Int,
     ): ViewHolder = ViewHolder(ManualMedicineItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
 
@@ -45,15 +45,15 @@ class ApprovedMedicinesAdapter : PagingDataAdapter<ApprovedMedicineItemDto, Appr
 
 }
 
-object MedicineComparator : DiffUtil.ItemCallback<ApprovedMedicineItemDto>() {
+object MedicineComparator : DiffUtil.ItemCallback<ApprovedMedicine>() {
     override fun areItemsTheSame(
-        oldItem: ApprovedMedicineItemDto, newItem: ApprovedMedicineItemDto
+        oldItem: ApprovedMedicine, newItem: ApprovedMedicine,
     ): Boolean {
         return oldItem.itemSeq == newItem.itemSeq
     }
 
     override fun areContentsTheSame(
-        oldItem: ApprovedMedicineItemDto, newItem: ApprovedMedicineItemDto
+        oldItem: ApprovedMedicine, newItem: ApprovedMedicine,
     ): Boolean {
         return oldItem == newItem
     }

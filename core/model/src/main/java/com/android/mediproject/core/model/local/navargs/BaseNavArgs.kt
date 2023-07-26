@@ -21,7 +21,6 @@ abstract class BaseNavArgs(
     }
 
     companion object {
-        @OptIn(ExperimentalStdlibApi::class)
         @Suppress("UNCHECKED_CAST")
         @JvmStatic
         fun fromBundle(bundle: Bundle): BaseNavArgs {

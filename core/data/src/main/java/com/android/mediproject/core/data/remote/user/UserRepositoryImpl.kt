@@ -17,23 +17,23 @@ class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDat
     UserRepository {
     override suspend fun changeNickname(changeNicknameParameter: ChangeNicknameParameter): Flow<Result<ChangeNicknameResponse>> =
         channelFlow {
-            userDataSource.changeNickname(changeNicknameParameter).map {
-                it.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
+            userDataSource.changeNickname(changeNicknameParameter).map { result ->
+                result.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
             }.collectLatest { trySend(it) }
         }
 
     override suspend fun changePassword(changePasswordParamter: ChangePasswordParamter): Flow<Result<ChangePasswordResponse>> =
         channelFlow {
-            userDataSource.changePassword(changePasswordParamter).map {
-                it.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
+            userDataSource.changePassword(changePasswordParamter).map { result ->
+                result.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
             }.collectLatest { trySend(it) }
         }
 
     override suspend fun withdrawal(): Flow<Result<WithdrawalResponse>> = channelFlow {
         Log.d("wap", "UserRepository : withdrawal()")
-        userDataSource.withdrawal().map {
-            Log.d("wap", "UserRepository : withdrawal()"+it.toString())
-            it.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
+        userDataSource.withdrawal().map { result ->
+            Log.d("wap", "UserRepository : withdrawal()$result")
+            result.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
         }.collectLatest { trySend(it) }
     }
 }

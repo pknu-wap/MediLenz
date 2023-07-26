@@ -1,13 +1,13 @@
 package com.android.mediproject.feature.intro
 
-import MutableEventFlow
 import android.text.Editable
 import androidx.lifecycle.viewModelScope
-import asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.model.local.navargs.TOHOME
 import com.android.mediproject.core.model.requestparameters.LoginParameter
@@ -139,14 +139,14 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun loginFailed() {
-        setLoginState(LoginViewModel.LoginState.LoginFailed("로그인 실패"))
+        setLoginState(LoginState.LoginFailed("로그인 실패"))
     }
 
     private fun loginSuccess() {
-        setLoginState(LoginViewModel.LoginState.LoginSuccess)
+        setLoginState(LoginState.LoginSuccess)
     }
 
     private fun loginFailedWithRegexError() {
-        setLoginState(LoginViewModel.LoginState.RegexError)
+        setLoginState(LoginState.RegexError)
     }
 }

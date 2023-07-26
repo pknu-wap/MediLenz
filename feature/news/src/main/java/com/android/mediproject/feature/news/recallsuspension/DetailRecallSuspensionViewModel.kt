@@ -6,7 +6,7 @@ import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.domain.GetRecallSuspensionInfoUseCase
-import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionItemDto
+import com.android.mediproject.core.model.remote.recall.DetailRecallSuspension
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,10 +20,10 @@ import javax.inject.Inject
 class DetailRecallSuspensionViewModel @Inject constructor(
     private val getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase,
     private val savedStateHandle: SavedStateHandle,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
-    private val _detailRecallSuspension = MutableStateFlow<UiState<DetailRecallSuspensionItemDto>>(UiState.Loading)
+    private val _detailRecallSuspension = MutableStateFlow<UiState<DetailRecallSuspension>>(UiState.Loading)
     val detailRecallSuspension get() = _detailRecallSuspension.asStateFlow()
 
     /**
@@ -33,11 +33,14 @@ class DetailRecallSuspensionViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             val productName: String = checkNotNull(savedStateHandle["product"])
             getRecallSuspensionInfoUseCase.getDetailRecallSuspension(product = productName, company = null).collectLatest {
-                _detailRecallSuspension.value = it.fold(onSuccess = { item ->
-                    UiState.Success(item)
-                }, onFailure = { throwable ->
-                    UiState.Error(throwable.message ?: "Failed to get detail recall suspension info")
-                })
+                _detailRecallSuspension.value = it.fold(
+                    onSuccess = { item ->
+                        UiState.Success(item)
+                    },
+                    onFailure = { throwable ->
+                        UiState.Error(throwable.message ?: "Failed to get detail recall suspension info")
+                    },
+                )
             }
         }
     }

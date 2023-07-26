@@ -20,7 +20,7 @@ import com.android.mediproject.feature.search.result.ai.AiSearchResultViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import org.tensorflow.lite.task.gms.vision.detector.Detection
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint

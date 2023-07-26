@@ -9,12 +9,12 @@ import com.android.mediproject.core.common.util.deepNavigate
 import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.local.navargs.RecallDisposalArgs
-import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItemDto
+import com.android.mediproject.core.model.remote.recall.RecallSuspension
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.stateAsCollect
 import com.android.mediproject.feature.news.databinding.FragmentRecentPenaltyListBinding
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -59,7 +59,7 @@ class RecentPenaltyListFragment :
         }
     }
 
-    private fun handleUiState(uiState: UiState<List<RecallSuspensionListItemDto>>) {
+    private fun handleUiState(uiState: UiState<List<RecallSuspension>>) {
         when (uiState) {
             is UiState.Error -> {}
             is UiState.Initial -> {}

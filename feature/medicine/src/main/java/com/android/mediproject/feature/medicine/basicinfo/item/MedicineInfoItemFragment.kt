@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfoItemBinding
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 @AndroidEntryPoint
 class MedicineInfoItemFragment : BaseMedicineInfoItemFragment<FragmentMedicineInfoItemBinding>(
-    FragmentMedicineInfoItemBinding::inflate
+    FragmentMedicineInfoItemBinding::inflate,
 ) {
 
     companion object : MedicineInfoItemFragmentFactory by BaseMedicineInfoItemFragment.Companion

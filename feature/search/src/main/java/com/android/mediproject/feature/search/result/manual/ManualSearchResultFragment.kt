@@ -20,7 +20,7 @@ import com.android.mediproject.feature.search.result.EventState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 @AndroidEntryPoint
 class ManualSearchResultFragment :
@@ -61,7 +61,7 @@ class ManualSearchResultFragment :
                 adapter = searchResultListAdapter
             }
 
-            filterBtn.setOnClickListener { it ->
+            filterBtn.setOnClickListener {
                 MediPopupMenu.showMenu(it, R.menu.search_result_list_filter_menu) { menuItem ->
 
                     when (menuItem.itemId) {

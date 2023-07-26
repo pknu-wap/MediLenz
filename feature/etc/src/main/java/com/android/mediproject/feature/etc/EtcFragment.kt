@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.etc
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,7 +10,7 @@ import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.etc.databinding.FragmentEtcBinding
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,7 +49,7 @@ class EtcFragment :
 
     private fun openWebWithUri(uri: Uri) {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.setData(uri)
+        intent.data = uri
         startActivity(intent)
     }
 }

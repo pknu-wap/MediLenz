@@ -16,16 +16,18 @@ class GetFavoriteMedicineUseCase @Inject constructor(private val favoriteMedicin
     suspend fun getFavoriteMedicineList() = channelFlow {
         favoriteMedicineRepository.getFavoriteMedicineList().map { result ->
             result.fold(
-                onSuccess = { Result.success(it.map { it.toFavoriteMedicineDto() }) },
-                onFailure = { Result.failure(it) })
+                onSuccess = { it -> Result.success(it.map { it.toFavoriteMedicineDto() }) },
+                onFailure = { Result.failure(it) },
+            )
         }.collectLatest { trySend(it) }
     }
 
     suspend fun getFavoriteMedicineMoreList() = channelFlow {
         favoriteMedicineRepository.getFavoriteMedicineList().map { result ->
             result.fold(
-                onSuccess = { Result.success(it.map { it.toFavoriteMedicineMoreDto() }) },
-                onFailure = { Result.failure(it) })
+                onSuccess = { it -> Result.success(it.map { it.toFavoriteMedicineMoreDto() }) },
+                onFailure = { Result.failure(it) },
+            )
         }.collectLatest { trySend(it) }
     }
 
@@ -36,7 +38,8 @@ class GetFavoriteMedicineUseCase @Inject constructor(private val favoriteMedicin
                     val result =
                         addFavoriteMedicineResponseResult.fold(
                             onSuccess = { Result.success(Unit) },
-                            onFailure = { Result.failure(it) })
+                            onFailure = { Result.failure(it) },
+                        )
                     trySend(result)
                 }
         } else {
@@ -45,7 +48,8 @@ class GetFavoriteMedicineUseCase @Inject constructor(private val favoriteMedicin
                     val result =
                         deleteFavoriteMedicineResponseResult.fold(
                             onSuccess = { Result.success(Unit) },
-                            onFailure = { Result.failure(it) })
+                            onFailure = { Result.failure(it) },
+                        )
                     trySend(result)
                 }
         }

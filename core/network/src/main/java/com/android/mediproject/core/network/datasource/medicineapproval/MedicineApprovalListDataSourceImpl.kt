@@ -3,7 +3,7 @@ package com.android.mediproject.core.network.datasource.medicineapproval
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
-import com.android.mediproject.core.model.medicine.medicineapproval.Item
+import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse.Item
 
 class MedicineApprovalListDataSourceImpl(
     private val medicineApprovalDataSource: MedicineApprovalDataSource,
@@ -28,18 +28,21 @@ class MedicineApprovalListDataSourceImpl(
                 entpName = entpName,
                 medicationType = medicationType,
                 pageNo = currentPage,
-            ).fold(onSuccess = {
-                val nextKey = it.body.let { body ->
-                    if (body.items.size < DATA_GO_KR_PAGE_SIZE) null
-                    else currentPage + 1
-                }
+            ).fold(
+                onSuccess = {
+                    val nextKey = it.body.let { body ->
+                        if (body.items.size < DATA_GO_KR_PAGE_SIZE) null
+                        else currentPage + 1
+                    }
 
-                LoadResult.Page(
-                    data = it.body.items,
-                    prevKey = null,
-                    nextKey = nextKey,
-                )
-            }, onFailure = { LoadResult.Error(it) })
+                    LoadResult.Page(
+                        data = it.body.items,
+                        prevKey = null,
+                        nextKey = nextKey,
+                    )
+                },
+                onFailure = { LoadResult.Error(it) },
+            )
 
         } catch (e: Exception) {
             LoadResult.Error(e)

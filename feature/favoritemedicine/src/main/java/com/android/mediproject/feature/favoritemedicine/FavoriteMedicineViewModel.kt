@@ -1,8 +1,8 @@
 package com.android.mediproject.feature.favoritemedicine
 
-import MutableEventFlow
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
-import asEventFlow
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineDto
@@ -43,7 +43,7 @@ class FavoriteMedicineViewModel @Inject constructor(
     fun loadFavoriteMedicines() =
         viewModelScope.launch {
             getFavoriteMedicineUseCase.getFavoriteMedicineList()
-                .collect {
+                .collect { it ->
                     it.fold(
                         onSuccess = { _favoriteMedicineList.value = it },
                         onFailure = { },

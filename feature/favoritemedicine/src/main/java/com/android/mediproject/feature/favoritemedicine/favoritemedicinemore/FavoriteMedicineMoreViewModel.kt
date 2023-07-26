@@ -29,8 +29,8 @@ class FavoriteMedicineMoreViewModel @Inject constructor(
     fun loadFavoriteMedicines() =
         viewModelScope.launch {
             getFavoriteMedicineUseCase.getFavoriteMedicineMoreList()
-                .collect {
-                    it.fold(
+                .collect { result ->
+                    result.fold(
                         onSuccess = { _favoriteMedicineList.value = it },
                         onFailure = { },
                     )

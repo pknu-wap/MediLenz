@@ -1,17 +1,17 @@
 package com.android.mediproject.feature.search.result.manual
 
-import MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
-import asEventFlow
 import com.android.mediproject.core.common.bindingadapter.ISendEvent
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetMedicineApprovalListUseCase
 import com.android.mediproject.core.model.constants.MedicationType
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
-import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto
+import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicine
 import com.android.mediproject.core.model.requestparameters.ApprovalListSearchParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.search.result.EventState
@@ -37,7 +37,7 @@ class ManualSearchResultViewModel @Inject constructor(
     private val getMedicineApprovalListUseCase: GetMedicineApprovalListUseCase,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
-) : BaseViewModel(), ISendEvent<ApprovedMedicineItemDto> {
+) : BaseViewModel(), ISendEvent<ApprovedMedicine> {
 
     private val _searchParameter =
         MutableStateFlow(ApprovalListSearchParameter(itemName = null, entpName = null, medicationType = MedicationType.ALL))
@@ -91,7 +91,7 @@ class ManualSearchResultViewModel @Inject constructor(
         }
     }
 
-    override fun send(e: ApprovedMedicineItemDto) {
+    override fun send(e: ApprovedMedicine) {
         viewModelScope.launch(defaultDispatcher) {
             _eventState.emit(
                 EventState.OpenMedicineInfo(

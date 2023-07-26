@@ -53,7 +53,7 @@ import java.time.LocalDate
  * @param medicineIdInServer AWS에 저장된 의약품 ID
  * @param existsMedicineIdInServer AWS에 저장된 의약품 ID가 있는지 여부
  */
-data class MedicineDetailInfo(
+data class MedicineDetail(
     val atcCode: String,
     val barCode: String,
     val businessRegistrationNumber: String,
@@ -100,7 +100,7 @@ data class MedicineDetailInfo(
     val existsMedicineIdInServer: Boolean,
 )
 
-fun MedicineDetailInfoResponse.Body.Item.toMedicineDetailInfoDto(medicineIdInServer: Long = 0L) = MedicineDetailInfo(
+fun MedicineDetailInfoResponse.Item.toMedicineDetail(medicineIdInServer: Long = 0L) = MedicineDetail(
     atcCode = atcCode,
     barCode = barCode,
     businessRegistrationNumber = businessRegistrationNumber,

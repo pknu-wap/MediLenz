@@ -1,8 +1,8 @@
 package com.android.mediproject.feature.mypage
 
-import MutableEventFlow
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
-import asEventFlow
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.domain.user.UserUseCase

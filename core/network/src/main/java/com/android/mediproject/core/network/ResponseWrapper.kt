@@ -1,6 +1,6 @@
 package com.android.mediproject.core.network
 
-import com.android.mediproject.core.model.DataGoKrBaseResponse
+import com.android.mediproject.core.model.DataGoKrResponse
 import com.android.mediproject.core.model.toResult
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -31,7 +31,7 @@ private inline fun <reified T : Any> String.parse(): Result<T> = try {
     Result.failure(e)
 }
 
-internal inline fun <reified T : DataGoKrBaseResponse> Response<String>.onStringResponse(): Result<PairResponse<T, String>> {
+internal inline fun <reified T : DataGoKrResponse<*>> Response<String>.onStringResponse(): Result<PairResponse<T, String>> {
     return if (isSuccessful) {
         body()?.parse<T>()?.getOrNull()?.toResult()?.fold(
             onSuccess = { Result.success(PairResponse(it, body()!!)) },
@@ -42,7 +42,7 @@ internal inline fun <reified T : DataGoKrBaseResponse> Response<String>.onString
     }
 }
 
-internal inline fun <reified T : DataGoKrBaseResponse> Response<T>.onDataGokrResponse(): Result<T> =
+internal inline fun <reified T : DataGoKrResponse<*>> Response<T>.onDataGokrResponse(): Result<T> =
     if (isSuccessful) body()?.toResult() ?: Result.failure(Throwable("Response Body is Null"))
     else Result.failure(errorBody()?.string()?.let { Throwable(it) } ?: Throwable("Response Error"))
 

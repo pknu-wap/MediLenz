@@ -54,6 +54,17 @@ object DataGoKrNetwork {
         Retrofit.Builder().client(okHttpClient).addConverterFactory(ScalarsConverterFactory.create()).baseUrl(DATA_GO_KR_BASEURL).build()
             .create(DataGoKrNetworkApi::class.java)
 
+    @Provides
+    @Singleton
+    fun providesDurProductInfoNetworkApi(
+        @Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi,
+    ): DurProductInfoNetworkApi = dataGoKrNetworkApi
+
+    @Provides
+    @Singleton
+    fun providesDurIngrInfoNetworkApi(@Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi): DurIngrInfoNetworkApi =
+        dataGoKrNetworkApi
+
     // DataSource 인스턴스 ---------------------------------------------------------------------------------------------------
 
     @Provides
@@ -92,11 +103,9 @@ object DataGoKrNetwork {
     // DUR 품목 정보 ---------------------------------------------------------------------------------------------------
     @Provides
     @Singleton
-    fun providesDurProductDataSource(@Named("dataGoKrNetworkApiWithJsonResponse") api: DurProductInfoNetworkApi): DurProductDataSource =
-        DurProductDataSourceImpl(api)
+    fun providesDurProductDataSource(api: DurProductInfoNetworkApi): DurProductDataSource = DurProductDataSourceImpl(api)
 
     @Provides
     @Singleton
-    fun providesDurIngrDataSource(@Named("dataGoKrNetworkApiWithJsonResponse") api: DurIngrInfoNetworkApi): DurIngrDataSource =
-        DurIngrDataSourceImpl(api)
+    fun providesDurIngrDataSource(api: DurIngrInfoNetworkApi): DurIngrDataSource = DurIngrDataSourceImpl(api)
 }

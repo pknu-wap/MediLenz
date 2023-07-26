@@ -20,7 +20,7 @@ import com.android.mediproject.feature.search.result.EventState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,10 +30,6 @@ class AiSearchResultFragment :
     override val fragmentViewModel: AiSearchResultViewModel by activityViewModels()
 
     @Inject lateinit var systemBarStyler: SystemBarStyler
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

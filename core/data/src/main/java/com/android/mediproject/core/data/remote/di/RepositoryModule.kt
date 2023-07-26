@@ -2,14 +2,14 @@ package com.android.mediproject.core.data.remote.di
 
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.data.dur.duringr.DurIngrRepository
+import com.android.mediproject.core.data.dur.duringr.DurIngrRepositoryImpl
+import com.android.mediproject.core.data.dur.durproduct.DurProductRepository
+import com.android.mediproject.core.data.dur.durproduct.DurProductRepositoryImpl
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepository
 import com.android.mediproject.core.data.remote.adminaction.AdminActionRepositoryImpl
 import com.android.mediproject.core.data.remote.comments.CommentsRepository
 import com.android.mediproject.core.data.remote.comments.CommentsRepositoryImpl
-import com.android.mediproject.core.data.remote.dur.DurRepository
-import com.android.mediproject.core.data.remote.dur.DurRepositoryImpl
-import com.android.mediproject.core.data.remote.senior.ElderlyCautionRepository
-import com.android.mediproject.core.data.remote.senior.ElderlyCautionRepositoryImpl
 import com.android.mediproject.core.data.remote.favoritemedicine.FavoriteMedicineRepository
 import com.android.mediproject.core.data.remote.favoritemedicine.FavoriteMedicineRepositoryImpl
 import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepository
@@ -34,8 +34,8 @@ import com.android.mediproject.core.database.cache.manager.MedicineDataCacheMana
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
+import com.android.mediproject.core.network.datasource.dur.DurIngrDataSource
 import com.android.mediproject.core.network.datasource.dur.DurProductDataSource
-import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
 import com.android.mediproject.core.network.datasource.favoritemedicine.FavoriteMedicineDataSource
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
@@ -100,13 +100,12 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesElderlyCautionRepository(elderlyCautionDataSource: ): ElderlyCautionRepository =
-        ElderlyCautionRepositoryImpl(elderlyCautionDataSource)
+    fun providesDurProductRepository(durProductDataSource: DurProductDataSource): DurProductRepository =
+        DurProductRepositoryImpl(durProductDataSource)
 
     @Provides
     @Singleton
-    fun providesDurRepository(durProductDataSource: DurProductDataSource): DurRepository = DurRepositoryImpl(durProductDataSource)
-
+    fun providesDurIngrRepository(durIngrDataSource: DurIngrDataSource): DurIngrRepository = DurIngrRepositoryImpl(durIngrDataSource)
 
     @Provides
     @Singleton

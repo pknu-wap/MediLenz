@@ -15,7 +15,7 @@ class AiResultAdapter : ListAdapter<ClassificationResult, AiResultAdapter.ViewHo
         init {
             binding.rootLayout.setOnClickListener {
                 binding.item?.apply {
-                    onClick?.invoke(medicineDetailInfo!!)
+                    onClick?.invoke(medicineDetail!!)
                 }
             }
         }
@@ -24,7 +24,7 @@ class AiResultAdapter : ListAdapter<ClassificationResult, AiResultAdapter.ViewHo
         fun bind(item: ClassificationResult) {
             binding.apply {
                 this.item = item
-                medicineNameTextView.text = "${item.classificationRecognition} - ${item.medicineDetailInfo?.itemName}"
+                medicineNameTextView.text = "${item.classificationRecognition} - ${item.medicineDetail?.itemName}"
                 executePendingBindings()
             }
         }

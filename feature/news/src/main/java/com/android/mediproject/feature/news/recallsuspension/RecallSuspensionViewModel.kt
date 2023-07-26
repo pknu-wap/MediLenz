@@ -6,7 +6,7 @@ import androidx.paging.cachedIn
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.GetRecallSuspensionInfoUseCase
-import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItemDto
+import com.android.mediproject.core.model.remote.recall.RecallSuspension
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,10 +18,10 @@ import javax.inject.Inject
 @HiltViewModel
 class RecallSuspensionViewModel @Inject constructor(
     private val getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
-    private lateinit var _recallDisposalList: Flow<PagingData<RecallSuspensionListItemDto>>
+    private lateinit var _recallDisposalList: Flow<PagingData<RecallSuspension>>
     val recallDisposalList by lazy { _recallDisposalList }
 
     /**

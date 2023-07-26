@@ -13,7 +13,7 @@ import android.text.style.UnderlineSpan
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpanned
 import com.android.mediproject.core.common.R
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfo
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetail
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoDto
 import com.android.mediproject.core.model.util.XMLParsedResult
 import java.lang.ref.WeakReference
@@ -36,9 +36,7 @@ class MedicineInfoMapper @Inject constructor() {
      * 용법용량 정보 데이터를 UI에 맞게 변환
      */
     fun toDosageInfo(xmlParsedResult: XMLParsedResult): Spanned {
-        val stringBuilder = WeakReference(StringBuilder())
-
-        return stringBuilder.get()?.let { builder ->
+        return WeakReference(StringBuilder()).get()?.let { builder ->
             xmlParsedResult.articleList.forEach { article ->
                 builder.append("<b>${article.title}</b><br>")
                 article.contentList.forEach { content ->
@@ -49,7 +47,6 @@ class MedicineInfoMapper @Inject constructor() {
 
             val result = Html.fromHtml(builder.toString(), Html.FROM_HTML_MODE_COMPACT)
             builder.clear()
-            stringBuilder.clear()
             result
         } ?: "".toSpanned()
     }
@@ -58,9 +55,7 @@ class MedicineInfoMapper @Inject constructor() {
      * 효능효과 데이터를 UI에 맞게 변환
      */
     fun toEfficacyEffect(xmlParsedResult: XMLParsedResult): Spanned {
-        val stringBuilder = WeakReference(StringBuilder())
-
-        return stringBuilder.get()?.let { builder ->
+        return WeakReference(StringBuilder()).get()?.let { builder ->
             xmlParsedResult.articleList.forEach { article ->
                 article.contentList.forEach { content ->
                     builder.append("$content<br>")
@@ -70,7 +65,6 @@ class MedicineInfoMapper @Inject constructor() {
 
             val result = Html.fromHtml(builder.toString(), Html.FROM_HTML_MODE_COMPACT)
             builder.clear()
-            stringBuilder.clear()
             result
         } ?: "".toSpanned()
     }
@@ -78,23 +72,19 @@ class MedicineInfoMapper @Inject constructor() {
     /**
      * 의약품 기본 정보 데이터를 UI에 맞게 변환
      */
-    fun toMedicineInfo(medicineDetailInfo: MedicineDetailInfo): Spanned {
-        val stringBuilder = WeakReference(StringBuilder())
-
-        return stringBuilder.get()?.let { builder ->
-            with(medicineDetailInfo) {
+    fun toMedicineInfo(medicineDetail: MedicineDetail): Spanned {
+        return WeakReference(StringBuilder()).get()?.let { builder ->
+            with(medicineDetail) {
                 builder.append("<p><b>의약품 이름:</b> $itemName</p>").append("<p><b>의약품 영문 이름:</b> $itemEnglishName</p>")
                     .append("<p><b>의약품 시퀀스 번호:</b> $itemSequence</p>").append("<p><b>의약품 허가 날짜:</b> $itemPermitDate</p>")
                     .append("<p><b>제조사 이름:</b> $entpName</p>").append("<p><b>제조사 영문 이름:</b> $entpEnglishName</p>")
                     .append("<p><b>제조및수입사:</b> $consignmentManufacturer</p>").append("<p><b>성분 이름:</b> $ingredientName</p>")
                     .append("<p><b>주성분의 영문 이름:</b> $mainIngredientEnglish</p>").append("<p><b>총 함량:</b> $totalContent</p>")
-                    .append("<p><b>저장 방법:</b> $storageMethod</p>").append("<p><b>유효 기간:</b> $validTerm</p>")
-                    .append("<p><b>패키지 단위:</b> $packUnit</p>")
+                    .append("<p><b>저장 방법:</b> $storageMethod</p>").append("<p><b>유효 기간:</b> $validTerm</p>").append("<p><b>패키지 단위:</b> $packUnit</p>")
             }
 
             val result = Html.fromHtml(builder.toString(), Html.FROM_HTML_MODE_COMPACT)
             builder.clear()
-            stringBuilder.clear()
             result
         } ?: "".toSpanned()
     }
@@ -173,18 +163,16 @@ class MedicineInfoMapper @Inject constructor() {
                 )
             }
         }.let { dataMap ->
-            val builder = WeakReference(StringBuilder())
-            val result = builder.get()?.let { builder ->
+            val result = WeakReference(StringBuilder()).get()?.run {
                 dataMap.forEach { (title, data) ->
-                    builder.append("<p><b>$title</b></p>")
+                    append("<p><b>$title</b></p>")
                     data.forEach { (key, value) ->
-                        builder.append("<p><b>$key:</b> $value</p>")
+                        append("<p><b>$key:</b> $value</p>")
                     }
                 }
-                Html.fromHtml(builder.toString(), Html.FROM_HTML_MODE_COMPACT).toSpanned()
+                Html.fromHtml(toString(), Html.FROM_HTML_MODE_COMPACT).toSpanned()
             } ?: "".toSpanned()
 
-            builder.clear()
             dataMap.clear()
             result
         }

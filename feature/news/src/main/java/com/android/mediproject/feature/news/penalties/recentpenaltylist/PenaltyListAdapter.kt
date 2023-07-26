@@ -4,25 +4,25 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItemDto
+import com.android.mediproject.core.model.remote.recall.RecallSuspension
 import com.android.mediproject.core.ui.base.view.SimpleListItemView
 import com.android.mediproject.feature.news.R
 
 class PenaltyListAdapter :
-    ListAdapter<RecallSuspensionListItemDto, PenaltyListAdapter.PenaltyViewHolder>(
+    ListAdapter<RecallSuspension, PenaltyListAdapter.PenaltyViewHolder>(
         object :
-            DiffUtil.ItemCallback<RecallSuspensionListItemDto>() {
+            DiffUtil.ItemCallback<RecallSuspension>() {
             override fun areItemsTheSame(
-                oldItem: RecallSuspensionListItemDto, newItem: RecallSuspensionListItemDto,
+                oldItem: RecallSuspension, newItem: RecallSuspension,
             ): Boolean = oldItem == newItem
 
             override fun areContentsTheSame(
-                oldItem: RecallSuspensionListItemDto, newItem: RecallSuspensionListItemDto,
+                oldItem: RecallSuspension, newItem: RecallSuspension,
             ): Boolean = oldItem == newItem
         },
     ) {
 
-    class PenaltyViewHolder(private val view: SimpleListItemView<RecallSuspensionListItemDto>) :
+    class PenaltyViewHolder(private val view: SimpleListItemView<RecallSuspension>) :
         RecyclerView.ViewHolder(view) {
         init {
             view.apply {
@@ -37,7 +37,7 @@ class PenaltyListAdapter :
             }
         }
 
-        fun bind(data: RecallSuspensionListItemDto) {
+        fun bind(data: RecallSuspension) {
             view.apply {
                 this.data = data
                 setTitle(data.product)

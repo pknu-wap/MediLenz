@@ -14,7 +14,7 @@ import com.android.mediproject.feature.home.databinding.FragmentHomeBinding
 import com.android.mediproject.feature.news.penalties.recentpenaltylist.RecentPenaltyListFragment
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint

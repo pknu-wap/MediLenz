@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter
  * @property usagePeriod 유효기한
  *
  */
-data class DetailRecallSuspensionItemDto(
+data class DetailRecallSuspension(
     val bizrNo: String, // 1278641862
     val enterprise: String, // (주)자연세상
     val enterpriseAddress: String, // 경기도 포천시 소흘읍 호국로481번길 21-16
@@ -40,15 +40,15 @@ data class DetailRecallSuspensionItemDto(
     val usagePeriod: String?, // 제조일로부터36개월
 )
 
-fun DetailRecallSuspensionResponse.Body.Item.Item.toRecallSuspensionItemDto(): DetailRecallSuspensionItemDto = DetailRecallSuspensionItemDto(
+fun DetailRecallSuspensionResponse.Item.Item.toRecallSuspension(): DetailRecallSuspension = DetailRecallSuspension(
     bizrNo = bizrNo ?: "",
-    enterprise = eNTRPS ?: "",
-    enterpriseAddress = eNTRPSADRES ?: "",
-    enterpriseTel = eNTRPSTELNO ?: "",
+    enterprise = enterprise ?: "",
+    enterpriseAddress = entpAddress ?: "",
+    enterpriseTel = entpTel ?: "",
     manufacturedDate = manufacturedDate?.run { LocalDate.parse(this, dateFormat) },
     manufactureNo = manufactureId ?: "",
     openEndDate = LocalDate.parse(openEndDate, dateFormat),
-    packageUnit = pACKNGUNIT ?: "",
+    packageUnit = packageUnit ?: "",
     product = pRDUCT ?: "",
     recallCommandDate = recalLCommandDate.run { LocalDate.parse(this, dateFormat) },
     rm = rM,

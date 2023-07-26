@@ -86,12 +86,11 @@ class SystemBarColorAnalyzer @Inject constructor() {
     }
 
     private suspend fun startConvert(): Pair<SystemBarStyler.SystemBarColor, SystemBarStyler.SystemBarColor> {
-        val start = System.currentTimeMillis()
         val statusBarBitmap = Bitmap.createBitmap(decorView.width, statusBarHeight, Bitmap.Config.ARGB_8888)
         val navigationBarBitmap = Bitmap.createBitmap(decorView.width, navigationBarHeight, Bitmap.Config.ARGB_8888)
 
-        val statusBarCopyResult = pixelCopy(Rect(0, 0, decorView.width, statusBarHeight), statusBarBitmap)
-        val navBarCopyResult = pixelCopy(Rect(0, decorView.height - navigationBarHeight, decorView.width, decorView.height), navigationBarBitmap)
+        pixelCopy(Rect(0, 0, decorView.width, statusBarHeight), statusBarBitmap)
+        pixelCopy(Rect(0, decorView.height - navigationBarHeight, decorView.width, decorView.height), navigationBarBitmap)
 
         val statusBarColor = statusBarBitmap[10, 10].toColor()
         val navigationBarColor = navigationBarBitmap[10, 10].toColor()
@@ -111,9 +110,6 @@ class SystemBarColorAnalyzer @Inject constructor() {
         window = activity.window
         lifecycle.addObserver(
             object : DefaultLifecycleObserver {
-                override fun onCreate(owner: LifecycleOwner) {
-                    super.onCreate(owner)
-                }
 
                 override fun onStart(owner: LifecycleOwner) {
                     super.onStart(owner)

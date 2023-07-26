@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface AdminActionRepository {
     suspend fun getAdminActionList(
-    ): Flow<PagingData<AdminActionListResponse.Body.Item>>
+    ): Flow<PagingData<AdminActionListResponse.Item>>
 
 }

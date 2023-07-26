@@ -5,13 +5,13 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineSafeUseItemBinding
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import repeatOnStarted
 
 /**
  *
@@ -51,9 +51,11 @@ class MedicineSafeUsageItemFragment :
 
     override val fragmentViewModel: MedicineSafeUsageViewModel by viewModels()
 
-    private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>({
-        requireParentFragment().requireParentFragment()
-    })
+    private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>(
+        {
+            requireParentFragment().requireParentFragment()
+        },
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

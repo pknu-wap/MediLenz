@@ -19,7 +19,7 @@ import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListF
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint

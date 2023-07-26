@@ -10,7 +10,7 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.basicinfo.host.MedicineBasicInfoViewModel
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import kotlinx.coroutines.flow.collectLatest
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
@@ -25,18 +25,20 @@ abstract class BaseMedicineInfoItemFragment<T : ViewDataBinding>(inflate: Inflat
 
     override val fragmentViewModel: MedicineBasicInfoViewModel by viewModels(ownerProducer = { requireParentFragment() })
 
-    private val _medicineInfoViewModel by viewModels<MedicineInfoViewModel>(ownerProducer = {
-        requireParentFragment().requireParentFragment()
-    })
+    private val _medicineInfoViewModel by viewModels<MedicineInfoViewModel>(
+        ownerProducer = {
+            requireParentFragment().requireParentFragment()
+        },
+    )
 
-    protected val medicineInfoViewModel get() = _medicineInfoViewModel
+    private val medicineInfoViewModel get() = _medicineInfoViewModel
 
 
     companion object : MedicineInfoItemFragmentFactory {
 
         @JvmStatic
         override fun <T : BaseMedicineInfoItemFragment<*>> newInstance(
-            fragmentClass: KClass<T>
+            fragmentClass: KClass<T>,
         ): T {
             return fragmentClass.createInstance()
         }

@@ -29,7 +29,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItemDto
+import com.android.mediproject.core.model.remote.recall.RecallSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import java.time.format.DateTimeFormatter
 
@@ -45,7 +45,9 @@ fun RecallDisposalScreen(
     val list = viewModel.recallDisposalList.collectAsLazyPagingItems()
 
     LazyColumn(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
     ) {
         items(
             count = list.itemCount, key = list.itemKey(),
@@ -80,16 +82,17 @@ fun RecallDisposalScreen(
 /**
  * 회수 폐기 목록 아이템
  *
- * @param recallSuspensionListItemDto 회수 폐기 목록 아이템
+ * @param recallSuspension 회수 폐기 목록 아이템
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
+fun ListItem(recallSuspension: RecallSuspension) {
     Surface(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 20.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 20.dp),
         shape = RectangleShape,
         onClick = {
-            recallSuspensionListItemDto.onClick?.invoke(recallSuspensionListItemDto)
+            recallSuspension.onClick?.invoke(recallSuspension)
         },
     ) {
         Column(
@@ -100,16 +103,18 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
                 verticalAlignment = CenterVertically,
             ) {
                 Text(
-                    text = recallSuspensionListItemDto.product,
+                    text = recallSuspension.product,
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 14.sp,
                     color = Color.Black,
-                    modifier = Modifier.align(CenterVertically).weight(1f),
+                    modifier = Modifier
+                        .align(CenterVertically)
+                        .weight(1f),
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                 )
                 Text(
-                    text = recallSuspensionListItemDto.run {
+                    text = recallSuspension.run {
                         if (recallCommandDate != null) recallCommandDate
                         else destructionOrderDate
                     }!!.format(dateFormat),
@@ -121,7 +126,7 @@ fun ListItem(recallSuspensionListItemDto: RecallSuspensionListItemDto) {
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = recallSuspensionListItemDto.reason, fontSize = 12.sp, color = Color.Gray, maxLines = 1,
+                text = recallSuspension.reason, fontSize = 12.sp, color = Color.Gray, maxLines = 1,
             )
         }
     }

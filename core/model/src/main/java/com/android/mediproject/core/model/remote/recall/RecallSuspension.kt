@@ -17,7 +17,7 @@ import java.time.LocalDate
  * @property reason 폐기 사유
  *
  */
-data class RecallSuspensionListItemDto(
+data class RecallSuspension(
     val enfrcYn: String?, // N
     val entrps: String, // 동국제약(주)
     val itemSeq: String, // 201208461
@@ -25,10 +25,10 @@ data class RecallSuspensionListItemDto(
     val recallCommandDate: LocalDate?, // 20230504
     val destructionOrderDate: LocalDate?, // 20230503000000
     val reason: String, // 안정성 시험결과 NDMA 기준 초과에 따른 사전예방적 조치로 시중 유통품에 대해 영업자회수
-    var onClick: ((RecallSuspensionListItemDto) -> Unit)? = null,
+    var onClick: ((RecallSuspension) -> Unit)? = null,
 )
 
-fun RecallSuspensionListResponse.Body.Item.Item.toRecallSuspensionItemDto() = RecallSuspensionListItemDto(
+fun RecallSuspensionListResponse.Item.Item.toRecallSuspension() = RecallSuspension(
     enfrcYn = enfrcYn,
     entrps = entrps ?: "",
     itemSeq = itemSeq ?: "",

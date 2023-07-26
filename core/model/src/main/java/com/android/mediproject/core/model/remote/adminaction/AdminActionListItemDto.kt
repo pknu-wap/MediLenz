@@ -40,7 +40,7 @@ data class AdminActionListItemDto(
     var onClick: (() -> Unit)? = null,
 ) : Parcelable
 
-fun AdminActionListResponse.Body.Item.toDto(): AdminActionListItemDto {
+fun AdminActionListResponse.Item.toDto(): AdminActionListItemDto {
     return AdminActionListItemDto(
         address = aDDR,
         disposition = aDMDISPSNAME,

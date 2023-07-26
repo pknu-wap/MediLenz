@@ -19,7 +19,7 @@ import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFragment
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -104,7 +104,7 @@ class MyPageFragment :
     }
 
     private fun isCommentListNotEmpty(commentList: List<MyCommentDto>): Boolean {
-        return (commentList.size != 0)
+        return (commentList.isNotEmpty())
     }
 
     private fun handleToken(tokenState: TokenState<CurrentTokens>) {

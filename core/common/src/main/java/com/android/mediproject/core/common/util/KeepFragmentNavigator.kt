@@ -50,7 +50,6 @@ class KeepFragmentNavigator(
     private val backStack get() = state.backStack
     private fun createFragmentTransaction(
         entry: NavBackStackEntry,
-        navOptions: NavOptions?,
     ): FragmentTransaction {
         val destination = entry.destination as Destination
         var className = destination.className
@@ -151,7 +150,7 @@ class KeepFragmentNavigator(
                     }
                     if (!pop) {
                         requireNotNull(entry) {
-                            "The fragment " + fragment + " is unknown to the FragmentNavigator. " + "Please use the navigate() function to add fragments to the " + "FragmentNavigator managed FragmentManager."
+                            "The fragment $fragment is unknown to the FragmentNavigator. Please use the navigate() function to add fragments to the FragmentNavigator managed FragmentManager."
                         }
                     }
                     if (entry != null) {
@@ -329,7 +328,7 @@ class KeepFragmentNavigator(
             state.pushWithTransition(entry)
             return
         }
-        val ft = createFragmentTransaction(entry, navOptions)
+        val ft = createFragmentTransaction(entry)
 
         if (!initialNavigation) {
             ft.addToBackStack(entry.id)
@@ -367,7 +366,7 @@ class KeepFragmentNavigator(
             )
             return
         }
-        val ft = createFragmentTransaction(backStackEntry, null)
+        val ft = createFragmentTransaction(backStackEntry)
         if (state.backStack.value.size > 1) {
             // If the Fragment to be replaced is on the FragmentManager's
             // back stack, a simple replace() isn't enough so we
@@ -384,14 +383,14 @@ class KeepFragmentNavigator(
         state.onLaunchSingleTop(backStackEntry)
     }
 
-    public override fun onSaveState(): Bundle? {
+    override fun onSaveState(): Bundle? {
         if (savedIds.isEmpty()) {
             return null
         }
         return bundleOf(KEY_SAVED_IDS to ArrayList(savedIds))
     }
 
-    public override fun onRestoreState(savedState: Bundle) {
+    override fun onRestoreState(savedState: Bundle) {
         val savedIds = savedState.getStringArrayList(KEY_SAVED_IDS)
         if (savedIds != null) {
             this.savedIds.clear()
@@ -400,8 +399,7 @@ class KeepFragmentNavigator(
     }
 
     @NavDestination.ClassType(Fragment::class)
-    public open class Destination
-    public constructor(fragmentNavigator: Navigator<out Destination>) : NavDestination(fragmentNavigator) {
+    open class Destination(fragmentNavigator: Navigator<out Destination>) : NavDestination(fragmentNavigator) {
 
         /**
          * Construct a new fragment destination. This destination is not valid until you set the
@@ -410,10 +408,10 @@ class KeepFragmentNavigator(
          * @param navigatorProvider The [NavController] which this destination
          * will be associated with.
          */
-        public constructor(navigatorProvider: NavigatorProvider) : this(navigatorProvider.getNavigator(KeepFragmentNavigator::class.java))
+        constructor(navigatorProvider: NavigatorProvider) : this(navigatorProvider.getNavigator(KeepFragmentNavigator::class.java))
 
         @CallSuper
-        public override fun onInflate(context: Context, attrs: AttributeSet) {
+        override fun onInflate(context: Context, attrs: AttributeSet) {
             super.onInflate(context, attrs)
             context.resources.obtainAttributes(attrs, R.styleable.KeepFragmentNavigator).use { array ->
                 val className = array.getString(R.styleable.KeepFragmentNavigator_android_name)
@@ -427,7 +425,7 @@ class KeepFragmentNavigator(
          * destination
          * @return this [Destination]
          */
-        public fun setClassName(className: String): Destination {
+        fun setClassName(className: String): Destination {
             _className = className
             return this
         }
@@ -439,13 +437,13 @@ class KeepFragmentNavigator(
          *
          * @throws IllegalStateException when no Fragment class was set.
          */
-        public val className: String
+        val className: String
             get() {
                 checkNotNull(_className) { "Fragment class was not set" }
                 return _className as String
             }
 
-        public override fun toString(): String {
+        override fun toString(): String {
             val sb = StringBuilder()
             sb.append(super.toString())
             sb.append(" class=")
@@ -472,21 +470,21 @@ class KeepFragmentNavigator(
     /**
      * Extras that can be passed to FragmentNavigator to enable Fragment specific behavior
      */
-    public class Extras internal constructor(sharedElements: Map<View, String>) : Navigator.Extras {
+    class Extras internal constructor(sharedElements: Map<View, String>) : Navigator.Extras {
         private val _sharedElements = LinkedHashMap<View, String>()
 
         /**
          * The map of shared elements associated with these Extras. The returned map
          * is an [unmodifiable][Map] copy of the underlying map and should be treated as immutable.
          */
-        public val sharedElements: Map<View, String>
+        val sharedElements: Map<View, String>
             get() = _sharedElements.toMap()
 
         /**
          * Builder for constructing new [Extras] instances. The resulting instances are
          * immutable.
          */
-        public class Builder {
+        class Builder {
             private val _sharedElements = LinkedHashMap<View, String>()
 
             /**
@@ -496,7 +494,7 @@ class KeepFragmentNavigator(
              * @param sharedElements Shared element pairs to add
              * @return this [Builder]
              */
-            public fun addSharedElements(sharedElements: Map<View, String>): Builder {
+            fun addSharedElements(sharedElements: Map<View, String>): Builder {
                 for ((view, name) in sharedElements) {
                     addSharedElement(view, name)
                 }
@@ -514,7 +512,7 @@ class KeepFragmentNavigator(
              * @return this [Builder]
              * @see FragmentTransaction.addSharedElement
              */
-            public fun addSharedElement(sharedElement: View, name: String): Builder {
+            fun addSharedElement(sharedElement: View, name: String): Builder {
                 _sharedElements[sharedElement] = name
                 return this
             }
@@ -524,7 +522,7 @@ class KeepFragmentNavigator(
              *
              * @return An immutable [Extras] instance.
              */
-            public fun build(): Extras {
+            fun build(): Extras {
                 return Extras(_sharedElements)
             }
         }

@@ -72,7 +72,7 @@ data class GranuleIdentificationInfoDto(
     val thick: String?, // 7.58
 )
 
-fun GranuleIdentificationInfoResponse.Body.Item.toDto() = GranuleIdentificationInfoDto(
+fun GranuleIdentificationInfoResponse.Item.toDto() = GranuleIdentificationInfoDto(
     bizrNo = bizrNo,
     changeDate = changeDate.toLocalDate("yyyyMMdd"),
     chart = chart,
