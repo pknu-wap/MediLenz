@@ -10,7 +10,7 @@ class ElderlyCautionDataSourceImpl @Inject constructor(private val dataGoKrNetwo
 
 
     override suspend fun getElderlyCaution(itemName: String?, itemSeq: String?): Result<ElderlyCautionResponse> =
-        dataGoKrNetworkApi.getElderlyCaution(itemName = itemName, itemSeq = itemSeq).onResponse().fold(
+        dataGoKrNetworkApi.getElderlyCaution(itemName = itemName, _itemSeq = itemSeq).onResponse().fold(
             onSuccess = { response ->
                 response.toResult()
             },
