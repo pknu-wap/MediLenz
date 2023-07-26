@@ -1,14 +1,14 @@
 package com.android.mediproject.core.model.datagokr.durproduct.senior
 
 
+import com.android.mediproject.core.model.DataGoKrBaseResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class DurProductSeniorCautionResponse(
     @SerialName("body") val body: Body = Body(),
-    @SerialName("header") val header: Header = Header(),
-) {
+) : DataGoKrBaseResponse() {
     @Serializable
     data class Body(
         @SerialName("items") val items: List<Item> = listOf(),
@@ -67,9 +67,5 @@ data class DurProductSeniorCautionResponse(
         )
     }
 
-    @Serializable
-    data class Header(
-        @SerialName("resultCode") val resultCode: String = "", // 00
-        @SerialName("resultMsg") val resultMsg: String = "", // NORMAL SERVICE.
-    )
+
 }

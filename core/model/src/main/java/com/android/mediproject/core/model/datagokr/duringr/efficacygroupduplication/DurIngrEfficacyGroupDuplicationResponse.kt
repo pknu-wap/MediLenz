@@ -1,14 +1,14 @@
 package com.android.mediproject.core.model.datagokr.duringr.efficacygroupduplication
 
 
+import com.android.mediproject.core.model.DataGoKrBaseResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class DurIngrEfficacyGroupDuplicationResponse(
     @SerialName("body") val body: Body = Body(),
-    @SerialName("header") val header: Header = Header(),
-) {
+) : DataGoKrBaseResponse() {
     @Serializable
     data class Body(
         @SerialName("items") val items: List<Item> = listOf(),
@@ -57,9 +57,5 @@ data class DurIngrEfficacyGroupDuplicationResponse(
         }
     }
 
-    @Serializable
-    data class Header(
-        @SerialName("resultCode") val resultCode: String = "", // 00
-        @SerialName("resultMsg") val resultMsg: String = "", // NORMAL SERVICE.
-    )
+
 }
