@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.penalties.recentpenaltylist
 
+import MutableEventFlow
 import android.content.Context
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -8,6 +9,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
+import asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
@@ -24,33 +26,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecentPenaltyListViewModel @Inject constructor(
-    private val getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher) : BaseViewModel() {
+    private val getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase) : BaseViewModel() {
+
+    private val _eventFlow = MutableEventFlow<PenaltyListEvent>()
+    val eventFlow get() = _eventFlow.asEventFlow()
+
+    fun event(event: PenaltyListEvent) = viewModelScope.launch { _eventFlow.emit(event) }
+
+    fun navigateToNews() = event(PenaltyListEvent.NavigateToNews)
+
+    sealed class PenaltyListEvent {
+        object NavigateToNews : PenaltyListEvent()
+    }
 
     private val _recallDisposalList = MutableStateFlow<UiState<List<RecallSuspensionListItemDto>>>(UiState.Initial)
     val recallDisposalList get() = _recallDisposalList.asStateFlow()
 
-    private val _noHistoryText = MutableStateFlow<Spanned>(SpannableStringBuilder())
-    val noHistoryText get() = _noHistoryText.asStateFlow()
-
-    fun createNoHistoryText(context: Context) {
-        viewModelScope.launch(defaultDispatcher) {
-            val text = context.getString(com.android.mediproject.feature.penalties.R.string.failedLoading)
-            val firstIdx = text.indexOf("데이터")
-            val span = SpannableStringBuilder(text).apply {
-                setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.main)),
-                    firstIdx,
-                    firstIdx + 3,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                setSpan(UnderlineSpan(), firstIdx, firstIdx + 3, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            }
-            _noHistoryText.value = span
-        }
-    }
-
-    /**
-     * 회수 폐기 공고 목록을 로드
-     */
     init {
         viewModelScope.launch {
             getRecallSuspensionInfoUseCase.getRecentRecallDisposalList(numOfRows = 5).fold(onSuccess = {

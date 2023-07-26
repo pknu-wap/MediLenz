@@ -3,11 +3,14 @@ package com.android.mediproject.core.common.mapper
 import android.content.Context
 import android.graphics.Typeface
 import android.text.Html
+import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
+import androidx.core.content.ContextCompat
 import androidx.core.text.toSpanned
 import com.android.mediproject.core.common.R
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoDto
@@ -188,17 +191,33 @@ class MedicineInfoMapper @Inject constructor() {
 
     fun initHeaderSpan(context: Context, text: String): SpannableStringBuilder {
         return SpannableStringBuilder(text).apply {
-            val underline1Idx = text.indexOf(context.getString(R.string.highlightWord1)) to text.indexOf(context.getString(R.string.highlightWord1)) + 2
+            val underline1Idx =
+                text.indexOf(context.getString(R.string.highlightWord1)) to text.indexOf(context.getString(R.string.highlightWord1)) + 2
 
             setSpan(UnderlineSpan(), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
             setSpan(StyleSpan(Typeface.BOLD), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
             setSpan(RelativeSizeSpan(TEXT_SIZE_PERCENT), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
 
-            val underline2Idx = text.indexOf(context.getString(R.string.highlightWord2)) to text.indexOf(context.getString(R.string.highlightWord2)) + 2
+            val underline2Idx =
+                text.indexOf(context.getString(R.string.highlightWord2)) to text.indexOf(context.getString(R.string.highlightWord2)) + 2
 
             setSpan(UnderlineSpan(), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
             setSpan(StyleSpan(Typeface.BOLD), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
             setSpan(RelativeSizeSpan(TEXT_SIZE_PERCENT), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+        }
+    }
+
+    fun getNoHistorySpan(context: Context): SpannableStringBuilder {
+        val text = context.getString(R.string.failedLoading)
+        val highLightIndex = text.indexOf(context.getString(R.string.highlightWord3))
+        return SpannableStringBuilder(text).apply {
+            setSpan(
+                ForegroundColorSpan(ContextCompat.getColor(context, R.color.main)),
+                highLightIndex,
+                highLightIndex + 3,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+            setSpan(UnderlineSpan(), highLightIndex, highLightIndex + 3, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         }
     }
 }

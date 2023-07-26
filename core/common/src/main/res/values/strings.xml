@@ -76,4 +76,7 @@
 
     <string name="highlightWord1">찾고</string>
     <string name="highlightWord2">소통</string>
+
+    <string name="failedLoading">식약처로 부터 데이터를 불러오는데 실패했습니다.</string>
+    <string name="highlightWord3">데이터</string>
 </resources>
