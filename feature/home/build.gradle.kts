@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":feature:search"))
     implementation(project(":feature:comments"))
-    implementation(project(":feature:penalties"))
+    implementation(project(":feature:news"))
     implementation(project(":feature:camera"))
 
     implementation(libs.bundles.glides)

@@ -2,4 +2,7 @@
 <resources>
     <string name="recallSuspension">회수 폐기</string>
     <string name="adminAction">행정 처분</string>
+
+    <string name="penaltyList">행정 처분 목록</string>
+    <string name="failedLoading">식약처로 부터 데이터를 불러오는데 실패했습니다.</string>
 </resources>

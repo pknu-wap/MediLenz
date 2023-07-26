@@ -17,7 +17,7 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
     implementation(project(":feature:search"))
-    implementation(project(":feature:penalties"))
+    implementation(project(":feature:news"))
     implementation(project(":feature:comments"))
 
     implementation(libs.bundles.glides)
@@ -26,6 +26,4 @@ dependencies {
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.androidx.asynclayoutinflater)
-    //implementation(libs.smartdeeplink.core)
-
 }

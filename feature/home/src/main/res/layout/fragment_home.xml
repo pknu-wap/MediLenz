@@ -85,7 +85,7 @@
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/recentPenaltyListFragment"
-                        android:name="com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListFragment"
+                        android:name="com.android.mediproject.feature.news.penalties.recentpenaltylist.RecentPenaltyListFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/divider_margin_vertical" />

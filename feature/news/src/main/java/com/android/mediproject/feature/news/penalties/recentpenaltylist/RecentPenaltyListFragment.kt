@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.penalties.recentpenaltylist
+package com.android.mediproject.feature.news.penalties.recentpenaltylist
 
 import android.os.Bundle
 import android.view.View
@@ -12,7 +12,7 @@ import com.android.mediproject.core.model.local.navargs.RecallDisposalArgs
 import com.android.mediproject.core.model.remote.recall.RecallSuspensionListItemDto
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.stateAsCollect
-import com.android.mediproject.feature.penalties.databinding.FragmentRecentPenaltyListBinding
+import com.android.mediproject.feature.news.databinding.FragmentRecentPenaltyListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import repeatOnStarted
 import javax.inject.Inject
@@ -37,7 +37,7 @@ class RecentPenaltyListFragment :
     }
 
     private fun setBinding() = binding.apply {
-        fragmentViewModel.apply {
+        viewModel = fragmentViewModel.apply {
             viewLifecycleOwner.apply {
                 repeatOnStarted {
                     recallDisposalList.stateAsCollect(headerView, noHistoryTextView).collect { uiState ->
