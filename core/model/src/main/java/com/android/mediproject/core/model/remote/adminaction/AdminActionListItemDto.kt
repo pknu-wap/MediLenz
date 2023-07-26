@@ -37,7 +37,7 @@ data class AdminActionListItemDto(
     val itemSeq: String, // 200808451
     val lastSettleDate: LocalDate, // 20230526
     val publicEndDate: LocalDate, // 20230910
-    var onClick: (() -> Unit)? = null
+    var onClick: (() -> Unit)? = null,
 ) : Parcelable
 
 fun AdminActionListResponse.Body.Item.toDto(): AdminActionListItemDto {
@@ -46,16 +46,16 @@ fun AdminActionListResponse.Body.Item.toDto(): AdminActionListItemDto {
         disposition = aDMDISPSNAME,
         enforcementNumber = aDMDISPSSEQ,
         applyLaw = bEFAPPLYLAW,
-        bizrNo = bIZRNO ?: "",
-        entpName = eNTPNAME,
+        bizrNo = bizrNo ?: "",
+        entpName = entpName,
         entpNo = eNTPNO,
         violation = eXPOSECONT,
-        itemName = iTEMNAME ?: "",
-        itemSeq = iTEMSEQ ?: "",
+        itemName = itemName ?: "",
+        itemSeq = itemSeq ?: "",
         lastSettleDate = LocalDate.parse(lASTSETTLEDATE, dateFormatter),
-        publicEndDate = LocalDate.parse(rLSENDDATE, dateFormatter)
+        publicEndDate = LocalDate.parse(rLSENDDATE, dateFormatter),
 
-    )
+        )
 }
 
 private val dateFormatter by lazy { DateTimeFormatter.ofPattern("yyyyMMdd") }

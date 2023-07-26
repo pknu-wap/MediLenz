@@ -4,8 +4,7 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.DATA_GO_KR_DEFAULT_PAGE_NO
 import com.android.mediproject.core.common.DATA_GO_KR_DEFAULT_ROW_SIZE
 import com.android.mediproject.core.common.JSON
-import com.android.mediproject.core.model.remote.dur.DurResponse
-import com.android.mediproject.core.model.remote.elderlycaution.ElderlyCautionResponse
+import com.android.mediproject.core.model.datagokr.durproduct.senior.DurProductElderlyCautionResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -26,7 +25,7 @@ interface DurProductInfoNetworkApi {
      *
      */
     @GET(value = "DURPrdlstInfoService02/getDurPrdlstInfoList2")
-    suspend fun getDur(
+    suspend fun getDurProductList(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
         @Query("itemName") itemName: String?,
@@ -54,7 +53,7 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
-    ): Response<ElderlyCautionResponse>
+    ): Response<DurProductElderlyCautionResponse>
 
     /**
      * 서방정 분할 주의 정보 조회
@@ -65,7 +64,7 @@ interface DurProductInfoNetworkApi {
      * @param itemSeq 품목기준코드
      */
     @GET(value = "DURPrdlstInfoService02/getSeobangjeongPartitnAtentInfoList2")
-    suspend fun getSustainedReleaseTableSplitAttentionInfo(
+    suspend fun getExReleaseTableSplitAttentionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
         @Query("itemName") itemName: String?,

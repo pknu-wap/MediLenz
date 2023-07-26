@@ -1,6 +1,5 @@
 package com.android.mediproject.core.data.remote.dur
 
-import com.android.mediproject.core.model.remote.dur.DurResponse
 import kotlinx.coroutines.flow.Flow
 
 interface DurRepository {

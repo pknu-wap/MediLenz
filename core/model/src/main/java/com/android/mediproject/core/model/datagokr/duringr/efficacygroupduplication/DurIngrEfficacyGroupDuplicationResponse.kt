@@ -1,11 +1,11 @@
-package com.android.mediproject.core.model.datagokr.duringr
+package com.android.mediproject.core.model.datagokr.duringr.efficacygroupduplication
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DurIngrPregnantWomanTabooInfoResponse(
+data class DurIngrEfficacyGroupDuplicationResponse(
     @SerialName("body") val body: Body = Body(),
     @SerialName("header") val header: Header = Header(),
 ) {
@@ -20,6 +20,7 @@ data class DurIngrPregnantWomanTabooInfoResponse(
         data class Item(
             @SerialName("item") val item: Item = Item(),
         ) {
+
             /**
              * @param durSeq DUR번호
              * @param typeName DUR유형
@@ -30,8 +31,7 @@ data class DurIngrPregnantWomanTabooInfoResponse(
              * @param mixIngr 복합제
              * @param oriIngr 관계성분
              * @param className 약효분류
-             * @param formName 제형
-             * @param grade 등급
+             * @param effectCode 효능군
              * @param notificationDate 고시일자
              * @param prohibitContent 금기내용
              * @param remark 비고
@@ -39,22 +39,20 @@ data class DurIngrPregnantWomanTabooInfoResponse(
              */
             @Serializable
             data class Item(
-                @SerialName("CLASS_NAME") val className: String = "", // [02470]난포호르몬제 및 황체호르몬제
+                @SerialName("CLASS_NAME") val className: String = "", // [01140]해열.진통.소염제
                 @SerialName("DEL_YN") val delYn: String = "", // 정상
-                @SerialName("DUR_SEQ") val durSeq: String = "", // 1893
-                @SerialName("FORM_NAME")
-                val formName: String = "", // 연질캡슐제, 현탁상/유화주사제/용액용분말주사제/서방성현탁액용분말주사제/용액용동결건조분말주사제/현탁액용동결건조분말주사제/서방성현탁액용동결건조분말주사제/리포좀화현탁액용동결건조분말주사제/현탁액주사제/서방성현탁액성주사제/용액주사제
-                @SerialName("GRADE") val grade: String = "", // 1등급
-                @SerialName("INGR_CODE") val ingrCode: String = "", // D000100
-                @SerialName("INGR_ENG_NAME") val ingrEngName: String = "", // Progesterone
-                @SerialName("INGR_NAME") val ingrKorName: String = "", // 프로게스테론
+                @SerialName("DUR_SEQ") val durSeq: String = "", // 2463
+                @SerialName("EFFECT_CODE") val effectCode: String = "", // 해열진통소염제
+                @SerialName("INGR_CODE") val ingrCode: String = "", // D000739
+                @SerialName("INGR_ENG_NAME") val ingrEngName: String = "", // Aceclofenac
+                @SerialName("INGR_NAME") val ingrKorName: String = "", // 아세클로페낙
                 @SerialName("MIX_INGR") val mixIngr: String = "",
                 @SerialName("MIX_TYPE") val mixType: String = "", // 단일
-                @SerialName("NOTIFICATION_DATE") val notificationDate: String = "", // 20081211
-                @SerialName("ORI_INGR") val oriIngr: String = "", // [M040719]프로게스테론/[M086429]미분화프로게스테론/[M252921]프로게스테론(미분화)
-                @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // 임부에 대한 안전성 미확립.
-                @SerialName("REMARK") val remark: String = "", // 경구
-                @SerialName("TYPE_NAME") val typeName: String = "", // 임부금기
+                @SerialName("NOTIFICATION_DATE") val notificationDate: String = "", // 20120831
+                @SerialName("ORI_INGR") val oriIngr: String = "", // [M040359]아세클로페낙
+                @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // null
+                @SerialName("REMARK") val remark: String = "", // null
+                @SerialName("TYPE_NAME") val typeName: String = "", // 효능군중복
             )
         }
     }

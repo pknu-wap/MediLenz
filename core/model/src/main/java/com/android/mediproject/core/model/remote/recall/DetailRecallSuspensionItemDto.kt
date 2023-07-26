@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 /**
  * 상세 리콜 폐기 데이터
  *
- * @property bIZRNO 사업자등록번호
+ * @property bizrNo 사업자등록번호
  * @property enterprise 업체명
  * @property enterpriseAddress 업체 주소
  * @property enterpriseTel 업체 전화번호
@@ -24,7 +24,7 @@ import java.time.format.DateTimeFormatter
  *
  */
 data class DetailRecallSuspensionItemDto(
-    val bIZRNO: String, // 1278641862
+    val bizrNo: String, // 1278641862
     val enterprise: String, // (주)자연세상
     val enterpriseAddress: String, // 경기도 포천시 소흘읍 호국로481번길 21-16
     val enterpriseTel: String, // 0315443091
@@ -41,7 +41,7 @@ data class DetailRecallSuspensionItemDto(
 )
 
 fun DetailRecallSuspensionResponse.Body.Item.Item.toRecallSuspensionItemDto(): DetailRecallSuspensionItemDto = DetailRecallSuspensionItemDto(
-    bIZRNO = bIZRNO ?: "",
+    bizrNo = bizrNo ?: "",
     enterprise = eNTRPS ?: "",
     enterpriseAddress = eNTRPSADRES ?: "",
     enterpriseTel = eNTRPSTELNO ?: "",

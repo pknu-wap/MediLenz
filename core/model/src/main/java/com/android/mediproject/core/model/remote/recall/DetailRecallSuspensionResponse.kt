@@ -23,17 +23,17 @@ data class DetailRecallSuspensionResponse(
         @SerialName("items") val items: List<Item>,
         @SerialName("numOfRows") val numOfRows: Int, // 15
         @SerialName("pageNo") val pageNo: Int, // 1
-        @SerialName("totalCount") val totalCount: Int // 1
+        @SerialName("totalCount") val totalCount: Int, // 1
     ) {
         @Serializable
         data class Item(
-            @SerialName("item") val item: Item
+            @SerialName("item") val item: Item,
         ) {
 
             /**
              * 상세 리콜 폐기 데이터
              *
-             * @property bIZRNO 사업자등록번호
+             * @property bizrNo 사업자등록번호
              * @property eNTRPS 업체명
              * @property eNTRPSADRES 업체 주소
              * @property eNTRPSTELNO 업체 전화번호
@@ -51,7 +51,7 @@ data class DetailRecallSuspensionResponse(
              */
             @Serializable
             data class Item(
-                @SerialName("BIZRNO") val bIZRNO: String?, // 1278641862
+                @SerialName("BIZRNO") val bizrNo: String?, // 1278641862
                 @SerialName("ENTRPS") val eNTRPS: String?, // (주)자연세상
                 @SerialName("ENTRPS_ADRES") val eNTRPSADRES: String?, // 경기도 포천시 소흘읍 호국로481번길 21-16
                 @SerialName("ENTRPS_TELNO") val eNTRPSTELNO: String?, // 0315443091
@@ -64,7 +64,7 @@ data class DetailRecallSuspensionResponse(
                 @SerialName("RM") val rM: String?, // null
                 @SerialName("RTRVL_CMMND_DT") val approvalDate: String?, // 20221004000000
                 @SerialName("RTRVL_RESN") val retrievalReason: String?, // 정량법 부적합
-                @SerialName("USGPD") val usagePeriod: String? // 제조일로부터36개월
+                @SerialName("USGPD") val usagePeriod: String?, // 제조일로부터36개월
             )
         }
 

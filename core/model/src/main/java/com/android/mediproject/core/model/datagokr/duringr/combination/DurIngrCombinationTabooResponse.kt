@@ -1,11 +1,11 @@
-package com.android.mediproject.core.model.datagokr.duringr
+package com.android.mediproject.core.model.datagokr.duringr.combination
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DurIngrCombinationTabooInfoResponse(
+data class DurIngrCombinationTabooResponse(
     @SerialName("body") val body: Body = Body(),
     @SerialName("header") val header: Header = Header(),
 ) {

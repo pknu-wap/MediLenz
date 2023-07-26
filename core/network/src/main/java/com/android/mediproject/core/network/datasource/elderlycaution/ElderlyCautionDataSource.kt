@@ -1,6 +1,5 @@
 package com.android.mediproject.core.network.datasource.elderlycaution
 
-import com.android.mediproject.core.model.remote.elderlycaution.ElderlyCautionResponse
 import retrofit2.http.Query
 
 interface ElderlyCautionDataSource {
@@ -14,5 +13,5 @@ interface ElderlyCautionDataSource {
     suspend fun getElderlyCaution(
         @Query("itemName") itemName: String?,
         @Query("itemSeq") itemSeq: String?,
-    ): Result<ElderlyCautionResponse>
+    ): Result<DurProductElderlyCautionResponse>
 }
