@@ -5,6 +5,7 @@ import com.android.mediproject.core.model.dur.DurType
 import com.android.mediproject.core.network.datasource.dur.DurProductDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
@@ -14,8 +15,7 @@ class DurProductRepositoryImpl @Inject constructor(
 ) : DurProductRepository {
 
     private val mapCacheMaxSize = 5
-    private val _durProductCacheMap = mutableMapOf<String, Map<DurType, DataGoKrResponse<*>>>()
-    private val durProductCacheMap = _durProductCacheMap.toMap()
+    private val durProductCacheMap = mutableMapOf<String, MutableMap<DurType, DataGoKrResponse<*>>>()
     private val mutex = Mutex()
 
     fun hasDur(itemName: String?, itemSeq: String?): Flow<Result<List<DurType>>> = channelFlow {
@@ -32,14 +32,25 @@ class DurProductRepositoryImpl @Inject constructor(
         }
     }
 
-    fun durList(itemName: String?, itemSeq: String?): Flow<Map<DurType, DataGoKrResponse<*>>> = channelFlow {
+    fun getDur(itemSeq: String, durTypes: List<DurType>): Flow<Map<DurType, DataGoKrResponse<*>>> = channelFlow {
+        val filteredDurTypes = mutex.withLock {
+            durProductCacheMap[itemSeq]?.keys?.filter { it !in durTypes } ?: durTypes
+        }
+        val map = mutableMapOf<DurType, DataGoKrResponse<*>>()
+        durProductDataSource.getDurList(itemSeq, filteredDurTypes).last().forEach { (durType, response) ->
+            response.onSuccess {
+                cache(itemSeq, durType, it)
+                map[durType] = it
+            }
+        }
 
+        send(map)
     }
 
     private suspend fun cache(key: String, durType: DurType, response: DataGoKrResponse<*>) {
         mutex.withLock {
-            if (_durProductCacheMap.size > mapCacheMaxSize) _durProductCacheMap.remove(_durProductCacheMap.keys.first())
-            _durProductCacheMap[key] = _durProductCacheMap[key]?.plus(durType to response) ?: mapOf(durType to response)
+            if (durProductCacheMap.size > mapCacheMaxSize) durProductCacheMap.remove(durProductCacheMap.keys.first())
+            durProductCacheMap[key] = durProductCacheMap[key]?.apply { this[durType] = response } ?: mutableMapOf(durType to response)
         }
     }
 }

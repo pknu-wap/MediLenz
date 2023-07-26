@@ -1,5 +1,7 @@
 package com.android.mediproject.core.network.datasource.dur
 
+import com.android.mediproject.core.model.DataGoKrResponse
+import com.android.mediproject.core.model.dur.DurType
 import com.android.mediproject.core.model.dur.durproduct.capacity.DurProductCapacityAttentionResponse
 import com.android.mediproject.core.model.dur.durproduct.combination.DurProductCombinationTabooResponse
 import com.android.mediproject.core.model.dur.durproduct.dosing.DurProductDosingCautionResponse
@@ -9,8 +11,12 @@ import com.android.mediproject.core.model.dur.durproduct.pregnancy.DurProductPre
 import com.android.mediproject.core.model.dur.durproduct.productlist.DurProductListResponse
 import com.android.mediproject.core.model.dur.durproduct.senior.DurProductSeniorCautionResponse
 import com.android.mediproject.core.model.dur.durproduct.specialtyagegroup.DurProductSpecialtyAgeGroupTabooResponse
+import kotlinx.coroutines.flow.Flow
 
 interface DurProductDataSource {
+
+    fun getDurList(itemSeq: String, durTypes: List<DurType>): Flow<Map<DurType, Result<DataGoKrResponse<*>>>>
+
     suspend fun getDurProductList(
         itemName: String?,
         itemSeq: String?,
