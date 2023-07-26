@@ -14,8 +14,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-interface DataGoKrNetworkApi {
-
+interface DataGoKrNetworkApi : DurProductInfoNetworkApi, DurIngrInfoNetworkApi {
     /**
      * 의약품 허가 목록 조회
      *

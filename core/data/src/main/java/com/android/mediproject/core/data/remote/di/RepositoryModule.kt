@@ -34,7 +34,7 @@ import com.android.mediproject.core.database.cache.manager.MedicineDataCacheMana
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
-import com.android.mediproject.core.network.datasource.dur.DurDataSource
+import com.android.mediproject.core.network.datasource.dur.DurProductDataSource
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
 import com.android.mediproject.core.network.datasource.favoritemedicine.FavoriteMedicineDataSource
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
@@ -105,7 +105,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesDurRepository(durDataSource: DurDataSource): DurRepository = DurRepositoryImpl(durDataSource)
+    fun providesDurRepository(durProductDataSource: DurProductDataSource): DurRepository = DurRepositoryImpl(durProductDataSource)
 
 
     @Provides

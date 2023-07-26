@@ -4,7 +4,12 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.DATA_GO_KR_DEFAULT_PAGE_NO
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.JSON
-import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
+import com.android.mediproject.core.model.datagokr.duringr.capacity.DurIngrCapacityAttentionResponse
+import com.android.mediproject.core.model.datagokr.duringr.combination.DurIngrCombinationTabooResponse
+import com.android.mediproject.core.model.datagokr.duringr.dosing.DurIngrDosingCautionResponse
+import com.android.mediproject.core.model.datagokr.duringr.pregnancy.DurIngrPregnantWomanTabooResponse
+import com.android.mediproject.core.model.datagokr.duringr.senior.DurIngrSeniorCautionResponse
+import com.android.mediproject.core.model.datagokr.duringr.specialtyagegroup.DurIngrSpecialtyAgeGroupTabooResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -31,7 +36,7 @@ interface DurIngrInfoNetworkApi {
         @Query("ingrCode") ingrCode: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
-    ): Response<GranuleIdentificationInfoResponse>
+    ): Response<DurIngrCombinationTabooResponse>
 
 
     /**
@@ -49,7 +54,7 @@ interface DurIngrInfoNetworkApi {
         @Query("ingrCode") ingrCode: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
-    ): Response<GranuleIdentificationInfoResponse>
+    ): Response<DurIngrSpecialtyAgeGroupTabooResponse>
 
     /**
      * 임부금기 목록 조회
@@ -66,7 +71,7 @@ interface DurIngrInfoNetworkApi {
         @Query("ingrCode") ingrCode: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
-    ): Response<GranuleIdentificationInfoResponse>
+    ): Response<DurIngrPregnantWomanTabooResponse>
 
     /**
      * 용량주의 정보 조회
@@ -83,7 +88,7 @@ interface DurIngrInfoNetworkApi {
         @Query("ingrCode") ingrCode: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
-    )
+    ): Response<DurIngrCapacityAttentionResponse>
 
     /**
      * 투여기간 정보 조회
@@ -100,7 +105,7 @@ interface DurIngrInfoNetworkApi {
         @Query("ingrCode") ingrCode: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
-    )
+    ): Response<DurIngrDosingCautionResponse>
 
 
     /**
@@ -110,7 +115,7 @@ interface DurIngrInfoNetworkApi {
      * @param ingrCode DUR성분(ex : D000056)
      */
     @GET(value = "DURIrdntInfoService02/getOdsnAtentInfoList01")
-    suspend fun getElderlyCaution(
+    suspend fun getSeniorCaution(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
         @Query("typeName") typeName: String = "노인주의",
@@ -118,7 +123,7 @@ interface DurIngrInfoNetworkApi {
         @Query("ingrCode") ingrCode: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
-    )
+    ): Response<DurIngrSeniorCautionResponse>
 
     /**
      * 효능군중복주의 정보 조회
@@ -135,5 +140,5 @@ interface DurIngrInfoNetworkApi {
         @Query("ingrCode") ingrCode: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
-    )
+    ): Response<DurIngrCombinationTabooResponse>
 }

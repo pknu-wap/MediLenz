@@ -4,7 +4,15 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.DATA_GO_KR_DEFAULT_PAGE_NO
 import com.android.mediproject.core.common.DATA_GO_KR_DEFAULT_ROW_SIZE
 import com.android.mediproject.core.common.JSON
-import com.android.mediproject.core.model.datagokr.durproduct.senior.DurProductElderlyCautionResponse
+import com.android.mediproject.core.model.datagokr.durproduct.capacity.DurProductCapacityAttentionResponse
+import com.android.mediproject.core.model.datagokr.durproduct.combination.DurProductCombinationTabooResponse
+import com.android.mediproject.core.model.datagokr.durproduct.dosing.DurProductDosingCautionResponse
+import com.android.mediproject.core.model.datagokr.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationResponse
+import com.android.mediproject.core.model.datagokr.durproduct.extendedreleasetablet.DurProductExReleaseTableSplitAttentionResponse
+import com.android.mediproject.core.model.datagokr.durproduct.pregnancy.DurProductPregnantWomanTabooResponse
+import com.android.mediproject.core.model.datagokr.durproduct.productlist.DurProductListResponse
+import com.android.mediproject.core.model.datagokr.durproduct.senior.DurProductSeniorCautionResponse
+import com.android.mediproject.core.model.datagokr.durproduct.specialtyagegroup.DurProductSpecialtyAgeGroupTabooResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -32,7 +40,7 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
-    ): Response<DurResponse>
+    ): Response<DurProductListResponse>
 
     /**
      * 노인 주의 정보 조회
@@ -44,7 +52,7 @@ interface DurProductInfoNetworkApi {
      *
      */
     @GET(value = "DURPrdlstInfoService02/getOdsnAtentInfoList2")
-    suspend fun getElderlyCaution(
+    suspend fun getSeniorCaution(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
         @Query("typeName") typeName: String = "노인주의",
@@ -53,7 +61,7 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
-    ): Response<DurProductElderlyCautionResponse>
+    ): Response<DurProductSeniorCautionResponse>
 
     /**
      * 서방정 분할 주의 정보 조회
@@ -73,7 +81,7 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
-    )
+    ): Response<DurProductExReleaseTableSplitAttentionResponse>
 
     /**
      * 효능군 중복 정보 조회
@@ -93,7 +101,7 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
-    )
+    ): Response<DurProductEfficacyGroupDuplicationResponse>
 
     /**
      * 투여기간 주의 정보 조회
@@ -114,7 +122,7 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
-    )
+    ): Response<DurProductDosingCautionResponse>
 
     /**
      * 용량주의 정보 조회
@@ -135,7 +143,7 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
-    )
+    ): Response<DurProductCapacityAttentionResponse>
 
     /**
      * 임산부 금기 정보 조회
@@ -156,7 +164,7 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
-    )
+    ): Response<DurProductPregnantWomanTabooResponse>
 
     /**
      * 특정연령대금기 정보조회
@@ -177,7 +185,7 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
-    )
+    ): Response<DurProductSpecialtyAgeGroupTabooResponse>
 
     /**
      * 병용금기 정보 조회
@@ -198,5 +206,5 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
-    )
+    ): Response<DurProductCombinationTabooResponse>
 }

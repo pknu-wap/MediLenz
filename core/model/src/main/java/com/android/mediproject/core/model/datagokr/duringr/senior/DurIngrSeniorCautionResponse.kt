@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DurIngrElderlyCautionResponse(
+data class DurIngrSeniorCautionResponse(
     @SerialName("body") val body: Body = Body(),
     @SerialName("header") val header: Header = Header(),
 ) {

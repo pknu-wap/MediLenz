@@ -3,10 +3,10 @@ package com.android.mediproject.core.network.module
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
-import com.android.mediproject.core.network.datasource.dur.DurDataSource
-import com.android.mediproject.core.network.datasource.dur.DurDataSourceImpl
-import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
-import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSourceImpl
+import com.android.mediproject.core.network.datasource.dur.DurIngrDataSource
+import com.android.mediproject.core.network.datasource.dur.DurIngrDataSourceImpl
+import com.android.mediproject.core.network.datasource.dur.DurProductDataSource
+import com.android.mediproject.core.network.datasource.dur.DurProductDataSourceImpl
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSourceImpl
 import com.android.mediproject.core.network.datasource.image.GoogleSearchDataSource
@@ -17,6 +17,8 @@ import com.android.mediproject.core.network.datasource.penalties.adminaction.Adm
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSourceImpl
 import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
+import com.android.mediproject.core.network.module.datagokr.DurIngrInfoNetworkApi
+import com.android.mediproject.core.network.module.datagokr.DurProductInfoNetworkApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -31,12 +33,13 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
-const val DATA_GO_KR_BASEURL = "https://apis.data.go.kr/1471000/"
+private const val DATA_GO_KR_BASEURL = "https://apis.data.go.kr/1471000/"
 
 @InstallIn(SingletonComponent::class)
 @Module
 object DataGoKrNetwork {
 
+    // Retrofit2 인스턴스 ---------------------------------------------------------------------------------------------------
     @Provides
     @Singleton
     @Named("dataGoKrNetworkApiWithJsonResponse")
@@ -51,6 +54,7 @@ object DataGoKrNetwork {
         Retrofit.Builder().client(okHttpClient).addConverterFactory(ScalarsConverterFactory.create()).baseUrl(DATA_GO_KR_BASEURL).build()
             .create(DataGoKrNetworkApi::class.java)
 
+    // DataSource 인스턴스 ---------------------------------------------------------------------------------------------------
 
     @Provides
     @Singleton
@@ -75,8 +79,7 @@ object DataGoKrNetwork {
         medicineDataCacheManager: MedicineDataCacheManager,
         googleSearchDataSource: GoogleSearchDataSource,
         @Dispatcher(MediDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
-
-        ): MedicineApprovalDataSource = MedicineApprovalDataSourceImpl(
+    ): MedicineApprovalDataSource = MedicineApprovalDataSourceImpl(
         dataGoKrNetworkApiWithString, dataGoKrNetworkApiWithJson, medicineDataCacheManager, googleSearchDataSource, defaultDispatcher,
     )
 
@@ -86,14 +89,14 @@ object DataGoKrNetwork {
         @Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi,
     ): GranuleIdentificationDataSource = GranuleIdentificationDataSourceImpl(dataGoKrNetworkApi)
 
+    // DUR 품목 정보 ---------------------------------------------------------------------------------------------------
     @Provides
     @Singleton
-    fun providesElderlyCautionDataSource(
-        @Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi,
-    ): ElderlyCautionDataSource = ElderlyCautionDataSourceImpl(dataGoKrNetworkApi)
+    fun providesDurProductDataSource(@Named("dataGoKrNetworkApiWithJsonResponse") api: DurProductInfoNetworkApi): DurProductDataSource =
+        DurProductDataSourceImpl(api)
 
     @Provides
     @Singleton
-    fun providesDurDataSource(@Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi): DurDataSource =
-        DurDataSourceImpl(dataGoKrNetworkApi)
+    fun providesDurIngrDataSource(@Named("dataGoKrNetworkApiWithJsonResponse") api: DurIngrInfoNetworkApi): DurIngrDataSource =
+        DurIngrDataSourceImpl(api)
 }
