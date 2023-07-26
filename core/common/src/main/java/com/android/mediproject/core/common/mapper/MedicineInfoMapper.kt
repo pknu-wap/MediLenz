@@ -10,8 +10,8 @@ import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import androidx.core.text.toSpanned
 import com.android.mediproject.core.common.R
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfo
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoDto
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
 import com.android.mediproject.core.model.util.XMLParsedResult
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -75,11 +75,11 @@ class MedicineInfoMapper @Inject constructor() {
     /**
      * 의약품 기본 정보 데이터를 UI에 맞게 변환
      */
-    fun toMedicineInfo(medicineDetatilInfoDto: MedicineDetatilInfoDto): Spanned {
+    fun toMedicineInfo(medicineDetailInfo: MedicineDetailInfo): Spanned {
         val stringBuilder = WeakReference(StringBuilder())
 
         return stringBuilder.get()?.let { builder ->
-            with(medicineDetatilInfoDto) {
+            with(medicineDetailInfo) {
                 builder.append("<p><b>의약품 이름:</b> $itemName</p>").append("<p><b>의약품 영문 이름:</b> $itemEnglishName</p>")
                     .append("<p><b>의약품 시퀀스 번호:</b> $itemSequence</p>").append("<p><b>의약품 허가 날짜:</b> $itemPermitDate</p>")
                     .append("<p><b>제조사 이름:</b> $entpName</p>").append("<p><b>제조사 영문 이름:</b> $entpEnglishName</p>")
@@ -188,13 +188,15 @@ class MedicineInfoMapper @Inject constructor() {
 
     fun initHeaderSpan(context: Context, text: String): SpannableStringBuilder {
         return SpannableStringBuilder(text).apply {
-            val underline1Idx = text.indexOf(context.getString(R.string.highlightWord1)) to text.indexOf(context.getString(R.string.highlightWord1)) + 2
+            val underline1Idx =
+                text.indexOf(context.getString(R.string.highlightWord1)) to text.indexOf(context.getString(R.string.highlightWord1)) + 2
 
             setSpan(UnderlineSpan(), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
             setSpan(StyleSpan(Typeface.BOLD), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
             setSpan(RelativeSizeSpan(TEXT_SIZE_PERCENT), underline1Idx.first, underline1Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
 
-            val underline2Idx = text.indexOf(context.getString(R.string.highlightWord2)) to text.indexOf(context.getString(R.string.highlightWord2)) + 2
+            val underline2Idx =
+                text.indexOf(context.getString(R.string.highlightWord2)) to text.indexOf(context.getString(R.string.highlightWord2)) + 2
 
             setSpan(UnderlineSpan(), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
             setSpan(StyleSpan(Typeface.BOLD), underline2Idx.first, underline2Idx.second, Spanned.SPAN_INCLUSIVE_INCLUSIVE)

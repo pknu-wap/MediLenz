@@ -1,10 +1,10 @@
 package com.android.mediproject.core.model.ai
 
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfo
 
 data class ClassificationResult(
-    val detectionObject: DetectionObject, val classificationRecognition: ClassificationRecognition
+    val detectionObject: DetectionObject, val classificationRecognition: ClassificationRecognition,
 ) {
-    var medicineDetatilInfoDto: MedicineDetatilInfoDto? = null
-    var onClick: ((MedicineDetatilInfoDto) -> Unit)? = null
+    var medicineDetailInfo: MedicineDetailInfo? = null
+    var onClick: ((MedicineDetailInfo) -> Unit)? = null
 }

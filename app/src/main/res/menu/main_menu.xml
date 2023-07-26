@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@id/homeFragment"
+        android:id="@id/home_nav"
         android:title="@string/home"
         android:icon="@drawable/menu_selector_home_color" />
 
     <item
-        android:id="@id/newsFragment"
+        android:id="@id/news_nav"
         android:title="@string/news"
         android:icon="@drawable/menu_selector_news_color" />
 
@@ -15,12 +15,12 @@
         android:title=""/>
 
     <item
-        android:id="@id/myPageFragment"
+        android:id="@id/mypage_nav"
         android:title="@string/myPage"
         android:icon="@drawable/menu_selector_mypage_color" />
 
     <item
-        android:id="@id/etcFragment"
+        android:id="@id/etc_nav"
         android:title="@string/etc"
         android:icon="@drawable/menu_selector_etc_color" />
 </menu>

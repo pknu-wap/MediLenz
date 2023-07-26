@@ -4,30 +4,6 @@
     android:id="@+id/main_nav"
     app:startDestination="@id/intro_nav">
 
-    <savingfragment
-        android:id="@+id/myPageFragment"
-        android:name="com.android.mediproject.feature.mypage.MyPageFragment"
-        android:label="MyPageFragment" />
-
-    <savingfragment
-        android:id="@+id/etcFragment"
-        android:name="com.android.mediproject.feature.etc.EtcFragment"
-        android:label="EtcFragment" />
-
-    <savingfragment
-        android:id="@+id/homeFragment"
-        android:name="com.android.mediproject.feature.home.HomeFragment"
-        android:label="HomeFragment">
-        <action
-            android:id="@+id/action_homeFragment_to_searchMedicinesFragment"
-            app:destination="@id/searchMedicinesFragment" />
-    </savingfragment>
-
-    <savingfragment
-        android:id="@+id/newsFragment"
-        android:name="com.android.mediproject.feature.news.NewsFragment"
-        android:label="NewsFragment" />
-
     <include app:graph="@navigation/mypage_nav" />
     <include app:graph="@navigation/etc_nav" />
     <include app:graph="@navigation/intro_nav" />

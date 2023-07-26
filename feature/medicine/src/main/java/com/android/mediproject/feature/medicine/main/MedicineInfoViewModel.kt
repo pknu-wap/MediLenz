@@ -10,7 +10,7 @@ import com.android.mediproject.core.domain.CommentsUseCase
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfo
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -54,7 +54,7 @@ class MedicineInfoViewModel @Inject constructor(
 
     private val checkFavoriteMedicine = MutableStateFlow(EventState.Favorite(isFavorite = false, lockChecked = true))
 
-    val medicineDetails: StateFlow<UiState<MedicineDetatilInfoDto>> = medicinePrimaryInfo.flatMapLatest { primaryInfo ->
+    val medicineDetails: StateFlow<UiState<MedicineDetailInfo>> = medicinePrimaryInfo.flatMapLatest { primaryInfo ->
         getMedicineDetailsUseCase(primaryInfo).mapLatest { result ->
             result.fold(
                 onSuccess = {

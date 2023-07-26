@@ -10,7 +10,7 @@ import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
 import com.android.mediproject.core.model.ai.ClassificationResult
 import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfo
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.search.result.EventState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,8 +29,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AiSearchResultViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
-) : BaseViewModel(), ISendEvent<MedicineDetatilInfoDto> {
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
+) : BaseViewModel(), ISendEvent<MedicineDetailInfo> {
 
     val _classificationResult = MutableStateFlow<List<ClassificationResult>>(emptyList())
 
@@ -46,16 +46,19 @@ class AiSearchResultViewModel @Inject constructor(
             it.classificationRecognition.medicineSeq
         }
         getMedicineDetailsUseCase.getMedicineDetailInfoByItemSeq(itemSeqs).flatMapLatest { response ->
-            response.fold(onSuccess = { medicineDetailInfoList ->
-                medicineDetailInfoList.mapIndexed { index, medicineDetailInfo ->
-                    classificationList[index].medicineDetatilInfoDto = medicineDetailInfo
-                    classificationList[index].onClick = ::send
-                }.let {
-                    flowOf(UiState.Success(classificationList))
-                }
-            }, onFailure = {
-                flowOf(UiState.Error(it.message ?: "약품 상세 정보 조회에 실패했습니다."))
-            })
+            response.fold(
+                onSuccess = { medicineDetailInfoList ->
+                    medicineDetailInfoList.mapIndexed { index, medicineDetailInfo ->
+                        classificationList[index].medicineDetailInfo = medicineDetailInfo
+                        classificationList[index].onClick = ::send
+                    }.let {
+                        flowOf(UiState.Success(classificationList))
+                    }
+                },
+                onFailure = {
+                    flowOf(UiState.Error(it.message ?: "약품 상세 정보 조회에 실패했습니다."))
+                },
+            )
         }
     }.flowOn(defaultDispatcher).stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = UiState.Loading)
 
@@ -65,19 +68,23 @@ class AiSearchResultViewModel @Inject constructor(
         }
     }
 
-    override fun send(e: MedicineDetatilInfoDto) {
+    override fun send(e: MedicineDetailInfo) {
         viewModelScope.launch(defaultDispatcher) {
-            _eventState.emit(EventState.OpenMedicineInfo(MedicineInfoArgs(
-                entpKorName = e.entpName,
-                entpEngName = e.entpEnglishName ?: "",
-                itemIngrName = e.mainItemIngredient,
-                itemKorName = e.itemName,
-                itemEngName = e.itemEnglishName,
-                itemSeq = e.itemSequence.toLong(),
-                productType = e.industryType ?: "",
-                medicineType = e.etcOtcCode,
-                imgUrl = e.insertFileUrl ?: "",
-            )))
+            _eventState.emit(
+                EventState.OpenMedicineInfo(
+                    MedicineInfoArgs(
+                        entpKorName = e.entpName,
+                        entpEngName = e.entpEnglishName ?: "",
+                        itemIngrName = e.mainItemIngredient,
+                        itemKorName = e.itemName,
+                        itemEngName = e.itemEnglishName,
+                        itemSeq = e.itemSequence.toLong(),
+                        productType = e.industryType ?: "",
+                        medicineType = e.etcOtcCode,
+                        imgUrl = e.insertFileUrl ?: "",
+                    ),
+                ),
+            )
         }
     }
 

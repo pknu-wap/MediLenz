@@ -43,7 +43,7 @@ import java.time.LocalDate
  */
 data class GranuleIdentificationInfoDto(
     val bizrNo: String, // 3038117108
-    val changeDate: LocalDate, // 20230419
+    val changeDate: LocalDate?, // 20230419
     val chart: String, // 무색 내지 연보라색의 내용물이 든 보라색의 투명한 타원형 연질캡슐
     val className: String, // 항히스타민제
     val classNo: String, // 01410
@@ -55,11 +55,11 @@ data class GranuleIdentificationInfoDto(
     val entpSeq: String, // 19910005
     val etcOtcName: String, // 일반의약품
     val formCodeName: String, // 연질캡슐제, 액상
-    val imgRegistTs: LocalDate, // 20100305
+    val imgRegistTs: LocalDate?, // 20100305
     val itemEngName: String, // Allershot Soft Cap.
     val itemImage: String, // https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/154661648918800015
     val itemName: String, // 알러샷연질캡슐(세티리진염산염)
-    val itemPermitDate: LocalDate, // 20090812
+    val itemPermitDate: LocalDate?, // 20090812
     val itemSeq: String, // 200906254
     val lengLong: String, // 12.50
     val lengShort: String, // 7.58

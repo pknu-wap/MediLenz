@@ -19,13 +19,11 @@ import com.android.mediproject.core.common.uiutil.LayoutController
 import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
 import com.android.mediproject.core.common.uiutil.SystemBarController
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
-import com.android.mediproject.core.common.util.SavingFragmentNavigator
 import com.android.mediproject.core.network.InternetNetworkListener
 import com.android.mediproject.core.ui.WindowViewModel
 import com.android.mediproject.core.ui.base.BaseActivity
 import com.android.mediproject.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.lastOrNull
 import repeatOnStarted
 import javax.inject.Inject
 
@@ -98,25 +96,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
                 itemIconTintList = null
                 background = null
                 menu.getItem(2).isEnabled = false
-
-                navController.navigatorProvider.addNavigator(
-                    SavingFragmentNavigator(
-                        fragmentContainerView.id,
-                        navHostFragment.childFragmentManager,
-                        systemBarColorAnalyzer,
-                    ),
-                )
-
-                navController.setGraph(R.navigation.main_nav)
                 bottomNav.setupWithNavController(navController)
             }
             setDestinationListener()
-
-            repeatOnStarted {
-                activityViewModel.selectedBottomNavFragmentId.lastOrNull()?.let { lastSelectedId ->
-                    //bottomNav.selectedItemId = lastSelectedId
-                }
-            }
         }
     }
 

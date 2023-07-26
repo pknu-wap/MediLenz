@@ -33,7 +33,7 @@ fun String?.parseXmlString(): XMLParsedResult {
             getElementsByTagName(section, "ARTICLE").map { article ->
                 val articleTitle = article.getAttribute("title")
                 getElementsByTagName(article, "PARAGRAPH").map { paragraph ->
-                    Html.fromHtml(paragraph.textContent.trimIndent()).toString()
+                    Html.fromHtml(paragraph.textContent.trimIndent(), Html.FROM_HTML_MODE_COMPACT).toString()
                 }.let { paragraphContents ->
                     XMLParsedResult.Article(
                         title = articleTitle,

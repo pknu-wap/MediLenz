@@ -6,7 +6,9 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
 import com.android.mediproject.core.common.uiutil.SystemBarController
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.common.uiutil.hideKeyboard
@@ -21,41 +23,40 @@ import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SearchMedicinesFragment :
-    BaseFragment<FragmentSearchMedicinesBinding, SearchMedicinesViewModel>(FragmentSearchMedicinesBinding::inflate) {
+class SearchMedicinesFragment : BaseFragment<FragmentSearchMedicinesBinding, SearchMedicinesViewModel>(FragmentSearchMedicinesBinding::inflate) {
 
     @Inject lateinit var systemBarStyler: SystemBarController
+    @Inject lateinit var systemBarColorAnalyzer: SystemBarColorAnalyzer
 
     override val fragmentViewModel by viewModels<SearchMedicinesViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         systemBarStyler.changeMode(listOf(SystemBarStyler.ChangeView(binding.root, SystemBarStyler.SpacingType.PADDING)))
 
-        // contents_fragment_container_view 에 최근 검색 목록과 검색 결과 목록 화면 두 개를 띄운다.
         initSearchBar()
-
         viewLifecycleOwner.repeatOnStarted {
             fragmentViewModel.searchQuery.collectLatest { query ->
                 // Flow로 받은 문자열이 일치하는 경우에만 searchView에 표시한다.
                 if (!binding.searchView.getText().contentEquals(query)) binding.searchView.setText(query)
             }
         }
-    }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-    }
+        // 검색어가 전달된 경우에는 검색어를 넣은 후 검색
+        arguments?.getString("query")?.takeIf {
+            it.isNotEmpty()
+        }?.also {
+            childFragmentManager.findFragmentById(binding.contentsFragmentContainerView.id)?.apply {
+                val navController = (this as NavHostFragment).findNavController()
 
-    private fun moveToManualSearchResultFragment() {
-        val navController = binding.contentsFragmentContainerView.findNavController()
-        navController.currentDestination?.also { currentDestination ->
-            // 현재 프래그먼트가 검색 결과 프래그먼트인 경우에는 백스택에서 검색 결과 프래그먼트를 제거하고 검색 결과 프래그먼트로
-            // 다시 이동한다.
-            // 검색 결과 프래그먼트가 아닌 경우에는 검색 결과 프래그먼트로 이동한다.
-            if (currentDestination.id == R.id.manualSearchResultFragment) navController.navigate(R.id.action_manualSearchResultFragment_self)
-            else navController.navigate(RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment())
+                if (navController.currentDestination?.id != R.id.manualSearchResultFragment) {
+                    fragmentViewModel.setQuery(it)
+                    navController.navigate(
+                        RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment(),
+                        NavOptions.Builder().setPopUpTo(R.id.manualSearchResultFragment, true).build(),
+                    )
+                }
+            }
         }
     }
 
@@ -73,22 +74,22 @@ class SearchMedicinesFragment :
                 }
             }
         }
+    }
 
-        // 검색어가 전달된 경우에는 검색어를 넣은 후 검색
-        arguments?.getString("query")?.takeIf {
-            it.isNotEmpty()
-        }?.also {
-            binding.contentsFragmentContainerView.findNavController().apply {
-                if (currentDestination?.id != R.id.manualSearchResultFragment) {
-                    fragmentViewModel.setQuery(it)
-                    navigate(
-                        RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment(),
-                        NavOptions.Builder().setPopUpTo(R.id.manualSearchResultFragment, true).build(),
-                    )
-                }
-            }
+
+    private fun moveToManualSearchResultFragment() {
+        val navController = binding.contentsFragmentContainerView.findNavController()
+        navController.currentDestination?.also { currentDestination ->
+            // 현재 프래그먼트가 검색 결과 프래그먼트인 경우에는 백스택에서 검색 결과 프래그먼트를 제거하고 검색 결과 프래그먼트로
+            // 다시 이동한다.
+            // 검색 결과 프래그먼트가 아닌 경우에는 검색 결과 프래그먼트로 이동한다.
+            if (currentDestination.id == R.id.manualSearchResultFragment) navController.navigate(R.id.action_manualSearchResultFragment_self)
+            else navController.navigate(
+                RecentSearchListFragmentDirections.actionRecentSearchListFragmentToManualSearchResultFragment(),
+            )
         }
     }
+
 
     /**
      * 검색바 검색 가능하도록 설정하고, 검색버튼과 AI검색 버튼이 동작하도록 초기화합니다.
