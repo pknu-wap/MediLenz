@@ -1,11 +1,12 @@
 package com.android.mediproject.feature.medicine.main
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.doOnPreDraw
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
+import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
 import com.android.mediproject.core.common.uiutil.SystemBarController
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.common.util.navArgs
@@ -33,6 +34,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
     private val navArgs by navArgs<MedicineInfoArgs>()
 
     @Inject lateinit var systemBarStyler: SystemBarController
+    @Inject lateinit var systemBarColorAnalyzer: SystemBarColorAnalyzer
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,22 +46,9 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             viewModel = fragmentViewModel
             medicineInfoArgs = navArgs
 
-            root.doOnPreDraw {
-                topAppBar.removeOnOffsetChangedListener(null)
-                // smoothly hide medicinePrimaryInfoViewgroup when collapsing toolbar
-                topAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-                    medicineInfoBar.alpha = 1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat())
-                    medicineInfoBar2.alpha = -(verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat())
-
-                    // 스크롤 할 때 마다 medicinePrimaryInfoViewgroup의 투명도 조정
-                    medicinePrimaryInfoViewgroup.alpha = 1.0f + (verticalOffset.toFloat() / appBarLayout.totalScrollRange.toFloat()).apply {
-                        if (this == -1.0f) {
-                            medicinePrimaryInfoViewgroup.visibility = View.INVISIBLE
-                        } else if (this > -0.8f) {
-                            medicinePrimaryInfoViewgroup.isVisible = true
-                        }
-                    }
-                }
+            toolbar.bar.setBackgroundColor(Color.TRANSPARENT)
+            topAppBar.addOnOffsetChangedListener { _, _ ->
+                systemBarColorAnalyzer.convert()
             }
         }
 
@@ -101,34 +90,26 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                 }
 
             }
-        }
 
+            launch {
+                systemBarColorAnalyzer.statusBarColor.collect {
+                    (if (it == SystemBarStyler.SystemBarColor.WHITE) Color.WHITE else Color.BLACK).also { color ->
+                        binding.toolbar.backButton.imageTintList =
+                            ColorStateList.valueOf(color)
+                        binding.toolbar.title.setTextColor(color)
+                    }
+                }
+            }
+        }
     }
 
     private fun setBarStyle() = binding.apply {
-        systemBarStyler.changeMode(
-            topViews = listOf(
-                SystemBarStyler.ChangeView(
-                    medicineInfoBar,
-                    SystemBarStyler.SpacingType.PADDING,
-                ),
-            ),
-        )
 
-        systemBarStyler.changeMode(
-            topViews = listOf(
-                SystemBarStyler.ChangeView(
-                    medicineInfoBar2,
-                    SystemBarStyler.SpacingType.PADDING,
-                ),
-            ),
-        )
     }
 
 
     // 탭 레이아웃 초기화
     private fun initTabs() {
-
         binding.apply {
             contentViewPager.adapter = MedicineInfoPageAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
 

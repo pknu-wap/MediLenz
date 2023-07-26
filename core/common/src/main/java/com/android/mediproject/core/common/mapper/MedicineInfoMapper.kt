@@ -13,8 +13,8 @@ import android.text.style.UnderlineSpan
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpanned
 import com.android.mediproject.core.common.R
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfo
 import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoDto
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
 import com.android.mediproject.core.model.util.XMLParsedResult
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -78,11 +78,11 @@ class MedicineInfoMapper @Inject constructor() {
     /**
      * 의약품 기본 정보 데이터를 UI에 맞게 변환
      */
-    fun toMedicineInfo(medicineDetatilInfoDto: MedicineDetatilInfoDto): Spanned {
+    fun toMedicineInfo(medicineDetailInfo: MedicineDetailInfo): Spanned {
         val stringBuilder = WeakReference(StringBuilder())
 
         return stringBuilder.get()?.let { builder ->
-            with(medicineDetatilInfoDto) {
+            with(medicineDetailInfo) {
                 builder.append("<p><b>의약품 이름:</b> $itemName</p>").append("<p><b>의약품 영문 이름:</b> $itemEnglishName</p>")
                     .append("<p><b>의약품 시퀀스 번호:</b> $itemSequence</p>").append("<p><b>의약품 허가 날짜:</b> $itemPermitDate</p>")
                     .append("<p><b>제조사 이름:</b> $entpName</p>").append("<p><b>제조사 영문 이름:</b> $entpEnglishName</p>")

@@ -15,7 +15,7 @@ class AiResultAdapter : ListAdapter<ClassificationResult, AiResultAdapter.ViewHo
         init {
             binding.rootLayout.setOnClickListener {
                 binding.item?.apply {
-                    onClick?.invoke(medicineDetatilInfoDto!!)
+                    onClick?.invoke(medicineDetailInfo!!)
                 }
             }
         }
@@ -24,14 +24,14 @@ class AiResultAdapter : ListAdapter<ClassificationResult, AiResultAdapter.ViewHo
         fun bind(item: ClassificationResult) {
             binding.apply {
                 this.item = item
-                medicineNameTextView.text = "${item.classificationRecognition} - ${item.medicineDetatilInfoDto?.itemName}"
+                medicineNameTextView.text = "${item.classificationRecognition} - ${item.medicineDetailInfo?.itemName}"
                 executePendingBindings()
             }
         }
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int
+        parent: ViewGroup, viewType: Int,
     ): ViewHolder = ViewHolder(AiMedicineItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
 
@@ -42,13 +42,13 @@ class AiResultAdapter : ListAdapter<ClassificationResult, AiResultAdapter.ViewHo
 
 internal object MedicineComparator : DiffUtil.ItemCallback<ClassificationResult>() {
     override fun areItemsTheSame(
-        oldItem: ClassificationResult, newItem: ClassificationResult
+        oldItem: ClassificationResult, newItem: ClassificationResult,
     ): Boolean {
         return oldItem.detectionObject == newItem.detectionObject
     }
 
     override fun areContentsTheSame(
-        oldItem: ClassificationResult, newItem: ClassificationResult
+        oldItem: ClassificationResult, newItem: ClassificationResult,
     ): Boolean {
         return oldItem == newItem
     }

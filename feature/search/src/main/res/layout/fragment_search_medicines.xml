@@ -50,9 +50,9 @@
             android:background="@color/white"
             android:paddingHorizontal="16dp"
             app:defaultNavHost="true"
+            app:navGraph="@navigation/search_medicines_nav"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/searchView"
-            app:navGraph="@navigation/search_medicines_nav" />
+            app:layout_constraintTop_toBottomOf="@id/searchView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

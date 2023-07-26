@@ -7,7 +7,7 @@ import com.android.mediproject.core.common.mapper.MedicineInfoMapper
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetatilInfoDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfo
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -25,16 +25,16 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicineBasicInfoViewModel @Inject constructor(
     private val medicineInfoMapper: MedicineInfoMapper,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 
-) : BaseViewModel() {
+    ) : BaseViewModel() {
 
 
-    private val _medicineDetails = MutableStateFlow<UiState<MedicineDetatilInfoDto>>(UiState.Loading)
+    private val _medicineDetails = MutableStateFlow<UiState<MedicineDetailInfo>>(UiState.Loading)
     private val medicineDetails get() = _medicineDetails.asStateFlow()
 
 
-    fun setMedicineDetails(uiState: UiState<MedicineDetatilInfoDto>) {
+    fun setMedicineDetails(uiState: UiState<MedicineDetailInfo>) {
         viewModelScope.launch {
             _medicineDetails.value = uiState
         }

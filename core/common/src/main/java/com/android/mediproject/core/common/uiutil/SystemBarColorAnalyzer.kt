@@ -26,17 +26,21 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.properties.Delegates
 
+@Singleton
 @SuppressLint("InternalInsetResource", "DiscouragedApi")
-object SystemBarColorAnalyzer {
+class SystemBarColorAnalyzer @Inject constructor() {
     private val waitLock = Mutex()
     private var waiting: Job? = null
     private val coroutineScope = MainScope() + CoroutineName("SystemBarColorAnalyzer")
@@ -48,8 +52,20 @@ object SystemBarColorAnalyzer {
     private val statusBarHeight = resource.getDimensionPixelSize(resource.getIdentifier("status_bar_height", "dimen", "android"))
     private val navigationBarHeight = resource.getDimensionPixelSize(resource.getIdentifier("navigation_bar_height", "dimen", "android"))
 
-    private const val criteriaColor = 140
+    private val criteriaColor = 140
     private var systemBarController: SystemBarController? = null
+
+    private val _statusBarColor = MutableSharedFlow<SystemBarStyler.SystemBarColor>(
+        onBufferOverflow = BufferOverflow.DROP_OLDEST, replay = 1,
+        extraBufferCapacity = 5,
+    )
+    val statusBarColor = _statusBarColor.asSharedFlow()
+
+    private val _navigationBarColor = MutableSharedFlow<SystemBarStyler.SystemBarColor>(
+        onBufferOverflow = BufferOverflow.DROP_OLDEST, replay = 1,
+        extraBufferCapacity = 5,
+    )
+    val navigationBarColor = _navigationBarColor.asSharedFlow()
 
     init {
         coroutineScope.launch(Dispatchers.Default) {
@@ -83,7 +99,8 @@ object SystemBarColorAnalyzer {
         statusBarBitmap.recycle()
         navigationBarBitmap.recycle()
 
-        Log.d("wap", "${System.currentTimeMillis() - start}MS, status : $statusBarColor, nav : $navigationBarColor")
+        _statusBarColor.emit(statusBarColor)
+        _navigationBarColor.emit(navigationBarColor)
 
         return statusBarColor to navigationBarColor
     }
@@ -145,7 +162,7 @@ object SystemBarColorAnalyzer {
             waitLock.withLock {
                 if (waiting?.isActive == true) waiting?.cancel()
                 waiting = launch(Dispatchers.Default) {
-                    delay(70)
+                    delay(80)
                     onChangedFragmentFlow.emit(Unit)
                 }
             }

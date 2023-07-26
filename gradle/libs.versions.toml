@@ -1,12 +1,12 @@
 # 라이브러리 버전---------------------------------------------------------------------------------------------------------------
 [versions]
 # kotlin
-kotlin = "1.8.21"
-kotlinCompilerExtension = "1.4.7"
+kotlin = "1.8.22"
+kotlinCompilerExtension = "1.4.8"
 kotlinxCoroutines = "1.7.2"
 kotlinxSerializationJson = "1.5.0"
 kotlinxDateTime = "0.4.0"
-ksp = "1.8.21-1.0.11"
+ksp = "1.8.22-1.0.11"
 
 androidGradlePlugin = "8.0.2"
 androidDesugarJdkLibs = "2.0.3"
@@ -18,9 +18,9 @@ lz4Java = "1.8.0"
 androidXPagingCompose = "1.0.0-alpha19"
 androidxCore = "1.10.1"
 androidxActivity = "1.7.2"
-androidxFragment = "1.5.7"
+androidxFragment = "1.6.0"
 androidxNavigation = "2.6.0"
-androidxComposeBom = "2023.04.01"
+androidxComposeBom = "2023.06.01"
 androidxConcurrentFutures = "1.1.0"
 androidxLifecycle = "2.6.1"
 androidxDatastore = "1.0.0"
@@ -59,10 +59,10 @@ androidXTestOrchestra = "1.4.2"
 cameraX = "1.2.3"
 accompanist = "0.30.1"
 
-jUnit = "4.12"
+jUnit = "4.13.2"
 mockit = "5.4.0"
 mockitKotlin = "5.0.0"
-
+robolectric = "4.10.3"
 lottie = "6.0.0"
 
 material = "1.9.0"
@@ -70,9 +70,9 @@ glide = "4.15.1"
 gms = "4.3.15"
 retrofit2 = "2.9.0"
 retrofit2KotlinxSerializationJson = "1.0.0"
-androidArchLifecycle = "1.0.0"
+androidArchLifecycle = "1.1.1"
 
-okhttp3 = "4.10.0"
+okhttp3 = "4.11.0"
 
 flexbox = "3.0.0"
 
@@ -81,7 +81,7 @@ targetSdk = "33"
 minSdk = "28"
 
 #firebase
-firebaseCrashlytics = "18.3.7"
+firebaseCrashlytics = "18.4.0"
 firebaseCrashlyticsGradlePlugin = "2.9.5"
 firebaseAnalytics = "21.3.0"
 
@@ -90,13 +90,14 @@ googleAutoServiceAnnotation = "1.0.1"
 kotlinPoet = "1.13.2"
 googleAutoCommon = "1.2.1"
 
-taskVision = "0.4.3"
-playServicesTflite = "16.1.0"
-tflite = "2.12.0"
-tfliteSupport = "0.4.3"
-gpuDelegate = "0.4.3"
-tfliteMetadata = "0.4.3"
-tfliteGpu = "2.12.0"
+taskVision = "0.4.4"
+playServicesTfliteJava = "16.1.0"
+playServicesTfliteGpu = "16.2.0"
+tflite = "2.13.0"
+tfliteSupport = "0.4.4"
+gpuDelegate = "0.4.4"
+tfliteMetadata = "0.4.4"
+tfliteGpu = "2.13.0"
 
 smart_deeplink_core = "1.0.0-rc06"
 smart_deeplink_annotation = "1.0.0-rc05"
@@ -113,8 +114,8 @@ jsoup = "1.16.1"
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 
 tensorflow-lite-taskVisionPlayServices = { module = "org.tensorflow:tensorflow-lite-task-vision-play-services", version.ref = "taskVision" }
-tensorflow-lite-playServicesTfliteGpu = { module = "com.google.android.gms:play-services-tflite-gpu", version.ref = "playServicesTflite" }
-tensorflow-lite-playServicesTfliteJava = { module = "com.google.android.gms:play-services-tflite-java", version.ref = "playServicesTflite" }
+tensorflow-lite-playServicesTfliteGpu = { module = "com.google.android.gms:play-services-tflite-gpu", version.ref = "playServicesTfliteGpu" }
+tensorflow-lite-playServicesTfliteJava = { module = "com.google.android.gms:play-services-tflite-java", version.ref = "playServicesTfliteJava" }
 tensorflow-lite-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tflite" }
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tfliteSupport" }
 tensorflow-lite-gpuDelegate = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "gpuDelegate" }
@@ -215,6 +216,7 @@ androidx-test-ext-truth = { module = "androidx.test.ext:truth", version.ref = "a
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockit" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitKotlin" }
 junit = { module = "junit:junit", version.ref = "jUnit" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 android-flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 
@@ -332,7 +334,7 @@ dataStores = ["androidx-datastore-preferences", "androidx-datastore"]
 
 workManagers = ["androidx-work-ktx"]
 
-testLocal = ["junit", "mockito-core", "mockito-kotlin", "kotlinx-coroutines-testImplementation"]
+testLocal = ["junit", "mockito-core", "mockito-kotlin", "kotlinx-coroutines-testImplementation", "robolectric"]
 
 testAndroid = ["androidx-test-espresso-core", "androidx-test-runner", "androidx-test-rules", "androidx-test-core", "androidx-test-ext-truth",
     "androidx-test-core-ktx", "androidx-test-ext-junit", "androidx-test-ext-junit-ktx", "kotlinx-coroutines-testImplementation"]

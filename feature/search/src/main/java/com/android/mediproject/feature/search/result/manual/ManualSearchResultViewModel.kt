@@ -36,7 +36,7 @@ import javax.inject.Inject
 class ManualSearchResultViewModel @Inject constructor(
     private val getMedicineApprovalListUseCase: GetMedicineApprovalListUseCase,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel(), ISendEvent<ApprovedMedicineItemDto> {
 
     private val _searchParameter =
@@ -93,17 +93,21 @@ class ManualSearchResultViewModel @Inject constructor(
 
     override fun send(e: ApprovedMedicineItemDto) {
         viewModelScope.launch(defaultDispatcher) {
-            _eventState.emit(EventState.OpenMedicineInfo(MedicineInfoArgs(
-                entpKorName = e.entpName,
-                entpEngName = e.entpEngName ?: "",
-                itemIngrName = e.itemIngrName,
-                itemKorName = e.itemName,
-                itemEngName = e.itemEngName ?: "",
-                itemSeq = e.itemSeq,
-                productType = e.prductType,
-                medicineType = e.medicineType,
-                imgUrl = e.imgUrl ?: "",
-            )))
+            _eventState.emit(
+                EventState.OpenMedicineInfo(
+                    MedicineInfoArgs(
+                        entpKorName = e.entpName,
+                        entpEngName = e.entpEngName ?: "",
+                        itemIngrName = e.itemIngrName,
+                        itemKorName = e.itemName,
+                        itemEngName = e.itemEngName ?: "",
+                        itemSeq = e.itemSeq,
+                        productType = e.prductType,
+                        medicineType = e.medicineType,
+                        imgUrl = e.imgUrl ?: "",
+                    ),
+                ),
+            )
         }
     }
 }

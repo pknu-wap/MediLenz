@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.mediproject.core.common.paging.setOnStateChangedListener
@@ -28,7 +29,6 @@ class ManualSearchResultFragment :
     private val searchMedicinesViewModel: SearchMedicinesViewModel by viewModels({ requireParentFragment().requireParentFragment() })
 
     override val fragmentViewModel: ManualSearchResultViewModel by viewModels()
-
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,7 +100,10 @@ class ManualSearchResultFragment :
     }
 
     private fun openMedicineInfo(medicineInfoArgs: MedicineInfoArgs) {
-        activity?.findNavController(com.android.mediproject.core.common.R.id.fragmentContainerView)
-            ?.deepNavigate("medilens://search/medicine/medicine_detail_nav", medicineInfoArgs)
+        activity?.findNavController(com.android.mediproject.core.common.R.id.fragmentContainerView)?.deepNavigate(
+            "medilens://search/medicine/medicine_detail_nav", medicineInfoArgs,
+            NavOptions.Builder().setLaunchSingleTop(true).setRestoreState(true).build(),
+        )
+
     }
 }

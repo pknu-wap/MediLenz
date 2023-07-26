@@ -29,7 +29,7 @@ import java.time.LocalDate
  * @param typeName 유형
  */
 data class ElderlyCautionDto(
-    val changeDate: LocalDate, // 20221201
+    val changeDate: LocalDate?, // 20221201
     val chart: String, // 청색의 원형 필름코팅정
     val classCode: String, // 01170
     val className: String, // 정신신경용제
@@ -41,12 +41,12 @@ data class ElderlyCautionDto(
     val ingrEngNameFull: String, // Amitriptyline(아미트리프틸린)
     val ingrName: String, // 아미트리프틸린
     val itemName: String, // 에나폰정10밀리그램(아미트리프틸린염산염)
-    val itemPermitDate: LocalDate, // 19700220
+    val itemPermitDate: LocalDate?, // 19700220
     val itemSeq: String, // 197000079
     val mainIngr: String, // [M223101]아미트리프틸린염산염
     val minIngr: String, // [M223101]아미트리프틸린염산염
     val mixType: String, // 단일
-    val notificationDate: LocalDate, // 20150728
+    val notificationDate: LocalDate?, // 20150728
     val prohibitionContent: String, // 노인에서의 삼환계 항우울제 사용은 기립성 저혈압, 비틀거림, 항콜린작용에 의한 구갈, 배뇨곤란, 변비, 안내압항진 등이 나타나기 쉬움으로 소량으로 신중투여
     val remark: String?, // null
     val typeName: String, // 노인주의

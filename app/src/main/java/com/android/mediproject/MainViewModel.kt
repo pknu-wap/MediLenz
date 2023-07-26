@@ -3,6 +3,7 @@ package com.android.mediproject
 import MutableEventFlow
 import android.content.res.Resources
 import androidx.annotation.ArrayRes
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import asEventFlow
 import com.android.mediproject.core.domain.sign.GetAccountStateUseCase
@@ -14,10 +15,26 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getAccountStateUseCase: GetAccountStateUseCase,
+    private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel() {
+    val lastSelectedBottomNavFragmentIdKey = "lastSelectedBottomNavFragmentId"
+
     private val _eventFlow = MutableEventFlow<MainEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
+    private val _selectedBottomNavFragmentId = MutableEventFlow<Int>(replay = 1)
+    val selectedBottomNavFragmentId = _selectedBottomNavFragmentId.asEventFlow()
+
+    init {
+        viewModelScope.launch {
+            getAccountStateUseCase.loadAccountState()
+            if (savedStateHandle.keys().isNotEmpty()) {
+                savedStateHandle.get<Int>(lastSelectedBottomNavFragmentIdKey)?.let {
+                    _selectedBottomNavFragmentId.emit(it)
+                }
+            }
+        }
+    }
 
     fun getHideBottomNavDestinationIds(resources: Resources): Set<Int> = resources.getArray(R.array.hideBottomNavDestinationIds)
 
@@ -36,11 +53,6 @@ class MainViewModel @Inject constructor(
     fun event(event: MainEvent) = viewModelScope.launch { _eventFlow.emit(event) }
     fun aicamera() = event(MainEvent.AICamera())
 
-    init {
-        viewModelScope.launch {
-            getAccountStateUseCase.loadAccountState()
-        }
-    }
 
     sealed class MainEvent {
         data class AICamera(val unit: Unit? = null) : MainEvent()

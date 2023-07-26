@@ -3,7 +3,9 @@ package com.android.mediproject.feature.home
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.mapper.MedicineInfoMapper
 import com.android.mediproject.core.common.uiutil.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -16,8 +18,7 @@ import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment :
-    BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHomeBinding::inflate) {
+class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHomeBinding::inflate) {
 
     companion object {
         private const val THRESHOLD = 0.7
@@ -25,11 +26,9 @@ class HomeFragment :
 
     override val fragmentViewModel: HomeViewModel by viewModels()
 
-    @Inject
-    lateinit var systemBarStyler: SystemBarStyler
+    @Inject lateinit var systemBarStyler: SystemBarStyler
 
-    @Inject
-    lateinit var medicineInfoMapper: MedicineInfoMapper
+    @Inject lateinit var medicineInfoMapper: MedicineInfoMapper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,7 +50,7 @@ class HomeFragment :
 
     private fun handleEvent(event: HomeViewModel.HomeEvent) {
         when (event) {
-            is HomeViewModel.HomeEvent.NavigateToSearch -> navigateWithNavDirections(HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment())
+            is HomeViewModel.HomeEvent.NavigateToSearch -> findNavController().navigate(R.id.action_homeFragment_to_searchMedicinesFragment)
         }
     }
 
@@ -123,12 +122,9 @@ class HomeFragment :
 
     private fun setRecentSearchResultLisnter() {
         childFragmentManager.setFragmentResultListener(RecentSearchListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
-            navigateWithNavDirections(
-                HomeFragmentDirections.actionHomeFragmentToSearchMedicinesFragment(
-                    bundle.getString(
-                        RecentSearchListFragment.ResultKey.WORD.name,
-                    ) ?: "",
-                ),
+            findNavController().navigate(
+                R.id.action_homeFragment_to_searchMedicinesFragment,
+                bundleOf("query" to bundle.getString(RecentSearchListFragment.ResultKey.WORD.name)),
             )
         }
     }

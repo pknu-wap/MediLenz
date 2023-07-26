@@ -16,6 +16,6 @@ abstract class DataGoKrBaseResponse {
 }
 
 inline fun <reified T : DataGoKrBaseResponse> T.toResult(): Result<T> = header?.run {
-    if (resultCode == "00") Result.success(this as T)
+    if (resultCode == "00") Result.success(this@toResult as T)
     else Result.failure(Throwable(resultMsg))
 } ?: Result.failure(Throwable("Response Failed"))

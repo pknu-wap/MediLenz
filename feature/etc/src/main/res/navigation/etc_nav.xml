@@ -10,4 +10,5 @@
         android:label="EtcFragment" />
 
     <deepLink app:uri="medilens://main/etc_nav" />
+
 </navigation>
