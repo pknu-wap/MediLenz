@@ -2,10 +2,10 @@ package com.android.mediproject.core.domain
 
 import androidx.paging.PagingData
 import androidx.paging.flatMap
-import com.android.mediproject.core.data.remote.comments.CommentsRepository
-import com.android.mediproject.core.model.comments.CommentDto
-import com.android.mediproject.core.model.comments.MyCommentDto
-import com.android.mediproject.core.model.comments.toCommentDto
+import com.android.mediproject.core.data.comments.CommentsRepository
+import com.android.mediproject.core.model.comments.Comment
+import com.android.mediproject.core.model.comments.MyComment
+import com.android.mediproject.core.model.comments.toComment
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
@@ -31,17 +31,17 @@ class CommentsUseCase @Inject constructor(
      *
      * @param medicineId 약의 고유 번호
      */
-    fun getCommentsForAMedicine(medicineId: Long, myUserId: Long): Flow<PagingData<CommentDto>> = channelFlow {
+    fun getCommentsForAMedicine(medicineId: Long, myUserId: Long): Flow<PagingData<Comment>> = channelFlow {
         commentsRepository.getCommentsForAMedicine(medicineId).collectLatest { pagingData ->
             val result = pagingData.flatMap {
                 (it.replies.map { reply ->
-                    reply.toCommentDto().apply {
+                    reply.toComment().apply {
                         reply.likeList.forEach { like ->
                             if (like.userId == myUserId) this.isLiked = true
                         }
                     }
                 }.toList().reversed()) + listOf(
-                    it.toCommentDto().apply {
+                    it.toComment().apply {
                         it.likeList.forEach { like ->
                             if (like.userId == myUserId) this.isLiked = true
                         }
@@ -55,7 +55,7 @@ class CommentsUseCase @Inject constructor(
     /**
      * 내가 작성한 댓글을 가져오는 메서드입니다.
      */
-    fun getMyComments(userId: Int): Flow<PagingData<MyCommentDto>> {
+    fun getMyComments(userId: Int): Flow<PagingData<MyComment>> {
         TODO()
     }
 

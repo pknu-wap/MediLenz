@@ -10,7 +10,7 @@ import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetMedicineApprovalListUseCase
 import com.android.mediproject.core.model.constants.MedicationType
-import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
+import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicine
 import com.android.mediproject.core.model.requestparameters.ApprovalListSearchParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -35,7 +36,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ManualSearchResultViewModel @Inject constructor(
     private val getMedicineApprovalListUseCase: GetMedicineApprovalListUseCase,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel(), ISendEvent<ApprovedMedicine> {
 
@@ -44,7 +44,7 @@ class ManualSearchResultViewModel @Inject constructor(
     val searchParameter = _searchParameter.asStateFlow()
 
     val searchResultFlow = searchParameter.flatMapLatest {
-        getMedicineApprovalListUseCase(it).cachedIn(viewModelScope).mapLatest { pagingData ->
+        getMedicineApprovalListUseCase(it).cachedIn(viewModelScope).flowOn(defaultDispatcher).mapLatest { pagingData ->
             pagingData.map { item ->
                 item.onClick = ::send
                 item

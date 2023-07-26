@@ -9,7 +9,7 @@ import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.sign.SignUseCase
-import com.android.mediproject.core.model.local.navargs.TOHOME
+import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.requestparameters.LoginParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

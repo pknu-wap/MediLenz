@@ -1,6 +1,6 @@
 package com.android.mediproject.core.domain.sign
 
-import com.android.mediproject.core.data.remote.user.UserInfoRepository
+import com.android.mediproject.core.data.user.UserInfoRepository
 import com.android.mediproject.core.model.user.AccountState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow

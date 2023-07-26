@@ -1,7 +1,7 @@
 package com.android.mediproject.core.network.datasource.penalties.recallsuspension
 
-import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
-import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
+import com.android.mediproject.core.model.recall.DetailRecallSuspensionResponse
+import com.android.mediproject.core.model.recall.RecallSuspensionListResponse
 import kotlinx.coroutines.flow.Flow
 
 interface RecallSuspensionDataSource {

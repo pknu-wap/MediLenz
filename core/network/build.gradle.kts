@@ -5,11 +5,13 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.core.network"
+
+    hilt {
+        enableAggregatingTask = true
+    }
+
 }
 
-hilt {
-    enableAggregatingTask = true
-}
 
 
 dependencies {

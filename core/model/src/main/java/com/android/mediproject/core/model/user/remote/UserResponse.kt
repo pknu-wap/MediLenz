@@ -1,6 +1,6 @@
 package com.android.mediproject.core.model.user.remote
 
-import com.android.mediproject.core.model.user.UserDto
+import com.android.mediproject.core.model.user.User
 import kotlinx.serialization.Serializable
 
 /**
@@ -13,10 +13,10 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class UserResponse(
-    val nickname: String, val userId: Long, val email: String, val message: String
+    val nickname: String, val userId: Long, val email: String, val message: String,
 )
 
-fun UserResponse.toUserDto() = UserDto(nickName = nickname).apply {
+fun UserResponse.toUserDto() = User(nickName = nickname).apply {
     id = userId
     email = this@toUserDto.email
 }

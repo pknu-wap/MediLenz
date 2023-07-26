@@ -1,7 +1,7 @@
 package com.android.mediproject.core.data.dur.durproduct
 
 import com.android.mediproject.core.model.DataGoKrResponse
-import com.android.mediproject.core.model.datagokr.DurType
+import com.android.mediproject.core.model.dur.DurType
 import com.android.mediproject.core.network.datasource.dur.DurProductDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow

@@ -9,8 +9,8 @@ import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.CommentsUseCase
 import com.android.mediproject.core.domain.sign.GetAccountStateUseCase
-import com.android.mediproject.core.model.comments.CommentDto
-import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
+import com.android.mediproject.core.model.comments.Comment
+import com.android.mediproject.core.model.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
@@ -79,7 +79,7 @@ class MedicineCommentsViewModel @Inject constructor(
     }
 
 
-    val comments: StateFlow<PagingData<CommentDto>> = medicineBasicInfo.flatMapLatest { info ->
+    val comments: StateFlow<PagingData<Comment>> = medicineBasicInfo.flatMapLatest { info ->
         commentsUseCase.getCommentsForAMedicine(info.medicineIdInAws, myUserId.value).cachedIn(viewModelScope).mapLatest { pagingData ->
             val signedIn = accountState.value is AccountState.SignedIn
             pagingData.map { comment ->
@@ -108,10 +108,14 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     private fun applyReplyComment(comment: String) {
         viewModelScope.launch {
-            commentsUseCase.applyNewComment(NewCommentParameter(medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws.toString(),
-                userId = myUserId.value.toString(),
-                content = comment,
-                subOrdinationId = replyId.value.toString())).collectLatest { result ->
+            commentsUseCase.applyNewComment(
+                NewCommentParameter(
+                    medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws.toString(),
+                    userId = myUserId.value.toString(),
+                    content = comment,
+                    subOrdinationId = replyId.value.toString(),
+                ),
+            ).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 등록 성공
                     commentsUseCase.scrollChannel.send(Unit)
@@ -128,10 +132,14 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     private fun applyNewComment(content: String) {
         viewModelScope.launch {
-            commentsUseCase.applyNewComment(NewCommentParameter(medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws.toString(),
-                userId = myUserId.value.toString(),
-                content = content,
-                subOrdinationId = "0")).collectLatest { result ->
+            commentsUseCase.applyNewComment(
+                NewCommentParameter(
+                    medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws.toString(),
+                    userId = myUserId.value.toString(),
+                    content = content,
+                    subOrdinationId = "0",
+                ),
+            ).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 등록 성공
                     commentsUseCase.scrollChannel.send(Unit)
@@ -146,13 +154,17 @@ class MedicineCommentsViewModel @Inject constructor(
     /**
      * 수정한 댓글(답글) 등록
      *
-     * @param commentDto 수정한 댓글(답글) 정보
+     * @param comment 수정한 댓글(답글) 정보
      */
-    private fun applyEditedComment(commentDto: CommentDto) {
+    private fun applyEditedComment(comment: Comment) {
         viewModelScope.launch {
-            commentsUseCase.applyEditedComment(EditCommentParameter(commentId = commentDto.commentId,
-                content = commentDto.content,
-                medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws)).collectLatest { result ->
+            commentsUseCase.applyEditedComment(
+                EditCommentParameter(
+                    commentId = comment.commentId,
+                    content = comment.content,
+                    medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws,
+                ),
+            ).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 수정 성공
                     _action.emit(COMPLETED_APPLY_EDITED_COMMENT(Result.success(Unit)))
@@ -235,7 +247,7 @@ class MedicineCommentsViewModel @Inject constructor(
      * @param item 수정할 댓글의 정보
      * @param position 수정할 댓글의 리스트 내 절대 위치
      */
-    private fun onClickedEdit(item: CommentDto, position: Int) {
+    private fun onClickedEdit(item: Comment, position: Int) {
         viewModelScope.launch {
             // 수정 상태 변경
             item.isEditing = !item.isEditing

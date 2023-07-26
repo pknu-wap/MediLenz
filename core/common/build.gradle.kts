@@ -21,10 +21,10 @@ android {
         buildConfigField("String", "AWS_BASE_URL", "\"${properties["awsUrl"]}\"")
         buildConfigField("String", "VERTEX_ENDPOINT_URL", "\"${properties["vertexEndpointUrl"]}\"")
     }
-}
 
-hilt {
-    enableAggregatingTask = true
+    hilt {
+        enableAggregatingTask = true
+    }
 }
 
 dependencies {

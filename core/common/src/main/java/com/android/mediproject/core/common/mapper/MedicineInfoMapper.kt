@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.toSpanned
 import com.android.mediproject.core.common.R
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetail
-import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoDto
+import com.android.mediproject.core.model.granule.GranuleIdentificationInfo
 import com.android.mediproject.core.model.util.XMLParsedResult
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -90,7 +90,7 @@ class MedicineInfoMapper @Inject constructor() {
     }
 
 
-    suspend fun toGranuleInfo(context: Context, granuleDto: GranuleIdentificationInfoDto): Spanned =
+    suspend fun toGranuleInfo(context: Context, granuleDto: GranuleIdentificationInfo): Spanned =
         mutableMapOf<String, List<Pair<String, String>>>().apply {
             // 그룹 1: 의약품 정보
             context.resources.getStringArray(R.array.medicineInfo).also {

@@ -13,7 +13,7 @@ import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import com.android.mediproject.core.model.local.navargs.BaseNavArgs
+import com.android.mediproject.core.model.navargs.BaseNavArgs
 
 /**
  * Uri Builder

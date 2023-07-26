@@ -9,6 +9,7 @@ data class MedicineCacheJoinResult(
     val itemSeq: String,
     @ColumnInfo(name = "data") val data: ByteArray,
     @ColumnInfo(name = "image_url") val imageUrl: String,
+    @ColumnInfo(name = "change_date") val changeDate: String,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

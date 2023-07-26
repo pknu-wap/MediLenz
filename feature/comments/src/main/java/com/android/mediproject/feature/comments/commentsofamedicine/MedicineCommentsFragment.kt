@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.common.paging.setOnStateChangedListener
 import com.android.mediproject.core.common.util.navArgs
-import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
+import com.android.mediproject.core.model.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.R
 import com.android.mediproject.feature.comments.databinding.FragmentMedicineCommentsBinding

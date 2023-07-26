@@ -1,9 +1,9 @@
 package com.android.mediproject.core.domain
 
-import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
-import com.android.mediproject.core.data.remote.medicineid.MedicineIdRepository
+import com.android.mediproject.core.data.medicineapproval.MedicineApprovalRepository
+import com.android.mediproject.core.data.medicineid.MedicineIdRepository
 import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
-import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
+import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetail
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.MedicineCacheEntity
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.toMedicineDetail

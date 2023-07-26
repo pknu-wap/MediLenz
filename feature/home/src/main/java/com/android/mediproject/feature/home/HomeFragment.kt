@@ -7,7 +7,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.mapper.MedicineInfoMapper
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
+import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment
 import com.android.mediproject.feature.home.databinding.FragmentHomeBinding

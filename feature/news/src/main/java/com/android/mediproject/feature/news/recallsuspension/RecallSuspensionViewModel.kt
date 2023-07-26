@@ -6,7 +6,7 @@ import androidx.paging.cachedIn
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.GetRecallSuspensionInfoUseCase
-import com.android.mediproject.core.model.remote.recall.RecallSuspension
+import com.android.mediproject.core.model.recall.RecallSuspension
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

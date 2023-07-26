@@ -26,11 +26,13 @@ object DataStoreModule {
         @ApplicationContext context: Context,
         @Dispatcher(MediDispatchers.IO) ioDispatcher: CoroutineDispatcher,
         serializer: SavedTokenSerializer,
-    ): DataStore<SavedToken> = DataStoreFactory.create(
-        serializer = serializer,
-        scope = CoroutineScope(ioDispatcher + SupervisorJob()),
-    ) {
-        context.dataStoreFile("saved_token.pb")
+    ): DataStore<SavedToken> = synchronized(this) {
+        DataStoreFactory.create(
+            serializer = serializer,
+            scope = CoroutineScope(ioDispatcher + SupervisorJob()),
+        ) {
+            context.dataStoreFile("saved_token.pb")
+        }
     }
 
     @Provides

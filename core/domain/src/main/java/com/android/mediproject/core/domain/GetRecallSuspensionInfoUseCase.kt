@@ -2,10 +2,10 @@ package com.android.mediproject.core.domain
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.android.mediproject.core.data.remote.recallsuspension.RecallSuspensionRepository
-import com.android.mediproject.core.model.remote.recall.DetailRecallSuspension
-import com.android.mediproject.core.model.remote.recall.RecallSuspension
-import com.android.mediproject.core.model.remote.recall.toRecallSuspension
+import com.android.mediproject.core.data.recallsuspension.RecallSuspensionRepository
+import com.android.mediproject.core.model.recall.DetailRecallSuspension
+import com.android.mediproject.core.model.recall.RecallSuspension
+import com.android.mediproject.core.model.recall.toRecallSuspension
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

@@ -29,7 +29,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.android.mediproject.core.model.remote.recall.RecallSuspension
+import com.android.mediproject.core.model.recall.RecallSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import java.time.format.DateTimeFormatter
 

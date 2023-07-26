@@ -8,8 +8,8 @@ import com.android.mediproject.core.common.mapper.MedicineInfoMapper
 import com.android.mediproject.core.common.util.deepNavigate
 import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.model.local.navargs.RecallDisposalArgs
-import com.android.mediproject.core.model.remote.recall.RecallSuspension
+import com.android.mediproject.core.model.navargs.RecallDisposalArgs
+import com.android.mediproject.core.model.recall.RecallSuspension
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.stateAsCollect
 import com.android.mediproject.feature.news.databinding.FragmentRecentPenaltyListBinding

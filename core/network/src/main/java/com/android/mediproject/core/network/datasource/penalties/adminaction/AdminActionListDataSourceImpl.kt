@@ -3,7 +3,7 @@ package com.android.mediproject.core.network.datasource.penalties.adminaction
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
-import com.android.mediproject.core.model.remote.adminaction.AdminActionListResponse
+import com.android.mediproject.core.model.adminaction.AdminActionListResponse
 import javax.inject.Inject
 
 

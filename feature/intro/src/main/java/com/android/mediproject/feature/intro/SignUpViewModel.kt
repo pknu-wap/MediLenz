@@ -8,7 +8,7 @@ import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.domain.sign.SignUseCase
-import com.android.mediproject.core.model.local.navargs.TOHOME
+import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

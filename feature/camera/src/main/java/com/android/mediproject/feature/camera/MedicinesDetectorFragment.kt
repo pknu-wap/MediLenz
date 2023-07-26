@@ -11,8 +11,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
-import com.android.mediproject.core.common.uiutil.SystemBarController
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
+import com.android.mediproject.core.common.util.SystemBarController
+import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
 import com.android.mediproject.feature.camera.tflite.CameraHelper

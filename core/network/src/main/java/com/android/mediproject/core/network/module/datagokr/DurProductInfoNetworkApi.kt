@@ -1,18 +1,18 @@
 package com.android.mediproject.core.network.module.datagokr
 
 import com.android.mediproject.core.common.BuildConfig
-import com.android.mediproject.core.common.DATA_GO_KR_DEFAULT_PAGE_NO
-import com.android.mediproject.core.common.DATA_GO_KR_DEFAULT_ROW_SIZE
+import com.android.mediproject.core.common.DATA_GO_KR_PAGE_NO
+import com.android.mediproject.core.common.DATA_GO_KR_ROW_SIZE
 import com.android.mediproject.core.common.JSON
-import com.android.mediproject.core.model.datagokr.durproduct.capacity.DurProductCapacityAttentionResponse
-import com.android.mediproject.core.model.datagokr.durproduct.combination.DurProductCombinationTabooResponse
-import com.android.mediproject.core.model.datagokr.durproduct.dosing.DurProductDosingCautionResponse
-import com.android.mediproject.core.model.datagokr.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationResponse
-import com.android.mediproject.core.model.datagokr.durproduct.extendedreleasetablet.DurProductExReleaseTableSplitAttentionResponse
-import com.android.mediproject.core.model.datagokr.durproduct.pregnancy.DurProductPregnantWomanTabooResponse
-import com.android.mediproject.core.model.datagokr.durproduct.productlist.DurProductListResponse
-import com.android.mediproject.core.model.datagokr.durproduct.senior.DurProductSeniorCautionResponse
-import com.android.mediproject.core.model.datagokr.durproduct.specialtyagegroup.DurProductSpecialtyAgeGroupTabooResponse
+import com.android.mediproject.core.model.dur.durproduct.capacity.DurProductCapacityAttentionResponse
+import com.android.mediproject.core.model.dur.durproduct.combination.DurProductCombinationTabooResponse
+import com.android.mediproject.core.model.dur.durproduct.dosing.DurProductDosingCautionResponse
+import com.android.mediproject.core.model.dur.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationResponse
+import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTableSplitAttentionResponse
+import com.android.mediproject.core.model.dur.durproduct.pregnancy.DurProductPregnantWomanTabooResponse
+import com.android.mediproject.core.model.dur.durproduct.productlist.DurProductListResponse
+import com.android.mediproject.core.model.dur.durproduct.senior.DurProductSeniorCautionResponse
+import com.android.mediproject.core.model.dur.durproduct.specialtyagegroup.DurProductSpecialtyAgeGroupTabooResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -35,11 +35,11 @@ interface DurProductInfoNetworkApi {
     @GET(value = "DURPrdlstInfoService02/getDurPrdlstInfoList2")
     suspend fun getDurProductList(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("itemName") itemName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_ROW_SIZE,
     ): Response<DurProductListResponse>
 
     /**
@@ -54,13 +54,13 @@ interface DurProductInfoNetworkApi {
     @GET(value = "DURPrdlstInfoService02/getOdsnAtentInfoList2")
     suspend fun getSeniorCaution(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("typeName") typeName: String = "노인주의",
         @Query("itemName") itemName: String?,
         @Query("ingrCode") ingrCode: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_ROW_SIZE,
     ): Response<DurProductSeniorCautionResponse>
 
     /**
@@ -74,13 +74,13 @@ interface DurProductInfoNetworkApi {
     @GET(value = "DURPrdlstInfoService02/getSeobangjeongPartitnAtentInfoList2")
     suspend fun getExReleaseTableSplitAttentionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("itemName") itemName: String?,
         @Query("entpName") entpName: String?,
         @Query("typeName") typeName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_ROW_SIZE,
     ): Response<DurProductExReleaseTableSplitAttentionResponse>
 
     /**
@@ -94,13 +94,13 @@ interface DurProductInfoNetworkApi {
     @GET(value = "DURPrdlstInfoService02/getEfcyDplctInfoList2")
     suspend fun getEfficacyGroupDuplicationInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("itemName") itemName: String?,
         @Query("ingrCode") ingrCode: String?,
         @Query("typeName") typeName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_ROW_SIZE,
     ): Response<DurProductEfficacyGroupDuplicationResponse>
 
     /**
@@ -115,13 +115,13 @@ interface DurProductInfoNetworkApi {
     @GET(value = "DURPrdlstInfoService02/getMdctnPdAtentInfoList2")
     suspend fun getDosingCautionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("itemName") itemName: String?,
         @Query("ingrCode") ingrCode: String?,
         @Query("typeName") typeName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_ROW_SIZE,
     ): Response<DurProductDosingCautionResponse>
 
     /**
@@ -136,13 +136,13 @@ interface DurProductInfoNetworkApi {
     @GET(value = "DURPrdlstInfoService02/getCpctyAtentInfoList2")
     suspend fun getCapacityAttentionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("itemName") itemName: String?,
         @Query("ingrCode") ingrCode: String?,
         @Query("typeName") typeName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_ROW_SIZE,
     ): Response<DurProductCapacityAttentionResponse>
 
     /**
@@ -157,13 +157,13 @@ interface DurProductInfoNetworkApi {
     @GET(value = "DURPrdlstInfoService02/getPwnmTabooInfoList2")
     suspend fun getPregnantWomanTabooInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("itemName") itemName: String?,
         @Query("ingrCode") ingrCode: String?,
         @Query("typeName") typeName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_ROW_SIZE,
     ): Response<DurProductPregnantWomanTabooResponse>
 
     /**
@@ -178,13 +178,13 @@ interface DurProductInfoNetworkApi {
     @GET(value = "DURPrdlstInfoService02/getSpcifyAgrdeTabooInfoList2")
     suspend fun getSpecialtyAgeGroupTabooInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("itemName") itemName: String?,
         @Query("ingrCode") ingrCode: String?,
         @Query("typeName") typeName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_ROW_SIZE,
     ): Response<DurProductSpecialtyAgeGroupTabooResponse>
 
     /**
@@ -199,12 +199,12 @@ interface DurProductInfoNetworkApi {
     @GET(value = "DURPrdlstInfoService02/getUsjntTabooInfoList02")
     suspend fun getCombinationTabooInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("itemName") itemName: String?,
         @Query("ingrCode") ingrCode: String?,
         @Query("typeName") typeName: String?,
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_DEFAULT_ROW_SIZE,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_ROW_SIZE,
     ): Response<DurProductCombinationTabooResponse>
 }

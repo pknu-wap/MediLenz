@@ -2,6 +2,7 @@ package com.android.mediproject.core.network.datasource.image
 
 import android.util.LruCache
 import com.android.mediproject.core.network.module.GoogleSearchNetworkApi
+import com.android.mediproject.core.network.module.safetyEncode
 import com.android.mediproject.core.network.onResponse
 import com.android.mediproject.core.network.parser.HtmlParser
 import javax.inject.Inject
@@ -16,12 +17,12 @@ class GoogleSearchDataSourceImpl @Inject constructor(
     private val urlCache = LruCache<String, String>(60)
 
     override suspend fun getImageUrl(medicineName: String): Result<String> {
-        val query = additionalQuery + medicineName
+        val query = (additionalQuery + medicineName).safetyEncode()
 
         return synchronized(urlCache) {
             urlCache.get(query)
-        }?.let {
-            Result.success(it)
+        }?.run {
+            Result.success(this)
         } ?: run {
             googleSearchNetworkApi.getImageUrl(query).onResponse().fold(
                 onSuccess = {

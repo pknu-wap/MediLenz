@@ -1,15 +1,15 @@
 package com.android.mediproject.core.network.module.datagokr
 
 import com.android.mediproject.core.common.BuildConfig
-import com.android.mediproject.core.common.DATA_GO_KR_DEFAULT_PAGE_NO
+import com.android.mediproject.core.common.DATA_GO_KR_PAGE_NO
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.JSON
-import com.android.mediproject.core.model.datagokr.duringr.capacity.DurIngrCapacityAttentionResponse
-import com.android.mediproject.core.model.datagokr.duringr.combination.DurIngrCombinationTabooResponse
-import com.android.mediproject.core.model.datagokr.duringr.dosing.DurIngrDosingCautionResponse
-import com.android.mediproject.core.model.datagokr.duringr.pregnancy.DurIngrPregnantWomanTabooResponse
-import com.android.mediproject.core.model.datagokr.duringr.senior.DurIngrSeniorCautionResponse
-import com.android.mediproject.core.model.datagokr.duringr.specialtyagegroup.DurIngrSpecialtyAgeGroupTabooResponse
+import com.android.mediproject.core.model.dur.duringr.capacity.DurIngrCapacityAttentionResponse
+import com.android.mediproject.core.model.dur.duringr.combination.DurIngrCombinationTabooResponse
+import com.android.mediproject.core.model.dur.duringr.dosing.DurIngrDosingCautionResponse
+import com.android.mediproject.core.model.dur.duringr.pregnancy.DurIngrPregnantWomanTabooResponse
+import com.android.mediproject.core.model.dur.duringr.senior.DurIngrSeniorCautionResponse
+import com.android.mediproject.core.model.dur.duringr.specialtyagegroup.DurIngrSpecialtyAgeGroupTabooResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -30,7 +30,7 @@ interface DurIngrInfoNetworkApi {
     @GET(value = "DURIrdntInfoService02/getUsjntTabooInfoList01")
     suspend fun getCombinationTabooInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("typeName") typeName: String = "병용금기",
         @Query("ingrKorName") ingrKorName: String?,
         @Query("ingrCode") ingrCode: String?,
@@ -48,7 +48,7 @@ interface DurIngrInfoNetworkApi {
     @GET(value = "DURIrdntInfoService02/getSpcifyAgrdeTabooInfoList01")
     suspend fun getSpecialtyAgeGroupTabooInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("typeName") typeName: String = "특정연령대금기",
         @Query("ingrName") ingrName: String?,
         @Query("ingrCode") ingrCode: String?,
@@ -65,7 +65,7 @@ interface DurIngrInfoNetworkApi {
     @GET(value = "DURIrdntInfoService02/getPwnmTabooInfoList01")
     suspend fun getPregnantWomanTabooInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("typeName") typeName: String = "임부금기",
         @Query("ingrName") ingrName: String?,
         @Query("ingrCode") ingrCode: String?,
@@ -82,7 +82,7 @@ interface DurIngrInfoNetworkApi {
     @GET(value = "DURIrdntInfoService02/getCpctyAtentInfoList01")
     suspend fun getCapacityAttentionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("typeName") typeName: String = "용량주의",
         @Query("ingrName") ingrName: String?,
         @Query("ingrCode") ingrCode: String?,
@@ -99,7 +99,7 @@ interface DurIngrInfoNetworkApi {
     @GET(value = "DURIrdntInfoService02/getMdctnPdAtentInfoList01")
     suspend fun getDosingCautionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("typeName") typeName: String = "투여기간주의",
         @Query("ingrName") ingrName: String?,
         @Query("ingrCode") ingrCode: String?,
@@ -117,7 +117,7 @@ interface DurIngrInfoNetworkApi {
     @GET(value = "DURIrdntInfoService02/getOdsnAtentInfoList01")
     suspend fun getSeniorCaution(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("typeName") typeName: String = "노인주의",
         @Query("ingrName") ingrName: String?,
         @Query("ingrCode") ingrCode: String?,
@@ -134,7 +134,7 @@ interface DurIngrInfoNetworkApi {
     @GET(value = "DURIrdntInfoService02/getEfcyDplctInfoList01")
     suspend fun getEfficacyGroupDuplicationInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("typeName") typeName: String = "효능군중복",
         @Query("ingrName") ingrName: String?,
         @Query("ingrCode") ingrCode: String?,

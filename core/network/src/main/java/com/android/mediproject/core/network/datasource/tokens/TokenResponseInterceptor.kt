@@ -1,8 +1,8 @@
 package com.android.mediproject.core.network.datasource.tokens
 
 import android.util.Log
-import com.android.mediproject.core.model.awscommon.BaseAwsSignResponse
-import com.android.mediproject.core.model.remote.token.RequestBehavior
+import com.android.mediproject.core.model.servercommon.ServerSignResponse
+import com.android.mediproject.core.model.token.RequestBehavior
 import com.android.mediproject.core.network.tokens.TokenServer
 import retrofit2.Response
 
@@ -11,7 +11,7 @@ import retrofit2.Response
  *
  * @return Result<T>
  */
-internal suspend inline fun <reified T : BaseAwsSignResponse> Response<T>.onResponseWithTokens(
+internal suspend inline fun <reified T : ServerSignResponse> Response<T>.onResponseWithTokens(
     requestBehavior: RequestBehavior,
     tokenServer: TokenServer,
 ): Result<T> = run {

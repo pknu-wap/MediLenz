@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,7 +26,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.android.mediproject.core.model.remote.adminaction.AdminActionListItemDto
+import com.android.mediproject.core.model.adminaction.AdminAction
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import java.time.format.DateTimeFormatter
 
@@ -76,14 +75,14 @@ fun AdminActionScreen(
  * 행정 처분 목록 아이템
  */
 @Composable
-fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
+fun ListItem(adminAction: AdminAction) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 20.dp),
         shape = RectangleShape,
         onClick = {
-            adminActionListItemDto.onClick?.invoke()
+            adminAction.onClick?.invoke()
         },
     ) {
         Column(
@@ -94,7 +93,7 @@ fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
                 verticalAlignment = CenterVertically,
             ) {
                 Text(
-                    text = adminActionListItemDto.entpName,
+                    text = adminAction.entpName,
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 14.sp,
                     color = Color.Black,
@@ -105,7 +104,7 @@ fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
                     maxLines = 1,
                 )
                 Text(
-                    text = adminActionListItemDto.lastSettleDate.format(dateFormat),
+                    text = adminAction.lastSettleDate.format(dateFormat),
                     fontSize = 12.sp,
                     modifier = Modifier.align(CenterVertically),
                     color = Color.Gray,
@@ -114,11 +113,11 @@ fun ListItem(adminActionListItemDto: AdminActionListItemDto) {
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = adminActionListItemDto.violation, fontSize = 12.sp, color = Color.Gray, maxLines = 1,
+                text = adminAction.violation, fontSize = 12.sp, color = Color.Gray, maxLines = 1,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = adminActionListItemDto.disposition, fontSize = 12.sp, color = Color.Gray, maxLines = 1,
+                text = adminAction.disposition, fontSize = 12.sp, color = Color.Gray, maxLines = 1,
             )
         }
     }

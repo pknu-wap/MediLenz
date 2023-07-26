@@ -8,10 +8,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
-import com.android.mediproject.core.common.uiutil.SystemBarController
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
-import com.android.mediproject.core.common.uiutil.hideKeyboard
+import com.android.mediproject.core.common.util.SystemBarColorAnalyzer
+import com.android.mediproject.core.common.util.SystemBarController
+import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.common.util.hideKeyboard
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.MediSearchbar
 import com.android.mediproject.feature.search.databinding.FragmentSearchMedicinesBinding

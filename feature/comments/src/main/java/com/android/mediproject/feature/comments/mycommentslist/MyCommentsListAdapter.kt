@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.comments.MyCommentDto
+import com.android.mediproject.core.model.comments.MyComment
 import com.android.mediproject.feature.comments.databinding.ItemMyCommentBinding
 
 class MyCommentsViewHolder(
@@ -22,21 +22,21 @@ class MyCommentsViewHolder(
         }
     }
 
-    fun bind(myComment: MyCommentDto) {
+    fun bind(myComment: MyComment) {
         binding.myComment = myComment
     }
 }
 
 
-class MyCommentsListAdapter : ListAdapter<MyCommentDto, MyCommentsViewHolder>(diffUtil) {
+class MyCommentsListAdapter : ListAdapter<MyComment, MyCommentsViewHolder>(diffUtil) {
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<MyCommentDto>() {
-            override fun areItemsTheSame(oldItem: MyCommentDto, newItem: MyCommentDto): Boolean {
+        val diffUtil = object : DiffUtil.ItemCallback<MyComment>() {
+            override fun areItemsTheSame(oldItem: MyComment, newItem: MyComment): Boolean {
                 return oldItem === newItem
             }
 
-            override fun areContentsTheSame(oldItem: MyCommentDto, newItem: MyCommentDto): Boolean {
+            override fun areContentsTheSame(oldItem: MyComment, newItem: MyComment): Boolean {
                 return oldItem == newItem
             }
         }
@@ -52,7 +52,7 @@ class MyCommentsListAdapter : ListAdapter<MyCommentDto, MyCommentsViewHolder>(di
         holder.bind(getItem(position))
     }
 
-    override fun submitList(list: MutableList<MyCommentDto>?) {
+    override fun submitList(list: MutableList<MyComment>?) {
         super.submitList(list)
     }
 }

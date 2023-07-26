@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.navGraphViewModels
-import com.android.mediproject.core.common.uiutil.SystemBarController
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
+import com.android.mediproject.core.common.util.SystemBarController
+import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.feature.camera.InferenceState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
 import com.android.mediproject.feature.camera.R

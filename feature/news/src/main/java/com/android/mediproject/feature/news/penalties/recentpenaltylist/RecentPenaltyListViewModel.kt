@@ -5,7 +5,7 @@ import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetRecallSuspensionInfoUseCase
-import com.android.mediproject.core.model.remote.recall.RecallSuspension
+import com.android.mediproject.core.model.recall.RecallSuspension
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

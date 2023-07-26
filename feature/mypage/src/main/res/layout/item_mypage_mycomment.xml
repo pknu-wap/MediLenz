@@ -6,7 +6,7 @@
 
         <variable
             name="myCommentDto"
-            type="com.android.mediproject.core.model.comments.MyCommentDto" />
+            type="com.android.mediproject.core.model.comments.MyComment" />
     </data>
 
     <LinearLayout

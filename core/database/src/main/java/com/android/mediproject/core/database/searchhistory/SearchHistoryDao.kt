@@ -20,7 +20,7 @@ abstract class SearchHistoryDao {
     }
 
     @Insert(entity = SearchHistoryDto::class, onConflict = OnConflictStrategy.IGNORE)
-    abstract suspend fun realInsert(SearchHistoryDto: SearchHistoryDto)
+    abstract suspend fun realInsert(searchHistoryDto: SearchHistoryDto)
 
     /**
      * id에 해당하는 검색 기록을 삭제한다.

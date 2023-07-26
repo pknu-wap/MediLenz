@@ -5,11 +5,12 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.favoritemedicine"
+
+    hilt {
+        enableAggregatingTask = true
+    }
 }
 
-hilt {
-    enableAggregatingTask = true
-}
 
 dependencies {
 

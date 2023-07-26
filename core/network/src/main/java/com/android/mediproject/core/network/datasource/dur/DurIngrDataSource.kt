@@ -1,11 +1,11 @@
 package com.android.mediproject.core.network.datasource.dur
 
-import com.android.mediproject.core.model.datagokr.duringr.capacity.DurIngrCapacityAttentionResponse
-import com.android.mediproject.core.model.datagokr.duringr.combination.DurIngrCombinationTabooResponse
-import com.android.mediproject.core.model.datagokr.duringr.dosing.DurIngrDosingCautionResponse
-import com.android.mediproject.core.model.datagokr.duringr.pregnancy.DurIngrPregnantWomanTabooResponse
-import com.android.mediproject.core.model.datagokr.duringr.senior.DurIngrSeniorCautionResponse
-import com.android.mediproject.core.model.datagokr.duringr.specialtyagegroup.DurIngrSpecialtyAgeGroupTabooResponse
+import com.android.mediproject.core.model.dur.duringr.capacity.DurIngrCapacityAttentionResponse
+import com.android.mediproject.core.model.dur.duringr.combination.DurIngrCombinationTabooResponse
+import com.android.mediproject.core.model.dur.duringr.dosing.DurIngrDosingCautionResponse
+import com.android.mediproject.core.model.dur.duringr.pregnancy.DurIngrPregnantWomanTabooResponse
+import com.android.mediproject.core.model.dur.duringr.senior.DurIngrSeniorCautionResponse
+import com.android.mediproject.core.model.dur.duringr.specialtyagegroup.DurIngrSpecialtyAgeGroupTabooResponse
 
 interface DurIngrDataSource {
     suspend fun getCombinationTabooInfo(

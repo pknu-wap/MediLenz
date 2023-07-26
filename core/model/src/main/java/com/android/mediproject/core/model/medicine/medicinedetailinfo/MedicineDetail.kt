@@ -2,7 +2,7 @@ package com.android.mediproject.core.model.medicine.medicinedetailinfo
 
 import com.android.mediproject.core.model.util.XMLParsedResult
 import com.android.mediproject.core.model.util.parseXmlString
-import com.android.mediproject.core.toLocalDate
+import com.android.mediproject.core.model.toLocalDate
 import java.time.LocalDate
 
 /**

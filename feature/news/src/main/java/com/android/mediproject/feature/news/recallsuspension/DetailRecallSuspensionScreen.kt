@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.model.remote.recall.DetailRecallSuspension
+import com.android.mediproject.core.model.recall.DetailRecallSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.adminaction.color
 import java.time.format.DateTimeFormatter

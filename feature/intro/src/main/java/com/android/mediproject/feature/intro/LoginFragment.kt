@@ -8,11 +8,11 @@ import androidx.navigation.NavOptions
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
-import com.android.mediproject.core.common.uiutil.SystemBarController
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
+import com.android.mediproject.core.common.util.SystemBarController
+import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.util.delayTextChangedCallback
-import com.android.mediproject.core.model.local.navargs.TOHOME
-import com.android.mediproject.core.model.local.navargs.TOMYPAGE
+import com.android.mediproject.core.model.navargs.TOHOME
+import com.android.mediproject.core.model.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint

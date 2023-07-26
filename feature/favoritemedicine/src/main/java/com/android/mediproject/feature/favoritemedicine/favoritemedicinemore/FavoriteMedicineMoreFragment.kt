@@ -1,15 +1,14 @@
 package com.android.mediproject.feature.favoritemedicine.favoritemedicinemore
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
-import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreDto
-import com.android.mediproject.core.model.remote.token.CurrentTokens
-import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreInfo
+import com.android.mediproject.core.model.token.CurrentTokens
+import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.favoritemedicine.databinding.FragmentFavoriteMedicineMoreBinding
 import com.android.mediproject.feature.favoritemedicine.favoritemedicinemore.recyclerview.FavoriteMedcineMoreDecoration
@@ -64,7 +63,7 @@ class FavoriteMedicineMoreFragment :
         addItemDecoration(DividerItemDecoration(requireContext(), 1))
     }
 
-    private fun setFavoriteMedicineMoreList(medicineList: List<FavoriteMedicineMoreDto>) {
+    private fun setFavoriteMedicineMoreList(medicineList: List<FavoriteMedicineMoreInfo>) {
         favoriteMedicineMoreAdapter.submitList(medicineList)
     }
 

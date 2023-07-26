@@ -1,7 +1,7 @@
 package com.android.mediproject.core.domain.sign
 
-import com.android.mediproject.core.data.remote.sign.SignRepository
-import com.android.mediproject.core.data.remote.user.UserInfoRepository
+import com.android.mediproject.core.data.sign.SignRepository
+import com.android.mediproject.core.data.user.UserInfoRepository
 import com.android.mediproject.core.model.requestparameters.LoginParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import com.android.mediproject.core.model.user.AccountState
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 class SignUseCase @Inject constructor(
-    private val signRepository: SignRepository, private val userInfoRepository: UserInfoRepository
+    private val signRepository: SignRepository, private val userInfoRepository: UserInfoRepository,
 ) {
     suspend fun login(loginParameter: LoginParameter): Flow<Result<Unit>> = signRepository.login(loginParameter)
 

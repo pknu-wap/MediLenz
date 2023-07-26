@@ -1,11 +1,11 @@
 package com.android.mediproject.core.network.datasource.dur
 
-import com.android.mediproject.core.model.datagokr.duringr.capacity.DurIngrCapacityAttentionResponse
-import com.android.mediproject.core.model.datagokr.duringr.combination.DurIngrCombinationTabooResponse
-import com.android.mediproject.core.model.datagokr.duringr.dosing.DurIngrDosingCautionResponse
-import com.android.mediproject.core.model.datagokr.duringr.pregnancy.DurIngrPregnantWomanTabooResponse
-import com.android.mediproject.core.model.datagokr.duringr.senior.DurIngrSeniorCautionResponse
-import com.android.mediproject.core.model.datagokr.duringr.specialtyagegroup.DurIngrSpecialtyAgeGroupTabooResponse
+import com.android.mediproject.core.model.dur.duringr.capacity.DurIngrCapacityAttentionResponse
+import com.android.mediproject.core.model.dur.duringr.combination.DurIngrCombinationTabooResponse
+import com.android.mediproject.core.model.dur.duringr.dosing.DurIngrDosingCautionResponse
+import com.android.mediproject.core.model.dur.duringr.pregnancy.DurIngrPregnantWomanTabooResponse
+import com.android.mediproject.core.model.dur.duringr.senior.DurIngrSeniorCautionResponse
+import com.android.mediproject.core.model.dur.duringr.specialtyagegroup.DurIngrSpecialtyAgeGroupTabooResponse
 import com.android.mediproject.core.network.module.datagokr.DurIngrInfoNetworkApi
 import com.android.mediproject.core.network.onDataGokrResponse
 import javax.inject.Inject
@@ -15,7 +15,7 @@ class DurIngrDataSourceImpl @Inject constructor(
 ) : DurIngrDataSource {
     override suspend fun getCombinationTabooInfo(ingrKorName: String?, ingrCode: String?): Result<DurIngrCombinationTabooResponse> =
         durIngrInfoNetworkApi.getCombinationTabooInfo(ingrKorName = ingrKorName, ingrCode = ingrCode).onDataGokrResponse()
-    
+
     override suspend fun getSpecialtyAgeGroupTabooInfo(ingrName: String?, ingrCode: String?): Result<DurIngrSpecialtyAgeGroupTabooResponse> =
         durIngrInfoNetworkApi.getSpecialtyAgeGroupTabooInfo(ingrName = ingrName, ingrCode = ingrCode).onDataGokrResponse()
 

@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.remote.recall.RecallSuspension
+import com.android.mediproject.core.model.recall.RecallSuspension
 import com.android.mediproject.core.ui.base.view.SimpleListItemView
 import com.android.mediproject.feature.news.R
 

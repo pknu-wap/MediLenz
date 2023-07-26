@@ -4,10 +4,11 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.core.ui"
-}
 
-hilt {
-    enableAggregatingTask = true
+    hilt {
+        enableAggregatingTask = true
+    }
+
 }
 
 dependencies {

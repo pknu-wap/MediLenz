@@ -1,6 +1,6 @@
 package com.android.mediproject.core.network.datasource.penalties.recallsuspension
 
-import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
+import com.android.mediproject.core.model.recall.DetailRecallSuspensionResponse
 import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onDataGokrResponse
 import kotlinx.coroutines.CoroutineDispatcher

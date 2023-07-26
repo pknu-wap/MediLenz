@@ -9,10 +9,10 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
-import com.android.mediproject.core.model.comments.MyCommentDto
-import com.android.mediproject.core.model.remote.token.CurrentTokens
-import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.model.comments.MyComment
+import com.android.mediproject.core.model.token.CurrentTokens
+import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
@@ -103,7 +103,7 @@ class MyPageFragment :
         addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
     }
 
-    private fun isCommentListNotEmpty(commentList: List<MyCommentDto>): Boolean {
+    private fun isCommentListNotEmpty(commentList: List<MyComment>): Boolean {
         return (commentList.isNotEmpty())
     }
 
@@ -273,7 +273,7 @@ class MyPageFragment :
         myCommentsListHeaderView.setExpandVisiblity(false)
     }
 
-    private fun showCommentList(myCommentList: List<MyCommentDto>) = binding.apply {
+    private fun showCommentList(myCommentList: List<MyComment>) = binding.apply {
         setShowCommentListVisible()
         myCommentListAdapter.submitList(myCommentList)
     }

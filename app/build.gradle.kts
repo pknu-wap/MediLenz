@@ -53,11 +53,10 @@ android {
         checkDependencies = true
         ignoreTestSources = true
     }
+    hilt {
+        enableAggregatingTask = true
+    }
 
-}
-
-hilt {
-    enableAggregatingTask = true
 }
 
 dependencies {

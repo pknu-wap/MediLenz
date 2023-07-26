@@ -5,12 +5,12 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
-import com.android.mediproject.core.model.comments.MyCommentDto
+import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
+import com.android.mediproject.core.model.comments.MyComment
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.databinding.FragmentMyCommentsListBinding
 import dagger.hilt.android.AndroidEntryPoint
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -62,7 +62,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
     private fun testDummyData() = binding.apply {
         myCommentsListAdapter.submitList(
             mutableListOf(
-                MyCommentDto(
+                MyComment(
                     12345,
                     "타이레놀",
                     "머리아플 때 먹으니까 짱 좋던데요..?",
@@ -71,7 +71,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
                 ) { comment ->
                     log(comment.medicineName + "을 누르셨습니다.")
                 },
-                MyCommentDto(
+                MyComment(
                     12346,
                     "코메키나",
                     "저 같은 비염환자들한테 딱 입니다. 시험칠 때 필수...!!",

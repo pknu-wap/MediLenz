@@ -25,7 +25,6 @@ import androidx.navigation.Navigator
 import androidx.navigation.NavigatorProvider
 import androidx.navigation.NavigatorState
 import com.android.mediproject.core.common.R
-import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
 import java.lang.ref.WeakReference
 
 @Navigator.Name("keep_fragment")
@@ -256,34 +255,6 @@ class KeepFragmentNavigator(
 
     override fun createDestination(): Destination = Destination(this)
 
-
-    /**
-     * Instantiates the Fragment via the FragmentManager's
-     * [androidx.fragment.app.FragmentFactory].
-     *
-     * Note that this method is **not** responsible for calling
-     * [Fragment.setArguments] on the returned Fragment instance.
-     *
-     * @param context Context providing the correct [ClassLoader]
-     * @param fragmentManager FragmentManager the Fragment will be added to
-     * @param className The Fragment to instantiate
-     * @param args The Fragment's arguments, if any
-     * @return A new fragment instance.
-     */
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated(
-        """Set a custom {@link androidx.fragment.app.FragmentFactory} via
-      {@link FragmentManager#setFragmentFactory(FragmentFactory)} to control
-      instantiation of Fragments.""",
-    )
-    private fun instantiateFragment(
-        context: Context,
-        fragmentManager: FragmentManager,
-        className: String,
-        args: Bundle?,
-    ): Fragment {
-        return fragmentManager.fragmentFactory.instantiate(context.classLoader, className)
-    }
 
     /**
      * {@inheritDoc}

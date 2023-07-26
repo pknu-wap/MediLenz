@@ -1,14 +1,14 @@
 package com.android.mediproject.core.network.module.datagokr
 
 import com.android.mediproject.core.common.BuildConfig
-import com.android.mediproject.core.common.DATA_GO_KR_DEFAULT_PAGE_NO
+import com.android.mediproject.core.common.DATA_GO_KR_PAGE_NO
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.JSON
 import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
-import com.android.mediproject.core.model.remote.adminaction.AdminActionListResponse
-import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
-import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
-import com.android.mediproject.core.model.remote.recall.RecallSuspensionListResponse
+import com.android.mediproject.core.model.adminaction.AdminActionListResponse
+import com.android.mediproject.core.model.granule.GranuleIdentificationInfoResponse
+import com.android.mediproject.core.model.recall.DetailRecallSuspensionResponse
+import com.android.mediproject.core.model.recall.RecallSuspensionListResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -45,7 +45,7 @@ interface DataGoKrNetworkApi : DurProductInfoNetworkApi, DurIngrInfoNetworkApi {
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("item_name", encoded = false) itemName: String = "",
         @Query("item_seq", encoded = true) itemSeq: String = "",
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = 1,
     ): Response<String>
@@ -70,7 +70,7 @@ interface DataGoKrNetworkApi : DurProductInfoNetworkApi, DurIngrInfoNetworkApi {
     @GET(value = "MdcinRtrvlSleStpgeInfoService03/getMdcinRtrvlSleStpgeItem02")
     suspend fun getDetailRecallSuspensionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("type") type: String = JSON,
         @Query("Entrps", encoded = true) company: String?,
         @Query("Prduct", encoded = true) product: String?,
@@ -99,7 +99,7 @@ interface DataGoKrNetworkApi : DurProductInfoNetworkApi, DurIngrInfoNetworkApi {
     @GET(value = "MdcinGrnIdntfcInfoService01/getMdcinGrnIdntfcInfoList01")
     suspend fun getGranuleIdentificationInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
-        @Query("pageNo") pageNo: Int = DATA_GO_KR_DEFAULT_PAGE_NO,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
         @Query("item_name") itemName: String?,
         @Query("entp_name") entpName: String?,
         @Query("item_seq") itemSeq: String?,

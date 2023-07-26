@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.mediproject.core.common.paging.setOnStateChangedListener
 import com.android.mediproject.core.common.util.deepNavigate
 import com.android.mediproject.core.model.constants.MedicationType
-import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
+import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.listfilter.MediPopupMenu
 import com.android.mediproject.feature.search.R

@@ -1,6 +1,6 @@
 package com.android.mediproject.core.network.datasource.penalties.adminaction
 
-import com.android.mediproject.core.model.remote.adminaction.AdminActionListResponse
+import com.android.mediproject.core.model.adminaction.AdminActionListResponse
 
 interface AdminActionDataSource {
 

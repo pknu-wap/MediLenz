@@ -1,14 +1,14 @@
 package com.android.mediproject.core.network.datasource.dur
 
-import com.android.mediproject.core.model.datagokr.durproduct.capacity.DurProductCapacityAttentionResponse
-import com.android.mediproject.core.model.datagokr.durproduct.combination.DurProductCombinationTabooResponse
-import com.android.mediproject.core.model.datagokr.durproduct.dosing.DurProductDosingCautionResponse
-import com.android.mediproject.core.model.datagokr.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationResponse
-import com.android.mediproject.core.model.datagokr.durproduct.extendedreleasetablet.DurProductExReleaseTableSplitAttentionResponse
-import com.android.mediproject.core.model.datagokr.durproduct.pregnancy.DurProductPregnantWomanTabooResponse
-import com.android.mediproject.core.model.datagokr.durproduct.productlist.DurProductListResponse
-import com.android.mediproject.core.model.datagokr.durproduct.senior.DurProductSeniorCautionResponse
-import com.android.mediproject.core.model.datagokr.durproduct.specialtyagegroup.DurProductSpecialtyAgeGroupTabooResponse
+import com.android.mediproject.core.model.dur.durproduct.capacity.DurProductCapacityAttentionResponse
+import com.android.mediproject.core.model.dur.durproduct.combination.DurProductCombinationTabooResponse
+import com.android.mediproject.core.model.dur.durproduct.dosing.DurProductDosingCautionResponse
+import com.android.mediproject.core.model.dur.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationResponse
+import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTableSplitAttentionResponse
+import com.android.mediproject.core.model.dur.durproduct.pregnancy.DurProductPregnantWomanTabooResponse
+import com.android.mediproject.core.model.dur.durproduct.productlist.DurProductListResponse
+import com.android.mediproject.core.model.dur.durproduct.senior.DurProductSeniorCautionResponse
+import com.android.mediproject.core.model.dur.durproduct.specialtyagegroup.DurProductSpecialtyAgeGroupTabooResponse
 
 interface DurProductDataSource {
     suspend fun getDurProductList(

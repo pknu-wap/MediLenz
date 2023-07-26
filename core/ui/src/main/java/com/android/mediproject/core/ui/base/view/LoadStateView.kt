@@ -5,7 +5,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.common.uiutil.dpToPx
+import com.android.mediproject.core.common.util.dpToPx
 import com.android.mediproject.core.ui.R
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
@@ -13,8 +13,8 @@ class LoadStateView(context: Context, onRetry: () -> Unit) : ConstraintLayout(co
     init {
 
 
-        val horizontalPadding = 24.dpToPx(context)
-        val verticalPadding = 12.dpToPx(context)
+        val horizontalPadding = 24.dpToPx()
+        val verticalPadding = 12.dpToPx()
 
         setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
@@ -34,7 +34,7 @@ class LoadStateView(context: Context, onRetry: () -> Unit) : ConstraintLayout(co
                 it.topToBottom = android.R.id.progress
                 it.startToStart = LayoutParams.PARENT_ID
                 it.endToEnd = LayoutParams.PARENT_ID
-                it.setMargins(0, 16.dpToPx(context), 0, 0)
+                it.setMargins(0, 16.dpToPx(), 0, 0)
             }
 
             addView(textView)
@@ -46,7 +46,7 @@ class LoadStateView(context: Context, onRetry: () -> Unit) : ConstraintLayout(co
                 it.topToBottom = android.R.id.text1
                 it.startToStart = LayoutParams.PARENT_ID
                 it.endToEnd = LayoutParams.PARENT_ID
-                it.setMargins(0, 8.dpToPx(context), 0, 0)
+                it.setMargins(0, 8.dpToPx(), 0, 0)
             }
             btn.text = context.getString(R.string.retryText)
             setOnClickListener {
