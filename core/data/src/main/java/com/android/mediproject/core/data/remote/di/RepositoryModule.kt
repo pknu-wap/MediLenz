@@ -8,8 +8,8 @@ import com.android.mediproject.core.data.remote.comments.CommentsRepository
 import com.android.mediproject.core.data.remote.comments.CommentsRepositoryImpl
 import com.android.mediproject.core.data.remote.dur.DurRepository
 import com.android.mediproject.core.data.remote.dur.DurRepositoryImpl
-import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRepository
-import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRepositoryImpl
+import com.android.mediproject.core.data.remote.senior.ElderlyCautionRepository
+import com.android.mediproject.core.data.remote.senior.ElderlyCautionRepositoryImpl
 import com.android.mediproject.core.data.remote.favoritemedicine.FavoriteMedicineRepository
 import com.android.mediproject.core.data.remote.favoritemedicine.FavoriteMedicineRepositoryImpl
 import com.android.mediproject.core.data.remote.granule.GranuleIdentificationRepository
@@ -100,7 +100,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesElderlyCautionRepository(elderlyCautionDataSource: ElderlyCautionDataSource): ElderlyCautionRepository =
+    fun providesElderlyCautionRepository(elderlyCautionDataSource: ): ElderlyCautionRepository =
         ElderlyCautionRepositoryImpl(elderlyCautionDataSource)
 
     @Provides

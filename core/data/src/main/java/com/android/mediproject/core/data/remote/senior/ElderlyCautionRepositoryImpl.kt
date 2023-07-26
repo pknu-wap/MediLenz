@@ -1,4 +1,4 @@
-package com.android.mediproject.core.data.remote.elderlycaution
+package com.android.mediproject.core.data.remote.senior
 
 import com.android.mediproject.core.network.datasource.elderlycaution.ElderlyCautionDataSource
 import javax.inject.Inject

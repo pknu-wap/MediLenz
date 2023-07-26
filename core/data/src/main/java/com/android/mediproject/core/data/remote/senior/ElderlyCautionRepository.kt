@@ -1,4 +1,4 @@
-package com.android.mediproject.core.data.remote.elderlycaution
+package com.android.mediproject.core.data.remote.senior
 
 interface ElderlyCautionRepository {
     suspend fun getElderlyCaution(

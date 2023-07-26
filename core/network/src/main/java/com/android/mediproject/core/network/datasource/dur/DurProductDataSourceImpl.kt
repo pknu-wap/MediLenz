@@ -10,81 +10,79 @@ import com.android.mediproject.core.model.datagokr.durproduct.productlist.DurPro
 import com.android.mediproject.core.model.datagokr.durproduct.senior.DurProductSeniorCautionResponse
 import com.android.mediproject.core.model.datagokr.durproduct.specialtyagegroup.DurProductSpecialtyAgeGroupTabooResponse
 import com.android.mediproject.core.network.module.datagokr.DurProductInfoNetworkApi
+import com.android.mediproject.core.network.onDataGokrResponse
 import javax.inject.Inject
 
 class DurProductDataSourceImpl @Inject constructor(
     private val durProductInfoNetworkApi: DurProductInfoNetworkApi,
 ) : DurProductDataSource {
-    override suspend fun getDurProductList(itemName: String?, itemSeq: String?): Result<DurProductListResponse> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getDurProductList(itemName: String?, itemSeq: String?): Result<DurProductListResponse> =
+        durProductInfoNetworkApi.getDurProductList(itemName = itemName, itemSeq = itemSeq).onDataGokrResponse()
 
-    override suspend fun getSeniorCaution(itemName: String?, ingrCode: String?, itemSeq: String?): Result<DurProductSeniorCautionResponse> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getSeniorCaution(itemName: String?, ingrCode: String?, itemSeq: String?): Result<DurProductSeniorCautionResponse> =
+        durProductInfoNetworkApi.getSeniorCaution(itemName = itemName, ingrCode = ingrCode, itemSeq = itemSeq).onDataGokrResponse()
 
     override suspend fun getExReleaseTableSplitAttentionInfo(
         itemName: String?,
         entpName: String?,
         typeName: String?,
         itemSeq: String?,
-    ): Result<DurProductExReleaseTableSplitAttentionResponse> {
-        TODO("Not yet implemented")
-    }
+    ): Result<DurProductExReleaseTableSplitAttentionResponse> =
+        durProductInfoNetworkApi.getExReleaseTableSplitAttentionInfo(itemName = itemName, entpName = entpName, typeName = typeName, itemSeq = itemSeq)
+            .onDataGokrResponse()
 
     override suspend fun getEfficacyGroupDuplicationInfo(
         itemName: String?,
         ingrCode: String?,
         typeName: String?,
         itemSeq: String?,
-    ): Result<DurProductEfficacyGroupDuplicationResponse> {
-        TODO("Not yet implemented")
-    }
+    ): Result<DurProductEfficacyGroupDuplicationResponse> =
+        durProductInfoNetworkApi.getEfficacyGroupDuplicationInfo(itemName = itemName, ingrCode = ingrCode, typeName = typeName, itemSeq = itemSeq)
+            .onDataGokrResponse()
 
     override suspend fun getDosingCautionInfo(
         itemName: String?,
         ingrCode: String?,
         typeName: String?,
         itemSeq: String?,
-    ): Result<DurProductDosingCautionResponse> {
-        TODO("Not yet implemented")
-    }
+    ): Result<DurProductDosingCautionResponse> =
+        durProductInfoNetworkApi.getDosingCautionInfo(itemName = itemName, ingrCode = ingrCode, typeName = typeName, itemSeq = itemSeq)
+            .onDataGokrResponse()
 
     override suspend fun getCapacityAttentionInfo(
         itemName: String?,
         ingrCode: String?,
         typeName: String?,
         itemSeq: String?,
-    ): Result<DurProductCapacityAttentionResponse> {
-        TODO("Not yet implemented")
-    }
+    ): Result<DurProductCapacityAttentionResponse> =
+        durProductInfoNetworkApi.getCapacityAttentionInfo(itemName = itemName, ingrCode = ingrCode, typeName = typeName, itemSeq = itemSeq)
+            .onDataGokrResponse()
 
     override suspend fun getPregnantWomanTabooInfo(
         itemName: String?,
         ingrCode: String?,
         typeName: String?,
         itemSeq: String?,
-    ): Result<DurProductPregnantWomanTabooResponse> {
-        TODO("Not yet implemented")
-    }
+    ): Result<DurProductPregnantWomanTabooResponse> =
+        durProductInfoNetworkApi.getPregnantWomanTabooInfo(itemName = itemName, ingrCode = ingrCode, typeName = typeName, itemSeq = itemSeq)
+            .onDataGokrResponse()
 
     override suspend fun getSpecialtyAgeGroupTabooInfo(
         itemName: String?,
         ingrCode: String?,
         typeName: String?,
         itemSeq: String?,
-    ): Result<DurProductSpecialtyAgeGroupTabooResponse> {
-        TODO("Not yet implemented")
-    }
+    ): Result<DurProductSpecialtyAgeGroupTabooResponse> =
+        durProductInfoNetworkApi.getSpecialtyAgeGroupTabooInfo(itemName = itemName, ingrCode = ingrCode, typeName = typeName, itemSeq = itemSeq)
+            .onDataGokrResponse()
 
     override suspend fun getCombinationTabooInfo(
         itemName: String?,
         ingrCode: String?,
         typeName: String?,
         itemSeq: String?,
-    ): Result<DurProductCombinationTabooResponse> {
-        TODO("Not yet implemented")
-    }
-
+    ): Result<DurProductCombinationTabooResponse> =
+        durProductInfoNetworkApi.getCombinationTabooInfo(itemName = itemName, ingrCode = ingrCode, typeName = typeName, itemSeq = itemSeq)
+            .onDataGokrResponse()
 
 }

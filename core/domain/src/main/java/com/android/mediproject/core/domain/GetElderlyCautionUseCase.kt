@@ -1,6 +1,6 @@
 package com.android.mediproject.core.domain
 
-import com.android.mediproject.core.data.remote.elderlycaution.ElderlyCautionRepository
+import com.android.mediproject.core.data.remote.senior.ElderlyCautionRepository
 import com.android.mediproject.core.model.datagokr.durproduct.senior.ElderlyCautionDto
 import com.android.mediproject.core.model.datagokr.durproduct.senior.toElderlyCautionDto
 import javax.inject.Inject
