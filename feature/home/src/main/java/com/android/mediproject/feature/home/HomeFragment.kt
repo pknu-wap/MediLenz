@@ -8,13 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.mapper.MedicineInfoMapper
 import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment
 import com.android.mediproject.feature.home.databinding.FragmentHomeBinding
 import com.android.mediproject.feature.news.penalties.recentpenaltylist.RecentPenaltyListFragment
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment
 import dagger.hilt.android.AndroidEntryPoint
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -124,7 +124,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
         childFragmentManager.setFragmentResultListener(RecentSearchListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
             findNavController().navigate(
                 R.id.action_homeFragment_to_searchMedicinesFragment,
-                bundleOf("query" to bundle.getString(RecentSearchListFragment.ResultKey.WORD.name)),
+                bundleOf("words" to bundle.getString(RecentSearchListFragment.ResultKey.WORD.name)),
             )
         }
     }

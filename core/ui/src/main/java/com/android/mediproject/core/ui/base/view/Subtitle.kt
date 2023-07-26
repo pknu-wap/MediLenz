@@ -2,6 +2,7 @@ package com.android.mediproject.core.ui.base.view
 
 import android.content.Context
 import android.graphics.Typeface
+import android.text.Editable
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -15,7 +16,7 @@ import com.android.mediproject.core.ui.R
 class Subtitle @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    @AttrRes defStyleAttr: Int = 0
+    @AttrRes defStyleAttr: Int = 0,
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     companion object {
@@ -81,5 +82,5 @@ class Subtitle @JvmOverloads constructor(
     //EditText에 적은 값을 불러오는 함수
     fun getValue(): String = inputData.text.toString()
 
-    fun getEditable() = inputData.text
+    fun getEditable(): Editable = inputData.text
 }

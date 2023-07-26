@@ -16,7 +16,6 @@ interface EventFlow<out T> : Flow<T> {
 
 interface MutableEventFlow<T> : EventFlow<T>, FlowCollector<T>
 
-@Suppress("FunctionName")
 fun <T> MutableEventFlow(
     replay: Int = EventFlow.DEFAULT_REPLAY,
 ): MutableEventFlow<T> = EventFlowImpl(replay)
