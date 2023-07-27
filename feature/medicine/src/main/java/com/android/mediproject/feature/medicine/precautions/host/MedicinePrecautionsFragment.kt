@@ -19,7 +19,7 @@ class MedicinePrecautionsFragment :
 
         binding.apply {
             precautionsViewpager.adapter = MedicinePrecautionsItemPageAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
-
+            
             chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
                 precautionsViewpager.setCurrentItem(group.indexOfChild(group.findViewById(checkedIds.first())), true)
             }

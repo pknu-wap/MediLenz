@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class DurProductExReleaseTableSplitAttentionResponse : DataGoKrResponse<DurProductExReleaseTableSplitAttentionResponse.Item>() {
+class DurProductExReleaseTabletSplitAttentionResponse : DataGoKrResponse<DurProductExReleaseTabletSplitAttentionResponse.Item>() {
 
 
     /**

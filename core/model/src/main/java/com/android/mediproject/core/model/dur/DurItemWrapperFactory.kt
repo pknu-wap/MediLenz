@@ -9,7 +9,7 @@ import com.android.mediproject.core.model.dur.durproduct.dosing.DurProductDosing
 import com.android.mediproject.core.model.dur.durproduct.dosing.DurProductDosingCautionWrapper
 import com.android.mediproject.core.model.dur.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationResponse
 import com.android.mediproject.core.model.dur.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationWrapper
-import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTableSplitAttentionResponse
+import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTabletSplitAttentionResponse
 import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTableSplitAttentionWrapper
 import com.android.mediproject.core.model.dur.durproduct.pregnancy.DurProductPregnantWomanTabooResponse
 import com.android.mediproject.core.model.dur.durproduct.pregnancy.DurProductPregnantWomanTabooWrapper
@@ -25,7 +25,7 @@ class DurItemWrapperFactory {
             DurType.SENIOR_CAUTION -> DurProductSeniorCautionWrapper(response as DurProductSeniorCautionResponse)
             DurType.DOSING_CAUTION -> DurProductDosingCautionWrapper(response as DurProductDosingCautionResponse)
             DurType.EFFICACY_GROUP_DUPLICATION -> DurProductEfficacyGroupDuplicationWrapper(response as DurProductEfficacyGroupDuplicationResponse)
-            DurType.EX_RELEASE_TABLET_SPLIT_ATTENTION -> DurProductExReleaseTableSplitAttentionWrapper(response as DurProductExReleaseTableSplitAttentionResponse)
+            DurType.EX_RELEASE_TABLET_SPLIT_ATTENTION -> DurProductExReleaseTableSplitAttentionWrapper(response as DurProductExReleaseTabletSplitAttentionResponse)
             DurType.COMBINATION_TABOO -> DurProductCombinationTabooWrapper(response as DurProductCombinationTabooResponse)
             DurType.PREGNANT_WOMAN_TABOO -> DurProductPregnantWomanTabooWrapper(response as DurProductPregnantWomanTabooResponse)
             DurType.CAPACITY_ATTENTION -> DurProductCapacityAttentionWrapper(response as DurProductCapacityAttentionResponse)

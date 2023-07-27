@@ -6,7 +6,7 @@ import com.android.mediproject.core.model.dur.durproduct.capacity.DurProductCapa
 import com.android.mediproject.core.model.dur.durproduct.combination.DurProductCombinationTabooResponse
 import com.android.mediproject.core.model.dur.durproduct.dosing.DurProductDosingCautionResponse
 import com.android.mediproject.core.model.dur.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationResponse
-import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTableSplitAttentionResponse
+import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTabletSplitAttentionResponse
 import com.android.mediproject.core.model.dur.durproduct.pregnancy.DurProductPregnantWomanTabooResponse
 import com.android.mediproject.core.model.dur.durproduct.productlist.DurProductListResponse
 import com.android.mediproject.core.model.dur.durproduct.senior.DurProductSeniorCautionResponse
@@ -33,7 +33,7 @@ interface DurProductDataSource {
         entpName: String?,
         typeName: String?,
         itemSeq: String?,
-    ): Result<DurProductExReleaseTableSplitAttentionResponse>
+    ): Result<DurProductExReleaseTabletSplitAttentionResponse>
 
     suspend fun getEfficacyGroupDuplicationInfo(
         itemName: String?,

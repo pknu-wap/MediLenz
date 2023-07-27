@@ -30,7 +30,6 @@ fun PagingDataAdapter<*, *>.setOnStateChangedListener(
 
         progressBar.isVisible = isFirstLoad
         listView.isVisible = (!isFirstLoad && (loadState.source.refresh !is LoadState.Loading))
-        msgTextView.isVisible =
-            ((!isFirstLoad && loadState.source.refresh !is LoadState.Loading) && itemCount == 0)
+        msgTextView.isVisible = ((!isFirstLoad && loadState.source.refresh !is LoadState.Loading) && itemCount == 0)
     }
 }

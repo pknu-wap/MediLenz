@@ -8,7 +8,7 @@ import com.android.mediproject.core.model.dur.durproduct.capacity.DurProductCapa
 import com.android.mediproject.core.model.dur.durproduct.combination.DurProductCombinationTabooResponse
 import com.android.mediproject.core.model.dur.durproduct.dosing.DurProductDosingCautionResponse
 import com.android.mediproject.core.model.dur.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationResponse
-import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTableSplitAttentionResponse
+import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTabletSplitAttentionResponse
 import com.android.mediproject.core.model.dur.durproduct.pregnancy.DurProductPregnantWomanTabooResponse
 import com.android.mediproject.core.model.dur.durproduct.productlist.DurProductListResponse
 import com.android.mediproject.core.model.dur.durproduct.senior.DurProductSeniorCautionResponse
@@ -81,7 +81,7 @@ interface DurProductInfoNetworkApi {
         @Query("itemSeq") itemSeq: String?,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_ROW_SIZE,
-    ): Response<DurProductExReleaseTableSplitAttentionResponse>
+    ): Response<DurProductExReleaseTabletSplitAttentionResponse>
 
     /**
      * 효능군 중복 정보 조회

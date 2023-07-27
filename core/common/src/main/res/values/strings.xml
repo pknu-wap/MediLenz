@@ -62,16 +62,6 @@
     <string name="imgRegistTsTitle">이미지 등록 일시</string>
     <string name="safeUseOfMedicine">안전 사용</string>
 
-    <!-- 안전 사용 아이템 제목 -->
-    <string name="combinationProhibition">병용 금기</string>
-    <string name="specificAgeGroupProhibition">특정 연령대 금기</string>
-    <string name="pregnancyProhibition">임부 금기</string>
-    <string name="doseCaution">용량 주의</string>
-    <string name="durationOfUseCaution">투여기간 주의</string>
-    <string name="elderlyCaution">노인 주의</string>
-    <string name="efficacyGroupDuplicationCaution">효능군 중복</string>
-    <string name="divisionCaution">분할 주의</string>
-    <string name="additiveCaution">첨가제 주의</string>
     <string name="noInternetConnection">인터넷 연결이 필요합니다.</string>
 
     <string name="highlightWord1">찾고</string>
