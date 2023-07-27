@@ -98,7 +98,6 @@ class DurProductCombinationTabooResponse : DataGoKrResponse<DurProductCombinatio
         @SerialName("REMARK") val remark: String = "", // null
         @SerialName("TYPE_CODE") val typeCode: String = "", // A
         @SerialName("TYPE_NAME") val typeName: String = "", // 병용금기
-    )
-
+    ) : LeafItem
 
 }

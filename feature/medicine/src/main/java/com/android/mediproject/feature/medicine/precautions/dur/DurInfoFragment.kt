@@ -1,17 +1,12 @@
-package com.android.mediproject.feature.medicine.precautions.item
+package com.android.mediproject.feature.medicine.precautions.dur
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.common.dialog.LoadingDialog
-import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.medicine.R
-import com.android.mediproject.feature.medicine.databinding.FragmentMedicineSafeUseItemBinding
+import com.android.mediproject.feature.medicine.databinding.FragmentDurInfoBinding
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 /**
  *
@@ -46,10 +41,9 @@ import kotlinx.coroutines.launch
  *
  */
 @AndroidEntryPoint
-class MedicineSafeUsageItemFragment :
-    BaseFragment<FragmentMedicineSafeUseItemBinding, MedicineSafeUsageViewModel>(FragmentMedicineSafeUseItemBinding::inflate) {
+class DurInfoFragment : BaseFragment<FragmentDurInfoBinding, DurInfoViewModel>(FragmentDurInfoBinding::inflate) {
 
-    override val fragmentViewModel: MedicineSafeUsageViewModel by viewModels()
+    override val fragmentViewModel: DurInfoViewModel by viewModels()
 
     private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>(
         {
@@ -59,40 +53,7 @@ class MedicineSafeUsageItemFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.viewModel = fragmentViewModel
-
-        viewLifecycleOwner.repeatOnStarted {
-
-            launch {
-                fragmentViewModel.dur.collect {
-                    when (it) {
-                        is UiState.Success -> {
-                            LoadingDialog.dismiss()
-                        }
-
-                        else -> {
-                            LoadingDialog.dismiss()
-                        }
-                    }
-                }
-            }
-
-            launch {
-                medicineInfoViewModel.medicineDetails.collect {
-                    when (it) {
-                        is UiState.Success -> {
-                            it.data.also { medicineInfo ->
-                                LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.loadingSafeUsage))
-                                fragmentViewModel.loadDur(itemName = null, itemSeq = medicineInfo.itemSequence)
-                            }
-                        }
-
-                        else -> {}
-                    }
-                }
-            }
-        }
 
     }
 

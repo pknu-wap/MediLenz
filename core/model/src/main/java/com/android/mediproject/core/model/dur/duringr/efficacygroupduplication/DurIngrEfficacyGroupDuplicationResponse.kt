@@ -45,6 +45,6 @@ class DurIngrEfficacyGroupDuplicationResponse : DataGoKrResponse<DurIngrEfficacy
             @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // null
             @SerialName("REMARK") val remark: String = "", // null
             @SerialName("TYPE_NAME") val typeName: String = "", // 효능군중복
-        )
+        ) : LeafItem
     }
 }

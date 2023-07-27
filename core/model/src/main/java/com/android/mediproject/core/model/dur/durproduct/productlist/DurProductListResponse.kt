@@ -61,7 +61,7 @@ class DurProductListResponse : DataGoKrResponse<DurProductListResponse.Item>() {
         @SerialName("TYPE_CODE") val typeCode: String = "", // D,F,I
         @SerialName("TYPE_NAME  ") val typeName: String = "", // 용량주의,노인주의,첨가제주의
         @SerialName("VALID_TERM") val validTerm: String = "", // 제조일로부터 36 개월
-    ) {
+    ) : LeafItem {
         val typeNames = typeName.split(",")
         val typeCodes = typeCode.split(",")
     }

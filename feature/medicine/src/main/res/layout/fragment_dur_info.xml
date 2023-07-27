@@ -5,16 +5,14 @@
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.medicine.precautions.item.MedicineSafeUsageViewModel"
-            />
+            type="com.android.mediproject.feature.medicine.precautions.dur.DurInfoViewModel" />
     </data>
 
     <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/safeUsageRecyclerView"
+        android:id="@+id/durListRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-        />
 </layout>

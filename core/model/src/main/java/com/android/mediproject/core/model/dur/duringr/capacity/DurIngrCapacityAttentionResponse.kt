@@ -47,7 +47,7 @@ class DurIngrCapacityAttentionResponse : DataGoKrResponse<DurIngrCapacityAttenti
             @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // 금기내용
             @SerialName("REMARK") val remark: String = "", // 비고
             @SerialName("TYPE_NAME") val typeName: String = "", // 용량주의
-        )
+        ) : LeafItem
     }
 
 }

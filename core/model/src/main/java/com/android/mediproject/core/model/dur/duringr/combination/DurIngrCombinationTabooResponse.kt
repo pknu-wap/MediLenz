@@ -54,7 +54,7 @@ class DurIngrCombinationTabooResponse : DataGoKrResponse<DurIngrCombinationTaboo
             @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // 횡문근융해증
             @SerialName("REMARK") val remark: String = "", // 75세 이상 남성
             @SerialName("TYPE_NAME") val typeName: String = "", // 병용금기
-        )
+        ) : LeafItem
     }
 
 

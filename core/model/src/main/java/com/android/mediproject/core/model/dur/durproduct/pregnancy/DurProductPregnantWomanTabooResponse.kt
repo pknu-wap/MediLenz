@@ -55,5 +55,5 @@ class DurProductPregnantWomanTabooResponse : DataGoKrResponse<DurProductPregnant
         val prohibitContent: String = "", // "(경구) 동물실험에서 골격, 심장, 망막 및 혀에 기형 보고.출생자의 체중감소 및 생존수 감소, 분만지연, 사산수 증가 보고.(주사)동물 실험에서 최기형성 및 태자치사 작용 보고."
         @SerialName("REMARK") val remark: String = "", // null
         @SerialName("TYPE_NAME") val typeName: String = "", // 임부금기
-    )
+    ) : LeafItem
 }

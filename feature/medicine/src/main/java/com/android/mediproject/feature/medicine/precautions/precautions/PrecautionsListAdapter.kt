@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.medicine.precautions.item.precautions
+package com.android.mediproject.feature.medicine.precautions.precautions
 
 import android.text.Spanned
 import android.view.LayoutInflater

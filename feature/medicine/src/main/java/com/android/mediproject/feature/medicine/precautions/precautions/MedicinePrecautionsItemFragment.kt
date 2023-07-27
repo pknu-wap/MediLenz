@@ -1,17 +1,16 @@
-package com.android.mediproject.feature.medicine.precautions.item
+package com.android.mediproject.feature.medicine.precautions.precautions
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicinePrecautionsItemBinding
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import com.android.mediproject.feature.medicine.precautions.host.MedicinePrecautionsViewModel
-import com.android.mediproject.feature.medicine.precautions.item.precautions.PrecautionsListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 /**
  * 의약품 사용 상 주의사항 Fragment

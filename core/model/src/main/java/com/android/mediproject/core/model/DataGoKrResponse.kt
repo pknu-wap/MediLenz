@@ -25,6 +25,7 @@ abstract class DataGoKrResponse<ITEM : Any> {
         @SerialName("totalCount") val totalCount: Int = 0,
     )
 
+    interface LeafItem
 }
 
 inline fun <reified T : DataGoKrResponse<*>> T.toResult(): Result<T> = header?.run {

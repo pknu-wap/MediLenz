@@ -46,7 +46,7 @@ class DurIngrPregnantWomanTabooResponse : DataGoKrResponse<DurIngrPregnantWomanT
             @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // 임부에 대한 안전성 미확립.
             @SerialName("REMARK") val remark: String = "", // 경구
             @SerialName("TYPE_NAME") val typeName: String = "", // 임부금기
-        )
+        ) : LeafItem
     }
 
 }

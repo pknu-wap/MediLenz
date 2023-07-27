@@ -43,6 +43,6 @@ class DurIngrSeniorCautionResponse : DataGoKrResponse<DurIngrSeniorCautionRespon
             @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // 노인에서의 장기지속형 벤조다이아제핀 사용은 운동실조, 과진정 등이 나타나기 쉬움으로 소량부터 신중투여
             @SerialName("REMARK") val remark: String = "", // null
             @SerialName("TYPE_NAME") val typeName: String = "", // 노인주의
-        )
+        ) : LeafItem
     }
 }

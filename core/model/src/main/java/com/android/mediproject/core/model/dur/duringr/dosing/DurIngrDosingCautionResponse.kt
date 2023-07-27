@@ -47,7 +47,7 @@ class DurIngrDosingCautionResponse : DataGoKrResponse<DurIngrDosingCautionRespon
             @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // null
             @SerialName("REMARK") val remark: String = "", // null
             @SerialName("TYPE_NAME") val typeName: String = "", // 투여기간주의
-        )
+        ) : LeafItem
     }
 
 }

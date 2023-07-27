@@ -45,5 +45,5 @@ class DurProductExReleaseTableSplitAttentionResponse : DataGoKrResponse<DurProdu
         @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // 분할불가
         @SerialName("REMARK") val remark: String = "", // null
         @SerialName("TYPE_NAME") val typeName: String = "", // 분할주의
-    )
+    ) : LeafItem
 }
