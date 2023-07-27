@@ -38,13 +38,17 @@ private const val DATA_GO_KR_BASEURL = "https://apis.data.go.kr/1471000/"
 @InstallIn(SingletonComponent::class)
 @Module
 object DataGoKrNetwork {
+    private val json = Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+    }
 
     // Retrofit2 인스턴스 ---------------------------------------------------------------------------------------------------
     @Provides
     @Singleton
     @Named("dataGoKrNetworkApiWithJsonResponse")
     fun providesDataGoKrNetworkApiWithJson(okHttpClient: OkHttpClient): DataGoKrNetworkApi =
-        Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(DATA_GO_KR_BASEURL).build().create(DataGoKrNetworkApi::class.java)
 
     @Provides

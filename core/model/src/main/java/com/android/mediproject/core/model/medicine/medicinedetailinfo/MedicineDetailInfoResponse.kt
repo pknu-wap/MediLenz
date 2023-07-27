@@ -25,7 +25,6 @@ class MedicineDetailInfoResponse : DataGoKrResponse<MedicineDetailInfoResponse.I
      * @param docText 효능효과
      * @param ediCode EDI코드
      * @param eeDocData 의약품 효능효과
-     * @param eeDocId 의약품 효능효과 문서의 식별자(ID)입니다.
      * @param entpEnglishName 제조사의 영문 이름입니다.
      * @param entpName 제조사의 이름입니다.
      * @param entpNumber 제조사의 번호입니다.
@@ -70,7 +69,6 @@ class MedicineDetailInfoResponse : DataGoKrResponse<MedicineDetailInfoResponse.I
         @SerialName("DOC_TEXT") val docText: String = "",
         @SerialName("EDI_CODE") val ediCode: String = "",
         @SerialName("EE_DOC_DATA") val eeDocData: String = "",
-        @SerialName("EE_DOC_ID") val eeDocId: String = "",
         @SerialName("ENTP_ENG_NAME") val entpEnglishName: String = "",
         @SerialName("ENTP_NAME") val entpName: String = "",
         @SerialName("ENTP_NO") val entpNumber: String = "",

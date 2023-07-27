@@ -1,5 +1,6 @@
 package com.android.mediproject.core.model.dur.duringr.combination
 
+import android.text.Spanned
 import com.android.mediproject.core.model.dur.DurItemWrapper
 import com.android.mediproject.core.model.dur.DurType
 import com.android.mediproject.core.model.dur.duringr.ui.DurIngrItem
@@ -13,7 +14,10 @@ data class DurIngrCombinationTaboo(
     val mixtureIngrEngName: String,
     val remark: String,
     override val prohibitContent: String = "",
-) : DurIngrItem(DurType.COMBINATION_TABOO)
+) : DurIngrItem(DurType.COMBINATION_TABOO) {
+    override val content: Spanned
+        get() = TODO("Not yet implemented")
+}
 
 class DurIngrCombinationTabooWrapper(
     override val response: DurIngrCombinationTabooResponse,

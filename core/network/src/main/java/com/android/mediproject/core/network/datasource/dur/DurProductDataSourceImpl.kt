@@ -17,41 +17,37 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import javax.inject.Inject
-import kotlin.reflect.full.callSuspendBy
-import kotlin.reflect.full.findParameterByName
 
 class DurProductDataSourceImpl @Inject constructor(
     private val durProductInfoNetworkApi: DurProductInfoNetworkApi,
 ) : DurProductDataSource {
 
-    private val methods = mapOf(
-        DurType.CAPACITY_ATTENTION to ::getCapacityAttentionInfo,
-        DurType.COMBINATION_TABOO to ::getCombinationTabooInfo,
-        DurType.DOSING_CAUTION to ::getDosingCautionInfo,
-        DurType.EX_RELEASE_TABLET_SPLIT_ATTENTION to ::getExReleaseTableSplitAttentionInfo,
-        DurType.EFFICACY_GROUP_DUPLICATION to ::getEfficacyGroupDuplicationInfo,
-        DurType.PREGNANT_WOMAN_TABOO to ::getPregnantWomanTabooInfo,
-        DurType.SENIOR_CAUTION to ::getSeniorCaution,
-        DurType.SPECIALTY_AGE_GROUP_TABOO to ::getSpecialtyAgeGroupTabooInfo,
-    )
-
-    private val itemSeqParameter = ::getDurList.findParameterByName("itemSeq")!!
-
-    override fun getDurList(itemSeq: String, durTypes: List<DurType>): Flow<Map<DurType, Result<DataGoKrResponse<*>>>> = channelFlow {
-        val args = mapOf(itemSeqParameter to itemSeq)
-        val map = durTypes.map { type ->
-            type to async {
-                methods.getValue(type).callSuspendBy(args)
-            }
-        }.associate {
-            it.first to it.second.await()
-        }
-
+    override fun getDurList(itemSeq: String, durTypes: List<DurType>): Flow<Map<DurType, Result<DataGoKrResponse<out Any>>>> = channelFlow {
+        val map: Map<DurType, Result<DataGoKrResponse<out Any>>> = durTypes.map { type ->
+            type to async { call(type, itemSeq) }
+        }.associate { it.first to it.second.await() }
         send(map)
+    }
+
+
+    private suspend inline fun call(durType: DurType, itemSeq: String): Result<DataGoKrResponse<out Any>> = when (durType) {
+        DurType.EX_RELEASE_TABLET_SPLIT_ATTENTION -> getExReleaseTableSplitAttentionInfo(
+            itemName = null, entpName = null,
+            typeName = null, itemSeq = itemSeq,
+        )
+
+        DurType.EFFICACY_GROUP_DUPLICATION -> getEfficacyGroupDuplicationInfo(itemName = null, ingrCode = null, typeName = null, itemSeq = itemSeq)
+        DurType.DOSING_CAUTION -> getDosingCautionInfo(itemName = null, ingrCode = null, typeName = null, itemSeq = itemSeq)
+        DurType.CAPACITY_ATTENTION -> getCapacityAttentionInfo(itemName = null, ingrCode = null, typeName = null, itemSeq = itemSeq)
+        DurType.PREGNANT_WOMAN_TABOO -> getPregnantWomanTabooInfo(itemName = null, ingrCode = null, typeName = null, itemSeq = itemSeq)
+        DurType.SPECIALTY_AGE_GROUP_TABOO -> getSpecialtyAgeGroupTabooInfo(itemName = null, ingrCode = null, typeName = null, itemSeq = itemSeq)
+        DurType.COMBINATION_TABOO -> getCombinationTabooInfo(itemName = null, ingrCode = null, typeName = null, itemSeq = itemSeq)
+        DurType.SENIOR_CAUTION -> getSeniorCaution(itemName = null, ingrCode = null, itemSeq = itemSeq)
     }
 
     override suspend fun getDurProductList(itemName: String?, itemSeq: String?): Result<DurProductListResponse> =
         durProductInfoNetworkApi.getDurProductList(itemName = itemName, itemSeq = itemSeq).onDataGokrResponse()
+
 
     override suspend fun getSeniorCaution(itemName: String?, ingrCode: String?, itemSeq: String?): Result<DurProductSeniorCautionResponse> =
         durProductInfoNetworkApi.getSeniorCaution(itemName = itemName, ingrCode = ingrCode, itemSeq = itemSeq).onDataGokrResponse()

@@ -23,7 +23,10 @@ internal inline fun <reified T : Any> Response<T>.onResponse(): Result<T> {
     }
 }
 
-private val json = Json { coerceInputValues = true }
+private val json = Json {
+    coerceInputValues = true
+    ignoreUnknownKeys = true
+}
 
 private inline fun <reified T : Any> String.parse(): Result<T> = try {
     Result.success(json.decodeFromString(this))

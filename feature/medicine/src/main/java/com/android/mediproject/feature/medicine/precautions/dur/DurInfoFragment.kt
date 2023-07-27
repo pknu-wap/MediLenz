@@ -46,20 +46,22 @@ class DurInfoFragment : BaseFragment<FragmentDurInfoBinding, DurInfoViewModel>(F
             viewLifecycleOwner.repeatOnStarted {
                 fragmentViewModel.durList.collect { state ->
                     state.isInitializing {
-                        
+
                     }.isLoadingDurTypes {
 
                     }.isLoadingDurList {
 
                     }.isSuccess {
+                        log("isSuccess")
                         adapter.submitList(it)
                     }.isError {
-
+                        log("isError")
+                        adapter.submitList(emptyList())
                     }
                 }
             }
 
-            adapter.submitList(null)
+            adapter.submitList(emptyList())
             fragmentViewModel.getDur(medicineInfoViewModel.medicinePrimaryInfo.replayCache.last().itemSeq.toString())
         }
     }

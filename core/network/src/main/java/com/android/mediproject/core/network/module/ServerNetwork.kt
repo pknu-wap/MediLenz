@@ -66,12 +66,18 @@ import javax.inject.Singleton
 @Module
 object ServerNetwork {
 
+    private val json = Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+    }
+
+
     @Provides
     @Named("awsNetworkApiWithoutTokens")
     @Singleton
     fun providesWithoutTokensAwsNetworkApi(
         @Named("okHttpClientWithoutAny") okHttpClient: OkHttpClient,
-    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
 
@@ -86,15 +92,18 @@ object ServerNetwork {
     @Singleton
     fun providesAwsNetworkApi(
         @Named("okHttpClientWithAccessTokens") okHttpClient: OkHttpClient,
-    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
     @Named("awsNetworkApiWithRefreshTokens")
     fun providesReissueTokenAwsNetworkApi(
         @Named("okHttpClientWithReissueTokens") okHttpClient: OkHttpClient,
-    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-        .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
+    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
+        json.asConverterFactory(
+            "application/json".toMediaType(),
+        ),
+    ).baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
     @Singleton

@@ -1,16 +1,16 @@
 package com.android.mediproject.core.common.recyclerview
 
+import android.util.Log
+import android.view.View
 import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import kotlin.reflect.KProperty
 
 abstract class MListAdapter<T, VH : RecyclerView.ViewHolder> : ListAdapter<T, VH> {
-
+    private var init = true
     private var iView: IView? = null
 
     constructor(diffCallback: DiffUtil.ItemCallback<T>) : super(diffCallback)
@@ -19,14 +19,17 @@ abstract class MListAdapter<T, VH : RecyclerView.ViewHolder> : ListAdapter<T, VH
     override fun onCurrentListChanged(previousList: MutableList<T>, currentList: MutableList<T>) {
         super.onCurrentListChanged(previousList, currentList)
         iView?.run {
-            val isFirstLoad = previousList.isEmpty() && currentList.isNotEmpty()
+            Log.d(
+                "MListAdapter", "previousListEmpty : ${previousList.isEmpty()}, currentListEmpty : ${currentList.isEmpty()}",
+            )
 
-            progressBarIsVisible.call(isFirstLoad)
-            loadTextViewIsVisible.call(isFirstLoad)
-            msgTextViewIsVisible.call(previousList.isEmpty() && currentList.isEmpty())
-            listViewIsVisible.call(currentList.isNotEmpty())
+            msgTextViewIsVisible(if (!init and previousList.isEmpty() and currentList.isEmpty()) View.VISIBLE else View.GONE)
+            loadTextViewIsVisible(if (init) View.VISIBLE else View.GONE)
+            progressBarIsVisible(if (init) View.VISIBLE else View.GONE)
+            listViewIsVisible(if (currentList.isNotEmpty()) View.VISIBLE else View.GONE)
 
-            if (previousList.isEmpty() && currentList.isNotEmpty()) listViewScrollToPosition(0)
+            if (previousList.isEmpty() and currentList.isNotEmpty()) listViewScrollToPosition(0)
+            init = false
         }
     }
 
@@ -54,10 +57,10 @@ abstract class MListAdapter<T, VH : RecyclerView.ViewHolder> : ListAdapter<T, VH
         emptyMsg: String,
         loadMsg: String,
     ) {
-        val msgTextViewIsVisible: KProperty<Boolean> = msgTextView::isVisible
-        val loadTextViewIsVisible: KProperty<Boolean> = loadTextView::isVisible
-        val progressBarIsVisible: KProperty<Boolean> = progressBar::isVisible
-        val listViewIsVisible: KProperty<Boolean> = listView::isVisible
+        val msgTextViewIsVisible: (Int) -> Unit = msgTextView::setVisibility
+        val loadTextViewIsVisible: (Int) -> Unit = loadTextView::setVisibility
+        val progressBarIsVisible: (Int) -> Unit = progressBar::setVisibility
+        val listViewIsVisible: (Int) -> Unit = listView::setVisibility
         val listViewScrollToPosition: (Int) -> Unit = listView::scrollToPosition
 
         init {

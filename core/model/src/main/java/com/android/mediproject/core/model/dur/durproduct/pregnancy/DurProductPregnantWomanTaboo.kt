@@ -1,8 +1,16 @@
 package com.android.mediproject.core.model.dur.durproduct.pregnancy
 
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
+import androidx.core.text.toSpanned
 import com.android.mediproject.core.model.dur.DurItemWrapper
 import com.android.mediproject.core.model.dur.DurType
 import com.android.mediproject.core.model.dur.durproduct.ui.DurProductItem
+import java.lang.ref.WeakReference
 
 /**
  * 임부 금기
@@ -17,7 +25,22 @@ data class DurProductPregnantWomanTaboo(
     val ingrKorName: String,
     val ingrEngName: String,
     override val prohibitContent: String,
-) : DurProductItem(DurType.PREGNANT_WOMAN_TABOO)
+) : DurProductItem(DurType.PREGNANT_WOMAN_TABOO) {
+    override val content: Spanned
+        get() = WeakReference(SpannableStringBuilder()).get()!!.let { builder ->
+            builder.append(itemName)
+            builder.setSpan(StyleSpan(Typeface.BOLD), 0, itemName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            builder.setSpan(RelativeSizeSpan(1.2f), 0, itemName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            builder.append(ingrEngName)
+            builder.setSpan(StyleSpan(Typeface.BOLD), builder.length - ingrEngName.length, builder.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            builder.append("\n")
+            builder.append(prohibitContent)
+
+            builder.toSpanned()
+        }
+}
 
 class DurProductPregnantWomanTabooWrapper(
     override val response: DurProductPregnantWomanTabooResponse,

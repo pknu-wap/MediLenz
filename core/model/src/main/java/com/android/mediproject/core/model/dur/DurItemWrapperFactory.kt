@@ -9,19 +9,19 @@ import com.android.mediproject.core.model.dur.durproduct.dosing.DurProductDosing
 import com.android.mediproject.core.model.dur.durproduct.dosing.DurProductDosingCautionWrapper
 import com.android.mediproject.core.model.dur.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationResponse
 import com.android.mediproject.core.model.dur.durproduct.efficacygroupduplication.DurProductEfficacyGroupDuplicationWrapper
-import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTabletSplitAttentionResponse
 import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTableSplitAttentionWrapper
+import com.android.mediproject.core.model.dur.durproduct.extendedreleasetablet.DurProductExReleaseTabletSplitAttentionResponse
 import com.android.mediproject.core.model.dur.durproduct.pregnancy.DurProductPregnantWomanTabooResponse
 import com.android.mediproject.core.model.dur.durproduct.pregnancy.DurProductPregnantWomanTabooWrapper
 import com.android.mediproject.core.model.dur.durproduct.senior.DurProductSeniorCautionResponse
 import com.android.mediproject.core.model.dur.durproduct.senior.DurProductSeniorCautionWrapper
 import com.android.mediproject.core.model.dur.durproduct.specialtyagegroup.DurProductSpecialtyAgeGroupTabooResponse
-import com.android.mediproject.core.model.dur.durproduct.specialtyagegroup.DurProductSpecialtyWrapper
+import com.android.mediproject.core.model.dur.durproduct.specialtyagegroup.DurProductSpecialtyAgeGroupTabooWrapper
 
 class DurItemWrapperFactory {
     companion object {
         inline fun <reified T : DataGoKrResponse<*>> createForDurProduct(durType: DurType, response: T): DurItemWrapper = when (durType) {
-            DurType.SPECIALTY_AGE_GROUP_TABOO -> DurProductSpecialtyWrapper(response as DurProductSpecialtyAgeGroupTabooResponse)
+            DurType.SPECIALTY_AGE_GROUP_TABOO -> DurProductSpecialtyAgeGroupTabooWrapper(response as DurProductSpecialtyAgeGroupTabooResponse)
             DurType.SENIOR_CAUTION -> DurProductSeniorCautionWrapper(response as DurProductSeniorCautionResponse)
             DurType.DOSING_CAUTION -> DurProductDosingCautionWrapper(response as DurProductDosingCautionResponse)
             DurType.EFFICACY_GROUP_DUPLICATION -> DurProductEfficacyGroupDuplicationWrapper(response as DurProductEfficacyGroupDuplicationResponse)

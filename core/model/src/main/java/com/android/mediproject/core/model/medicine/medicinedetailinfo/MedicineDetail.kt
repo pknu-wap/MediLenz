@@ -19,7 +19,6 @@ import java.time.LocalDate
  * @param docText ?
  * @param ediCode EDI코드
  * @param eeDocData 의약품 효능효과
- * @param eeDocId 의약품 효능효과 문서의 식별자(ID)입니다.
  * @param entpEnglishName 제조사의 영문 이름입니다.
  * @param entpName 제조사의 이름입니다.
  * @param entpNumber 제조사의 번호입니다.
@@ -65,7 +64,6 @@ data class MedicineDetail(
     val docText: String,
     val ediCode: String,
     val eeDocData: XMLParsedResult,
-    val eeDocId: String,
     val entpEnglishName: String,
     val entpName: String,
     val entpNumber: String,
@@ -112,7 +110,6 @@ fun MedicineDetailInfoResponse.Item.toMedicineDetail(medicineIdInServer: Long = 
     docText = docText,
     ediCode = ediCode,
     eeDocData = if (eeDocData.isNotEmpty()) eeDocData.parseXmlString() else XMLParsedResult("", emptyList()),
-    eeDocId = eeDocId,
     entpEnglishName = entpEnglishName,
     entpName = entpName,
     entpNumber = entpNumber,

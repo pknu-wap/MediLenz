@@ -1,4 +1,4 @@
-package com.android.mediproject.core.model.dur.durproduct.capacity
+package com.android.mediproject.core.model.dur.durproduct.specialtyagegroup
 
 import android.graphics.Typeface
 import android.text.Spannable
@@ -13,15 +13,15 @@ import com.android.mediproject.core.model.dur.durproduct.ui.DurProductItem
 import java.lang.ref.WeakReference
 
 /**
- * 용량주의
+ * 특정연령대 금기
  *
  * @param itemName 품목명
- * @param prohibitContent 1일 최대투여량
+ * @param prohibitContent 연령금기내용
  */
-data class DurProductCapacityAttention(
+data class DurProductSpecialtyAgeGroupTaboo(
     val itemName: String,
     override val prohibitContent: String,
-) : DurProductItem(DurType.CAPACITY_ATTENTION) {
+) : DurProductItem(DurType.SPECIALTY_AGE_GROUP_TABOO) {
     override val content: Spanned
         get() = WeakReference(SpannableStringBuilder()).get()!!.let { builder ->
             builder.append(itemName)
@@ -35,19 +35,14 @@ data class DurProductCapacityAttention(
         }
 }
 
-
-fun DurProductCapacityAttentionResponse.Item.toDurProductCapacityAttention() = DurProductCapacityAttention(
-    itemName = itemName,
-    prohibitContent = prohibitContent,
-)
-
-class DurProductCapacityAttentionWrapper(
-    override val response: DurProductCapacityAttentionResponse,
+class DurProductSpecialtyAgeGroupTabooWrapper(
+    override val response: DurProductSpecialtyAgeGroupTabooResponse,
 ) : DurItemWrapper(response) {
     override fun convert() = response.body.items.map {
-        DurProductCapacityAttention(
+        DurProductSpecialtyAgeGroupTaboo(
             itemName = it.itemName,
             prohibitContent = it.prohibitContent,
         )
     }
+
 }

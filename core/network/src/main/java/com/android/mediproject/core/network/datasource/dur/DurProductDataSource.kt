@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface DurProductDataSource {
 
-    fun getDurList(itemSeq: String, durTypes: List<DurType>): Flow<Map<DurType, Result<DataGoKrResponse<*>>>>
+    fun getDurList(itemSeq: String, durTypes: List<DurType>): Flow<Map<DurType, Result<DataGoKrResponse<out Any>>>>
 
     suspend fun getDurProductList(
         itemName: String?,

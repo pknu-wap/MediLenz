@@ -1,6 +1,7 @@
 plugins {
     id("mediproject.android.feature")
     id("kotlinx-serialization")
+    alias(libs.plugins.kapt)
 }
 
 android {

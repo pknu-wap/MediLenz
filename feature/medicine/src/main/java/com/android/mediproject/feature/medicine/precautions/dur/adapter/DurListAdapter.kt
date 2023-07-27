@@ -49,6 +49,8 @@ class DurListAdapter : MListAdapter<DurListItem, DurListAdapter.ViewHolder>(List
         }
 
         fun onBind(item: DurListItem) {
+            binding.model = item
+            binding.executePendingBindings()
             item.durItems?.onSuccess { contentsAdapter.submitList(it) }?.onFailure { }
         }
     }

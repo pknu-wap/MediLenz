@@ -7,7 +7,6 @@ import com.android.mediproject.core.model.dur.DurType
 import com.android.mediproject.core.network.datasource.dur.DurProductDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
@@ -23,12 +22,8 @@ class DurProductRepositoryImpl @Inject constructor(
     override fun hasDur(itemName: String?, itemSeq: String?): Flow<Result<List<DurType>>> = channelFlow {
         val response = durProductDataSource.getDurProductList(itemName = itemName, itemSeq = itemSeq)
         response.onSuccess {
-            if (it.body.items.isNotEmpty()) {
-                val durTypeList = it.body.items.map { item -> DurType.valueOf(item.typeName) }
-                send(Result.success(durTypeList))
-            } else {
-                send(Result.failure(Throwable("No Dur")))
-            }
+            val durTypeList = it.body.items.firstOrNull()?.typeNames?.map { type -> DurType.typeOf(type) } ?: emptyList()
+            send(Result.success(durTypeList))
         }.onFailure {
             send(Result.failure(it))
         }
@@ -39,16 +34,18 @@ class DurProductRepositoryImpl @Inject constructor(
             durProductCacheMap[itemSeq]?.keys?.filter { it !in durTypes } ?: durTypes
         }
         val map = mutableMapOf<DurType, Result<List<DurItem>>>()
-        durProductDataSource.getDurList(itemSeq, filteredDurTypes).last().forEach { (durType, response) ->
-            response.onSuccess {
-                cache(itemSeq, durType, it)
-                durType to Result.success(DurItemWrapperFactory.createForDurProduct(durType, it).convert())
-            }.onFailure {
-                durType to Result.failure<List<DurItem>>(it)
+        durProductDataSource.getDurList(itemSeq, filteredDurTypes).collect { resultMap ->
+            resultMap.forEach { (durType, response) ->
+                response.onSuccess {
+                    cache(itemSeq, durType, it)
+                    map[durType] = Result.success(DurItemWrapperFactory.createForDurProduct(durType, it).convert())
+                }.onFailure {
+                    map[durType] = Result.failure(it)
+                }
             }
-        }
 
-        send(map)
+            send(map)
+        }
     }
 
     private suspend fun cache(key: String, durType: DurType, response: DataGoKrResponse<*>) {
