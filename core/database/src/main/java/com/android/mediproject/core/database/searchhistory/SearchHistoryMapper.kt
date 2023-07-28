@@ -1,7 +1,9 @@
 package com.android.mediproject.core.database.searchhistory
 
-fun SearchHistoryDto.toSearchHistoryItemDto(): com.android.mediproject.core.model.search.local.SearchHistoryItemDto {
-    return com.android.mediproject.core.model.search.local.SearchHistoryItemDto(
+import com.android.mediproject.core.model.search.SearchHistory
+
+fun SearchHistoryDto.toSearchHistoryItemDto(): SearchHistory {
+    return SearchHistory(
         id = id, query = query, searchedAt = searchDateTime,
     )
 }

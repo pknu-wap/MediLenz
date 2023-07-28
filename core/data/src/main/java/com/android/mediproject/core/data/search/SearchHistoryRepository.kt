@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SearchHistoryRepository {
     @WorkerThread
-    fun insertSearchHistory(searchHistoryDto: SearchHistoryDto)
+    suspend fun insertSearchHistory(searchHistoryDto: SearchHistoryDto)
 
     @WorkerThread
 

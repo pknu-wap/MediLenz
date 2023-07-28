@@ -1,7 +1,7 @@
 package com.android.mediproject.core.network.datasource.sign
 
-import com.android.mediproject.core.model.remote.sign.SignInResponse
-import com.android.mediproject.core.model.remote.sign.SignUpResponse
+import com.android.mediproject.core.model.sign.SignInResponse
+import com.android.mediproject.core.model.sign.SignUpResponse
 import com.android.mediproject.core.model.requestparameters.LoginParameter
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import kotlinx.coroutines.flow.Flow

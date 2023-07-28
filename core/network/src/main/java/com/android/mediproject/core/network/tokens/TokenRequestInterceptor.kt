@@ -1,7 +1,7 @@
 package com.android.mediproject.core.network.tokens
 
 import android.util.Log
-import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.model.token.TokenState
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

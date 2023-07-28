@@ -4,15 +4,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.comments.CommentDto
+import com.android.mediproject.core.model.comments.Comment
 import com.android.mediproject.core.ui.base.view.SimpleListItemView
 
-class RecentCommentsAdapter : ListAdapter<CommentDto, RecentCommentsAdapter.RecentCommentListViewHolder>(AsyncDiffer) {
+class RecentCommentsAdapter : ListAdapter<Comment, RecentCommentsAdapter.RecentCommentListViewHolder>(AsyncDiffer) {
 
 
-    class RecentCommentListViewHolder(private val view: SimpleListItemView<CommentDto>) : RecyclerView.ViewHolder(view) {
+    class RecentCommentListViewHolder(private val view: SimpleListItemView<Comment>) : RecyclerView.ViewHolder(view) {
 
-        private var item: CommentDto? = null
+        private var item: Comment? = null
 
         init {
             view.setOnItemClickListener {
@@ -24,7 +24,7 @@ class RecentCommentsAdapter : ListAdapter<CommentDto, RecentCommentsAdapter.Rece
             }
         }
 
-        fun bind(data: CommentDto) {
+        fun bind(data: Comment) {
             item = data
             view.setTitle(data.userName)
             view.setContent(data.content)
@@ -42,12 +42,12 @@ class RecentCommentsAdapter : ListAdapter<CommentDto, RecentCommentsAdapter.Rece
 }
 
 
-object AsyncDiffer : DiffUtil.ItemCallback<CommentDto>() {
-    override fun areItemsTheSame(oldItem: CommentDto, newItem: CommentDto): Boolean {
+object AsyncDiffer : DiffUtil.ItemCallback<Comment>() {
+    override fun areItemsTheSame(oldItem: Comment, newItem: Comment): Boolean {
         return oldItem.commentId == newItem.commentId
     }
 
-    override fun areContentsTheSame(oldItem: CommentDto, newItem: CommentDto): Boolean {
+    override fun areContentsTheSame(oldItem: Comment, newItem: Comment): Boolean {
         return oldItem == newItem
     }
 }

@@ -1,6 +1,6 @@
 package com.android.mediproject.core.network.datasource.tokens
 
-import com.android.mediproject.core.model.remote.token.RequestBehavior
+import com.android.mediproject.core.model.token.RequestBehavior
 import java.time.Duration
 import java.time.LocalDateTime
 

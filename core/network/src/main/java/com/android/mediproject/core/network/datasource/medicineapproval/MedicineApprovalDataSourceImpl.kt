@@ -6,7 +6,7 @@ import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDe
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.MedicineCacheEntity
 import com.android.mediproject.core.model.toResult
 import com.android.mediproject.core.network.datasource.image.GoogleSearchDataSource
-import com.android.mediproject.core.network.module.DataGoKrNetworkApi
+import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
 import com.android.mediproject.core.network.module.safetyEncode
 import com.android.mediproject.core.network.onResponse
 import com.android.mediproject.core.network.onStringResponse
@@ -32,21 +32,21 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
         itemName = itemName?.safetyEncode(), entpName = entpName?.safetyEncode(), pageNo = pageNo,
         medicationType = medicationType,
     ).onResponse().fold(
-            onSuccess = { response ->
-                response.toResult().fold(
-                    onSuccess = {
-                        loadMedicineImageUrl(it)
-                        Result.success(response)
-                    },
-                    onFailure = {
-                        Result.failure(it)
-                    },
-                )
-            },
-            onFailure = {
-                Result.failure(it)
-            },
-        )
+        onSuccess = { response ->
+            response.toResult().fold(
+                onSuccess = {
+                    loadMedicineImageUrl(it)
+                    Result.success(response)
+                },
+                onFailure = {
+                    Result.failure(it)
+                },
+            )
+        },
+        onFailure = {
+            Result.failure(it)
+        },
+    )
 
     override fun getMedicineDetailInfo(itemName: String): Flow<Result<MedicineDetailInfoResponse>> = channelFlow {
         dataGoKrNetworkApiWithString.getMedicineDetailInfo(itemName = itemName.safetyEncode()).let { response ->

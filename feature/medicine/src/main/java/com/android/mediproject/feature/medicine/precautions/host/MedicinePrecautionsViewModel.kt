@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MedicinePrecautionsViewModel @Inject constructor(
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
     private val _precautions = MutableStateFlow<List<Spanned>>(emptyList())
@@ -30,9 +30,7 @@ class MedicinePrecautionsViewModel @Inject constructor(
      */
     fun createPrecautionsTexts(xmlParsedResult: XMLParsedResult) {
         viewModelScope.launch(defaultDispatcher) {
-            val stringBuilder = WeakReference(StringBuilder())
-
-            stringBuilder.get()?.also { builder ->
+            WeakReference(StringBuilder()).get()?.also { builder ->
                 val list = mutableListOf<Spanned>()
 
                 xmlParsedResult.articleList.forEach { article ->
@@ -52,7 +50,6 @@ class MedicinePrecautionsViewModel @Inject constructor(
                     list.toList()
                 }
             }
-            stringBuilder.clear()
         }
     }
 

@@ -5,11 +5,12 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.news"
+
+    hilt {
+        enableAggregatingTask = true
+    }
 }
 
-hilt {
-    enableAggregatingTask = true
-}
 
 dependencies {
     implementation(project(":core:ui"))

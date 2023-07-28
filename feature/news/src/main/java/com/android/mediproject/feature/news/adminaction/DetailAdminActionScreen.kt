@@ -21,13 +21,14 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.android.mediproject.core.model.remote.adminaction.AdminActionListItemDto
+import com.android.mediproject.core.model.adminaction.AdminAction
 import java.time.format.DateTimeFormatter
 
 @Preview
 @Composable
 fun DetailAdminActionScreen(
-    viewModel: AdminActionViewModel = hiltViewModel()) {
+    viewModel: AdminActionViewModel = hiltViewModel(),
+) {
     viewModel.getClickedItem()
     val item = viewModel.clickedItem.collectAsState()
 
@@ -37,7 +38,7 @@ fun DetailAdminActionScreen(
 }
 
 @Composable
-fun Item(item: AdminActionListItemDto) {
+fun Item(item: AdminAction) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,35 +54,45 @@ fun Item(item: AdminActionListItemDto) {
             )
 
             Spacer(Modifier.height(20.dp))
-            Text(text = item.itemName,
+            Text(
+                text = item.itemName,
                 fontSize = TextUnit(20f, type = TextUnitType.Sp),
                 style = TextStyle(color = "#32649F".color),
                 modifier = Modifier.align(Alignment.End),
-                textAlign = TextAlign.Right)
+                textAlign = TextAlign.Right,
+            )
 
             Spacer(Modifier.height(20.dp))
-            Text(text = item.lastSettleDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+            Text(
+                text = item.lastSettleDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
                 fontSize = TextUnit(14f, type = TextUnitType.Sp),
                 style = TextStyle(color = "#595959".color),
                 modifier = Modifier.align(Alignment.End),
-                textAlign = TextAlign.Right)
+                textAlign = TextAlign.Right,
+            )
 
             Divider(Modifier.padding(top = 20.dp, bottom = 40.dp))
 
-            Text(text = item.violation,
+            Text(
+                text = item.violation,
                 fontSize = TextUnit(14f, type = TextUnitType.Sp),
                 modifier = Modifier.padding(bottom = 8.dp),
-                color = "#3E3C3C".color)
+                color = "#3E3C3C".color,
+            )
 
-            Text(text = item.disposition,
+            Text(
+                text = item.disposition,
                 fontSize = TextUnit(14f, type = TextUnitType.Sp),
                 modifier = Modifier.padding(bottom = 8.dp),
-                color = "#3E3C3C".color)
+                color = "#3E3C3C".color,
+            )
 
-            Text(text = item.applyLaw,
+            Text(
+                text = item.applyLaw,
                 fontSize = TextUnit(14f, type = TextUnitType.Sp),
                 modifier = Modifier.padding(bottom = 8.dp),
-                color = "#3E3C3C".color)
+                color = "#3E3C3C".color,
+            )
         }
     }
 }

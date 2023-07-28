@@ -11,7 +11,7 @@
 
         <variable
             name="userDto"
-            type="com.android.mediproject.core.model.user.UserDto" />
+            type="com.android.mediproject.core.model.user.User" />
     </data>
 
     <androidx.core.widget.NestedScrollView

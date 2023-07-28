@@ -1,15 +1,18 @@
 plugins {
     id("mediproject.android.feature")
     id("kotlinx-serialization")
+    alias(libs.plugins.kapt)
 }
 
 android {
     namespace = "com.android.mediproject.core.network"
+
+    hilt {
+        enableAggregatingTask = true
+    }
+
 }
 
-hilt {
-    enableAggregatingTask = true
-}
 
 
 dependencies {

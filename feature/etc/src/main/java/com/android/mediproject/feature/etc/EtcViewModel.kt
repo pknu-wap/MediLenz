@@ -1,8 +1,8 @@
 package com.android.mediproject.feature.etc
 
-import MutableEventFlow
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
-import asEventFlow
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 

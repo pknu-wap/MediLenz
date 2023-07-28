@@ -7,7 +7,7 @@ import androidx.navigation.NavOptions
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentIntroBinding
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 @AndroidEntryPoint
 class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(FragmentIntroBinding::inflate) {

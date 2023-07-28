@@ -7,7 +7,7 @@ import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.comments.CommentDto
+import com.android.mediproject.core.model.comments.Comment
 import com.android.mediproject.core.ui.base.view.listfilter.MediPopupMenu
 import com.android.mediproject.feature.comments.R
 import com.android.mediproject.feature.comments.databinding.ItemViewCommentBinding
@@ -15,12 +15,16 @@ import com.android.mediproject.feature.comments.databinding.ItemViewCommentEditB
 import com.android.mediproject.feature.comments.databinding.ItemViewReplyBinding
 
 
-class CommentsAdapter : PagingDataAdapter<CommentDto, CommentsAdapter.BaseCommentViewHolder>(Diff) {
+class CommentsAdapter : PagingDataAdapter<Comment, CommentsAdapter.BaseCommentViewHolder>(Diff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = viewType.let {
         when (it) {
-            ViewType.COMMENT.ordinal -> CommentViewHolder(ItemViewCommentBinding.inflate(LayoutInflater.from(parent.context),
-                parent,
-                false))
+            ViewType.COMMENT.ordinal -> CommentViewHolder(
+                ItemViewCommentBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false,
+                ),
+            )
 
             ViewType.REPLY.ordinal -> ReplyViewHolder(ItemViewReplyBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
@@ -86,11 +90,11 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, CommentsAdapter.BaseCommen
             }
         }
 
-        override fun bind(commentDto: CommentDto) {
+        override fun bind(comment: Comment) {
             binding.apply {
-                comment = commentDto
-                moreButton.isVisible = commentDto.isMine
-                likeButton.setBackgroundResource(if (commentDto.isLiked) R.drawable.baseline_thumb_up_24 else R.drawable.outline_thumb_up_24)
+                this.comment = comment
+                moreButton.isVisible = comment.isMine
+                likeButton.setBackgroundResource(if (comment.isLiked) R.drawable.baseline_thumb_up_24 else R.drawable.outline_thumb_up_24)
                 executePendingBindings()
             }
         }
@@ -135,11 +139,11 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, CommentsAdapter.BaseCommen
             }
         }
 
-        override fun bind(commentDto: CommentDto) {
+        override fun bind(comment: Comment) {
             binding.apply {
-                commentView.comment = commentDto
-                commentView.moreButton.isVisible = commentDto.isMine
-                commentView.likeButton.setBackgroundResource(if (commentDto.isLiked) R.drawable.baseline_thumb_up_24 else R.drawable.outline_thumb_up_24)
+                commentView.comment = comment
+                commentView.moreButton.isVisible = comment.isMine
+                commentView.likeButton.setBackgroundResource(if (comment.isLiked) R.drawable.baseline_thumb_up_24 else R.drawable.outline_thumb_up_24)
                 commentView.executePendingBindings()
             }
         }
@@ -172,11 +176,11 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, CommentsAdapter.BaseCommen
 
         }
 
-        override fun bind(commentDto: CommentDto) {
+        override fun bind(comment: Comment) {
             binding.apply {
-                this.commentDto = commentDto
+                this.commentDto = comment
                 // 답글 인지 메인 댓글인지에 따라 배경을 다르게 함
-                if (commentDto.isReply) root.setBackgroundResource(R.drawable.reply_background)
+                if (comment.isReply) root.setBackgroundResource(R.drawable.reply_background)
                 else root.setBackgroundResource(R.drawable.comment_background)
                 executePendingBindings()
             }
@@ -185,14 +189,14 @@ class CommentsAdapter : PagingDataAdapter<CommentDto, CommentsAdapter.BaseCommen
     }
 
     abstract class BaseCommentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        open fun bind(commentDto: CommentDto) {}
+        open fun bind(comment: Comment) {}
     }
 
-    object Diff : DiffUtil.ItemCallback<CommentDto>() {
-        override fun areItemsTheSame(oldItem: CommentDto, newItem: CommentDto): Boolean = oldItem.commentId == newItem.commentId
+    object Diff : DiffUtil.ItemCallback<Comment>() {
+        override fun areItemsTheSame(oldItem: Comment, newItem: Comment): Boolean = oldItem.commentId == newItem.commentId
 
 
-        override fun areContentsTheSame(oldItem: CommentDto, newItem: CommentDto): Boolean = oldItem == newItem
+        override fun areContentsTheSame(oldItem: Comment, newItem: Comment): Boolean = oldItem == newItem
     }
 
     /**

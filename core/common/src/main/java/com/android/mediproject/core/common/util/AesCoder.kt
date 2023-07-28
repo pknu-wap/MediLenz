@@ -12,7 +12,7 @@ import javax.inject.Singleton
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-
+@Suppress("DEPRECATION")
 @Singleton
 class AesCoder @Inject constructor(@ApplicationContext context: Context) {
     private var secretKey: SecretKeySpec? = null
@@ -26,12 +26,10 @@ class AesCoder @Inject constructor(@ApplicationContext context: Context) {
         )
         else context.packageManager.getPackageInfo(context.packageName, 0)
 
-        var key: String? = "${packageInfo.firstInstallTime}".repeat(4).substring(0, 32)
-        key?.apply {
+        "${packageInfo.firstInstallTime}".repeat(4).substring(0, 32).run {
             secretKey = SecretKeySpec(toByteArray(charset("UTF-8")), "AES")
             ivParameterSpec = IvParameterSpec(encodeToByteArray(0, 16))
         }
-        key = null
     }
 
     private fun createSecretKey(plainArray: CharArray): Pair<SecretKeySpec, IvParameterSpec> {
@@ -44,7 +42,7 @@ class AesCoder @Inject constructor(@ApplicationContext context: Context) {
             }
             if (extraLength > 0) {
                 val extra = "5".toByte()
-                IntRange(0, extraLength - 1).forEachIndexed { index, i ->
+                IntRange(0, extraLength - 1).forEachIndexed { index, _ ->
                     this[keyLength + index] = extra
                 }
             }

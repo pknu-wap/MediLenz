@@ -1,17 +1,17 @@
 package com.android.mediproject.feature.search.result.manual
 
-import MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
-import asEventFlow
 import com.android.mediproject.core.common.bindingadapter.ISendEvent
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetMedicineApprovalListUseCase
 import com.android.mediproject.core.model.constants.MedicationType
-import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
-import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicineItemDto
+import com.android.mediproject.core.model.navargs.MedicineInfoArgs
+import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicine
 import com.android.mediproject.core.model.requestparameters.ApprovalListSearchParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.search.result.EventState
@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -35,16 +36,15 @@ import javax.inject.Inject
 @HiltViewModel
 class ManualSearchResultViewModel @Inject constructor(
     private val getMedicineApprovalListUseCase: GetMedicineApprovalListUseCase,
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
-) : BaseViewModel(), ISendEvent<ApprovedMedicineItemDto> {
+) : BaseViewModel(), ISendEvent<ApprovedMedicine> {
 
     private val _searchParameter =
         MutableStateFlow(ApprovalListSearchParameter(itemName = null, entpName = null, medicationType = MedicationType.ALL))
     val searchParameter = _searchParameter.asStateFlow()
 
     val searchResultFlow = searchParameter.flatMapLatest {
-        getMedicineApprovalListUseCase(it).cachedIn(viewModelScope).mapLatest { pagingData ->
+        getMedicineApprovalListUseCase(it).cachedIn(viewModelScope).flowOn(defaultDispatcher).mapLatest { pagingData ->
             pagingData.map { item ->
                 item.onClick = ::send
                 item
@@ -91,7 +91,7 @@ class ManualSearchResultViewModel @Inject constructor(
         }
     }
 
-    override fun send(e: ApprovedMedicineItemDto) {
+    override fun send(e: ApprovedMedicine) {
         viewModelScope.launch(defaultDispatcher) {
             _eventState.emit(
                 EventState.OpenMedicineInfo(

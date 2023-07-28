@@ -13,7 +13,7 @@
     <string name="noMedicinesDetected">검출된 의약품이 없습니다</string>
 
     <string name="loadingAiModels">AI를 초기화하는 중입니다.</string>
-    <string name="getDetectedObjects">Processing...</string>
+    <string name="getDetectedObjects">Processing…</string>
     <string name="capturedImage">캡처된 이미지</string>
     <string name="zoomOut">축소</string>
     <string name="zoomIn">확대</string>

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="myComment"
-            type="com.android.mediproject.core.model.comments.MyCommentDto" />
+            type="com.android.mediproject.core.model.comments.MyComment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

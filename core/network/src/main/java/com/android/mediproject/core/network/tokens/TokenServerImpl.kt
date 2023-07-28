@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.datastore.core.DataStore
 import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.datastore.SavedToken
-import com.android.mediproject.core.model.remote.token.CurrentTokens
-import com.android.mediproject.core.model.remote.token.RequestBehavior
-import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.model.token.CurrentTokens
+import com.android.mediproject.core.model.token.RequestBehavior
+import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.network.datasource.tokens.NewTokens
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -154,7 +154,7 @@ internal class TokenServerImpl @Inject constructor(
             _tokenState = TokenState.Empty
             _refreshTokenExpiresIn = null
             _accessTokenExpiresIn = null
-            
+
             tokenDataStore.updateData {
                 it.toBuilder().clear().build()
             }

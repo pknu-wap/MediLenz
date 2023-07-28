@@ -1,6 +1,6 @@
 package com.android.mediproject.core.model.comments
 
-import com.android.mediproject.core.model.awscommon.BaseAwsQueryResponse
+import com.android.mediproject.core.model.servercommon.ServerQueryResponse
 import kotlinx.serialization.Serializable
 
 /**
@@ -9,4 +9,4 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CommentChangedResponse(
     val commentId: Long = 0L,
-) : BaseAwsQueryResponse()
+) : ServerQueryResponse()

@@ -8,7 +8,7 @@ import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.domain.GetGranuleIdentificationUseCase
-import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoDto
+import com.android.mediproject.core.model.granule.GranuleIdentificationInfo
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,14 +22,16 @@ import javax.inject.Inject
 class GranuleInfoViewModel @Inject constructor(
     private val medicineInfoMapper: MedicineInfoMapper,
     private val getGranuleIdentificationUseCase: GetGranuleIdentificationUseCase,
-    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher) : BaseViewModel() {
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
+) : BaseViewModel() {
 
-    private val granuleIdentification = MutableStateFlow<UiState<GranuleIdentificationInfoDto>>(UiState.Loading)
+    private val granuleIdentification = MutableStateFlow<UiState<GranuleIdentificationInfo>>(UiState.Loading)
     private val _granuleTextTags = MutableStateFlow<Spanned?>(null)
     val granuleTextTags get() = _granuleTextTags.asStateFlow()
 
     fun getGranuleIdentificationInfo(
-        itemName: String?, entpName: String?, itemSeq: String?, context: Context) = viewModelScope.launch(defaultDispatcher) {
+        itemName: String?, entpName: String?, itemSeq: String?, context: Context,
+    ) = viewModelScope.launch(defaultDispatcher) {
         granuleIdentification.value = UiState.Loading
         getGranuleIdentificationUseCase(itemName, entpName, itemSeq).collectLatest { result ->
             result.onSuccess {

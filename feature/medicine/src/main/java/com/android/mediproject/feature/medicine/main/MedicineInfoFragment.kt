@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
-import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
-import com.android.mediproject.core.common.uiutil.SystemBarController
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
+import com.android.mediproject.core.common.util.SystemBarColorAnalyzer
+import com.android.mediproject.core.common.util.SystemBarController
+import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.util.navArgs
 import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
+import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfoBinding
@@ -19,7 +19,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 /**

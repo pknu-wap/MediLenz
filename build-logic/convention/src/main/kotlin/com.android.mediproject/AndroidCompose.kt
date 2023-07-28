@@ -23,6 +23,11 @@ internal fun Project.configureAndroidCompose(
             compose = true
         }
 
+        defaultConfig {
+            minSdk = libs.findVersion("minSdk").get().toString().toInt()
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
+
         composeOptions {
             kotlinCompilerExtensionVersion = libs.findVersion("kotlinCompilerExtension").get().toString()
         }

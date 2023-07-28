@@ -14,7 +14,6 @@ class SavedTokenSerializer @Inject constructor() : Serializer<SavedToken> {
 
     override suspend fun readFrom(input: InputStream): SavedToken {
         try {
-            @Suppress("BlockingMethodInNonBlockingContext")
             return SavedToken.parseFrom(input)
         } catch (exception: Exception) {
             throw CorruptionException("Failed to read proto.", exception)
@@ -22,7 +21,6 @@ class SavedTokenSerializer @Inject constructor() : Serializer<SavedToken> {
     }
 
     override suspend fun writeTo(t: SavedToken, output: OutputStream) {
-        @Suppress("BlockingMethodInNonBlockingContext")
         t.writeTo(output)
     }
 

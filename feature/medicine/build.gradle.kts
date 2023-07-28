@@ -5,10 +5,10 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.medicine"
-}
 
-hilt {
-    enableAggregatingTask = true
+    hilt {
+        enableAggregatingTask = true
+    }
 }
 
 dependencies {
@@ -26,4 +26,7 @@ dependencies {
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.androidx.asynclayoutinflater)
+
+    testImplementation(libs.bundles.testLocal)
+    androidTestImplementation(libs.bundles.testAndroid)
 }

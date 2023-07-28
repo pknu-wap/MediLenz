@@ -17,13 +17,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.ui.base.view.Subtitle
 import com.android.mediproject.core.ui.base.view.Subtitle.Companion.PASSWORD
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 @AndroidEntryPoint
 class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() {

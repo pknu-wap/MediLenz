@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.mediproject.core.common.paging.setOnStateChangedListener
 import com.android.mediproject.core.common.util.navArgs
-import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
+import com.android.mediproject.core.model.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.R
 import com.android.mediproject.feature.comments.databinding.FragmentMedicineCommentsBinding
@@ -20,7 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 @AndroidEntryPoint
 class MedicineCommentsFragment :
@@ -38,10 +38,12 @@ class MedicineCommentsFragment :
             replyHeader.isVisible = false
 
             val adapter = CommentsAdapter().apply {
-                setOnStateChangedListener(pagingListView.messageTextView,
+                setOnStateChangedListener(
+                    pagingListView.messageTextView,
                     pagingListView.pagingList,
                     pagingListView.progressIndicator,
-                    getString(R.string.emptyComments))
+                    getString(R.string.emptyComments),
+                )
             }
 
             pagingListView.pagingList.apply {
@@ -56,11 +58,13 @@ class MedicineCommentsFragment :
                     reverseLayout = true
                 }
                 setItemViewCacheSize(0)
-                setRecycledViewPool(RecyclerView.RecycledViewPool().apply {
-                    setMaxRecycledViews(CommentsAdapter.ViewType.COMMENT.ordinal, 6)
-                    setMaxRecycledViews(CommentsAdapter.ViewType.EDITING.ordinal, 0)
-                    setMaxRecycledViews(CommentsAdapter.ViewType.REPLY.ordinal, 6)
-                })
+                setRecycledViewPool(
+                    RecyclerView.RecycledViewPool().apply {
+                        setMaxRecycledViews(CommentsAdapter.ViewType.COMMENT.ordinal, 6)
+                        setMaxRecycledViews(CommentsAdapter.ViewType.EDITING.ordinal, 0)
+                        setMaxRecycledViews(CommentsAdapter.ViewType.REPLY.ordinal, 6)
+                    },
+                )
                 this.adapter = adapter
             }
 
@@ -84,51 +88,67 @@ class MedicineCommentsFragment :
                             }
 
                             is CommentActionState.CLICKED_DELETE_MY_COMMENT -> {
-                                showDialog(R.string.requestToDeleteComment, onPositive = {
-                                    fragmentViewModel.deleteComment(action.commentId)
-                                }, onNegative = {
+                                showDialog(
+                                    R.string.requestToDeleteComment,
+                                    onPositive = {
+                                        fragmentViewModel.deleteComment(action.commentId)
+                                    },
+                                    onNegative = {
 
-                                })
+                                    },
+                                )
                             }
 
                             is CommentActionState.COMPLETED_LIKE -> {
-                                action.result.fold(onSuccess = {
-                                    toast(getString(R.string.completedLike))
-                                    adapter.refresh()
-                                }, onFailure = {
-                                    toast(it.message.toString())
-                                })
+                                action.result.fold(
+                                    onSuccess = {
+                                        toast(getString(R.string.completedLike))
+                                        adapter.refresh()
+                                    },
+                                    onFailure = {
+                                        toast(it.message.toString())
+                                    },
+                                )
                             }
 
                             is CommentActionState.COMPLETED_APPLY_COMMENT_REPLY -> {
                                 replayInfoHeader.isVisible = false
-                                action.result.fold(onSuccess = {
-                                    replyHeader.isVisible = false
-                                    toast(getString(R.string.appliedComment))
-                                    adapter.refresh()
-                                }, onFailure = {
-                                    toast(it.message.toString())
-                                })
+                                action.result.fold(
+                                    onSuccess = {
+                                        replyHeader.isVisible = false
+                                        toast(getString(R.string.appliedComment))
+                                        adapter.refresh()
+                                    },
+                                    onFailure = {
+                                        toast(it.message.toString())
+                                    },
+                                )
                             }
 
                             is CommentActionState.COMPLETED_APPLY_EDITED_COMMENT -> {
-                                action.result.fold(onSuccess = {
-                                    toast(getString(R.string.appliedEditComment))
-                                    adapter.refresh()
+                                action.result.fold(
+                                    onSuccess = {
+                                        toast(getString(R.string.appliedEditComment))
+                                        adapter.refresh()
 
-                                }, onFailure = {
-                                    toast(it.message.toString())
-                                })
+                                    },
+                                    onFailure = {
+                                        toast(it.message.toString())
+                                    },
+                                )
                             }
 
                             is CommentActionState.COMPLETED_DELETE_COMMENT -> {
-                                action.result.fold(onSuccess = {
-                                    toast(getString(R.string.deletedComment))
-                                    adapter.refresh()
+                                action.result.fold(
+                                    onSuccess = {
+                                        toast(getString(R.string.deletedComment))
+                                        adapter.refresh()
 
-                                }, onFailure = {
-                                    toast(it.message.toString())
-                                })
+                                    },
+                                    onFailure = {
+                                        toast(it.message.toString())
+                                    },
+                                )
                             }
 
                             is CommentActionState.NONE -> {

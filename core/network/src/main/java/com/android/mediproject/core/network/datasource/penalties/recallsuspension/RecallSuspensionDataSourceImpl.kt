@@ -1,47 +1,25 @@
 package com.android.mediproject.core.network.datasource.penalties.recallsuspension
 
-import com.android.mediproject.core.common.network.Dispatcher
-import com.android.mediproject.core.common.network.MediDispatchers
-import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionResponse
-import com.android.mediproject.core.model.toResult
-import com.android.mediproject.core.network.module.DataGoKrNetworkApi
-import com.android.mediproject.core.network.onResponse
+import com.android.mediproject.core.model.recall.DetailRecallSuspensionResponse
+import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
+import com.android.mediproject.core.network.onDataGokrResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.channelFlow
 import javax.inject.Inject
 
 class RecallSuspensionDataSourceImpl @Inject constructor(
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    private val ioDispatcher: CoroutineDispatcher,
     private val dataGoKrNetworkApi: DataGoKrNetworkApi,
 ) : RecallSuspensionDataSource {
 
 
     override fun getDetailRecallSuspensionInfo(
         company: String?, product: String?,
-    ): Flow<Result<DetailRecallSuspensionResponse>> = flow {
-        dataGoKrNetworkApi.getDetailRecallSuspensionInfo(company = company, product = product)
-            .onResponse().fold(
-                onSuccess = { response ->
-                    response.toResult()
-                },
-                onFailure = {
-                    Result.failure(it)
-                },
-            ).also {
-                emit(it)
-            }
+    ): Flow<Result<DetailRecallSuspensionResponse>> = channelFlow {
+        send(dataGoKrNetworkApi.getDetailRecallSuspensionInfo(company = company, product = product).onDataGokrResponse())
     }
 
     override suspend fun getRecallSuspensionList(pageNo: Int, numOfRows: Int) =
-        dataGoKrNetworkApi.getRecallSuspensionList(pageNo = pageNo, numOfRows = numOfRows)
-            .onResponse().fold(
-                onSuccess = { response ->
-                    response.toResult()
-                },
-                onFailure = {
-                    Result.failure(it)
-                },
-            )
-
+        dataGoKrNetworkApi.getRecallSuspensionList(pageNo = pageNo, numOfRows = numOfRows).onDataGokrResponse()
 }

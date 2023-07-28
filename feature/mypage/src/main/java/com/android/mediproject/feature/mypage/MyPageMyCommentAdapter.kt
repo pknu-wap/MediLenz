@@ -5,24 +5,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.comments.MyCommentDto
+import com.android.mediproject.core.model.comments.MyComment
 import com.android.mediproject.feature.mypage.databinding.ItemMypageMycommentBinding
 
 class MyCommentListViewHolder(private val binding: ItemMypageMycommentBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(myCommentDto: MyCommentDto) {
-        binding.myCommentDto = myCommentDto
+    fun bind(myComment: MyComment) {
+        binding.myCommentDto = myComment
     }
 
 }
 
-class MyPageMyCommentAdapter : ListAdapter<MyCommentDto, MyCommentListViewHolder>(object :
-    DiffUtil.ItemCallback<MyCommentDto>() {
-    override fun areItemsTheSame(oldItem: MyCommentDto, newItem: MyCommentDto): Boolean {
+class MyPageMyCommentAdapter : ListAdapter<MyComment, MyCommentListViewHolder>(object :
+    DiffUtil.ItemCallback<MyComment>() {
+    override fun areItemsTheSame(oldItem: MyComment, newItem: MyComment): Boolean {
         return oldItem.commentId == newItem.commentId
     }
 
-    override fun areContentsTheSame(oldItem: MyCommentDto, newItem: MyCommentDto): Boolean {
+    override fun areContentsTheSame(oldItem: MyComment, newItem: MyComment): Boolean {
         return oldItem == newItem
     }
 }) {

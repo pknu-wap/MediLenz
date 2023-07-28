@@ -19,9 +19,9 @@ fun PagingDataAdapter<*, *>.setOnStateChangedListener(
     msgTextView: TextView,
     listView: RecyclerView,
     progressBar: CircularProgressIndicator,
-    emptyMsg: String
+    emptyMsg: String,
 ) {
-    var isFirstLoad = true
+    var isFirstLoad: Boolean
     addLoadStateListener { loadState ->
         isFirstLoad = loadState.refresh is LoadState.Loading
         if (isFirstLoad) listView.scrollToPosition(0)
@@ -30,7 +30,6 @@ fun PagingDataAdapter<*, *>.setOnStateChangedListener(
 
         progressBar.isVisible = isFirstLoad
         listView.isVisible = (!isFirstLoad && (loadState.source.refresh !is LoadState.Loading))
-        msgTextView.isVisible =
-            ((!isFirstLoad && loadState.source.refresh !is LoadState.Loading) && itemCount == 0)
+        msgTextView.isVisible = ((!isFirstLoad && loadState.source.refresh !is LoadState.Loading) && itemCount == 0)
     }
 }

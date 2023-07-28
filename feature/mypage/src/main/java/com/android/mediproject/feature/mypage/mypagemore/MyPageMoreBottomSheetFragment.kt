@@ -17,7 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 @AndroidEntryPoint
 class MyPageMoreBottomSheetFragment(private val backCallback: () -> Unit) :

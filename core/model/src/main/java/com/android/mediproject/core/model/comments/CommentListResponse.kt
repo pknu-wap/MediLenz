@@ -1,14 +1,14 @@
 package com.android.mediproject.core.model.comments
 
 
-import com.android.mediproject.core.model.awscommon.BaseAwsQueryResponse
+import com.android.mediproject.core.model.servercommon.ServerQueryResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CommentListResponse(
-    @SerialName("commentList") val commentList: List<Comment>
-) : BaseAwsQueryResponse() {
+    @SerialName("commentList") val commentList: List<Comment>,
+) : ServerQueryResponse() {
 
     @Serializable
     data class Comment(
@@ -21,7 +21,7 @@ data class CommentListResponse(
         @SerialName("USERID") val userId: Long, // 2
         @SerialName("likeList") val likeList: List<Like>,
         @SerialName("nickname") val nickName: String,
-        @SerialName("updatedAt") val updatedAt: String
+        @SerialName("updatedAt") val updatedAt: String,
     ) {
         @Serializable
         data class Reply(
@@ -31,7 +31,7 @@ data class CommentListResponse(
             @SerialName("likeList") val likeList: List<Like>, @SerialName("MEDICINEID") val medicineId: Long, // 41
             @SerialName("SUBORDINATION") val subordination: Long, // 2
             @SerialName("USERID") val userId: Long, // 3
-            @SerialName("nickname") val nickName: String, @SerialName("updatedAt") val updatedAt: String
+            @SerialName("nickname") val nickName: String, @SerialName("updatedAt") val updatedAt: String,
         )
     }
 }
@@ -40,5 +40,5 @@ data class CommentListResponse(
 data class Like(
     @SerialName("COMMENTID") val commentId: Long, // 2
     @SerialName("ID") val id: Long, // 1
-    @SerialName("USERID") val userId: Long
+    @SerialName("USERID") val userId: Long,
 )

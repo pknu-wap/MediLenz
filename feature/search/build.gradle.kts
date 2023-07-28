@@ -4,11 +4,12 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.search"
+
+    hilt {
+        enableAggregatingTask = true
+    }
 }
 
-hilt {
-    enableAggregatingTask = true
-}
 
 dependencies {
     implementation(project(":core:ui"))

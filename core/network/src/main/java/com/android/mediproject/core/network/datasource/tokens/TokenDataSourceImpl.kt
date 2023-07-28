@@ -1,10 +1,10 @@
 package com.android.mediproject.core.network.datasource.tokens
 
 import android.util.Log
-import com.android.mediproject.core.model.remote.token.CurrentTokens
-import com.android.mediproject.core.model.remote.token.ReissueTokenResponse
-import com.android.mediproject.core.model.remote.token.RequestBehavior
-import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.model.token.CurrentTokens
+import com.android.mediproject.core.model.token.ReissueTokenResponse
+import com.android.mediproject.core.model.token.RequestBehavior
+import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.network.module.AwsNetworkApi
 import com.android.mediproject.core.network.tokens.TokenServer
 import kotlinx.coroutines.channels.BufferOverflow
@@ -40,7 +40,7 @@ class TokenDataSourceImpl @Inject constructor(
     /**
      * 토큰 갱신
      */
-    private fun reissueTokens(refreshToken: CharArray): Flow<Result<ReissueTokenResponse>> = channelFlow {
+    private fun reissueTokens(): Flow<Result<ReissueTokenResponse>> = channelFlow {
         awsNetworkApi.reissueTokens().onResponseWithTokens(RequestBehavior.ReissueTokens, tokenServer).fold(
             onSuccess = { Result.success(it) },
             onFailure = { Result.failure(it) },
@@ -69,7 +69,7 @@ class TokenDataSourceImpl @Inject constructor(
         }
 
         mutex.withLock { processingTokenReissuance = true }
-        reissueTokens(currentToken.data.refreshToken).collectLatest { reissueTokenResponseResult ->
+        reissueTokens().collectLatest { reissueTokenResponseResult ->
             val result = reissueTokenResponseResult.fold(onSuccess = { Result.success(Unit) }, onFailure = { Result.failure(it) })
 
             Log.d("wap", "reissueToken, result : $result")

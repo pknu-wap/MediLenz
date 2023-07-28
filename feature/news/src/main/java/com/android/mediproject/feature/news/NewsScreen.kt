@@ -32,7 +32,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.android.mediproject.core.model.local.navargs.RecallDisposalArgs
+import com.android.mediproject.core.model.navargs.RecallDisposalArgs
 import com.android.mediproject.feature.news.adminaction.AdminActionScreen
 import com.android.mediproject.feature.news.adminaction.DetailAdminActionScreen
 import com.android.mediproject.feature.news.recallsuspension.DetailRecallDisposalScreen

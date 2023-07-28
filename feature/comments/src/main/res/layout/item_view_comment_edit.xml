@@ -6,7 +6,7 @@
 
         <variable
             name="commentDto"
-            type="com.android.mediproject.core.model.comments.CommentDto" />
+            type="com.android.mediproject.core.model.comments.Comment" />
 
     </data>
 

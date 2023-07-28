@@ -13,7 +13,7 @@ import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import com.android.mediproject.core.model.local.navargs.BaseNavArgs
+import com.android.mediproject.core.model.navargs.BaseNavArgs
 
 /**
  * Uri Builder
@@ -70,7 +70,7 @@ private fun toBaseUri(deepLinkUrl: String, parameter: Map<String, Any?>): Uri = 
  * @param parameter DeepLink에 들어갈 파라미터
  */
 fun NavController.navigateByDeepLink(
-    deepLinkUrl: String, parameter: BaseNavArgs, navOptions: NavOptions? = null
+    deepLinkUrl: String, parameter: BaseNavArgs, navOptions: NavOptions? = null,
 ) {
     val parameterMap = parameter.toMap()
     toQueryUri(deepLinkUrl, parameterMap).also { finalUri ->
@@ -88,8 +88,10 @@ fun NavController.navigateByDeepLink(
                     else -> NavType.ReferenceType
                 }
 
-                deepLinkMatch.destination.addArgument(key,
-                    NavArgument.Builder().setType(navType).setIsNullable(true).setDefaultValue(value).build())
+                deepLinkMatch.destination.addArgument(
+                    key,
+                    NavArgument.Builder().setType(navType).setIsNullable(true).setDefaultValue(value).build(),
+                )
             }
         }
     }
@@ -99,7 +101,7 @@ fun NavController.navigateByDeepLink(
 
 
 fun NavController.deepNavigate(
-    deepLinkUrl: String, parameter: BaseNavArgs, navOptions: NavOptions? = null
+    deepLinkUrl: String, parameter: BaseNavArgs, navOptions: NavOptions? = null,
 ) {
     val parameterMap = parameter.toMap()
 
@@ -121,7 +123,6 @@ fun NavController.deepNavigate(
 
 inline fun <reified N : BaseNavArgs> NavDestination.setArguments(navArgs: N) {
     navArgs.toMap().forEach { (key, value) ->
-        if (value == null) return@forEach
         val navType: NavType<out Any?> = when (value) {
             is String -> NavType.StringType
             is Int -> NavType.IntType

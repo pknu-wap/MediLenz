@@ -13,18 +13,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUiSaveStateControl
 import androidx.navigation.ui.setupWithNavController
-import com.android.mediproject.core.common.uiutil.LayoutController
-import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
-import com.android.mediproject.core.common.uiutil.SystemBarController
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
-import com.android.mediproject.core.network.InternetNetworkListener
+import com.android.mediproject.core.common.util.LayoutController
+import com.android.mediproject.core.common.util.SystemBarColorAnalyzer
+import com.android.mediproject.core.common.util.SystemBarController
+import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.network.NetworkStatusManager
 import com.android.mediproject.core.ui.WindowViewModel
 import com.android.mediproject.core.ui.base.BaseActivity
 import com.android.mediproject.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,20 +33,19 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
 
     @Inject lateinit var layoutController: LayoutController
     @Inject lateinit var systemBarController: SystemBarController
-    @Inject lateinit var internetNetworkListener: InternetNetworkListener
+    @Inject lateinit var networkStatusManager: NetworkStatusManager
     @Inject lateinit var systemBarColorAnalyzer: SystemBarColorAnalyzer
 
     override val activityViewModel: MainViewModel by viewModels()
     private lateinit var navController: NavController
 
 
-    @OptIn(NavigationUiSaveStateControl::class)
     override fun afterBinding() {
         systemBarController.init(this, window, this)
         systemBarColorAnalyzer.init(this, systemBarController, lifecycle)
 
-        internetNetworkListener.activityLifeCycle = lifecycle
-        internetNetworkListener.networkStateCallback = InternetNetworkListener.NetworkStateCallback { isConnected ->
+        networkStatusManager.activityLifeCycle = lifecycle
+        networkStatusManager.networkStateCallback = NetworkStatusManager.NetworkStateCallback { isConnected ->
             if (!isConnected) {
                 NetworkStateDialogFragment().show(supportFragmentManager, NetworkStateDialogFragment::class.java.name)
             }

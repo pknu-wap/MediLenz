@@ -1,6 +1,6 @@
 package com.android.mediproject.core.network.datasource.granule
 
-import com.android.mediproject.core.model.remote.granule.GranuleIdentificationInfoResponse
+import com.android.mediproject.core.model.granule.GranuleIdentificationInfoResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.Query
 

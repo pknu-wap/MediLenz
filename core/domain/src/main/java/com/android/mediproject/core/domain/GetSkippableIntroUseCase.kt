@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 class GetSkippableIntroUseCase @Inject constructor(
-    private val appDataStore: AppDataStore
+    private val appDataStore: AppDataStore,
 ) {
     suspend operator fun invoke() = callbackFlow {
         appDataStore.skipIntro.collectLatest {

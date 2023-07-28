@@ -8,10 +8,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.common.uiutil.SystemBarColorAnalyzer
-import com.android.mediproject.core.common.uiutil.SystemBarController
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
-import com.android.mediproject.core.common.uiutil.hideKeyboard
+import com.android.mediproject.core.common.util.SystemBarColorAnalyzer
+import com.android.mediproject.core.common.util.SystemBarController
+import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.common.util.hideKeyboard
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.MediSearchbar
 import com.android.mediproject.feature.search.databinding.FragmentSearchMedicinesBinding
@@ -19,7 +20,6 @@ import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListF
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,7 +43,7 @@ class SearchMedicinesFragment : BaseFragment<FragmentSearchMedicinesBinding, Sea
         }
 
         // 검색어가 전달된 경우에는 검색어를 넣은 후 검색
-        arguments?.getString("query")?.takeIf {
+        arguments?.getString("words")?.takeIf {
             it.isNotEmpty()
         }?.also {
             childFragmentManager.findFragmentById(binding.contentsFragmentContainerView.id)?.apply {

@@ -3,7 +3,7 @@
 # kotlin
 kotlin = "1.8.22"
 kotlinCompilerExtension = "1.4.8"
-kotlinxCoroutines = "1.7.2"
+kotlinxCoroutines = "1.7.3"
 kotlinxSerializationJson = "1.5.0"
 kotlinxDateTime = "0.4.0"
 ksp = "1.8.22-1.0.11"
@@ -337,7 +337,7 @@ workManagers = ["androidx-work-ktx"]
 testLocal = ["junit", "mockito-core", "mockito-kotlin", "kotlinx-coroutines-testImplementation", "robolectric"]
 
 testAndroid = ["androidx-test-espresso-core", "androidx-test-runner", "androidx-test-rules", "androidx-test-core", "androidx-test-ext-truth",
-    "androidx-test-core-ktx", "androidx-test-ext-junit", "androidx-test-ext-junit-ktx", "kotlinx-coroutines-testImplementation"]
+    "androidx-test-core-ktx", "androidx-test-ext-junit", "androidx-test-ext-junit-ktx"]
 
 tflite = ["tensorflow-lite-lite", "tensorflow-lite-playServicesTfliteGpu", "tensorflow-lite-taskVisionPlayServices",
     "tensorflow-lite-playServicesTfliteJava", "tensorflow-lite-gpuDelegate", "tensorflow-lite-metadata",

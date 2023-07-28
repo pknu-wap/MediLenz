@@ -6,7 +6,7 @@
 
         <variable
             name="medicineInfoArgs"
-            type="com.android.mediproject.core.model.local.navargs.MedicineInfoArgs" />
+            type="com.android.mediproject.core.model.navargs.MedicineInfoArgs" />
 
         <variable
             name="viewModel"

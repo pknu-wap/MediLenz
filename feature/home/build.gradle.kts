@@ -4,11 +4,12 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.feature.home"
+
+    hilt {
+        enableAggregatingTask = true
+    }
 }
 
-hilt {
-    enableAggregatingTask = true
-}
 
 dependencies {
     implementation(project(":core:ui"))

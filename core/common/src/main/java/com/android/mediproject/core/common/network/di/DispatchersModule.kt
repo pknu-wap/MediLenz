@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 object DispatchersModule {
     @Provides
     @Dispatcher(MediDispatchers.IO)
-    fun providesIODispatcher(): CoroutineDispatcher = Dispatchers.IO
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Provides
     @Dispatcher(MediDispatchers.Default)

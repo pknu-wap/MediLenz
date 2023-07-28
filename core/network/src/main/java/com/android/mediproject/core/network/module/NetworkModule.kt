@@ -10,7 +10,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.DelicateCoroutinesApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.security.KeyStore
@@ -26,7 +25,6 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 import kotlin.properties.Delegates
 
-@OptIn(DelicateCoroutinesApi::class)
 @Module
 @InstallIn(SingletonComponent::class)
 class CertificateHelper @Inject constructor(@ApplicationContext context: Context) {
@@ -64,7 +62,7 @@ class CertificateHelper @Inject constructor(@ApplicationContext context: Context
     }
 }
 
-@Module(includes = [DataGoKrNetwork::class, AwsNetwork::class])
+@Module(includes = [DataGoKrNetwork::class, ServerNetwork::class])
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
@@ -132,7 +130,7 @@ object NetworkModule {
             addInterceptor(
                 HttpLoggingInterceptor().apply {
                     if (BuildConfig.DEBUG) {
-                        level = HttpLoggingInterceptor.Level.BODY
+                        level = HttpLoggingInterceptor.Level.BASIC
                     }
                 },
             )

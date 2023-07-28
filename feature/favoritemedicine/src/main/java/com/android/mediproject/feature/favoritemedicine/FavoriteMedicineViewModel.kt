@@ -1,13 +1,13 @@
 package com.android.mediproject.feature.favoritemedicine
 
-import MutableEventFlow
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
-import asEventFlow
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
-import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineDto
-import com.android.mediproject.core.model.remote.token.CurrentTokens
-import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicine
+import com.android.mediproject.core.model.token.CurrentTokens
+import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +34,7 @@ class FavoriteMedicineViewModel @Inject constructor(
         object NavigateToFavoriteMedicineMore : FavoriteMedicineEvent()
     }
 
-    private val _favoriteMedicineList = MutableStateFlow<List<FavoriteMedicineDto>>(listOf())
+    private val _favoriteMedicineList = MutableStateFlow<List<FavoriteMedicine>>(listOf())
     val favoriteMedicineList get() = _favoriteMedicineList
 
     private val _token = MutableStateFlow<TokenState<CurrentTokens>>(TokenState.Empty)
@@ -43,7 +43,7 @@ class FavoriteMedicineViewModel @Inject constructor(
     fun loadFavoriteMedicines() =
         viewModelScope.launch {
             getFavoriteMedicineUseCase.getFavoriteMedicineList()
-                .collect {
+                .collect { it ->
                     it.fold(
                         onSuccess = { _favoriteMedicineList.value = it },
                         onFailure = { },

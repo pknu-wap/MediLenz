@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class UserDataSourceImpl @Inject constructor(
     private val awsNetworkApi: AwsNetworkApi,
-    private val aesCoder: AesCoder
+    private val aesCoder: AesCoder,
 ) :
     UserDataSource {
 
@@ -48,13 +48,16 @@ class UserDataSourceImpl @Inject constructor(
     override suspend fun withdrawal(): Flow<Result<WithdrawalResponse>> = channelFlow {
         Log.d("wap", "UserDataSource : withdrawal()")
         awsNetworkApi.withdrawal().onResponse()
-            .fold(onSuccess = {
-                Log.d("wap", "dataSource : 성공")
-                Result.success(it)
-            }, onFailure = {
-                Log.d("wap", "dataSource : 실패 에러내용 : " + it.toString())
-                Result.failure(it)
-            })
+            .fold(
+                onSuccess = {
+                    Log.d("wap", "dataSource : 성공")
+                    Result.success(it)
+                },
+                onFailure = {
+                    Log.d("wap", "dataSource : 실패 에러내용 : $it")
+                    Result.failure(it)
+                },
+            )
             .also { trySend(it) }
     }
 }

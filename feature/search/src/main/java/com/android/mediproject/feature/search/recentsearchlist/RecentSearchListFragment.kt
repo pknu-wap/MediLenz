@@ -7,7 +7,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
 import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.model.search.local.SearchHistoryItemDto
+import com.android.mediproject.core.model.search.SearchHistory
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.ButtonChip
 import com.android.mediproject.core.ui.base.view.stateAsCollect
@@ -15,7 +15,7 @@ import com.android.mediproject.feature.search.databinding.FragmentRecentSearchLi
 import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 
 /**
@@ -64,19 +64,21 @@ class RecentSearchListFragment :
      *
      * 클릭 시 관련 로직을 수행하도록 합니다.
      */
-    private fun addHistoryItemChips(searchHistoryItemDto: SearchHistoryItemDto) {
+    private fun addHistoryItemChips(searchHistory: SearchHistory) {
         binding.apply {
             val horizontalSpace = resources.getDimension(com.android.mediproject.core.ui.R.dimen.dp_4).toInt()
-            this.searchHistoryList.addView(ButtonChip<String>(requireContext()).apply {
-                layoutParams = FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-                    setMargins(horizontalSpace, 0, horizontalSpace, 0)
-                }
-                data = searchHistoryItemDto.query
-                setChipText(data.toString())
-                setOnChipClickListener {
-                    onClicked(searchHistoryItemDto.query)
-                }
-            })
+            this.searchHistoryList.addView(
+                ButtonChip<String>(requireContext()).apply {
+                    layoutParams = FlexboxLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                        setMargins(horizontalSpace, 0, horizontalSpace, 0)
+                    }
+                    data = searchHistory.query
+                    setChipText(data.toString())
+                    setOnChipClickListener {
+                        onClicked(searchHistory.query)
+                    }
+                },
+            )
         }
     }
 

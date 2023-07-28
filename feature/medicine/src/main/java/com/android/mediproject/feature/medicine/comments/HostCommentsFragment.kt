@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.android.mediproject.core.common.util.setArguments
 import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.model.local.navargs.MedicineBasicInfoArgs
+import com.android.mediproject.core.model.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.feature.medicine.databinding.FragmentCommentsHostBinding
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint

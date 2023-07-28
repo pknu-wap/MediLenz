@@ -1,26 +1,21 @@
 package com.android.mediproject.core.domain
 
-import com.android.mediproject.core.data.remote.dur.DurRepository
-import com.android.mediproject.core.model.remote.dur.toDto
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
+import com.android.mediproject.core.data.dur.durproduct.DurProductRepository
+import com.android.mediproject.core.model.dur.DurType
+import kotlinx.coroutines.flow.last
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetDurUseCase @Inject constructor(private val durRepository: DurRepository) {
+@Singleton
+class GetDurUseCase @Inject constructor(
+    private val durProductRepository: DurProductRepository,
+    private val durIngrRepository: DurProductRepository,
+) {
+    suspend fun hasDur(
+        itemName: String?, itemSeq: String?,
+    ) = durProductRepository.hasDur(itemName, itemSeq).last()
 
-    suspend operator fun invoke(
-        itemName: String?,
-        itemSeq: String?,
-    ) = channelFlow {
-        durRepository.getDur(itemName, itemSeq).map { result ->
-            result.fold(onSuccess = {
-                Result.success(it.toDto())
-            }, onFailure = {
-                Result.failure(it)
-            })
-        }.collectLatest {
-            send(it)
-        }
-    }
+    suspend fun getDur(
+        itemSeq: String, durTypes: List<DurType>,
+    ) = durProductRepository.getDur(itemSeq, durTypes).last()
 }

@@ -7,6 +7,11 @@ plugins {
 android {
     namespace = "com.android.mediproject.feature.camera"
 
+    hilt {
+        enableAggregatingTask = true
+    }
+
+
     androidResources {
         noCompress += listOf("tflite")
     }
@@ -36,9 +41,7 @@ android {
 
 }
 
-hilt {
-    enableAggregatingTask = true
-}
+
 
 dependencies {
     implementation(project(":core:ui"))

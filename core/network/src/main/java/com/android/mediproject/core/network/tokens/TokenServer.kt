@@ -1,7 +1,7 @@
 package com.android.mediproject.core.network.tokens
 
-import com.android.mediproject.core.model.remote.token.CurrentTokens
-import com.android.mediproject.core.model.remote.token.TokenState
+import com.android.mediproject.core.model.token.CurrentTokens
+import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.network.datasource.tokens.NewTokens
 import java.time.LocalDateTime
 

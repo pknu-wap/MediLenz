@@ -1,12 +1,12 @@
 package com.android.mediproject.core.domain
 
-import com.android.mediproject.core.data.remote.medicineapproval.MedicineApprovalRepository
-import com.android.mediproject.core.data.remote.medicineid.MedicineIdRepository
+import com.android.mediproject.core.data.medicineapproval.MedicineApprovalRepository
+import com.android.mediproject.core.data.medicineid.MedicineIdRepository
 import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
-import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfo
+import com.android.mediproject.core.model.navargs.MedicineInfoArgs
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetail
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.MedicineCacheEntity
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.toMedicineDetailInfoDto
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.toMedicineDetail
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -22,7 +22,7 @@ class GetMedicineDetailsUseCase @Inject constructor(
 
     operator fun invoke(
         medicineInfoArgs: MedicineInfoArgs,
-    ): Flow<Result<MedicineDetailInfo>> = channelFlow {
+    ): Flow<Result<MedicineDetail>> = channelFlow {
         medicineApprovalRepository.getMedicineDetailInfo(
             itemName = medicineInfoArgs.itemKorName,
         ).zip(
@@ -53,7 +53,7 @@ class GetMedicineDetailsUseCase @Inject constructor(
 
             val medicineInfo = medicineInfoResult.fold(
                 onSuccess = { item ->
-                    Result.success(item.toMedicineDetailInfoDto(medicineId))
+                    Result.success(item.toMedicineDetail(medicineId))
                 },
                 onFailure = {
                     Result.failure(it)
@@ -74,13 +74,13 @@ class GetMedicineDetailsUseCase @Inject constructor(
     }
 
 
-    fun getMedicineDetailInfoByItemSeq(itemSeqs: List<String>): Flow<Result<List<MedicineDetailInfo>>> = channelFlow {
+    fun getMedicineDetailInfoByItemSeq(itemSeqs: List<String>): Flow<Result<List<MedicineDetail>>> = channelFlow {
         medicineApprovalRepository.getMedicineDetailInfoByItemSeq(itemSeqs).collectLatest { medicineInfoResult ->
             val medicineInfo = medicineInfoResult.fold(
                 onSuccess = { item ->
                     Result.success(
                         item.map {
-                            it.toMedicineDetailInfoDto()
+                            it.toMedicineDetail()
                         },
                     )
                 },

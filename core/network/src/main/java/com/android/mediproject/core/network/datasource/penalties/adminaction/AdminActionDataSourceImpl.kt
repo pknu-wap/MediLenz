@@ -3,7 +3,7 @@ package com.android.mediproject.core.network.datasource.penalties.adminaction
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.model.toResult
-import com.android.mediproject.core.network.module.DataGoKrNetworkApi
+import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject

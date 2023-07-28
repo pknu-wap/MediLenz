@@ -1,12 +1,11 @@
 package com.android.mediproject.feature.news
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.common.uiutil.SystemBarStyler
+import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.util.navArgs
-import com.android.mediproject.core.model.local.navargs.RecallDisposalArgs
+import com.android.mediproject.core.model.navargs.RecallDisposalArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.news.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint

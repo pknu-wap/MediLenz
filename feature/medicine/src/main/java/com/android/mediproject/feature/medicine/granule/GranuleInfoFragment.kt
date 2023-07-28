@@ -8,7 +8,7 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.databinding.FragmentGranuleInfoBinding
 import com.android.mediproject.feature.medicine.main.MedicineInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 /**
  * 해당 화면은 의약품 식별 정보(낱알 정보, 형태 등)를 보여주는 화면입니다.
@@ -22,9 +22,11 @@ class GranuleInfoFragment : BaseFragment<FragmentGranuleInfoBinding, GranuleInfo
 
     override val fragmentViewModel: GranuleInfoViewModel by viewModels()
 
-    private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>({
-        requireParentFragment()
-    })
+    private val medicineInfoViewModel by viewModels<MedicineInfoViewModel>(
+        {
+            requireParentFragment()
+        },
+    )
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,7 +39,7 @@ class GranuleInfoFragment : BaseFragment<FragmentGranuleInfoBinding, GranuleInfo
                 when (it) {
                     is UiState.Success -> {
                         fragmentViewModel.getGranuleIdentificationInfo(
-                            itemName = null, entpName = null, itemSeq = it.data.itemSequence, requireContext()
+                            itemName = null, entpName = null, itemSeq = it.data.itemSequence, requireContext(),
                         )
                     }
 

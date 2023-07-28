@@ -1,16 +1,16 @@
 package com.android.mediproject.feature.search.result.ai
 
-import MutableEventFlow
 import androidx.lifecycle.viewModelScope
-import asEventFlow
 import com.android.mediproject.core.common.bindingadapter.ISendEvent
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
 import com.android.mediproject.core.model.ai.ClassificationResult
-import com.android.mediproject.core.model.local.navargs.MedicineInfoArgs
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfo
+import com.android.mediproject.core.model.navargs.MedicineInfoArgs
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetail
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.search.result.EventState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,9 +30,9 @@ import javax.inject.Inject
 class AiSearchResultViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
-) : BaseViewModel(), ISendEvent<MedicineDetailInfo> {
+) : BaseViewModel(), ISendEvent<MedicineDetail> {
 
-    val _classificationResult = MutableStateFlow<List<ClassificationResult>>(emptyList())
+    private val _classificationResult = MutableStateFlow<List<ClassificationResult>>(emptyList())
 
     val classificationResult = _classificationResult.asStateFlow()
 
@@ -49,7 +49,7 @@ class AiSearchResultViewModel @Inject constructor(
             response.fold(
                 onSuccess = { medicineDetailInfoList ->
                     medicineDetailInfoList.mapIndexed { index, medicineDetailInfo ->
-                        classificationList[index].medicineDetailInfo = medicineDetailInfo
+                        classificationList[index].medicineDetail = medicineDetailInfo
                         classificationList[index].onClick = ::send
                     }.let {
                         flowOf(UiState.Success(classificationList))
@@ -68,20 +68,20 @@ class AiSearchResultViewModel @Inject constructor(
         }
     }
 
-    override fun send(e: MedicineDetailInfo) {
+    override fun send(e: MedicineDetail) {
         viewModelScope.launch(defaultDispatcher) {
             _eventState.emit(
                 EventState.OpenMedicineInfo(
                     MedicineInfoArgs(
                         entpKorName = e.entpName,
-                        entpEngName = e.entpEnglishName ?: "",
+                        entpEngName = e.entpEnglishName,
                         itemIngrName = e.mainItemIngredient,
                         itemKorName = e.itemName,
                         itemEngName = e.itemEnglishName,
                         itemSeq = e.itemSequence.toLong(),
-                        productType = e.industryType ?: "",
+                        productType = e.industryType,
                         medicineType = e.etcOtcCode,
-                        imgUrl = e.insertFileUrl ?: "",
+                        imgUrl = e.insertFileUrl,
                     ),
                 ),
             )

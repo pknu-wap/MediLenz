@@ -24,7 +24,7 @@
         tools:layout="@layout/fragment_search_medicines">
 
         <argument
-            android:name="query"
+            android:name="words"
             android:defaultValue=""
             app:argType="string" />
 

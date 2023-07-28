@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.model.remote.recall.DetailRecallSuspensionItemDto
+import com.android.mediproject.core.model.recall.DetailRecallSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.adminaction.color
 import java.time.format.DateTimeFormatter
@@ -31,7 +31,8 @@ import java.time.format.DateTimeFormatter
 @Preview
 @Composable
 fun DetailRecallDisposalScreen(
-    viewModel: DetailRecallSuspensionViewModel = hiltViewModel(), navController: NavController = rememberNavController()) {
+    viewModel: DetailRecallSuspensionViewModel = hiltViewModel(), navController: NavController = rememberNavController(),
+) {
 
     val uiState = viewModel.detailRecallSuspension.collectAsState()
 
@@ -55,7 +56,7 @@ fun DetailRecallDisposalScreen(
 
 // 회수 폐기
 @Composable
-fun Item(item: DetailRecallSuspensionItemDto) {
+fun Item(item: DetailRecallSuspension) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -72,26 +73,32 @@ fun Item(item: DetailRecallSuspensionItemDto) {
                 )
 
                 Spacer(Modifier.height(20.dp))
-                Text(text = item.enterprise,
+                Text(
+                    text = item.enterprise,
                     modifier = Modifier.align(Alignment.End),
                     fontSize = TextUnit(16f, type = TextUnitType.Sp),
                     style = TextStyle(color = "#32649F".color),
-                    textAlign = TextAlign.Right)
+                    textAlign = TextAlign.Right,
+                )
 
                 Spacer(Modifier.height(20.dp))
 
-                Text(text = item.recallCommandDate.format(DateTimeFormatter.ISO_DATE),
+                Text(
+                    text = item.recallCommandDate.format(DateTimeFormatter.ISO_DATE),
                     fontSize = TextUnit(14f, type = TextUnitType.Sp),
                     style = TextStyle(color = "#595959".color),
                     modifier = Modifier.align(Alignment.End),
-                    textAlign = TextAlign.Right)
+                    textAlign = TextAlign.Right,
+                )
 
                 Divider(Modifier.padding(top = 20.dp, bottom = 40.dp))
 
-                Text(text = item.reasonForRecall,
+                Text(
+                    text = item.reasonForRecall,
                     fontSize = TextUnit(14f, type = TextUnitType.Sp),
                     modifier = Modifier.padding(bottom = 8.dp),
-                    color = "#3E3C3C".color)
+                    color = "#3E3C3C".color,
+                )
             }
         }
     }

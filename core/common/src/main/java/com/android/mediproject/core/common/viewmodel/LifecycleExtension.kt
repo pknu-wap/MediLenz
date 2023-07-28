@@ -1,3 +1,5 @@
+package com.android.mediproject.core.common.viewmodel
+
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope

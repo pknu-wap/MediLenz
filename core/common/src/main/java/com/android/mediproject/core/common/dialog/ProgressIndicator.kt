@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.android.mediproject.core.common.R
-import com.android.mediproject.core.common.uiutil.dpToPx
+import com.android.mediproject.core.common.util.dpToPx
 
 class ProgressIndicator(context: Context, textMessage: String?) : ConstraintLayout(context) {
 
@@ -34,17 +34,23 @@ class ProgressIndicator(context: Context, textMessage: String?) : ConstraintLayo
     init {
         background = ContextCompat.getDrawable(context, R.drawable.progress_background)
 
-        addView(lottie, LayoutParams(LayoutParams.WRAP_CONTENT, dpToPx(context, 31)).apply {
-            topToTop = LayoutParams.PARENT_ID
-            startToStart = LayoutParams.PARENT_ID
-            endToEnd = LayoutParams.PARENT_ID
-        })
-        addView(textView, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-            topToBottom = lottie.id
-            topMargin = dpToPx(context, 16)
-            startToStart = LayoutParams.PARENT_ID
-            endToEnd = LayoutParams.PARENT_ID
-        })
+        addView(
+            lottie,
+            LayoutParams(LayoutParams.WRAP_CONTENT, 31.dpToPx()).apply {
+                topToTop = LayoutParams.PARENT_ID
+                startToStart = LayoutParams.PARENT_ID
+                endToEnd = LayoutParams.PARENT_ID
+            },
+        )
+        addView(
+            textView,
+            LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                topToBottom = lottie.id
+                topMargin = 16.dpToPx()
+                startToStart = LayoutParams.PARENT_ID
+                endToEnd = LayoutParams.PARENT_ID
+            },
+        )
 
         lottie.playAnimation()
     }

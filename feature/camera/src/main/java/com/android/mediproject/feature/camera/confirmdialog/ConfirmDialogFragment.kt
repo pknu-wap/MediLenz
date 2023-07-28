@@ -17,7 +17,7 @@ import com.android.mediproject.feature.camera.databinding.FragmentConfirmDialogB
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import repeatOnStarted
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 @AndroidEntryPoint
 class ConfirmDialogFragment : DialogFragment() {

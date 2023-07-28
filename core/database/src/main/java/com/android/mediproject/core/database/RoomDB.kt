@@ -11,7 +11,7 @@ import com.android.mediproject.core.database.searchhistory.SearchHistoryDao
 import com.android.mediproject.core.database.searchhistory.SearchHistoryDto
 
 
-@Database(entities = [SearchHistoryDto::class, MedicineDetailCacheDto::class, MedicineImageCacheDto::class], version = 1, exportSchema = true)
+@Database(entities = [SearchHistoryDto::class, MedicineDetailCacheDto::class, MedicineImageCacheDto::class], version = 1, exportSchema = false)
 @TypeConverters(RoomTypeConverter::class)
 abstract class RoomDB : RoomDatabase() {
     abstract fun searchHistoryDao(): SearchHistoryDao
