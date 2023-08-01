@@ -9,8 +9,8 @@ import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
 import com.android.mediproject.core.model.ai.ClassificationResult
-import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetail
+import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.search.result.EventState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -80,7 +80,7 @@ class AiSearchResultViewModel @Inject constructor(
                         itemEngName = e.itemEnglishName,
                         itemSeq = e.itemSequence.toLong(),
                         productType = e.industryType,
-                        medicineType = e.medicationProductType,
+                        medicineType = e.medicationProductType.text,
                         imgUrl = e.insertFileUrl,
                     ),
                 ),

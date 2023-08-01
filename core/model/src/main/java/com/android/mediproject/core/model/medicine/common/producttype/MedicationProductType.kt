@@ -16,6 +16,6 @@ enum class MedicationProductType(val description: String, @StringRes val stringR
     GENERAL("일반", R.string.medicineProductType_general);
 
     companion object {
-        fun valueOf(description: String) = values().find { description.contains(it.name) } ?: throw IllegalArgumentException()
+        fun enumOf(description: String) = values().find { description.contains(it.name) } ?: throw IllegalArgumentException()
     }
 }

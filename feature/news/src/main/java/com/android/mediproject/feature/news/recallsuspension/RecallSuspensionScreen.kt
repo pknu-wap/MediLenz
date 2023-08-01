@@ -113,9 +113,9 @@ fun ListItem(recallSuspension: RecallSuspension) {
                 )
                 Text(
                     text = recallSuspension.run {
-                        if (recallCommandDate != null) recallCommandDate
+                        if (recallCommandDate.isEmpty) recallCommandDate
                         else destructionOrderDate
-                    }!!.format(dateFormat),
+                    }.value.format(dateFormat),
                     fontSize = 12.sp,
                     modifier = Modifier.align(CenterVertically),
                     color = Color.Gray,

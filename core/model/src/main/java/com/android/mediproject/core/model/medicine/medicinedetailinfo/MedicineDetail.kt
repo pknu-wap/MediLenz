@@ -3,7 +3,7 @@ package com.android.mediproject.core.model.medicine.medicinedetailinfo
 import com.android.mediproject.core.model.DateTimeValue
 import com.android.mediproject.core.model.medicine.common.cancel.MedicineCancelStatus
 import com.android.mediproject.core.model.medicine.common.cancel.MedicineCancelStatusMapper
-import com.android.mediproject.core.model.medicine.common.producttype.MedicationProductType
+import com.android.mediproject.core.model.medicine.common.producttype.FilterMedicationProductType
 import com.android.mediproject.core.model.toLocalDate
 import com.android.mediproject.core.model.util.XMLParsedResult
 import com.android.mediproject.core.model.util.parseXmlString
@@ -66,7 +66,7 @@ data class MedicineDetail(
     val entpEnglishName: String,
     val entpName: String,
     val entpNumber: String,
-    val medicationProductType: MedicationProductType,
+    val medicationProductType: FilterMedicationProductType,
     val gbnName: String,
     val industryType: String,
     val ingredientName: String,
@@ -107,7 +107,7 @@ fun MedicineDetailInfoResponse.Item.toMedicineDetail(medicineIdInServer: Long = 
     entpEnglishName = entpEnglishName,
     entpName = entpName,
     entpNumber = entpNumber,
-    medicationProductType = MedicationProductType.valueOf(etcOtcCode),
+    medicationProductType = FilterMedicationProductType.enumOf(etcOtcCode),
     gbnName = gbnName,
     industryType = industryType,
     ingredientName = ingredientName,

@@ -20,8 +20,9 @@ enum class FilterMedicationProductType(val text: String, @StringRes val stringRe
     );
 
     companion object {
-
         fun FilterMedicationProductType.text() = text
         fun FilterMedicationProductType.stringResId() = stringResId
+
+        fun enumOf(text: String) = values().find { text.contains(it.text) }!!
     }
 }
