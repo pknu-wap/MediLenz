@@ -13,8 +13,8 @@ import android.text.style.UnderlineSpan
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpanned
 import com.android.mediproject.core.common.R
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetail
 import com.android.mediproject.core.model.granule.GranuleIdentificationInfo
+import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetail
 import com.android.mediproject.core.model.util.XMLParsedResult
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -76,7 +76,7 @@ class MedicineInfoMapper @Inject constructor() {
         return WeakReference(StringBuilder()).get()?.let { builder ->
             with(medicineDetail) {
                 builder.append("<p><b>의약품 이름:</b> $itemName</p>").append("<p><b>의약품 영문 이름:</b> $itemEnglishName</p>")
-                    .append("<p><b>의약품 시퀀스 번호:</b> $itemSequence</p>").append("<p><b>의약품 허가 날짜:</b> $itemPermitDate</p>")
+                    .append("<p><b>의약품 시퀀스 번호:</b> $itemSequence</p>").append("<p><b>의약품 허가 날짜:</b> ${itemPermitDate.value}</p>")
                     .append("<p><b>제조사 이름:</b> $entpName</p>").append("<p><b>제조사 영문 이름:</b> $entpEnglishName</p>")
                     .append("<p><b>제조및수입사:</b> $consignmentManufacturer</p>").append("<p><b>성분 이름:</b> $ingredientName</p>")
                     .append("<p><b>주성분의 영문 이름:</b> $mainIngredientEnglish</p>").append("<p><b>총 함량:</b> $totalContent</p>")

@@ -9,7 +9,8 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.mediproject.core.common.paging.setOnStateChangedListener
 import com.android.mediproject.core.common.util.deepNavigate
-import com.android.mediproject.core.model.constants.MedicationType
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
+import com.android.mediproject.core.model.medicine.common.producttype.FilterMedicationProductType
 import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.listfilter.MediPopupMenu
@@ -20,7 +21,6 @@ import com.android.mediproject.feature.search.result.EventState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 @AndroidEntryPoint
 class ManualSearchResultFragment :
@@ -65,11 +65,11 @@ class ManualSearchResultFragment :
                 MediPopupMenu.showMenu(it, R.menu.search_result_list_filter_menu) { menuItem ->
 
                     when (menuItem.itemId) {
-                        R.id.listOnlySpecialtyMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.SPECIALTY)
+                        R.id.listOnlySpecialtyMedicines -> fragmentViewModel.searchMedicinesByMedicationType(FilterMedicationProductType.SPECIALTY)
 
-                        R.id.listOnlyGenericMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.GENERAL)
+                        R.id.listOnlyGenericMedicines -> fragmentViewModel.searchMedicinesByMedicationType(FilterMedicationProductType.GENERAL)
 
-                        R.id.listAllMedicines -> fragmentViewModel.searchMedicinesByMedicationType(MedicationType.ALL)
+                        R.id.listAllMedicines -> fragmentViewModel.searchMedicinesByMedicationType(FilterMedicationProductType.ALL)
                     }
                     true
                 }

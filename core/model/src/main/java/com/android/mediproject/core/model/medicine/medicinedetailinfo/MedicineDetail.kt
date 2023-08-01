@@ -1,9 +1,12 @@
 package com.android.mediproject.core.model.medicine.medicinedetailinfo
 
+import com.android.mediproject.core.model.DateTimeValue
+import com.android.mediproject.core.model.medicine.common.cancel.MedicineCancelStatus
+import com.android.mediproject.core.model.medicine.common.cancel.MedicineCancelStatusMapper
+import com.android.mediproject.core.model.medicine.common.producttype.MedicationProductType
+import com.android.mediproject.core.model.toLocalDate
 import com.android.mediproject.core.model.util.XMLParsedResult
 import com.android.mediproject.core.model.util.parseXmlString
-import com.android.mediproject.core.model.toLocalDate
-import java.time.LocalDate
 
 /**
  * 의약품 상세 허가 정보
@@ -11,8 +14,7 @@ import java.time.LocalDate
  * @param atcCode ATC 코드
  * @param barCode 바코드
  * @param businessRegistrationNumber 사업자등록번호
- * @param cancelDate 취소일자
- * @param cancelName 취소명
+ * @param cancelStatus 취소 상태
  * @param changeDate 변경일자
  * @param chart 성상
  * @param consignmentManufacturer 제조및수입사
@@ -22,7 +24,7 @@ import java.time.LocalDate
  * @param entpEnglishName 제조사의 영문 이름입니다.
  * @param entpName 제조사의 이름입니다.
  * @param entpNumber 제조사의 번호입니다.
- * @param etcOtcCode 전문의약품 코드입니다.
+ * @param medicationProductType 전문의약품 코드입니다.
  * @param gbnName GBN(General Batch Number)의 이름입니다.
  * @param industryType 산업 유형입니다. 이 경우에는 '의약품'이라고 명시되어 있습니다.
  * @param ingredientName 성분 이름입니다.
@@ -42,12 +44,10 @@ import java.time.LocalDate
  * @param packUnit 패키지 단위입니다.
  * @param permitKindName 허가 종류 이름입니다.
  * @param pnDocData PN 문서 데이터입니다.
- * @param reexamDate 재심사 날짜입니다.
  * @param reexamTarget 재심사 대상입니다.
  * @param storageMethod 저장 방법입니다.
  * @param totalContent 총 함량입니다.
  * @param udDocData 용법 용량
- * @param uDocUid UD 문서의 식별자(ID)입니다.
  * @param validTerm 유효 기간입니다. 제조일로부터의 개월 수를 나타냅니다.
  * @param medicineIdInServer AWS에 저장된 의약품 ID
  * @param existsMedicineIdInServer AWS에 저장된 의약품 ID가 있는지 여부
@@ -56,9 +56,8 @@ data class MedicineDetail(
     val atcCode: String,
     val barCode: String,
     val businessRegistrationNumber: String,
-    val cancelDate: LocalDate,
-    val cancelName: String,
-    val changeDate: LocalDate,
+    val cancelStatus: MedicineCancelStatus,
+    val changeDate: DateTimeValue,
     val chart: String,
     val consignmentManufacturer: String,
     val docText: String,
@@ -67,14 +66,14 @@ data class MedicineDetail(
     val entpEnglishName: String,
     val entpName: String,
     val entpNumber: String,
-    val etcOtcCode: String,
+    val medicationProductType: MedicationProductType,
     val gbnName: String,
     val industryType: String,
     val ingredientName: String,
     val insertFileUrl: String,
     val itemEnglishName: String,
     val itemName: String,
-    val itemPermitDate: LocalDate,
+    val itemPermitDate: DateTimeValue,
     val itemSequence: String,
     val mainIngredientEnglish: String,
     val mainItemIngredient: String,
@@ -87,12 +86,10 @@ data class MedicineDetail(
     val packUnit: String,
     val permitKindName: String,
     val pnDocData: XMLParsedResult,
-    val reexamDate: LocalDate,
     val reexamTarget: String,
     val storageMethod: String,
     val totalContent: String,
     val udDocData: XMLParsedResult,
-    val uDocUid: String,
     val validTerm: String,
     val medicineIdInServer: Long,
     val existsMedicineIdInServer: Boolean,
@@ -102,44 +99,41 @@ fun MedicineDetailInfoResponse.Item.toMedicineDetail(medicineIdInServer: Long = 
     atcCode = atcCode,
     barCode = barCode,
     businessRegistrationNumber = businessRegistrationNumber,
-    cancelDate = cancelDate.toLocalDate("yyyyMMdd") ?: LocalDate.MIN,
-    cancelName = cancelName,
-    changeDate = changeDate.toLocalDate("yyyyMMdd") ?: LocalDate.MIN,
     chart = chart,
     consignmentManufacturer = consignmentManufacturer,
     docText = docText,
     ediCode = ediCode,
-    eeDocData = if (eeDocData.isNotEmpty()) eeDocData.parseXmlString() else XMLParsedResult("", emptyList()),
+    eeDocData = eeDocData.parseXmlString(),
     entpEnglishName = entpEnglishName,
     entpName = entpName,
     entpNumber = entpNumber,
-    etcOtcCode = etcOtcCode,
+    medicationProductType = MedicationProductType.valueOf(etcOtcCode),
     gbnName = gbnName,
     industryType = industryType,
     ingredientName = ingredientName,
     insertFileUrl = insertFileUrl,
     itemEnglishName = itemEnglishName,
     itemName = itemName,
-    itemPermitDate = itemPermitDate.toLocalDate("yyyyMMdd") ?: LocalDate.MIN,
+    itemPermitDate = itemPermitDate.toLocalDate("yyyyMMdd"),
     itemSequence = itemSequence,
     mainIngredientEnglish = mainIngredientEnglish,
     mainItemIngredient = mainItemIngredient,
     makeMaterialFlag = makeMaterialFlag,
     materialName = materialName,
     narcoticKindCode = narcoticKindCode,
-    nbDocData = if (nbDocData.isNotEmpty()) nbDocData.parseXmlString() else XMLParsedResult("", emptyList()),
+    nbDocData = nbDocData.parseXmlString(),
     nbDocId = nbDocId,
     newDrugClassName = newDrugClassName,
     packUnit = packUnit,
     permitKindName = permitKindName,
-    pnDocData = if (pnDocData.isNotEmpty()) pnDocData.parseXmlString() else XMLParsedResult("", emptyList()),
-    reexamDate = reexamDate.toLocalDate("yyyyMMdd") ?: LocalDate.MIN,
+    pnDocData = pnDocData.parseXmlString(),
     reexamTarget = reexamTarget,
     storageMethod = storageMethod,
     totalContent = totalContent,
     udDocData = udDocData.parseXmlString(),
-    uDocUid = uDDOCID,
     validTerm = validTerm,
     medicineIdInServer = medicineIdInServer,
     existsMedicineIdInServer = medicineIdInServer != 0L,
+    cancelStatus = MedicineCancelStatusMapper.map(cancelName, cancelDate),
+    changeDate = changeDate.toLocalDate("yyyyMMdd"),
 )

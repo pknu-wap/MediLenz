@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
-        <import type="com.android.mediproject.core.model.constants.MedicationType" />
+        <import type="com.android.mediproject.core.model.medicine.common.producttype.MedicationProductType" />
 
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.search.result.manual.ManualSearchResultViewModel"
-            />
+            type="com.android.mediproject.feature.search.result.manual.ManualSearchResultViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/filterBtn"
@@ -31,7 +28,7 @@
             app:drawableRightCompat="@drawable/baseline_expand_more_24"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:medicationTypeText="@{viewModel.searchParameter.medicationType}" />
+            app:medicationTypeText="@{viewModel.searchParameter.medicationProductType}" />
 
         <include
             android:id="@+id/pagingListViewGroup"
@@ -39,8 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/filterBtn"
-            />
+            app:layout_constraintTop_toBottomOf="@id/filterBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

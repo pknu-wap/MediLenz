@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/medicine_type_background"
             android:maxLines="1"
-            android:text="@{item.medicineDetail.etcOtcCode}"
+            android:text="@{item.medicineDetail.medicationProductType}"
             android:textColor="@color/medicineType"
             android:textSize="11sp"
             app:layout_constraintLeft_toRightOf="@id/medicineNameTextView"

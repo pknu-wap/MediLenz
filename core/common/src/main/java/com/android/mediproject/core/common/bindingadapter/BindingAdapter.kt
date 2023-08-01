@@ -11,7 +11,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
 import androidx.databinding.BindingAdapter
 import com.android.mediproject.core.common.R
-import com.android.mediproject.core.model.constants.MedicationType
+import com.android.mediproject.core.model.medicine.common.producttype.MedicationProductType
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
 
@@ -21,7 +21,7 @@ class GlideAppModule : AppGlideModule()
 object BindingAdapter {
     @JvmStatic
     @BindingAdapter("medicationTypeText")
-    fun setMedicationTypeText(textView: TextView, type: MedicationType) {
+    fun setMedicationTypeText(textView: TextView, type: MedicationProductType) {
         val arr = textView.context.resources.getStringArray(R.array.medicationTypes)
         textView.text = arr[type.ordinal]
     }

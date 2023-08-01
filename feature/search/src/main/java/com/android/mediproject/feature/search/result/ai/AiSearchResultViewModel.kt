@@ -80,7 +80,7 @@ class AiSearchResultViewModel @Inject constructor(
                         itemEngName = e.itemEnglishName,
                         itemSeq = e.itemSequence.toLong(),
                         productType = e.industryType,
-                        medicineType = e.etcOtcCode,
+                        medicineType = e.medicationProductType,
                         imgUrl = e.insertFileUrl,
                     ),
                 ),

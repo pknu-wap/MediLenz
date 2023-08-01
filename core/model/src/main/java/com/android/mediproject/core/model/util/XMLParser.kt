@@ -19,8 +19,8 @@ private val factory = DocumentBuilderFactory.newInstance()
  * @return XML 파싱 결과
  *
  */
-fun String?.parseXmlString(): XMLParsedResult {
-    if (this == null) return XMLParsedResult("", emptyList())
+fun String.parseXmlString(): XMLParsedResult {
+    if (isEmpty()) return XMLParsedResult()
 
     val doc = WeakReference(factory.newDocumentBuilder().parse(InputSource(StringReader(this)))).get()!!
     doc.documentElement.normalize()
@@ -59,9 +59,10 @@ private fun getElementsByTagName(element: Element, tagName: String): List<Elemen
 
 
 data class XMLParsedResult(
-    val title: String,
-    val articleList: List<Article>,
+    val title: String = "",
+    val articleList: List<Article> = emptyList(),
 ) {
+
 
     fun isEmpty(): Boolean = articleList.isEmpty()
 

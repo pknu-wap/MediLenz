@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="medicineCancelStatus_canceled">취하</string>
+    <string name="medicineCancelStatus_expired">유효기간만료</string>
+    <string name="medicineCancelStatus_normal">정상</string>
+    <string name="medicineProductType_general">일반 의약품</string>
+    <string name="medicineProductType_specialty">전문 의약품</string>
+    <string name="medicineProductType_all">모두</string>
+</resources>

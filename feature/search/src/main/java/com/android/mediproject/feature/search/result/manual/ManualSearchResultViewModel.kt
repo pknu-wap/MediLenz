@@ -9,9 +9,9 @@ import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetMedicineApprovalListUseCase
-import com.android.mediproject.core.model.constants.MedicationType
-import com.android.mediproject.core.model.navargs.MedicineInfoArgs
+import com.android.mediproject.core.model.medicine.common.producttype.FilterMedicationProductType
 import com.android.mediproject.core.model.medicine.medicineapproval.ApprovedMedicine
+import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.requestparameters.ApprovalListSearchParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.search.result.EventState
@@ -40,7 +40,7 @@ class ManualSearchResultViewModel @Inject constructor(
 ) : BaseViewModel(), ISendEvent<ApprovedMedicine> {
 
     private val _searchParameter =
-        MutableStateFlow(ApprovalListSearchParameter(itemName = null, entpName = null, medicationType = MedicationType.ALL))
+        MutableStateFlow(ApprovalListSearchParameter(itemName = null, entpName = null, medicationProductType = FilterMedicationProductType.ALL))
     val searchParameter = _searchParameter.asStateFlow()
 
     val searchResultFlow = searchParameter.flatMapLatest {
@@ -83,10 +83,10 @@ class ManualSearchResultViewModel @Inject constructor(
     /**
      * 의약품 유형으로 검색
      */
-    fun searchMedicinesByMedicationType(medicationType: MedicationType) {
+    fun searchMedicinesByMedicationType(medicationProductType: FilterMedicationProductType) {
         viewModelScope.launch {
             _searchParameter.update {
-                it.copy(medicationType = medicationType)
+                it.copy(medicationProductType = medicationProductType)
             }
         }
     }
