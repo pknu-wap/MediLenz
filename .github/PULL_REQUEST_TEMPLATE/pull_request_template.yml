@@ -1,0 +1,28 @@
+name: Pull request Template
+description: Pull request 시 사용합니다
+
+body:
+  - type: textarea
+    id: pr-contents
+    attributes:
+      label: 📑작업 내용 설명
+      description: 작업한 내용을 작성
+      placeholder: ex) 댓글 작성 기능 추가~
+    validations:
+      required: true
+  - type: textarea
+    id: task-list
+    attributes:
+      label: 🔲작업 목록
+      description: 작업한 목록을 리스트로 표시
+      placeholder: 
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: ✔️참고 사항(Optional)
+      description: 참고해야할 내용을 작성
+      placeholder: 
+    validations:
+      required: false

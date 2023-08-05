@@ -1,0 +1,38 @@
+name: Feature Template
+description: Feature 추가 시 작성 부탁드립니다 :)
+title: "[Feature]: "
+labels: ["newfeature"]
+
+body:
+  - type: textarea
+    id: issue-contents
+    attributes:
+      label: 📑Feature 설명
+      description: 작업할 Feature에 대한 설명을 작성
+      placeholder: ex) 댓글 작성 기능 추가~
+    validations:
+      required: true
+  - type: textarea
+    id: task-list
+    attributes:
+      label: 🔲작업 목록
+      description: 작업할 목록을 체크박스로 표시
+      placeholder: 
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: ✔️참고 사항(Optional)
+      description: 참고해야할 내용을 작성
+      placeholder: 
+    validations:
+      required: false
+  - type: textarea
+    id: estimated-time-to-complete
+    attributes:
+      label: 🕜예상 소요 시간(Optional)
+      description: 작업 예상 소요 시간을 작성
+      placeholder: ex) 2일 or 5월 3일 까지
+    validations:
+      required: false
