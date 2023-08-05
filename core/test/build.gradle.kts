@@ -14,6 +14,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:data"))
+    implementation(project(":core:model"))
 
     implementation(libs.bundles.testLocal)
     implementation(libs.bundles.testAndroid)
