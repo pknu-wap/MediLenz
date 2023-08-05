@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-## Architecture
-
-View-Model-Domain(UseCase)-Repository-Data(Local/Remote)
-
-## Library
-
-retrofit2   
-kotlinx-serialization   
-room   
-glide   
-workmanager   
-datastore   
-hilt   
-compose
-=======
 ![image](https://user-images.githubusercontent.com/48265129/236689315-647e33d2-056e-4a03-91d7-a8c985032daa.png)
 
 Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사용자들끼리 의약품에 관한 정보를 주고받을 수 있는 커뮤니티 기능을 제공하는 Android Native 앱입니다.
@@ -56,14 +40,11 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 
 - MVVM
 - domain 영역 포함
->>>>>>> e81e49f7abae2aa72878a4da9b615f57330d9636
 
 ## Modules
 
 ![image](https://user-images.githubusercontent.com/48265129/234879804-42a22684-4534-421f-b71f-c83122e8e613.png)
 
-<<<<<<< HEAD
-=======
 ## Members
  #### 아래의 프로필 이미지를 클릭하시면 저희 팀원들의 커밋 내역을 확인하실 수 있습니다! 😀
 | [@ho-sick99](https://github.com/ho-sick99) | [@pknujsp](https://github.com/pknujsp) | [@tgyuuAn](https://github.com/tgyuuAn) | [@winocreative](https://github.com/winocreative) |
@@ -71,7 +52,6 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/server_develop?author=ho-sick99"><img src="https://avatars.githubusercontent.com/u/83945722?s=64&v=4" width="64" height="64"></a> | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/android_develop?author=pknujsp"><img src="https://avatars.githubusercontent.com/u/48265129?s=64&v=4" width="64" height="64"></a> | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/android_develop?author=tgyuuAn"><img src="https://avatars.githubusercontent.com/u/116813010?s=64&v=4" width="64" height="64"></a> | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/server_develop?author=winocreative"><img src="https://avatars.githubusercontent.com/u/26576118?s=64&v=4" width="64" height="64"></a> |
 
 
->>>>>>> e81e49f7abae2aa72878a4da9b615f57330d9636
 ## Git Flow
 
 기본적으로 Git Flow 전략을 이용한다. 작업 시작 시 선행되어야 할 작업은 다음과 같다.
@@ -86,10 +66,7 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 
 ## App Design Templates (Figma)
 
-<<<<<<< HEAD
-=======
 ![image](https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/assets/116813010/466463b2-b69e-40fe-bcb2-30685a4cf7c0)
 
 
->>>>>>> e81e49f7abae2aa72878a4da9b615f57330d9636
 <https://www.figma.com/file/wgaIpwcuWfSpy1SA52wiUt/%ED%99%94%EB%A9%B4?node-id=0%3A1&t=VEl3ZiT2Q5Cyp4ps-1>
