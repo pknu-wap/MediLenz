@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MediLenz</string>
+    <string name="messageDevelopment">현재 버전은 <strong>초기 개발 버전</strong>으로 예상치 못한 오류 및 강제 종료가 발생할 수 있습니다</string>
+    <!-- Strings used for fragments for navigation -->
+</resources>

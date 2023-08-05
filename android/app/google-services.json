@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "898493131497",
+    "project_id": "medilenz-7276b",
+    "storage_bucket": "medilenz-7276b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:898493131497:android:884db09c3cf16cd030de78",
+        "android_client_info": {
+          "package_name": "com.android.mediproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "898493131497-kq7nsheeco98msah8hl0ptcioh8pebbg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.mediproject",
+            "certificate_hash": "52585fe9fb7f05d0d0c0e3f443c35613e00c29b1"
+          }
+        },
+        {
+          "client_id": "898493131497-lnipe3n8n22d5242pir050annu2adj14.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiQ7pa6mtYgTHbovjr6kndPzc19-MMfIo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "898493131497-lnipe3n8n22d5242pir050annu2adj14.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
