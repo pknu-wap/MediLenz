@@ -12,7 +12,7 @@ import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment
 import com.android.mediproject.feature.home.databinding.FragmentHomeBinding
-import com.android.mediproject.feature.news.penalties.recentpenaltylist.RecentPenaltyListFragment
+import com.android.mediproject.feature.news.recents.RecentPenaltyListFragment
 import com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

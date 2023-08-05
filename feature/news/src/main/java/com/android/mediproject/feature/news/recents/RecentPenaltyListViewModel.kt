@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.news.penalties.recentpenaltylist
+package com.android.mediproject.feature.news.recents
 
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.viewmodel.MutableEventFlow

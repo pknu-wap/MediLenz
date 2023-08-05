@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.news.recallsuspension
+package com.android.mediproject.feature.news.recallsalesuspension
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,8 +31,9 @@ import java.time.format.DateTimeFormatter
 @Preview
 @Composable
 fun DetailRecallDisposalScreen(
-    viewModel: DetailRecallSuspensionViewModel = hiltViewModel(), navController: NavController = rememberNavController(),
 ) {
+    val viewModel: DetailRecallSuspensionViewModel = hiltViewModel()
+    val navController: NavController = rememberNavController()
 
     val uiState = viewModel.detailRecallSuspension.collectAsState()
 

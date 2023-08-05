@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.news.recallsuspension
+package com.android.mediproject.feature.news.recallsalesuspension
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -37,9 +37,9 @@ import java.time.format.DateTimeFormatter
  */
 @Composable
 fun RecallDisposalScreen(
-    viewModel: RecallSuspensionViewModel = hiltViewModel(), navController: NavController,
 ) {
-
+    val viewModel: RecallSuspensionViewModel = hiltViewModel()
+    val navController = rememberNavController()
     val list = viewModel.recallDisposalList.collectAsLazyPagingItems()
 
     LazyColumn(

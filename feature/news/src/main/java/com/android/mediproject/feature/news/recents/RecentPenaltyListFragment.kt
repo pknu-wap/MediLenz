@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.news.penalties.recentpenaltylist
+package com.android.mediproject.feature.news.recents
 
 import android.os.Bundle
 import android.view.View

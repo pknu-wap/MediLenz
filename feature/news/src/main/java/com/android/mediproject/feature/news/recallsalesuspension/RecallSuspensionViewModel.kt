@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.news.recallsuspension
+package com.android.mediproject.feature.news.recallsalesuspension
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData

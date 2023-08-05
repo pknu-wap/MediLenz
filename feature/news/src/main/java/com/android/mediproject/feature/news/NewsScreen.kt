@@ -1,6 +1,7 @@
 package com.android.mediproject.feature.news
 
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +14,9 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -24,27 +25,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.android.mediproject.core.model.navargs.RecallDisposalArgs
 import com.android.mediproject.feature.news.adminaction.AdminActionScreen
-import com.android.mediproject.feature.news.adminaction.DetailAdminActionScreen
-import com.android.mediproject.feature.news.recallsuspension.DetailRecallDisposalScreen
-import com.android.mediproject.feature.news.recallsuspension.RecallDisposalScreen
+import com.android.mediproject.feature.news.recallsalesuspension.RecallDisposalScreen
+import com.android.mediproject.feature.news.safetynotification.SafetyNotificationScreen
 import kotlinx.parcelize.Parcelize
 
 /**
  * 뉴스 타입
  */
 @Parcelize
-enum class ChipType : Parcelable {
-    RECALLS_SUSPENSION, ADMIN_ACTION;
+sealed class ChipType(@StringRes val nameStringId: Int) : Parcelable {
+    object RecallSaleSuspension : ChipType(R.string.recallSaleSuspension)
+
+    object SafetyNotification : ChipType(R.string.safetyNotification)
+
+    object AdminAction : ChipType(R.string.adminAction)
 }
 
 /**
@@ -52,58 +52,45 @@ enum class ChipType : Parcelable {
  */
 @Composable
 fun NewsNavHost(
-    navController: NavHostController = rememberNavController(), arguments: RecallDisposalArgs
+    arguments: RecallDisposalArgs,
 ) {
-    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
-        ""
+    val navController: NavHostController = rememberNavController()
+
+    val startDestination by remember {
+        mutableStateOf(
+            if (arguments.product.isNotEmpty()) RecallSaleSuspensionRoutes.RecallSaleSuspensionRoutesDetail.uri
+            else MainRoutes.News.uri,
+        )
     }
 
-    val start = if (arguments.product.isNotEmpty()) "detailRecallSuspension/{product}"
-    else "news"
-
-    NavHost(navController = navController, startDestination = start) {
-        composable("news") {
-            CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
-                NewsScreen(navController)
-            }
-        }
-        composable(
-            "detailRecallSuspension/{product}", arguments = listOf(navArgument("product") {
-                type = NavType.StringType
-                defaultValue = arguments.product
-            })
-        ) {
-            DetailRecallDisposalScreen()
-        }
-        composable("detailAdminAction") {
-            CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
-                DetailAdminActionScreen()
-            }
+    NavHost(navController = navController, startDestination = startDestination) {
+        composable(MainRoutes.News.uri) {
+            NewsScreen()
         }
     }
 }
 
 @Composable
-fun NewsScreen(navController: NavController) {
-    var selectedChip by rememberSaveable { mutableStateOf(ChipType.RECALLS_SUSPENSION) }
-
-    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
-        ""
-    }
+fun NewsScreen() {
+    val navController = rememberNavController()
+    var selectedChip: ChipType by rememberSaveable { mutableStateOf(ChipType.RecallSaleSuspension) }
 
     Column {
-        ChipGroup(selectedChip, onChipSelected = { chip ->
-            selectedChip = chip
-        })
+        ChipGroup(
+            selectedChip,
+            onChipSelected = { chip ->
+                selectedChip = chip
+            },
+        )
         Divider(modifier = Modifier.padding(horizontal = 24.dp))
-        if (selectedChip == ChipType.RECALLS_SUSPENSION) RecallDisposalScreen(navController = navController)
-        else {
-            CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
-                AdminActionScreen(navController = navController)
-            }
+        when (selectedChip) {
+            is ChipType.RecallSaleSuspension -> RecallDisposalScreen()
+            is ChipType.AdminAction -> AdminActionScreen()
+            is ChipType.SafetyNotification -> SafetyNotificationScreen()
         }
     }
 }
+
 
 /**
  * 뉴스 타입 선택
@@ -113,24 +100,33 @@ fun NewsScreen(navController: NavController) {
  */
 @Composable
 fun ChipGroup(selectedChip: ChipType, onChipSelected: (ChipType) -> Unit) {
+    val spacerModifier = Modifier.width(8.dp)
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 24.dp, end = 24.dp)
+        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
     ) {
         CustomFilterChip(
-            title = stringResource(id = R.string.recallSuspension),
-            isSelected = selectedChip == ChipType.RECALLS_SUSPENSION,
-            type = ChipType.RECALLS_SUSPENSION
+            title = stringResource(id = ChipType.RecallSaleSuspension.nameStringId),
+            isSelected = selectedChip == ChipType.RecallSaleSuspension,
+            type = ChipType.RecallSaleSuspension,
         ) {
-            onChipSelected(ChipType.RECALLS_SUSPENSION)
+            onChipSelected(ChipType.RecallSaleSuspension)
         }
-        Spacer(Modifier.width(8.dp))
+        Spacer(spacerModifier)
         CustomFilterChip(
-            title = stringResource(id = R.string.adminAction),
-            isSelected = selectedChip == ChipType.ADMIN_ACTION,
-            type = ChipType.ADMIN_ACTION
+            title = stringResource(id = ChipType.AdminAction.nameStringId),
+            isSelected = selectedChip == ChipType.AdminAction,
+            type = ChipType.AdminAction,
         ) {
-            onChipSelected(ChipType.ADMIN_ACTION)
+            onChipSelected(ChipType.AdminAction)
+        }
+        Spacer(spacerModifier)
+        CustomFilterChip(
+            title = stringResource(id = ChipType.SafetyNotification.nameStringId),
+            isSelected = selectedChip == ChipType.SafetyNotification,
+            type = ChipType.SafetyNotification,
+        ) {
+            onChipSelected(ChipType.RecallSaleSuspension)
         }
     }
 }
@@ -141,7 +137,7 @@ fun ChipGroup(selectedChip: ChipType, onChipSelected: (ChipType) -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomFilterChip(
-    type: ChipType, title: String, isSelected: Boolean, onClick: (ChipType) -> Unit
+    type: ChipType, title: String, isSelected: Boolean, onClick: (ChipType) -> Unit,
 ) {
     FilterChip(
         selected = isSelected,
@@ -152,7 +148,7 @@ fun CustomFilterChip(
             selectedContainerColor = Color.Blue,
             selectedLabelColor = Color.White,
             disabledContainerColor = Color.White,
-            disabledLabelColor = Color.Blue
+            disabledLabelColor = Color.Blue,
         ),
     )
 }
