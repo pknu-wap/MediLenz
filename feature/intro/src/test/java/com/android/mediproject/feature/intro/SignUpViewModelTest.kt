@@ -28,7 +28,7 @@ class SignUpViewModelTest {
     }
 
     @Test
-    fun `이메일 형식이 맞지 않으면 회원가입이 불가능하다`() {
+    fun `회원가입 시 이메일 형식이 맞지 않으면 안된다`() {
         //given
         val notValidEmail = "example@.com"
         val validPassword = "abcd123456"
@@ -48,7 +48,7 @@ class SignUpViewModelTest {
     }
 
     @Test
-    fun `회원가입시 비밀번호가 4글자 미만이면 안된다`() {
+    fun `회원가입 시 비밀번호가 4글자 미만이면 안된다`() {
         //given
         val validEmail = "example@gmail.com"
         val notValidPassword = "ab1"
@@ -68,7 +68,7 @@ class SignUpViewModelTest {
     }
 
     @Test
-    fun `회원가입시 비밀번호가 16글자 초과면 안된다`() {
+    fun `회원가입 시 비밀번호가 16글자 초과면 안된다`() {
         //given
         val validEmail = "example@gmail.com"
         val notValidPassword = "123456789abcdefghijklmn"
@@ -88,7 +88,7 @@ class SignUpViewModelTest {
     }
 
     @Test
-    fun `회원가입시 비밀번호와 체크용 비밀번호가 다르면 안된다`() {
+    fun `회원가입 시 비밀번호와 확인 비밀번호가 다르면 안된다`() {
         //given
         val validEmail = "example@gmail.com"
         val validPassword = "abcd123456"
@@ -109,7 +109,7 @@ class SignUpViewModelTest {
     }
 
     @Test
-    fun `회원가입시 아이디가 이메일 형식이 맞고, 비밀번호가 4글자 이상 16글자 이하이며, 체크용 비밀번호가 같아야 한다`() {
+    fun `회원가입 시 아이디가 이메일 형식이 맞고, 비밀번호가 4글자 이상 16글자 이하이며, 비밀번호와 확인 비밀번호가 같아야 한다`() {
         //given
         val validEmail = "example@gmail.com"
         val validPassword = "abcd123456"
