@@ -80,7 +80,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun clearEmailPasswordCharArray(email: CharArray, password: CharArray) {
+    private fun fillEmailPassword(email: CharArray, password: CharArray) {
         email.fill('\u0000')
         password.fill('\u0000')
     }
@@ -103,7 +103,7 @@ class LoginViewModel @Inject constructor(
             loginFailed()
         }
         viewModelScope.launch(defaultDispatcher + exceptionHandler) {
-            val pair = initEmailPasswordCharArray(email, password)
+            val pair = initEmailPassword(email, password)
             val (emailCharArray, passwordCharArray) = pair.first to pair.second
 
             setLoginState(LoginState.Logining)
@@ -113,15 +113,15 @@ class LoginViewModel @Inject constructor(
                     onSuccess = { loginSuccess() }, onFailure = { loginFailed() },
                 )
             }
-            clearEmailPasswordCharArray(emailCharArray, passwordCharArray)
+            fillEmailPassword(emailCharArray, passwordCharArray)
         }
     }
 
-    private fun initEmailPasswordCharArray(email: String, password: String): Pair<CharArray, CharArray> {
-        return Pair(initEmailCharArray(email), initPasswordCharArray(password))
+    private fun initEmailPassword(email: String, password: String): Pair<CharArray, CharArray> {
+        return Pair(initEmail(email), initPassword(password))
     }
 
-    private fun initEmailCharArray(email: String): CharArray {
+    private fun initEmail(email: String): CharArray {
         val emailCharArray = CharArray(email.length)
         email.trim().forEachIndexed { index, c ->
             emailCharArray[index] = c
@@ -129,7 +129,7 @@ class LoginViewModel @Inject constructor(
         return emailCharArray
     }
 
-    private fun initPasswordCharArray(password: String): CharArray {
+    private fun initPassword(password: String): CharArray {
         val passwordCharArray = CharArray(password.length)
         password.trim().forEachIndexed { index, c ->
             passwordCharArray[index] = c
