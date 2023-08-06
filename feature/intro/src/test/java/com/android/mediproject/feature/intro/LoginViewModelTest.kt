@@ -29,7 +29,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `로그인 시 이메일 정규표현식을 지키지 않으면 안된다`() {
+    fun `로그인 시 이메일 형식이 맞지 않으면 안된다`() {
         //given
         val notValidEmail = "example@.com"
         val validPassword = "abcd123456"
