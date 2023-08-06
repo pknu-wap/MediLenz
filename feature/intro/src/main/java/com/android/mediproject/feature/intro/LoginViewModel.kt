@@ -97,7 +97,7 @@ class LoginViewModel @Inject constructor(
         return isPasswordValid(password)
     }
 
-    private fun login(email: String, password: String, checkedSaveEmail: Boolean) {
+    private fun login(email: String, password: String, isEmailSaved: Boolean) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
             throwable.printStackTrace()
             loginFailed()
@@ -108,7 +108,7 @@ class LoginViewModel @Inject constructor(
 
             setLoginState(LoginState.Logining)
 
-            signUseCase.login(LoginParameter(emailCharArray, passwordCharArray, checkedSaveEmail)).collect { result ->
+            signUseCase.login(LoginParameter(emailCharArray, passwordCharArray, isEmailSaved)).collect { result ->
                 result.fold(
                     onSuccess = { loginSuccess() }, onFailure = { loginFailed() },
                 )

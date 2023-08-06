@@ -31,7 +31,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `로그인 시 이메일 형식이 맞지 않으면 RegexError를 반환한다`() {
+    fun `로그인 시 이메일 형식을 `() {
         //given
         val notValidEmail = "example@.com"
         val validPassword = "abcd123456"
