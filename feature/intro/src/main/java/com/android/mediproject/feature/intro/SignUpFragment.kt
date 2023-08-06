@@ -71,10 +71,10 @@ class SignUpFragment :
 
     private fun signUp() {
         fragmentViewModel.signUpWithCheckRegex(
-            binding.signUpEmail.getEditable(),
-            binding.signUpPassword.getEditable(),
-            binding.signUpPasswordCheck.getEditable(),
-            binding.signUpNickName.getEditable(),
+            binding.signUpEmail.getValue(),
+            binding.signUpPassword.getValue(),
+            binding.signUpPasswordCheck.getValue(),
+            binding.signUpNickName.getValue(),
         )
     }
 

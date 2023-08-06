@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.intro
 
-import android.text.Editable
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -105,16 +104,16 @@ class LoginViewModel @Inject constructor(
         }
         viewModelScope.launch(defaultDispatcher + exceptionHandler) {
             val pair = initEmailPasswordCharArray(email, password)
-            val (email, password) = pair.first to pair.second
+            val (emailCharArray, passwordCharArray) = pair.first to pair.second
 
             setLoginState(LoginState.Logining)
 
-            signUseCase.login(LoginParameter(email, password, checkedSaveEmail)).collect { result ->
+            signUseCase.login(LoginParameter(emailCharArray, passwordCharArray, checkedSaveEmail)).collect { result ->
                 result.fold(
                     onSuccess = { loginSuccess() }, onFailure = { loginFailed() },
                 )
             }
-            clearEmailPasswordCharArray(email, password)
+            clearEmailPasswordCharArray(emailCharArray, passwordCharArray)
         }
     }
 
@@ -122,20 +121,20 @@ class LoginViewModel @Inject constructor(
         return Pair(initEmailCharArray(email), initPasswordCharArray(password))
     }
 
-    private fun initEmailCharArray(emailString: String): CharArray {
-        val email = CharArray(emailString.length)
-        emailString.trim().forEachIndexed { index, c ->
-            email[index] = c
+    private fun initEmailCharArray(email: String): CharArray {
+        val emailCharArray = CharArray(email.length)
+        email.trim().forEachIndexed { index, c ->
+            emailCharArray[index] = c
         }
-        return email
+        return emailCharArray
     }
 
-    private fun initPasswordCharArray(passwordString: String): CharArray {
-        val password = CharArray(passwordString.length)
-        passwordString.trim().forEachIndexed { index, c ->
-            password[index] = c
+    private fun initPasswordCharArray(password: String): CharArray {
+        val passwordCharArray = CharArray(password.length)
+        password.trim().forEachIndexed { index, c ->
+            passwordCharArray[index] = c
         }
-        return password
+        return passwordCharArray
     }
 
     private fun loginFailed() {
