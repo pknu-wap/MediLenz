@@ -58,24 +58,6 @@ class SignUpViewModel @Inject constructor(
         _callBackMoveFlag.value = flag
     }
 
-    /**
-    fun signUpWithCheckRegex(
-    email: String, password: String, checkPassword: String, nickName: String,
-    ) {
-    if (checkEmailPasswordRegex(email, password)) {
-
-    if (password.contentEquals(checkPassword)) {
-    signUp(email, password, nickName)
-    } else {
-    isNotEqualPasswordCheck()
-    }
-
-    } else {
-    signUpFaledWithRegexError()
-    }
-    }
-     **/
-
     fun signUpWithCheckRegex(
         email: String, password: String, checkPassword: String, nickName: String,
     ) {
