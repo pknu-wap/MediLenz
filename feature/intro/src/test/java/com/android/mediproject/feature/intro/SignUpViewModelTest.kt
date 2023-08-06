@@ -3,7 +3,7 @@ package com.android.mediproject.feature.intro
 import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.test.repositories.FakeSignRepository
 import com.android.mediproject.core.test.repositories.FakeUserInfoRepository
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import comandroid.mediproject.core.test.MainCoroutineRule
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
@@ -28,7 +28,7 @@ class SignUpViewModelTest {
     }
 
     @Test
-    fun `회원가입시 이메일 형식이 맞지 않으면 RegexError를 반환한다`() {
+    fun `이메일 형식이 맞지 않으면 회원가입이 불가능하다`() {
         //given
         val notValidEmail = "example@.com"
         val validPassword = "abcd123456"
@@ -42,12 +42,13 @@ class SignUpViewModelTest {
             nickName = nickName)
 
         //then
-        val result = viewModel.signUpState.value
-        Truth.assertThat(result).isEqualTo(SignUpViewModel.SignUpState.RegexError)
+        val actual = viewModel.signUpState.value
+        val expected = SignUpViewModel.SignUpState.RegexError
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun `회원가입시 비밀번호가 3글자 이하면 RegexError를 반환한다`() {
+    fun `회원가입시 비밀번호가 4글자 미만이면 안된다`() {
         //given
         val validEmail = "example@gmail.com"
         val notValidPassword = "ab1"
@@ -61,12 +62,13 @@ class SignUpViewModelTest {
             nickName = nickName)
 
         //then
-        val result = viewModel.signUpState.value
-        Truth.assertThat(result).isEqualTo(SignUpViewModel.SignUpState.RegexError)
+        val actual = viewModel.signUpState.value
+        val expected = SignUpViewModel.SignUpState.RegexError
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun `회원가입시 비밀번호가 17글자 이상이면 RegexError를 반환한다`() {
+    fun `회원가입시 비밀번호가 16글자 초과면 안된다`() {
         //given
         val validEmail = "example@gmail.com"
         val notValidPassword = "123456789abcdefghijklmn"
@@ -80,12 +82,13 @@ class SignUpViewModelTest {
             nickName = nickName)
 
         //then
-        val result = viewModel.signUpState.value
-        Truth.assertThat(result).isEqualTo(SignUpViewModel.SignUpState.RegexError)
+        val actual = viewModel.signUpState.value
+        val expected = SignUpViewModel.SignUpState.RegexError
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun `회원가입시 비밀번호와 비밀번호 체크가 같지 않으면 PasswordError를 반환한다`() {
+    fun `회원가입시 비밀번호와 체크용 비밀번호가 다르면 안된다`() {
         //given
         val validEmail = "example@gmail.com"
         val validPassword = "abcd123456"
@@ -100,12 +103,13 @@ class SignUpViewModelTest {
             nickName = nickName)
 
         //then
-        val result = viewModel.signUpState.value
-        Truth.assertThat(result).isEqualTo(SignUpViewModel.SignUpState.PasswordError)
+        val actual = viewModel.signUpState.value
+        val expected = SignUpViewModel.SignUpState.PasswordError
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun `회원가입시 아이디가 이메일 형식이 맞고, 비밀번호가 4글자 이상 16글자 이하이며, 체크 비밀번호가 같을경우 SignUpSuccess를 반환한다`() {
+    fun `회원가입시 아이디가 이메일 형식이 맞고, 비밀번호가 4글자 이상 16글자 이하이며, 체크용 비밀번호가 같아야 한다`() {
         //given
         val validEmail = "example@gmail.com"
         val validPassword = "abcd123456"
@@ -119,7 +123,8 @@ class SignUpViewModelTest {
             nickName = nickName)
 
         //then
-        val result = viewModel.signUpState.value
-        Truth.assertThat(result).isEqualTo(SignUpViewModel.SignUpState.SignUpSuccess)
+        val actual = viewModel.signUpState.value
+        val expected = SignUpViewModel.SignUpState.SignUpSuccess
+        assertThat(actual).isEqualTo(expected)
     }
 }
