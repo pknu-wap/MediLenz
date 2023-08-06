@@ -10,8 +10,6 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 
 
 class LoginViewModelTest {
@@ -40,7 +38,7 @@ class LoginViewModelTest {
         viewModel.loginWithCheckRegex(
             email = notValidEmail,
             password = validPassword,
-            checkedSaveEmail = false,
+            isEmailSaved = false,
         )
 
         //then
@@ -59,7 +57,7 @@ class LoginViewModelTest {
         viewModel.loginWithCheckRegex(
             email = validEmail,
             password = notValidPassword,
-            checkedSaveEmail = false,
+            isEmailSaved = false,
         )
 
         //then
@@ -78,7 +76,7 @@ class LoginViewModelTest {
         viewModel.loginWithCheckRegex(
             email = validEmail,
             password = notValidPassword,
-            checkedSaveEmail = false,
+            isEmailSaved = false,
         )
 
         //then
@@ -97,7 +95,7 @@ class LoginViewModelTest {
         viewModel.loginWithCheckRegex(
             email = validEmail,
             password = validPassword,
-            checkedSaveEmail = false,
+            isEmailSaved = false,
         )
 
         //then

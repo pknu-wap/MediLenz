@@ -72,12 +72,12 @@ class LoginViewModel @Inject constructor(
         object SignUp : LoginEvent()
     }
 
-    fun loginWithCheckRegex(email: String, password: String, checkedSaveEmail: Boolean) {
+    fun loginWithCheckRegex(email: String, password: String, isEmailSaved: Boolean) {
         if (!checkEmailPasswordRegex(email, password)) {
             loginFailedWithRegexError()
             return
         }
-        login(email, password, checkedSaveEmail)
+        login(email, password, isEmailSaved)
     }
 
     private fun fillEmailPassword(email: CharArray, password: CharArray) {
