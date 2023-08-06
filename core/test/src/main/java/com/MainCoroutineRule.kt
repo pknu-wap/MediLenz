@@ -1,4 +1,4 @@
-package com
+package comandroid.mediproject.core.test
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

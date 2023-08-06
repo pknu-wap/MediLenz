@@ -71,8 +71,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
 
     private fun login() {
         fragmentViewModel.loginWithCheckRegex(
-            binding.loginEmail.getEditable(),
-            binding.loginPassword.getEditable(),
+            binding.loginEmail.getValue(),
+            binding.loginPassword.getValue(),
             binding.rememberEmailCB.isChecked,
         )
     }
