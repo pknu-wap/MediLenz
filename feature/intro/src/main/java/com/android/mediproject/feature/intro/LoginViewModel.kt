@@ -73,9 +73,9 @@ class LoginViewModel @Inject constructor(
         object SignUp : LoginEvent()
     }
 
-    fun loginWithCheckRegex(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) {
-        if (checkEmailPasswordRegex(emailEditable, passwordEditable)) {
-            login(emailEditable, passwordEditable, checkedSaveEmail)
+    fun loginWithCheckRegex(email: String, password: String, checkedSaveEmail: Boolean) {
+        if (checkEmailPasswordRegex(email, password)) {
+            login(email, password, checkedSaveEmail)
         } else {
             loginFailedWithRegexError()
         }
@@ -86,25 +86,25 @@ class LoginViewModel @Inject constructor(
         password.fill('\u0000')
     }
 
-    private fun checkEmailPasswordRegex(emailEditable: Editable, passwordEditable: Editable): Boolean {
-        return checkEmailRegex(emailEditable) && checkPasswordRegex(passwordEditable)
+    private fun checkEmailPasswordRegex(email: String, password: String): Boolean {
+        return checkEmailRegex(email) && checkPasswordRegex(password)
     }
 
-    private fun checkEmailRegex(emailEditable: Editable): Boolean {
-        return isEmailValid(emailEditable)
+    private fun checkEmailRegex(email: String): Boolean {
+        return isEmailValid(email)
     }
 
-    private fun checkPasswordRegex(passwordEditable: Editable): Boolean {
-        return isPasswordValid(passwordEditable)
+    private fun checkPasswordRegex(password: String): Boolean {
+        return isPasswordValid(password)
     }
 
-    private fun login(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) {
+    private fun login(email: String, password: String, checkedSaveEmail: Boolean) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
             throwable.printStackTrace()
             loginFailed()
         }
         viewModelScope.launch(defaultDispatcher + exceptionHandler) {
-            val pair = initEmailPasswordCharArray(emailEditable, passwordEditable)
+            val pair = initEmailPasswordCharArray(email, password)
             val (email, password) = pair.first to pair.second
 
             setLoginState(LoginState.Logining)
@@ -118,21 +118,21 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun initEmailPasswordCharArray(emailEditable: Editable, passwordEditable: Editable): Pair<CharArray, CharArray> {
-        return Pair(initEmailCharArray(emailEditable), initPasswordCharArray(passwordEditable))
+    private fun initEmailPasswordCharArray(email: String, password: String): Pair<CharArray, CharArray> {
+        return Pair(initEmailCharArray(email), initPasswordCharArray(password))
     }
 
-    private fun initEmailCharArray(emailEditable: Editable): CharArray {
-        val email = CharArray(emailEditable.length)
-        emailEditable.trim().forEachIndexed { index, c ->
+    private fun initEmailCharArray(emailString: String): CharArray {
+        val email = CharArray(emailString.length)
+        emailString.trim().forEachIndexed { index, c ->
             email[index] = c
         }
         return email
     }
 
-    private fun initPasswordCharArray(passwordEditable: Editable): CharArray {
-        val password = CharArray(passwordEditable.length)
-        passwordEditable.trim().forEachIndexed { index, c ->
+    private fun initPasswordCharArray(passwordString: String): CharArray {
+        val password = CharArray(passwordString.length)
+        passwordString.trim().forEachIndexed { index, c ->
             password[index] = c
         }
         return password
