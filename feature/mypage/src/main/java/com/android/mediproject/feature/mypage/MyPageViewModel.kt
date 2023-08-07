@@ -64,11 +64,7 @@ class MyPageViewModel @Inject constructor(
 
     fun loadUser() = viewModelScope.launch { getUserUseCase().collect { _user.value = it } }
 
-    private val _myCommentsList = MutableSharedFlow<List<MyCommentsListResponse.Comment>>(
-        replay = 1,
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST,
-    )
+    private val _myCommentsList = MutableSharedFlow<List<MyCommentsListResponse.Comment>>()
     val myCommentsList get() = _myCommentsList.asSharedFlow()
 
     fun loadMyCommentsList() = viewModelScope.launch(ioDispatcher) {
