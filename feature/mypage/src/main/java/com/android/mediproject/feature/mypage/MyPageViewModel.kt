@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.domain.SignUseCase
-import com.android.mediproject.core.domain.EditUserAccountUseCase
+import com.android.mediproject.core.domain.GetUserUseCase
 import com.android.mediproject.core.model.comments.MyComment
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getTokenUseCase: GetTokenUseCase,
-    private val editUserAccountUseCase: EditUserAccountUseCase,
+    private val getUserUseCase: GetUserUseCase,
     private val signUseCase: SignUseCase,
 ) : BaseViewModel() {
 
@@ -55,7 +55,7 @@ class MyPageViewModel @Inject constructor(
     private val _user = MutableStateFlow(User("기본값"))
     val user get() = _user.asStateFlow()
 
-    fun loadUser() = viewModelScope.launch { editUserAccountUseCase().collect { _user.value = it } }
+    fun loadUser() = viewModelScope.launch { getUserUseCase().collect { _user.value = it } }
 
     private val _myCommentsList = MutableSharedFlow<List<MyComment>>(
         replay = 1,
