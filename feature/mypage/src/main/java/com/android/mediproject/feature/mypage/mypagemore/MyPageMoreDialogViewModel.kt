@@ -14,6 +14,7 @@ import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,12 +35,6 @@ class MyPageMoreDialogViewModel @Inject constructor(
 
     fun toast(message: String) = event(MyPageMoreDialogEvent.Toast(message))
 
-    fun completeWithdrawal() = event(MyPageMoreDialogEvent.CompleteWithdrawal)
-
-    fun completeChangeNickname() = event(MyPageMoreDialogEvent.CompleteChangeNickname)
-
-    fun completeLogout() = event(MyPageMoreDialogEvent.CompleteLogout)
-
     fun cancelDialog() = event(MyPageMoreDialogEvent.CancelDialog)
 
     sealed class MyPageMoreDialogEvent {
@@ -49,6 +44,30 @@ class MyPageMoreDialogViewModel @Inject constructor(
         object CompleteChangeNickname : MyPageMoreDialogEvent()
         object CompleteLogout : MyPageMoreDialogEvent()
         data class Toast(val message: String) : MyPageMoreDialogEvent()
+    }
+
+    private val _myPageMoreDialogState = MutableStateFlow<MyPageMoreDialogState>(MyPageMoreDialogState.initial)
+    val myPageMoreDialogState = _myPageMoreDialogState.asStateFlow()
+
+    private fun setMyPageMoreDialogState(myPageMoreDialogState: MyPageMoreDialogState) {
+        _myPageMoreDialogState.value = myPageMoreDialogState
+    }
+
+    fun completeWithdrawal() = setMyPageMoreDialogState(MyPageMoreDialogState.Complete(MyPageMoreCompleteFlag.WITHDRAWAL))
+
+    fun completeChangeNickname() = setMyPageMoreDialogState(MyPageMoreDialogState.Complete(MyPageMoreCompleteFlag.CHANGENICKNAME))
+
+    fun completeLogout() = setMyPageMoreDialogState(MyPageMoreDialogState.Complete(MyPageMoreCompleteFlag.LOGOUT))
+
+
+    sealed class MyPageMoreDialogState {
+        data class Complete(val myPageMoreCompleteFlag: MyPageMoreCompleteFlag? = null) : MyPageMoreDialogState()
+        object initial : MyPageMoreDialogState()
+        object PasswordError : MyPageMoreDialogState()
+    }
+
+    enum class MyPageMoreCompleteFlag {
+        WITHDRAWAL, CHANGENICKNAME, LOGOUT
     }
 
     private val _dialogFlag = MutableStateFlow(MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME)
