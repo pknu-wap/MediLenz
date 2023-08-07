@@ -1,7 +1,7 @@
 package com.android.mediproject.core.data.recallsuspension
 
 import androidx.paging.PagingData
-import com.android.mediproject.core.model.recall.DetailRecallSuspensionResponse
+import com.android.mediproject.core.model.recall.DetailRecallSaleSuspensionResponse
 import com.android.mediproject.core.model.recall.RecallSuspensionListResponse
 import kotlinx.coroutines.flow.Flow
 
@@ -15,5 +15,5 @@ interface RecallSuspensionRepository {
 
     fun getDetailRecallSuspension(
         company: String?, product: String?,
-    ): Flow<Result<DetailRecallSuspensionResponse.Item.Item>>
+    ): Flow<Result<DetailRecallSaleSuspensionResponse.Item.Item>>
 }

@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
-import com.android.mediproject.core.model.recall.DetailRecallSuspensionResponse
+import com.android.mediproject.core.model.recall.DetailRecallSaleSuspensionResponse
 import com.android.mediproject.core.model.recall.RecallSuspensionListResponse
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionListDataSourceImpl
@@ -36,7 +36,7 @@ class RecallSuspensionRepositoryImpl @Inject constructor(
 
     override fun getDetailRecallSuspension(
         company: String?, product: String?,
-    ): Flow<Result<DetailRecallSuspensionResponse.Item.Item>> = recallSuspensionDataSource.getDetailRecallSuspensionInfo(
+    ): Flow<Result<DetailRecallSaleSuspensionResponse.Item.Item>> = recallSuspensionDataSource.getDetailRecallSuspensionInfo(
         company = company, product = product,
     ).map { result ->
         result.fold(

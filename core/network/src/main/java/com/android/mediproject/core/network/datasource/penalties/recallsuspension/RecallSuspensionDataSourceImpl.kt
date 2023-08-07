@@ -1,6 +1,6 @@
 package com.android.mediproject.core.network.datasource.penalties.recallsuspension
 
-import com.android.mediproject.core.model.recall.DetailRecallSuspensionResponse
+import com.android.mediproject.core.model.recall.DetailRecallSaleSuspensionResponse
 import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onDataGokrResponse
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,7 +16,7 @@ class RecallSuspensionDataSourceImpl @Inject constructor(
 
     override fun getDetailRecallSuspensionInfo(
         company: String?, product: String?,
-    ): Flow<Result<DetailRecallSuspensionResponse>> = channelFlow {
+    ): Flow<Result<DetailRecallSaleSuspensionResponse>> = channelFlow {
         send(dataGoKrNetworkApi.getDetailRecallSuspensionInfo(company = company, product = product).onDataGokrResponse())
     }
 

@@ -7,4 +7,10 @@
     <string name="failedLoading">식약처로 부터 데이터를 불러오는데 실패했습니다.</string>
     <string name="loadingRecallSaleSuspensionData">회수/판매중지 정보를 불러오고 있어요</string>
     <string name="recallSaleSuspensionImage">회수/판매중지 정보 대표사진</string>
+    <string name="productName">품목명</string>
+    <string name="companyName">업체명</string>
+    <string name="recallCommandDate">회수명령일자</string>
+    <string name="recallSaleSuspensionReason">회수사유</string>
+    <string name="manufacturingNumber">제조번호(사용기한)</string>
+    <string name="opendEndDate">정보 공개 마감</string>
 </resources>

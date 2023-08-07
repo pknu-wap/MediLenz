@@ -7,7 +7,7 @@ import com.android.mediproject.core.common.JSON
 import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.adminaction.AdminActionListResponse
 import com.android.mediproject.core.model.granule.GranuleIdentificationInfoResponse
-import com.android.mediproject.core.model.recall.DetailRecallSuspensionResponse
+import com.android.mediproject.core.model.recall.DetailRecallSaleSuspensionResponse
 import com.android.mediproject.core.model.recall.RecallSuspensionListResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -75,7 +75,7 @@ interface DataGoKrNetworkApi : DurProductInfoNetworkApi, DurIngrInfoNetworkApi {
         @Query("Entrps", encoded = true) company: String?,
         @Query("Prduct", encoded = true) product: String?,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
-    ): Response<DetailRecallSuspensionResponse>
+    ): Response<DetailRecallSaleSuspensionResponse>
 
     /**
      * 행정 처분 목록조회
