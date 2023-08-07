@@ -175,7 +175,7 @@ class MyPageMoreDialogFragment(private val flag: DialogType) : DialogFragment() 
     }
 
     private fun changePassword() {
-        fragmentViewModel.changePassword(binding.dialogSubtitle1.getEditable())
+        fragmentViewModel.changePassword(binding.dialogSubtitle1.getValue())
     }
 
     private fun withdrawal() {

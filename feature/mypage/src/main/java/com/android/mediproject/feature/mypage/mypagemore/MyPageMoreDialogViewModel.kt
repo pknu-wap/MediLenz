@@ -90,7 +90,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
         }
     }
 
-    fun changePassword(newPassword: Editable) = viewModelScope.launch(ioDispatcher) {
+    fun changePassword(newPassword: String) = viewModelScope.launch(ioDispatcher) {
         if (!isPasswordValid(newPassword)) {
             setMyPageDialogState(MyPageDialogState.Error(MyPageDialogFlag.CHANGEPASSWORD))
             return@launch
