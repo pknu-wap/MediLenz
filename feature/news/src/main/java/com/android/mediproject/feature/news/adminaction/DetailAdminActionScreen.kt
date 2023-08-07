@@ -49,7 +49,7 @@ fun Item(item: AdminAction) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Spacer(Modifier.height(20.dp))
             Text(
-                text = item.entpName,
+                text = item.companyName,
                 fontSize = TextUnit(20f, type = TextUnitType.Sp),
             )
 
@@ -64,7 +64,7 @@ fun Item(item: AdminAction) {
 
             Spacer(Modifier.height(20.dp))
             Text(
-                text = item.lastSettleDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                text = item.adminActionDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
                 fontSize = TextUnit(14f, type = TextUnitType.Sp),
                 style = TextStyle(color = "#595959".color),
                 modifier = Modifier.align(Alignment.End),
@@ -74,21 +74,21 @@ fun Item(item: AdminAction) {
             Divider(Modifier.padding(top = 20.dp, bottom = 40.dp))
 
             Text(
-                text = item.violation,
+                text = item.violationDetails,
                 fontSize = TextUnit(14f, type = TextUnitType.Sp),
                 modifier = Modifier.padding(bottom = 8.dp),
                 color = "#3E3C3C".color,
             )
 
             Text(
-                text = item.disposition,
+                text = item.adminAction,
                 fontSize = TextUnit(14f, type = TextUnitType.Sp),
                 modifier = Modifier.padding(bottom = 8.dp),
                 color = "#3E3C3C".color,
             )
 
             Text(
-                text = item.applyLaw,
+                text = item.violationLaw,
                 fontSize = TextUnit(14f, type = TextUnitType.Sp),
                 modifier = Modifier.padding(bottom = 8.dp),
                 color = "#3E3C3C".color,

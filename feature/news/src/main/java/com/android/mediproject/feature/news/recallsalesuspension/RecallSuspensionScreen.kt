@@ -21,7 +21,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
@@ -33,7 +32,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.android.mediproject.core.model.DateTimeValue
 import com.android.mediproject.core.model.recall.RecallSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
@@ -87,16 +85,9 @@ fun RecallDisposalScreen(
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun ListItem() {
-    val recallSuspension: RecallSuspension = RecallSuspension(
-        enfrcYn = null,
-        itemSeq = "", destructionOrderDate = DateTimeValue(null, ""),
-        recallCommandDate = DateTimeValue(null, ""),
-    )
-
-    Surface(
+fun ListItem(recallSuspension: RecallSuspension) {
+     Surface(
         shape = RectangleShape,
         modifier = Modifier
             .fillMaxWidth()

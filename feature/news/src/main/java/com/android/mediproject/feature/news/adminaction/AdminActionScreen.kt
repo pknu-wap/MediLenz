@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +16,8 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,7 +52,7 @@ fun AdminActionScreen() {
                     viewModel.onClickedItem(index)
                     navController.navigate("detailAdminAction")
                 }
-                ListItem(it)
+                //ListItem(it)
             }
             if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
         }
@@ -76,10 +77,11 @@ fun AdminActionScreen() {
  */
 @Composable
 fun ListItem(adminAction: AdminAction) {
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 20.dp),
+            .padding(horizontal = 24.dp, vertical = 12.dp),
         shape = RectangleShape,
         onClick = {
             adminAction.onClick?.invoke()
@@ -88,36 +90,76 @@ fun ListItem(adminAction: AdminAction) {
         Column(
             modifier = Modifier.fillMaxWidth(),
         ) {
+            // 업체명, 행정처분일자
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = CenterVertically,
             ) {
                 Text(
-                    text = adminAction.entpName,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontSize = 14.sp,
-                    color = Color.Black,
-                    modifier = Modifier
-                        .align(CenterVertically)
-                        .weight(1f),
+                    text = adminAction.companyName,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        lineHeight = 16.sp,
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFF000000),
+                    ),
+                    modifier = Modifier.weight(1f),
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                 )
                 Text(
-                    text = adminAction.lastSettleDate.format(dateFormat),
-                    fontSize = 12.sp,
-                    modifier = Modifier.align(CenterVertically),
-                    color = Color.Gray,
+                    text = adminAction.adminActionDate.format(dateFormat),
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        lineHeight = 16.sp,
+                        fontWeight = FontWeight(300),
+                        color = Color(0xFF6D6D6D),
+                    ),
                     maxLines = 1,
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+
+            Spacer(modifier = Modifier.height(6.dp))
+            // 품목명
             Text(
-                text = adminAction.violation, fontSize = 12.sp, color = Color.Gray, maxLines = 1,
+                text = adminAction.itemName,
+                style = TextStyle(
+                    fontSize = 13.sp,
+                    lineHeight = 16.sp,
+                    fontWeight = FontWeight(300),
+                    color = Color(0xFF525050),
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 위반내용
             Text(
-                text = adminAction.disposition, fontSize = 12.sp, color = Color.Gray, maxLines = 1,
+                text = adminAction.violationDetails,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    lineHeight = 16.sp,
+                    fontWeight = FontWeight(300),
+                    color = Color(0xFF767272),
+                ),
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 행정 처분명
+            Text(
+                text = adminAction.adminAction,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    lineHeight = 16.sp,
+                    fontWeight = FontWeight(300),
+                    color = Color(0xFF808080),
+                ),
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
