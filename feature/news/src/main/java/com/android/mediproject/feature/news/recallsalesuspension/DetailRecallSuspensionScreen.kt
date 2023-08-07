@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,19 +58,17 @@ fun DetailRecallDisposalScreen(
 
 // 회수 폐기
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 fun Item() {
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
+        modifier = Modifier.fillMaxWidth(),
         shape = RectangleShape,
     ) {
-        Column {
+        Column(modifier = Modifier.padding(horizontal = 24.dp)) {
             ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
                 val (header, product, image) = createRefs()
 
-                // 제품명
+                // 품목명
                 Header(
                     text = stringResource(id = R.string.productName),
                     modifier = Modifier.constrainAs(header) {
@@ -89,8 +86,6 @@ fun Item() {
                         fontWeight = FontWeight(600),
                         color = Color(0xFF000000),
                     ),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.constrainAs(product) {
                         start.linkTo(parent.start)
                         end.linkTo(image.start, 12.dp)
@@ -169,11 +164,10 @@ fun Item() {
             // 제조번호(사용기한)
             CardBox(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(horizontal = 54.dp),
+                    .align(Alignment.End),
             ) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                    horizontalAlignment = Alignment.End,
                 ) {
                     Header(text = stringResource(id = R.string.manufacturingNumber))
                     Spacer(modifier = Modifier.height(6.dp))
@@ -190,18 +184,17 @@ fun Item() {
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // 공개마감일자
             CardBox(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(horizontal = 54.dp),
+                    .align(Alignment.End),
             ) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                    horizontalAlignment = Alignment.End,
                 ) {
-                    Header(text = stringResource(id = R.string.opendEndDate))
+                    Header(text = stringResource(id = R.string.disclosureEndDate))
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = "2026-07-26 일",

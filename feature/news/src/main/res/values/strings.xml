@@ -12,5 +12,20 @@
     <string name="recallCommandDate">회수명령일자</string>
     <string name="recallSaleSuspensionReason">회수사유</string>
     <string name="manufacturingNumber">제조번호(사용기한)</string>
-    <string name="opendEndDate">정보 공개 마감</string>
+    <string name="disclosureEndDate">정보공개마감일자</string>
+    <string name="manufactureAddress">생산 공장 소재지</string>
+    <string name="adminActionDate">행정처분일자</string>
+    <string name="productNameWithItemSeq">품목명, 품목기준코드</string>
+    <string name="bizrNo">사업자등록번호</string>
+    <string name="adminActionNumber">행정처분 일련번호</string>
+    <string name="companyRegistrationNumber">업체일련번호</string>
+    <string name="violationDetails">위반내용</string>
+    <string name="violationLaw">위반법령</string>
+    <string name="title">제목</string>
+    <string name="publicationDate">공개일자</string>
+    <string name="informationSummary">요약</string>
+    <string name="informationDetails">상세정보</string>
+    <string name="actions">조치사항</string>
+    <string name="departmentAndContactPerson">담당부서, 담당자(식약처)</string>
+    <string name="attachmentFile">첨부파일</string>
 </resources>
