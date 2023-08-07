@@ -75,7 +75,7 @@ class MyPageFragment :
                     repeatOnStarted { loginMode.collect { handleLoginMode(it) } }
                     repeatOnStarted {
                         myCommentsList.collect { commentList ->
-                            if (isCommentListNotEmpty(commentList)) showCommentList(commentList)
+                            if (commentList.isNotEmpty()) showCommentList(commentList)
                             else noShowCommentList()
                         }
                     }
@@ -103,10 +103,6 @@ class MyPageFragment :
         addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
     }
 
-    private fun isCommentListNotEmpty(commentList: List<MyCommentsListResponse.Comment>): Boolean {
-        return (commentList.isNotEmpty())
-    }
-
     private fun handleToken(tokenState: TokenState<CurrentTokens>) {
         log(tokenState.toString())
         when (tokenState) {
@@ -129,13 +125,9 @@ class MyPageFragment :
     }
 
     private fun showMyPageBottomSheet() {
-        if (isMyPageMoreBottomSheetNull()) {
+        if (myPageMoreBottomSheet == null) {
             showMyPageMoreBottomSheet()
         }
-    }
-
-    private fun isMyPageMoreBottomSheetNull(): Boolean {
-        return myPageMoreBottomSheet == null
     }
 
     private fun showMyPageMoreBottomSheet() {
