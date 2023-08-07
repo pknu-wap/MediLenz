@@ -25,6 +25,8 @@ dependencies {
     implementation(libs.bundles.glides)
     kapt(libs.bundles.glides.kapt)
     implementation(libs.bundles.kotlins)
+    implementation(libs.bundles.testLocal)
+    implementation(libs.bundles.testAndroid)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
 }

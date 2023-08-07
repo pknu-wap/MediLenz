@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.mypage
+package com.android.mediproject.core.test
 
 import org.junit.Test
 

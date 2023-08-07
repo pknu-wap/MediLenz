@@ -93,22 +93,23 @@ class MyPageMoreDialogViewModel @Inject constructor(
 
     fun changePassword(newPassword: Editable) = viewModelScope.launch(ioDispatcher) {
         if (isPasswordValid(newPassword)) {
-            toast("비밀번호는 영어 + 숫자로 이루어진 4~10자로 설정해주세요.")
+            toast("비밀번호는 영어 + 숫자로 이루어진 4~16자로 설정해주세요.")
             cancelDialog()
-        } else {
-            val password = CharArray(newPassword.length)
-            newPassword.trim().forEachIndexed { index, c ->
-                password[index] = c
-            }
-
-            userUseCase.changePassword(changePasswordParamter = ChangePasswordParamter(password))
-                .collect {
-                    it.fold(
-                        onSuccess = { toast("비밀번호 변경에 성공하였습니다.") },
-                        onFailure = { toast("비밀번호 변경에 실패하였습니다.") },
-                    )
-                }
-            cancelDialog()
+            return@launch
         }
+
+        val password = CharArray(newPassword.length)
+        newPassword.trim().forEachIndexed { index, c ->
+            password[index] = c
+        }
+
+        userUseCase.changePassword(changePasswordParamter = ChangePasswordParamter(password))
+            .collect {
+                it.fold(
+                    onSuccess = { toast("비밀번호 변경에 성공하였습니다.") },
+                    onFailure = { toast("비밀번호 변경에 실패하였습니다.") },
+                )
+            }
+        cancelDialog()
     }
 }

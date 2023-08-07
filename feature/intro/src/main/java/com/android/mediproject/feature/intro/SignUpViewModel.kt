@@ -59,80 +59,82 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun signUpWithCheckRegex(
-        emailEditable: CharSequence, passwordEditable: CharSequence, checkPasswordEditable: CharSequence, nickNameEditable: CharSequence,
+        email: String, password: String, checkPassword: String, nickName: String,
     ) {
-        if (checkEmailPasswordRegex(emailEditable, passwordEditable)) {
-            if (passwordEditable.contentEquals(checkPasswordEditable)) {
-                signUp(emailEditable, passwordEditable, nickNameEditable)
-            } else {
-                isNotEqualPasswordCheck()
-            }
-        } else {
+        if (!checkEmailPasswordRegex(email, password)) {
             signUpFaledWithRegexError()
+            return
         }
+
+        if (!password.contentEquals(checkPassword)) {
+            isNotEqualPasswordCheck()
+            return
+        }
+
+        signUp(email, password, nickName)
     }
 
-    private fun checkEmailPasswordRegex(emailEditable: CharSequence, passwordEditable: CharSequence): Boolean {
-        return checkEmailRegex(emailEditable) && checkPasswordRegex(passwordEditable)
+    private fun checkEmailPasswordRegex(email: String, password: String): Boolean {
+        return checkEmailRegex(email) && checkPasswordRegex(password)
     }
 
-    private fun checkEmailRegex(emailEditable: CharSequence): Boolean {
-        return !isEmailValid(emailEditable)
+    private fun checkEmailRegex(email: String): Boolean {
+        return isEmailValid(email)
     }
 
-    private fun checkPasswordRegex(passwordEditable: CharSequence): Boolean {
-        return !isPasswordValid(passwordEditable)
+    private fun checkPasswordRegex(password: String): Boolean {
+        return isPasswordValid(password)
     }
 
     private fun signUp(
-        emailEditable: CharSequence,
-        passwordEditable: CharSequence,
-        nickNameEditable: CharSequence,
+        email: String,
+        password: String,
+        nickName: String,
     ) {
-        val pair = initEmailPasswordCharArray(emailEditable, passwordEditable)
-        val (email, password) = pair.first to pair.second
+        val pair = initEmailPassword(email, password)
+        val (emailCharArray, passwordCharArray) = pair.first to pair.second
 
         setSignUpState(SignUpState.SigningUp)
         viewModelScope.launch(ioDispatcher) {
-            signUseCase.signUp(SignUpParameter(email, password, nickNameEditable.toString())).collect { result ->
+            signUseCase.signUp(SignUpParameter(emailCharArray, passwordCharArray, nickName)).collect { result ->
                 result.fold(
                     onSuccess = { setSignUpState(SignUpState.SignUpSuccess) },
                     onFailure = { setSignUpState(SignUpState.SignUpFailed(it.message ?: "가입 실패")) },
                 )
             }
         }
-        clearEmailPasswordCharArray(email, password)
+        fillEmailPassword(emailCharArray, passwordCharArray)
     }
 
     private fun isNotEqualPasswordCheck() {
         setSignUpState(SignUpState.PasswordError)
     }
 
-    private fun initEmailPasswordCharArray(emailEditable: CharSequence, passwordEditable: CharSequence): Pair<CharArray, CharArray> {
-        return Pair(initEmailCharArray(emailEditable), initPasswordCharArray(passwordEditable))
+    private fun initEmailPassword(email: String, password: String): Pair<CharArray, CharArray> {
+        return Pair(initEmail(email), initPassword(password))
     }
 
-    private fun initEmailCharArray(emailEditable: CharSequence): CharArray {
-        val email = CharArray(emailEditable.length)
-        emailEditable.trim().forEachIndexed { index, c ->
-            email[index] = c
+    private fun initEmail(email: String): CharArray {
+        val emailCharArray = CharArray(email.length)
+        email.trim().forEachIndexed { index, c ->
+            emailCharArray[index] = c
         }
-        return email
+        return emailCharArray
     }
 
-    private fun initPasswordCharArray(passwordEditable: CharSequence): CharArray {
-        val password = CharArray(passwordEditable.length)
-        passwordEditable.trim().forEachIndexed { index, c ->
-            password[index] = c
+    private fun initPassword(password: String): CharArray {
+        val passwordCharArray = CharArray(password.length)
+        password.trim().forEachIndexed { index, c ->
+            passwordCharArray[index] = c
         }
-        return password
+        return passwordCharArray
     }
 
     private fun signUpFaledWithRegexError() {
         setSignUpState(SignUpState.RegexError)
     }
 
-    private fun clearEmailPasswordCharArray(email: CharArray, password: CharArray) {
+    private fun fillEmailPassword(email: CharArray, password: CharArray) {
         email.fill('\u0000')
         password.fill('\u0000')
     }
