@@ -6,7 +6,7 @@ import com.android.mediproject.core.data.user.UserInfoRepository
 import com.android.mediproject.core.data.user.UserRepository
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordParameter
 import com.android.mediproject.core.model.user.AccountState
 import com.android.mediproject.core.model.user.User
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+
 
 
 class UserUseCase @Inject constructor(
@@ -40,11 +41,11 @@ class UserUseCase @Inject constructor(
         }.collectLatest { trySend(it) }
     }
 
-    suspend fun changePassword(changePasswordParamter: ChangePasswordParamter) = channelFlow {
+    suspend fun changePassword(changePasswordParameter: ChangePasswordParameter) = channelFlow {
         val email =
             (getUserInfoRepository.myAccountInfo.value as AccountState.SignedIn).email.toCharArray()
         userRepository.changePassword(
-            changePasswordParamter.apply {
+            changePasswordParameter.apply {
                 this.email = email
             },
         ).map { result ->

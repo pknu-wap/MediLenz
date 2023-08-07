@@ -1,7 +1,6 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
 import com.android.mediproject.core.common.viewmodel.MutableEventFlow
-import android.text.Editable
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
@@ -9,7 +8,7 @@ import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.domain.user.UserUseCase
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -101,7 +100,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
             password[index] = c
         }
 
-        userUseCase.changePassword(changePasswordParamter = ChangePasswordParamter(password))
+        userUseCase.changePassword(changePasswordParameter = ChangePasswordParameter(password))
             .collect {
                 it.fold(
                     onSuccess = { setMyPageDialogState(MyPageDialogState.Success(MyPageDialogFlag.CHANGEPASSWORD)) },

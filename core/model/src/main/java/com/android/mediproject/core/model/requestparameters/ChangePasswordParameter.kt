@@ -3,7 +3,7 @@ package com.android.mediproject.core.model.requestparameters
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ChangePasswordParamter(
+data class ChangePasswordParameter(
     val newPassword: CharArray
 ) {
 
@@ -12,7 +12,7 @@ data class ChangePasswordParamter(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ChangePasswordParamter
+        other as ChangePasswordParameter
 
         if (!newPassword.contentEquals(other.newPassword)) return false
         if (!email.contentEquals(other.email)) return false

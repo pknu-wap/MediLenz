@@ -3,8 +3,7 @@ package com.android.mediproject.core.network.datasource.user
 import android.util.Log
 import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordParameter
 import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
 import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
 import com.android.mediproject.core.model.user.remote.WithdrawalResponse
@@ -34,10 +33,10 @@ class UserDataSourceImpl @Inject constructor(
     /**
      * 비밀번호 변경
      */
-    override suspend fun changePassword(changePasswordParamter: ChangePasswordParamter): Flow<Result<ChangePasswordResponse>> =
+    override suspend fun changePassword(changePasswordParameter: ChangePasswordParameter): Flow<Result<ChangePasswordResponse>> =
         channelFlow {
-            val password = WeakReference(aesCoder.encodePassword(changePasswordParamter.email, changePasswordParamter.newPassword)).get()!!
-            awsNetworkApi.changePassword(ChangePasswordRequestParameter(password)).onResponse()
+            val password = WeakReference(aesCoder.encodePassword(changePasswordParameter.email, changePasswordParameter.newPassword)).get()!!
+            awsNetworkApi.changePassword(ChangePasswordParameter(password.toCharArray())).onResponse()
                 .fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
                 .also { trySend(it) }
         }

@@ -12,7 +12,7 @@ import com.android.mediproject.core.model.favoritemedicine.NewFavoriteMedicineRe
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.requestparameters.AddFavoriteMedicineParameter
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordParameter
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
@@ -221,7 +221,7 @@ interface AwsNetworkApi {
      */
     @PATCH(value = "user")
     suspend fun changePassword(
-        @Body changePasswordRequestParameter: ChangePasswordRequestParameter,
+        @Body changePasswordParameter: ChangePasswordParameter,
     ): Response<ChangePasswordResponse>
 
     /**

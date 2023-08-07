@@ -1,17 +1,18 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
-import com.android.mediproject.core.domain.sign.SignUseCase
 import com.android.mediproject.core.domain.user.UserUseCase
-import com.android.mediproject.core.test.repositories.FakeSignRepository
-import com.android.mediproject.core.test.repositories.FakeUserInfoRepository
 import com.google.common.truth.Truth
 import comandroid.mediproject.core.test.MainCoroutineRule
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.junit.MockitoJUnitRunner
 
+@RunWith(MockitoJUnitRunner::class)
 class MyPageMoreDialogViewModelTest {
 
     @get:Rule
@@ -24,49 +25,35 @@ class MyPageMoreDialogViewModelTest {
 
     @Before
     fun setUp() {
-        val signRepository = FakeSignRepository()
-        val userInfoRepository = FakeUserInfoRepository()
-
-
         viewModel = MyPageMoreDialogViewModel(userUseCase, UnconfinedTestDispatcher())
     }
 
     @Test
-    fun `비밀번호 변경 시 비밀번호가 4글자 미만이면 안된다`() {
+    fun `비밀번호 변경 시 비밀번호가 4글자 미만이면 안된다`() = runTest {
         //given
-        val validEmail = "wap@gmail.com"
         val notValidPassword = "a12"
 
+
         //when
-        viewModel.loginWithCheckRegex(
-            email = validEmail,
-            password = notValidPassword,
-            isEmailSaved = false,
-        )
+        viewModel.changePassword(notValidPassword)
 
         //then
-        val actual = viewModel.loginState.value
-        val expected = LoginViewModel.LoginState.RegexError
+        val actual = viewModel.myPageMoreDialogState.value
+        val expected = MyPageMoreDialogViewModel.MyPageDialogState.Error(MyPageMoreDialogViewModel.MyPageDialogFlag.CHANGEPASSWORD)
         Truth.assertThat(actual).isEqualTo(expected)
     }
 
     @Test
     fun `비밀번호 변경 시 비밀번호가 16글자 초과이면 안된다`() {
         //given
-        val validEmail = "wap@gmail.com"
         val notValidPassword = "123456789abcdefghijklmn"
 
         //when
-        viewModel.loginWithCheckRegex(
-            email = validEmail,
-            password = notValidPassword,
-            isEmailSaved = false,
-        )
+        viewModel.changePassword(notValidPassword)
 
         //then
-        val actual = viewModel.loginState.value
-        val expected = LoginViewModel.LoginState.RegexError
+        val actual = viewModel.myPageMoreDialogState.value
+        val expected = MyPageMoreDialogViewModel.MyPageDialogState.Error(MyPageMoreDialogViewModel.MyPageDialogFlag.CHANGEPASSWORD)
         Truth.assertThat(actual).isEqualTo(expected)
     }
-
 }

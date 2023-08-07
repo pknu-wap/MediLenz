@@ -1,7 +1,7 @@
 package com.android.mediproject.core.network.datasource.user
 
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordParameter
 import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
 import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
 import com.android.mediproject.core.model.user.remote.WithdrawalResponse
@@ -16,7 +16,7 @@ interface UserDataSource {
     /**
      * 비밀번호 변경
      */
-    suspend fun changePassword(changePasswordParamter: ChangePasswordParamter): Flow<Result<ChangePasswordResponse>>
+    suspend fun changePassword(changePasswordParameter: ChangePasswordParameter): Flow<Result<ChangePasswordResponse>>
 
     /**
      * 회원 탈퇴
