@@ -28,4 +28,6 @@
     <string name="actions">조치사항</string>
     <string name="departmentAndContactPerson">담당부서, 담당자(식약처)</string>
     <string name="attachmentFile">첨부파일</string>
+    <string name="loadingSafetyNotification">안전성 서한 정보를 불러오고 있어요</string>
+    <string name="loadingAdminActionList">행정 처분 정보를 불러오고 있어요</string>
 </resources>

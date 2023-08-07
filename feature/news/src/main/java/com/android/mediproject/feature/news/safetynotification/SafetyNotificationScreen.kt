@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.news.safetynotification
 
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -11,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
@@ -27,50 +28,56 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import com.android.mediproject.core.model.medicine.safetynotification.SafetyNotification
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
+import com.android.mediproject.feature.news.R
 
 
 @Composable
 fun SafetyNotificationScreen() {
     val viewModel: SafetyNotificationViewModel = hiltViewModel()
     val navController = rememberNavController()
-    val list = viewModel.adminActionList.collectAsLazyPagingItems(viewModel.dispatchers)
+    val list = viewModel.safetyNotificationList.collectAsLazyPagingItems(viewModel.dispatchers)
 
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(
-            count = list.itemCount, key = list.itemKey(),
-            contentType = list.itemContentType(
-            ),
-        ) { index ->
-            list[index]?.run {
-                onClick = {
-                    viewModel.onClickedItem(index)
-                    navController.navigate("detailAdminAction")
-                }
-                ListItem(this)
-            }
-            if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
-        }
-
+    Surface {
         when (list.loadState.append) {
-            is LoadState.NotLoading -> item {
-                CenterProgressIndicator("")
+            is LoadState.NotLoading -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                ) {
+                    items(
+                        count = list.itemCount, key = list.itemKey(),
+                        contentType = list.itemContentType(
+                        ),
+                    ) { index ->
+                        list[index]?.run {
+                            onClick = {
+                                navController.navigate("detailAdminAction")
+                            }
+                            ListItem(this)
+                        }
+                        if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
+                    }
+                }
             }
 
-            is LoadState.Loading -> item {
-                CenterProgressIndicator("")
+            is LoadState.Loading -> {
+                CenterProgressIndicator(stringResource(id = R.string.loadingSafetyNotification))
             }
 
-            is LoadState.Error -> TODO()
-            else -> TODO()
+            else -> {}
         }
+
     }
+
+
 }
 
 
-@Preview(showBackground = true)
 @Composable
-fun ListItem() {
+fun ListItem(safetyNotification: SafetyNotification) {
     Surface(
         shape = RectangleShape,
         modifier = Modifier
@@ -91,19 +98,18 @@ fun ListItem() {
 
             // 제목
             Text(
-                text = "제목",
+                text = safetyNotification.title,
                 textAlign = TextAlign.Start,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 softWrap = true,
-                modifier = Modifier
-                    .constrainAs(title) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(date.start)
-                        bottom.linkTo(info.top)
-                        width = Dimension.fillToConstraints
-                    },
+                modifier = Modifier.constrainAs(title) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(date.start)
+                    bottom.linkTo(info.top)
+                    width = Dimension.fillToConstraints
+                },
                 style = TextStyle(
                     fontSize = 14.sp,
                     lineHeight = 16.sp,
@@ -114,7 +120,7 @@ fun ListItem() {
 
             // 정보
             Text(
-                text = "정보",
+                text = safetyNotification.informationSummary,
                 textAlign = TextAlign.Left,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
@@ -136,7 +142,7 @@ fun ListItem() {
 
             // 날짜
             Text(
-                text = "2023-07-21 금",
+                text = safetyNotification.publicationDate.toString(),
                 textAlign = TextAlign.Right,
                 modifier = Modifier.constrainAs(date) {
                     start.linkTo(title.end)

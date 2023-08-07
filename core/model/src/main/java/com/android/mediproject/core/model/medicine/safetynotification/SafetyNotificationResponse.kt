@@ -8,6 +8,23 @@ import kotlinx.serialization.Serializable
 @Serializable
 class SafetyNotificationResponse : DataGoKrResponse<SafetyNotificationResponse.Item>() {
 
+    /**
+     * 안전성정보
+     *
+     * @property actions 조치사항
+     * @property attachmentFile 첨부파일
+     * @property department 담당부서
+     * @property views 조회수
+     * @property informationDetails 내용
+     * @property notificationClassId 구분코드
+     * @property notificationClassName 구분명
+     * @property publicationDate 공개시작일
+     * @property manager 담당자
+     * @property publicationStartDateTime 공개시작일시
+     * @property safetyNotificationNo 안전성 서한번호
+     * @property informationSummary 안전성 서한 정보요약
+     * @property title 제목
+     */
     @Serializable
     data class Item(
         @SerialName("ACTN_MTTR_CONT") val actions: String = "", // ❍ 한국휴텍스제약㈜에서 제조한 ‘레큐틴정’ 등 6개 품목(붙임)

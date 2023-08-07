@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,6 +30,7 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.android.mediproject.core.model.adminaction.AdminAction
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
+import com.android.mediproject.feature.news.R
 import java.time.format.DateTimeFormatter
 
 
@@ -41,35 +43,34 @@ fun AdminActionScreen() {
     val navController = rememberNavController()
     val list = viewModel.adminActionList.collectAsLazyPagingItems()
 
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(
-            count = list.itemCount, key = list.itemKey(),
-            contentType = list.itemContentType(
-            ),
-        ) { index ->
-            list[index]?.run {
-                onClick = {
-                    viewModel.onClickedItem(index)
-                    navController.navigate("detailAdminAction")
+    when (list.loadState.append) {
+        is LoadState.NotLoading ->  {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                items(
+                    count = list.itemCount, key = list.itemKey(),
+                    contentType = list.itemContentType(
+                    ),
+                ) { index ->
+                    list[index]?.run {
+                        onClick = {
+                            viewModel.onClickedItem(index)
+                            navController.navigate("detailAdminAction")
+                        }
+                        ListItem(this)
+                    }
+                    if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
                 }
-                ListItem(this)
             }
-            if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
         }
 
-        when (list.loadState.append) {
-            is LoadState.NotLoading -> item {
-                CenterProgressIndicator("")
-            }
-
-            is LoadState.Loading -> item {
-                CenterProgressIndicator("")
-            }
-
-            is LoadState.Error -> TODO()
-            else -> TODO()
+        is LoadState.Loading ->  {
+            CenterProgressIndicator(stringResource(id = R.string.loadingAdminActionList))
         }
+
+        else -> TODO()
     }
+
+
 }
 
 /**

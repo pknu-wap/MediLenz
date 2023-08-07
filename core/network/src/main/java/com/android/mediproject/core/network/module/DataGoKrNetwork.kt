@@ -117,5 +117,6 @@ object DataGoKrNetwork {
 
     @Provides
     @Singleton
-    fun providesSafetyNotificationDataSource(api: DataGoKrNetworkApi): SafetyNotificationDataSource = SafetyNotificationDataSourceImpl(api)
+    fun providesSafetyNotificationDataSource(@Named("dataGoKrNetworkApiWithJsonResponse") api: DataGoKrNetworkApi): SafetyNotificationDataSource =
+        SafetyNotificationDataSourceImpl(api)
 }

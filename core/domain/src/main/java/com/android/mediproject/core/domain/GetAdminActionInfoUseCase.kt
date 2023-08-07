@@ -13,7 +13,7 @@ class GetAdminActionInfoUseCase @Inject constructor(
     private val adminActionRepository: AdminActionRepository,
 ) {
 
-    suspend fun getAdminActionList(
+    fun getAdminActionList(
     ): Flow<PagingData<AdminAction>> =
         adminActionRepository.getAdminActionList().let { pager ->
             pager.map { pagingData ->

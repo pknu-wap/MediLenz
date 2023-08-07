@@ -5,7 +5,7 @@ import com.android.mediproject.core.model.adminaction.AdminActionListResponse
 import kotlinx.coroutines.flow.Flow
 
 interface AdminActionRepository {
-    suspend fun getAdminActionList(
+    fun getAdminActionList(
     ): Flow<PagingData<AdminActionListResponse.Item>>
 
 }

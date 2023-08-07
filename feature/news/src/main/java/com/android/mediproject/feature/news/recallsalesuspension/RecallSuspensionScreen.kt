@@ -49,38 +49,37 @@ fun RecallDisposalScreen(
     val navController = rememberNavController()
     val list = viewModel.recallDisposalList.collectAsLazyPagingItems()
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-    ) {
-        items(
-            count = list.itemCount, key = list.itemKey(),
-            contentType = list.itemContentType(
-            ),
-        ) { index ->
-            list[index]?.run {
-                onClick = {
-                    navController.navigate("detailRecallSuspension/${it.product}")
+    when (list.loadState.append) {
+        is LoadState.NotLoading -> {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+            ) {
+                items(
+                    count = list.itemCount, key = list.itemKey(),
+                    contentType = list.itemContentType(
+                    ),
+                ) { index ->
+                    list[index]?.run {
+                        onClick = {
+                            navController.navigate("detailRecallSuspension/${it.product}")
+                        }
+                        ListItem(this)
+                    }
+                    if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
                 }
-                ListItem(this)
             }
-            if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
         }
 
-        when (list.loadState.append) {
-            is LoadState.NotLoading -> item {
-                CenterProgressIndicator(stringResource(id = R.string.loadingRecallSaleSuspensionData))
-            }
-
-            is LoadState.Loading -> item {
-                CenterProgressIndicator(stringResource(id = R.string.loadingRecallSaleSuspensionData))
-            }
-
-            is LoadState.Error -> TODO()
-            else -> TODO()
+        is LoadState.Loading -> {
+            CenterProgressIndicator(stringResource(id = R.string.loadingRecallSaleSuspensionData))
         }
+
+        else -> TODO()
     }
+
+
 }
 
 
@@ -126,8 +125,7 @@ fun ListItem(recallSuspension: RecallSuspension) {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 softWrap = true,
-                modifier = Modifier
-                    .constrainAs(product) {
+                modifier = Modifier.constrainAs(product) {
                         top.linkTo(parent.top)
                         start.linkTo(barrier)
                         end.linkTo(parent.end)
