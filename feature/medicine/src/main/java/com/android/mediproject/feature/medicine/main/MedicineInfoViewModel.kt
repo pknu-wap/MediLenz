@@ -6,7 +6,7 @@ import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.domain.CommentsUseCase
+import com.android.mediproject.core.domain.GetCommentsUseCase
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
 import com.android.mediproject.core.model.navargs.MedicineInfoArgs
@@ -32,7 +32,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicineInfoViewModel @Inject constructor(
     private val getMedicineDetailsUseCase: GetMedicineDetailsUseCase,
-    private val commentsUseCase: CommentsUseCase,
+    private val getCommentsUseCase: GetCommentsUseCase,
     private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
@@ -40,7 +40,7 @@ class MedicineInfoViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             // 댓글 업데이트 시 스크롤을 맨 아래로 내립니다.
-            commentsUseCase.scrollChannel.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Eagerly, replay = 0).collect {
+            getCommentsUseCase.scrollChannel.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Eagerly, replay = 0).collect {
                 _eventState.emit(EventState.ScrollToBottom)
             }
         }

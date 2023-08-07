@@ -186,7 +186,7 @@ class MyPageFragment :
 
     private fun loginModeScreen() = fragmentViewModel.apply {
         loadUser()
-        loadComments()
+        loadMyCommentsList()
     }
 
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {

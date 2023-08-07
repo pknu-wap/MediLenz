@@ -162,9 +162,15 @@ interface AwsNetworkApi {
      * 특정 약에 대한 댓글 목록 조회
      */
     @GET(value = "medicine/comment/{medicineId}")
-    suspend fun getComments(
+    suspend fun getCommentsByMedicineId(
         @Path("medicineId", encoded = true) medicineId: Long,
     ): Response<CommentListResponse>
+
+    /**
+     * 내가 작성한 댓글 목록 조회
+     */
+    @GET(value = "user/comment")
+    suspend fun getMyCommentsList() : Response<CommentListResponse>
 
     /**
      * 댓글 수정

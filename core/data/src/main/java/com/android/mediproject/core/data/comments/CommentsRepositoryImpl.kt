@@ -26,7 +26,7 @@ import javax.inject.Inject
 class CommentsRepositoryImpl @Inject constructor(
     private val commentsDataSource: CommentsDataSource, private val tokenRepository: TokenRepository,
 ) : CommentsRepository {
-    override fun getCommentsForAMedicine(medicineId: Long): Flow<PagingData<CommentListResponse.Comment>> =
+    override fun getCommentsByMedicineId(medicineId: Long): Flow<PagingData<CommentListResponse.Comment>> =
         Pager(
             config = PagingConfig(pageSize = SERVER_PAGE_SIZE, prefetchDistance = 0),
             pagingSourceFactory = {
@@ -34,14 +34,22 @@ class CommentsRepositoryImpl @Inject constructor(
             },
         ).flow
 
-    override fun getMyComments(userId: Int): Flow<PagingData<MyComment>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun applyEditedComment(parameter: EditCommentParameter): Flow<Result<CommentChangedResponse>> = channelFlow {
+    override fun getMyCommentsList(): Flow<Result<CommentListResponse>> = channelFlow {
         checkToken().collectLatest { tokenState ->
             tokenState.onSuccess {
-                commentsDataSource.applyEditedComment(parameter).collectLatest {
+                commentsDataSource.getMyCommentsList().collectLatest {
+                    trySend(it)
+                }
+            }.onFailure {
+                trySend(Result.failure(it))
+            }
+        }
+    }
+
+    override fun editComment(parameter: EditCommentParameter): Flow<Result<CommentChangedResponse>> = channelFlow {
+        checkToken().collectLatest { tokenState ->
+            tokenState.onSuccess {
+                commentsDataSource.editComment(parameter).collectLatest {
                     trySend(it)
                 }
             }.onFailure {

@@ -1,6 +1,5 @@
 package com.android.mediproject.core.network.datasource.comments
 
-import androidx.paging.PagingData
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
@@ -22,8 +21,8 @@ class CommentsDataSourceImpl @Inject constructor(
      * 약품에 대한 댓글 리스트를 가져온다.
      * @param medicineId: 약품 고유 번호
      */
-    override suspend fun getCommentsForAMedicine(medicineId: Long): Result<CommentListResponse> {
-        return awsNetworkApi.getComments(medicineId).onResponse().fold(
+    override suspend fun getCommentsByMedicineId(medicineId: Long): Result<CommentListResponse> {
+        return awsNetworkApi.getCommentsByMedicineId(medicineId).onResponse().fold(
             onSuccess = { response ->
                 if (response.commentList.isEmpty()) Result.failure(Exception("댓글이 없습니다."))
                 else Result.success(response)
@@ -34,11 +33,19 @@ class CommentsDataSourceImpl @Inject constructor(
         )
     }
 
-    override fun getMyComments(userId: Int): Flow<PagingData<CommentListResponse>> {
-        TODO("Not yet implemented")
+    override suspend fun getMyCommentsList(): Flow<Result<CommentListResponse>> = flow {
+        awsNetworkApi.getMyCommentsList().onResponse().fold(
+            onSuccess = { response ->
+                if (response.commentList.isEmpty()) Result.failure(Exception("내가 작성한 댓글이 없습니다."))
+                else Result.success(response)
+            },
+            onFailure = {
+                Result.failure(it)
+            },
+        ).also { emit(it) }
     }
 
-    override fun applyEditedComment(parameter: EditCommentParameter): Flow<Result<CommentChangedResponse>> = flow {
+    override fun editComment(parameter: EditCommentParameter): Flow<Result<CommentChangedResponse>> = flow {
         awsNetworkApi.editComment(parameter).onResponse().fold(
             onSuccess = { response ->
                 Result.success(response)
