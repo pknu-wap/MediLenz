@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
-import com.android.mediproject.core.model.comments.MyComment
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.databinding.FragmentMyCommentsListBinding
 import dagger.hilt.android.AndroidEntryPoint

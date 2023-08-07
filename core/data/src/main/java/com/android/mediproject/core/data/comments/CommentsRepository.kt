@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
@@ -19,7 +20,7 @@ interface CommentsRepository {
     /**
      * 내가 작성한 댓글을 가져오는 메서드입니다.
      */
-    fun getMyCommentsList(): Flow<Result<CommentListResponse>>
+    fun getMyCommentsList(): Flow<Result<MyCommentsListResponse>>
 
     /**
      * 댓글을 수정합니다.

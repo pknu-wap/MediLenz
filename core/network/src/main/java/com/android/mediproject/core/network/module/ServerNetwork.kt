@@ -5,6 +5,7 @@ import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.favoritemedicine.CheckFavoriteMedicineResponse
 import com.android.mediproject.core.model.favoritemedicine.DeleteFavoriteMedicineResponse
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineListResponse
@@ -170,7 +171,7 @@ interface AwsNetworkApi {
      * 내가 작성한 댓글 목록 조회
      */
     @GET(value = "user/comment")
-    suspend fun getMyCommentsList() : Response<CommentListResponse>
+    suspend fun getMyCommentsList() : Response<MyCommentsListResponse>
 
     /**
      * 댓글 수정

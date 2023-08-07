@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.util.SystemBarStyler
-import com.android.mediproject.core.model.comments.MyComment
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.ui.R
@@ -20,6 +19,7 @@ import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFr
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -103,7 +103,7 @@ class MyPageFragment :
         addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
     }
 
-    private fun isCommentListNotEmpty(commentList: List<MyComment>): Boolean {
+    private fun isCommentListNotEmpty(commentList: List<MyCommentsListResponse.Comment>): Boolean {
         return (commentList.isNotEmpty())
     }
 
@@ -273,7 +273,7 @@ class MyPageFragment :
         myCommentsListHeaderView.setExpandVisiblity(false)
     }
 
-    private fun showCommentList(myCommentList: List<MyComment>) = binding.apply {
+    private fun showCommentList(myCommentList: List<MyCommentsListResponse.Comment>) = binding.apply {
         setShowCommentListVisible()
         myCommentListAdapter.submitList(myCommentList)
     }

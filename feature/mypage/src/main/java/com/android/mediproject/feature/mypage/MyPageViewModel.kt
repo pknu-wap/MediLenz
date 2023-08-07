@@ -9,7 +9,7 @@ import com.android.mediproject.core.domain.GetCommentsUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.domain.GetUserUseCase
-import com.android.mediproject.core.model.comments.MyComment
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.model.user.User
@@ -64,7 +64,7 @@ class MyPageViewModel @Inject constructor(
 
     fun loadUser() = viewModelScope.launch { getUserUseCase().collect { _user.value = it } }
 
-    private val _myCommentsList = MutableSharedFlow<List<Commnet>>(
+    private val _myCommentsList = MutableSharedFlow<List<MyCommentsListResponse.Comment>>(
         replay = 1,
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
@@ -89,30 +89,4 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun signOut() = viewModelScope.launch { signUseCase.signOut() }
-
-    val dummy = listOf(
-        MyComment(20230528, "타이레놀", "아따 좋습니다 좋아요", System.currentTimeMillis().toString(), 3),
-        MyComment(
-            20230529,
-            "가나다라마바사",
-            "이건 실제로 있는 약일까요?",
-            System.currentTimeMillis().toString(),
-            0,
-        ),
-        MyComment(
-            20230530,
-            "코메키나",
-            "이건 가까운 약국에서 구할 수 있어요. 하여튼 구할 수 있어요.",
-            System.currentTimeMillis().toString(),
-            2,
-        ),
-        MyComment(
-            20230528,
-            "가나다라마바사",
-            "이건 실제로 있는 약일까요?",
-            System.currentTimeMillis().toString(),
-            0,
-        ),
-        MyComment(20230531, "아자차카", "이건 확실히 없을 것 같네요.", System.currentTimeMillis().toString(), 2),
-    )
 }

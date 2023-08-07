@@ -5,6 +5,7 @@ import androidx.paging.flatMap
 import com.android.mediproject.core.data.comments.CommentsRepository
 import com.android.mediproject.core.model.comments.Comment
 import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.comments.toComment
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
@@ -55,7 +56,7 @@ class GetCommentsUseCase @Inject constructor(
     /**
      * 내가 작성한 댓글을 가져오는 메서드입니다.
      */
-    fun getMyCommentsList(): Flow<Result<CommentListResponse>> = commentsRepository.getMyCommentsList().mapLatest { result ->
+    fun getMyCommentsList(): Flow<Result<MyCommentsListResponse>> = commentsRepository.getMyCommentsList().mapLatest { result ->
         result.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
     }
 }

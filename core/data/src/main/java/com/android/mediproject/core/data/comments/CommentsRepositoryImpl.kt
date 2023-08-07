@@ -8,7 +8,7 @@ import com.android.mediproject.core.data.token.TokenRepository
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
-import com.android.mediproject.core.model.comments.MyComment
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
@@ -34,7 +34,7 @@ class CommentsRepositoryImpl @Inject constructor(
             },
         ).flow
 
-    override fun getMyCommentsList(): Flow<Result<CommentListResponse>> = channelFlow {
+    override fun getMyCommentsList(): Flow<Result<MyCommentsListResponse>> = channelFlow {
         checkToken().collectLatest { tokenState ->
             tokenState.onSuccess {
                 commentsDataSource.getMyCommentsList().collectLatest {

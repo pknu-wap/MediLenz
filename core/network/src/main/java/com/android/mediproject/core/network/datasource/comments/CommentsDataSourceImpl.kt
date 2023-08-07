@@ -3,6 +3,7 @@ package com.android.mediproject.core.network.datasource.comments
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.LikeCommentParameter
@@ -33,7 +34,7 @@ class CommentsDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun getMyCommentsList(): Flow<Result<CommentListResponse>> = flow {
+    override suspend fun getMyCommentsList(): Flow<Result<MyCommentsListResponse>> = flow {
         awsNetworkApi.getMyCommentsList().onResponse().fold(
             onSuccess = { response ->
                 if (response.commentList.isEmpty()) Result.failure(Exception("내가 작성한 댓글이 없습니다."))
