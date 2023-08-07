@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
+    implementation(project(":core:test"))
     implementation(project(":feature:favoritemedicine"))
     implementation(project(":feature:comments"))
     implementation(libs.bundles.glides)

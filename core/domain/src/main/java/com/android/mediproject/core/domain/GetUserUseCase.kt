@@ -1,4 +1,4 @@
-package com.android.mediproject.core.domain.sign
+package com.android.mediproject.core.domain
 
 import android.util.Log
 import com.android.mediproject.core.datastore.AppDataStore

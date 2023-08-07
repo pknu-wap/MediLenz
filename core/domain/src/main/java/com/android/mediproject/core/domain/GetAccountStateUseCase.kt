@@ -1,4 +1,4 @@
-package com.android.mediproject.core.domain.sign
+package com.android.mediproject.core.domain
 
 import com.android.mediproject.core.data.user.UserInfoRepository
 import com.android.mediproject.core.model.user.AccountState

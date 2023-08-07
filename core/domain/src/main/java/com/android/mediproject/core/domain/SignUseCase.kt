@@ -1,4 +1,4 @@
-package com.android.mediproject.core.domain.sign
+package com.android.mediproject.core.domain
 
 import com.android.mediproject.core.data.sign.SignRepository
 import com.android.mediproject.core.data.user.UserInfoRepository
@@ -15,11 +15,11 @@ import javax.inject.Singleton
 class SignUseCase @Inject constructor(
     private val signRepository: SignRepository, private val userInfoRepository: UserInfoRepository,
 ) {
-    suspend fun login(loginParameter: LoginParameter): Flow<Result<Unit>> = signRepository.login(loginParameter)
+    fun login(loginParameter: LoginParameter): Flow<Result<Unit>> = signRepository.login(loginParameter)
 
-    suspend fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>> = signRepository.signUp(signUpParameter)
+    fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>> = signRepository.signUp(signUpParameter)
 
-    suspend fun signOut() = signRepository.signOut()
+    fun signOut() = signRepository.signOut()
 
     val savedEmail: Flow<String> = channelFlow {
         userInfoRepository.myAccountInfo.collectLatest {

@@ -8,7 +8,7 @@ import com.android.mediproject.core.common.bindingadapter.ISendText
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.CommentsUseCase
-import com.android.mediproject.core.domain.sign.GetAccountStateUseCase
+import com.android.mediproject.core.domain.GetAccountStateUseCase
 import com.android.mediproject.core.model.comments.Comment
 import com.android.mediproject.core.model.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter

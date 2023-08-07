@@ -191,15 +191,15 @@ class MyPageFragment :
 
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {
         when (bottomSheetFlag) {
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME)
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.CHANGE_PASSWORD)
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.WITHDRAWAL)
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.LOGOUT)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.CHANGE_NICKNAME)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.CHANGE_PASSWORD)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.WITHDRAWAL)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.LOGOUT)
         }
     }
 
-    private fun showMyPageMoreDialog(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
-        MyPageMoreDialogFragment(dialogFlag).show(
+    private fun showMyPageMoreDialog(dialogType: MyPageMoreDialogFragment.DialogType) {
+        MyPageMoreDialogFragment(dialogType).show(
             requireActivity().supportFragmentManager,
             MyPageMoreDialogFragment.TAG,
         )
@@ -207,10 +207,10 @@ class MyPageFragment :
 
     private fun handleDialogCallback(dialogFlag: Int) {
         when (dialogFlag) {
-            MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME.value -> changeNicknameCallback()
-            MyPageMoreDialogFragment.DialogFlag.CHANGE_PASSWORD.value -> changePasswordCallback()
-            MyPageMoreDialogFragment.DialogFlag.WITHDRAWAL.value -> withdrawalCallback()
-            MyPageMoreDialogFragment.DialogFlag.LOGOUT.value -> logoutCallback()
+            MyPageMoreDialogFragment.DialogType.CHANGE_NICKNAME.value -> changeNicknameCallback()
+            MyPageMoreDialogFragment.DialogType.CHANGE_PASSWORD.value -> changePasswordCallback()
+            MyPageMoreDialogFragment.DialogType.WITHDRAWAL.value -> withdrawalCallback()
+            MyPageMoreDialogFragment.DialogType.LOGOUT.value -> logoutCallback()
         }
     }
 

@@ -25,13 +25,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 @AndroidEntryPoint
-class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() {
+class MyPageMoreDialogFragment(private val flag: DialogType) : DialogFragment() {
 
     companion object {
         const val TAG = "MyPageMoreDialogFragment"
     }
 
-    enum class DialogFlag(val value: Int) {
+    enum class DialogType(val value: Int) {
         CHANGE_NICKNAME(305),
         CHANGE_PASSWORD(306),
         WITHDRAWAL(307),
@@ -67,9 +67,10 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         viewModel = fragmentViewModel.apply {
             viewLifecycleOwner.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                repeatOnStarted { dialogFlag.collect { handleDialogFlag(it) } }
+                repeatOnStarted { dialogType.collect { handleDialogType(it) } }
+                repeatOnStarted { myPageMoreDialogState.collect { handleDialogState(it) } }
             }
-            setDialogFlag(flag)
+            setDialogType(flag)
         }
     }
 
@@ -77,45 +78,96 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         when (event) {
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteDialog -> handleCompleteDialog()
             is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CancelDialog -> dismiss()
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteWithdrawal -> completeWithdrawal()
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteChangeNickname -> completeChangeNickName()
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.CompleteLogout -> completeLogout()
-            is MyPageMoreDialogViewModel.MyPageMoreDialogEvent.Toast -> toast(event.message)
         }
     }
 
     private fun handleCompleteDialog() {
-        when (getDialogFlag()) {
-            DialogFlag.CHANGE_NICKNAME -> changeNickname()
-            DialogFlag.CHANGE_PASSWORD -> changePassword()
-            DialogFlag.WITHDRAWAL -> withdrawal()
-            DialogFlag.LOGOUT -> logout()
+        when (getDialogType()) {
+            DialogType.CHANGE_NICKNAME -> changeNickname()
+            DialogType.CHANGE_PASSWORD -> changePassword()
+            DialogType.WITHDRAWAL -> withdrawal()
+            DialogType.LOGOUT -> logout()
+        }
+    }
+
+    private fun handleDialogState(dialogState: MyPageMoreDialogViewModel.MyPageDialogState) {
+        when (dialogState) {
+            is MyPageMoreDialogViewModel.MyPageDialogState.Success -> handleSuccessFlag(dialogState.myPageDialogFlag)
+            is MyPageMoreDialogViewModel.MyPageDialogState.Error -> handleErrorFlag(dialogState.myPageDialogFlag)
+            is MyPageMoreDialogViewModel.MyPageDialogState.initial -> Unit
+        }
+    }
+
+    private fun handleSuccessFlag(dialogFlag: MyPageMoreDialogViewModel.MyPageDialogFlag) {
+        when (dialogFlag) {
+            MyPageMoreDialogViewModel.MyPageDialogFlag.CHANGENICKNAME -> completeChangeNickName()
+            MyPageMoreDialogViewModel.MyPageDialogFlag.WITHDRAWAL -> completeWithdrawal()
+            MyPageMoreDialogViewModel.MyPageDialogFlag.LOGOUT -> completeLogout()
+            MyPageMoreDialogViewModel.MyPageDialogFlag.CHANGEPASSWORD -> completeChangePassword()
+        }
+    }
+
+    private fun handleErrorFlag(dialogFlag: MyPageMoreDialogViewModel.MyPageDialogFlag) {
+        when (dialogFlag) {
+            MyPageMoreDialogViewModel.MyPageDialogFlag.CHANGENICKNAME -> errorChangeNickName()
+            MyPageMoreDialogViewModel.MyPageDialogFlag.WITHDRAWAL -> errorWithdrawal()
+            MyPageMoreDialogViewModel.MyPageDialogFlag.LOGOUT -> errorLogout()
+            MyPageMoreDialogViewModel.MyPageDialogFlag.CHANGEPASSWORD -> errorChangePassword()
         }
     }
 
     private fun completeWithdrawal() {
         setFragmentResult(
             TAG,
-            bundleOf(TAG to MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value),
+            bundleOf(TAG to DialogType.WITHDRAWAL.value),
         )
+        dismiss()
     }
 
     private fun completeChangeNickName() {
         setFragmentResult(
             TAG,
-            bundleOf(TAG to MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value),
+            bundleOf(TAG to DialogType.CHANGE_NICKNAME),
         )
+        dismiss()
     }
 
     private fun completeLogout() {
         setFragmentResult(
             TAG,
-            bundleOf(TAG to MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value),
+            bundleOf(TAG to DialogType.LOGOUT.value),
         )
+        toast("로그아웃이 완료되었습니다.")
+        dismiss()
     }
 
-    private fun getDialogFlag(): DialogFlag {
-        return fragmentViewModel.dialogFlag.value
+    private fun completeChangePassword() {
+        setFragmentResult(
+            TAG,
+            bundleOf(TAG to DialogType.CHANGE_PASSWORD),
+        )
+        toast("비밀번호 변경이 완료되었습니다.")
+        dismiss()
+    }
+
+    private fun errorChangeNickName(){
+        toast("닉네임 변경에 실패하셨습니다.")
+    }
+
+    private fun errorWithdrawal(){
+        toast("회원 탈퇴에 실패하셨습니다.")
+    }
+
+    private fun errorLogout(){
+        toast("로그아웃에 실패하셨습니다.")
+    }
+
+    private fun errorChangePassword(){
+        toast("비밀번호 변경에 실패하셨습니다.")
+    }
+
+    private fun getDialogType(): DialogType {
+        return fragmentViewModel.dialogType.value
     }
 
     private fun changeNickname() {
@@ -123,7 +175,7 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
     }
 
     private fun changePassword() {
-        fragmentViewModel.changePassword(binding.dialogSubtitle1.getEditable())
+        fragmentViewModel.changePassword(binding.dialogSubtitle1.getValue())
     }
 
     private fun withdrawal() {
@@ -138,12 +190,12 @@ class MyPageMoreDialogFragment(private val flag: DialogFlag) : DialogFragment() 
         Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
     }
 
-    private fun handleDialogFlag(dialogFlag: DialogFlag) {
-        when (dialogFlag) {
-            DialogFlag.CHANGE_NICKNAME -> setChangeNickNameDialog()
-            DialogFlag.CHANGE_PASSWORD -> setChangePasswordDialog()
-            DialogFlag.WITHDRAWAL -> setWithdrawalDialog()
-            DialogFlag.LOGOUT -> setLogoutDialog()
+    private fun handleDialogType(dialogType: DialogType) {
+        when (dialogType) {
+            DialogType.CHANGE_NICKNAME -> setChangeNickNameDialog()
+            DialogType.CHANGE_PASSWORD -> setChangePasswordDialog()
+            DialogType.WITHDRAWAL -> setWithdrawalDialog()
+            DialogType.LOGOUT -> setLogoutDialog()
         }
     }
 
