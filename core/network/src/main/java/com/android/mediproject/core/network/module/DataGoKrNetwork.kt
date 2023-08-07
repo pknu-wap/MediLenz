@@ -16,6 +16,8 @@ import com.android.mediproject.core.network.datasource.penalties.adminaction.Adm
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSourceImpl
+import com.android.mediproject.core.network.datasource.safetynotification.SafetyNotificationDataSource
+import com.android.mediproject.core.network.datasource.safetynotification.SafetyNotificationDataSourceImpl
 import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
 import com.android.mediproject.core.network.module.datagokr.DurIngrInfoNetworkApi
 import com.android.mediproject.core.network.module.datagokr.DurProductInfoNetworkApi
@@ -112,4 +114,8 @@ object DataGoKrNetwork {
     @Provides
     @Singleton
     fun providesDurIngrDataSource(api: DurIngrInfoNetworkApi): DurIngrDataSource = DurIngrDataSourceImpl(api)
+
+    @Provides
+    @Singleton
+    fun providesSafetyNotificationDataSource(api: DataGoKrNetworkApi): SafetyNotificationDataSource = SafetyNotificationDataSourceImpl(api)
 }

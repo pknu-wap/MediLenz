@@ -4,9 +4,10 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_NO
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.JSON
-import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.adminaction.AdminActionListResponse
 import com.android.mediproject.core.model.granule.GranuleIdentificationInfoResponse
+import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
+import com.android.mediproject.core.model.medicine.safetynotification.SafetyNotificationResponse
 import com.android.mediproject.core.model.recall.DetailRecallSaleSuspensionResponse
 import com.android.mediproject.core.model.recall.RecallSuspensionListResponse
 import retrofit2.Response
@@ -106,4 +107,12 @@ interface DataGoKrNetworkApi : DurProductInfoNetworkApi, DurIngrInfoNetworkApi {
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
     ): Response<GranuleIdentificationInfoResponse>
+
+    @GET(value = "DrugSafeLetterService02/getDrugSafeLetterList02")
+    suspend fun getDrugSafeLetterList(
+        @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
+        @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
+        @Query("type") type: String = JSON,
+        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
+    ): Response<SafetyNotificationResponse>
 }

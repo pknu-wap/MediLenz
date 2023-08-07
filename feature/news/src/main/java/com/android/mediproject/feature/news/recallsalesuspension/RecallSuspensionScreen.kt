@@ -63,7 +63,7 @@ fun RecallDisposalScreen(
                 onClick = {
                     navController.navigate("detailRecallSuspension/${it.product}")
                 }
-                //ListItem(this)
+                ListItem(this)
             }
             if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
         }
@@ -87,7 +87,7 @@ fun RecallDisposalScreen(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ListItem(recallSuspension: RecallSuspension) {
-     Surface(
+    Surface(
         shape = RectangleShape,
         modifier = Modifier
             .fillMaxWidth()

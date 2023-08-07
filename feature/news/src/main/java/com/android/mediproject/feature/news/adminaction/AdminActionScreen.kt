@@ -47,12 +47,12 @@ fun AdminActionScreen() {
             contentType = list.itemContentType(
             ),
         ) { index ->
-            list[index]?.let {
-                it.onClick = {
+            list[index]?.run {
+                onClick = {
                     viewModel.onClickedItem(index)
                     navController.navigate("detailAdminAction")
                 }
-                //ListItem(it)
+                ListItem(this)
             }
             if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
         }

@@ -3,6 +3,8 @@ package com.android.mediproject.feature.news.safetynotification
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,11 +21,50 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
+import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 
 
 @Composable
 fun SafetyNotificationScreen() {
+    val viewModel: SafetyNotificationViewModel = hiltViewModel()
+    val navController = rememberNavController()
+    val list = viewModel.adminActionList.collectAsLazyPagingItems(viewModel.dispatchers)
 
+    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        items(
+            count = list.itemCount, key = list.itemKey(),
+            contentType = list.itemContentType(
+            ),
+        ) { index ->
+            list[index]?.run {
+                onClick = {
+                    viewModel.onClickedItem(index)
+                    navController.navigate("detailAdminAction")
+                }
+                ListItem(this)
+            }
+            if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
+        }
+
+        when (list.loadState.append) {
+            is LoadState.NotLoading -> item {
+                CenterProgressIndicator("")
+            }
+
+            is LoadState.Loading -> item {
+                CenterProgressIndicator("")
+            }
+
+            is LoadState.Error -> TODO()
+            else -> TODO()
+        }
+    }
 }
 
 

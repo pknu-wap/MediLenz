@@ -20,6 +20,8 @@ import com.android.mediproject.core.data.medicineid.MedicineIdRepository
 import com.android.mediproject.core.data.medicineid.MedicineIdRepositoryImpl
 import com.android.mediproject.core.data.recallsuspension.RecallSuspensionRepository
 import com.android.mediproject.core.data.recallsuspension.RecallSuspensionRepositoryImpl
+import com.android.mediproject.core.data.safetynotification.SafetyNotificationRepository
+import com.android.mediproject.core.data.safetynotification.SafetyNotificationRepositoryImpl
 import com.android.mediproject.core.data.search.SearchHistoryRepository
 import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
 import com.android.mediproject.core.data.sign.SignRepository
@@ -43,6 +45,7 @@ import com.android.mediproject.core.network.datasource.medicineid.MedicineIdData
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
 import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionListDataSourceImpl
+import com.android.mediproject.core.network.datasource.safetynotification.SafetyNotificationDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.tokens.TokenDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSource
@@ -146,4 +149,10 @@ object RepositoryModule {
         tokenDataSource: TokenDataSource,
         tokenServer: TokenServer,
     ): TokenRepository = TokenRepositoryImpl(tokenDataSource, tokenServer)
+
+    @Provides
+    @Singleton
+    fun providesSafetyNotificationRepository(
+        safetyNotificationDataSource: SafetyNotificationDataSource,
+    ): SafetyNotificationRepository = SafetyNotificationRepositoryImpl(safetyNotificationDataSource)
 }
