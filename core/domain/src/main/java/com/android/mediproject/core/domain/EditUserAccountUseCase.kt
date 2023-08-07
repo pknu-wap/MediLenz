@@ -1,4 +1,4 @@
-package com.android.mediproject.core.domain.user
+package com.android.mediproject.core.domain
 
 import android.util.Log
 import com.android.mediproject.core.data.sign.SignRepository
@@ -8,8 +8,6 @@ import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordParameter
 import com.android.mediproject.core.model.user.AccountState
-import com.android.mediproject.core.model.user.User
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -17,18 +15,12 @@ import javax.inject.Inject
 
 
 
-class UserUseCase @Inject constructor(
+class EditUserAccountUseCase @Inject constructor(
     private val appDataStore: AppDataStore,
     private val userRepository: UserRepository,
     private val getUserInfoRepository: UserInfoRepository,
     private val signRepository: SignRepository,
 ) {
-    suspend operator fun invoke(): Flow<User> = channelFlow {
-        appDataStore.nickName.collect { nickName ->
-            trySend(User(nickName = nickName))
-        }
-    }
-
     suspend fun changeNickname(changeNicknameParameter: ChangeNicknameParameter) = channelFlow {
         userRepository.changeNickname(changeNicknameParameter).map { result ->
             result.fold(

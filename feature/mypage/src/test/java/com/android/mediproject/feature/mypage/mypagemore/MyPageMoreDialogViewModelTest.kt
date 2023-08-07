@@ -1,6 +1,6 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
-import com.android.mediproject.core.domain.user.UserUseCase
+import com.android.mediproject.core.domain.EditUserAccountUseCase
 import com.google.common.truth.Truth
 import comandroid.mediproject.core.test.MainCoroutineRule
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -21,11 +21,11 @@ class MyPageMoreDialogViewModelTest {
     lateinit var viewModel: MyPageMoreDialogViewModel
 
     @Mock
-    lateinit var userUseCase: UserUseCase
+    lateinit var editUserAccountUseCase: EditUserAccountUseCase
 
     @Before
     fun setUp() {
-        viewModel = MyPageMoreDialogViewModel(userUseCase, UnconfinedTestDispatcher())
+        viewModel = MyPageMoreDialogViewModel(editUserAccountUseCase, UnconfinedTestDispatcher())
     }
 
     @Test

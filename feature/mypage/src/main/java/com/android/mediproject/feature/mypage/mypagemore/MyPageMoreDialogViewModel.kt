@@ -6,7 +6,7 @@ import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.isPasswordValid
-import com.android.mediproject.core.domain.user.UserUseCase
+import com.android.mediproject.core.domain.EditUserAccountUseCase
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
 import com.android.mediproject.core.model.requestparameters.ChangePasswordParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageMoreDialogViewModel @Inject constructor(
-    private val userUseCase: UserUseCase,
+    private val editUserAccountUseCase: EditUserAccountUseCase,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) :
     BaseViewModel() {
@@ -63,7 +63,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
     }
 
     fun changeNickname(newNickname: String) = viewModelScope.launch(ioDispatcher) {
-        userUseCase.changeNickname(changeNicknameParameter = ChangeNicknameParameter(newNickname))
+        editUserAccountUseCase.changeNickname(changeNicknameParameter = ChangeNicknameParameter(newNickname))
             .collect {
                 it.fold(
                     onSuccess = { setMyPageDialogState(MyPageDialogState.Success(MyPageDialogFlag.CHANGENICKNAME)) },
@@ -77,7 +77,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
     }
 
     fun withdrawal() = viewModelScope.launch {
-        userUseCase.withdrawal().collect {
+        editUserAccountUseCase.withdrawal().collect {
             it.fold(
                 onSuccess = {
                     setMyPageDialogState(MyPageDialogState.Success(MyPageDialogFlag.WITHDRAWAL))
@@ -100,7 +100,7 @@ class MyPageMoreDialogViewModel @Inject constructor(
             password[index] = c
         }
 
-        userUseCase.changePassword(changePasswordParameter = ChangePasswordParameter(password))
+        editUserAccountUseCase.changePassword(changePasswordParameter = ChangePasswordParameter(password))
             .collect {
                 it.fold(
                     onSuccess = { setMyPageDialogState(MyPageDialogState.Success(MyPageDialogFlag.CHANGEPASSWORD)) },
