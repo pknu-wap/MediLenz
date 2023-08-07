@@ -5,4 +5,6 @@
     <string name="safetyNotification">안전성서한</string>
     <string name="adminActionList">행정처분 목록</string>
     <string name="failedLoading">식약처로 부터 데이터를 불러오는데 실패했습니다.</string>
+    <string name="loadingRecallSaleSuspensionData">회수/판매중지 정보를 불러오고 있어요</string>
+    <string name="recallSaleSuspensionImage">회수/판매중지 정보 대표사진</string>
 </resources>

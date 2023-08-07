@@ -1,5 +1,7 @@
 package com.android.mediproject.core.common.viewmodel
 
+import io.github.pknujsp.core.annotation.KBindFunc
+
 /**
  * UI 상태를 나타내는 클래스
  *
@@ -9,29 +11,10 @@ package com.android.mediproject.core.common.viewmodel
  * @see UiState.Error
  *
  */
+@KBindFunc
 sealed interface UiState<out T> {
     object Initial : UiState<Nothing>
     object Loading : UiState<Nothing>
-    data class Success<out R>(val data: R) : UiState<R>
+    data class Success<out T>(val data: T) : UiState<T>
     data class Error(val message: String) : UiState<Nothing>
-}
-
-fun <T> UiState<T>.isInitalizing(block: () -> Unit): UiState<T> {
-    if (this is UiState.Initial) block()
-    return this
-}
-
-fun <T> UiState<T>.isLoading(block: () -> Unit): UiState<T> {
-    if (this is UiState.Loading) block()
-    return this
-}
-
-fun <T> UiState<T>.isSuccess(block: (T) -> Unit): UiState<T> {
-    if (this is UiState.Success) block(data)
-    return this
-}
-
-fun <T> UiState<T>.isError(block: (String) -> Unit): UiState<T> {
-    if (this is UiState.Error) block(message)
-    return this
 }

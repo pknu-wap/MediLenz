@@ -58,11 +58,11 @@ fun AdminActionScreen() {
 
         when (list.loadState.append) {
             is LoadState.NotLoading -> item {
-                CenterProgressIndicator(showOfItem = false)
+                CenterProgressIndicator("")
             }
 
             is LoadState.Loading -> item {
-                CenterProgressIndicator(showOfItem = true)
+                CenterProgressIndicator("")
             }
 
             is LoadState.Error -> TODO()

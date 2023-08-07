@@ -22,7 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.common.viewmodel.onError
+import com.android.mediproject.core.common.viewmodel.onInitial
+import com.android.mediproject.core.common.viewmodel.onLoading
+import com.android.mediproject.core.common.viewmodel.onSuccess
 import com.android.mediproject.core.model.recall.DetailRecallSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.adminaction.color
@@ -37,20 +40,12 @@ fun DetailRecallDisposalScreen(
 
     val uiState = viewModel.detailRecallSuspension.collectAsState()
 
-    when (val state = uiState.value) {
-        is UiState.Loading -> {
-            CenterProgressIndicator(true)
-        }
+    uiState.value.onInitial {
 
-        is UiState.Success -> {
-            Item(item = state.data)
-        }
-
-        is UiState.Error -> {
-
-        }
-
-        is UiState.Initial -> {}
+    }.onError { error -> }.onLoading {
+        CenterProgressIndicator("")
+    }.onSuccess { detailRecallSuspension ->
+        Item(item = detailRecallSuspension)
     }
 
 }

@@ -20,7 +20,7 @@ dependencies {
     implementation(libs.bundles.glides)
     implementation(libs.androidx.splash)
     implementation(libs.bundles.composes)
-    implementation(libs.androidx.splash)
+    debugImplementation(libs.bundles.compose.debug)
 
     kapt(libs.bundles.glides.kapt)
 

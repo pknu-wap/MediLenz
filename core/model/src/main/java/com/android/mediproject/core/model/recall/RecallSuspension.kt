@@ -19,12 +19,13 @@ import com.android.mediproject.core.model.toLocalDate
  */
 data class RecallSuspension(
     val enfrcYn: String?, // N
-    val entrps: String, // 동국제약(주)
+    val entrps: String = "동국제약(주)", // 동국제약(주)
     val itemSeq: String, // 201208461
-    val product: String, // 니자틴캡슐(니자티딘)
+    val product: String = "니자틴캡슐(니자티딘)", // 니자틴캡슐(니자티딘)
     val recallCommandDate: DateTimeValue, // 20230504
     val destructionOrderDate: DateTimeValue, // 20230503000000
-    val reason: String, // 안정성 시험결과 NDMA 기준 초과에 따른 사전예방적 조치로 시중 유통품에 대해 영업자회수
+    val reason: String = "안정성 시험결과 NDMA 기준 초과에 따른 사전예방적 조치로 시중 유통품에 대해 영업자회수", // 안정성 시험결과 NDMA 기준 초과에 따른 사전예방적 조치로 시중 유통품에 대해 영업자회수
+    val imageUrl: String = "https://www.pharm.or.kr/images/sb_photo/big3/201211200000101.jpg",
     var onClick: ((RecallSuspension) -> Unit)? = null,
 )
 
@@ -36,4 +37,5 @@ fun RecallSuspensionListResponse.Item.Item.toRecallSuspension() = RecallSuspensi
     recallCommandDate = recallCommandDate.toLocalDate("yyyyMMdd"),
     destructionOrderDate = rtrlCommandDt.toLocalDate("yyyyMMddHHmmss"),
     reason = rtrvlResn ?: "",
+    imageUrl = "",
 )
