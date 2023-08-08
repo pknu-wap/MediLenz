@@ -9,7 +9,7 @@ import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.feature.comments.databinding.ItemMyCommentBinding
 
 class MyCommentsViewHolder(
-    private val binding: ItemMyCommentBinding
+    private val binding: ItemMyCommentBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(comment: CommentListResponse.Comment) {
@@ -17,20 +17,17 @@ class MyCommentsViewHolder(
     }
 }
 
-
-class MyCommentsListAdapter : ListAdapter<CommentListResponse.Comment, MyCommentsViewHolder>(diffUtil) {
-
-    companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<CommentListResponse.Comment>() {
-            override fun areItemsTheSame(oldItem: CommentListResponse.Comment, newItem: CommentListResponse.Comment): Boolean {
-                return oldItem === newItem
-            }
-
-            override fun areContentsTheSame(oldItem: CommentListResponse.Comment, newItem: CommentListResponse.Comment): Boolean {
-                return oldItem == newItem
-            }
+class MyCommentsListAdapter : ListAdapter<CommentListResponse.Comment, MyCommentsViewHolder>(
+    object : DiffUtil.ItemCallback<CommentListResponse.Comment>() {
+        override fun areItemsTheSame(oldItem: CommentListResponse.Comment, newItem: CommentListResponse.Comment): Boolean {
+            return oldItem === newItem
         }
-    }
+
+        override fun areContentsTheSame(oldItem: CommentListResponse.Comment, newItem: CommentListResponse.Comment): Boolean {
+            return oldItem == newItem
+        }
+    },
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyCommentsViewHolder {
         val binding =
@@ -40,9 +37,5 @@ class MyCommentsListAdapter : ListAdapter<CommentListResponse.Comment, MyComment
 
     override fun onBindViewHolder(holder: MyCommentsViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-
-    override fun submitList(list: MutableList<CommentListResponse.Comment>?) {
-        super.submitList(list)
     }
 }
