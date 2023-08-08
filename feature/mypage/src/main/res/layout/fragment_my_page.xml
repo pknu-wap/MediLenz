@@ -160,6 +160,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     app:lottie_rawRes="@raw/loading"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/userImageIV"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -241,7 +242,6 @@
                         android:visibility="gone"
                         app:lottie_rawRes="@raw/loading"
                         android:layout_marginTop="30dp"
-                        android:scaleType="fitCenter"
                         android:layout_gravity="center"/>
 
                     <androidx.recyclerview.widget.RecyclerView
