@@ -88,7 +88,7 @@ class MyPageFragment :
             is UiState.Initial -> {}
             is UiState.Loading -> {}
             is UiState.Success -> { binding.userDto = userState.data }
-            is UiState.Error -> {}
+            is UiState.Error -> { toast(userState.message) }
         }
     }
 
@@ -100,7 +100,7 @@ class MyPageFragment :
                 if (commentListState.data.isNotEmpty()) showCommentList(commentListState.data)
                 else noShowCommentList()
             }
-            is UiState.Error -> {}
+            is UiState.Error -> { toast(commentListState.message) }
         }
     }
 
@@ -128,7 +128,7 @@ class MyPageFragment :
             is TokenState.Tokens.AccessExpiration -> {}
             is TokenState.Tokens.Valid -> setLoginMode(MyPageViewModel.LoginMode.LOGIN_MODE)
             else -> {}
-        }   
+        }
     }
 
     private fun setLoginMode(loginMode: MyPageViewModel.LoginMode) {

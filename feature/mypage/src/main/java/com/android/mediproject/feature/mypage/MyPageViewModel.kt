@@ -60,30 +60,30 @@ class MyPageViewModel @Inject constructor(
     private val _user = MutableStateFlow<UiState<User>>(UiState.Initial)
     val user get() = _user.asStateFlow()
 
-    fun setUserState(uiState: UiState<User>) {
+    fun setUserUiState(uiState: UiState<User>) {
         _user.value = uiState
     }
 
     fun loadUser() = viewModelScope.launch(ioDispatcher) {
-        setUserState(UiState.Initial)
+        setUserUiState(UiState.Initial)
         getUserUseCase().collectLatest {
-            setUserState(UiState.Success(it))
+            setUserUiState(UiState.Success(it))
         }
     }
 
     private val _myCommentsList = MutableStateFlow<UiState<List<MyCommentsListResponse.Comment>>>(UiState.Initial)
     val myCommentsList get() = _myCommentsList.asStateFlow()
 
-    fun setMyCommentsListState(uiState: UiState<List<MyCommentsListResponse.Comment>>) {
+    fun setMyCommentsListUiState(uiState: UiState<List<MyCommentsListResponse.Comment>>) {
         _myCommentsList.value = uiState
     }
 
     fun loadMyCommentsList() = viewModelScope.launch(ioDispatcher) {
-        setMyCommentsListState(UiState.Loading)
+        setMyCommentsListUiState(UiState.Loading)
         getCommentsUseCase.getMyCommentsList().collectLatest { result ->
             result.fold(
-                onSuccess = { setMyCommentsListState(UiState.Success(it.commentList)) },
-                onFailure = { setMyCommentsListState(UiState.Error("댓글을 불러오는데 실패하였습니다.")) },
+                onSuccess = { setMyCommentsListUiState(UiState.Success(it.commentList)) },
+                onFailure = { setMyCommentsListUiState(UiState.Error("댓글을 불러오는데 실패하였습니다.")) },
             )
         }
     }
