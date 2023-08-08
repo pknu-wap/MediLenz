@@ -94,7 +94,7 @@ class MedicineCommentsViewModel @Inject constructor(
                     if (comment.userId == myUserId.value && signedIn) {
                         onClickEdit = ::onClickedEdit
                         onClickDelete = ::onClickedDelete
-                        onClickApplyEdited = ::applyEditedComment
+                        onClickApplyEdited = ::editComment
                         isMine = true
                     }
                 }
@@ -158,7 +158,7 @@ class MedicineCommentsViewModel @Inject constructor(
      *
      * @param comment 수정한 댓글(답글) 정보
      */
-    private fun applyEditedComment(comment: Comment) {
+    private fun editComment(comment: Comment) {
         viewModelScope.launch {
             editCommentUseCase.applyEditedComment(
                 EditCommentParameter(
