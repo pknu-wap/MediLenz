@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="5dp"
-                android:text="@{String.valueOf(myComment.replyCount)}"
+                android:text="@{String.valueOf(comment.replies.size())}"
                 android:textColor="@color/main"
                 android:textSize="@dimen/myCommentItemTextSize" />
 
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="5dp"
-                android:text="@{myComment.createdAt}"
+                android:text="@{comment.createdAt}"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/myCommentItemTextSize" />
         </LinearLayout>
