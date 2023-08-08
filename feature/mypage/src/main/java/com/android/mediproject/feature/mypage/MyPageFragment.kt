@@ -36,35 +36,8 @@ class MyPageFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setFragmentResultListner()
         setBinding()
-    }
-
-    private fun setFragmentResultListner() {
-        setBottomsheetFragmentResultListner()
-        setDialogFragmentResultListner()
-    }
-
-    private fun setBottomsheetFragmentResultListner() {
-        parentFragmentManager.setFragmentResultListener(
-            MyPageMoreBottomSheetFragment.TAG,
-            viewLifecycleOwner,
-        ) { _, bundle ->
-            val flag = bundle.getInt(MyPageMoreBottomSheetFragment.TAG)
-            handleBottomSheetFlag(flag)
-            myPageMoreBottomSheet!!.dismiss()
-            myPageMoreBottomSheet = null
-        }
-    }
-
-    private fun setDialogFragmentResultListner() {
-        requireActivity().supportFragmentManager.setFragmentResultListener(
-            MyPageMoreDialogFragment.TAG,
-            viewLifecycleOwner,
-        ) { _, bundle ->
-            val flag = bundle.getInt(MyPageMoreDialogFragment.TAG)
-            handleDialogCallback(flag)
-        }
+        setFragmentResultListner()
     }
 
     private fun setBinding() =
@@ -82,44 +55,6 @@ class MyPageFragment :
             setBarStyle()
             setRecyclerView()
         }
-
-    private fun handleUserState(userState: UiState<User>) {
-        when (userState) {
-            is UiState.Initial -> {}
-            is UiState.Loading -> {}
-            is UiState.Success -> { binding.userDto = userState.data }
-            is UiState.Error -> { toast(userState.message) }
-        }
-    }
-
-    private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
-        when (commentListState) {
-            is UiState.Initial -> {}
-            is UiState.Loading -> {}
-            is UiState.Success -> {
-                if (commentListState.data.isNotEmpty()) showCommentList(commentListState.data)
-                else noShowCommentList()
-            }
-            is UiState.Error -> { toast(commentListState.message) }
-        }
-    }
-
-    fun setBarStyle() = binding.apply {
-        systemBarStyler.changeMode(
-            topViews = listOf(
-                SystemBarStyler.ChangeView(
-                    mypageBar,
-                    SystemBarStyler.SpacingType.PADDING,
-                ),
-            ),
-        )
-    }
-
-    private fun setRecyclerView() = binding.myCommentsListRV.apply {
-        adapter = myCommentListAdapter
-        layoutManager = LinearLayoutManager(requireActivity())
-        addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
-    }
 
     private fun handleToken(tokenState: TokenState<CurrentTokens>) {
         log(tokenState.toString())
@@ -197,6 +132,44 @@ class MyPageFragment :
     private fun loginModeScreen() = fragmentViewModel.apply {
         loadUser()
         loadMyCommentsList()
+    }
+
+    private fun handleUserState(userState: UiState<User>) {
+        when (userState) {
+            is UiState.Initial -> {}
+            is UiState.Loading -> {}
+            is UiState.Success -> { binding.userDto = userState.data }
+            is UiState.Error -> { log(userState.message) }
+        }
+    }
+
+    private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
+        when (commentListState) {
+            is UiState.Initial -> {}
+            is UiState.Loading -> {}
+            is UiState.Success -> {
+                if (commentListState.data.isNotEmpty()) showCommentList(commentListState.data)
+                else noShowCommentList()
+            }
+            is UiState.Error -> { log(commentListState.message) }
+        }
+    }
+
+    fun setBarStyle() = binding.apply {
+        systemBarStyler.changeMode(
+            topViews = listOf(
+                SystemBarStyler.ChangeView(
+                    mypageBar,
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
+        )
+    }
+
+    private fun setRecyclerView() = binding.myCommentsListRV.apply {
+        adapter = myCommentListAdapter
+        layoutManager = LinearLayoutManager(requireActivity())
+        addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
     }
 
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {
@@ -291,5 +264,32 @@ class MyPageFragment :
     private fun setShowCommentListVisible() = binding.apply {
         guestModeCL.visibility = View.GONE
         loginModeCL.visibility = View.VISIBLE
+    }
+
+    private fun setFragmentResultListner() {
+        setBottomsheetFragmentResultListner()
+        setDialogFragmentResultListner()
+    }
+
+    private fun setBottomsheetFragmentResultListner() {
+        parentFragmentManager.setFragmentResultListener(
+            MyPageMoreBottomSheetFragment.TAG,
+            viewLifecycleOwner,
+        ) { _, bundle ->
+            val flag = bundle.getInt(MyPageMoreBottomSheetFragment.TAG)
+            handleBottomSheetFlag(flag)
+            myPageMoreBottomSheet!!.dismiss()
+            myPageMoreBottomSheet = null
+        }
+    }
+
+    private fun setDialogFragmentResultListner() {
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            MyPageMoreDialogFragment.TAG,
+            viewLifecycleOwner,
+        ) { _, bundle ->
+            val flag = bundle.getInt(MyPageMoreDialogFragment.TAG)
+            handleDialogCallback(flag)
+        }
     }
 }
