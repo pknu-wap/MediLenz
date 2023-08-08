@@ -33,6 +33,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
         viewModel = fragmentViewModel.apply {
             repeatOnStarted { eventFlow.collect { handleEvent(it) } }
             repeatOnStarted { myCommentsList.collect { handleMyCommentListState(it) } }
+            loadMyCommentsList()
         }
         setBarStyle()
         setRecyclerView()
@@ -46,14 +47,9 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
         when (commentListState) {
             is UiState.Initial -> {}
             is UiState.Loading -> {}
-            is UiState.Success -> { showCommentList(commentListState.data)
-            }
-            is UiState.Error -> { log(commentListState.message) }
+            is UiState.Success -> myCommentsListAdapter.submitList(commentListState.data)
+            is UiState.Error -> log(commentListState.message)
         }
-    }
-
-    private fun showCommentList(myCommentList: List<MyCommentsListResponse.Comment>) = binding.apply {
-        myCommentsListAdapter.submitList(myCommentList)
     }
 
     private fun setRecyclerView() = binding.myCommentsListRV.apply {
