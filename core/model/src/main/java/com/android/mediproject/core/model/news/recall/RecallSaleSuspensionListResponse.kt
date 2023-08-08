@@ -44,7 +44,9 @@ class RecallSaleSuspensionListResponse : DataGoKrResponse<RecallSaleSuspensionLi
             @SerialName("RECALL_COMMAND_DATE") val recallCommandDate: String = "", // 20230504
             @SerialName("RTRVL_CMMND_DT") val retrievalCommandDate: String = "", // 20230503000000
             @SerialName("RTRVL_RESN") val retrievalReason: String = "", // 안정성 시험결과 NDMA 기준 초과에 따른 사전예방적 조치로 시중 유통품에 대해 영업자회수
-        ) : NetworkApiResponse.ListItem
+        ) : NetworkApiResponse.ListItem {
+            var imageUrl: String = ""
+        }
     }
 
 }

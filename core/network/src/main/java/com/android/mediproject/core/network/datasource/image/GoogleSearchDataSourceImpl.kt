@@ -5,6 +5,12 @@ import com.android.mediproject.core.network.module.GoogleSearchNetworkApi
 import com.android.mediproject.core.network.module.safetyEncode
 import com.android.mediproject.core.network.onResponse
 import com.android.mediproject.core.network.parser.HtmlParser
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.newFixedThreadPoolContext
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 class GoogleSearchDataSourceImpl @Inject constructor(
@@ -12,23 +18,25 @@ class GoogleSearchDataSourceImpl @Inject constructor(
     private val htmlParser: HtmlParser,
 ) : GoogleSearchDataSource {
 
-    private val additionalQuery = "의약품 "
+    private val urlCache = LruCache<String, String>(100)
+    private val mutex = Mutex()
 
-    private val urlCache = LruCache<String, String>(60)
+    @OptIn(DelicateCoroutinesApi::class)
+    private val threads = newFixedThreadPoolContext(3, "GoogleSearchProcessor")
 
-    override suspend fun getImageUrl(medicineName: String): Result<String> {
-        val query = (additionalQuery + medicineName).safetyEncode()
+    private suspend fun getImageUrl(query: String, additionalQuery: String): Result<String> {
+        val finalQuery = (additionalQuery + query).safetyEncode()
 
-        return synchronized(urlCache) {
-            urlCache.get(query)
+        return mutex.withLock {
+            urlCache.get(finalQuery)
         }?.run {
             Result.success(this)
         } ?: run {
-            googleSearchNetworkApi.getImageUrl(query).onResponse().fold(
+            googleSearchNetworkApi.getImageUrl(finalQuery).onResponse().fold(
                 onSuccess = {
-                    val url = htmlParser.parse(medicineName, it)
-                    synchronized(urlCache) {
-                        urlCache.put(query, url)
+                    val url = htmlParser.parse(finalQuery, it)
+                    mutex.withLock {
+                        urlCache.put(finalQuery, url)
                     }
                     Result.success(url)
                 },
@@ -39,4 +47,20 @@ class GoogleSearchDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun fetchImageUrls(elements: List<String>, additionalQuery: String): Map<String, String> {
+        val map = mutableMapOf<String, String>()
+        val requests = elements.map { query ->
+            supervisorScope {
+                async(threads) {
+                    val imageUrl = getImageUrl(query, additionalQuery)
+                    synchronized(map) {
+                        map[query] = imageUrl.getOrDefault("")
+                    }
+                }
+            }
+        }
+
+        requests.forEach { it.await() }
+        return map
+    }
 }

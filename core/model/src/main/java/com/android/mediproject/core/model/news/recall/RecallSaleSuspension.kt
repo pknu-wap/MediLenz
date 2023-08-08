@@ -47,7 +47,7 @@ class RecallSaleSuspensionListUiModelMapper(override val source: RecallSaleSuspe
                 recallCommandDate = recallCommandDate.toLocalDate("yyyyMMdd"),
                 retrievalCommandDate = retrievalCommandDate.toLocalDate("yyyyMMddHHmmss"),
                 retrievalReason = retrievalReason,
-                imageUrl = "",
+                imageUrl = imageUrl,
             )
         }
 

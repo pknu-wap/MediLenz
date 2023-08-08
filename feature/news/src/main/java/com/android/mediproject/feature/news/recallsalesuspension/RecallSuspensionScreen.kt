@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.news.recallsalesuspension
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +32,7 @@ import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.ListItemScreen
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 
 
 /**
@@ -83,8 +82,8 @@ fun ItemOnList(recallSaleSuspension: RecallSaleSuspension) {
             createVerticalChain(product, reason, date, chainStyle = ChainStyle.Packed)
             val barrier = createEndBarrier(image, margin = 11.dp)
 
-            Image(
-                painter = painterResource(id = com.android.mediproject.core.ui.R.drawable.baseline_camera_24),
+            GlideImage(
+                model = recallSaleSuspension.imageUrl,
                 contentDescription = stringResource(id = R.string.recallSaleSuspensionImage),
                 alignment = Alignment.Center,
                 modifier = Modifier

@@ -11,7 +11,6 @@ import com.android.mediproject.core.network.module.safetyEncode
 import com.android.mediproject.core.network.onResponse
 import com.android.mediproject.core.network.onStringResponse
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.withContext
@@ -106,17 +105,7 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
             }
             if (items.isEmpty()) return@withContext
 
-            val map = mutableMapOf<String, String>()
-            val asyncList = items.map { (_, name) ->
-                async {
-                    val imageUrl = googleSearchDataSource.getImageUrl(name)
-                    synchronized(map) {
-                        map[name] = imageUrl.getOrDefault("")
-                    }
-                }
-            }
-
-            asyncList.forEach { it.await() }
+            val map = googleSearchDataSource.fetchImageUrls(items.map { it.second }, "의약품 ")
             medicineApprovalListResponse.body.items.run {
                 items.forEach { (i, seq) ->
                     this[i].bigPrdtImgUrl = map.getOrDefault(seq, "")

@@ -78,7 +78,8 @@ object DataGoKrNetwork {
     fun providesRecallSuspensionDataSource(
         @Dispatcher(MediDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
         @Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi,
-    ): RecallSaleSuspensionDataSource = RecallSaleSuspensionDataSourceImpl(defaultDispatcher, dataGoKrNetworkApi)
+        googleSearchDataSource: GoogleSearchDataSource,
+    ): RecallSaleSuspensionDataSource = RecallSaleSuspensionDataSourceImpl(defaultDispatcher, dataGoKrNetworkApi, googleSearchDataSource)
 
     @Provides
     @Singleton
