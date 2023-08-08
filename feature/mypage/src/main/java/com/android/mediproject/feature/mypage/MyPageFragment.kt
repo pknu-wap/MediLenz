@@ -137,22 +137,58 @@ class MyPageFragment :
     private fun handleUserState(userState: UiState<User>) {
         when (userState) {
             is UiState.Initial -> {}
-            is UiState.Loading -> {}
-            is UiState.Success -> { binding.userDto = userState.data }
-            is UiState.Error -> { log(userState.message) }
+
+            is UiState.Loading -> setUserLoadingVisible()
+
+            is UiState.Success -> {
+                setUserSuccessVisible()
+                binding.userDto = userState.data
+            }
+
+            is UiState.Error -> {
+                log(userState.message)
+            }
         }
+    }
+
+    private fun setUserLoadingVisible() = binding.apply {
+        userNameTV.visibility = View.GONE
+        userImageIV.visibility = View.GONE
+        userLottie.visibility = View.VISIBLE
+    }
+
+    private fun setUserSuccessVisible() = binding.apply {
+        userNameTV.visibility = View.VISIBLE
+        userImageIV.visibility = View.VISIBLE
+        userLottie.visibility = View.GONE
     }
 
     private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
         when (commentListState) {
             is UiState.Initial -> {}
-            is UiState.Loading -> {}
+
+            is UiState.Loading -> setCommentLoadingVisible()
+
             is UiState.Success -> {
+                setCommentSuccessVisible()
                 if (commentListState.data.isNotEmpty()) showCommentList(commentListState.data)
                 else noShowCommentList()
             }
-            is UiState.Error -> { log(commentListState.message) }
+
+            is UiState.Error -> {
+                log(commentListState.message)
+            }
         }
+    }
+
+    private fun setCommentLoadingVisible() = binding.apply {
+        myCommentsListRV.visibility = View.GONE
+        commentLottie.visibility = View.VISIBLE
+    }
+
+    private fun setCommentSuccessVisible() = binding.apply {
+        myCommentsListRV.visibility = View.VISIBLE
+        commentLottie.visibility = View.GONE
     }
 
     fun setBarStyle() = binding.apply {
