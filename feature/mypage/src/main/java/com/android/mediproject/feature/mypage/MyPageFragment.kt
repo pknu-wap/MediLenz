@@ -73,8 +73,8 @@ class MyPageFragment :
                 viewLifecycleOwner.apply {
                     repeatOnStarted { token.collect { handleToken(it) } }
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { user.collect { handleUserState(it) } }
                     repeatOnStarted { loginMode.collect { handleLoginMode(it) } }
+                    repeatOnStarted { user.collect { handleUserState(it) } }
                     repeatOnStarted { myCommentsList.collect { handleMyCommentListState(it) } }
                 }
                 loadTokens()

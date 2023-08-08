@@ -36,17 +36,11 @@
 
             </com.android.mediproject.core.ui.base.view.Bar>
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/userLottie"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/mypageBar"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/guestModeCL"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mypageBar">
 
@@ -136,7 +130,6 @@
                 android:id="@+id/loginModeCL"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mypageBar">
 
@@ -151,6 +144,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/userNameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -159,6 +153,15 @@
                     android:textSize="28sp"
                     app:layout_constraintBottom_toBottomOf="@id/userImageIV"
                     app:layout_constraintStart_toEndOf="@id/userImageIV"
+                    app:layout_constraintTop_toTopOf="@id/userImageIV" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/userLottie"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:layout_constraintBottom_toBottomOf="@id/userImageIV"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/userImageIV" />
 
                 <ImageView
@@ -191,6 +194,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/commentLottie"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="30dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/favoriteMedicineListLL" />
 
                 <LinearLayout
                     android:id="@+id/myCommentsListLL"
