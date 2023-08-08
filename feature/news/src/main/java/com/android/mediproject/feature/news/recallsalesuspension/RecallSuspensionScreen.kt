@@ -1,6 +1,8 @@
 package com.android.mediproject.feature.news.recallsalesuspension
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +14,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -28,13 +31,13 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.android.mediproject.core.model.news.recall.RecallSaleSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
+import com.android.mediproject.feature.news.setOnStateChangedListener
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import java.time.format.DateTimeFormatter
 
@@ -49,37 +52,35 @@ fun RecallSaleSuspensionScreen(
     val navController = rememberNavController()
     val list = viewModel.recallDisposalList.collectAsLazyPagingItems()
 
-    when (list.loadState.append) {
-        is LoadState.NotLoading -> {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-            ) {
-                items(
-                    count = list.itemCount, key = list.itemKey(),
-                    contentType = list.itemContentType(
-                    ),
-                ) { index ->
-                    list[index]?.run {
-                        onClick = {
-                            navController.navigate("detailRecallSuspension/${it.product}")
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+    ) {
+        list.setOnStateChangedListener { isFirstLoad, isLoading, isEmpty ->
+            Log.d("RecallSuspensionScreen", "isFirstLoad: $isFirstLoad, isLoading: $isLoading, isEmpty: $isEmpty")
+            if (isFirstLoad) {
+                CenterProgressIndicator(stringResource(id = R.string.loadingRecallSaleSuspensionData))
+            } else if (!isLoading and !isEmpty) {
+                LazyColumn {
+                    items(
+                        count = list.itemCount, key = list.itemKey(),
+                        contentType = list.itemContentType(
+                        ),
+                    ) { index ->
+                        list[index]?.run {
+                            onClick = {
+                                navController.navigate("detailRecallSuspension/${it.product}")
+                            }
+                            ListItem(this)
                         }
-                        ListItem(this)
+                        if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
                     }
-                    if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
                 }
             }
         }
-
-        is LoadState.Loading -> {
-            CenterProgressIndicator(stringResource(id = R.string.loadingRecallSaleSuspensionData))
-        }
-
-        else -> TODO()
     }
-
-
 }
 
 

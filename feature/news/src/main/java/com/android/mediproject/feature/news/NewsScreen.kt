@@ -123,7 +123,7 @@ fun ChipGroup(selectedChip: ChipType, onChipSelected: (ChipType) -> Unit) {
             isSelected = selectedChip == ChipType.SafetyNotification,
             type = ChipType.SafetyNotification,
         ) {
-            onChipSelected(ChipType.RecallSaleSuspension)
+            onChipSelected(ChipType.SafetyNotification)
         }
     }
 }

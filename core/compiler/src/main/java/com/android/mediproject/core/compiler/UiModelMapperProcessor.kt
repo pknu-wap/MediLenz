@@ -26,11 +26,11 @@ class UiModelMapperProcessor(
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val declarations = resolver.getSymbolsWithAnnotation(ANNOTATION_TYPE).filterIsInstance<KSClassDeclaration>().toList()
-        createFile(declarations)
+        createFile(declarations, resolver)
         return declarations
     }
 
-    private fun createFile(declarations: List<KSClassDeclaration>) {
+    private fun createFile(declarations: List<KSClassDeclaration>, resolver: Resolver) {
         val uiModelMapperFactoryClass = ClassName("com.android.mediproject.core.model.common", "UiModelMapperFactory")
 
         val newFileSpec = FileSpec.builder(uiModelMapperFactoryClass.packageName, OUTPUT_FILE_NAME).addType(
@@ -51,13 +51,14 @@ class UiModelMapperProcessor(
 
         try {
             codeGenerator.createNewFile(
-                dependencies = Dependencies(false, *declarations.map { it.containingFile!! }.toTypedArray()),
+                dependencies = Dependencies(false, *resolver.getAllFiles().toList().toTypedArray()),
                 packageName = uiModelMapperFactoryClass.packageName,
                 fileName = OUTPUT_FILE_NAME,
-            ).bufferedWriter().use {
-                newFileSpec.writeTo(it)
+            ).writer().use {
+                it.write(newFileSpec.toString())
             }
-        } catch (e: Exception) {
+        } catch (e: FileAlreadyExistsException) {
+            finish()
         }
     }
 }

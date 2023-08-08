@@ -142,7 +142,7 @@ fun ListItem(safetyNotification: SafetyNotification) {
 
             // 날짜
             Text(
-                text = safetyNotification.publicationDate.toString(),
+                text = safetyNotification.publicationDate.value.toString(),
                 textAlign = TextAlign.Right,
                 modifier = Modifier.constrainAs(date) {
                     start.linkTo(title.end)

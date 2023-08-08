@@ -9,7 +9,19 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.core.model"
+
+    buildTypes {
+        getByName("debug") {
+            sourceSets {
+                getByName("main") {
+                    java.srcDir(File("build/generated/ksp/debug/kotlin"))
+                }
+            }
+        }
+    }
 }
+
+
 
 dependencies {
     ksp(project(":core:compiler"))
