@@ -30,4 +30,5 @@ dependencies {
     implementation(libs.bundles.testAndroid)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
+    implementation(libs.lottie)
 }
