@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.ui.R
@@ -20,6 +21,7 @@ import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragmen
 import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.model.comments.MyCommentsListResponse
+import com.android.mediproject.core.model.user.User
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -71,14 +73,9 @@ class MyPageFragment :
                 viewLifecycleOwner.apply {
                     repeatOnStarted { token.collect { handleToken(it) } }
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { user.collect { userDto = it } }
+                    repeatOnStarted { user.collect { handleUserState(it) } }
                     repeatOnStarted { loginMode.collect { handleLoginMode(it) } }
-                    repeatOnStarted {
-                        myCommentsList.collect { commentList ->
-                            if (commentList.isNotEmpty()) showCommentList(commentList)
-                            else noShowCommentList()
-                        }
-                    }
+                    repeatOnStarted { myCommentsList.collect { handleMyCommentListState(it) } }
                 }
                 loadTokens()
             }
@@ -86,7 +83,28 @@ class MyPageFragment :
             setRecyclerView()
         }
 
-    private fun setBarStyle() = binding.apply {
+    private fun handleUserState(userState: UiState<User>) {
+        when (userState) {
+            is UiState.Initial -> {}
+            is UiState.Loading -> {}
+            is UiState.Success -> { binding.userDto = userState.data }
+            is UiState.Error -> {}
+        }
+    }
+
+    private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
+        when (commentListState) {
+            is UiState.Initial -> {}
+            is UiState.Loading -> {}
+            is UiState.Success -> {
+                if (commentListState.data.isNotEmpty()) showCommentList(commentListState.data)
+                else noShowCommentList()
+            }
+            is UiState.Error -> {}
+        }
+    }
+
+    fun setBarStyle() = binding.apply {
         systemBarStyler.changeMode(
             topViews = listOf(
                 SystemBarStyler.ChangeView(
@@ -110,7 +128,7 @@ class MyPageFragment :
             is TokenState.Tokens.AccessExpiration -> {}
             is TokenState.Tokens.Valid -> setLoginMode(MyPageViewModel.LoginMode.LOGIN_MODE)
             else -> {}
-        }
+        }   
     }
 
     private fun setLoginMode(loginMode: MyPageViewModel.LoginMode) {
