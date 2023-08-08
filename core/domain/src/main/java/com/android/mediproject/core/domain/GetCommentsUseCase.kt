@@ -4,7 +4,8 @@ import androidx.paging.PagingData
 import androidx.paging.flatMap
 import com.android.mediproject.core.data.comments.CommentsRepository
 import com.android.mediproject.core.model.comments.Comment
-import com.android.mediproject.core.model.comments.MyComment
+import com.android.mediproject.core.model.comments.CommentListResponse
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.comments.toComment
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
@@ -20,7 +21,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CommentsUseCase @Inject constructor(
+class GetCommentsUseCase @Inject constructor(
     private val commentsRepository: CommentsRepository,
 ) {
 
@@ -31,8 +32,8 @@ class CommentsUseCase @Inject constructor(
      *
      * @param medicineId 약의 고유 번호
      */
-    fun getCommentsForAMedicine(medicineId: Long, myUserId: Long): Flow<PagingData<Comment>> = channelFlow {
-        commentsRepository.getCommentsForAMedicine(medicineId).collectLatest { pagingData ->
+    fun getCommentsByMedicineId(medicineId: Long, myUserId: Long): Flow<PagingData<Comment>> = channelFlow {
+        commentsRepository.getCommentsByMedicineId(medicineId).collectLatest { pagingData ->
             val result = pagingData.flatMap {
                 (it.replies.map { reply ->
                     reply.toComment().apply {
@@ -55,48 +56,7 @@ class CommentsUseCase @Inject constructor(
     /**
      * 내가 작성한 댓글을 가져오는 메서드입니다.
      */
-    fun getMyComments(userId: Int): Flow<PagingData<MyComment>> {
-        TODO()
+    fun getMyCommentsList(): Flow<Result<MyCommentsListResponse>> = commentsRepository.getMyCommentsList().mapLatest { result ->
+        result.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
     }
-
-
-    /**
-     * 댓글을 수정합니다.
-     */
-    fun applyEditedComment(parameter: EditCommentParameter): Flow<Result<Unit>> =
-        commentsRepository.applyEditedComment(parameter).mapLatest { result ->
-            result.fold(onSuccess = { Result.success(Unit) }, onFailure = { Result.failure(it) })
-        }
-
-
-    /**
-     * 댓글을 등록합니다.
-     */
-    fun applyNewComment(parameter: NewCommentParameter): Flow<Result<Unit>> =
-        commentsRepository.applyNewComment(parameter).mapLatest { result ->
-            result.fold(
-                onSuccess = {
-                    Result.success(Unit)
-                },
-                onFailure = { Result.failure(it) },
-            )
-        }
-
-
-    /**
-     * 댓글 삭제 클릭
-     */
-    fun deleteComment(parameter: DeleteCommentParameter): Flow<Result<Unit>> =
-        commentsRepository.deleteComment(parameter).mapLatest { result ->
-            result.fold(onSuccess = { Result.success(Unit) }, onFailure = { Result.failure(it) })
-        }
-
-
-    /**
-     * 댓글 좋아요 클릭
-     */
-    fun likeComment(parameter: LikeCommentParameter): Flow<Result<Unit>> = commentsRepository.likeComment(parameter).mapLatest { result ->
-        result.fold(onSuccess = { Result.success(Unit) }, onFailure = { Result.failure(it) })
-    }
-
 }

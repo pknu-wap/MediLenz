@@ -7,7 +7,8 @@ import androidx.paging.map
 import com.android.mediproject.core.common.bindingadapter.ISendText
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
-import com.android.mediproject.core.domain.CommentsUseCase
+import com.android.mediproject.core.domain.EditCommentUseCase
+import com.android.mediproject.core.domain.GetCommentsUseCase
 import com.android.mediproject.core.domain.GetAccountStateUseCase
 import com.android.mediproject.core.model.comments.Comment
 import com.android.mediproject.core.model.navargs.MedicineBasicInfoArgs
@@ -45,7 +46,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MedicineCommentsViewModel @Inject constructor(
-    private val commentsUseCase: CommentsUseCase,
+    private val getCommentsUseCase: GetCommentsUseCase,
+    private val editCommentUseCase: EditCommentUseCase,
     private val getAccountStateUseCase: GetAccountStateUseCase,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
@@ -80,7 +82,7 @@ class MedicineCommentsViewModel @Inject constructor(
 
 
     val comments: StateFlow<PagingData<Comment>> = medicineBasicInfo.flatMapLatest { info ->
-        commentsUseCase.getCommentsForAMedicine(info.medicineIdInAws, myUserId.value).cachedIn(viewModelScope).mapLatest { pagingData ->
+        getCommentsUseCase.getCommentsByMedicineId(info.medicineIdInAws, myUserId.value).cachedIn(viewModelScope).mapLatest { pagingData ->
             val signedIn = accountState.value is AccountState.SignedIn
             pagingData.map { comment ->
                 comment.apply {
@@ -92,7 +94,7 @@ class MedicineCommentsViewModel @Inject constructor(
                     if (comment.userId == myUserId.value && signedIn) {
                         onClickEdit = ::onClickedEdit
                         onClickDelete = ::onClickedDelete
-                        onClickApplyEdited = ::applyEditedComment
+                        onClickApplyEdited = ::editComment
                         isMine = true
                     }
                 }
@@ -108,7 +110,7 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     private fun applyReplyComment(comment: String) {
         viewModelScope.launch {
-            commentsUseCase.applyNewComment(
+            editCommentUseCase.applyNewComment(
                 NewCommentParameter(
                     medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws.toString(),
                     userId = myUserId.value.toString(),
@@ -118,7 +120,7 @@ class MedicineCommentsViewModel @Inject constructor(
             ).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 등록 성공
-                    commentsUseCase.scrollChannel.send(Unit)
+                    getCommentsUseCase.scrollChannel.send(Unit)
                     _action.emit(COMPLETED_APPLY_COMMENT_REPLY(Result.success(Unit)))
                 }.onFailure {
                     _action.emit(COMPLETED_APPLY_COMMENT_REPLY(Result.failure(it)))
@@ -132,7 +134,7 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     private fun applyNewComment(content: String) {
         viewModelScope.launch {
-            commentsUseCase.applyNewComment(
+            editCommentUseCase.applyNewComment(
                 NewCommentParameter(
                     medicineId = medicineBasicInfo.replayCache.last().medicineIdInAws.toString(),
                     userId = myUserId.value.toString(),
@@ -142,7 +144,7 @@ class MedicineCommentsViewModel @Inject constructor(
             ).collectLatest { result ->
                 result.onSuccess {
                     // 댓글 등록 성공
-                    commentsUseCase.scrollChannel.send(Unit)
+                    getCommentsUseCase.scrollChannel.send(Unit)
                     _action.emit(COMPLETED_APPLY_COMMENT_REPLY(Result.success(Unit)))
                 }.onFailure {
                     _action.emit(COMPLETED_APPLY_COMMENT_REPLY(Result.failure(it)))
@@ -156,9 +158,9 @@ class MedicineCommentsViewModel @Inject constructor(
      *
      * @param comment 수정한 댓글(답글) 정보
      */
-    private fun applyEditedComment(comment: Comment) {
+    private fun editComment(comment: Comment) {
         viewModelScope.launch {
-            commentsUseCase.applyEditedComment(
+            editCommentUseCase.applyEditedComment(
                 EditCommentParameter(
                     commentId = comment.commentId,
                     content = comment.content,
@@ -207,11 +209,11 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     fun deleteComment(commentId: Long) {
         viewModelScope.launch {
-            commentsUseCase.deleteComment(DeleteCommentParameter(commentId, medicineBasicInfo.replayCache.last().medicineIdInAws))
+            editCommentUseCase.deleteComment(DeleteCommentParameter(commentId, medicineBasicInfo.replayCache.last().medicineIdInAws))
                 .collectLatest { result ->
                     result.onSuccess {
                         // 댓글 삭제 성공
-                        commentsUseCase.scrollChannel.send(Unit)
+                        getCommentsUseCase.scrollChannel.send(Unit)
                         _action.emit(COMPLETED_DELETE_COMMENT(Result.success(Unit)))
                     }.onFailure {
                         _action.emit(COMPLETED_DELETE_COMMENT(Result.failure(it)))
@@ -228,7 +230,7 @@ class MedicineCommentsViewModel @Inject constructor(
      */
     private fun onClickedLike(commentId: Long, isLiked: Boolean) {
         viewModelScope.launch {
-            commentsUseCase.likeComment(LikeCommentParameter(commentId, medicineBasicInfo.replayCache.last().medicineIdInAws, isLiked))
+            editCommentUseCase.likeComment(LikeCommentParameter(commentId, medicineBasicInfo.replayCache.last().medicineIdInAws, isLiked))
                 .collectLatest { result ->
                     result.onSuccess {
                         // like 처리 완료

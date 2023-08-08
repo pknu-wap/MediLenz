@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.util.SystemBarStyler
-import com.android.mediproject.core.model.comments.MyComment
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.ui.R
@@ -20,6 +19,7 @@ import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFr
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -75,7 +75,7 @@ class MyPageFragment :
                     repeatOnStarted { loginMode.collect { handleLoginMode(it) } }
                     repeatOnStarted {
                         myCommentsList.collect { commentList ->
-                            if (isCommentListNotEmpty(commentList)) showCommentList(commentList)
+                            if (commentList.isNotEmpty()) showCommentList(commentList)
                             else noShowCommentList()
                         }
                     }
@@ -103,10 +103,6 @@ class MyPageFragment :
         addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
     }
 
-    private fun isCommentListNotEmpty(commentList: List<MyComment>): Boolean {
-        return (commentList.isNotEmpty())
-    }
-
     private fun handleToken(tokenState: TokenState<CurrentTokens>) {
         log(tokenState.toString())
         when (tokenState) {
@@ -129,13 +125,9 @@ class MyPageFragment :
     }
 
     private fun showMyPageBottomSheet() {
-        if (isMyPageMoreBottomSheetNull()) {
+        if (myPageMoreBottomSheet == null) {
             showMyPageMoreBottomSheet()
         }
-    }
-
-    private fun isMyPageMoreBottomSheetNull(): Boolean {
-        return myPageMoreBottomSheet == null
     }
 
     private fun showMyPageMoreBottomSheet() {
@@ -186,7 +178,7 @@ class MyPageFragment :
 
     private fun loginModeScreen() = fragmentViewModel.apply {
         loadUser()
-        loadComments()
+        loadMyCommentsList()
     }
 
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {
@@ -273,7 +265,7 @@ class MyPageFragment :
         myCommentsListHeaderView.setExpandVisiblity(false)
     }
 
-    private fun showCommentList(myCommentList: List<MyComment>) = binding.apply {
+    private fun showCommentList(myCommentList: List<MyCommentsListResponse.Comment>) = binding.apply {
         setShowCommentListVisible()
         myCommentListAdapter.submitList(myCommentList)
     }

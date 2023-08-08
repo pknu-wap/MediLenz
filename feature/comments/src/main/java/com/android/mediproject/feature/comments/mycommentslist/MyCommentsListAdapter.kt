@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.comments.MyComment
 import com.android.mediproject.feature.comments.databinding.ItemMyCommentBinding
 
 class MyCommentsViewHolder(
