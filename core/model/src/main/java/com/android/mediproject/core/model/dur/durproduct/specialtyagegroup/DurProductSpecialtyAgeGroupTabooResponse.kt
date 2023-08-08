@@ -2,6 +2,7 @@ package com.android.mediproject.core.model.dur.durproduct.specialtyagegroup
 
 
 import com.android.mediproject.core.model.DataGoKrResponse
+import com.android.mediproject.core.model.servercommon.NetworkApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -55,6 +56,6 @@ class DurProductSpecialtyAgeGroupTabooResponse : DataGoKrResponse<DurProductSpec
         val prohibitContent: String = "", // 소아 등(특히 치아 형성기인 12세 미만의 소아)에 투여 시, 치아의 착색？법랑질 형성 부전, 또는 일과성 골발육 부전을 일으킬 수 있음
         @SerialName("REMARK") val remark: String = "", // 다만, 다른 약을 사용할 수 없거나 효과가 없는 경우에만 8세 이상 신중투여
         @SerialName("TYPE_NAME") val typeName: String = "", // 특정연령대금기
-    ) : LeafItem
+    ) : NetworkApiResponse.ListItem
 
 }

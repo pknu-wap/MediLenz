@@ -2,6 +2,7 @@ package com.android.mediproject.core.model.dur.duringr.pregnancy
 
 
 import com.android.mediproject.core.model.DataGoKrResponse
+import com.android.mediproject.core.model.servercommon.NetworkApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -46,7 +47,7 @@ class DurIngrPregnantWomanTabooResponse : DataGoKrResponse<DurIngrPregnantWomanT
             @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // 임부에 대한 안전성 미확립.
             @SerialName("REMARK") val remark: String = "", // 경구
             @SerialName("TYPE_NAME") val typeName: String = "", // 임부금기
-        ) : LeafItem
+        ) : NetworkApiResponse.ListItem
     }
 
 }

@@ -14,8 +14,8 @@ import com.android.mediproject.core.network.datasource.medicineapproval.Medicine
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSourceImpl
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionDataSource
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionDataSourceImpl
-import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
-import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSourceImpl
+import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSaleSuspensionDataSource
+import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSaleSuspensionDataSourceImpl
 import com.android.mediproject.core.network.datasource.safetynotification.SafetyNotificationDataSource
 import com.android.mediproject.core.network.datasource.safetynotification.SafetyNotificationDataSourceImpl
 import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
@@ -78,7 +78,7 @@ object DataGoKrNetwork {
     fun providesRecallSuspensionDataSource(
         @Dispatcher(MediDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
         @Named("dataGoKrNetworkApiWithJsonResponse") dataGoKrNetworkApi: DataGoKrNetworkApi,
-    ): RecallSuspensionDataSource = RecallSuspensionDataSourceImpl(defaultDispatcher, dataGoKrNetworkApi)
+    ): RecallSaleSuspensionDataSource = RecallSaleSuspensionDataSourceImpl(defaultDispatcher, dataGoKrNetworkApi)
 
     @Provides
     @Singleton

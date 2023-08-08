@@ -2,6 +2,7 @@ package com.android.mediproject.core.model.dur.duringr.efficacygroupduplication
 
 
 import com.android.mediproject.core.model.DataGoKrResponse
+import com.android.mediproject.core.model.servercommon.NetworkApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -45,6 +46,6 @@ class DurIngrEfficacyGroupDuplicationResponse : DataGoKrResponse<DurIngrEfficacy
             @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // null
             @SerialName("REMARK") val remark: String = "", // null
             @SerialName("TYPE_NAME") val typeName: String = "", // 효능군중복
-        ) : LeafItem
+        ) : NetworkApiResponse.ListItem
     }
 }

@@ -2,6 +2,7 @@ package com.android.mediproject.core.model.dur.durproduct.capacity
 
 
 import com.android.mediproject.core.model.DataGoKrResponse
+import com.android.mediproject.core.model.servercommon.NetworkApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -55,6 +56,6 @@ class DurProductCapacityAttentionResponse : DataGoKrResponse<DurProductCapacityA
         @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // 클로르페니라민말레산염 24mg
         @SerialName("REMARK") val remark: String = "", // null
         @SerialName("TYPE_NAME") val typeName: String = "", // 용량주의
-    ) : LeafItem
+    ) : NetworkApiResponse.ListItem
 
 }

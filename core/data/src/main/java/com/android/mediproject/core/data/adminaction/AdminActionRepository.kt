@@ -1,7 +1,7 @@
 package com.android.mediproject.core.data.adminaction
 
 import androidx.paging.PagingData
-import com.android.mediproject.core.model.adminaction.AdminActionListResponse
+import com.android.mediproject.core.model.news.adminaction.AdminActionListResponse
 import kotlinx.coroutines.flow.Flow
 
 interface AdminActionRepository {

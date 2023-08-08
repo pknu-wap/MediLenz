@@ -8,7 +8,7 @@ import androidx.paging.cachedIn
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.GetAdminActionInfoUseCase
-import com.android.mediproject.core.model.adminaction.AdminAction
+import com.android.mediproject.core.model.news.adminaction.AdminAction
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

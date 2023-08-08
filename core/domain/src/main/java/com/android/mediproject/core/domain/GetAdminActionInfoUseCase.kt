@@ -3,8 +3,8 @@ package com.android.mediproject.core.domain
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.android.mediproject.core.data.adminaction.AdminActionRepository
-import com.android.mediproject.core.model.adminaction.AdminAction
-import com.android.mediproject.core.model.adminaction.toAdminAction
+import com.android.mediproject.core.model.common.UiModelMapperFactory
+import com.android.mediproject.core.model.news.adminaction.AdminAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -18,7 +18,8 @@ class GetAdminActionInfoUseCase @Inject constructor(
         adminActionRepository.getAdminActionList().let { pager ->
             pager.map { pagingData ->
                 pagingData.map {
-                    it.toAdminAction()
+                    val wrapper = UiModelMapperFactory.create<AdminAction>(it)
+                    wrapper.convert()
                 }
             }
         }

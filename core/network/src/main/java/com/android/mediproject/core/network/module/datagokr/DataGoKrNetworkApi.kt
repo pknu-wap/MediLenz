@@ -4,12 +4,12 @@ import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_NO
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.common.JSON
-import com.android.mediproject.core.model.adminaction.AdminActionListResponse
 import com.android.mediproject.core.model.granule.GranuleIdentificationInfoResponse
 import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
-import com.android.mediproject.core.model.medicine.safetynotification.SafetyNotificationResponse
-import com.android.mediproject.core.model.recall.DetailRecallSaleSuspensionResponse
-import com.android.mediproject.core.model.recall.RecallSuspensionListResponse
+import com.android.mediproject.core.model.news.adminaction.AdminActionListResponse
+import com.android.mediproject.core.model.news.recall.DetailRecallSaleSuspensionResponse
+import com.android.mediproject.core.model.news.recall.RecallSaleSuspensionListResponse
+import com.android.mediproject.core.model.news.safetynotification.SafetyNotificationResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -60,7 +60,7 @@ interface DataGoKrNetworkApi : DurProductInfoNetworkApi, DurIngrInfoNetworkApi {
         @Query("pageNo") pageNo: Int,
         @Query("type") type: String = JSON,
         @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
-    ): Response<RecallSuspensionListResponse>
+    ): Response<RecallSaleSuspensionListResponse>
 
     /**
      * 의약품 회수·판매중지 정보 상세 조회

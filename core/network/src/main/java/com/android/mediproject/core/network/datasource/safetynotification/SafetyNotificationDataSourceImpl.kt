@@ -2,7 +2,7 @@ package com.android.mediproject.core.network.datasource.safetynotification
 
 import androidx.paging.PagingState
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
-import com.android.mediproject.core.model.medicine.safetynotification.SafetyNotificationResponse
+import com.android.mediproject.core.model.news.safetynotification.SafetyNotificationResponse
 import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
 import com.android.mediproject.core.network.onDataGokrResponse
 import javax.inject.Inject

@@ -283,6 +283,9 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 
 lz4 = { module = "org.lz4:lz4-java", version.ref = "lz4Java" }
 
+ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+
+
 # 라이브러리들을 묶어서 한번에 선언------------------------------------------------------------------------------------------------------------------------
 [bundles]
 

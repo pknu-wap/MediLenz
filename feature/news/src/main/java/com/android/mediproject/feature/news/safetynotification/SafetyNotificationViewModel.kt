@@ -7,8 +7,8 @@ import androidx.paging.map
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.GetSafetyNotificationUseCase
-import com.android.mediproject.core.model.common.UiModelWrapperFactory
-import com.android.mediproject.core.model.medicine.safetynotification.SafetyNotification
+import com.android.mediproject.core.model.common.UiModelMapperFactory
+import com.android.mediproject.core.model.news.safetynotification.SafetyNotification
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -26,8 +26,8 @@ class SafetyNotificationViewModel @Inject constructor(
     val dispatchers get() = _dispatchers
     val safetyNotificationList: Flow<PagingData<SafetyNotification>> = getSafetyNotificationUseCase().cachedIn(viewModelScope).map { pagingData ->
         pagingData.map { source ->
-            val wrapper = UiModelWrapperFactory.create<SafetyNotification>(source)
-            wrapper.convert().first().apply {
+            val wrapper = UiModelMapperFactory.create<SafetyNotification>(source)
+            wrapper.convert().apply {
                 onClick = ::onClick
             }
         }

@@ -18,8 +18,8 @@ import com.android.mediproject.core.data.medicineapproval.MedicineApprovalReposi
 import com.android.mediproject.core.data.medicineapproval.MedicineApprovalRepositoryImpl
 import com.android.mediproject.core.data.medicineid.MedicineIdRepository
 import com.android.mediproject.core.data.medicineid.MedicineIdRepositoryImpl
-import com.android.mediproject.core.data.recallsuspension.RecallSuspensionRepository
-import com.android.mediproject.core.data.recallsuspension.RecallSuspensionRepositoryImpl
+import com.android.mediproject.core.data.recallsuspension.RecallSaleSuspensionRepository
+import com.android.mediproject.core.data.recallsuspension.RecallSaleSuspensionRepositoryImpl
 import com.android.mediproject.core.data.safetynotification.SafetyNotificationRepository
 import com.android.mediproject.core.data.safetynotification.SafetyNotificationRepositoryImpl
 import com.android.mediproject.core.data.search.SearchHistoryRepository
@@ -43,8 +43,8 @@ import com.android.mediproject.core.network.datasource.granule.GranuleIdentifica
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
-import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionDataSource
-import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSuspensionListDataSourceImpl
+import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSaleSuspensionDataSource
+import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSaleSuspensionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.safetynotification.SafetyNotificationDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.tokens.TokenDataSource
@@ -85,9 +85,9 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideRecallSuspensionRepository(
-        recallSuspensionDataSource: RecallSuspensionDataSource, recallSuspensionListDataSource: RecallSuspensionListDataSourceImpl,
-    ): RecallSuspensionRepository = RecallSuspensionRepositoryImpl(recallSuspensionDataSource, recallSuspensionListDataSource)
+    fun provideRecallSaleSuspensionRepository(
+        recallSaleSuspensionDataSource: RecallSaleSuspensionDataSource, recallSuspensionListDataSource: RecallSaleSuspensionListDataSourceImpl,
+    ): RecallSaleSuspensionRepository = RecallSaleSuspensionRepositoryImpl(recallSaleSuspensionDataSource, recallSuspensionListDataSource)
 
     @Provides
     @Singleton

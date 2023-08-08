@@ -1,5 +1,6 @@
 package com.android.mediproject.core.model
 
+import android.os.Parcelable
 import com.android.mediproject.core.model.common.UiValue
 import java.time.LocalDate
 import java.time.LocalDateTime

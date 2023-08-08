@@ -9,7 +9,7 @@ import com.android.mediproject.core.common.util.deepNavigate
 import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.navargs.RecallDisposalArgs
-import com.android.mediproject.core.model.recall.RecallSuspension
+import com.android.mediproject.core.model.news.recall.RecallSaleSuspension
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.core.ui.base.view.stateAsCollect
 import com.android.mediproject.feature.news.databinding.FragmentRecentPenaltyListBinding
@@ -59,7 +59,7 @@ class RecentPenaltyListFragment :
         }
     }
 
-    private fun handleUiState(uiState: UiState<List<RecallSuspension>>) {
+    private fun handleUiState(uiState: UiState<List<RecallSaleSuspension>>) {
         when (uiState) {
             is UiState.Error -> {}
             is UiState.Initial -> {}

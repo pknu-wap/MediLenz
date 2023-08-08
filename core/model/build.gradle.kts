@@ -1,9 +1,10 @@
 plugins {
     id("mediproject.android.library")
-    id(libs.plugins.kotlin.serialization.get().pluginId)
-    id(libs.plugins.nav.safeargs.kotlin.get().pluginId)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.nav.safeargs.kotlin)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -11,6 +12,8 @@ android {
 }
 
 dependencies {
+    ksp(project(":core:compiler"))
+    implementation(project(":core:annotation"))
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlin.reflection)
     implementation(libs.androidx.navigation.ui.ktx)

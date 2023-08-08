@@ -28,7 +28,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.android.mediproject.core.model.adminaction.AdminAction
+import com.android.mediproject.core.model.news.adminaction.AdminAction
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import java.time.format.DateTimeFormatter
@@ -44,7 +44,7 @@ fun AdminActionScreen() {
     val list = viewModel.adminActionList.collectAsLazyPagingItems()
 
     when (list.loadState.append) {
-        is LoadState.NotLoading ->  {
+        is LoadState.NotLoading -> {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(
                     count = list.itemCount, key = list.itemKey(),
@@ -63,7 +63,7 @@ fun AdminActionScreen() {
             }
         }
 
-        is LoadState.Loading ->  {
+        is LoadState.Loading -> {
             CenterProgressIndicator(stringResource(id = R.string.loadingAdminActionList))
         }
 
@@ -109,7 +109,7 @@ fun ListItem(adminAction: AdminAction) {
                     maxLines = 1,
                 )
                 Text(
-                    text = adminAction.adminActionDate.format(dateFormat),
+                    text = adminAction.adminActionDate.value.format(dateFormat),
                     style = TextStyle(
                         fontSize = 12.sp,
                         lineHeight = 16.sp,

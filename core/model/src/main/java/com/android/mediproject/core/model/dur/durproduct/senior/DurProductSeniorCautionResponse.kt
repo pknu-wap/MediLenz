@@ -2,6 +2,7 @@ package com.android.mediproject.core.model.dur.durproduct.senior
 
 
 import com.android.mediproject.core.model.DataGoKrResponse
+import com.android.mediproject.core.model.servercommon.NetworkApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -56,7 +57,7 @@ class DurProductSeniorCautionResponse : DataGoKrResponse<DurProductSeniorCaution
         val prohibitContent: String = "", // 노인에서의 삼환계 항우울제 사용은 기립성 저혈압, 비틀거림, 항콜린작용에 의한 구갈, 배뇨곤란, 변비, 안내압항진 등이 나타나기 쉬움으로 소량으로 신중투여
         @SerialName("REMARK") val remark: String = "", // null
         @SerialName("TYPE_NAME") val typeName: String = "", // 노인주의
-    ) : LeafItem
+    ) : NetworkApiResponse.ListItem
 
 
 }

@@ -2,6 +2,7 @@ package com.android.mediproject.core.model.dur.duringr.dosing
 
 
 import com.android.mediproject.core.model.DataGoKrResponse
+import com.android.mediproject.core.model.servercommon.NetworkApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -47,7 +48,7 @@ class DurIngrDosingCautionResponse : DataGoKrResponse<DurIngrDosingCautionRespon
             @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // null
             @SerialName("REMARK") val remark: String = "", // null
             @SerialName("TYPE_NAME") val typeName: String = "", // 투여기간주의
-        ) : LeafItem
+        ) : NetworkApiResponse.ListItem
     }
 
 }

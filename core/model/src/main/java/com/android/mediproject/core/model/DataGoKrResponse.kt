@@ -1,10 +1,11 @@
 package com.android.mediproject.core.model
 
+import com.android.mediproject.core.model.servercommon.NetworkApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class DataGoKrResponse<ITEM : Any> {
+abstract class DataGoKrResponse<ITEM : Any> : NetworkApiResponse {
     @SerialName("header") val header: Header? = null
     @SerialName("body") val _body: Body<ITEM>? = null
 
@@ -15,7 +16,7 @@ abstract class DataGoKrResponse<ITEM : Any> {
     data class Header(
         @SerialName("resultCode") val resultCode: String, // 00
         @SerialName("resultMsg") val resultMsg: String, // NORMAL SERVICE.
-    )
+    ) : HeaderItem
 
     @Serializable
     data class Body<ITEM : Any>(
@@ -25,7 +26,7 @@ abstract class DataGoKrResponse<ITEM : Any> {
         @SerialName("totalCount") val totalCount: Int = 0,
     )
 
-    interface LeafItem
+    interface HeaderItem
 }
 
 inline fun <reified T : DataGoKrResponse<*>> T.toResult(): Result<T> = header?.run {

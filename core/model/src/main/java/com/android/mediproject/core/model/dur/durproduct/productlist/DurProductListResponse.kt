@@ -3,6 +3,7 @@ package com.android.mediproject.core.model.dur.durproduct.productlist
 
 import com.android.mediproject.core.model.DataGoKrResponse
 import com.android.mediproject.core.model.dur.DurType
+import com.android.mediproject.core.model.servercommon.NetworkApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -46,7 +47,7 @@ class DurProductListResponse : DataGoKrResponse<DurProductListResponse.Item>() {
         @SerialName("PACK_UNIT") val packUnit: String = "", // 1000정/병
         @SerialName("STORAGE_METHOD") val storageMethod: String = "", // 실온, 건소, 밀폐용기,
         @SerialName("TYPE_NAME  ") val typeName: String = "", // 용량주의,노인주의,첨가제주의
-    ) : LeafItem {
+    ) : NetworkApiResponse.ListItem {
         val typeNames = typeName.split(",").filterNot { it == DurType.excludeType }
     }
 }

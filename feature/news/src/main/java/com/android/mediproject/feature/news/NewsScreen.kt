@@ -31,7 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.android.mediproject.core.model.navargs.RecallDisposalArgs
 import com.android.mediproject.feature.news.adminaction.AdminActionScreen
-import com.android.mediproject.feature.news.recallsalesuspension.RecallDisposalScreen
+import com.android.mediproject.feature.news.recallsalesuspension.RecallSaleSuspensionScreen
 import com.android.mediproject.feature.news.safetynotification.SafetyNotificationScreen
 import kotlinx.parcelize.Parcelize
 
@@ -41,9 +41,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 sealed class ChipType(@StringRes val nameStringId: Int) : Parcelable {
     object RecallSaleSuspension : ChipType(R.string.recallSaleSuspension)
-
     object SafetyNotification : ChipType(R.string.safetyNotification)
-
     object AdminAction : ChipType(R.string.adminAction)
 }
 
@@ -55,7 +53,6 @@ fun NewsNavHost(
     arguments: RecallDisposalArgs,
 ) {
     val navController: NavHostController = rememberNavController()
-
     val startDestination by remember {
         mutableStateOf(
             if (arguments.product.isNotEmpty()) RecallSaleSuspensionRoutes.RecallSaleSuspensionRoutesDetail.uri
@@ -84,7 +81,7 @@ fun NewsScreen() {
         )
         Divider(modifier = Modifier.padding(horizontal = 24.dp))
         when (selectedChip) {
-            is ChipType.RecallSaleSuspension -> RecallDisposalScreen()
+            is ChipType.RecallSaleSuspension -> RecallSaleSuspensionScreen()
             is ChipType.AdminAction -> AdminActionScreen()
             is ChipType.SafetyNotification -> SafetyNotificationScreen()
         }

@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
-import com.android.mediproject.core.model.adminaction.AdminActionListResponse
+import com.android.mediproject.core.model.news.adminaction.AdminActionListResponse
 import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.domain.GetRecallSuspensionInfoUseCase
-import com.android.mediproject.core.model.recall.DetailRecallSuspension
+import com.android.mediproject.core.domain.GetRecallSaleSuspensionUseCase
+import com.android.mediproject.core.model.news.recall.DetailRecallSuspension
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailRecallSuspensionViewModel @Inject constructor(
-    private val getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase,
+    private val getRecallSaleSuspensionUseCase: GetRecallSaleSuspensionUseCase,
     private val savedStateHandle: SavedStateHandle,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
@@ -32,7 +32,7 @@ class DetailRecallSuspensionViewModel @Inject constructor(
     init {
         viewModelScope.launch(ioDispatcher) {
             val productName: String = checkNotNull(savedStateHandle["product"])
-            getRecallSuspensionInfoUseCase.getDetailRecallSuspension(product = productName, company = null).collectLatest {
+            getRecallSaleSuspensionUseCase.getDetailRecallSaleSuspension(product = productName, company = null).collectLatest {
                 _detailRecallSuspension.value = it.fold(
                     onSuccess = { item ->
                         UiState.Success(item)

@@ -2,6 +2,7 @@ package com.android.mediproject.core.model.dur.duringr.specialtyagegroup
 
 
 import com.android.mediproject.core.model.DataGoKrResponse
+import com.android.mediproject.core.model.servercommon.NetworkApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -47,7 +48,7 @@ class DurIngrSpecialtyAgeGroupTabooResponse : DataGoKrResponse<DurIngrSpecialtyA
             @SerialName("PROHBT_CONTENT") val prohibitContent: String = "", // 안전성 및 유효성 미확립
             @SerialName("REMARK") val remark: String = "", // null
             @SerialName("TYPE_NAME") val typeName: String = "", // 특정연령대금기
-        ) : LeafItem
+        ) : NetworkApiResponse.ListItem
     }
 
 

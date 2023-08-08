@@ -32,7 +32,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.android.mediproject.core.model.recall.RecallSuspension
+import com.android.mediproject.core.model.news.recall.RecallSaleSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -43,7 +43,7 @@ import java.time.format.DateTimeFormatter
  * 회수 폐기 목록 표시
  */
 @Composable
-fun RecallDisposalScreen(
+fun RecallSaleSuspensionScreen(
 ) {
     val viewModel: RecallSuspensionViewModel = hiltViewModel()
     val navController = rememberNavController()
@@ -85,20 +85,19 @@ fun RecallDisposalScreen(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ListItem(recallSuspension: RecallSuspension) {
+fun ListItem(recallSaleSuspension: RecallSaleSuspension) {
     Surface(
         shape = RectangleShape,
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),
         onClick = {
-            recallSuspension.onClick?.invoke(recallSuspension)
+            recallSaleSuspension.onClick?.invoke(recallSaleSuspension)
         },
     ) {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
                 .padding(horizontal = 24.dp, vertical = 12.dp),
         ) {
             val (image, product, reason, entp, date) = createRefs()
@@ -120,18 +119,18 @@ fun ListItem(recallSuspension: RecallSuspension) {
 
             // 품목명
             Text(
-                text = recallSuspension.product,
+                text = recallSaleSuspension.product,
                 textAlign = TextAlign.Start,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 softWrap = true,
                 modifier = Modifier.constrainAs(product) {
-                        top.linkTo(parent.top)
-                        start.linkTo(barrier)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(reason.top)
-                        width = Dimension.fillToConstraints
-                    },
+                    top.linkTo(parent.top)
+                    start.linkTo(barrier)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(reason.top)
+                    width = Dimension.fillToConstraints
+                },
                 style = TextStyle(
                     fontSize = 15.sp,
                     lineHeight = 16.sp,
@@ -142,7 +141,7 @@ fun ListItem(recallSuspension: RecallSuspension) {
 
             // 회수 사유
             Text(
-                text = recallSuspension.reason,
+                text = recallSaleSuspension.retrievalReason,
                 textAlign = TextAlign.Left,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -164,7 +163,7 @@ fun ListItem(recallSuspension: RecallSuspension) {
 
             // 업체명
             Text(
-                text = recallSuspension.entrps,
+                text = recallSaleSuspension.company,
                 textAlign = TextAlign.Right,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -186,7 +185,7 @@ fun ListItem(recallSuspension: RecallSuspension) {
 
             // 날짜
             Text(
-                text = if (recallSuspension.recallCommandDate.isEmpty) recallSuspension.destructionOrderDate.value.toString() else recallSuspension.recallCommandDate.value.toString(),
+                text = if (recallSaleSuspension.recallCommandDate.isEmpty) recallSaleSuspension.retrievalCommandDate.value.toString() else recallSaleSuspension.recallCommandDate.value.toString(),
                 textAlign = TextAlign.Right,
                 modifier = Modifier.constrainAs(date) {
                     top.linkTo(reason.bottom, 6.dp)
