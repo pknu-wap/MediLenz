@@ -1,9 +1,9 @@
 package com.android.mediproject.core.model.news.recall
 
+import com.android.mediproject.core.annotation.UiModelMapping
 import com.android.mediproject.core.model.DateTimeValue
 import com.android.mediproject.core.model.common.UiModel
 import com.android.mediproject.core.model.common.UiModelMapper
-import com.android.mediproject.core.model.common.UiModelMapperFactory
 import com.android.mediproject.core.model.toLocalDate
 
 
@@ -41,15 +41,10 @@ data class DetailRecallSuspension(
     val usagePeriod: String, // 제조일로부터36개월
 ) : UiModel
 
-
+@UiModelMapping
 class DetailRecallSaleSuspensionUiModelMapper(override val source: DetailRecallSaleSuspensionResponse.Item.Item) :
     UiModelMapper<DetailRecallSuspension>() {
 
-    private companion object {
-        init {
-            UiModelMapperFactory.register(DetailRecallSaleSuspensionUiModelMapper::class, DetailRecallSaleSuspensionResponse.Item.Item::class)
-        }
-    }
 
     override fun convert(): DetailRecallSuspension {
         return source.run {

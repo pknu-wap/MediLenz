@@ -1,10 +1,10 @@
 package com.android.mediproject.core.model.news.recall
 
 
+import com.android.mediproject.core.annotation.UiModelMapping
 import com.android.mediproject.core.model.DateTimeValue
 import com.android.mediproject.core.model.common.UiModel
 import com.android.mediproject.core.model.common.UiModelMapper
-import com.android.mediproject.core.model.common.UiModelMapperFactory
 import com.android.mediproject.core.model.toLocalDate
 
 
@@ -32,14 +32,10 @@ data class RecallSaleSuspension(
     var onClick: ((RecallSaleSuspension) -> Unit)? = null,
 ) : UiModel
 
+@UiModelMapping
 class RecallSaleSuspensionListUiModelMapper(override val source: RecallSaleSuspensionListResponse.Item.Item) :
     UiModelMapper<RecallSaleSuspension>() {
 
-    private companion object {
-        init {
-            UiModelMapperFactory.register(RecallSaleSuspensionListUiModelMapper::class, RecallSaleSuspensionListResponse.Item.Item::class)
-        }
-    }
 
     override fun convert(): RecallSaleSuspension {
         return source.run {

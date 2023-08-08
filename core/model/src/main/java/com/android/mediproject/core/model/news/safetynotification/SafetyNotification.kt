@@ -1,9 +1,9 @@
 package com.android.mediproject.core.model.news.safetynotification
 
+import com.android.mediproject.core.annotation.UiModelMapping
 import com.android.mediproject.core.model.DateTimeValue
 import com.android.mediproject.core.model.common.UiModel
 import com.android.mediproject.core.model.common.UiModelMapper
-import com.android.mediproject.core.model.common.UiModelMapperFactory
 import com.android.mediproject.core.model.toLocalDate
 
 
@@ -42,13 +42,9 @@ data class SafetyNotification(
     var onClick: ((SafetyNotification) -> Unit)? = null,
 ) : UiModel
 
+@UiModelMapping
 class SafetyNotificationUiModelMapper(override val source: SafetyNotificationResponse.Item) : UiModelMapper<SafetyNotification>() {
 
-    private companion object {
-        init {
-            UiModelMapperFactory.register(SafetyNotificationUiModelMapper::class, SafetyNotificationResponse.Item::class)
-        }
-    }
 
     override fun convert(): SafetyNotification = source.run {
         SafetyNotification(

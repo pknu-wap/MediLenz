@@ -4,4 +4,4 @@ import java.lang.annotation.Inherited
 
 @Target(AnnotationTarget.CLASS)
 @Inherited
-annotation class UiModelMapper
+annotation class UiModelMapping

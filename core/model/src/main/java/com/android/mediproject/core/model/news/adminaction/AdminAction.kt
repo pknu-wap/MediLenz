@@ -1,10 +1,10 @@
 package com.android.mediproject.core.model.news.adminaction
 
 
+import com.android.mediproject.core.annotation.UiModelMapping
 import com.android.mediproject.core.model.DateTimeValue
 import com.android.mediproject.core.model.common.UiModel
 import com.android.mediproject.core.model.common.UiModelMapper
-import com.android.mediproject.core.model.common.UiModelMapperFactory
 import com.android.mediproject.core.model.toLocalDate
 
 /**
@@ -40,12 +40,8 @@ data class AdminAction(
     var onClick: (() -> Unit)? = null,
 ) : UiModel
 
+@UiModelMapping
 class AdminActionListUiModelMapper(override val source: AdminActionListResponse.Item) : UiModelMapper<AdminAction>() {
-    private companion object {
-        init {
-            UiModelMapperFactory.register(AdminActionListUiModelMapper::class, AdminActionListResponse.Item::class)
-        }
-    }
 
     override fun convert(): AdminAction {
         return source.run {

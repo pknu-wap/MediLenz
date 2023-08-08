@@ -6,10 +6,10 @@ import kotlin.reflect.full.primaryConstructor
 
 class UiModelMapperFactory {
     companion object {
-        val mappers: Map<KClass<out NetworkApiResponse.ListItem>, KClass<out UiModelMapper<out UiModel>>> = mapOf()
+        var mappers: Map<KClass<out NetworkApiResponse.ListItem>, KClass<out UiModelMapper<out UiModel>>> = mapOf()
 
         fun register(wrapper: KClass<out UiModelMapper<out UiModel>>, source: KClass<out NetworkApiResponse.ListItem>) {
-            mappers.plus(Pair(source, wrapper))
+            mappers = mappers.plus(Pair(source, wrapper))
         }
 
         inline fun <reified OUT : UiModel> create(source: Any): UiModelMapper<OUT> =
