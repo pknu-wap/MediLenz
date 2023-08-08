@@ -1,17 +1,16 @@
 package com.android.mediproject.feature.news.safetynotification
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,62 +30,47 @@ import androidx.paging.compose.itemKey
 import com.android.mediproject.core.model.news.safetynotification.SafetyNotification
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
+import com.android.mediproject.feature.news.customui.ListItemScreen
 
 
 @Composable
 fun SafetyNotificationScreen() {
     val viewModel: SafetyNotificationViewModel = hiltViewModel()
     val navController = rememberNavController()
-    val list = viewModel.safetyNotificationList.collectAsLazyPagingItems(viewModel.dispatchers)
+    val list = viewModel.safetyNotificationList.collectAsLazyPagingItems()
 
-    Surface {
-        when (list.loadState.append) {
-            is LoadState.NotLoading -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(),
-                ) {
-                    items(
-                        count = list.itemCount, key = list.itemKey(),
-                        contentType = list.itemContentType(
-                        ),
-                    ) { index ->
-                        list[index]?.run {
-                            onClick = {
-                                navController.navigate("detailAdminAction")
-                            }
-                            ListItem(this)
-                        }
-                        if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
-                    }
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
+    ) {
+        items(
+            count = list.itemCount, key = list.itemKey(),
+            contentType = list.itemContentType(
+            ),
+        ) { index ->
+            list[index]?.run {
+                onClick = {
+                    navController.navigate("detailAdminAction")
                 }
+                ItemOnList(this)
             }
-
-            is LoadState.Loading -> {
-                CenterProgressIndicator(stringResource(id = R.string.loadingSafetyNotification))
-            }
-
-            else -> {}
+            if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
         }
 
+        if (list.loadState.refresh == LoadState.Loading) {
+            item {
+                CenterProgressIndicator(stringResource(id = R.string.loadingSafetyNotification))
+            }
+        }
     }
-
-
 }
 
 
 @Composable
-fun ListItem(safetyNotification: SafetyNotification) {
-    Surface(
-        shape = RectangleShape,
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        onClick = {
-
-        },
-    ) {
+fun ItemOnList(safetyNotification: SafetyNotification) {
+    ListItemScreen(onClick = { safetyNotification.onClick?.invoke(safetyNotification) }) {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,7 +110,7 @@ fun ListItem(safetyNotification: SafetyNotification) {
                 overflow = TextOverflow.Ellipsis,
                 softWrap = true,
                 modifier = Modifier.constrainAs(info) {
-                    top.linkTo(title.bottom, 11.dp)
+                    top.linkTo(title.bottom, 12.dp)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
@@ -145,7 +129,7 @@ fun ListItem(safetyNotification: SafetyNotification) {
                 text = safetyNotification.publicationDate.value.toString(),
                 textAlign = TextAlign.Right,
                 modifier = Modifier.constrainAs(date) {
-                    start.linkTo(title.end)
+                    start.linkTo(title.end, 8.dp)
                     end.linkTo(parent.end)
                     baseline.linkTo(title.baseline)
                 },

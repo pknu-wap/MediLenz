@@ -1,23 +1,17 @@
 package com.android.mediproject.feature.news.recallsalesuspension
 
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -31,15 +25,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.android.mediproject.core.model.news.recall.RecallSaleSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
-import com.android.mediproject.feature.news.setOnStateChangedListener
+import com.android.mediproject.feature.news.customui.ListItemScreen
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import java.time.format.DateTimeFormatter
 
 
 /**
@@ -52,32 +46,24 @@ fun RecallSaleSuspensionScreen(
     val navController = rememberNavController()
     val list = viewModel.recallDisposalList.collectAsLazyPagingItems()
 
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-    ) {
-        list.setOnStateChangedListener { isFirstLoad, isLoading, isEmpty ->
-            Log.d("RecallSuspensionScreen", "isFirstLoad: $isFirstLoad, isLoading: $isLoading, isEmpty: $isEmpty")
-            if (isFirstLoad) {
-                CenterProgressIndicator(stringResource(id = R.string.loadingRecallSaleSuspensionData))
-            } else if (!isLoading and !isEmpty) {
-                LazyColumn {
-                    items(
-                        count = list.itemCount, key = list.itemKey(),
-                        contentType = list.itemContentType(
-                        ),
-                    ) { index ->
-                        list[index]?.run {
-                            onClick = {
-                                navController.navigate("detailRecallSuspension/${it.product}")
-                            }
-                            ListItem(this)
-                        }
-                        if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
-                    }
+    LazyColumn {
+        items(
+            count = list.itemCount, key = list.itemKey(),
+            contentType = list.itemContentType(
+            ),
+        ) { index ->
+            list[index]?.run {
+                onClick = {
+                    navController.navigate("detailRecallSuspension/${it.product}")
                 }
+                ItemOnList(this)
+            }
+            if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
+        }
+
+        if (list.loadState.refresh == LoadState.Loading) {
+            item {
+                CenterProgressIndicator(stringResource(id = R.string.loadingRecallSaleSuspensionData))
             }
         }
     }
@@ -86,16 +72,8 @@ fun RecallSaleSuspensionScreen(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ListItem(recallSaleSuspension: RecallSaleSuspension) {
-    Surface(
-        shape = RectangleShape,
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        onClick = {
-            recallSaleSuspension.onClick?.invoke(recallSaleSuspension)
-        },
-    ) {
+fun ItemOnList(recallSaleSuspension: RecallSaleSuspension) {
+    ListItemScreen(onClick = { recallSaleSuspension.onClick?.invoke(recallSaleSuspension) }) {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
@@ -108,9 +86,11 @@ fun ListItem(recallSaleSuspension: RecallSaleSuspension) {
             Image(
                 painter = painterResource(id = com.android.mediproject.core.ui.R.drawable.baseline_camera_24),
                 contentDescription = stringResource(id = R.string.recallSaleSuspensionImage),
+                alignment = Alignment.Center,
                 modifier = Modifier
-                    .width(100.dp)
+                    .width(90.dp)
                     .height(75.dp)
+                    .padding(bottom = 12.dp)
                     .constrainAs(image) {
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
@@ -125,13 +105,14 @@ fun ListItem(recallSaleSuspension: RecallSaleSuspension) {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 softWrap = true,
-                modifier = Modifier.constrainAs(product) {
-                    top.linkTo(parent.top)
-                    start.linkTo(barrier)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(reason.top)
-                    width = Dimension.fillToConstraints
-                },
+                modifier = Modifier
+                    .constrainAs(product) {
+                        top.linkTo(parent.top)
+                        start.linkTo(barrier)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(reason.top)
+                        width = Dimension.fillToConstraints
+                    },
                 style = TextStyle(
                     fontSize = 15.sp,
                     lineHeight = 16.sp,
@@ -147,13 +128,14 @@ fun ListItem(recallSaleSuspension: RecallSaleSuspension) {
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 softWrap = true,
-                modifier = Modifier.constrainAs(reason) {
-                    top.linkTo(product.bottom, 8.dp)
-                    start.linkTo(barrier)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(date.top)
-                    width = Dimension.fillToConstraints
-                },
+                modifier = Modifier
+                    .constrainAs(reason) {
+                        top.linkTo(product.bottom, 12.dp)
+                        start.linkTo(barrier)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(date.top)
+                        width = Dimension.fillToConstraints
+                    },
                 style = TextStyle(
                     fontSize = 12.sp,
                     lineHeight = 16.sp,
@@ -172,7 +154,7 @@ fun ListItem(recallSaleSuspension: RecallSaleSuspension) {
                 modifier = Modifier.constrainAs(entp) {
                     start.linkTo(barrier)
                     baseline.linkTo(date.baseline)
-                    end.linkTo(date.start, 9.dp)
+                    end.linkTo(date.start, 8.dp)
                     width = Dimension.fillToConstraints
 
                 },
@@ -188,12 +170,13 @@ fun ListItem(recallSaleSuspension: RecallSaleSuspension) {
             Text(
                 text = if (recallSaleSuspension.recallCommandDate.isEmpty) recallSaleSuspension.retrievalCommandDate.value.toString() else recallSaleSuspension.recallCommandDate.value.toString(),
                 textAlign = TextAlign.Right,
-                modifier = Modifier.constrainAs(date) {
-                    top.linkTo(reason.bottom, 6.dp)
-                    start.linkTo(entp.end)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                },
+                modifier = Modifier
+                    .constrainAs(date) {
+                        top.linkTo(reason.bottom, 10.dp)
+                        start.linkTo(entp.end)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    },
                 style = TextStyle(
                     fontSize = 12.sp,
                     lineHeight = 16.sp,
@@ -204,44 +187,3 @@ fun ListItem(recallSaleSuspension: RecallSaleSuspension) {
         }
     }
 }
-
-
-private val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
-
-/**
-Column(
-modifier = Modifier.fillMaxWidth(),
-) {
-Row(
-horizontalArrangement = Arrangement.spacedBy(8.dp),
-verticalAlignment = CenterVertically,
-) {
-Text(
-text = recallSuspension.product,
-style = MaterialTheme.typography.titleMedium,
-fontSize = 14.sp,
-color = Color.Black,
-modifier = Modifier
-.align(CenterVertically)
-.weight(1f),
-overflow = TextOverflow.Ellipsis,
-maxLines = 1,
-)
-Text(
-text = recallSuspension.run {
-if (recallCommandDate.isEmpty) recallCommandDate
-else destructionOrderDate
-}.value.format(dateFormat),
-fontSize = 12.sp,
-modifier = Modifier.align(CenterVertically),
-color = Color.Gray,
-maxLines = 1,
-)
-}
-Spacer(modifier = Modifier.height(8.dp))
-Text(
-text = recallSuspension.reason, fontSize = 12.sp, color = Color.Gray, maxLines = 1,
-)
-}
- */

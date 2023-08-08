@@ -20,10 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SafetyNotificationViewModel @Inject constructor(
-    @Dispatcher(MediDispatchers.Default) private val _dispatchers: CoroutineDispatcher,
+    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     getSafetyNotificationUseCase: GetSafetyNotificationUseCase,
 ) : BaseViewModel() {
-    val dispatchers get() = _dispatchers
     val safetyNotificationList: Flow<PagingData<SafetyNotification>> = getSafetyNotificationUseCase().cachedIn(viewModelScope).map { pagingData ->
         pagingData.map { source ->
             val wrapper = UiModelMapperFactory.create<SafetyNotification>(source)
@@ -31,7 +30,7 @@ class SafetyNotificationViewModel @Inject constructor(
                 onClick = ::onClick
             }
         }
-    }.flowOn(dispatchers)
+    }.flowOn(ioDispatcher)
 
     private fun onClick(safetyNotification: SafetyNotification) {
         viewModelScope.launch {

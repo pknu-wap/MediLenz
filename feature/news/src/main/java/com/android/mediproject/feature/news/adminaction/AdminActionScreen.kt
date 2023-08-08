@@ -9,13 +9,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +29,7 @@ import androidx.paging.compose.itemKey
 import com.android.mediproject.core.model.news.adminaction.AdminAction
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
+import com.android.mediproject.feature.news.customui.ListItemScreen
 import java.time.format.DateTimeFormatter
 
 
@@ -43,53 +42,41 @@ fun AdminActionScreen() {
     val navController = rememberNavController()
     val list = viewModel.adminActionList.collectAsLazyPagingItems()
 
-    when (list.loadState.append) {
-        is LoadState.NotLoading -> {
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(
-                    count = list.itemCount, key = list.itemKey(),
-                    contentType = list.itemContentType(
-                    ),
-                ) { index ->
-                    list[index]?.run {
-                        onClick = {
-                            viewModel.onClickedItem(index)
-                            navController.navigate("detailAdminAction")
-                        }
-                        ListItem(this)
-                    }
-                    if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
+    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        items(
+            count = list.itemCount, key = list.itemKey(),
+            contentType = list.itemContentType(
+            ),
+        ) { index ->
+            list[index]?.run {
+                onClick = {
+                    viewModel.onClickedItem(index)
+                    navController.navigate("detailAdminAction")
                 }
+                ItemOnList(this)
+            }
+            if (index < list.itemCount - 1) Divider(modifier = Modifier.padding(horizontal = 24.dp))
+        }
+
+        if (list.loadState.refresh == LoadState.Loading) {
+            item {
+                CenterProgressIndicator(stringResource(id = R.string.loadingAdminActionList))
             }
         }
 
-        is LoadState.Loading -> {
-            CenterProgressIndicator(stringResource(id = R.string.loadingAdminActionList))
-        }
-
-        else -> TODO()
     }
-
-
 }
 
 /**
  * 행정 처분 목록 아이템
  */
 @Composable
-fun ListItem(adminAction: AdminAction) {
-
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 12.dp),
-        shape = RectangleShape,
-        onClick = {
-            adminAction.onClick?.invoke()
-        },
-    ) {
+fun ItemOnList(adminAction: AdminAction) {
+    ListItemScreen(onClick = { adminAction.onClick?.invoke() }) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 12.dp),
         ) {
             // 업체명, 행정처분일자
             Row(
@@ -120,7 +107,7 @@ fun ListItem(adminAction: AdminAction) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             // 품목명
             Text(
                 text = adminAction.itemName,
@@ -164,6 +151,8 @@ fun ListItem(adminAction: AdminAction) {
             )
         }
     }
+
 }
+
 
 private val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
