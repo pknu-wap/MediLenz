@@ -40,6 +40,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/favoriteMedicineHeaderView" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/favoritemedicineLottie"
+            android:layout_width="@dimen/smallLottie"
+            android:layout_height="@dimen/smallLottie"
+            android:layout_marginTop="@dimen/spacing_betweens_header_and_elements"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/favoriteMedicineHeaderView"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading" />
+
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/favoriteMedicineList"
             android:layout_width="match_parent"

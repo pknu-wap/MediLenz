@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicine
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
@@ -38,9 +40,26 @@ class FavoriteMedicineFragment :
             viewLifecycleOwner.apply {
                 repeatOnStarted { token.collect { handleToken(it) } }
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineList(it) } }
+                repeatOnStarted { favoriteMedicineList.collect { handleFavoriteMedicineListState(it) } }
             }
             loadTokens()
+        }
+    }
+
+    private fun handleFavoriteMedicineListState(favoriteMedicineListState: UiState<List<FavoriteMedicine>>) {
+        when (favoriteMedicineListState) {
+            is UiState.Init -> {}
+
+            is UiState.Loading -> setLoadingCommentVisible()
+
+            is UiState.Success -> {
+                setSuccessCommentVisible()
+                setFavoriteMedicineList(favoriteMedicineListState.data)
+            }
+
+            is UiState.Error -> {
+                log(favoriteMedicineListState.message)
+            }
         }
     }
 
@@ -74,6 +93,7 @@ class FavoriteMedicineFragment :
 
     private fun showFavorteMedicine(medicineList: List<FavoriteMedicine>) {
         val horizontalSpace = resources.getDimension(R.dimen.dp_4).toInt()
+
         medicineList.forEach { medicine ->
             binding.favoriteMedicineList.addView(
                 ButtonChip<String>(

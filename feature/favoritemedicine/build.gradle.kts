@@ -24,4 +24,5 @@ dependencies {
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.android.flexbox)
+    implementation(libs.lottie)
 }
