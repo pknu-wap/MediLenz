@@ -13,7 +13,6 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +22,7 @@ class FavoriteMedicineMoreViewModel @Inject constructor(
     private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase,
 ) : BaseViewModel() {
 
-    private val _favoriteMedicineList = MutableStateFlow<UiState<List<FavoriteMedicineMoreInfo>>>(UiState.Init)
+    private val _favoriteMedicineList = MutableStateFlow<UiState<List<FavoriteMedicineMoreInfo>>>(UiState.Initial)
     val favoriteMedicineList get() = _favoriteMedicineList
 
     fun setFavoriteMedicineListUiState(uiState: UiState<List<FavoriteMedicineMoreInfo>>) {
@@ -46,7 +45,7 @@ class FavoriteMedicineMoreViewModel @Inject constructor(
                 .collect { result ->
                     result.fold(
                         onSuccess = { setFavoriteMedicineListUiState(UiState.Success(it)) },
-                        onFailure = { setFavoriteMedicineListUiState(UiState.Error("즐겨찾기를 불러오는 데 실패하였습니다."))},
+                        onFailure = { setFavoriteMedicineListUiState(UiState.Error("즐겨찾기를 불러오는 데 실패하였습니다.")) },
                     )
                 }
         }

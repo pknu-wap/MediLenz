@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
-import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicine
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
@@ -48,7 +47,7 @@ class FavoriteMedicineFragment :
 
     private fun handleFavoriteMedicineListState(favoriteMedicineListState: UiState<List<FavoriteMedicine>>) {
         when (favoriteMedicineListState) {
-            is UiState.Init -> Unit
+            is UiState.Initial -> Unit
 
             is UiState.Loading -> setLoadingFavoriteMedicineVisible()
 
@@ -63,12 +62,12 @@ class FavoriteMedicineFragment :
         }
     }
 
-    private fun setLoadingFavoriteMedicineVisible() = binding.apply{
+    private fun setLoadingFavoriteMedicineVisible() = binding.apply {
         favoriteMedicineList.visibility = View.GONE
         favoriteMedicineLottie.visibility = View.VISIBLE
     }
 
-    private fun setSuccessFavoriteMedicineVisible() = binding.apply{
+    private fun setSuccessFavoriteMedicineVisible() = binding.apply {
         favoriteMedicineList.visibility = View.VISIBLE
         favoriteMedicineLottie.visibility = View.GONE
     }

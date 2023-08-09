@@ -1,13 +1,12 @@
 package com.android.mediproject.feature.favoritemedicine
 
-import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicine
-import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreInfo
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -16,7 +15,6 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,7 +35,7 @@ class FavoriteMedicineViewModel @Inject constructor(
         object NavigateToFavoriteMedicineMore : FavoriteMedicineEvent()
     }
 
-    private val _favoriteMedicineList = MutableStateFlow<UiState<List<FavoriteMedicine>>>(UiState.Init)
+    private val _favoriteMedicineList = MutableStateFlow<UiState<List<FavoriteMedicine>>>(UiState.Initial)
     val favoriteMedicineList get() = _favoriteMedicineList
 
     fun setFavoriteMedicineListUiState(uiState: UiState<List<FavoriteMedicine>>) {

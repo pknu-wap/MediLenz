@@ -68,7 +68,7 @@ class FavoriteMedicineMoreFragment :
 
     private fun handleFavoriteMedicineListState(favoriteMedicineListState: UiState<List<FavoriteMedicineMoreInfo>>) {
         when (favoriteMedicineListState) {
-            is UiState.Init -> Unit
+            is UiState.Initial -> Unit
 
             is UiState.Loading -> setLoadingFavoriteMedicineMoreVisible()
 
@@ -83,12 +83,12 @@ class FavoriteMedicineMoreFragment :
         }
     }
 
-    private fun setLoadingFavoriteMedicineMoreVisible() = binding.apply{
+    private fun setLoadingFavoriteMedicineMoreVisible() = binding.apply {
         favoriteMedicineListRV.visibility = View.GONE
         favoriteMedicineMoreLottie.visibility = View.VISIBLE
     }
 
-    private fun setSuccessFavoriteMedicineMoreVisible() = binding.apply{
+    private fun setSuccessFavoriteMedicineMoreVisible() = binding.apply {
         favoriteMedicineListRV.visibility = View.VISIBLE
         favoriteMedicineMoreLottie.visibility = View.GONE
     }
