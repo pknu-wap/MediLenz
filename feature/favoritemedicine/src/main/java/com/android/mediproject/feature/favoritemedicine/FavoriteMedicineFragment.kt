@@ -48,12 +48,12 @@ class FavoriteMedicineFragment :
 
     private fun handleFavoriteMedicineListState(favoriteMedicineListState: UiState<List<FavoriteMedicine>>) {
         when (favoriteMedicineListState) {
-            is UiState.Init -> {}
+            is UiState.Init -> Unit
 
-            is UiState.Loading -> setLoadingCommentVisible()
+            is UiState.Loading -> setLoadingFavoriteMedicineVisible()
 
             is UiState.Success -> {
-                setSuccessCommentVisible()
+                setSuccessFavoriteMedicineVisible()
                 setFavoriteMedicineList(favoriteMedicineListState.data)
             }
 
@@ -61,6 +61,16 @@ class FavoriteMedicineFragment :
                 log(favoriteMedicineListState.message)
             }
         }
+    }
+
+    private fun setLoadingFavoriteMedicineVisible() = binding.apply{
+        favoriteMedicineList.visibility = View.GONE
+        favoriteMedicineLottie.visibility = View.VISIBLE
+    }
+
+    private fun setSuccessFavoriteMedicineVisible() = binding.apply{
+        favoriteMedicineList.visibility = View.VISIBLE
+        favoriteMedicineLottie.visibility = View.GONE
     }
 
     private fun handleToken(token: TokenState<CurrentTokens>) {

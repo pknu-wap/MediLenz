@@ -41,7 +41,7 @@
             app:layout_constraintTop_toBottomOf="@id/favoriteMedicineHeaderView" />
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/favoritemedicineLottie"
+            android:id="@+id/favoriteMedicineLottie"
             android:layout_width="@dimen/smallLottie"
             android:layout_height="@dimen/smallLottie"
             android:layout_marginTop="@dimen/spacing_betweens_header_and_elements"

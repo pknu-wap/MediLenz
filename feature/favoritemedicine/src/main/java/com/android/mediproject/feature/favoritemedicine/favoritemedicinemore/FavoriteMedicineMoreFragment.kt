@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreInfo
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
@@ -14,6 +15,7 @@ import com.android.mediproject.feature.favoritemedicine.databinding.FragmentFavo
 import com.android.mediproject.feature.favoritemedicine.favoritemedicinemore.recyclerview.FavoriteMedcineMoreDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
+import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicine
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,7 +37,7 @@ class FavoriteMedicineMoreFragment :
     private fun setBinding() = binding.apply {
         viewModel = fragmentViewModel.apply {
             viewLifecycleOwner.apply {
-                repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineMoreList(it) } }
+                repeatOnStarted { favoriteMedicineList.collect { handleFavoriteMedicineListState(it) } }
                 repeatOnStarted { token.collect { handleToken(it) } }
                 loadTokens()
             }
@@ -61,6 +63,34 @@ class FavoriteMedicineMoreFragment :
         layoutManager = LinearLayoutManager(requireContext())
         addItemDecoration(FavoriteMedcineMoreDecoration(requireContext()))
         addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+    }
+
+
+    private fun handleFavoriteMedicineListState(favoriteMedicineListState: UiState<List<FavoriteMedicineMoreInfo>>) {
+        when (favoriteMedicineListState) {
+            is UiState.Init -> Unit
+
+            is UiState.Loading -> setLoadingFavoriteMedicineMoreVisible()
+
+            is UiState.Success -> {
+                setSuccessFavoriteMedicineMoreVisible()
+                setFavoriteMedicineMoreList(favoriteMedicineListState.data)
+            }
+
+            is UiState.Error -> {
+                log(favoriteMedicineListState.message)
+            }
+        }
+    }
+
+    private fun setLoadingFavoriteMedicineMoreVisible() = binding.apply{
+        favoriteMedicineListRV.visibility = View.GONE
+        favoriteMedicineMoreLottie.visibility = View.VISIBLE
+    }
+
+    private fun setSuccessFavoriteMedicineMoreVisible() = binding.apply{
+        favoriteMedicineListRV.visibility = View.VISIBLE
+        favoriteMedicineMoreLottie.visibility = View.GONE
     }
 
     private fun setFavoriteMedicineMoreList(medicineList: List<FavoriteMedicineMoreInfo>) {
