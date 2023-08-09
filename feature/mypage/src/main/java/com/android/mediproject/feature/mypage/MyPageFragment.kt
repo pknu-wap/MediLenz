@@ -141,10 +141,10 @@ class MyPageFragment :
         when (userState) {
             is UiState.Init -> {}
 
-            is UiState.Loading -> setUserLoadingVisible()
+            is UiState.Loading -> setLoadingUserVisible()
 
             is UiState.Success -> {
-                setUserSuccessVisible()
+                setSuccessUserVisible()
                 binding.userDto = userState.data
             }
 
@@ -154,13 +154,13 @@ class MyPageFragment :
         }
     }
 
-    private fun setUserLoadingVisible() = binding.apply {
+    private fun setLoadingUserVisible() = binding.apply {
         userNameTV.visibility = View.GONE
         userImageIV.visibility = View.GONE
         userLottie.visibility = View.VISIBLE
     }
 
-    private fun setUserSuccessVisible() = binding.apply {
+    private fun setSuccessUserVisible() = binding.apply {
         userNameTV.visibility = View.VISIBLE
         userImageIV.visibility = View.VISIBLE
         userLottie.visibility = View.GONE
@@ -170,10 +170,10 @@ class MyPageFragment :
         when (commentListState) {
             is UiState.Init -> {}
 
-            is UiState.Loading -> setCommentLoadingVisible()
+            is UiState.Loading -> setLoadingCommentVisible()
 
             is UiState.Success -> {
-                setCommentSuccessVisible()
+                setSuccessCommentVisible()
                 if (commentListState.data.isNotEmpty()) showCommentList(commentListState.data)
                 else noShowCommentList()
             }
@@ -184,12 +184,12 @@ class MyPageFragment :
         }
     }
 
-    private fun setCommentLoadingVisible() = binding.apply {
+    private fun setLoadingCommentVisible() = binding.apply {
         myCommentsListRV.visibility = View.GONE
         commentLottie.visibility = View.VISIBLE
     }
 
-    private fun setCommentSuccessVisible() = binding.apply {
+    private fun setSuccessCommentVisible() = binding.apply {
         myCommentsListRV.visibility = View.VISIBLE
         commentLottie.visibility = View.GONE
     }
