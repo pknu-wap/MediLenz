@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +31,8 @@ import com.android.mediproject.core.model.news.adminaction.AdminAction
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.ListItemScreen
+import com.android.mediproject.feature.news.rememberListState
+import com.android.mediproject.feature.news.restoreListState
 import java.time.format.DateTimeFormatter
 
 
@@ -41,8 +44,10 @@ fun AdminActionScreen() {
     val viewModel: AdminActionViewModel = hiltViewModel()
     val navController = rememberNavController()
     val list = viewModel.adminActionList.collectAsLazyPagingItems()
+    val listState = rememberLazyListState()
+    restoreListState(listState = listState, listScrollState = viewModel.listScrollState)
 
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+    LazyColumn(state = listState) {
         items(
             count = list.itemCount, key = list.itemKey(),
             contentType = list.itemContentType(
@@ -65,6 +70,8 @@ fun AdminActionScreen() {
         }
 
     }
+
+    rememberListState(listState = listState, listScrollState = viewModel.listScrollState)
 }
 
 /**

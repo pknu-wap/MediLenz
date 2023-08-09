@@ -1,5 +1,7 @@
 package com.android.mediproject.feature.news.safetynotification
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -23,6 +25,9 @@ class SafetyNotificationViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     getSafetyNotificationUseCase: GetSafetyNotificationUseCase,
 ) : BaseViewModel() {
+
+    val listScrollState: MutableState<Int> = mutableStateOf(0)
+
     val safetyNotificationList: Flow<PagingData<SafetyNotification>> = getSafetyNotificationUseCase().cachedIn(viewModelScope).map { pagingData ->
         pagingData.map { source ->
             val wrapper = UiModelMapperFactory.create<SafetyNotification>(source)

@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -33,33 +32,36 @@ import com.android.mediproject.core.common.viewmodel.onError
 import com.android.mediproject.core.common.viewmodel.onInitial
 import com.android.mediproject.core.common.viewmodel.onLoading
 import com.android.mediproject.core.common.viewmodel.onSuccess
+import com.android.mediproject.core.model.news.recall.DetailRecallSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.CardBox
 import com.android.mediproject.feature.news.customui.Header
 
 @Composable
-fun DetailRecallDisposalScreen(
+fun DetailRecallSaleSuspensionScreen(
+    product: String,
 ) {
-    val viewModel: DetailRecallSuspensionViewModel = hiltViewModel()
+    val viewModel: DetailRecallSaleSuspensionViewModel = hiltViewModel()
     val navController: NavController = rememberNavController()
-
-    val uiState = viewModel.detailRecallSuspension.collectAsStateWithLifecycle()
+    val uiState = viewModel.detail.collectAsStateWithLifecycle()
 
     uiState.value.onInitial {
 
-    }.onError { error -> }.onLoading {
+    }.onError { error ->
+
+    }.onLoading {
+        viewModel.load(product)
         CenterProgressIndicator(stringResource(id = R.string.loadingRecallSaleSuspensionData))
     }.onSuccess { detailRecallSuspension ->
-        //Item(item = detailRecallSuspension)
+        Item(detailRecallSuspension)
     }
 
 }
 
 // 회수 폐기
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun Item() {
+fun Item(detailRecallSuspension: DetailRecallSuspension) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RectangleShape,
@@ -79,7 +81,7 @@ fun Item() {
                 )
 
                 Text(
-                    text = "노게스타정1.5밀리그램(레보노르게스트렐)",
+                    text = detailRecallSuspension.product,
                     style = TextStyle(
                         fontSize = 24.sp,
                         lineHeight = 28.sp,
@@ -118,7 +120,7 @@ fun Item() {
                 Header(text = stringResource(id = R.string.companyName))
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "(주)다산제약",
+                    text = detailRecallSuspension.company,
                     style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 16.sp,
@@ -132,7 +134,7 @@ fun Item() {
                 Header(text = stringResource(id = R.string.recallCommandDate))
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "2023-07-27 목",
+                    text = detailRecallSuspension.recallCommandDate.value.toString(),
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 16.sp,
@@ -150,7 +152,7 @@ fun Item() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "최신 영국약전 개정내용 미반영된 제조번호에 대한 영업자회수",
+                text = detailRecallSuspension.retrievalReason,
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 20.sp,
@@ -163,8 +165,7 @@ fun Item() {
 
             // 제조번호(사용기한)
             CardBox(
-                modifier = Modifier
-                    .align(Alignment.End),
+                modifier = Modifier.align(Alignment.End),
             ) {
                 Column(
                     horizontalAlignment = Alignment.End,
@@ -172,7 +173,7 @@ fun Item() {
                     Header(text = stringResource(id = R.string.manufacturingNumber))
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "22001[2025-01-16]",
+                        text = detailRecallSuspension.usagePeriod,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 16.sp,
@@ -188,8 +189,7 @@ fun Item() {
 
             // 공개마감일자
             CardBox(
-                modifier = Modifier
-                    .align(Alignment.End),
+                modifier = Modifier.align(Alignment.End),
             ) {
                 Column(
                     horizontalAlignment = Alignment.End,
@@ -197,7 +197,7 @@ fun Item() {
                     Header(text = stringResource(id = R.string.disclosureEndDate))
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "2026-07-26 일",
+                        text = detailRecallSuspension.openEndDate.value.toString(),
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 16.sp,

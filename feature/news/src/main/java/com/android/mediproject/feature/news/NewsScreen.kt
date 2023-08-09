@@ -31,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.android.mediproject.core.model.navargs.RecallDisposalArgs
 import com.android.mediproject.feature.news.adminaction.AdminActionScreen
+import com.android.mediproject.feature.news.recallsalesuspension.DetailRecallSaleSuspensionScreen
 import com.android.mediproject.feature.news.recallsalesuspension.RecallSaleSuspensionScreen
 import com.android.mediproject.feature.news.safetynotification.SafetyNotificationScreen
 import kotlinx.parcelize.Parcelize
@@ -55,13 +56,13 @@ fun NewsNavHost(
     val navController: NavHostController = rememberNavController()
     val startDestination by remember {
         mutableStateOf(
-            if (arguments.product.isNotEmpty()) RecallSaleSuspensionRoutes.RecallSaleSuspensionRoutesDetail.uri
-            else MainRoutes.News.uri,
+            if (arguments.product.isNotEmpty()) RecallSaleSuspensionRoutes.RecallSaleSuspensionRoutesDetail.name
+            else MainRoutes.News.name,
         )
     }
 
     NavHost(navController = navController, startDestination = startDestination) {
-        composable(MainRoutes.News.uri) {
+        composable(MainRoutes.News.name) {
             NewsScreen()
         }
     }
@@ -69,21 +70,34 @@ fun NewsNavHost(
 
 @Composable
 fun NewsScreen() {
-    val navController = rememberNavController()
     var selectedChip: ChipType by rememberSaveable { mutableStateOf(ChipType.RecallSaleSuspension) }
+    var displayList: Boolean by rememberSaveable { mutableStateOf(true) }
+    var argument: String by rememberSaveable { mutableStateOf("") }
 
-    Column {
-        ChipGroup(
-            selectedChip,
-            onChipSelected = { chip ->
-                selectedChip = chip
-            },
-        )
-        Divider(modifier = Modifier.padding(horizontal = 24.dp))
+    if (displayList) {
+        Column {
+            ChipGroup(
+                selectedChip,
+                onChipSelected = { chip ->
+                    selectedChip = chip
+                },
+            )
+            Divider(modifier = Modifier.padding(horizontal = 24.dp))
+            when (selectedChip) {
+                is ChipType.RecallSaleSuspension -> RecallSaleSuspensionScreen {
+                    displayList = false
+                    argument = it
+                }
+
+                is ChipType.AdminAction -> AdminActionScreen()
+                is ChipType.SafetyNotification -> SafetyNotificationScreen()
+            }
+        }
+    } else {
         when (selectedChip) {
-            is ChipType.RecallSaleSuspension -> RecallSaleSuspensionScreen()
-            is ChipType.AdminAction -> AdminActionScreen()
-            is ChipType.SafetyNotification -> SafetyNotificationScreen()
+            is ChipType.RecallSaleSuspension -> DetailRecallSaleSuspensionScreen(product = argument)
+            is ChipType.AdminAction -> DetailRecallSaleSuspensionScreen(product = argument)
+            is ChipType.SafetyNotification -> DetailRecallSaleSuspensionScreen(product = argument)
         }
     }
 }

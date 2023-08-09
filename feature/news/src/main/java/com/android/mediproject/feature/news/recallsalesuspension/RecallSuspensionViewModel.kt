@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.news.recallsalesuspension
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.android.mediproject.core.common.network.Dispatcher
@@ -19,4 +20,5 @@ class RecallSuspensionViewModel @Inject constructor(
 
     val recallDisposalList = getRecallSaleSuspensionUseCase.getRecallSaleSuspensionList().cachedIn(viewModelScope).flowOn(ioDispatcher)
 
+    val listScrollState = mutableStateOf(0)
 }

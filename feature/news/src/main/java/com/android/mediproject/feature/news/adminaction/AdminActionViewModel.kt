@@ -1,5 +1,7 @@
 package com.android.mediproject.feature.news.adminaction
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import androidx.paging.DifferCallback
 import androidx.paging.NullPaddedList
@@ -27,6 +29,7 @@ class AdminActionViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
+    val listScrollState: MutableState<Int> = mutableStateOf(0)
     val adminActionList = getAdminActionInfoUseCase.getAdminActionList().cachedIn(viewModelScope).flowOn(ioDispatcher)
     private val clickedItemPosition = MutableStateFlow(-1)
 

@@ -59,7 +59,7 @@ class DetailRecallSaleSuspensionUiModelMapper(override val source: DetailRecallS
                 packageUnit = packageUnit,
                 product = product,
                 recallCommandDate = recallCommandDate.toLocalDate("yyyyMMdd"),
-                retrievalCommandDate = retrievalCommandDate.toLocalDate("yyyyMMdd000000"),
+                retrievalCommandDate = retrievalCommandDate.toLocalDate("yyyyMMddHHmmss"),
                 retrievalReason = retrievalReason,
                 usagePeriod = usagePeriod,
             )

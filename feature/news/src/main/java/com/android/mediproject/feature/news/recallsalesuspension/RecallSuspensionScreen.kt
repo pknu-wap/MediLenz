@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +23,6 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -31,6 +31,8 @@ import com.android.mediproject.core.model.news.recall.RecallSaleSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.ListItemScreen
+import com.android.mediproject.feature.news.rememberListState
+import com.android.mediproject.feature.news.restoreListState
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
@@ -40,12 +42,15 @@ import com.bumptech.glide.integration.compose.GlideImage
  */
 @Composable
 fun RecallSaleSuspensionScreen(
+    onClicked: (product: String) -> Unit,
 ) {
     val viewModel: RecallSuspensionViewModel = hiltViewModel()
-    val navController = rememberNavController()
     val list = viewModel.recallDisposalList.collectAsLazyPagingItems()
 
-    LazyColumn {
+    val listState = rememberLazyListState()
+    restoreListState(listState = listState, listScrollState = viewModel.listScrollState)
+
+    LazyColumn(state = listState) {
         items(
             count = list.itemCount, key = list.itemKey(),
             contentType = list.itemContentType(
@@ -53,7 +58,7 @@ fun RecallSaleSuspensionScreen(
         ) { index ->
             list[index]?.run {
                 onClick = {
-                    navController.navigate("detailRecallSuspension/${it.product}")
+                    onClicked(product)
                 }
                 ItemOnList(this)
             }
@@ -66,6 +71,8 @@ fun RecallSaleSuspensionScreen(
             }
         }
     }
+
+    rememberListState(listState = listState, listScrollState = viewModel.listScrollState)
 }
 
 
