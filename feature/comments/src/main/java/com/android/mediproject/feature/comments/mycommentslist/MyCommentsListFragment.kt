@@ -46,10 +46,26 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
     private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
         when (commentListState) {
             is UiState.Initial -> {}
-            is UiState.Loading -> {}
-            is UiState.Success -> myCommentsListAdapter.submitList(commentListState.data)
+
+            is UiState.Loading -> setCommentLoadingVisible()
+
+            is UiState.Success -> {
+                setCommentSuccessVisible()
+                myCommentsListAdapter.submitList(commentListState.data)
+            }
+
             is UiState.Error -> log(commentListState.message)
         }
+    }
+
+    private fun setCommentLoadingVisible() = binding.apply{
+        commentLottie.visibility = View.VISIBLE
+        myCommentsListRV.visibility = View.GONE
+    }
+
+    private fun setCommentSuccessVisible() = binding.apply{
+        commentLottie.visibility = View.GONE
+        myCommentsListRV.visibility = View.VISIBLE
     }
 
     private fun setRecyclerView() = binding.myCommentsListRV.apply {

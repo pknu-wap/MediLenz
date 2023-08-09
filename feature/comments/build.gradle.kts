@@ -23,5 +23,6 @@ dependencies {
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.androidx.paging.runtime)
+    implementation(libs.lottie)
 
 }
