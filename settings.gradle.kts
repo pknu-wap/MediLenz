@@ -34,6 +34,7 @@ include(":core:domain")
 include(":core:annotation")
 include(":core:compiler")
 include(":core:test")
+include(":test")
 
 include(":feature:favoritemedicine")
 include(":feature:intro")
