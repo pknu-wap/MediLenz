@@ -9,6 +9,5 @@ import kotlinx.coroutines.flow.Flow
 interface SignDataSource {
     fun logIn(loginParameter: LoginParameter): Flow<Result<SignInResponse>>
     fun signUp(signUpParameter: SignUpParameter): Flow<Result<SignUpResponse>>
-
     fun signOut()
 }

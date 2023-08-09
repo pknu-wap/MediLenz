@@ -44,6 +44,11 @@ class MyPageViewModel @Inject constructor(
 
     fun signUp() = event(MyPageEvent.SignUp)
 
+    fun signOut() = viewModelScope.launch {
+        signUseCase.signOut()
+        loadTokens()
+    }
+
     fun navigateToMyPageMore() = event(MyPageEvent.NavigateToMyPageMore)
 
     fun navigateToMyCommentList() = event(MyPageEvent.NavigateToMyCommentList)
@@ -60,7 +65,9 @@ class MyPageViewModel @Inject constructor(
 
     fun loadTokens() = viewModelScope.launch {
         getTokenUseCase().collect {
-            _token.emit(it) } }
+            _token.emit(it)
+        }
+    }
 
     private val _user = MutableStateFlow<UiState<User>>(UiState.Init)
     val user get() = _user.asStateFlow()
@@ -92,17 +99,4 @@ class MyPageViewModel @Inject constructor(
             )
         }
     }
-
-    private val _loginMode = MutableStateFlow(LoginMode.Init)
-    val loginMode get() = _loginMode.asStateFlow()
-
-    fun setLoginMode(loginMode: LoginMode) {
-        _loginMode.value = loginMode
-    }
-
-    enum class LoginMode {
-        LOGIN_MODE, GUEST_MODE, Init
-    }
-
-    fun signOut() = viewModelScope.launch { signUseCase.signOut() }
 }

@@ -46,7 +46,6 @@ class MyPageFragment :
                 viewLifecycleOwner.apply {
                     repeatOnStarted { token.collect { handleToken(it) } }
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { loginMode.collect { handleLoginMode(it) } }
                     repeatOnStarted { user.collect { handleUserState(it) } }
                     repeatOnStarted { myCommentsList.collect { handleMyCommentListState(it) } }
                 }
@@ -59,15 +58,11 @@ class MyPageFragment :
     private fun handleToken(tokenState: TokenState<CurrentTokens>) {
         log(tokenState.toString())
         when (tokenState) {
-            is TokenState.Empty -> setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
+            is TokenState.Empty -> guestModeScreen()
             is TokenState.Tokens.AccessExpiration -> {}
-            is TokenState.Tokens.Valid -> setLoginMode(MyPageViewModel.LoginMode.LOGIN_MODE)
+            is TokenState.Tokens.Valid -> loginModeScreen()
             else -> {}
         }
-    }
-
-    private fun setLoginMode(loginMode: MyPageViewModel.LoginMode) {
-        fragmentViewModel.setLoginMode(loginMode)
     }
 
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
@@ -92,14 +87,6 @@ class MyPageFragment :
             parentFragmentManager,
             MyPageMoreBottomSheetFragment.TAG,
         )
-    }
-
-    private fun handleLoginMode(loginMode: MyPageViewModel.LoginMode) {
-        when (loginMode) {
-            MyPageViewModel.LoginMode.GUEST_MODE -> guestModeScreen()
-            MyPageViewModel.LoginMode.LOGIN_MODE -> loginModeScreen()
-            MyPageViewModel.LoginMode.Init -> Unit
-        }
     }
 
     private fun guestModeScreen() = binding.apply {
@@ -249,7 +236,6 @@ class MyPageFragment :
         log("MyPageDialog Callback : withdrawal() ")
         fragmentViewModel.apply {
             signOut()
-            setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
         }
     }
 
@@ -257,7 +243,6 @@ class MyPageFragment :
         log("MyPageDialog Callback : logout() ")
         fragmentViewModel.apply {
             signOut()
-            setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
         }
     }
 
