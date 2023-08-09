@@ -125,6 +125,7 @@ class MyPageFragment :
     }
 
     private fun setGuestModeScreenVisible() = binding.apply {
+        tokenLottie.visibility = View.GONE
         guestModeCL.visibility = View.VISIBLE
         loginModeCL.visibility = View.GONE
     }
@@ -132,6 +133,7 @@ class MyPageFragment :
     private fun loginModeScreen() = fragmentViewModel.apply {
         loadUser()
         loadMyCommentsList()
+        setShowCommentListVisible()
     }
 
     private fun handleUserState(userState: UiState<User>) {
@@ -293,13 +295,13 @@ class MyPageFragment :
     }
 
     private fun showCommentList(myCommentList: List<MyCommentsListResponse.Comment>) = binding.apply {
-        setShowCommentListVisible()
         myCommentListAdapter.submitList(myCommentList)
     }
 
     private fun setShowCommentListVisible() = binding.apply {
         guestModeCL.visibility = View.GONE
         loginModeCL.visibility = View.VISIBLE
+        tokenLottie.visibility = View.GONE
     }
 
     private fun setFragmentResultListner() {

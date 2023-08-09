@@ -36,10 +36,21 @@
 
             </com.android.mediproject.core.ui.base.view.Bar>
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/tokenLottie"
+                app:lottie_rawRes="@raw/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/mypageBar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/guestModeCL"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mypageBar">
 
