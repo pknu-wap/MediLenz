@@ -15,7 +15,7 @@ import com.android.mediproject.feature.favoritemedicine.databinding.FragmentFavo
 import com.android.mediproject.feature.favoritemedicine.favoritemedicinemore.recyclerview.FavoriteMedcineMoreDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
-import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicine
+import com.android.mediproject.feature.favoritemedicine.favoritemedicinemore.recyclerview.FavoriteMeidicneMoreAdapter
 import javax.inject.Inject
 
 @AndroidEntryPoint
