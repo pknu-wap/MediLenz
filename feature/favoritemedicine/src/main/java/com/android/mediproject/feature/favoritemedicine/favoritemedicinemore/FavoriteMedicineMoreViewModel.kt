@@ -1,6 +1,7 @@
 package com.android.mediproject.feature.favoritemedicine.favoritemedicinemore
 
 import androidx.lifecycle.viewModelScope
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreInfo
@@ -22,8 +23,12 @@ class FavoriteMedicineMoreViewModel @Inject constructor(
     private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase,
 ) : BaseViewModel() {
 
-    private val _favoriteMedicineList = MutableStateFlow<List<FavoriteMedicineMoreInfo>>(listOf())
+    private val _favoriteMedicineList = MutableStateFlow<UiState<List<FavoriteMedicineMoreInfo>>>(UiState.Init)
     val favoriteMedicineList get() = _favoriteMedicineList
+
+    fun setFavoriteMedicineListUiState(uiState: UiState<List<FavoriteMedicineMoreInfo>>) {
+        _favoriteMedicineList.value = uiState
+    }
 
     private val _token = MutableSharedFlow<TokenState<CurrentTokens>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val token get() = _token.asSharedFlow()
@@ -33,13 +38,15 @@ class FavoriteMedicineMoreViewModel @Inject constructor(
             _token.emit(it)
         }
     }
+
     fun loadFavoriteMedicines() =
         viewModelScope.launch {
+            setFavoriteMedicineListUiState(UiState.Loading)
             getFavoriteMedicineUseCase.getFavoriteMedicineMoreList()
                 .collect { result ->
                     result.fold(
-                        onSuccess = { _favoriteMedicineList.value = it },
-                        onFailure = { },
+                        onSuccess = { setFavoriteMedicineListUiState(UiState.Success(it)) },
+                        onFailure = { setFavoriteMedicineListUiState(UiState.Error("즐겨찾기를 불러오는 데 실패하였습니다."))},
                     )
                 }
         }
