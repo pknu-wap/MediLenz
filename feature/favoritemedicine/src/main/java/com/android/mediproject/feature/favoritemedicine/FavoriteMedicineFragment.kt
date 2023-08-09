@@ -66,18 +66,11 @@ class FavoriteMedicineFragment :
 
     private fun setFavoriteMedicineList(medicineList: List<FavoriteMedicine>) {
         clearFavoriteMedicineListView()
-        if (checkMedicineListSize(medicineList)) {
-            showFavorteMedicine(medicineList)
-        } else {
-            showNoFavoriteMedicine()
-        }
+        if (medicineList.isNotEmpty()) showFavorteMedicine(medicineList)
+        else showNoFavoriteMedicine()
     }
 
     private fun clearFavoriteMedicineListView() = binding.favoriteMedicineList.removeAllViews()
-
-    private fun checkMedicineListSize(medicineList: List<FavoriteMedicine>): Boolean {
-        return (medicineList.isNotEmpty())
-    }
 
     private fun showFavorteMedicine(medicineList: List<FavoriteMedicine>) {
         val horizontalSpace = resources.getDimension(R.dimen.dp_4).toInt()
