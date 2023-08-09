@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.favoritemedicine.favoritemedicinemore
+package com.android.mediproject.feature.favoritemedicine.favoritemedicinemore.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

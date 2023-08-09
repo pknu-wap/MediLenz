@@ -39,8 +39,8 @@
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/tokenLottie"
                 app:lottie_rawRes="@raw/loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/bigLottie"
+                android:layout_height="@dimen/bigLottie"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:layout_constraintTop_toBottomOf="@id/mypageBar"
@@ -170,8 +170,8 @@
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/userLottie"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="@dimen/smallLottie"
+                    android:layout_height="@dimen/smallLottie"
                     app:lottie_rawRes="@raw/loading"
                     android:visibility="gone"
                     app:lottie_autoPlay="true"
@@ -252,8 +252,8 @@
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/commentLottie"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_width="@dimen/bigLottie"
+                        android:layout_height="@dimen/bigLottie"
                         android:visibility="gone"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
