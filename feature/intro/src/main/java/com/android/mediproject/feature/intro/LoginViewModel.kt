@@ -1,6 +1,5 @@
 package com.android.mediproject.feature.intro
 
-import android.text.Editable
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -8,7 +7,7 @@ import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
-import com.android.mediproject.core.domain.sign.SignUseCase
+import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.requestparameters.LoginParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -73,69 +72,69 @@ class LoginViewModel @Inject constructor(
         object SignUp : LoginEvent()
     }
 
-    fun loginWithCheckRegex(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) {
-        if (checkEmailPasswordRegex(emailEditable, passwordEditable)) {
-            login(emailEditable, passwordEditable, checkedSaveEmail)
-        } else {
+    fun loginWithCheckRegex(email: String, password: String, isEmailSaved: Boolean) {
+        if (!checkEmailPasswordRegex(email, password)) {
             loginFailedWithRegexError()
+            return
         }
+        login(email, password, isEmailSaved)
     }
 
-    private fun clearEmailPasswordCharArray(email: CharArray, password: CharArray) {
+    private fun fillEmailPassword(email: CharArray, password: CharArray) {
         email.fill('\u0000')
         password.fill('\u0000')
     }
 
-    private fun checkEmailPasswordRegex(emailEditable: Editable, passwordEditable: Editable): Boolean {
-        return checkEmailRegex(emailEditable) && checkPasswordRegex(passwordEditable)
+    private fun checkEmailPasswordRegex(email: String, password: String): Boolean {
+        return checkEmailRegex(email) && checkPasswordRegex(password)
     }
 
-    private fun checkEmailRegex(emailEditable: Editable): Boolean {
-        return isEmailValid(emailEditable)
+    private fun checkEmailRegex(email: String): Boolean {
+        return isEmailValid(email)
     }
 
-    private fun checkPasswordRegex(passwordEditable: Editable): Boolean {
-        return isPasswordValid(passwordEditable)
+    private fun checkPasswordRegex(password: String): Boolean {
+        return isPasswordValid(password)
     }
 
-    private fun login(emailEditable: Editable, passwordEditable: Editable, checkedSaveEmail: Boolean) {
+    private fun login(email: String, password: String, isEmailSaved: Boolean) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
             throwable.printStackTrace()
             loginFailed()
         }
         viewModelScope.launch(defaultDispatcher + exceptionHandler) {
-            val pair = initEmailPasswordCharArray(emailEditable, passwordEditable)
-            val (email, password) = pair.first to pair.second
+            val pair = initEmailPassword(email, password)
+            val (emailCharArray, passwordCharArray) = pair.first to pair.second
 
             setLoginState(LoginState.Logining)
 
-            signUseCase.login(LoginParameter(email, password, checkedSaveEmail)).collect { result ->
+            signUseCase.login(LoginParameter(emailCharArray, passwordCharArray, isEmailSaved)).collect { result ->
                 result.fold(
                     onSuccess = { loginSuccess() }, onFailure = { loginFailed() },
                 )
             }
-            clearEmailPasswordCharArray(email, password)
+            fillEmailPassword(emailCharArray, passwordCharArray)
         }
     }
 
-    private fun initEmailPasswordCharArray(emailEditable: Editable, passwordEditable: Editable): Pair<CharArray, CharArray> {
-        return Pair(initEmailCharArray(emailEditable), initPasswordCharArray(passwordEditable))
+    private fun initEmailPassword(email: String, password: String): Pair<CharArray, CharArray> {
+        return Pair(initEmail(email), initPassword(password))
     }
 
-    private fun initEmailCharArray(emailEditable: Editable): CharArray {
-        val email = CharArray(emailEditable.length)
-        emailEditable.trim().forEachIndexed { index, c ->
-            email[index] = c
+    private fun initEmail(email: String): CharArray {
+        val emailCharArray = CharArray(email.length)
+        email.trim().forEachIndexed { index, c ->
+            emailCharArray[index] = c
         }
-        return email
+        return emailCharArray
     }
 
-    private fun initPasswordCharArray(passwordEditable: Editable): CharArray {
-        val password = CharArray(passwordEditable.length)
-        passwordEditable.trim().forEachIndexed { index, c ->
-            password[index] = c
+    private fun initPassword(password: String): CharArray {
+        val passwordCharArray = CharArray(password.length)
+        password.trim().forEachIndexed { index, c ->
+            passwordCharArray[index] = c
         }
-        return password
+        return passwordCharArray
     }
 
     private fun loginFailed() {

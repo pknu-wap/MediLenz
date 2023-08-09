@@ -8,7 +8,7 @@ import com.android.mediproject.core.data.token.TokenRepository
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
-import com.android.mediproject.core.model.comments.MyComment
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class CommentsRepositoryImpl @Inject constructor(
     private val commentsDataSource: CommentsDataSource, private val tokenRepository: TokenRepository,
 ) : CommentsRepository {
-    override fun getCommentsForAMedicine(medicineId: Long): Flow<PagingData<CommentListResponse.Comment>> =
+    override fun getCommentsByMedicineId(medicineId: Long): Flow<PagingData<CommentListResponse.Comment>> =
         Pager(
             config = PagingConfig(pageSize = SERVER_PAGE_SIZE, prefetchDistance = 0),
             pagingSourceFactory = {
@@ -34,14 +34,22 @@ class CommentsRepositoryImpl @Inject constructor(
             },
         ).flow
 
-    override fun getMyComments(userId: Int): Flow<PagingData<MyComment>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun applyEditedComment(parameter: EditCommentParameter): Flow<Result<CommentChangedResponse>> = channelFlow {
+    override fun getMyCommentsList(): Flow<Result<MyCommentsListResponse>> = channelFlow {
         checkToken().collectLatest { tokenState ->
             tokenState.onSuccess {
-                commentsDataSource.applyEditedComment(parameter).collectLatest {
+                commentsDataSource.getMyCommentsList().collectLatest {
+                    trySend(it)
+                }
+            }.onFailure {
+                trySend(Result.failure(it))
+            }
+        }
+    }
+
+    override fun editComment(parameter: EditCommentParameter): Flow<Result<CommentChangedResponse>> = channelFlow {
+        checkToken().collectLatest { tokenState ->
+            tokenState.onSuccess {
+                commentsDataSource.editComment(parameter).collectLatest {
                     trySend(it)
                 }
             }.onFailure {

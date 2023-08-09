@@ -26,9 +26,6 @@ class DetailRecallSuspensionViewModel @Inject constructor(
     private val _detailRecallSuspension = MutableStateFlow<UiState<DetailRecallSuspension>>(UiState.Loading)
     val detailRecallSuspension get() = _detailRecallSuspension.asStateFlow()
 
-    /**
-     * 회수 폐기 공고 목록을 로드
-     */
     init {
         viewModelScope.launch(ioDispatcher) {
             val productName: String = checkNotNull(savedStateHandle["product"])

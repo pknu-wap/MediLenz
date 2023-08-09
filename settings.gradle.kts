@@ -23,7 +23,6 @@ rootProject.name = "mediproject"
 
 include(":app")
 include(":core")
-
 include(":core:common")
 include(":core:data")
 include(":core:ui")
@@ -31,9 +30,6 @@ include(":core:model")
 include(":core:network")
 include(":core:datastore")
 include(":core:domain")
-include(":core:database")
-include(":core:annotation")
-include(":core:compiler")
 
 include(":feature:favoritemedicine")
 include(":feature:intro")
@@ -43,5 +39,9 @@ include(":feature:search")
 include(":feature:mypage")
 include(":feature:etc")
 include(":feature:medicine")
+
 include(":feature:news")
 include(":feature:camera")
+
+include(":test")
+include(":core:test")

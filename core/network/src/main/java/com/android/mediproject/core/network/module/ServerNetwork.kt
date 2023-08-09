@@ -5,6 +5,7 @@ import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.favoritemedicine.CheckFavoriteMedicineResponse
 import com.android.mediproject.core.model.favoritemedicine.DeleteFavoriteMedicineResponse
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineListResponse
@@ -12,7 +13,7 @@ import com.android.mediproject.core.model.favoritemedicine.NewFavoriteMedicineRe
 import com.android.mediproject.core.model.medicine.MedicineIdResponse
 import com.android.mediproject.core.model.requestparameters.AddFavoriteMedicineParameter
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordRequestParameter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordParameter
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
@@ -162,9 +163,15 @@ interface AwsNetworkApi {
      * 특정 약에 대한 댓글 목록 조회
      */
     @GET(value = "medicine/comment/{medicineId}")
-    suspend fun getComments(
+    suspend fun getCommentsByMedicineId(
         @Path("medicineId", encoded = true) medicineId: Long,
     ): Response<CommentListResponse>
+
+    /**
+     * 내가 작성한 댓글 목록 조회
+     */
+    @GET(value = "user/comment")
+    suspend fun getMyCommentsList() : Response<MyCommentsListResponse>
 
     /**
      * 댓글 수정
@@ -221,7 +228,7 @@ interface AwsNetworkApi {
      */
     @PATCH(value = "user")
     suspend fun changePassword(
-        @Body changePasswordRequestParameter: ChangePasswordRequestParameter,
+        @Body changePasswordParameter: ChangePasswordParameter,
     ): Response<ChangePasswordResponse>
 
     /**

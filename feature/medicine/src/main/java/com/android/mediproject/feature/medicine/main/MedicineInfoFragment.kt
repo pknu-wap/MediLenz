@@ -69,7 +69,7 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
                             LoadingDialog.showLoadingDialog(requireContext(), null)
                         }
 
-                        is UiState.Initial -> {}
+                        is UiState.Init -> {}
 
                     }
                 }

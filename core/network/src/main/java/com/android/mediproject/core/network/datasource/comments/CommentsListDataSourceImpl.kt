@@ -13,7 +13,7 @@ class CommentsListDataSourceImpl(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CommentListResponse.Comment> {
         return try {
-            commentsDataSource.getCommentsForAMedicine(medicineId).fold(onSuccess = {
+            commentsDataSource.getCommentsByMedicineId(medicineId).fold(onSuccess = {
                 LoadResult.Page(
                     data = it.commentList,
                     prevKey = null,

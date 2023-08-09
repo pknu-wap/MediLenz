@@ -81,7 +81,7 @@ class AiSearchResultFragment :
                             onChangedResult(isEmpty = true, isLoading = true)
                         }
 
-                        is UiState.Initial -> {}
+                        is UiState.Init -> {}
                     }
                 }
             }

@@ -278,7 +278,7 @@ suspend inline fun <reified T> Flow<UiState<T>>.stateAsCollect(
             noDataWarningView?.isVisible = false
         }
 
-        is UiState.Initial -> {
+        is UiState.Init -> {
             headerForElementsView.onIndicatorVisibilityChanged(true)
             noDataWarningView?.isVisible = false
         }

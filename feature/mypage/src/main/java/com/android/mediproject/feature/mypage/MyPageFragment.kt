@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.util.SystemBarStyler
-import com.android.mediproject.core.model.comments.MyComment
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.ui.R
@@ -20,6 +20,8 @@ import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFr
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
+import com.android.mediproject.core.model.user.User
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,35 +36,8 @@ class MyPageFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setFragmentResultListner()
         setBinding()
-    }
-
-    private fun setFragmentResultListner() {
-        setBottomsheetFragmentResultListner()
-        setDialogFragmentResultListner()
-    }
-
-    private fun setBottomsheetFragmentResultListner() {
-        parentFragmentManager.setFragmentResultListener(
-            MyPageMoreBottomSheetFragment.TAG,
-            viewLifecycleOwner,
-        ) { _, bundle ->
-            val flag = bundle.getInt(MyPageMoreBottomSheetFragment.TAG)
-            handleBottomSheetFlag(flag)
-            myPageMoreBottomSheet!!.dismiss()
-            myPageMoreBottomSheet = null
-        }
-    }
-
-    private fun setDialogFragmentResultListner() {
-        requireActivity().supportFragmentManager.setFragmentResultListener(
-            MyPageMoreDialogFragment.TAG,
-            viewLifecycleOwner,
-        ) { _, bundle ->
-            val flag = bundle.getInt(MyPageMoreDialogFragment.TAG)
-            handleDialogCallback(flag)
-        }
+        setFragmentResultListner()
     }
 
     private fun setBinding() =
@@ -71,14 +46,8 @@ class MyPageFragment :
                 viewLifecycleOwner.apply {
                     repeatOnStarted { token.collect { handleToken(it) } }
                     repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { user.collect { userDto = it } }
-                    repeatOnStarted { loginMode.collect { handleLoginMode(it) } }
-                    repeatOnStarted {
-                        myCommentsList.collect { commentList ->
-                            if (isCommentListNotEmpty(commentList)) showCommentList(commentList)
-                            else noShowCommentList()
-                        }
-                    }
+                    repeatOnStarted { user.collect { handleUserState(it) } }
+                    repeatOnStarted { myCommentsList.collect { handleMyCommentListState(it) } }
                 }
                 loadTokens()
             }
@@ -86,39 +55,14 @@ class MyPageFragment :
             setRecyclerView()
         }
 
-    private fun setBarStyle() = binding.apply {
-        systemBarStyler.changeMode(
-            topViews = listOf(
-                SystemBarStyler.ChangeView(
-                    mypageBar,
-                    SystemBarStyler.SpacingType.PADDING,
-                ),
-            ),
-        )
-    }
-
-    private fun setRecyclerView() = binding.myCommentsListRV.apply {
-        adapter = myCommentListAdapter
-        layoutManager = LinearLayoutManager(requireActivity())
-        addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
-    }
-
-    private fun isCommentListNotEmpty(commentList: List<MyComment>): Boolean {
-        return (commentList.isNotEmpty())
-    }
-
     private fun handleToken(tokenState: TokenState<CurrentTokens>) {
         log(tokenState.toString())
         when (tokenState) {
-            is TokenState.Empty -> setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
+            is TokenState.Empty -> guestModeScreen()
             is TokenState.Tokens.AccessExpiration -> {}
-            is TokenState.Tokens.Valid -> setLoginMode(MyPageViewModel.LoginMode.LOGIN_MODE)
+            is TokenState.Tokens.Valid -> loginModeScreen()
             else -> {}
         }
-    }
-
-    private fun setLoginMode(loginMode: MyPageViewModel.LoginMode) {
-        fragmentViewModel.setLoginMode(loginMode)
     }
 
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
@@ -129,13 +73,9 @@ class MyPageFragment :
     }
 
     private fun showMyPageBottomSheet() {
-        if (isMyPageMoreBottomSheetNull()) {
+        if (myPageMoreBottomSheet == null) {
             showMyPageMoreBottomSheet()
         }
-    }
-
-    private fun isMyPageMoreBottomSheetNull(): Boolean {
-        return myPageMoreBottomSheet == null
     }
 
     private fun showMyPageMoreBottomSheet() {
@@ -147,13 +87,6 @@ class MyPageFragment :
             parentFragmentManager,
             MyPageMoreBottomSheetFragment.TAG,
         )
-    }
-
-    private fun handleLoginMode(loginMode: MyPageViewModel.LoginMode) {
-        when (loginMode) {
-            MyPageViewModel.LoginMode.GUEST_MODE -> guestModeScreen()
-            MyPageViewModel.LoginMode.LOGIN_MODE -> loginModeScreen()
-        }
     }
 
     private fun guestModeScreen() = binding.apply {
@@ -180,26 +113,102 @@ class MyPageFragment :
     }
 
     private fun setGuestModeScreenVisible() = binding.apply {
+        tokenLottie.visibility = View.GONE
         guestModeCL.visibility = View.VISIBLE
         loginModeCL.visibility = View.GONE
     }
 
     private fun loginModeScreen() = fragmentViewModel.apply {
         loadUser()
-        loadComments()
+        loadMyCommentsList()
+        setLoginModeScreenVisible()
+    }
+
+    private fun handleUserState(userState: UiState<User>) {
+        when (userState) {
+            is UiState.Init -> {}
+
+            is UiState.Loading -> setLoadingUserVisible()
+
+            is UiState.Success -> {
+                setSuccessUserVisible()
+                binding.userDto = userState.data
+            }
+
+            is UiState.Error -> {
+                log(userState.message)
+            }
+        }
+    }
+
+    private fun setLoadingUserVisible() = binding.apply {
+        userNameTV.visibility = View.GONE
+        userImageIV.visibility = View.GONE
+        userLottie.visibility = View.VISIBLE
+    }
+
+    private fun setSuccessUserVisible() = binding.apply {
+        userNameTV.visibility = View.VISIBLE
+        userImageIV.visibility = View.VISIBLE
+        userLottie.visibility = View.GONE
+    }
+
+    private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
+        when (commentListState) {
+            is UiState.Init -> {}
+
+            is UiState.Loading -> setLoadingCommentVisible()
+
+            is UiState.Success -> {
+                setSuccessCommentVisible()
+                if (commentListState.data.isNotEmpty()) showCommentList(commentListState.data)
+                else noShowCommentList()
+            }
+
+            is UiState.Error -> {
+                log(commentListState.message)
+            }
+        }
+    }
+
+    private fun setLoadingCommentVisible() = binding.apply {
+        myCommentsListRV.visibility = View.GONE
+        commentLottie.visibility = View.VISIBLE
+    }
+
+    private fun setSuccessCommentVisible() = binding.apply {
+        myCommentsListRV.visibility = View.VISIBLE
+        commentLottie.visibility = View.GONE
+    }
+
+    fun setBarStyle() = binding.apply {
+        systemBarStyler.changeMode(
+            topViews = listOf(
+                SystemBarStyler.ChangeView(
+                    mypageBar,
+                    SystemBarStyler.SpacingType.PADDING,
+                ),
+            ),
+        )
+    }
+
+    private fun setRecyclerView() = binding.myCommentsListRV.apply {
+        adapter = myCommentListAdapter
+        layoutManager = LinearLayoutManager(requireActivity())
+        addItemDecoration(MyPageMyCommentDecoraion(requireContext()))
     }
 
     private fun handleBottomSheetFlag(bottomSheetFlag: Int) {
         when (bottomSheetFlag) {
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME)
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.CHANGE_PASSWORD)
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.WITHDRAWAL)
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogFlag.LOGOUT)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.CHANGE_NICKNAME)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.CHANGE_PASSWORD)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.WITHDRAWAL)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.LOGOUT)
         }
     }
 
-    private fun showMyPageMoreDialog(dialogFlag: MyPageMoreDialogFragment.DialogFlag) {
-        MyPageMoreDialogFragment(dialogFlag).show(
+    private fun showMyPageMoreDialog(dialogType: MyPageMoreDialogFragment.DialogType) {
+        MyPageMoreDialogFragment(dialogType).show(
             requireActivity().supportFragmentManager,
             MyPageMoreDialogFragment.TAG,
         )
@@ -207,10 +216,10 @@ class MyPageFragment :
 
     private fun handleDialogCallback(dialogFlag: Int) {
         when (dialogFlag) {
-            MyPageMoreDialogFragment.DialogFlag.CHANGE_NICKNAME.value -> changeNicknameCallback()
-            MyPageMoreDialogFragment.DialogFlag.CHANGE_PASSWORD.value -> changePasswordCallback()
-            MyPageMoreDialogFragment.DialogFlag.WITHDRAWAL.value -> withdrawalCallback()
-            MyPageMoreDialogFragment.DialogFlag.LOGOUT.value -> logoutCallback()
+            MyPageMoreDialogFragment.DialogType.CHANGE_NICKNAME.value -> changeNicknameCallback()
+            MyPageMoreDialogFragment.DialogType.CHANGE_PASSWORD.value -> changePasswordCallback()
+            MyPageMoreDialogFragment.DialogType.WITHDRAWAL.value -> withdrawalCallback()
+            MyPageMoreDialogFragment.DialogType.LOGOUT.value -> logoutCallback()
         }
     }
 
@@ -227,7 +236,6 @@ class MyPageFragment :
         log("MyPageDialog Callback : withdrawal() ")
         fragmentViewModel.apply {
             signOut()
-            setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
         }
     }
 
@@ -235,7 +243,6 @@ class MyPageFragment :
         log("MyPageDialog Callback : logout() ")
         fragmentViewModel.apply {
             signOut()
-            setLoginMode(MyPageViewModel.LoginMode.GUEST_MODE)
         }
     }
 
@@ -273,13 +280,40 @@ class MyPageFragment :
         myCommentsListHeaderView.setExpandVisiblity(false)
     }
 
-    private fun showCommentList(myCommentList: List<MyComment>) = binding.apply {
-        setShowCommentListVisible()
+    private fun showCommentList(myCommentList: List<MyCommentsListResponse.Comment>) = binding.apply {
         myCommentListAdapter.submitList(myCommentList)
     }
 
-    private fun setShowCommentListVisible() = binding.apply {
+    private fun setLoginModeScreenVisible() = binding.apply {
         guestModeCL.visibility = View.GONE
         loginModeCL.visibility = View.VISIBLE
+        tokenLottie.visibility = View.GONE
+    }
+
+    private fun setFragmentResultListner() {
+        setBottomsheetFragmentResultListner()
+        setDialogFragmentResultListner()
+    }
+
+    private fun setBottomsheetFragmentResultListner() {
+        parentFragmentManager.setFragmentResultListener(
+            MyPageMoreBottomSheetFragment.TAG,
+            viewLifecycleOwner,
+        ) { _, bundle ->
+            val flag = bundle.getInt(MyPageMoreBottomSheetFragment.TAG)
+            handleBottomSheetFlag(flag)
+            myPageMoreBottomSheet!!.dismiss()
+            myPageMoreBottomSheet = null
+        }
+    }
+
+    private fun setDialogFragmentResultListner() {
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            MyPageMoreDialogFragment.TAG,
+            viewLifecycleOwner,
+        ) { _, bundle ->
+            val flag = bundle.getInt(MyPageMoreDialogFragment.TAG)
+            handleDialogCallback(flag)
+        }
     }
 }

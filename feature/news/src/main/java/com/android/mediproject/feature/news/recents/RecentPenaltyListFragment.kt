@@ -62,7 +62,7 @@ class RecentPenaltyListFragment :
     private fun handleUiState(uiState: UiState<List<RecallSaleSuspension>>) {
         when (uiState) {
             is UiState.Error -> {}
-            is UiState.Initial -> {}
+            is UiState.Init -> {}
             is UiState.Loading -> {}
             is UiState.Success -> {
                 uiState.data.forEach { itemDto ->

@@ -12,9 +12,6 @@ class GetMedicineApprovalListUseCase @Inject constructor(
     private val medicineApprovalRepository: MedicineApprovalRepository,
 ) {
 
-    /**
-     * 약품 목록 조회 UseCase
-     */
     suspend operator fun invoke(
         parameter: ApprovalListSearchParameter,
     ) = medicineApprovalRepository.getMedicineApprovalList(

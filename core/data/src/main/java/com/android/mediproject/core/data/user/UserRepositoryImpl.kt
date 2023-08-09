@@ -2,7 +2,7 @@ package com.android.mediproject.core.data.user
 
 import android.util.Log
 import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordParamter
+import com.android.mediproject.core.model.requestparameters.ChangePasswordParameter
 import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
 import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
 import com.android.mediproject.core.model.user.remote.WithdrawalResponse
@@ -22,9 +22,9 @@ class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDat
             }.collectLatest { trySend(it) }
         }
 
-    override suspend fun changePassword(changePasswordParamter: ChangePasswordParamter): Flow<Result<ChangePasswordResponse>> =
+    override suspend fun changePassword(changePasswordParameter: ChangePasswordParameter): Flow<Result<ChangePasswordResponse>> =
         channelFlow {
-            userDataSource.changePassword(changePasswordParamter).map { result ->
+            userDataSource.changePassword(changePasswordParameter).map { result ->
                 result.fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) })
             }.collectLatest { trySend(it) }
         }

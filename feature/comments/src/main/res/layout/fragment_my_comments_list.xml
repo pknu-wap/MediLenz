@@ -24,6 +24,17 @@
             app:showBackButton="true"
             app:title="@string/myComments" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/commentLottie"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/myCommentsListBar"
+            app:lottie_rawRes="@raw/loading" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myCommentsListRV"
             android:layout_width="match_parent"
