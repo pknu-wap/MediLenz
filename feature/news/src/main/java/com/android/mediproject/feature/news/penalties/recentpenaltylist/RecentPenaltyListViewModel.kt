@@ -42,6 +42,6 @@ class RecentPenaltyListViewModel @Inject constructor(
         object NavigateToNews : PenaltyListEvent()
     }
 
-    private val _recallDisposalList = MutableStateFlow<UiState<List<RecallSuspension>>>(UiState.Initial)
+    private val _recallDisposalList = MutableStateFlow<UiState<List<RecallSuspension>>>(UiState.Init)
     val recallDisposalList get() = _recallDisposalList.asStateFlow()
 }

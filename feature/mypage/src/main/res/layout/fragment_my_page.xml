@@ -36,10 +36,23 @@
 
             </com.android.mediproject.core.ui.base.view.Bar>
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/tokenLottie"
+                app:lottie_rawRes="@raw/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:layout_constraintTop_toBottomOf="@id/mypageBar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/guestModeCL"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mypageBar">
 
@@ -144,6 +157,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/userNameTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -152,6 +166,19 @@
                     android:textSize="28sp"
                     app:layout_constraintBottom_toBottomOf="@id/userImageIV"
                     app:layout_constraintStart_toEndOf="@id/userImageIV"
+                    app:layout_constraintTop_toTopOf="@id/userImageIV" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/userLottie"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:lottie_rawRes="@raw/loading"
+                    android:visibility="gone"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:layout_constraintBottom_toBottomOf="@id/userImageIV"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/userImageIV" />
 
                 <ImageView
@@ -201,7 +228,7 @@
 
                     <com.android.mediproject.core.ui.base.view.HeaderForElementsView
                         android:id="@+id/myCommentsListHeaderView"
-                        onMoreClick="@{()-> viewModel.navigateToMyCommnetList()}"
+                        onMoreClick="@{()-> viewModel.navigateToMyCommentList()}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/horizontal_margin_header_on_home"
@@ -222,6 +249,17 @@
                         android:textColor="@color/gray2"
                         android:textSize="20sp"
                         android:visibility="gone" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/commentLottie"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:visibility="gone"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/loading"
+                        android:layout_marginTop="30dp"
+                        android:layout_gravity="center"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/myCommentsListRV"

@@ -4,6 +4,7 @@ import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetCommentsUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
@@ -43,9 +44,14 @@ class MyPageViewModel @Inject constructor(
 
     fun signUp() = event(MyPageEvent.SignUp)
 
+    fun signOut() = viewModelScope.launch {
+        signUseCase.signOut()
+        loadTokens()
+    }
+
     fun navigateToMyPageMore() = event(MyPageEvent.NavigateToMyPageMore)
 
-    fun navigateToMyCommnetList() = event(MyPageEvent.NavigateToMyCommentList)
+    fun navigateToMyCommentList() = event(MyPageEvent.NavigateToMyCommentList)
 
     sealed class MyPageEvent {
         object Login : MyPageEvent()
@@ -54,35 +60,43 @@ class MyPageViewModel @Inject constructor(
         object NavigateToMyCommentList : MyPageEvent()
     }
 
-    private val _token = MutableStateFlow<TokenState<CurrentTokens>>(TokenState.Empty)
-    val token get() = _token.asStateFlow()
+    private val _token = MutableSharedFlow<TokenState<CurrentTokens>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val token get() = _token.asSharedFlow()
 
-    fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
-
-    private val _user = MutableStateFlow(User("기본값"))
-    val user get() = _user.asStateFlow()
-
-    fun loadUser() = viewModelScope.launch { getUserUseCase().collect { _user.value = it } }
-
-    private val _myCommentsList = MutableSharedFlow<List<MyCommentsListResponse.Comment>>()
-    val myCommentsList get() = _myCommentsList.asSharedFlow()
-
-    fun loadMyCommentsList() = viewModelScope.launch(ioDispatcher) {
-        getCommentsUseCase.getMyCommentsList().collectLatest { result ->
-            result.fold(onSuccess = { _myCommentsList.emit(it.commentList) }, onFailure = {})
+    fun loadTokens() = viewModelScope.launch {
+        getTokenUseCase().collect {
+            _token.emit(it)
         }
     }
 
-    private val _loginMode = MutableStateFlow(LoginMode.GUEST_MODE)
-    val loginMode get() = _loginMode.asStateFlow()
+    private val _user = MutableStateFlow<UiState<User>>(UiState.Init)
+    val user get() = _user.asStateFlow()
 
-    fun setLoginMode(loginMode: LoginMode) {
-        _loginMode.value = loginMode
+    fun setUserUiState(uiState: UiState<User>) {
+        _user.value = uiState
     }
 
-    enum class LoginMode {
-        LOGIN_MODE, GUEST_MODE
+    fun loadUser() = viewModelScope.launch(ioDispatcher) {
+        setUserUiState(UiState.Init)
+        getUserUseCase().collectLatest {
+            setUserUiState(UiState.Success(it))
+        }
     }
 
-    fun signOut() = viewModelScope.launch { signUseCase.signOut() }
+    private val _myCommentsList = MutableStateFlow<UiState<List<MyCommentsListResponse.Comment>>>(UiState.Init)
+    val myCommentsList get() = _myCommentsList.asStateFlow()
+
+    fun setMyCommentsListUiState(uiState: UiState<List<MyCommentsListResponse.Comment>>) {
+        _myCommentsList.value = uiState
+    }
+
+    fun loadMyCommentsList() = viewModelScope.launch(ioDispatcher) {
+        setMyCommentsListUiState(UiState.Loading)
+        getCommentsUseCase.getMyCommentsList().collectLatest { result ->
+            result.fold(
+                onSuccess = { setMyCommentsListUiState(UiState.Success(it.commentList)) },
+                onFailure = { setMyCommentsListUiState(UiState.Error("댓글을 불러오는데 실패하였습니다.")) },
+            )
+        }
+    }
 }
