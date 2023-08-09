@@ -72,7 +72,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
         adapter = myCommentsListAdapter
         layoutManager = LinearLayoutManager(requireActivity())
         addItemDecoration(MyCommentsListDecoration(requireContext()))
-        addItemDecoration(DividerItemDecoration(requireContext(), 1))
+        addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
     }
 
     private fun setBarStyle() = binding.apply {

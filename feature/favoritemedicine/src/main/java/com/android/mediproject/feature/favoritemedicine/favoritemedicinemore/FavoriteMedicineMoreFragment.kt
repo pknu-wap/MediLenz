@@ -60,7 +60,7 @@ class FavoriteMedicineMoreFragment :
         adapter = favoriteMedicineMoreAdapter
         layoutManager = LinearLayoutManager(requireContext())
         addItemDecoration(FavoriteMedcineMoreDecoration(requireContext()))
-        addItemDecoration(DividerItemDecoration(requireContext(), 1))
+        addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
     }
 
     private fun setFavoriteMedicineMoreList(medicineList: List<FavoriteMedicineMoreInfo>) {
