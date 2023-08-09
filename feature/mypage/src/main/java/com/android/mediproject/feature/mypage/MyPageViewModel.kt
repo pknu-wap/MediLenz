@@ -17,7 +17,10 @@ import com.android.mediproject.core.model.user.User
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -52,12 +55,14 @@ class MyPageViewModel @Inject constructor(
         object NavigateToMyCommentList : MyPageEvent()
     }
 
-    private val _token = MutableStateFlow<TokenState<CurrentTokens>>(TokenState.Empty)
-    val token get() = _token.asStateFlow()
+    private val _token = MutableSharedFlow<TokenState<CurrentTokens>>(replay = 1)
+    val token get() = _token.asSharedFlow()
 
-    fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
+    fun loadTokens() = viewModelScope.launch {
+        getTokenUseCase().collect {
+            _token.emit(it) } }
 
-    private val _user = MutableStateFlow<UiState<User>>(UiState.Initial)
+    private val _user = MutableStateFlow<UiState<User>>(UiState.Init)
     val user get() = _user.asStateFlow()
 
     fun setUserUiState(uiState: UiState<User>) {
@@ -65,13 +70,13 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun loadUser() = viewModelScope.launch(ioDispatcher) {
-        setUserUiState(UiState.Initial)
+        setUserUiState(UiState.Init)
         getUserUseCase().collectLatest {
             setUserUiState(UiState.Success(it))
         }
     }
 
-    private val _myCommentsList = MutableStateFlow<UiState<List<MyCommentsListResponse.Comment>>>(UiState.Initial)
+    private val _myCommentsList = MutableStateFlow<UiState<List<MyCommentsListResponse.Comment>>>(UiState.Init)
     val myCommentsList get() = _myCommentsList.asStateFlow()
 
     fun setMyCommentsListUiState(uiState: UiState<List<MyCommentsListResponse.Comment>>) {
@@ -88,7 +93,7 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    private val _loginMode = MutableStateFlow(LoginMode.GUEST_MODE)
+    private val _loginMode = MutableStateFlow(LoginMode.Init)
     val loginMode get() = _loginMode.asStateFlow()
 
     fun setLoginMode(loginMode: LoginMode) {
@@ -96,7 +101,7 @@ class MyPageViewModel @Inject constructor(
     }
 
     enum class LoginMode {
-        LOGIN_MODE, GUEST_MODE
+        LOGIN_MODE, GUEST_MODE, Init
     }
 
     fun signOut() = viewModelScope.launch { signUseCase.signOut() }

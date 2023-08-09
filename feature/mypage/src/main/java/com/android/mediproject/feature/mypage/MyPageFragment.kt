@@ -98,6 +98,7 @@ class MyPageFragment :
         when (loginMode) {
             MyPageViewModel.LoginMode.GUEST_MODE -> guestModeScreen()
             MyPageViewModel.LoginMode.LOGIN_MODE -> loginModeScreen()
+            MyPageViewModel.LoginMode.Init -> Unit
         }
     }
 
@@ -138,7 +139,7 @@ class MyPageFragment :
 
     private fun handleUserState(userState: UiState<User>) {
         when (userState) {
-            is UiState.Initial -> {}
+            is UiState.Init -> {}
 
             is UiState.Loading -> setUserLoadingVisible()
 
@@ -167,7 +168,7 @@ class MyPageFragment :
 
     private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
         when (commentListState) {
-            is UiState.Initial -> {}
+            is UiState.Init -> {}
 
             is UiState.Loading -> setCommentLoadingVisible()
 

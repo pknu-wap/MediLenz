@@ -49,7 +49,7 @@ fun DetailRecallDisposalScreen(
 
         }
 
-        is UiState.Initial -> {}
+        is UiState.Init -> {}
     }
 
 }

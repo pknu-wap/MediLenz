@@ -45,7 +45,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
 
     private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
         when (commentListState) {
-            is UiState.Initial -> {}
+            is UiState.Init -> {}
 
             is UiState.Loading -> setCommentLoadingVisible()
 
