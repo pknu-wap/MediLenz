@@ -45,7 +45,7 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
 
     private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
         when (commentListState) {
-            is UiState.Init -> {}
+            is UiState.Initial -> {}
 
             is UiState.Loading -> setCommentLoadingVisible()
 
@@ -58,12 +58,12 @@ class MyCommentsListFragment : BaseFragment<FragmentMyCommentsListBinding, MyCom
         }
     }
 
-    private fun setCommentLoadingVisible() = binding.apply{
+    private fun setCommentLoadingVisible() = binding.apply {
         commentLottie.visibility = View.VISIBLE
         myCommentsListRV.visibility = View.GONE
     }
 
-    private fun setCommentSuccessVisible() = binding.apply{
+    private fun setCommentSuccessVisible() = binding.apply {
         commentLottie.visibility = View.GONE
         myCommentsListRV.visibility = View.VISIBLE
     }

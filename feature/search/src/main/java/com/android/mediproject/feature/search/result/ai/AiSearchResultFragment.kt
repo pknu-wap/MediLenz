@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.util.deepNavigate
 import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.search.R
@@ -19,7 +20,6 @@ import com.android.mediproject.feature.search.result.EventState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -81,7 +81,7 @@ class AiSearchResultFragment :
                             onChangedResult(isEmpty = true, isLoading = true)
                         }
 
-                        is UiState.Init -> {}
+                        is UiState.Initial -> {}
                     }
                 }
             }

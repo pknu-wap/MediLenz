@@ -29,7 +29,7 @@ class MyCommentsListViewModel @Inject constructor(
 
     sealed class MyCommentsListEvent
 
-    private val _myCommentsList = MutableStateFlow<UiState<List<MyCommentsListResponse.Comment>>>(UiState.Init)
+    private val _myCommentsList = MutableStateFlow<UiState<List<MyCommentsListResponse.Comment>>>(UiState.Initial)
     val myCommentsList get() = _myCommentsList.asStateFlow()
 
     fun setMyCommentsListUiState(uiState: UiState<List<MyCommentsListResponse.Comment>>) {

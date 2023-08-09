@@ -6,6 +6,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     alias(libs.plugins.gms)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -67,6 +68,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:model"))
     implementation(project(":core:database"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
     implementation(project(":core:test"))
@@ -80,6 +82,8 @@ dependencies {
     implementation(project(":feature:medicine"))
     implementation(project(":feature:news"))
     implementation(project(":feature:camera"))
+    implementation(project(":core:annotation"))
+    ksp(project(":core:compiler"))
 
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.materials)

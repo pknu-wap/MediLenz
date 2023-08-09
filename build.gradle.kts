@@ -6,6 +6,9 @@ buildscript {
             exclude(group = "com.google.protobuf")
         }
     }
+    repositories {
+        google()
+    }
 }
 
 plugins {

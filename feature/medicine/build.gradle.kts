@@ -26,7 +26,4 @@ dependencies {
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.androidx.asynclayoutinflater)
-
-    testImplementation(libs.bundles.testLocal)
-    androidTestImplementation(libs.bundles.testAndroid)
 }

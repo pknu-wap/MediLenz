@@ -29,7 +29,11 @@ include(":core:ui")
 include(":core:model")
 include(":core:network")
 include(":core:datastore")
+include(":core:database")
 include(":core:domain")
+include(":core:annotation")
+include(":core:compiler")
+include(":core:test")
 
 include(":feature:favoritemedicine")
 include(":feature:intro")
@@ -42,6 +46,3 @@ include(":feature:medicine")
 
 include(":feature:news")
 include(":feature:camera")
-
-include(":test")
-include(":core:test")

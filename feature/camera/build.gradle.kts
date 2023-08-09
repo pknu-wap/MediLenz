@@ -2,15 +2,12 @@ plugins {
     id("mediproject.android.feature")
 }
 
-
-
 android {
     namespace = "com.android.mediproject.feature.camera"
 
     hilt {
         enableAggregatingTask = true
     }
-
 
     androidResources {
         noCompress += listOf("tflite")
@@ -60,10 +57,8 @@ dependencies {
 
     implementation(libs.bundles.navigations)
     implementation(libs.bundles.lifecycles)
-    //implementation(libs.kotlinx.datetime)
     implementation(libs.photo.view)
 
     implementation(libs.bundles.tflite)
-
     implementation(libs.smartdeeplink.core)
 }

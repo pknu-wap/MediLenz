@@ -69,7 +69,7 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    private val _user = MutableStateFlow<UiState<User>>(UiState.Init)
+    private val _user = MutableStateFlow<UiState<User>>(UiState.Initial)
     val user get() = _user.asStateFlow()
 
     fun setUserUiState(uiState: UiState<User>) {
@@ -77,13 +77,13 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun loadUser() = viewModelScope.launch(ioDispatcher) {
-        setUserUiState(UiState.Init)
+        setUserUiState(UiState.Initial)
         getUserUseCase().collectLatest {
             setUserUiState(UiState.Success(it))
         }
     }
 
-    private val _myCommentsList = MutableStateFlow<UiState<List<MyCommentsListResponse.Comment>>>(UiState.Init)
+    private val _myCommentsList = MutableStateFlow<UiState<List<MyCommentsListResponse.Comment>>>(UiState.Initial)
     val myCommentsList get() = _myCommentsList.asStateFlow()
 
     fun setMyCommentsListUiState(uiState: UiState<List<MyCommentsListResponse.Comment>>) {

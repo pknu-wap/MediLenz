@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
+
     implementation(libs.bundles.glides)
     kapt(libs.bundles.glides.kapt)
     implementation(libs.bundles.kotlins)
@@ -24,5 +25,4 @@ dependencies {
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.lottie)
-
 }

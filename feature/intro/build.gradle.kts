@@ -24,6 +24,5 @@ dependencies {
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
-    implementation(libs.bundles.testLocal)
-    implementation(libs.bundles.testAndroid)
+
 }

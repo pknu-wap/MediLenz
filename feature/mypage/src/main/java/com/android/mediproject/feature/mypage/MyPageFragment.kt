@@ -126,7 +126,7 @@ class MyPageFragment :
 
     private fun handleUserState(userState: UiState<User>) {
         when (userState) {
-            is UiState.Init -> {}
+            is UiState.Initial -> {}
 
             is UiState.Loading -> setLoadingUserVisible()
 
@@ -155,7 +155,7 @@ class MyPageFragment :
 
     private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
         when (commentListState) {
-            is UiState.Init -> {}
+            is UiState.Initial -> {}
 
             is UiState.Loading -> setLoadingCommentVisible()
 

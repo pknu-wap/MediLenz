@@ -1,4 +1,4 @@
-package comandroid.mediproject.core.test
+package com.android.mediproject.core.test
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -10,7 +10,7 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
 @ExperimentalCoroutinesApi
-class MainCoroutineRule(val dispatcher : TestDispatcher = UnconfinedTestDispatcher()):
+class MainCoroutineRule(val dispatcher: TestDispatcher = UnconfinedTestDispatcher()) :
     TestWatcher() {
     override fun starting(description: Description?) {
         super.starting(description)

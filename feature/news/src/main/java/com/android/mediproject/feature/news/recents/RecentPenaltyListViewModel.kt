@@ -1,11 +1,11 @@
-package com.android.mediproject.feature.news.penalties.recentpenaltylist
+package com.android.mediproject.feature.news.recents
 
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.asEventFlow
-import com.android.mediproject.core.domain.GetRecallSuspensionInfoUseCase
-import com.android.mediproject.core.model.recall.RecallSuspension
+import com.android.mediproject.core.domain.GetRecallSaleSuspensionUseCase
+import com.android.mediproject.core.model.news.recall.RecallSaleSuspension
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,12 +15,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecentPenaltyListViewModel @Inject constructor(
-    private val getRecallSuspensionInfoUseCase: GetRecallSuspensionInfoUseCase,
+    private val getRecallSaleSuspensionUseCase: GetRecallSaleSuspensionUseCase,
 ) : BaseViewModel() {
 
     init {
         viewModelScope.launch {
-            getRecallSuspensionInfoUseCase.getRecentRecallDisposalList(numOfRows = 5).fold(
+            getRecallSaleSuspensionUseCase.getRecentRecallSaleSuspensionList(numOfRows = 5).fold(
                 onSuccess = {
                     _recallDisposalList.value = UiState.Success(it)
                 },
@@ -42,6 +42,6 @@ class RecentPenaltyListViewModel @Inject constructor(
         object NavigateToNews : PenaltyListEvent()
     }
 
-    private val _recallDisposalList = MutableStateFlow<UiState<List<RecallSuspension>>>(UiState.Initial)
+    private val _recallDisposalList = MutableStateFlow<UiState<List<RecallSaleSuspension>>>(UiState.Initial)
     val recallDisposalList get() = _recallDisposalList.asStateFlow()
 }

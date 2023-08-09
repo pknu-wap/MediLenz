@@ -15,6 +15,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.common.viewmodel.onError
+import com.android.mediproject.core.common.viewmodel.onInitial
+import com.android.mediproject.core.common.viewmodel.onLoading
+import com.android.mediproject.core.common.viewmodel.onSuccess
 import com.android.mediproject.core.ui.R
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlinx.coroutines.flow.Flow
@@ -262,27 +266,21 @@ fun interface OnIndicatorVisibilityChangedListener {
 suspend inline fun <reified T> Flow<UiState<T>>.stateAsCollect(
     headerForElementsView: HeaderForElementsView, noDataWarningView: View?,
 ): Flow<UiState<T>> = flatMapLatest {
-    when (it) {
-        is UiState.Error -> {
-            headerForElementsView.onIndicatorVisibilityChanged(false)
-            noDataWarningView?.isVisible = true
-        }
 
-        is UiState.Loading -> {
-            headerForElementsView.onIndicatorVisibilityChanged(true)
-            noDataWarningView?.isVisible = false
-        }
-
-        is UiState.Success -> {
-            headerForElementsView.onIndicatorVisibilityChanged(false)
-            noDataWarningView?.isVisible = false
-        }
-
-        is UiState.Init -> {
-            headerForElementsView.onIndicatorVisibilityChanged(true)
-            noDataWarningView?.isVisible = false
-        }
+    it.onSuccess {
+        headerForElementsView.onIndicatorVisibilityChanged(false)
+        noDataWarningView?.isVisible = false
+    }.onLoading {
+        headerForElementsView.onIndicatorVisibilityChanged(true)
+        noDataWarningView?.isVisible = false
+    }.onError {
+        headerForElementsView.onIndicatorVisibilityChanged(false)
+        noDataWarningView?.isVisible = true
+    }.onInitial {
+        headerForElementsView.onIndicatorVisibilityChanged(true)
+        noDataWarningView?.isVisible = false
     }
+    
     flowOf(it)
 }
 
