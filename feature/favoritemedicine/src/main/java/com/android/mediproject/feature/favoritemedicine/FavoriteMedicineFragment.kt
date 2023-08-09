@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicine
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
@@ -38,10 +40,37 @@ class FavoriteMedicineFragment :
             viewLifecycleOwner.apply {
                 repeatOnStarted { token.collect { handleToken(it) } }
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                repeatOnStarted { favoriteMedicineList.collect { setFavoriteMedicineList(it) } }
+                repeatOnStarted { favoriteMedicineList.collect { handleFavoriteMedicineListState(it) } }
             }
             loadTokens()
         }
+    }
+
+    private fun handleFavoriteMedicineListState(favoriteMedicineListState: UiState<List<FavoriteMedicine>>) {
+        when (favoriteMedicineListState) {
+            is UiState.Init -> Unit
+
+            is UiState.Loading -> setLoadingFavoriteMedicineVisible()
+
+            is UiState.Success -> {
+                setSuccessFavoriteMedicineVisible()
+                setFavoriteMedicineList(favoriteMedicineListState.data)
+            }
+
+            is UiState.Error -> {
+                log(favoriteMedicineListState.message)
+            }
+        }
+    }
+
+    private fun setLoadingFavoriteMedicineVisible() = binding.apply{
+        favoriteMedicineList.visibility = View.GONE
+        favoriteMedicineLottie.visibility = View.VISIBLE
+    }
+
+    private fun setSuccessFavoriteMedicineVisible() = binding.apply{
+        favoriteMedicineList.visibility = View.VISIBLE
+        favoriteMedicineLottie.visibility = View.GONE
     }
 
     private fun handleToken(token: TokenState<CurrentTokens>) {
@@ -66,21 +95,15 @@ class FavoriteMedicineFragment :
 
     private fun setFavoriteMedicineList(medicineList: List<FavoriteMedicine>) {
         clearFavoriteMedicineListView()
-        if (checkMedicineListSize(medicineList)) {
-            showFavorteMedicine(medicineList)
-        } else {
-            showNoFavoriteMedicine()
-        }
+        if (medicineList.isNotEmpty()) showFavorteMedicine(medicineList)
+        else showNoFavoriteMedicine()
     }
 
     private fun clearFavoriteMedicineListView() = binding.favoriteMedicineList.removeAllViews()
 
-    private fun checkMedicineListSize(medicineList: List<FavoriteMedicine>): Boolean {
-        return (medicineList.isNotEmpty())
-    }
-
     private fun showFavorteMedicine(medicineList: List<FavoriteMedicine>) {
         val horizontalSpace = resources.getDimension(R.dimen.dp_4).toInt()
+
         medicineList.forEach { medicine ->
             binding.favoriteMedicineList.addView(
                 ButtonChip<String>(

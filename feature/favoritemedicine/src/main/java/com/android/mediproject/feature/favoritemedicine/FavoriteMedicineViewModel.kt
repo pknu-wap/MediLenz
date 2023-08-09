@@ -2,15 +2,20 @@ package com.android.mediproject.feature.favoritemedicine
 
 import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicine
+import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreInfo
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,8 +25,6 @@ class FavoriteMedicineViewModel @Inject constructor(
     private val getTokenUseCase: GetTokenUseCase,
     private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase,
 ) : BaseViewModel() {
-
-    fun loadTokens() = viewModelScope.launch { getTokenUseCase().collect { _token.value = it } }
 
     private val _eventFlow = MutableEventFlow<FavoriteMedicineEvent>()
     val eventFlow get() = _eventFlow.asEventFlow()
@@ -34,20 +37,32 @@ class FavoriteMedicineViewModel @Inject constructor(
         object NavigateToFavoriteMedicineMore : FavoriteMedicineEvent()
     }
 
-    private val _favoriteMedicineList = MutableStateFlow<List<FavoriteMedicine>>(listOf())
+    private val _favoriteMedicineList = MutableStateFlow<UiState<List<FavoriteMedicine>>>(UiState.Init)
     val favoriteMedicineList get() = _favoriteMedicineList
 
-    private val _token = MutableStateFlow<TokenState<CurrentTokens>>(TokenState.Empty)
-    val token get() = _token.asStateFlow()
+    fun setFavoriteMedicineListUiState(uiState: UiState<List<FavoriteMedicine>>) {
+        _favoriteMedicineList.value = uiState
+    }
 
-    fun loadFavoriteMedicines() =
+    private val _token = MutableSharedFlow<TokenState<CurrentTokens>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val token get() = _token.asSharedFlow()
+
+    fun loadTokens() = viewModelScope.launch {
+        getTokenUseCase().collect {
+            _token.emit(it)
+        }
+    }
+
+    fun loadFavoriteMedicines() {
+        setFavoriteMedicineListUiState(UiState.Loading)
         viewModelScope.launch {
             getFavoriteMedicineUseCase.getFavoriteMedicineList()
                 .collect { it ->
                     it.fold(
-                        onSuccess = { _favoriteMedicineList.value = it },
-                        onFailure = { },
+                        onSuccess = { setFavoriteMedicineListUiState(UiState.Success(it)) },
+                        onFailure = { setFavoriteMedicineListUiState(UiState.Error("즐겨찾기 항목을 불러오는데 실패하였습니다.")) },
                     )
                 }
         }
+    }
 }

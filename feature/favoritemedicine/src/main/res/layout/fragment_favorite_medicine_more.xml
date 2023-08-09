@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.favoritemedicine.favoritemedicinemore.FavoriteMedicineMoreViewModel" />
@@ -23,6 +24,20 @@
             app:setTheme="white"
             app:showBackButton="true"
             app:title="@string/favoriteMedicine" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/favoriteMedicineMoreLottie"
+            android:layout_width="@dimen/bigLottie"
+            android:layout_height="@dimen/bigLottie"
+            android:layout_marginBottom="30dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/favoriteMedicineListBar"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/favoriteMedicineListRV"

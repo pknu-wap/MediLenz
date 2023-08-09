@@ -24,4 +24,8 @@
     <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_16">16dp</dimen>
     <dimen name="horizontal_margin_header_on_home">12dp</dimen>
+
+    <dimen name="smallLottie">100dp</dimen>
+    <dimen name="midiumLottie">150dp</dimen>
+    <dimen name="bigLottie">250dp</dimen>
 </resources>
