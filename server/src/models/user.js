@@ -30,7 +30,7 @@ module.exports = function (sequelize, DataTypes) {
             field: 'PROFILE_URL',
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: 'default'
+            defaultValue: 'default.jpg'
         }
     }, {
         underscored: true,

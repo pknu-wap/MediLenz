@@ -3,6 +3,8 @@
 const userCtrl = require('../../controller/user/user.ctrl');
 const { verifyRefreshToken, verifyAccessToken } = require("../../config/jwt");
 const router = require("express").Router();
+const { upload } = require("../../config/multer");
+
 /**
  * @swagger
  * /user/login:
@@ -154,7 +156,7 @@ router.post("/reissue", verifyRefreshToken, userCtrl.process.reissue); // reissu
  */
 router.post("/register", userCtrl.process.register); // sign-up
 router.get("/", verifyAccessToken, userCtrl.output.getUserInfo) // get user information
-router.patch("/", verifyAccessToken, userCtrl.edit.patchUserInfo) // edit user information
+router.patch("/", verifyAccessToken, upload.single('profile_img'), userCtrl.edit.patchUserInfo) // edit user information
 router.delete("/", verifyAccessToken, userCtrl.eliminate.deleteUser) // delete user
 router.get("/comment", verifyAccessToken, userCtrl.output.getCommentListFromUserId);
 module.exports = router;
