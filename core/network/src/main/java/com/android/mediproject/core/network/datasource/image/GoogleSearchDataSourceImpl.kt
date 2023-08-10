@@ -3,8 +3,8 @@ package com.android.mediproject.core.network.datasource.image
 import android.util.LruCache
 import com.android.mediproject.core.network.module.GoogleSearchNetworkApi
 import com.android.mediproject.core.network.module.safetyEncode
-import com.android.mediproject.core.network.onResponse
 import com.android.mediproject.core.network.parser.HtmlParser
+import com.android.mediproject.core.network.retrofitext.NetworkApiResult
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.newFixedThreadPoolContext
@@ -21,8 +21,7 @@ class GoogleSearchDataSourceImpl @Inject constructor(
     private val urlCache = LruCache<String, String>(100)
     private val mutex = Mutex()
 
-    @OptIn(DelicateCoroutinesApi::class)
-    private val threads = newFixedThreadPoolContext(3, "GoogleSearchProcessor")
+    @OptIn(DelicateCoroutinesApi::class) private val threads = newFixedThreadPoolContext(3, "GoogleSearchProcessor")
 
     private suspend fun getImageUrl(query: String, additionalQuery: String): Result<String> {
         val finalQuery = (additionalQuery + query).safetyEncode()
@@ -32,18 +31,19 @@ class GoogleSearchDataSourceImpl @Inject constructor(
         }?.run {
             Result.success(this)
         } ?: run {
-            googleSearchNetworkApi.getImageUrl(finalQuery).onResponse().fold(
-                onSuccess = {
-                    val url = htmlParser.parse(finalQuery, it)
+            when (val result = googleSearchNetworkApi.getImageUrl(query = finalQuery)) {
+                is NetworkApiResult.Success -> {
+                    val imageUrl = htmlParser.parse(finalQuery, result.data)
                     mutex.withLock {
-                        urlCache.put(finalQuery, url)
+                        urlCache.put(finalQuery, imageUrl)
                     }
-                    Result.success(url)
-                },
-                onFailure = {
-                    Result.failure(it)
-                },
-            )
+                    Result.success(imageUrl)
+                }
+
+                is NetworkApiResult.Failure -> {
+                    Result.failure(result.exception)
+                }
+            }
         }
     }
 

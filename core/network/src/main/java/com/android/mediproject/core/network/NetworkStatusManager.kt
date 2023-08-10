@@ -56,7 +56,6 @@ class NetworkStatusManager @Inject constructor(@ApplicationContext private val c
             }
 
             Lifecycle.Event.ON_PAUSE -> {
-
             }
 
             else -> {}
