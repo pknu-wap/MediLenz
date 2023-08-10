@@ -9,6 +9,7 @@ import androidx.paging.PagingDataDiffer
 import androidx.paging.cachedIn
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.domain.GetAdminActionInfoUseCase
 import com.android.mediproject.core.model.news.adminaction.AdminAction
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -31,14 +32,13 @@ class AdminActionViewModel @Inject constructor(
 
     val listScrollState: MutableState<Int> = mutableStateOf(0)
     val adminActionList = getAdminActionInfoUseCase.getAdminActionList().cachedIn(viewModelScope).flowOn(ioDispatcher)
-    private val clickedItemPosition = MutableStateFlow(-1)
-
-    fun onClickedItem(position: Int) {
-        clickedItemPosition.value = position
+    private val _clickedItem = MutableStateFlow<UiState<AdminAction>>(UiState.Initial)
+    val clickedItem = _clickedItem.asStateFlow()
+    fun onClickedItem(adminAction: AdminAction) {
+        viewModelScope.launch {
+            _clickedItem.value = UiState.Success(adminAction)
+        }
     }
-
-    private val _clickedItem = MutableStateFlow<AdminAction?>(null)
-    val clickedItem get() = _clickedItem.asStateFlow()
 
     fun getClickedItem() {
         viewModelScope.launch(defaultDispatcher) {
@@ -67,9 +67,7 @@ class AdminActionViewModel @Inject constructor(
                             onListPresentable: () -> Unit,
                         ) = null
                     },
-                ).get()?.run {
-                    _clickedItem.value = this[clickedItemPosition.value]
-                }
+                )
             }
         }
     }

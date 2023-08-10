@@ -21,7 +21,6 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -35,16 +34,17 @@ import com.android.mediproject.feature.news.restoreListState
 
 
 @Composable
-fun SafetyNotificationScreen() {
+fun SafetyNotificationScreen(
+    onClicked: () -> Unit,
+) {
     val viewModel: SafetyNotificationViewModel = hiltViewModel()
-    val navController = rememberNavController()
     val list = viewModel.safetyNotificationList.collectAsLazyPagingItems()
 
     val listState = rememberLazyListState()
     restoreListState(listState = listState, listScrollState = viewModel.listScrollState)
 
     LazyColumn(
-        state = listState
+        state = listState,
     ) {
         items(
             count = list.itemCount, key = list.itemKey(),
@@ -53,7 +53,8 @@ fun SafetyNotificationScreen() {
         ) { index ->
             list[index]?.run {
                 onClick = {
-                    navController.navigate("detailAdminAction")
+                    viewModel.onClick(this)
+                    onClicked()
                 }
                 ItemOnList(this)
             }

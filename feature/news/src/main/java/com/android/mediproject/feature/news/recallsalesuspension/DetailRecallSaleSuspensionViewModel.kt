@@ -11,7 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,11 +23,11 @@ class DetailRecallSaleSuspensionViewModel @Inject constructor(
     private val _detail = MutableStateFlow<UiState<DetailRecallSuspension>>(UiState.Loading)
     val detail get() = _detail.asStateFlow()
 
-
     fun load(productName: String) {
         viewModelScope.launch(ioDispatcher) {
-            getRecallSaleSuspensionUseCase.getDetailRecallSaleSuspension(product = productName, company = null).collectLatest {
-                _detail.value = it.fold(
+            _detail.value = UiState.Loading
+            getRecallSaleSuspensionUseCase.getDetailRecallSaleSuspension(product = productName, company = null).run {
+                _detail.value = fold(
                     onSuccess = { item ->
                         UiState.Success(item)
                     },
@@ -40,5 +39,9 @@ class DetailRecallSaleSuspensionViewModel @Inject constructor(
         }
     }
 
-
+    fun clear() {
+        viewModelScope.launch {
+            _detail.value = UiState.Loading
+        }
+    }
 }

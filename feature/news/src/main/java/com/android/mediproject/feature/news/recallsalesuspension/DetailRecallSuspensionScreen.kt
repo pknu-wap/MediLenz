@@ -1,21 +1,24 @@
 package com.android.mediproject.feature.news.recallsalesuspension
 
-import androidx.compose.foundation.Image
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -26,8 +29,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.onError
 import com.android.mediproject.core.common.viewmodel.onInitial
 import com.android.mediproject.core.common.viewmodel.onLoading
@@ -37,21 +39,37 @@ import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.CardBox
 import com.android.mediproject.feature.news.customui.Header
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 
 @Composable
 fun DetailRecallSaleSuspensionScreen(
     product: String,
+    pop: () -> Unit,
 ) {
+    BackHandler {
+        pop()
+    }
     val viewModel: DetailRecallSaleSuspensionViewModel = hiltViewModel()
-    val navController: NavController = rememberNavController()
     val uiState = viewModel.detail.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.load(product)
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            if (uiState.value is UiState.Success) {
+                viewModel.clear()
+            }
+        }
+    }
 
     uiState.value.onInitial {
 
     }.onError { error ->
 
     }.onLoading {
-        viewModel.load(product)
         CenterProgressIndicator(stringResource(id = R.string.loadingRecallSaleSuspensionData))
     }.onSuccess { detailRecallSuspension ->
         Item(detailRecallSuspension)
@@ -60,13 +78,16 @@ fun DetailRecallSaleSuspensionScreen(
 }
 
 // 회수 폐기
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun Item(detailRecallSuspension: DetailRecallSuspension) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RectangleShape,
     ) {
-        Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+        Column(modifier = Modifier
+            .padding(horizontal = 24.dp)
+            .verticalScroll(state = rememberScrollState())) {
             ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
                 val (header, product, image) = createRefs()
 
@@ -96,8 +117,8 @@ fun Item(detailRecallSuspension: DetailRecallSuspension) {
                     },
                 )
 
-                Image(
-                    painter = painterResource(id = com.android.mediproject.core.ui.R.drawable.baseline_camera_24),
+                GlideImage(
+                    model = detailRecallSuspension.imageUrl,
                     contentDescription = stringResource(id = R.string.recallSaleSuspensionImage),
                     modifier = Modifier
                         .width(100.dp)

@@ -31,18 +31,17 @@ class GetRecallSaleSuspensionUseCase @Inject constructor(
         }
     }
 
-    fun getDetailRecallSaleSuspension(
+    suspend fun getDetailRecallSaleSuspension(
         company: String?, product: String?,
-    ): Flow<Result<DetailRecallSuspension>> = recallSaleSuspensionRepository.getDetailRecallSaleSuspension(company, product).map {
-        it.fold(
-            onSuccess = { item ->
-                Result.success(
-                    UiModelMapperFactory.create<DetailRecallSuspension>(item).convert(),
-                )
-            },
-            onFailure = { throwable ->
-                Result.failure(throwable)
-            },
-        )
-    }
+    ): Result<DetailRecallSuspension> = recallSaleSuspensionRepository.getDetailRecallSaleSuspension(company, product).fold(
+        onSuccess = { item ->
+            Result.success(
+                UiModelMapperFactory.create<DetailRecallSuspension>(item).convert(),
+            )
+        },
+        onFailure = { throwable ->
+            Result.failure(throwable)
+        },
+    )
+
 }

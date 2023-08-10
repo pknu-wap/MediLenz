@@ -22,7 +22,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -40,9 +39,10 @@ import java.time.format.DateTimeFormatter
  * 행정 처분 목록 표시
  */
 @Composable
-fun AdminActionScreen() {
+fun AdminActionScreen(
+    onClicked: () -> Unit,
+) {
     val viewModel: AdminActionViewModel = hiltViewModel()
-    val navController = rememberNavController()
     val list = viewModel.adminActionList.collectAsLazyPagingItems()
     val listState = rememberLazyListState()
     restoreListState(listState = listState, listScrollState = viewModel.listScrollState)
@@ -55,8 +55,8 @@ fun AdminActionScreen() {
         ) { index ->
             list[index]?.run {
                 onClick = {
-                    viewModel.onClickedItem(index)
-                    navController.navigate("detailAdminAction")
+                    viewModel.onClickedItem(this)
+                    onClicked()
                 }
                 ItemOnList(this)
             }

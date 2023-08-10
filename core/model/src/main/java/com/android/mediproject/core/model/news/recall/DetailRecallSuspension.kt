@@ -39,6 +39,7 @@ data class DetailRecallSuspension(
     val retrievalCommandDate: DateTimeValue, // 20221004000000
     val retrievalReason: String, // 정량법 부적합
     val usagePeriod: String, // 제조일로부터36개월
+    val imageUrl: String,
 ) : UiModel
 
 @UiModelMapping
@@ -62,6 +63,7 @@ class DetailRecallSaleSuspensionUiModelMapper(override val source: DetailRecallS
                 retrievalCommandDate = retrievalCommandDate.toLocalDate("yyyyMMddHHmmss"),
                 retrievalReason = retrievalReason,
                 usagePeriod = usagePeriod,
+                imageUrl = imageUrl,
             )
         }
     }

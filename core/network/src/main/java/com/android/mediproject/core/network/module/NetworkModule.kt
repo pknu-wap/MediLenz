@@ -127,13 +127,6 @@ object NetworkModule {
     @Named("okHttpClientWithoutAny")
     fun providesOkHttpClientWithoutAny(): OkHttpClient {
         return OkHttpClient.Builder().run {
-            addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    if (BuildConfig.DEBUG) {
-                        level = HttpLoggingInterceptor.Level.BASIC
-                    }
-                },
-            )
             build()
         }
     }

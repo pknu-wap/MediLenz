@@ -55,7 +55,9 @@ class DetailRecallSaleSuspensionResponse : DataGoKrResponse<DetailRecallSaleSusp
             @SerialName("RTRVL_CMMND_DT") val retrievalCommandDate: String = "", // 20221004000000
             @SerialName("RTRVL_RESN") val retrievalReason: String = "", // 정량법 부적합
             @SerialName("USGPD") val usagePeriod: String = "", // 제조일로부터36개월
-        ) : NetworkApiResponse.ListItem
+        ) : NetworkApiResponse.ListItem {
+            var imageUrl: String = ""
+        }
     }
 
 }

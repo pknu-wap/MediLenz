@@ -31,8 +31,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.android.mediproject.core.model.navargs.RecallDisposalArgs
 import com.android.mediproject.feature.news.adminaction.AdminActionScreen
+import com.android.mediproject.feature.news.adminaction.DetailAdminActionScreen
 import com.android.mediproject.feature.news.recallsalesuspension.DetailRecallSaleSuspensionScreen
 import com.android.mediproject.feature.news.recallsalesuspension.RecallSaleSuspensionScreen
+import com.android.mediproject.feature.news.safetynotification.DetailSafetyNotificationScreen
 import com.android.mediproject.feature.news.safetynotification.SafetyNotificationScreen
 import kotlinx.parcelize.Parcelize
 
@@ -85,19 +87,32 @@ fun NewsScreen() {
             Divider(modifier = Modifier.padding(horizontal = 24.dp))
             when (selectedChip) {
                 is ChipType.RecallSaleSuspension -> RecallSaleSuspensionScreen {
-                    displayList = false
                     argument = it
+                    displayList = false
                 }
 
-                is ChipType.AdminAction -> AdminActionScreen()
-                is ChipType.SafetyNotification -> SafetyNotificationScreen()
+                is ChipType.AdminAction -> AdminActionScreen {
+                    displayList = false
+                }
+
+                is ChipType.SafetyNotification -> SafetyNotificationScreen {
+                    displayList = false
+                }
             }
         }
     } else {
         when (selectedChip) {
-            is ChipType.RecallSaleSuspension -> DetailRecallSaleSuspensionScreen(product = argument)
-            is ChipType.AdminAction -> DetailRecallSaleSuspensionScreen(product = argument)
-            is ChipType.SafetyNotification -> DetailRecallSaleSuspensionScreen(product = argument)
+            is ChipType.RecallSaleSuspension -> DetailRecallSaleSuspensionScreen(product = argument) {
+                displayList = true
+            }
+
+            is ChipType.AdminAction -> DetailAdminActionScreen {
+                displayList = true
+            }
+
+            is ChipType.SafetyNotification -> DetailSafetyNotificationScreen {
+                displayList = true
+            }
         }
     }
 }

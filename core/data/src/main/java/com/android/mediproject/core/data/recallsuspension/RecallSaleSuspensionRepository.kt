@@ -13,7 +13,7 @@ interface RecallSaleSuspensionRepository {
         pageNo: Int = 1, numOfRows: Int = 15,
     ): Result<List<RecallSaleSuspensionListResponse.Item.Item>>
 
-    fun getDetailRecallSaleSuspension(
+    suspend fun getDetailRecallSaleSuspension(
         company: String?, product: String?,
-    ): Flow<Result<DetailRecallSaleSuspensionResponse.Item.Item>>
+    ): Result<DetailRecallSaleSuspensionResponse.Item.Item>
 }
