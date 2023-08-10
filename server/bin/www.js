@@ -3,12 +3,12 @@
 const app = require("../app");
 const models = require("../src/models/index.js");
 const PORT = process.env.PORT || 3000; // 포트
+const fs = require("fs");
+const { imgsDir } = require("../src/config/staticDirLoc");
 
 const { auto } = require("../src/config/sequelizeAuto");
 
 const oracledb = require("oracledb");
-
-const dir = "./imgs"; // path to save uploaded files
 
 app.listen(PORT, async () => {
     if (process.env.NODE_ENV == "development") {
@@ -50,8 +50,13 @@ app.listen(PORT, async () => {
     //   console.log(auto.tables); // 생성된 모델 확인
     // });
 
-    if (!fs.existsSync(dir)) { // path doesn't exist
-        fs.mkdirSync(dir); // create directory
+    if (!fs.existsSync(imgsDir)) { // path doesn't exist
+        try {
+            fs.mkdirSync(imgsDir); // create directory
+            console.log("Directory created successfully.");
+        } catch (error) {
+            console.error("Error creating directory:", error);
+        }
     }
 
     console.log(`Server running on port ${PORT}`);
