@@ -29,6 +29,7 @@ import com.android.mediproject.core.model.news.safetynotification.SafetyNotifica
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.ListItemScreen
+import com.android.mediproject.feature.news.listDateTimeFormat
 import com.android.mediproject.feature.news.rememberListState
 import com.android.mediproject.feature.news.restoreListState
 
@@ -130,7 +131,7 @@ fun ItemOnList(safetyNotification: SafetyNotification) {
 
             // 날짜
             Text(
-                text = safetyNotification.publicationDate.value.toString(),
+                text = safetyNotification.publicationDate.value.format(listDateTimeFormat),
                 textAlign = TextAlign.Right,
                 modifier = Modifier.constrainAs(date) {
                     start.linkTo(title.end, 8.dp)

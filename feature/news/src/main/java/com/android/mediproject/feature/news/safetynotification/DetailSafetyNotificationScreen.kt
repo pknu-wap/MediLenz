@@ -38,6 +38,7 @@ import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.CardBox
 import com.android.mediproject.feature.news.customui.Header
+import com.android.mediproject.feature.news.listDateTimeFormat
 
 
 @Composable
@@ -94,7 +95,7 @@ fun Item(safetyNotification: SafetyNotification) {
                 Header(text = stringResource(id = R.string.publicationDate))
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = safetyNotification.publicationDate.value.toString(),
+                    text = safetyNotification.publicationDate.value.format(listDateTimeFormat),
                     style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 16.sp,
@@ -117,7 +118,7 @@ fun Item(safetyNotification: SafetyNotification) {
                     lineHeight = 16.sp,
                     fontWeight = FontWeight(500),
                     color = Color(0xFF595959),
-                    textAlign = TextAlign.Right,
+                    textAlign = TextAlign.Left,
                 ),
             )
 
@@ -126,7 +127,7 @@ fun Item(safetyNotification: SafetyNotification) {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "❍ 식품의약품안전처는 한국휴텍스제약㈜에 대한 현장조사 결과, ‘레큐틴정’ 등 6개 품목이 허가 또는 신고된 사항과 다르게 제조되고 있는 사실이 확인됨에 따라 사전 예방적 차원에서 잠정 제조·판매 중지를 명령하고 해당 품목에 대하여 회수 조치함. ❍ 의․약전문가는 동 정보사항에 유의하여 해당 제품의 처방 및 사용을 중지하고 필요시 대체의약품을 사용하여 주실 것을 당부드리며, ❍ 아울러 해당 유통품 회수가 적절히 수행될 수 있도록 적극 협조하여 주시기 바람",
+                text = safetyNotification.informationDetails,
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 20.sp,

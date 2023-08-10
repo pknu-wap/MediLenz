@@ -31,6 +31,7 @@ import com.android.mediproject.core.model.news.recall.RecallSaleSuspension
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.ListItemScreen
+import com.android.mediproject.feature.news.listDateTimeFormat
 import com.android.mediproject.feature.news.rememberListState
 import com.android.mediproject.feature.news.restoreListState
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -174,7 +175,9 @@ fun ItemOnList(recallSaleSuspension: RecallSaleSuspension) {
 
             // 날짜
             Text(
-                text = if (recallSaleSuspension.recallCommandDate.isEmpty) recallSaleSuspension.retrievalCommandDate.value.toString() else recallSaleSuspension.recallCommandDate.value.toString(),
+                text = if (recallSaleSuspension.recallCommandDate.isEmpty) recallSaleSuspension.retrievalCommandDate.value.format(listDateTimeFormat) else recallSaleSuspension.recallCommandDate.value.format(
+                    listDateTimeFormat,
+                ),
                 textAlign = TextAlign.Right,
                 modifier = Modifier
                     .constrainAs(date) {

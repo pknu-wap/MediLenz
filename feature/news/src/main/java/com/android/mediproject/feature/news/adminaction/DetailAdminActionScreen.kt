@@ -31,6 +31,7 @@ import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.CardBox
 import com.android.mediproject.feature.news.customui.Header
+import com.android.mediproject.feature.news.listDateTimeFormat
 
 @Composable
 fun DetailAdminActionScreen(
@@ -97,7 +98,7 @@ fun Item(adminAction: AdminAction) {
                 Header(text = stringResource(id = R.string.adminActionDate))
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = adminAction.adminActionDate.value.toString(),
+                    text = adminAction.adminActionDate.value.format(listDateTimeFormat),
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 16.sp,
@@ -231,7 +232,7 @@ fun Item(adminAction: AdminAction) {
                     Header(text = stringResource(id = R.string.disclosureEndDate))
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = adminAction.disclosureEndDate.value.toString(),
+                        text = adminAction.disclosureEndDate.value.format(listDateTimeFormat),
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 16.sp,

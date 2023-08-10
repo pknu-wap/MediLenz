@@ -39,6 +39,7 @@ import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.CardBox
 import com.android.mediproject.feature.news.customui.Header
+import com.android.mediproject.feature.news.listDateTimeFormat
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
@@ -85,9 +86,11 @@ fun Item(detailRecallSuspension: DetailRecallSuspension) {
         modifier = Modifier.fillMaxWidth(),
         shape = RectangleShape,
     ) {
-        Column(modifier = Modifier
-            .padding(horizontal = 24.dp)
-            .verticalScroll(state = rememberScrollState())) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .verticalScroll(state = rememberScrollState()),
+        ) {
             ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
                 val (header, product, image) = createRefs()
 
@@ -155,7 +158,7 @@ fun Item(detailRecallSuspension: DetailRecallSuspension) {
                 Header(text = stringResource(id = R.string.recallCommandDate))
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = detailRecallSuspension.recallCommandDate.value.toString(),
+                    text = detailRecallSuspension.recallCommandDate.value.format(listDateTimeFormat),
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 16.sp,
@@ -218,7 +221,7 @@ fun Item(detailRecallSuspension: DetailRecallSuspension) {
                     Header(text = stringResource(id = R.string.disclosureEndDate))
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = detailRecallSuspension.openEndDate.value.toString(),
+                        text = detailRecallSuspension.openEndDate.value.format(listDateTimeFormat),
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 16.sp,
