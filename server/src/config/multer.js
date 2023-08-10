@@ -1,12 +1,14 @@
 const multer = require("multer");
+const path = require("path");
 const { nanoid } = require("nanoid");
+const { imgsDir } = require("../src/config/staticDirLoc");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "./imgs"); // destination to store file
+        cb(null, imgsDir); // destination to store file
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + nanoid()); // 'Current time + random string'
+        cb(null, Date.now() + nanoid() + path.extname(file.originalname)); // 'Current time + random string + file extension'
     },
 });
 
