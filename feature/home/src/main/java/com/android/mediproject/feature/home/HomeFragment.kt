@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.mapper.MedicineInfoMapper
+import com.android.mediproject.core.common.util.SystemBarColorAnalyzer
 import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.common.util.ViewColorChanger
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment
@@ -20,15 +23,16 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHomeBinding::inflate) {
 
-    companion object {
-        private const val THRESHOLD = 0.7
-    }
 
     override val fragmentViewModel: HomeViewModel by viewModels()
 
     @Inject lateinit var systemBarStyler: SystemBarStyler
 
+    @Inject lateinit var systemBarColorAnalyzer: SystemBarColorAnalyzer
+
     @Inject lateinit var medicineInfoMapper: MedicineInfoMapper
+
+    @Inject lateinit var viewColorChanger: ViewColorChanger
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,8 +61,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     private fun setBarStyle() {
         systemBarStyler.changeMode(
             listOf(
-                SystemBarStyler.ChangeView(binding.homeBar1, SystemBarStyler.SpacingType.PADDING),
-                SystemBarStyler.ChangeView(binding.homeBar2, SystemBarStyler.SpacingType.PADDING),
+                SystemBarStyler.ChangeView(binding.homeBar, SystemBarStyler.SpacingType.MARGIN),
                 SystemBarStyler.ChangeView(binding.headerLayout, SystemBarStyler.SpacingType.PADDING),
             ),
             emptyList(),
@@ -67,34 +70,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     }
 
     private fun setBarScrollEffect() = binding.apply {
-        homeBar1.bringToFront()
-        homeBar2.bringToFront()
+        root.doOnPreDraw {
+            val divHeight = headerLayout.height - logoBackground.bottom
+            var onWhite = false
+            scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                if (onWhite != (scrollY >= divHeight)) {
+                    onWhite = !onWhite
 
-        val headerLayoutHeight = getViewHeightInPercent(binding.headerLayout, 1.2F)
+                    fragmentViewModel.setLogoColor(
+                        if (onWhite) HomeViewModel.LogoColor.White else HomeViewModel.LogoColor.Main,
+                    )
 
-        scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            homeBar2.alpha = (scrollY / headerLayoutHeight)
-            setScrollBarStyle()
-        }
-    }
+                    logoBackground.setBackgroundColor(
+                        resources.getColor(
+                            if (onWhite) com.android.mediproject.core.ui.R.color.white else com.android.mediproject.core.ui.R.color.main,
+                            null,
+                        ),
+                    )
+                    homeBar.setImageResource(
+                        if (onWhite) com.android.mediproject.core.common.R.drawable.medilenz_original_logo else com.android.mediproject.core.common.R.drawable.medilenz_white_logo,
+                    )
 
-    private fun getViewHeightInPercent(view: View, percent: Float): Float {
-        return measureViewHeight(view) * percent
-    }
+                    systemBarColorAnalyzer.convert()
+                }
 
-    private fun measureViewHeight(view: View): Int {
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-        return view.measuredHeight
-    }
-
-    private fun setScrollBarStyle() = binding.apply {
-        if (homeBar2.alpha > THRESHOLD) {
-            systemBarStyler.setStyle(
-                SystemBarStyler.SystemBarColor.BLACK,
-                SystemBarStyler.SystemBarColor.BLACK,
-            )
-        } else {
-            systemBarStyler.setStyle(SystemBarStyler.SystemBarColor.WHITE, SystemBarStyler.SystemBarColor.BLACK)
+            }
         }
     }
 
