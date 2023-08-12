@@ -1,8 +1,12 @@
 package com.android.mediproject.feature.home
 
+import android.animation.AnimatorSet
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
+import androidx.core.animation.doOnEnd
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
@@ -10,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.mapper.MedicineInfoMapper
 import com.android.mediproject.core.common.util.SystemBarColorAnalyzer
 import com.android.mediproject.core.common.util.SystemBarStyler
-import com.android.mediproject.core.common.util.ViewColorChanger
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment
@@ -32,7 +35,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
 
     @Inject lateinit var medicineInfoMapper: MedicineInfoMapper
 
-    @Inject lateinit var viewColorChanger: ViewColorChanger
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,25 +75,50 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
         root.doOnPreDraw {
             val divHeight = headerLayout.height - logoBackground.bottom
             var onWhite = false
+
+            val whiteLogo = resources.getDrawable(com.android.mediproject.core.common.R.drawable.medilenz_white_logo, null)
+            val mainLogo = resources.getDrawable(com.android.mediproject.core.common.R.drawable.medilenz_original_logo, null)
+            val whiteColor = resources.getColor(com.android.mediproject.core.ui.R.color.white, null)
+            val mainColor = resources.getColor(com.android.mediproject.core.ui.R.color.main, null)
+
             scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
                 if (onWhite != (scrollY >= divHeight)) {
                     onWhite = !onWhite
 
-                    fragmentViewModel.setLogoColor(
-                        if (onWhite) HomeViewModel.LogoColor.White else HomeViewModel.LogoColor.Main,
-                    )
+                    val backgroundColorChange = ObjectAnimator.ofInt(
+                        logoBackground, "backgroundColor",
+                        if (onWhite) mainColor else whiteColor,
+                        if (onWhite) whiteColor else mainColor,
+                    ).apply {
+                        setEvaluator(ArgbEvaluator())
+                        duration = 250
+                    }
 
-                    logoBackground.setBackgroundColor(
-                        resources.getColor(
-                            if (onWhite) com.android.mediproject.core.ui.R.color.white else com.android.mediproject.core.ui.R.color.main,
-                            null,
-                        ),
-                    )
-                    homeBar.setImageResource(
-                        if (onWhite) com.android.mediproject.core.common.R.drawable.medilenz_original_logo else com.android.mediproject.core.common.R.drawable.medilenz_white_logo,
-                    )
+                    val logoChange = kotlinx.coroutines.Runnable {
+                        homeBar.setImageDrawable(
+                            if (onWhite) mainLogo else whiteLogo,
+                        )
+                    }
 
-                    systemBarColorAnalyzer.convert()
+                    val fadeOutAnim = ObjectAnimator.ofFloat(homeBar, "alpha", 1f, 0f).apply {
+                        duration = 150
+                    }
+                    val fadeInAnim = ObjectAnimator.ofFloat(homeBar, "alpha", 0f, 1f).apply {
+                        duration = 150
+                    }
+
+                    fadeOutAnim.doOnEnd {
+                        logoChange.run()
+                        fadeInAnim.start()
+                    }
+                    fadeInAnim.doOnEnd {
+                        systemBarColorAnalyzer.convert()
+                    }
+
+                    val anims = AnimatorSet().apply {
+                        playTogether(backgroundColorChange, fadeOutAnim)
+                    }
+                    anims.start()
                 }
 
             }

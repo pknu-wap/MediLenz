@@ -18,7 +18,6 @@ import com.android.mediproject.core.common.util.LayoutController
 import com.android.mediproject.core.common.util.SystemBarColorAnalyzer
 import com.android.mediproject.core.common.util.SystemBarController
 import com.android.mediproject.core.common.util.SystemBarStyler
-import com.android.mediproject.core.common.util.ViewColorChanger
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.network.NetworkStatusManager
 import com.android.mediproject.core.ui.WindowViewModel
@@ -36,7 +35,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
     @Inject lateinit var systemBarController: SystemBarController
     @Inject lateinit var networkStatusManager: NetworkStatusManager
     @Inject lateinit var systemBarColorAnalyzer: SystemBarColorAnalyzer
-    @Inject lateinit var viewColorChanger: ViewColorChanger
 
     override val activityViewModel: MainViewModel by viewModels()
     private lateinit var navController: NavController
@@ -45,7 +43,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMa
     override fun afterBinding() {
         systemBarController.init(this, window, this)
         systemBarColorAnalyzer.init(this, systemBarController, lifecycle)
-        viewColorChanger.init(this)
 
         networkStatusManager.activityLifeCycle = lifecycle
         networkStatusManager.networkStateCallback = NetworkStatusManager.NetworkStateCallback { isConnected ->
