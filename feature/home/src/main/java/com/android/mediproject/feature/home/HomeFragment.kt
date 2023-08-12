@@ -3,6 +3,7 @@ package com.android.mediproject.feature.home
 import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
@@ -63,7 +64,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     private fun setBarStyle() {
         systemBarStyler.changeMode(
             listOf(
-                SystemBarStyler.ChangeView(binding.homeBar, SystemBarStyler.SpacingType.MARGIN),
+                SystemBarStyler.ChangeView(binding.logoBackground, SystemBarStyler.SpacingType.PADDING),
                 SystemBarStyler.ChangeView(binding.headerLayout, SystemBarStyler.SpacingType.PADDING),
             ),
             emptyList(),
@@ -71,6 +72,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
         setBarScrollEffect()
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setBarScrollEffect() = binding.apply {
         root.doOnPreDraw {
             val divHeight = headerLayout.height - logoBackground.bottom
@@ -126,12 +128,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     }
 
     private fun setFragmentResultListener() {
-        setRecentCommentResultLisnter()
-        setRecentPenaltyResultLisnter()
-        setRecentSearchResultLisnter()
+        setRecentCommentResultListener()
+        setRecentPenaltyResultListener()
+        setRecentSearchResultListener()
     }
 
-    private fun setRecentCommentResultLisnter() {
+    private fun setRecentCommentResultListener() {
         childFragmentManager.setFragmentResultListener(RecentCommentListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
             bundle.apply {
                 val result = getInt(RecentCommentListFragment.ResultKey.WORD.name)
@@ -139,7 +141,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
         }
     }
 
-    private fun setRecentPenaltyResultLisnter() {
+    private fun setRecentPenaltyResultListener() {
         childFragmentManager.setFragmentResultListener(RecentPenaltyListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
             bundle.apply {
                 val result = getInt(RecentPenaltyListFragment.ResultKey.PENALTY_ID.name)
@@ -147,7 +149,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
         }
     }
 
-    private fun setRecentSearchResultLisnter() {
+    private fun setRecentSearchResultListener() {
         childFragmentManager.setFragmentResultListener(RecentSearchListFragment.ResultKey.RESULT_KEY.name, viewLifecycleOwner) { _, bundle ->
             findNavController().navigate(
                 R.id.action_homeFragment_to_searchMedicinesFragment,
