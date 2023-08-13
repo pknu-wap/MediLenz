@@ -4,6 +4,8 @@ import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
@@ -14,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.mapper.MedicineInfoMapper
 import com.android.mediproject.core.common.util.SystemBarColorAnalyzer
+import com.android.mediproject.core.common.util.SystemBarController
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -30,7 +33,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
 
     override val fragmentViewModel: HomeViewModel by viewModels()
 
-    @Inject lateinit var systemBarStyler: SystemBarStyler
+    @Inject lateinit var systemBarStyler: SystemBarController
 
     @Inject lateinit var systemBarColorAnalyzer: SystemBarColorAnalyzer
 
@@ -67,60 +70,54 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
                 SystemBarStyler.ChangeView(binding.logoBackground, SystemBarStyler.SpacingType.PADDING),
                 SystemBarStyler.ChangeView(binding.headerLayout, SystemBarStyler.SpacingType.PADDING),
             ),
-            emptyList(),
         )
         setBarScrollEffect()
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setBarScrollEffect() = binding.apply {
         root.doOnPreDraw {
+            ViewState.init(requireContext())
             val divHeight = headerLayout.height - logoBackground.bottom
-            var onWhite = false
+            var lastState: ViewState = ViewState.Default
 
-            val whiteLogo = resources.getDrawable(com.android.mediproject.core.common.R.drawable.medilenz_white_logo, null)
-            val mainLogo = resources.getDrawable(com.android.mediproject.core.common.R.drawable.medilenz_original_logo, null)
-            val whiteColor = resources.getColor(com.android.mediproject.core.ui.R.color.white, null)
-            val mainColor = resources.getColor(com.android.mediproject.core.ui.R.color.main, null)
-
-            scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-                if (onWhite != (scrollY >= divHeight)) {
-                    onWhite = !onWhite
-
+            scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                val newState = if (scrollY >= divHeight) ViewState.OnWhite else ViewState.Default
+                if (lastState != newState) {
                     val backgroundColorChange = ObjectAnimator.ofInt(
-                        logoBackground, "backgroundColor",
-                        if (onWhite) mainColor else whiteColor,
-                        if (onWhite) whiteColor else mainColor,
+                        logoBackground, PROPERTY_BACKGROUND_COLOR,
+                        lastState.color,
+                        newState.color,
                     ).apply {
                         setEvaluator(ArgbEvaluator())
-                        duration = 250
+                        duration = ANIM_DURATION
                     }
 
-                    val logoChange = kotlinx.coroutines.Runnable {
-                        homeBar.setImageDrawable(
-                            if (onWhite) mainLogo else whiteLogo,
-                        )
+                    val fadeOutAnim = ObjectAnimator.ofFloat(homeBar, PROPERTY_ALPHA, 1f, 0f).apply {
+                        duration = FADE_INT_OUT_DURATION
+
+                        val fadeInAnim = ObjectAnimator.ofFloat(homeBar, PROPERTY_ALPHA, 0f, 1f).apply {
+                            duration = FADE_INT_OUT_DURATION
+                            doOnEnd {
+                                systemBarColorAnalyzer.convert()
+                            }
+                        }
+
+                        doOnEnd {
+                            // logoChange
+                            kotlinx.coroutines.Runnable {
+                                homeBar.setImageDrawable(
+                                    newState.drawable,
+                                )
+                            }.run()
+                            fadeInAnim.start()
+                        }
                     }
 
-                    val fadeOutAnim = ObjectAnimator.ofFloat(homeBar, "alpha", 1f, 0f).apply {
-                        duration = 150
-                    }
-                    val fadeInAnim = ObjectAnimator.ofFloat(homeBar, "alpha", 0f, 1f).apply {
-                        duration = 150
-                    }
-
-                    fadeOutAnim.doOnEnd {
-                        logoChange.run()
-                        fadeInAnim.start()
-                    }
-                    fadeInAnim.doOnEnd {
-                        systemBarColorAnalyzer.convert()
-                    }
-
-                    val anims = AnimatorSet().apply {
-                        playTogether(backgroundColorChange, fadeOutAnim)
-                    }
+                    val anims = AnimatorSet()
+                    anims.playTogether(backgroundColorChange, fadeOutAnim)
                     anims.start()
+
+                    lastState = newState
                 }
 
             }
@@ -164,5 +161,48 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
             span = medicineInfoMapper.initHeaderSpan(requireContext(), getString(R.string.headerTextOnHome))
         }
         binding.headerText.text = span
+    }
+
+    private sealed class ViewState {
+        abstract val drawable: Drawable
+        abstract val color: Int
+
+        companion object {
+            protected var drawables = mapOf<ViewState, Drawable>()
+            protected var colors = mapOf<ViewState, Int>()
+
+            @SuppressLint("UseCompatLoadingForDrawables")
+            fun init(context: Context) {
+                drawables = mapOf(
+                    ViewState.Default to context.resources.getDrawable(com.android.mediproject.core.common.R.drawable.medilenz_white_logo, null),
+                    ViewState.OnWhite to context.resources.getDrawable(com.android.mediproject.core.common.R.drawable.medilenz_original_logo, null),
+                )
+                colors = mapOf(
+                    ViewState.Default to context.resources.getColor(com.android.mediproject.core.ui.R.color.main, null),
+                    ViewState.OnWhite to context.resources.getColor(com.android.mediproject.core.ui.R.color.white, null),
+                )
+            }
+        }
+
+        object Default : ViewState() {
+            override val drawable: Drawable
+                get() = drawables[ViewState.Default]!!
+            override val color: Int
+                get() = colors[ViewState.Default]!!
+        }
+
+        object OnWhite : ViewState() {
+            override val drawable: Drawable
+                get() = drawables[ViewState.OnWhite]!!
+            override val color: Int
+                get() = colors[ViewState.OnWhite]!!
+        }
+    }
+
+    private companion object ViewAnimConsts {
+        const val ANIM_DURATION = 250L
+        const val FADE_INT_OUT_DURATION = 150L
+        const val PROPERTY_BACKGROUND_COLOR = "backgroundColor"
+        const val PROPERTY_ALPHA = "alpha"
     }
 }
