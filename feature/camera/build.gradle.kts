@@ -61,4 +61,5 @@ dependencies {
 
     implementation(libs.bundles.tflite)
     implementation(libs.smartdeeplink.core)
+    implementation(libs.simpledialog)
 }
