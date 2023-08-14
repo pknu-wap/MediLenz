@@ -2,6 +2,7 @@ plugins {
     id("mediproject.android.feature")
     id("kotlinx-serialization")
     alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -27,10 +28,12 @@ dependencies {
     implementation(libs.bundles.retrofits)
     implementation(libs.bundles.dataStores)
     implementation(libs.google.protobuf.kotlin.lite)
-    //implementation(libs.kotlinx.datetime)
     implementation(libs.okhttp.logginginterceptor)
     implementation(libs.okhttp)
     implementation(libs.jsoup)
     kapt(libs.androidx.hilt.compilerKapt)
     kapt(libs.androidx.hilt.work.compilerKapt)
+
+    ksp(libs.ksealedbinding.compiler)
+    implementation(libs.ksealedbinding.annotation)
 }

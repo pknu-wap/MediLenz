@@ -18,12 +18,12 @@ import com.android.mediproject.core.common.util.LayoutController
 import com.android.mediproject.core.common.util.SystemBarColorAnalyzer
 import com.android.mediproject.core.common.util.SystemBarController
 import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.network.NetworkStatusManager
 import com.android.mediproject.core.ui.WindowViewModel
 import com.android.mediproject.core.ui.base.BaseActivity
 import com.android.mediproject.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint

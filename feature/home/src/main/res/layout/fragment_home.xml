@@ -89,6 +89,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/divider_margin_vertical" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1000dp" />
                 </LinearLayout>
 
                 <com.android.mediproject.core.ui.base.view.MediSearchbar
@@ -109,19 +113,20 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <com.android.mediproject.core.ui.base.view.Bar
-            android:id="@+id/homeBar1"
+        <FrameLayout
+            android:id="@+id/logoBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            app:setTheme="home_blue" />
+            android:background="@color/main"
+            android:layout_gravity="top">
 
-        <com.android.mediproject.core.ui.base.view.Bar
-            android:id="@+id/homeBar2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:alpha="0"
-            app:setTheme="home_white" />
+            <ImageView
+                android:id="@+id/homeBar"
+                android:layout_width="108dp"
+                android:layout_height="51dp"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/medilenz_white_logo" />
+        </FrameLayout>
+
     </FrameLayout>
 </layout>

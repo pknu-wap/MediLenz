@@ -1,4 +1,4 @@
-package com.android.mediproject.core.network.datasource.penalties.adminaction
+package com.android.mediproject.core.network.datasource.news.adminaction
 
 import com.android.mediproject.core.model.news.adminaction.AdminActionListResponse
 

@@ -5,7 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE
 import com.android.mediproject.core.model.news.safetynotification.SafetyNotificationResponse
-import com.android.mediproject.core.network.datasource.safetynotification.SafetyNotificationDataSource
+import com.android.mediproject.core.network.datasource.news.safetynotification.SafetyNotificationDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

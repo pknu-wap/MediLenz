@@ -18,5 +18,7 @@ dependencies {
     implementation(project(":core:model"))
 
     testImplementation(libs.bundles.testLocal)
+    implementation(libs.bundles.testLocal)
     androidTestImplementation(libs.bundles.testAndroid)
+    implementation(libs.bundles.testAndroid)
 }

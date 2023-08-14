@@ -1,4 +1,4 @@
-package com.android.mediproject.core.network.datasource.safetynotification
+package com.android.mediproject.core.network.datasource.news.safetynotification
 
 import androidx.paging.PagingSource
 import com.android.mediproject.core.model.news.safetynotification.SafetyNotificationResponse

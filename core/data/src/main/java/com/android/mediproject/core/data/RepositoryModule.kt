@@ -42,10 +42,10 @@ import com.android.mediproject.core.network.datasource.favoritemedicine.Favorite
 import com.android.mediproject.core.network.datasource.granule.GranuleIdentificationDataSource
 import com.android.mediproject.core.network.datasource.medicineapproval.MedicineApprovalDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
-import com.android.mediproject.core.network.datasource.penalties.adminaction.AdminActionListDataSourceImpl
-import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSaleSuspensionDataSource
-import com.android.mediproject.core.network.datasource.penalties.recallsuspension.RecallSaleSuspensionListDataSourceImpl
-import com.android.mediproject.core.network.datasource.safetynotification.SafetyNotificationDataSource
+import com.android.mediproject.core.network.datasource.news.adminaction.AdminActionListDataSourceImpl
+import com.android.mediproject.core.network.datasource.news.recallsuspension.RecallSaleSuspensionDataSource
+import com.android.mediproject.core.network.datasource.news.recallsuspension.RecallSaleSuspensionListDataSourceImpl
+import com.android.mediproject.core.network.datasource.news.safetynotification.SafetyNotificationDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.tokens.TokenDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSource

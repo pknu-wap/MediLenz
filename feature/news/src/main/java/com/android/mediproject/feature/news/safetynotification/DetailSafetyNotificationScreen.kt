@@ -1,11 +1,16 @@
 package com.android.mediproject.feature.news.safetynotification
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,32 +19,67 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.android.mediproject.core.common.viewmodel.onInitial
+import com.android.mediproject.core.common.viewmodel.onSuccess
+import com.android.mediproject.core.model.news.safetynotification.SafetyNotification
+import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.CardBox
 import com.android.mediproject.feature.news.customui.Header
+import com.android.mediproject.feature.news.listDateTimeFormat
 
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun Item() {
+fun DetailSafetyNotificationScreen(
+    pop: () -> Unit,
+) {
+    BackHandler {
+        pop()
+    }
+
+    val viewModel: SafetyNotificationViewModel = hiltViewModel()
+    val item = viewModel.clickedItem.collectAsStateWithLifecycle()
+
+    item.value.onInitial {
+        CenterProgressIndicator(stringResource(id = R.string.loadingSafetyNotification))
+    }.onSuccess {
+        Item(it)
+    }
+
+}
+
+
+@OptIn(ExperimentalTextApi::class)
+@Composable
+fun Item(safetyNotification: SafetyNotification) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RectangleShape,
     ) {
-        Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .verticalScroll(state = rememberScrollState()),
+        ) {
             // 제목
             Header(
                 text = stringResource(id = R.string.title),
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = "한국휴텍스제약㈜ 제조 ‘레큐틴정(트리메부틴말레산염)’등 6개 품목 잠정 제조·판매·사용 중지",
+                text = safetyNotification.title,
                 style = TextStyle(
                     fontSize = 24.sp,
                     lineHeight = 28.sp,
@@ -55,7 +95,7 @@ fun Item() {
                 Header(text = stringResource(id = R.string.publicationDate))
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "2023-07-21 금",
+                    text = safetyNotification.publicationDate.value.format(listDateTimeFormat),
                     style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 16.sp,
@@ -72,13 +112,13 @@ fun Item() {
             Header(text = stringResource(id = R.string.informationSummary))
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = "❍ 한국휴텍스제약㈜에서 제조한 의약품 6개 품목에 대하여 잠정 제조·판매중지 명령 및 사용 중단을 요청함.",
+                text = safetyNotification.informationSummary,
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 16.sp,
                     fontWeight = FontWeight(500),
                     color = Color(0xFF595959),
-                    textAlign = TextAlign.Right,
+                    textAlign = TextAlign.Left,
                 ),
             )
 
@@ -87,7 +127,7 @@ fun Item() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "❍ 식품의약품안전처는 한국휴텍스제약㈜에 대한 현장조사 결과, ‘레큐틴정’ 등 6개 품목이 허가 또는 신고된 사항과 다르게 제조되고 있는 사실이 확인됨에 따라 사전 예방적 차원에서 잠정 제조·판매 중지를 명령하고 해당 품목에 대하여 회수 조치함. ❍ 의․약전문가는 동 정보사항에 유의하여 해당 제품의 처방 및 사용을 중지하고 필요시 대체의약품을 사용하여 주실 것을 당부드리며, ❍ 아울러 해당 유통품 회수가 적절히 수행될 수 있도록 적극 협조하여 주시기 바람",
+                text = safetyNotification.informationDetails,
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 20.sp,
@@ -103,7 +143,7 @@ fun Item() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "❍ 한국휴텍스제약㈜에서 제조한 ‘레큐틴정’ 등 6개 품목(붙임)",
+                text = safetyNotification.actions,
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 20.sp,
@@ -123,7 +163,7 @@ fun Item() {
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
-                        text = "의약품관리과 : 정다현",
+                        text = "${safetyNotification.department} - ${safetyNotification.manager}",
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
@@ -143,15 +183,31 @@ fun Item() {
                 Column(horizontalAlignment = Alignment.End) {
                     Header(text = stringResource(id = R.string.attachmentFile))
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "https://nedrug.mfds.go.kr/cmn/edms/down/1ObfzbuFq4l",
-                        textAlign = TextAlign.Right,
+                    ClickableText(
+                        text = buildAnnotatedString {
+                            pushStringAnnotation(
+                                tag = safetyNotification.attachmentFile,
+                                annotation = safetyNotification.attachmentFile,
+                            )
+                            withStyle(
+                                style = SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    textDecoration = TextDecoration.Underline,
+                                ),
+                            ) {
+                                append(safetyNotification.attachmentFile)
+                            }
+                        },
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 20.sp,
                             fontWeight = FontWeight(300),
                             color = Color(0xFF3E3C3C),
+                            textAlign = TextAlign.Right,
                         ),
+                        onClick = {
+
+                        },
                     )
                 }
             }

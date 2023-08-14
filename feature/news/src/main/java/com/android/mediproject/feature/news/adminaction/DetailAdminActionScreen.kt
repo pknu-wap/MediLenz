@@ -1,15 +1,17 @@
 package com.android.mediproject.feature.news.adminaction
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,43 +20,55 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.android.mediproject.core.common.viewmodel.onInitial
+import com.android.mediproject.core.common.viewmodel.onSuccess
+import com.android.mediproject.core.model.news.adminaction.AdminAction
+import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.CardBox
 import com.android.mediproject.feature.news.customui.Header
+import com.android.mediproject.feature.news.listDateTimeFormat
 
 @Composable
 fun DetailAdminActionScreen(
-    viewModel: AdminActionViewModel = hiltViewModel(),
+    pop: () -> Unit,
 ) {
-    viewModel.getClickedItem()
-    val item = viewModel.clickedItem.collectAsState()
+    BackHandler {
+        pop()
+    }
 
-    item.value?.apply {
-        //Item(item = this)
+    val viewModel: AdminActionViewModel = hiltViewModel()
+    val item = viewModel.clickedItem.collectAsStateWithLifecycle()
+
+    item.value.onInitial {
+        CenterProgressIndicator(stringResource(id = R.string.loadingAdminActionList))
+    }.onSuccess {
+        Item(it)
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun Item() {
+fun Item(adminAction: AdminAction) {
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-       ,
+        modifier = Modifier.fillMaxWidth(),
         shape = RectangleShape,
     ) {
-        Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .verticalScroll(state = rememberScrollState()),
+        ) {
             // 업체명
             Header(
                 text = stringResource(id = R.string.companyName),
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = "동우당제약(주)",
+                text = adminAction.companyName,
                 style = TextStyle(
                     fontSize = 24.sp,
                     lineHeight = 28.sp,
@@ -70,7 +84,7 @@ fun Item() {
                 Header(text = stringResource(id = R.string.manufactureAddress))
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "경상북도 의성군 봉양면 농공신동길 27",
+                    text = adminAction.companyAddress,
                     style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 16.sp,
@@ -84,7 +98,7 @@ fun Item() {
                 Header(text = stringResource(id = R.string.adminActionDate))
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "2023-08-01 월",
+                    text = adminAction.adminActionDate.value.format(listDateTimeFormat),
                     style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 16.sp,
@@ -102,7 +116,7 @@ fun Item() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "동우당건강(200406266)",
+                text = "${adminAction.itemName}(${adminAction.itemSeq})",
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 20.sp,
@@ -118,7 +132,7 @@ fun Item() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "한약재 수거 검사 결과 '부적합' 판정",
+                text = adminAction.violationDetails,
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 20.sp,
@@ -134,7 +148,7 @@ fun Item() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "  ￮ ‘동우당건강(제118호)’ 품목 제조업무 정지 3개월 (2023. 8. 16. ~ 2023. 11. 15.)",
+                text = adminAction.adminAction,
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 20.sp,
@@ -150,10 +164,7 @@ fun Item() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = """
-                      ￮ 위반법령: 「약사법」제62조
-                      ￮ 처분법령: 「약사법」제76조 및 「의약품 등의 안전에 관한 규칙」제95조 관련 [별표 8] Ⅱ. 개별기준 제39호라목11)
-                """.trimIndent(),
+                text = adminAction.violationLaw,
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 20.sp,
@@ -174,7 +185,7 @@ fun Item() {
                     Header(text = stringResource(id = R.string.bizrNo))
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "5028163816",
+                        text = adminAction.companyBizrNo,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 16.sp,
@@ -197,14 +208,14 @@ fun Item() {
                     Header(text = stringResource(id = R.string.companyRegistrationNumber))
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "20020096",
+                        text = adminAction.companyRegistrationNumber,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 16.sp,
                             fontWeight = FontWeight(500),
                             color = Color(0xFF595959),
 
-                        ),
+                            ),
                     )
                 }
             }
@@ -221,14 +232,14 @@ fun Item() {
                     Header(text = stringResource(id = R.string.disclosureEndDate))
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "2024-02-14 수",
+                        text = adminAction.disclosureEndDate.value.format(listDateTimeFormat),
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 16.sp,
                             fontWeight = FontWeight(500),
                             color = Color(0xFF595959),
 
-                        ),
+                            ),
                     )
                 }
             }
@@ -245,7 +256,7 @@ fun Item() {
                     Header(text = stringResource(id = R.string.adminActionNumber))
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "2023005985",
+                        text = adminAction.adminActionNo,
                         style = TextStyle(
                             fontSize = 16.sp,
                             lineHeight = 16.sp,

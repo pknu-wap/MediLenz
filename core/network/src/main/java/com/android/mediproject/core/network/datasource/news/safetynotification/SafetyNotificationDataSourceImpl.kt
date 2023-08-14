@@ -1,4 +1,4 @@
-package com.android.mediproject.core.network.datasource.safetynotification
+package com.android.mediproject.core.network.datasource.news.safetynotification
 
 import androidx.paging.PagingState
 import com.android.mediproject.core.common.DATA_GO_KR_PAGE_SIZE

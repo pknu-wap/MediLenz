@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.PixelCopy
 import android.view.View
 import android.view.Window
@@ -53,9 +52,10 @@ class SystemBarColorAnalyzer @Inject constructor() {
     private val navigationBarHeight = resource.getDimensionPixelSize(resource.getIdentifier("navigation_bar_height", "dimen", "android"))
 
     private val criteriaColor = 140
+    private val avgRange = 3 to 3
     private var systemBarController: SystemBarController? = null
 
-    private val delayTime = 80L
+    private val delayTime = 70L
 
     private val _statusBarColor = MutableSharedFlow<SystemBarStyler.SystemBarColor>(
         onBufferOverflow = BufferOverflow.DROP_OLDEST, replay = 1,
@@ -106,6 +106,16 @@ class SystemBarColorAnalyzer @Inject constructor() {
         return statusBarColor to navigationBarColor
     }
 
+    private fun avg(bitmap: Bitmap): Int {
+        var sum = 0
+        for (i in 0 until avgRange.first) {
+            for (j in 0 until avgRange.second) {
+                sum += bitmap[i, j].toGrayScale()
+            }
+        }
+        return sum / (avgRange.first * avgRange.second)
+    }
+
     fun init(activity: Activity, systemBarController: SystemBarController, lifecycle: Lifecycle) {
         decorView = activity.window.decorView
         this.systemBarController = systemBarController
@@ -138,8 +148,6 @@ class SystemBarColorAnalyzer @Inject constructor() {
     }
 
     private fun Int.toColor() = toGrayScale().let { gray ->
-        Log.d("wap", "GrayScale : $gray")
-
         if (gray == 0 || gray == -1) SystemBarStyler.SystemBarColor.WHITE
         else if (gray <= criteriaColor) SystemBarStyler.SystemBarColor.WHITE
         else SystemBarStyler.SystemBarColor.BLACK

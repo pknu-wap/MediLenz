@@ -1,63 +1,79 @@
 package com.android.mediproject.feature.news
 
-sealed interface NavRoutes {
-    val name: String
+import androidx.navigation.NavType
+
+sealed class NavRoutes {
+    abstract val name: String
+    open val arguments: List<Pair<String, NavType<*>>> = listOf()
     val uri: String
+        get() {
+            return if (arguments.isEmpty()) name else "$name/${arguments.joinToString("/") { "{${it.first}}" }}"
+        }
+
+    fun uriWithArguments(args: List<Pair<String, Any>>): String {
+        return if (args.isEmpty()) uri else args.run {
+            var finalUri = uri
+            forEach { finalUri = finalUri.replace("{${it.first}}", it.second.toString()) }
+            finalUri
+        }
+    }
 }
 
-sealed class MainRoutes : NavRoutes {
+sealed class MainRoutes : NavRoutes() {
     sealed class News : MainRoutes() {
         override val name: String = Companion.name
-        override val uri: String = Companion.uri
 
         companion object : MainRoutes() {
             override val name: String = "News"
-            override val uri: String = "news"
         }
     }
 }
 
 sealed class RecallSaleSuspensionRoutes : MainRoutes.News() {
     override val name: String = "RecallSaleSuspension"
-    override val uri: String = "${super.uri}/recall-sale-suspension"
+    override val arguments: List<Pair<String, NavType<*>>> = listOf()
 
     object RecallSaleSuspensionRoutesList : RecallSaleSuspensionRoutes() {
         override val name: String = "RecallSaleSuspensionList"
-        override val uri: String = "${super.uri}/list"
+        override val arguments: List<Pair<String, NavType<*>>> = listOf()
+
     }
 
     object RecallSaleSuspensionRoutesDetail : RecallSaleSuspensionRoutes() {
         override val name: String = "RecallSaleSuspensionDetail"
-        override val uri: String = "${super.uri}/detail"
+        override val arguments: List<Pair<String, NavType<*>>> = listOf("product" to NavType.StringType)
+
     }
 }
 
 sealed class AdminActionRoutes : MainRoutes.News() {
     override val name: String = "AdminAction"
-    override val uri: String = "${super.uri}/admin-action"
+    override val arguments: List<Pair<String, NavType<*>>> = listOf()
 
     object AdminActionRoutesList : AdminActionRoutes() {
         override val name: String = "AdminActionList"
-        override val uri: String = "${super.uri}/list"
+        override val arguments: List<Pair<String, NavType<*>>> = listOf()
+
     }
 
     object AdminActionRoutesDetail : AdminActionRoutes() {
         override val name: String = "AdminActionDetail"
-        override val uri: String = "${super.uri}/detail"
+        override val arguments: List<Pair<String, NavType<*>>> = listOf()
+
     }
 }
 
 sealed class SafetyNotificationRoutes : MainRoutes.News() {
     override val name: String = "SafetyNotification"
-    override val uri: String = "${super.uri}/safety-notification"
+    override val arguments: List<Pair<String, NavType<*>>> = listOf()
 
     object SafetyNotificationRoutesList : SafetyNotificationRoutes() {
         override val name: String = "SafetyNotificationList"
-        override val uri: String = "${super.uri}/list"
+        override val arguments: List<Pair<String, NavType<*>>> = listOf()
     }
 
     object SafetyNotificationRoutesDetail : SafetyNotificationRoutes() {
         override val name: String = "SafetyNotificationDetail"
-        override val uri: String = "${super.uri}/detail"
+        override val arguments: List<Pair<String, NavType<*>>> = listOf()
     }
 }

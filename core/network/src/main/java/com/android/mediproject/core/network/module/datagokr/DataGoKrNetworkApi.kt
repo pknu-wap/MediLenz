@@ -75,7 +75,7 @@ interface DataGoKrNetworkApi : DurProductInfoNetworkApi, DurIngrInfoNetworkApi {
         @Query("type") type: String = JSON,
         @Query("Entrps", encoded = true) company: String?,
         @Query("Prduct", encoded = true) product: String?,
-        @Query("numOfRows") numOfRows: Int = DATA_GO_KR_PAGE_SIZE,
+        @Query("numOfRows") numOfRows: Int = 1,
     ): Response<DetailRecallSaleSuspensionResponse>
 
     /**

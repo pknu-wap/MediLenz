@@ -1,11 +1,10 @@
 package com.android.mediproject.feature.news.safetynotification
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +21,6 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -31,19 +29,23 @@ import com.android.mediproject.core.model.news.safetynotification.SafetyNotifica
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.ListItemScreen
+import com.android.mediproject.feature.news.listDateTimeFormat
+import com.android.mediproject.feature.news.rememberListState
+import com.android.mediproject.feature.news.restoreListState
 
 
 @Composable
-fun SafetyNotificationScreen() {
+fun SafetyNotificationScreen(
+    onClicked: () -> Unit,
+) {
     val viewModel: SafetyNotificationViewModel = hiltViewModel()
-    val navController = rememberNavController()
     val list = viewModel.safetyNotificationList.collectAsLazyPagingItems()
 
+    val listState = rememberLazyListState()
+    restoreListState(listState = listState, listScrollState = viewModel.listScrollState)
+
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center,
+        state = listState,
     ) {
         items(
             count = list.itemCount, key = list.itemKey(),
@@ -52,7 +54,8 @@ fun SafetyNotificationScreen() {
         ) { index ->
             list[index]?.run {
                 onClick = {
-                    navController.navigate("detailAdminAction")
+                    viewModel.onClick(this)
+                    onClicked()
                 }
                 ItemOnList(this)
             }
@@ -65,6 +68,8 @@ fun SafetyNotificationScreen() {
             }
         }
     }
+
+    rememberListState(listState = listState, listScrollState = viewModel.listScrollState)
 }
 
 
@@ -126,7 +131,7 @@ fun ItemOnList(safetyNotification: SafetyNotification) {
 
             // 날짜
             Text(
-                text = safetyNotification.publicationDate.value.toString(),
+                text = safetyNotification.publicationDate.value.format(listDateTimeFormat),
                 textAlign = TextAlign.Right,
                 modifier = Modifier.constrainAs(date) {
                     start.linkTo(title.end, 8.dp)

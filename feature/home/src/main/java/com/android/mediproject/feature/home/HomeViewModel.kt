@@ -1,7 +1,7 @@
 package com.android.mediproject.feature.home
 
-import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,5 +20,10 @@ class HomeViewModel @Inject constructor(
 
     sealed class HomeEvent {
         object NavigateToSearch : HomeEvent()
+    }
+
+    sealed interface LogoColor {
+        object White : LogoColor
+        object Main : LogoColor
     }
 }

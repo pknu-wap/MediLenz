@@ -3,12 +3,13 @@ package com.android.mediproject.core.network.module
 import com.android.mediproject.core.network.datasource.image.GoogleSearchDataSource
 import com.android.mediproject.core.network.datasource.image.GoogleSearchDataSourceImpl
 import com.android.mediproject.core.network.parser.HtmlParser
+import com.android.mediproject.core.network.retrofitext.NetworkApiCallAdapterFactory
+import com.android.mediproject.core.network.retrofitext.NetworkApiResult
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
@@ -25,7 +26,9 @@ object GoogleSearchNetwork {
     @Provides
     @Singleton
     fun providesGoogleSearchNetworkApi(@Named("okHttpClientWithoutAny") okHttpClient: OkHttpClient): GoogleSearchNetworkApi =
-        Retrofit.Builder().client(okHttpClient).addConverterFactory(ScalarsConverterFactory.create()).baseUrl(BASE_URL).build()
+        Retrofit.Builder().client(okHttpClient).addConverterFactory(ScalarsConverterFactory.create())
+            .addCallAdapterFactory(NetworkApiCallAdapterFactory())
+            .baseUrl(BASE_URL).build()
             .create(GoogleSearchNetworkApi::class.java)
 
     @Provides
@@ -43,7 +46,7 @@ interface GoogleSearchNetworkApi {
         @Query("tbm", encoded = true) tbm: String = ISCH,
         @Query("ie", encoded = true) ie: String = ENCODING,
         @Query("oe", encoded = true) oe: String = ENCODING,
-    ): Response<String>
+    ): NetworkApiResult<String>
 }
 
 private const val ENCODING: String = "utf8"

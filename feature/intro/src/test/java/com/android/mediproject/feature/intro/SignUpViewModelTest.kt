@@ -4,8 +4,9 @@ import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.test.repositories.FakeSignRepository
 import com.android.mediproject.core.test.repositories.FakeUserInfoRepository
 import com.google.common.truth.Truth.assertThat
-import comandroid.mediproject.core.test.MainCoroutineRule
+import com.android.mediproject.core.test.MainCoroutineRule
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,7 +40,8 @@ class SignUpViewModelTest {
             email = notValidEmail,
             password = validPassword,
             checkPassword = validPassword,
-            nickName = nickName)
+            nickName = nickName,
+        )
 
         //then
         val actual = viewModel.signUpState.value
@@ -59,7 +61,8 @@ class SignUpViewModelTest {
             email = validEmail,
             password = notValidPassword,
             checkPassword = notValidPassword,
-            nickName = nickName)
+            nickName = nickName,
+        )
 
         //then
         val actual = viewModel.signUpState.value
@@ -79,7 +82,8 @@ class SignUpViewModelTest {
             email = validEmail,
             password = notValidPassword,
             checkPassword = notValidPassword,
-            nickName = nickName)
+            nickName = nickName,
+        )
 
         //then
         val actual = viewModel.signUpState.value
@@ -100,7 +104,8 @@ class SignUpViewModelTest {
             email = validEmail,
             password = validPassword,
             checkPassword = anotherValidPassword,
-            nickName = nickName)
+            nickName = nickName,
+        )
 
         //then
         val actual = viewModel.signUpState.value
@@ -120,7 +125,8 @@ class SignUpViewModelTest {
             email = validEmail,
             password = validPassword,
             checkPassword = validPassword,
-            nickName = nickName)
+            nickName = nickName,
+        )
 
         //then
         val actual = viewModel.signUpState.value

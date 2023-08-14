@@ -1,8 +1,7 @@
-package com.android.mediproject.core.network.datasource.penalties.recallsuspension
+package com.android.mediproject.core.network.datasource.news.recallsuspension
 
 import com.android.mediproject.core.model.news.recall.DetailRecallSaleSuspensionResponse
 import com.android.mediproject.core.model.news.recall.RecallSaleSuspensionListResponse
-import kotlinx.coroutines.flow.Flow
 
 interface RecallSaleSuspensionDataSource {
 
@@ -19,8 +18,8 @@ interface RecallSaleSuspensionDataSource {
      * @param company 제조사
      * @param product 제품명
      */
-    fun getDetailRecallSaleSuspension(
+    suspend fun getDetailRecallSaleSuspension(
         company: String?,
         product: String?,
-    ): Flow<Result<DetailRecallSaleSuspensionResponse>>
+    ): Result<DetailRecallSaleSuspensionResponse>
 }

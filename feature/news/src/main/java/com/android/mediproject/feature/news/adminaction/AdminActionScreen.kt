@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +22,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -30,6 +30,8 @@ import com.android.mediproject.core.model.news.adminaction.AdminAction
 import com.android.mediproject.core.ui.compose.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.ListItemScreen
+import com.android.mediproject.feature.news.rememberListState
+import com.android.mediproject.feature.news.restoreListState
 import java.time.format.DateTimeFormatter
 
 
@@ -37,12 +39,15 @@ import java.time.format.DateTimeFormatter
  * 행정 처분 목록 표시
  */
 @Composable
-fun AdminActionScreen() {
+fun AdminActionScreen(
+    onClicked: () -> Unit,
+) {
     val viewModel: AdminActionViewModel = hiltViewModel()
-    val navController = rememberNavController()
     val list = viewModel.adminActionList.collectAsLazyPagingItems()
+    val listState = rememberLazyListState()
+    restoreListState(listState = listState, listScrollState = viewModel.listScrollState)
 
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+    LazyColumn(state = listState) {
         items(
             count = list.itemCount, key = list.itemKey(),
             contentType = list.itemContentType(
@@ -50,8 +55,8 @@ fun AdminActionScreen() {
         ) { index ->
             list[index]?.run {
                 onClick = {
-                    viewModel.onClickedItem(index)
-                    navController.navigate("detailAdminAction")
+                    viewModel.onClickedItem(this)
+                    onClicked()
                 }
                 ItemOnList(this)
             }
@@ -65,6 +70,8 @@ fun AdminActionScreen() {
         }
 
     }
+
+    rememberListState(listState = listState, listScrollState = viewModel.listScrollState)
 }
 
 /**
