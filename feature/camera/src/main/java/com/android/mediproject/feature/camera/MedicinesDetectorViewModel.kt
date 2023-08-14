@@ -57,7 +57,7 @@ class MedicinesDetectorViewModel @Inject constructor(
     }
 
     fun connectCamera(previewView: PreviewView, viewLifeCycleOwner: LifecycleOwner, detectionCallback: CameraHelper.ObjDetectionCallback) {
-        viewModelScope.launch(defaultDispatcher) {
+        viewModelScope.launch {
             aiModelState.collect { state ->
                 state.onLoaded {
                     if (cameraConnectionState.value is CameraConnectionState.Disconnected) {

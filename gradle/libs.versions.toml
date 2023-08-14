@@ -316,8 +316,7 @@ retrofits = ["retrofit-core", "retrofit-kotlinx-serialization", "retrofit-scalar
 
 navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-compose", "androidx-navigation-dynamic"]
 
-kotlins = ["kotlin-stdlib-root", "kotlinx-coroutines-android", "kotlinx-serialization-json",
-    "kotlinx-datetime", "kotlin-reflection"]
+kotlins = ["kotlin-stdlib-root", "kotlinx-coroutines-android", "kotlinx-serialization-json", "kotlin-reflection"]
 
 materials = ["material-main", "androidx-compose-material3", "androidx-compose-material3-windowSizeClass"]
 

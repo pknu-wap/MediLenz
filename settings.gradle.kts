@@ -47,3 +47,4 @@ include(":feature:medicine")
 
 include(":feature:news")
 include(":feature:camera")
+include(":core:ai")
