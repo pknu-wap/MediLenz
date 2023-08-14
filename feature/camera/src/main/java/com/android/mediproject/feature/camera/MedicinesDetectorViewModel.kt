@@ -57,18 +57,14 @@ class MedicinesDetectorViewModel @Inject constructor(
     }
 
     fun connectCamera(previewView: PreviewView, viewLifeCycleOwner: LifecycleOwner, detectionCallback: CameraHelper.ObjDetectionCallback) {
-        viewModelScope.launch {
-            aiModelState.value.onLoaded {
-                if (cameraConnectionState.value is CameraConnectionState.Disconnected) {
-                    realConnectCamera(previewView, viewLifeCycleOwner, detectionCallback)
-                }
-            }.onLoading {
-                aiModelState.collect { aiState ->
-                    aiState.onLoaded {
+        viewModelScope.launch(defaultDispatcher) {
+            aiModelState.collect { state ->
+                state.onLoaded {
+                    if (cameraConnectionState.value is CameraConnectionState.Disconnected) {
                         realConnectCamera(previewView, viewLifeCycleOwner, detectionCallback)
-                    }.onLoadFailed { _cameraConnectionState.value = CameraConnectionState.UnableToConnect }
-                }
-            }.onLoadFailed { _cameraConnectionState.value = CameraConnectionState.UnableToConnect }
+                    }
+                }.onLoadFailed { _cameraConnectionState.value = CameraConnectionState.UnableToConnect }
+            }
         }
     }
 
@@ -97,11 +93,10 @@ class MedicinesDetectorViewModel @Inject constructor(
             withContext(defaultDispatcher) {
                 detectedObjectResult.run {
                     // 처리중 오류 발생시 DetectFailed 상태로 변경
-                    val scaleFactor =
-                        maxOf(
-                            realWindowSize.width.toFloat() / resizedWindowSize.height,
-                            realWindowSize.height.toFloat() / resizedWindowSize.height,
-                        )
+                    val scaleFactor = maxOf(
+                        realWindowSize.width.toFloat() / resizedWindowSize.height,
+                        realWindowSize.height.toFloat() / resizedWindowSize.height,
+                    )
 
                     // 검출된 객체 자르기
                     val cutted = detections.map {
@@ -124,8 +119,7 @@ class MedicinesDetectorViewModel @Inject constructor(
                         InferenceState.Detected(
                             DetectionResultEntity(
                                 cutted, backgroundImage, resizedWindowSize.width,
-                                resizedWindowSize
-                                    .height,
+                                resizedWindowSize.height,
                             ),
                         ),
                     )
@@ -152,13 +146,6 @@ sealed interface CameraConnectionState {
     object UnableToConnect : CameraConnectionState
 }
 
-@KBindFunc
-sealed interface AiModelState {
-    object Initial : AiModelState
-    object Loading : AiModelState
-    object Loaded : AiModelState
-    object LoadFailed : AiModelState
-}
 
 @KBindFunc
 sealed interface InferenceState {
