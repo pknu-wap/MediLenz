@@ -1,9 +1,6 @@
 package com.android.mediproject.feature.camera
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.util.Size
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.LifecycleOwner
@@ -16,8 +13,8 @@ import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.camera.tflite.AiController
 import com.android.mediproject.feature.camera.tflite.CameraController
 import com.android.mediproject.feature.camera.tflite.CameraHelper
+import com.android.mediproject.feature.camera.util.VibrationManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.pknujsp.core.annotation.KBindFunc
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -35,11 +32,8 @@ class MedicinesDetectorViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
     private val aiController: AiController,
     private val cameraController: CameraController,
-    @ApplicationContext context: Context,
+    private val vibrationManager: VibrationManager,
 ) : BaseViewModel() {
-
-    @Suppress("DEPRECATION")
-    private var vibrator: Vibrator? = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     private val _aiModelState = MutableStateFlow<AiModelState>(AiModelState.Initial)
     private val aiModelState get() = _aiModelState.asStateFlow()
@@ -95,11 +89,7 @@ class MedicinesDetectorViewModel @Inject constructor(
 
     private fun capture(detectedObjectResult: DetectedObjectResult) {
         viewModelScope.launch {
-            vibrator?.vibrate(
-                VibrationEffect.createOneShot(
-                    100, VibrationEffect.DEFAULT_AMPLITUDE,
-                ),
-            )
+            vibrationManager.vibrate(50L)
             if (detectedObjectResult.detections.isEmpty()) {
                 _inferenceState.emit(InferenceState.DetectFailed)
                 return@launch
@@ -126,8 +116,7 @@ class MedicinesDetectorViewModel @Inject constructor(
                         val width = right - left
                         val height = bottom - top
 
-                        val croppedBitmap = Bitmap.createBitmap(backgroundImage, left.toInt(), top.toInt(), width.toInt(), height.toInt())
-                        DetectionObject(it, croppedBitmap)
+                        DetectionObject(it, Bitmap.createBitmap(backgroundImage, left.toInt(), top.toInt(), width.toInt(), height.toInt()))
                     }
                     _inferenceState.emit(
                         InferenceState.Detected(
@@ -145,12 +134,7 @@ class MedicinesDetectorViewModel @Inject constructor(
     }
 
     var captureFunc: (detectedObjectResult: DetectedObjectResult) -> Unit = ::capture
-
-    override fun onCleared() {
-        super.onCleared()
-        vibrator = null
-    }
-
+    
     fun disconnectCamera() {
         viewModelScope.launch {
             _cameraConnectionState.value = CameraConnectionState.Disconnected

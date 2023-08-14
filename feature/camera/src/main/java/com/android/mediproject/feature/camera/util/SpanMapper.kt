@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.camera
+package com.android.mediproject.feature.camera.util
 
 import android.content.Context
 import android.graphics.Typeface
@@ -8,6 +8,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import androidx.core.content.ContextCompat
+import com.android.mediproject.feature.camera.R
 
 object SpanMapper {
     private val spanCache = mutableMapOf<String, Spannable>()

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottomsheet_background"
         android:paddingHorizontal="24dp"
-        android:paddingVertical="16dp">
+        android:paddingVertical="22dp">
 
         <TextView
             android:id="@+id/detectionTextView"
