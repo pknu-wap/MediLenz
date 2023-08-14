@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             app:scaleType="fillStart" />
 
-        <com.android.mediproject.feature.camera.tflite.OverlayView
+        <com.android.mediproject.feature.camera.tflite.camera.OverlayView
             android:id="@+id/overlayView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

@@ -1,12 +1,11 @@
 package com.android.mediproject.feature.camera.confirm
 
 import android.graphics.Bitmap
-import android.util.Size
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
-import com.android.mediproject.core.model.ai.DetectionObjects
+import com.android.mediproject.core.model.ai.DetectionResultEntity
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.camera.util.ObjectBitmapCreator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,9 +22,9 @@ class ConfirmViewModel @Inject constructor(
     private val _bitmap = MutableStateFlow<UiState<Bitmap>>(UiState.Initial)
     val bitmap get() = _bitmap
 
-    fun createBitmap(detectionObjects: DetectionObjects) {
+    fun createBitmap(detectionResultEntity: DetectionResultEntity) {
         viewModelScope.launch(defaultDispatcher) {
-            _bitmap.value = UiState.Success(ObjectBitmapCreator.createBitmapWithObjects(detectionObjects))
+            _bitmap.value = UiState.Success(ObjectBitmapCreator.createBitmapWithObjects(detectionResultEntity))
         }
     }
 

@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import androidx.core.graphics.applyCanvas
-import com.android.mediproject.core.model.ai.DetectionObjects
+import com.android.mediproject.core.model.ai.DetectionResultEntity
 
 object ObjectBitmapCreator {
 
@@ -18,7 +18,7 @@ object ObjectBitmapCreator {
         isAntiAlias = true
     }
 
-    fun createBitmapWithObjects(objects: DetectionObjects): Bitmap {
+    fun createBitmapWithObjects(objects: DetectionResultEntity): Bitmap {
         val srcImageWidth = objects.width
         val srcImageHeight = objects.height
         val scaleFactor = maxOf(objects.backgroundImage.width.toFloat() / srcImageHeight, objects.backgroundImage.height.toFloat() / srcImageHeight)

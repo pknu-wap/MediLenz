@@ -6,7 +6,7 @@
 
         <variable
             name="detectedObject"
-            type="com.android.mediproject.core.model.ai.DetectionObject" />
+            type="com.android.mediproject.core.model.ai.DetectionResultEntity.Object" />
     </data>
 
 

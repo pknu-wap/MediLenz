@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.camera.tflite
+package com.android.mediproject.feature.camera.tflite.camera
 
 import android.content.Context
 import android.graphics.Canvas

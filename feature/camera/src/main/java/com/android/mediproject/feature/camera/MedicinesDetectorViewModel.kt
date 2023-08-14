@@ -7,12 +7,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
-import com.android.mediproject.core.model.ai.DetectionObject
-import com.android.mediproject.core.model.ai.DetectionObjects
+import com.android.mediproject.core.model.ai.DetectionResultEntity
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.camera.tflite.AiController
-import com.android.mediproject.feature.camera.tflite.CameraController
-import com.android.mediproject.feature.camera.tflite.CameraHelper
+import com.android.mediproject.feature.camera.tflite.camera.AiController
+import com.android.mediproject.feature.camera.tflite.camera.CameraController
+import com.android.mediproject.feature.camera.tflite.camera.CameraHelper
 import com.android.mediproject.feature.camera.util.VibrationManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.pknujsp.core.annotation.KBindFunc
@@ -116,11 +115,14 @@ class MedicinesDetectorViewModel @Inject constructor(
                         val width = right - left
                         val height = bottom - top
 
-                        DetectionObject(it, Bitmap.createBitmap(backgroundImage, left.toInt(), top.toInt(), width.toInt(), height.toInt()))
+                        DetectionResultEntity.Object(
+                            it,
+                            Bitmap.createBitmap(backgroundImage, left.toInt(), top.toInt(), width.toInt(), height.toInt()),
+                        )
                     }
                     _inferenceState.emit(
                         InferenceState.Detected(
-                            DetectionObjects(
+                            DetectionResultEntity(
                                 cutted, backgroundImage, resizedWindowSize.width,
                                 resizedWindowSize
                                     .height,
@@ -134,7 +136,7 @@ class MedicinesDetectorViewModel @Inject constructor(
     }
 
     var captureFunc: (detectedObjectResult: DetectedObjectResult) -> Unit = ::capture
-    
+
     fun disconnectCamera() {
         viewModelScope.launch {
             _cameraConnectionState.value = CameraConnectionState.Disconnected
@@ -161,7 +163,7 @@ sealed interface AiModelState {
 @KBindFunc
 sealed interface InferenceState {
     object Initial : InferenceState
-    data class Detected(val detection: DetectionObjects, var consumed: Boolean = false) : InferenceState
+    data class Detected(val detection: DetectionResultEntity, var consumed: Boolean = false) : InferenceState
     object DetectFailed : InferenceState
 }
 

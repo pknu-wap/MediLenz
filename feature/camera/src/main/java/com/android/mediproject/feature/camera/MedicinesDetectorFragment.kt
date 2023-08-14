@@ -14,7 +14,7 @@ import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
-import com.android.mediproject.feature.camera.tflite.CameraHelper
+import com.android.mediproject.feature.camera.tflite.camera.CameraHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import org.tensorflow.lite.task.gms.vision.detector.Detection
@@ -36,6 +36,7 @@ class MedicinesDetectorFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         systemBarStyler.changeMode(
             listOf(SystemBarStyler.ChangeView(binding.logo, SystemBarStyler.SpacingType.MARGIN)),
             listOf(SystemBarStyler.ChangeView(binding.detectionDescription, SystemBarStyler.SpacingType.MARGIN)),
