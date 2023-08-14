@@ -7,32 +7,25 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.util.SystemBarController
 import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
 import com.android.mediproject.feature.camera.tflite.CameraHelper
-import com.android.mediproject.feature.search.result.ai.AiSearchResultViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import org.tensorflow.lite.task.gms.vision.detector.Detection
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MedicinesDetectorFragment :
     BaseFragment<FragmentMedicinesDetectorBinding, MedicinesDetectorViewModel>(FragmentMedicinesDetectorBinding::inflate),
-    CameraHelper.OnDetectionCallback {
+    CameraHelper.ObjDetectionCallback {
 
-    override val fragmentViewModel: MedicinesDetectorViewModel by navGraphViewModels(R.id.camera_nav) {
-        defaultViewModelProviderFactory
-    }
-
-    private val aiSearchResultViewModel by activityViewModels<AiSearchResultViewModel>()
+    override val fragmentViewModel: MedicinesDetectorViewModel by activityViewModels()
 
     @Inject lateinit var systemBarStyler: SystemBarController
 
@@ -48,11 +41,6 @@ class MedicinesDetectorFragment :
             listOf(SystemBarStyler.ChangeView(binding.detectionDescription, SystemBarStyler.SpacingType.MARGIN)),
         )
 
-        fragmentViewModel.apply {
-            cameraController.fragmentLifeCycleOwner = this@MedicinesDetectorFragment.viewLifecycleOwner
-            cameraController.detectionCallback = this@MedicinesDetectorFragment
-        }
-
         binding.apply {
             viewModel = fragmentViewModel
             backBtn.setOnClickListener {
@@ -61,63 +49,45 @@ class MedicinesDetectorFragment :
         }
 
         viewLifecycleOwner.repeatOnStarted {
-            // AI모델 로드 상태
-            fragmentViewModel.aiModelState.collect { state ->
-                when (state) {
-                    is AiModelState.Loaded -> {
-                        LoadingDialog.dismiss()
-                    }
-
-                    is AiModelState.Loading -> {
-                        LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.loadingAiModels))
-                    }
-
-                    is AiModelState.LoadFailed -> {
-                        toast(getString(R.string.aiModelLoadFailed))
-                        LoadingDialog.dismiss()
-                        findNavController().popBackStack()
-                    }
+            fragmentViewModel.cameraConnectionState.collect { state ->
+                state.onConnected {
+                    LoadingDialog.dismiss()
+                }.onDisconnected {
+                    LoadingDialog.showLoadingDialog(requireActivity(), getString(R.string.connectingCamera))
+                }.onUnableToConnect {
+                    toast(getString(R.string.connectingCameraFailed))
+                    LoadingDialog.dismiss()
+                    findNavController().popBackStack()
                 }
-
             }
         }
 
         viewLifecycleOwner.repeatOnStarted {
             fragmentViewModel.inferenceState.collect { state ->
-                when (state) {
-                    is InferenceState.Detected -> {
-                        findNavController().navigate(MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmDialogFragment())
+                state.onDetected { _, consumed ->
+                    if (!consumed) {
+                        (state as InferenceState.Detected).consumed = true
+                        findNavController().navigate(MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmFragment())
                     }
-
-                    is InferenceState.Initial -> {
-
-                    }
-
-                    is InferenceState.DetectFailed -> {
-                        toast(getString(R.string.noMedicinesDetected))
-                    }
-
-                    is InferenceState.Classified -> {
-                        aiSearchResultViewModel.setClassificationResult(state.classificationResult)
-                        navigateWithUriNavOptions(
-                            "medilens://main/search/search_medicines/airesult",
-                            NavOptions.Builder().setPopUpTo(com.android.mediproject.feature.search.R.id.aiSearchResultFragment, true).build(),
-                        )
-                        LoadingDialog.dismiss()
-                    }
+                }.onDetectFailed {
+                    toast(getString(R.string.noMedicinesDetected))
                 }
             }
-
         }
     }
 
     private fun initializeCamera() {
-        fragmentViewModel.startCamera(binding.previewView)
+        fragmentViewModel.connectCamera(binding.previewView, this@MedicinesDetectorFragment.viewLifecycleOwner, this@MedicinesDetectorFragment)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        fragmentViewModel.disconnectCamera()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         requestPermissionLauncher.unregister()
+        super.onDestroy()
     }
 
     override fun onStart() {
@@ -141,7 +111,7 @@ class MedicinesDetectorFragment :
         }
     }
 
-    override fun onDetectedResult(objects: List<Detection>, width: Int, height: Int) {
+    override fun onDetect(objects: List<Detection>, width: Int, height: Int) {
         if (isVisible) binding.overlayView.apply {
             setResults(objects, width, height)
             invalidate()

@@ -1,5 +1,6 @@
 plugins {
     id("mediproject.android.feature")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -62,4 +63,7 @@ dependencies {
     implementation(libs.bundles.tflite)
     implementation(libs.smartdeeplink.core)
     implementation(libs.simpledialog)
+
+    ksp(libs.ksealedbinding.compiler)
+    implementation(libs.ksealedbinding.annotation)
 }

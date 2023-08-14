@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.camera.confirmdialog
+package com.android.mediproject.feature.camera.confirm
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

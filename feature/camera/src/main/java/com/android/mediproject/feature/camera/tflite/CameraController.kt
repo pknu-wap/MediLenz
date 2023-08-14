@@ -8,11 +8,10 @@ import androidx.lifecycle.LifecycleOwner
  * 카메라를 제어하는 인터페이스
  */
 interface CameraController {
-    fun pause()
-    fun resume()
-    suspend fun setupCamera(previewView: PreviewView): Result<Unit>
+    suspend fun connectCamera(previewView: PreviewView): Result<Unit>
 
-    var detectionCallback: CameraHelper.OnDetectionCallback
+
+    var detectionCallback: CameraHelper.ObjDetectionCallback
 
     var fragmentLifeCycleOwner: LifecycleOwner
 }

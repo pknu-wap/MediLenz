@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="DialogFullscreen" parent="Theme.MediProject">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowIsFloating">false</item>
+    <style name="TextButton" parent="Widget.AppCompat.TextView">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="TextButton.Negative" parent="TextButton">
+        <item name="android:background">@drawable/negative_button</item>
+        <item name="android:textColor">@color/main</item>
+    </style>
+
+    <style name="TextButton.Positive" parent="TextButton">
+        <item name="android:background">@drawable/positive_button</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

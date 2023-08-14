@@ -10,27 +10,16 @@
         android:label="MedicinesDetectorFragment">
 
         <action
-            android:id="@+id/action_medicinesDetectorFragment_to_confirmDialogFragment"
-            app:destination="@id/confirmDialogFragment" />
+            android:id="@+id/action_medicinesDetectorFragment_to_confirmFragment"
+            app:destination="@id/confirmFragment" />
     </fragment>
 
-    <dialog
-        android:id="@+id/confirmDialogFragment"
-        android:name="com.android.mediproject.feature.camera.confirmdialog.ConfirmDialogFragment"
-        android:label="ConfirmDialogFragment">
+    <fragment
+        android:id="@+id/confirmFragment"
+        android:name="com.android.mediproject.feature.camera.confirm.ConfirmFragment"
+        android:label="ConfirmFragment">
 
-        <action
-            android:id="@+id/action_confirmDialogFragment_to_detectedImageFragment"
-            app:destination="@id/detectedImageFragment"
-            app:enterAnim="@anim/nav_default_enter_anim" />
-    </dialog>
-
-    <dialog
-        android:id="@+id/detectedImageFragment"
-        android:name="com.android.mediproject.feature.camera.imagedialog.DetectedImageFragment"
-        android:label="DetectedImageFragment">
-        
-    </dialog>
+    </fragment>
 
     <deepLink app:uri="medilens://main/camera_nav" />
 
