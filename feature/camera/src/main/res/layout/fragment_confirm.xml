@@ -10,16 +10,17 @@
 
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:clipChildren="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rootImageViewGroup"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottomSheet"
+            android:layout_alignParentTop="true"
             android:clipChildren="false">
 
             <com.github.chrisbanes.photoview.PhotoView
@@ -28,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/capturedImage"
                 app:scaleType="fillStart" />
-            
+
 
             <ImageButton
                 android:id="@+id/backBtn"
@@ -72,7 +73,9 @@
             android:id="@+id/bottomSheet"
             layout="@layout/view_confirm_dialog"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="-20dp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 </layout>

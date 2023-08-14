@@ -143,7 +143,7 @@ class CameraHelper @Inject constructor() : ContentProvider(), LifecycleEventObse
     // fragment view의 생명주기 변화 수신
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         when (event) {
-            Lifecycle.Event.ON_DESTROY -> {
+            Lifecycle.Event.ON_STOP -> {
                 _mImageAnalyzer?.clearAnalyzer()
                 _mCameraProvider?.unbindAll()
                 _bitmapBuffer?.recycle()
