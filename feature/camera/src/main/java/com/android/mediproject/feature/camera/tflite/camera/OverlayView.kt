@@ -1,12 +1,11 @@
-package com.android.mediproject.feature.camera.tflite
+package com.android.mediproject.feature.camera.tflite.camera
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import com.android.mediproject.feature.camera.util.ObjectBitmapCreator
 import org.tensorflow.lite.task.gms.vision.detector.Detection
 import java.util.LinkedList
 
@@ -17,28 +16,18 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     val results: List<Detection>
         get() = _results
-    private val boxPaint = Paint()
+    private val boxPaint = ObjectBitmapCreator.boxPaint
     private var scaleFactor: Float = 1f
-    private val roundCornerRadius = 8f
+    private val roundCornerRadius = ObjectBitmapCreator.ROUND_CORNER_RADIUS
 
     var resizedWidth: Int = 0
     var resizeHeight: Int = 0
 
-    init {
-        initPaints()
-    }
 
     fun clear() {
         _results.clear()
     }
 
-    private fun initPaints() {
-        boxPaint.color = Color.WHITE
-        boxPaint.strokeWidth = 12f
-        boxPaint.style = Paint.Style.STROKE
-        boxPaint.strokeCap = Paint.Cap.SQUARE
-        boxPaint.isAntiAlias = true
-    }
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)

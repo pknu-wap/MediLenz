@@ -37,7 +37,7 @@
         </activity>
 
         <provider
-            android:name=".feature.camera.tflite.CameraHelper"
+            android:name=".feature.camera.tflite.camera.CameraHelper"
             android:authorities="${applicationId}.camera.helper"
             android:exported="false" />
     </application>

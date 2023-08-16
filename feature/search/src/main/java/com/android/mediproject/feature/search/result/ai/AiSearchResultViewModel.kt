@@ -8,7 +8,7 @@ import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
-import com.android.mediproject.core.model.ai.ClassificationResult
+import com.android.mediproject.core.model.ai.ClassificationResultEntity
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetail
 import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -32,18 +32,18 @@ class AiSearchResultViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel(), ISendEvent<MedicineDetail> {
 
-    private val _classificationResult = MutableStateFlow<List<ClassificationResult>>(emptyList())
+    private val _classificationResultEntity = MutableStateFlow<List<ClassificationResultEntity>>(emptyList())
 
-    val classificationResult = _classificationResult.asStateFlow()
+    val classificationResult = _classificationResultEntity.asStateFlow()
 
     private val _eventState = MutableEventFlow<EventState>(replay = 1)
 
     val eventState = _eventState.asEventFlow()
 
 
-    val medicineList: StateFlow<UiState<List<ClassificationResult>>> = _classificationResult.flatMapLatest { classificationList ->
+    val medicineList: StateFlow<UiState<List<ClassificationResultEntity>>> = _classificationResultEntity.flatMapLatest { classificationList ->
         val itemSeqs = classificationList.map {
-            it.classificationRecognition.medicineSeq
+            it.classificationRecognitionEntity.medicineSeq
         }
         getMedicineDetailsUseCase.getMedicineDetailInfoByItemSeq(itemSeqs).flatMapLatest { response ->
             response.fold(
@@ -62,9 +62,9 @@ class AiSearchResultViewModel @Inject constructor(
         }
     }.flowOn(defaultDispatcher).stateIn(viewModelScope, started = SharingStarted.Lazily, initialValue = UiState.Loading)
 
-    fun setClassificationResult(classificationResult: List<ClassificationResult>) {
+    fun setClassificationResult(classificationResultEntity: List<ClassificationResultEntity>) {
         viewModelScope.launch {
-            this@AiSearchResultViewModel._classificationResult.value = classificationResult
+            this@AiSearchResultViewModel._classificationResultEntity.value = classificationResultEntity
         }
     }
 

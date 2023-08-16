@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.camera.tflite
+package com.android.mediproject.feature.camera.tflite.camera
 
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -6,7 +6,6 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
@@ -21,13 +20,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeout
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.Rot90Op
@@ -50,8 +45,10 @@ import kotlin.properties.Delegates
  */
 class CameraHelper @Inject constructor() : ContentProvider(), LifecycleEventObserver, AiController, CameraController {
 
-
     companion object {
+        private const val TARGET_WIDTH = 320
+        private const val TARGET_HEIGHT = 320
+
         @set:Synchronized @get:Synchronized private var _instance: CameraHelper? = null
             set(value) {
                 if (field == null) field = value
@@ -62,6 +59,8 @@ class CameraHelper @Inject constructor() : ContentProvider(), LifecycleEventObse
 
         @get:Synchronized @set:Synchronized private var _objectDetector: ObjectDetector? = null
         private val objectDetector get() = _objectDetector!!
+
+        private var modelLoadJob: Job? = null
     }
 
     init {
@@ -99,25 +98,17 @@ class CameraHelper @Inject constructor() : ContentProvider(), LifecycleEventObse
         get() = _fragmentLifeCycleOwner
 
 
-    // 검출 결과
-    private val _detectionResult =
-        MutableSharedFlow<List<Detection>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 10)
-
-    override val detectionResult get() = _detectionResult.asSharedFlow()
-
     // 약 검출 결과 콜백
-    override var detectionCallback: OnDetectionCallback by Delegates.notNull()
+    override var detectionCallback: ObjDetectionCallback by Delegates.notNull()
 
-    private fun loadModel(@ApplicationContext context: Context) {
+    private suspend fun loadModel(@ApplicationContext context: Context) = suspendCoroutine<Result<Unit>> { cont ->
         try {
             TfLiteVision.initialize(context).addOnCompleteListener {
                 if (it.isSuccessful) {
                     val modelFile = WeakReference(context.assets.open("automl_tflite3.tflite")).get()!!
                     val objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setMaxResults(10).setScoreThreshold(0.4f)
                         .setBaseOptions(
-                            BaseOptions.builder().apply {
-                                useNnapi()
-                            }.build(),
+                            BaseOptions.builder().useNnapi().build(),
                         ).build()
 
                     val bytes = WeakReference(modelFile.readBytes()).get()!!
@@ -126,32 +117,37 @@ class CameraHelper @Inject constructor() : ContentProvider(), LifecycleEventObse
                     byteBuffer.put(bytes)
 
                     _objectDetector = ObjectDetector.createFromBufferAndOptions(byteBuffer, objectDetectorOptions)
+                    cont.resume(Result.success(Unit))
                 } else {
                     it.exception?.printStackTrace()
+                    cont.resume(Result.failure(Exception("Failed to initialize objectDetector")))
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            cont.resume(Result.failure(Exception("Failed to initialize objectDetector")))
         }
     }
 
-    private fun detect(image: ImageProxy) {
-        val imageProcessor = ImageProcessor.Builder().add(Rot90Op((-image.imageInfo.rotationDegrees) / 90)).build()
-        WeakReference(imageProcessor.process(TensorImage.fromBitmap(bitmapBuffer))).get()?.also { tensorImage ->
-            with(objectDetector.detect(tensorImage)) {
-                detectionCallback.onDetectedResult(this, tensorImage.width, tensorImage.height)
-                _detectionResult.tryEmit(this)
-            }
+    override suspend fun getObjectDetectorStatus(): Result<Unit> = if (_objectDetector == null) {
+        modelLoadJob?.join()
+        if (_objectDetector == null) {
+            Result.failure(Exception("Failed to initialize objectDetector"))
+        } else {
+            Result.success(Unit)
         }
+    } else {
+        Result.success(Unit)
     }
 
     // fragment view의 생명주기 변화 수신
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         when (event) {
-            Lifecycle.Event.ON_DESTROY -> {
+            Lifecycle.Event.ON_STOP -> {
+                _mImageAnalyzer?.clearAnalyzer()
                 _mCameraProvider?.unbindAll()
                 _bitmapBuffer?.recycle()
-                _detectionResult.resetReplayCache()
+                _mPreview?.setSurfaceProvider(null)
                 cameraExecutor?.shutdown()
 
                 _mPreview = null
@@ -168,31 +164,17 @@ class CameraHelper @Inject constructor() : ContentProvider(), LifecycleEventObse
         }
     }
 
-    override suspend fun setupCamera(previewView: PreviewView): Result<Unit> = withContext(Dispatchers.Default) {
+    override suspend fun connectCamera(previewView: PreviewView): Result<Unit> = withContext(Dispatchers.Default) {
         try {
             _mPreviewView = previewView
-
-            if (_objectDetector == null) {
-                runCatching {
-                    withTimeout(5000L) {
-                        while (true) {
-                            if (_objectDetector != null) break
-                            delay(100)
-                        }
-                    }
-                }.onFailure {
-                    return@withContext Result.failure(Exception("Failed to initialize objectDetector"))
-                }
-            }
-
             suspendCoroutine { continuation ->
-                context?.also { context ->
+                context?.let { context ->
                     try {
-                        ProcessCameraProvider.getInstance(context).also { cameraProviderFuture ->
-                            cameraProviderFuture.addListener(
+                        ProcessCameraProvider.getInstance(context).run {
+                            addListener(
                                 kotlinx.coroutines.Runnable {
-                                    _mCameraProvider = cameraProviderFuture.get()
-                                    camera(true)
+                                    _mCameraProvider = get()
+                                    connectCamera()
                                     continuation.resume(Result.success(Unit))
                                 },
                                 ContextCompat.getMainExecutor(context),
@@ -209,47 +191,33 @@ class CameraHelper @Inject constructor() : ContentProvider(), LifecycleEventObse
         }
     }
 
-    private fun camera(start: Boolean) {
-        if (start) {
-            cameraExecutor = newSingleThreadExecutor()
-            _mImageAnalyzer = ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).setTargetAspectRatio(RATIO_4_3)
-                .setTargetRotation(mPreviewView.display.rotation).setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build()
-            mImageAnalyzer.setAnalyzer(cameraExecutor!!) { image ->
-                if (_bitmapBuffer == null) _bitmapBuffer = Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
-                image.use { bitmapBuffer.copyPixelsFromBuffer(it.planes[0].buffer) }
-                detect(image)
+    private fun connectCamera() {
+        cameraExecutor = newSingleThreadExecutor()
+        _mImageAnalyzer = ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .setTargetRotation(mPreviewView.display.rotation).setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build()
+        mImageAnalyzer.setAnalyzer(cameraExecutor!!) { image ->
+            if (_bitmapBuffer == null) _bitmapBuffer = Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
+            image.use {
+                bitmapBuffer.copyPixelsFromBuffer(it.planes[0].buffer)
             }
-
-            _mPreview = Preview.Builder().setTargetAspectRatio(RATIO_4_3).setTargetRotation(mPreviewView.display.rotation).build()
-            mCameraProvider.bindToLifecycle(fragmentLifeCycleOwner, mCameraSelector, mPreview, mImageAnalyzer)
-            mPreview.setSurfaceProvider(mPreviewView.surfaceProvider)
-        } else {
-            mImageAnalyzer.clearAnalyzer()
-            mCameraProvider.unbindAll()
-            mPreview.setSurfaceProvider(null)
-
-            cameraExecutor?.shutdown()
-            _mPreview = null
-            cameraExecutor = null
-            _mImageAnalyzer = null
+            detect(image)
         }
+
+        _mPreview = Preview.Builder().setTargetRotation(mPreviewView.display.rotation).build()
+        mCameraProvider.bindToLifecycle(fragmentLifeCycleOwner, mCameraSelector, mPreview, mImageAnalyzer)
+        mPreview.setSurfaceProvider(mPreviewView.surfaceProvider)
     }
 
-    override fun pause() {
-        camera(false)
-    }
-
-    override fun resume() {
-        camera(true)
-    }
-
-    fun interface OnDetectionCallback {
-        fun onDetectedResult(objects: List<Detection>, width: Int, height: Int)
+    private fun detect(image: ImageProxy) {
+        val imageProcessor = ImageProcessor.Builder().add(Rot90Op((-image.imageInfo.rotationDegrees) / 90)).build()
+        WeakReference(imageProcessor.process(TensorImage.fromBitmap(bitmapBuffer))).get()?.let { tensorImage ->
+            detectionCallback.onDetect(objectDetector.detect(tensorImage), tensorImage.width, tensorImage.height)
+        }
     }
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(): Boolean {
-        GlobalScope.launch(Dispatchers.Default) {
+        modelLoadJob = GlobalScope.launch(Dispatchers.IO) {
             context?.run {
                 loadModel(this)
             }
@@ -267,4 +235,8 @@ class CameraHelper @Inject constructor() : ContentProvider(), LifecycleEventObse
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = 0
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int = 0
+
+    fun interface ObjDetectionCallback {
+        fun onDetect(objects: List<Detection>, width: Int, height: Int)
+    }
 }
