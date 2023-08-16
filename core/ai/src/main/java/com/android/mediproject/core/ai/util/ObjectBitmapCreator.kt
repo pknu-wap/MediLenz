@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.camera.util
+package com.android.mediproject.core.ai.util
 
 import android.graphics.Bitmap
 import android.graphics.Color

@@ -4,7 +4,7 @@ import android.util.Size
 import android.view.View
 import androidx.camera.view.PreviewView
 import androidx.databinding.BindingAdapter
-import com.android.mediproject.feature.camera.tflite.camera.OverlayView
+import com.android.mediproject.core.ai.tflite.camera.OverlayView
 
 object CamBindingAdapter {
     @BindingAdapter(value = ["onCapture", "srcPreview", "overlayView"], requireAll = true)

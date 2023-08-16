@@ -5,13 +5,16 @@ import android.util.Size
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
+import com.android.mediproject.core.ai.AiModelState
+import com.android.mediproject.core.ai.onLoadFailed
+import com.android.mediproject.core.ai.onLoaded
+import com.android.mediproject.core.ai.tflite.camera.AiController
+import com.android.mediproject.core.ai.tflite.camera.CameraController
+import com.android.mediproject.core.ai.tflite.camera.CameraHelper
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.model.ai.DetectionResultEntity
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.camera.tflite.camera.AiController
-import com.android.mediproject.feature.camera.tflite.camera.CameraController
-import com.android.mediproject.feature.camera.tflite.camera.CameraHelper
 import com.android.mediproject.feature.camera.util.VibrationManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.pknujsp.core.annotation.KBindFunc
@@ -41,7 +44,7 @@ class MedicinesDetectorViewModel @Inject constructor(
     val cameraConnectionState get() = _cameraConnectionState.asStateFlow()
 
     // 검출 정보 가록
-    private val _inferenceState = MutableSharedFlow<InferenceState>(replay = 1, extraBufferCapacity = 1)
+    private val _inferenceState = MutableSharedFlow<InferenceState<DetectionResultEntity>>(replay = 1, extraBufferCapacity = 1)
     val inferenceState get() = _inferenceState.asSharedFlow()
 
     init {
@@ -86,7 +89,7 @@ class MedicinesDetectorViewModel @Inject constructor(
         viewModelScope.launch {
             vibrationManager.vibrate(50L)
             if (detectedObjectResult.detections.isEmpty()) {
-                _inferenceState.emit(InferenceState.DetectFailed)
+                _inferenceState.emit(InferenceState.Failure)
                 return@launch
             }
 
@@ -116,7 +119,7 @@ class MedicinesDetectorViewModel @Inject constructor(
                         )
                     }
                     _inferenceState.emit(
-                        InferenceState.Detected(
+                        InferenceState.Success(
                             DetectionResultEntity(
                                 cutted, backgroundImage, resizedWindowSize.width,
                                 resizedWindowSize.height,
@@ -148,10 +151,10 @@ sealed interface CameraConnectionState {
 
 
 @KBindFunc
-sealed interface InferenceState {
-    object Initial : InferenceState
-    data class Detected(val detection: DetectionResultEntity, var consumed: Boolean = false) : InferenceState
-    object DetectFailed : InferenceState
+sealed interface InferenceState<out T> {
+    object Initial : InferenceState<Nothing>
+    data class Success<out T>(val entity: T, var consumed: Boolean = false) : InferenceState<T>
+    object Failure : InferenceState<Nothing>
 }
 
 data class DetectedObjectResult(

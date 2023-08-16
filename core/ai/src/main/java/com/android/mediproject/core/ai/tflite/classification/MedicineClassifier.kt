@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.camera.tflite.classification
+package com.android.mediproject.core.ai.tflite.classification
 
 import com.android.mediproject.core.model.ai.ClassificationResultEntity
 import com.android.mediproject.core.model.ai.DetectionResultEntity

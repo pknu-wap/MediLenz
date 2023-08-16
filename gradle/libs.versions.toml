@@ -108,6 +108,8 @@ detekt = "1.23.0"
 
 jsoup = "1.16.1"
 
+pytorch_android = "1.13.1"
+
 # 라이브러리 의존성------------------------------------------------------------------------------------------------------------------------
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -260,6 +262,11 @@ photo-view = { module = "com.github.chrisbanes:PhotoView", version.ref = "photov
 # lottie --------------------------------------------------------------------------------------------------------------
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
+# pytorch --------------------------------------------------------------------------------------------------------------
+
+pytorch-lite = { module = "org.pytorch:pytorch_android_lite", version.ref = "pytorch_android" }
+pytorch-torchvision = { module = "org.pytorch:pytorch_android_torchvision_lite", version.ref = "pytorch_android" }
+
 # material--------------------------------------------------------------------------------------------------------------
 material-main = { module = "com.google.android.material:material", version.ref = "material" }
 
@@ -335,12 +342,14 @@ workManagers = ["androidx-work-ktx"]
 
 testLocal = ["junit", "mockito-core", "mockito-kotlin", "kotlinx-coroutines-testImplementation", "robolectric", "google-dagger-hilt-testing"]
 
-testAndroid = ["androidx-test-espresso-core", "androidx-test-runner", "androidx-test-rules", "androidx-test-core", "androidx-test-ext-truth",
+testAndroid = ["androidx-test-espresso-core", "androidx-test-runner", "androidx-test-rules", "androidx-test-ext-truth", "androidx-test-core",
     "androidx-test-core-ktx", "androidx-test-ext-junit", "androidx-test-ext-junit-ktx", "androidx-test-arch-core", "google-dagger-hilt-testing"]
 
 tflite = ["tensorflow-lite-lite", "tensorflow-lite-playServicesTfliteGpu", "tensorflow-lite-taskVisionPlayServices",
     "tensorflow-lite-playServicesTfliteJava", "tensorflow-lite-gpuDelegate", "tensorflow-lite-metadata",
     "tensorflow-lite-support", "tensorflow-lite-gpu"]
+
+pytorch = ["pytorch-lite", "pytorch-torchvision"]
 
 # ------------------------------------------------------------------------------------------------------------------------
 [plugins]

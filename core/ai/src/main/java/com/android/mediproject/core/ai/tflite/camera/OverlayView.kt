@@ -1,11 +1,11 @@
-package com.android.mediproject.feature.camera.tflite.camera
+package com.android.mediproject.core.ai.tflite.camera
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import com.android.mediproject.feature.camera.util.ObjectBitmapCreator
+import com.android.mediproject.core.ai.util.ObjectBitmapCreator
 import org.tensorflow.lite.task.gms.vision.detector.Detection
 import java.util.LinkedList
 

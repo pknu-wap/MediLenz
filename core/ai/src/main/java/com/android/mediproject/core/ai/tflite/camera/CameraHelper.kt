@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.camera.tflite.camera
+package com.android.mediproject.core.ai.tflite.camera
 
 import android.content.ContentProvider
 import android.content.ContentValues

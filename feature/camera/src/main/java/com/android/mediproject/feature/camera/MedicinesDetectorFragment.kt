@@ -8,13 +8,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.ai.tflite.camera.CameraHelper
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.util.SystemBarController
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
-import com.android.mediproject.feature.camera.tflite.camera.CameraHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import org.tensorflow.lite.task.gms.vision.detector.Detection
@@ -65,12 +65,12 @@ class MedicinesDetectorFragment :
 
         viewLifecycleOwner.repeatOnStarted {
             fragmentViewModel.inferenceState.collect { state ->
-                state.onDetected { _, consumed ->
+                state.onSuccess { _, consumed ->
                     if (!consumed) {
-                        (state as InferenceState.Detected).consumed = true
+                        (state as InferenceState.Success).consumed = true
                         findNavController().navigate(MedicinesDetectorFragmentDirections.actionMedicinesDetectorFragmentToConfirmFragment())
                     }
-                }.onDetectFailed {
+                }.onFailure {
                     toast(getString(R.string.noMedicinesDetected))
                 }
             }

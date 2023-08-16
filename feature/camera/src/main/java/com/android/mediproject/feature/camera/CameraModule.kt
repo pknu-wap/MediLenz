@@ -1,8 +1,8 @@
 package com.android.mediproject.feature.camera
 
-import com.android.mediproject.feature.camera.tflite.camera.AiController
-import com.android.mediproject.feature.camera.tflite.camera.CameraController
-import com.android.mediproject.feature.camera.tflite.camera.CameraHelper
+import com.android.mediproject.core.ai.tflite.camera.AiController
+import com.android.mediproject.core.ai.tflite.camera.CameraController
+import com.android.mediproject.core.ai.tflite.camera.CameraHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
