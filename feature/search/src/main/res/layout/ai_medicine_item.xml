@@ -5,7 +5,7 @@
 
         <variable
             name="item"
-            type="com.android.mediproject.core.model.ai.ClassificationResultEntity" />
+            type="com.android.mediproject.core.model.ai.ClassificationResult.Item" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,7 +24,7 @@
             android:clickable="true"
             android:contentDescription="@string/medicineImage"
             android:scaleType="fitCenter"
-            app:img="@{item.medicineDetail.insertFileUrl}"
+            app:img="@{item.bitmap}"
             app:layout_constraintBottom_toTopOf="@id/inferedImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +37,6 @@
             android:clickable="true"
             android:contentDescription="@string/medicineImage"
             android:scaleType="fitCenter"
-            app:img="@{item.detectionObject.image}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/capturedImageView" />

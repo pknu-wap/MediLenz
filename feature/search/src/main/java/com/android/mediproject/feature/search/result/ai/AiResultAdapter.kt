@@ -6,25 +6,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.mediproject.core.model.ai.ClassificationResultEntity
+import com.android.mediproject.core.model.ai.ClassificationResult
 import com.android.mediproject.feature.search.databinding.AiMedicineItemBinding
 
-class AiResultAdapter : ListAdapter<ClassificationResultEntity, AiResultAdapter.ViewHolder>(MedicineComparator) {
+class AiResultAdapter : ListAdapter<ClassificationResult.Item, AiResultAdapter.ViewHolder>(MedicineComparator) {
 
     class ViewHolder(val binding: AiMedicineItemBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.rootLayout.setOnClickListener {
-                binding.item?.apply {
-                    onClick?.invoke(medicineDetail!!)
-                }
+
             }
         }
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: ClassificationResultEntity) {
+        fun bind(item: ClassificationResult.Item) {
             binding.apply {
                 this.item = item
-                medicineNameTextView.text = "${item.classificationRecognitionEntity} - ${item.medicineDetail?.itemName}"
                 executePendingBindings()
             }
         }
@@ -40,15 +37,15 @@ class AiResultAdapter : ListAdapter<ClassificationResultEntity, AiResultAdapter.
     }
 }
 
-internal object MedicineComparator : DiffUtil.ItemCallback<ClassificationResultEntity>() {
+internal object MedicineComparator : DiffUtil.ItemCallback<ClassificationResult.Item>() {
     override fun areItemsTheSame(
-        oldItem: ClassificationResultEntity, newItem: ClassificationResultEntity,
+        oldItem: ClassificationResult.Item, newItem: ClassificationResult.Item,
     ): Boolean {
-        return oldItem.detectionObject == newItem.detectionObject
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(
-        oldItem: ClassificationResultEntity, newItem: ClassificationResultEntity,
+        oldItem: ClassificationResult.Item, newItem: ClassificationResult.Item,
     ): Boolean {
         return oldItem == newItem
     }

@@ -1,4 +1,4 @@
-package com.android.mediproject.core.ai.tflite.classification
+package com.android.mediproject.core.ai.classification
 
 
 import kotlinx.serialization.SerialName

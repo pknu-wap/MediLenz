@@ -2,13 +2,15 @@ package com.android.mediproject.feature.camera
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.RectF
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.ai.tflite.camera.CameraHelper
+import com.android.mediproject.core.ai.camera.CameraHelper
+import com.android.mediproject.core.ai.model.InferenceState
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.util.SystemBarController
 import com.android.mediproject.core.common.util.SystemBarStyler
@@ -17,13 +19,12 @@ import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.camera.databinding.FragmentMedicinesDetectorBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import org.tensorflow.lite.task.gms.vision.detector.Detection
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MedicinesDetectorFragment :
     BaseFragment<FragmentMedicinesDetectorBinding, MedicinesDetectorViewModel>(FragmentMedicinesDetectorBinding::inflate),
-    CameraHelper.ObjDetectionCallback {
+    CameraHelper.OnDetectionListener {
 
     override val fragmentViewModel: MedicinesDetectorViewModel by activityViewModels()
 
@@ -64,7 +65,7 @@ class MedicinesDetectorFragment :
         }
 
         viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.inferenceState.collect { state ->
+            fragmentViewModel.captureState.collect { state ->
                 state.onSuccess { _, consumed ->
                     if (!consumed) {
                         (state as InferenceState.Success).consumed = true
@@ -78,7 +79,7 @@ class MedicinesDetectorFragment :
     }
 
     private fun initializeCamera() {
-        fragmentViewModel.connectCamera(binding.previewView, this@MedicinesDetectorFragment.viewLifecycleOwner, this@MedicinesDetectorFragment)
+        fragmentViewModel.connectCamera(binding.previewView, viewLifecycleOwner, this)
     }
 
     override fun onStop() {
@@ -112,10 +113,11 @@ class MedicinesDetectorFragment :
         }
     }
 
-    override fun onDetect(objects: List<Detection>, width: Int, height: Int) {
+    override fun onDetect(boundingBoxes: List<RectF>, capturedImageWidth: Int, capturedImageHeight: Int) {
         if (isVisible) binding.overlayView.apply {
-            setResults(objects, width, height)
+            setResults(boundingBoxes, capturedImageWidth, capturedImageHeight)
             invalidate()
         }
     }
+
 }

@@ -1,4 +1,4 @@
-package com.android.mediproject.core.ai.tflite.camera
+package com.android.mediproject.core.ai.camera
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,16 +6,13 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import com.android.mediproject.core.ai.util.ObjectBitmapCreator
-import org.tensorflow.lite.task.gms.vision.detector.Detection
 import java.util.LinkedList
 
 class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) {
-    private val _results = LinkedList<Detection>()
+    private val results = LinkedList<RectF>()
 
-    private val capturedObjects = mutableListOf<Detection>()
+    private val boundingBoxes = mutableListOf<RectF>()
 
-    val results: List<Detection>
-        get() = _results
     private val boxPaint = ObjectBitmapCreator.boxPaint
     private var scaleFactor: Float = 1f
     private val roundCornerRadius = ObjectBitmapCreator.ROUND_CORNER_RADIUS
@@ -23,17 +20,9 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     var resizedWidth: Int = 0
     var resizeHeight: Int = 0
 
-
-    fun clear() {
-        _results.clear()
-    }
-
-
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        for (result in _results) {
-            val boundingBox = result.boundingBox
-
+        for (boundingBox in results) {
             val top = boundingBox.top * scaleFactor
             val bottom = boundingBox.bottom * scaleFactor
             val left = boundingBox.left * scaleFactor
@@ -44,24 +33,25 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }
 
     fun setResults(
-        detectionResults: List<Detection>,
-        imageWidth: Int,
-        imageHeight: Int,
+        boundingBoxes: List<RectF>,
+        capturedImageWidth: Int,
+        capturedImageHeight: Int,
     ) {
-        synchronized(_results) {
-            _results.clear()
-            _results.addAll(detectionResults)
+        synchronized(results) {
+            results.clear()
+            results.addAll(boundingBoxes)
         }
-        resizedWidth = imageWidth
-        resizeHeight = imageHeight
 
-        scaleFactor = maxOf(width.toFloat() / imageHeight, height.toFloat() / imageHeight)
+        resizedWidth = capturedImageWidth
+        resizeHeight = capturedImageHeight
+
+        scaleFactor = maxOf(width.toFloat() / capturedImageHeight, height.toFloat() / capturedImageHeight)
     }
 
-    fun capture() = synchronized(_results) {
-        capturedObjects.clear()
-        capturedObjects.addAll(_results.toList())
-        capturedObjects.toList()
+    fun capture() = synchronized(results) {
+        boundingBoxes.clear()
+        boundingBoxes.addAll(results.toList())
+        boundingBoxes.toList()
     }
 
 }

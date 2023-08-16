@@ -6,8 +6,8 @@ import androidx.annotation.DrawableRes
 import androidx.core.graphics.drawable.toBitmap
 import androidx.test.core.app.ApplicationProvider
 import com.android.mediproject.core.ai.R
-import com.android.mediproject.core.ai.tflite.classification.MedicineClassifier
-import com.android.mediproject.core.ai.tflite.classification.MedicineClassifierImpl
+import com.android.mediproject.core.ai.classification.MedicineClassifier
+import com.android.mediproject.core.ai.classification.MedicineClassifierImpl
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

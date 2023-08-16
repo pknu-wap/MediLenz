@@ -61,7 +61,7 @@ class ConfirmFragment : BaseFragment<FragmentConfirmBinding, ConfirmViewModel>(F
                 findNavController().popBackStack()
             }
             bottomSheet.searchBtn.setOnClickListener {
-                val detectionResultEntity = medicineDetectorViewModel.inferenceState.replayCache.last() as InferenceState.Success
+                val detectionResultEntity = medicineDetectorViewModel.captureState.replayCache.last() as InferenceState.Success
                 fragmentViewModel.classify(detectionResultEntity.entity)
             }
             zoomIn.setOnClickListener {
@@ -76,7 +76,7 @@ class ConfirmFragment : BaseFragment<FragmentConfirmBinding, ConfirmViewModel>(F
             }
 
             viewLifecycleOwner.repeatOnStarted {
-                medicineDetectorViewModel.inferenceState.replayCache.last().let { state ->
+                medicineDetectorViewModel.captureState.replayCache.last().let { state ->
                     state.onSuccess { detectionObjects, _ ->
                         detectionObjects.run {
                             bottomSheet.detectionTextView.text = SpanMapper.createCheckCountsOfMedicinesTitle(

@@ -3,13 +3,13 @@ package com.android.mediproject.core.ai.util
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.RectF
 import androidx.core.graphics.applyCanvas
-import com.android.mediproject.core.model.ai.DetectionResultEntity
+import com.android.mediproject.core.ai.model.CapturedDetectionEntity
 
 object ObjectBitmapCreator {
 
     const val ROUND_CORNER_RADIUS = 10f
+    
     val boxPaint = Paint().apply {
         color = Color.WHITE
         strokeWidth = 12f
@@ -18,21 +18,11 @@ object ObjectBitmapCreator {
         isAntiAlias = true
     }
 
-    fun createBitmapWithObjects(objects: DetectionResultEntity): Bitmap {
-        val srcImageWidth = objects.width
-        val srcImageHeight = objects.height
-        val scaleFactor = maxOf(objects.backgroundImage.width.toFloat() / srcImageHeight, objects.backgroundImage.height.toFloat() / srcImageHeight)
-
-        val outBitmap = objects.backgroundImage.applyCanvas {
-            objects.detection.map { it.detection }.forEach { detection ->
-                val boundingBox = detection.boundingBox
-
-                val top = boundingBox.top * scaleFactor
-                val bottom = boundingBox.bottom * scaleFactor
-                val left = boundingBox.left * scaleFactor
-                val right = boundingBox.right * scaleFactor
-
-                drawRoundRect(RectF(left, top, right, bottom), ROUND_CORNER_RADIUS, ROUND_CORNER_RADIUS, boxPaint)
+    fun createBitmapWithObjects(capturedDetectionEntity: CapturedDetectionEntity): Bitmap {
+        val outBitmap = capturedDetectionEntity.capturedImage.applyCanvas {
+            for (item in capturedDetectionEntity.items) {
+                val rect = capturedDetectionEntity.scale(item.boundingBox)
+                drawRoundRect(rect, ROUND_CORNER_RADIUS, ROUND_CORNER_RADIUS, boxPaint)
             }
         }
 
