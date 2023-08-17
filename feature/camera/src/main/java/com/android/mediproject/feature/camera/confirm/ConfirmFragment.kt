@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.WindowManager
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -109,25 +108,23 @@ class ConfirmFragment : BaseFragment<FragmentConfirmBinding, ConfirmViewModel>(F
                             result.items.mapTo(mutableListOf()) { it.itemSeq }.joinToString(", "),
                         )
                     }.onInferencing {
-                        SimpleDialogBuilder.builder(requireActivity(), DialogType.Fullscreen)
+                        SimpleDialogBuilder.builder(requireActivity(), DialogType.Normal)
                             .setContentView(ViewClassificationLoadingBinding.inflate(layoutInflater).root)
-                            .setDim(false)
+                            .setDim(true, 0)
                             .setBehindBlur(false)
                             .setCornerRadius(0)
                             .setBackgroundColor(resources.getColor(R.color.loadingDialogBackgroundColor, null))
-                            .buildAndShow().run {
-                                this.setOnShowListener {
-                                    val window = this.window!!
-                                    window.apply {
-                                        WindowCompat.setDecorFitsSystemWindows(window, false)
-                                    }
-                                    window.addFlags(
-                                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                                    )
-                                    WindowCompat.getInsetsController(window, window.decorView).apply {
-                                        isAppearanceLightStatusBars = false
-                                        isAppearanceLightNavigationBars = false
-                                    }
+                            .setLayoutSize(MATCH_PARENT, MATCH_PARENT)
+                            .buildAndShow().also { dialog ->
+                                val dialogWindow = dialog.window!!
+                                dialogWindow.setFlags(
+                                    android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                                    android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                                )
+                                WindowCompat.setDecorFitsSystemWindows(dialogWindow, false)
+                                WindowCompat.getInsetsController(dialogWindow, dialogWindow.decorView).apply {
+                                    isAppearanceLightStatusBars = false
+                                    isAppearanceLightNavigationBars = true
                                 }
                             }
                     }
