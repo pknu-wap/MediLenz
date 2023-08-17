@@ -20,6 +20,7 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors.newSingleThreadExecutor
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.properties.Delegates
@@ -27,6 +28,7 @@ import kotlin.properties.Delegates
 /**
  * 카메라 제어, ai처리 담당
  */
+@Singleton
 class CameraHelper @Inject constructor(
     @ApplicationContext private val context: Context,
     private val medicineDetector: MedicineDetector,

@@ -8,9 +8,6 @@ import com.android.mediproject.core.ai.AiModelState
 import com.android.mediproject.core.ai.model.ClassificationResultEntity
 import com.android.mediproject.core.ai.onLoadFailed
 import com.android.mediproject.core.ai.onLoaded
-import com.android.mediproject.core.common.network.Dispatcher
-import com.android.mediproject.core.common.network.MediDispatchers
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,16 +22,11 @@ import org.pytorch.Tensor
 import org.pytorch.torchvision.TensorImageUtils
 import java.io.IOException
 import java.lang.ref.WeakReference
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.math.exp
 
 
 @OptIn(DelicateCoroutinesApi::class)
-@Singleton
-class MedicineClassifierImpl @Inject constructor(
-    @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-) : MedicineClassifier {
+object MedicineClassifierImpl : MedicineClassifier {
     private val targetSize = Size(224, 224)
 
     private var _aiModel: Module? = null

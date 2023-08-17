@@ -11,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.ai.camera.CameraHelper
 import com.android.mediproject.core.ai.model.InferenceState
+import com.android.mediproject.core.ai.model.onFailure
+import com.android.mediproject.core.ai.model.onSuccess
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.util.SystemBarController
 import com.android.mediproject.core.common.util.SystemBarStyler

@@ -45,6 +45,8 @@ class MedicinesDetectorViewModel @Inject constructor(
     private val _captureState = MutableSharedFlow<InferenceState<CapturedDetectionEntity>>(replay = 1, extraBufferCapacity = 1)
     val captureState get() = _captureState.asSharedFlow()
 
+    private val vibrateDuration = 50L
+
     fun connectCamera(previewView: PreviewView, viewLifeCycleOwner: LifecycleOwner, detectionCallback: CameraHelper.OnDetectionListener) {
         viewModelScope.launch {
             aiModelState.collect { state ->
@@ -73,7 +75,7 @@ class MedicinesDetectorViewModel @Inject constructor(
 
     private fun capture(capturedDetectionEntity: CapturedDetectionEntity) {
         viewModelScope.launch {
-            vibrationManager.vibrate(50L)
+            vibrationManager.vibrate(vibrateDuration)
             withContext(defaultDispatcher) {
                 if (capturedDetectionEntity.items.isEmpty()) {
                     _captureState.emit(InferenceState.Failure)

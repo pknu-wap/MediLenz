@@ -5,6 +5,7 @@ import android.view.View
 import androidx.camera.view.PreviewView
 import androidx.databinding.BindingAdapter
 import com.android.mediproject.core.ai.camera.OverlayView
+import com.android.mediproject.core.ai.model.CapturedDetectionEntity
 
 object CamBindingAdapter {
     @BindingAdapter(value = ["onCapture", "srcPreview", "overlayView"], requireAll = true)
@@ -13,10 +14,12 @@ object CamBindingAdapter {
         view.setOnClickListener {
             onCapture.invoke(
                 CapturedDetectionEntity(
-                    boundingBoxes = overlayView.capture(),
-                    fullImage = srcPreview.bitmap!!,
-                    realWindowSize = Size(overlayView.width, overlayView.height),
-                    resizedWindowSize = Size(overlayView.resizedWidth, overlayView.resizeHeight),
+                    items = overlayView.capture().map {
+                        CapturedDetectionEntity.Item(it)
+                    },
+                    capturedImage = srcPreview.bitmap!!,
+                    originalImageSize = Size(overlayView.width, overlayView.height),
+                    resizedImageSize = Size(overlayView.resizedWidth, overlayView.resizeHeight),
                 ),
             )
         }

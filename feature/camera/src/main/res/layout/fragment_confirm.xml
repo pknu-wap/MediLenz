@@ -4,10 +4,6 @@
 
     <data>
 
-        <variable
-            name="viewModel"
-            type="com.android.mediproject.feature.camera.MedicinesDetectorViewModel" />
-
     </data>
 
     <RelativeLayout

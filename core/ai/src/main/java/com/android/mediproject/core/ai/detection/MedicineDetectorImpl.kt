@@ -4,9 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.Size
 import androidx.camera.core.ImageProxy
-import com.android.mediproject.core.ai.AiModel
 import com.android.mediproject.core.ai.AiModelState
-import com.android.mediproject.core.ai.camera.CameraHelper
 import com.android.mediproject.core.ai.model.DetectionResultEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,13 +17,10 @@ import org.tensorflow.lite.task.gms.vision.detector.ObjectDetector
 import java.lang.ref.WeakReference
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@Singleton
-class MedicineDetectorImpl @Inject constructor() : MedicineDetector {
+object MedicineDetectorImpl : MedicineDetector {
 
     private var _objectDetector: ObjectDetector? = null
     private val objectDetector get() = _objectDetector!!

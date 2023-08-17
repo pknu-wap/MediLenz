@@ -8,4 +8,5 @@ sealed interface InferenceState<out T> {
     object Initial : InferenceState<Nothing>
     data class Success<out T>(val entity: T, var consumed: Boolean = false) : InferenceState<T>
     object Failure : InferenceState<Nothing>
+    object Inferencing : InferenceState<Nothing>
 }

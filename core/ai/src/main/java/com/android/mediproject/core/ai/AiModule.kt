@@ -17,23 +17,23 @@ object AiModule {
 
     @Provides
     @Singleton
-    fun providesMedicineClassifier(medicineClassifierImpl: MedicineClassifierImpl): MedicineClassifier = medicineClassifierImpl
+    fun providesMedicineClassifier(): MedicineClassifier = MedicineClassifierImpl
 
     @Provides
     @Singleton
     @Named(AiModelManager.Classifier)
-    fun providesMedicineClassifierModelManager(medicineClassifierImpl: MedicineClassifierImpl): AiModel = medicineClassifierImpl
+    fun providesMedicineClassifierModelManager(): AiModel = MedicineClassifierImpl
 
 
     @Provides
     @Singleton
-    fun providesMedicineDetector(medicineDetectorImpl: MedicineDetectorImpl): MedicineDetector = medicineDetectorImpl
+    fun providesMedicineDetector(): MedicineDetector = MedicineDetectorImpl
 
 
     @Provides
     @Singleton
     @Named(AiModelManager.Detector)
-    fun providesMedicineDetectorModelManager(medicineDetectorImpl: MedicineDetectorImpl): AiModel = medicineDetectorImpl
+    fun providesMedicineDetectorModelManager(): AiModel = MedicineDetectorImpl
 }
 
 class AiModelManager {

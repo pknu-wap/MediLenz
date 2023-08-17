@@ -7,6 +7,7 @@ import com.android.mediproject.core.ai.AiModelManager
 import com.android.mediproject.core.ai.classification.MedicineClassifier
 import com.android.mediproject.core.ai.model.CapturedDetectionEntity
 import com.android.mediproject.core.ai.model.InferenceState
+import com.android.mediproject.core.ai.onLoaded
 import com.android.mediproject.core.ai.util.ObjectBitmapCreator
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -15,7 +16,9 @@ import com.android.mediproject.core.model.ai.ClassificationResult
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -27,7 +30,7 @@ class ConfirmViewModel @Inject constructor(
     @Named(AiModelManager.Classifier) classifierModelManager: AiModel,
 ) : BaseViewModel() {
 
-    val aiModelState = classifierModelManager.aiModelState
+    private val aiModelState = classifierModelManager.aiModelState
 
     private val _bitmap = MutableStateFlow<UiState<Bitmap>>(UiState.Initial)
     val bitmap get() = _bitmap
@@ -46,24 +49,30 @@ class ConfirmViewModel @Inject constructor(
 
     fun classify() {
         viewModelScope.launch(defaultDispatcher) {
-            capturedDetection.value?.let { detection ->
-                val bitmaps = detection.items.map {
-                    it.bitmap!!
-                }
-                medicineClassifier.classify(bitmaps).collect { result ->
-                    result.onSuccess {
-                        val items = it.items.mapIndexed { i, item ->
-                            ClassificationResult.Item(
-                                itemSeq = item.itemSeq, score = item.score, bitmap = detection.items[i].bitmap!!,
+            classificationResult.value = InferenceState.Inferencing
+            aiModelState.collectLatest { model ->
+                model.onLoaded {
+                    val detection = capturedDetection.value!!
+                    val bitmaps = detection.items.map {
+                        it.bitmap!!
+                    }
+
+                    medicineClassifier.classify(bitmaps).collect { result ->
+                        result.onSuccess {
+                            val items = it.items.mapIndexed { i, item ->
+                                ClassificationResult.Item(
+                                    itemSeq = item.itemSeq, score = item.score, bitmap = detection.items[i].bitmap!!,
+                                )
+                            }
+                            delay(2000L)
+                            _classificationResult.value = InferenceState.Success(
+                                ClassificationResult(
+                                    items = items,
+                                ),
                             )
+                        }.onFailure {
+                            _classificationResult.value = InferenceState.Failure
                         }
-                        _classificationResult.value = InferenceState.Success(
-                            ClassificationResult(
-                                items = items,
-                            ),
-                        )
-                    }.onFailure {
-                        _classificationResult.value = InferenceState.Failure
                     }
                 }
             }

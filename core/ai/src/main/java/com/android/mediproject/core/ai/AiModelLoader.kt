@@ -4,6 +4,9 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
+import android.util.Log
+import com.android.mediproject.core.ai.classification.MedicineClassifierImpl
+import com.android.mediproject.core.ai.detection.MedicineDetectorImpl
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -15,7 +18,10 @@ class AiModelLoader : ContentProvider() {
     override fun onCreate(): Boolean {
         GlobalScope.launch(Dispatchers.IO) {
             context?.run {
-                
+                Log.d("wap", "AiModelLoader onCreate")
+                MedicineClassifierImpl.initialize(this)
+                MedicineDetectorImpl.initialize(this)
+                Log.d("wap", "AiModelLoader onCreate done")
             }
         }
         return true

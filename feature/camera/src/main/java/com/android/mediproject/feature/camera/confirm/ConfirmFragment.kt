@@ -4,19 +4,22 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.WindowManager
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.android.mediproject.core.ai.model.onInferencing
+import com.android.mediproject.core.ai.model.onSuccess
 import com.android.mediproject.core.common.util.SystemBarController
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.viewmodel.onSuccess
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
-import com.android.mediproject.feature.camera.InferenceState
 import com.android.mediproject.feature.camera.MedicinesDetectorViewModel
+import com.android.mediproject.feature.camera.R
 import com.android.mediproject.feature.camera.databinding.FragmentConfirmBinding
 import com.android.mediproject.feature.camera.databinding.ViewClassificationLoadingBinding
-import com.android.mediproject.feature.camera.onSuccess
 import com.android.mediproject.feature.camera.util.SpanMapper
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +40,6 @@ class ConfirmFragment : BaseFragment<FragmentConfirmBinding, ConfirmViewModel>(F
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            viewModel = medicineDetectorViewModel
             systemBarStyler.changeMode(
                 listOf(SystemBarStyler.ChangeView(backBtn, SystemBarStyler.SpacingType.MARGIN)),
                 listOf(SystemBarStyler.ChangeView(bottomSheet.root, SystemBarStyler.SpacingType.PADDING)),
@@ -61,8 +63,7 @@ class ConfirmFragment : BaseFragment<FragmentConfirmBinding, ConfirmViewModel>(F
                 findNavController().popBackStack()
             }
             bottomSheet.searchBtn.setOnClickListener {
-                val detectionResultEntity = medicineDetectorViewModel.captureState.replayCache.last() as InferenceState.Success
-                fragmentViewModel.classify(detectionResultEntity.entity)
+                fragmentViewModel.classify()
             }
             zoomIn.setOnClickListener {
                 val scale = imageView.scale + scaleAmount
@@ -81,7 +82,7 @@ class ConfirmFragment : BaseFragment<FragmentConfirmBinding, ConfirmViewModel>(F
                         detectionObjects.run {
                             bottomSheet.detectionTextView.text = SpanMapper.createCheckCountsOfMedicinesTitle(
                                 requireContext(),
-                                detection.size,
+                                detectionObjects.items.size,
                             )
 
                             fragmentViewModel.createBitmap(
@@ -103,12 +104,32 @@ class ConfirmFragment : BaseFragment<FragmentConfirmBinding, ConfirmViewModel>(F
 
             viewLifecycleOwner.repeatOnStarted {
                 fragmentViewModel.classificationResult.collect { state ->
-                    state.onSuccess { classificationResultEntities, consumed ->
+                    state.onSuccess { result, _ ->
                         toast(
-                            classificationResultEntities.map {
-                                it.classificationRecognitionEntity.medicineSeq
-                            }.toString(),
+                            result.items.mapTo(mutableListOf()) { it.itemSeq }.joinToString(", "),
                         )
+                    }.onInferencing {
+                        SimpleDialogBuilder.builder(requireActivity(), DialogType.Fullscreen)
+                            .setContentView(ViewClassificationLoadingBinding.inflate(layoutInflater).root)
+                            .setDim(false)
+                            .setBehindBlur(false)
+                            .setCornerRadius(0)
+                            .setBackgroundColor(resources.getColor(R.color.loadingDialogBackgroundColor, null))
+                            .buildAndShow().run {
+                                this.setOnShowListener {
+                                    val window = this.window!!
+                                    window.apply {
+                                        WindowCompat.setDecorFitsSystemWindows(window, false)
+                                    }
+                                    window.addFlags(
+                                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                                    )
+                                    WindowCompat.getInsetsController(window, window.decorView).apply {
+                                        isAppearanceLightStatusBars = false
+                                        isAppearanceLightNavigationBars = false
+                                    }
+                                }
+                            }
                     }
                 }
             }
