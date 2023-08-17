@@ -22,7 +22,6 @@ import org.pytorch.Tensor
 import org.pytorch.torchvision.TensorImageUtils
 import java.io.IOException
 import java.lang.ref.WeakReference
-import kotlin.math.exp
 
 
 @OptIn(DelicateCoroutinesApi::class)
@@ -55,11 +54,11 @@ object MedicineClassifierImpl : MedicineClassifier {
                         ),
                     ).get()!!
                     val outputTensor: Tensor = aiModel.forward(IValue.from(inputTensor)).toTensor()
-                    val scores = softmax(outputTensor.dataAsFloatArray)
+                    val scores = outputTensor.dataAsFloatArray
                     val maxScore = scores.withIndex().maxBy { it.value }
                     val itemSeq: String = metaData.getClass(maxScore.index)
 
-                    ClassificationResultEntity.Item(itemSeq, maxScore.value)
+                    ClassificationResultEntity.Item(itemSeq, maxScore.value.toFloat())
                 }
                 send(Result.success(ClassificationResultEntity(result)))
             }.onLoadFailed {
@@ -71,7 +70,7 @@ object MedicineClassifierImpl : MedicineClassifier {
     override suspend fun initialize(context: Context): Result<Unit> {
         _aiModelState.value = AiModelState.Loading
         return try {
-            _aiModel = LiteModuleLoader.loadModuleFromAsset(context.assets, "model25.ptl")
+            _aiModel = LiteModuleLoader.loadModuleFromAsset(context.assets, "model46.ptl")
             _metaData = json.decodeFromString(
                 ClassificationMetaDataEntity.serializer(),
                 context.assets.open("metadata.json").bufferedReader().use { it.readText() },
@@ -86,16 +85,6 @@ object MedicineClassifierImpl : MedicineClassifier {
 
     override fun release() {
 
-    }
-
-    private fun softmax(scores: FloatArray): FloatArray {
-        val maxScore = scores.max()
-
-        val expScores = FloatArray(scores.size) { i ->
-            exp((scores[i] - maxScore).toDouble()).toFloat()
-        }
-        val sumExpScores = expScores.sum()
-        return FloatArray(scores.size) { i -> expScores[i] / sumExpScores }
     }
 
     private fun Bitmap.resizeBitmap() = scale(targetSize.width, targetSize.height)

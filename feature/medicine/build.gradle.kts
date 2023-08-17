@@ -1,6 +1,7 @@
 plugins {
     id("mediproject.android.feature")
     id(libs.plugins.kotlin.parcelize.get().pluginId)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -26,4 +27,7 @@ dependencies {
     implementation(libs.bundles.materials)
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.androidx.asynclayoutinflater)
+
+    ksp(libs.ksealedbinding.compiler)
+    implementation(libs.ksealedbinding.annotation)
 }

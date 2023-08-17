@@ -1,18 +1,19 @@
 package com.android.mediproject.feature.medicine.main
 
-import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
-import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetCommentsUseCase
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
 import com.android.mediproject.core.domain.GetMedicineDetailsUseCase
-import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetail
+import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.pknujsp.core.annotation.KBindFunc
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,8 +24,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,14 +36,6 @@ class MedicineInfoViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
-    init {
-        viewModelScope.launch {
-            // 댓글 업데이트 시 스크롤을 맨 아래로 내립니다.
-            getCommentsUseCase.scrollChannel.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Eagerly, replay = 0).collect {
-                _eventState.emit(EventState.ScrollToBottom)
-            }
-        }
-    }
 
     private val _eventState = MutableEventFlow<EventState>(replay = 1)
     val eventState get() = _eventState.asEventFlow()
@@ -53,6 +44,10 @@ class MedicineInfoViewModel @Inject constructor(
     val medicinePrimaryInfo get() = _medicinePrimaryInfo.asSharedFlow()
 
     private val checkFavoriteMedicine = MutableStateFlow(EventState.Favorite(isFavorite = false, lockChecked = true))
+
+    companion object {
+        const val COMMENT_TAB_POSITION = 3
+    }
 
     val medicineDetails: StateFlow<UiState<MedicineDetail>> = medicinePrimaryInfo.flatMapLatest { primaryInfo ->
         getMedicineDetailsUseCase(primaryInfo).mapLatest { result ->
@@ -102,16 +97,10 @@ class MedicineInfoViewModel @Inject constructor(
             }
         }
     }
-
-    fun scrollToBottom() {
-        viewModelScope.launch {
-            _eventState.emit(EventState.ScrollToBottom)
-        }
-    }
 }
 
-sealed class EventState {
-    data class Favorite(val isFavorite: Boolean = false, val lockChecked: Boolean) : EventState()
-    object ScrollToBottom : EventState()
+@KBindFunc
+sealed interface EventState {
+    data class Favorite(val isFavorite: Boolean = false, val lockChecked: Boolean) : EventState
 
 }

@@ -4,22 +4,25 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.util.SystemBarColorAnalyzer
 import com.android.mediproject.core.common.util.SystemBarController
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.util.navArgs
-import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.common.viewmodel.onError
+import com.android.mediproject.core.common.viewmodel.onLoading
+import com.android.mediproject.core.common.viewmodel.onSuccess
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.model.navargs.MedicineInfoArgs
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.medicine.R
 import com.android.mediproject.feature.medicine.databinding.FragmentMedicineInfoBinding
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 /**
@@ -36,10 +39,11 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
     @Inject lateinit var systemBarStyler: SystemBarController
     @Inject lateinit var systemBarColorAnalyzer: SystemBarColorAnalyzer
 
+    private val scrollController = ScrollController()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentViewModel.setMedicinePrimaryInfo(navArgs)
-        setBarStyle()
 
         binding.apply {
             systemBarStyler.changeMode(topViews = listOf(SystemBarStyler.ChangeView(topAppBar, SystemBarStyler.SpacingType.PADDING)))
@@ -47,55 +51,42 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             medicineInfoArgs = navArgs
 
             toolbar.bar.setBackgroundColor(Color.TRANSPARENT)
-            topAppBar.addOnOffsetChangedListener { _, _ ->
+            topAppBar.viewTreeObserver.addOnGlobalLayoutListener {
                 systemBarColorAnalyzer.convert()
+            }
+
+            root.doOnLayout {
+                scrollController.init(collapsingToolbarLayout, toolbar, topAppBar)
             }
         }
 
-        viewLifecycleOwner.repeatOnStarted {
-            launch {
-                fragmentViewModel.medicineDetails.collect { uiState ->
-                    when (uiState) {
-                        is UiState.Success -> {
-                            initTabs()
-                            LoadingDialog.dismiss()
-                        }
-
-                        is UiState.Error -> {
-                            LoadingDialog.dismiss()
-                        }
-
-                        is UiState.Loading -> {
-                            LoadingDialog.showLoadingDialog(requireContext(), null)
-                        }
-
-                        is UiState.Initial -> {}
-
+        viewLifecycleOwner.apply {
+            repeatOnStarted {
+                fragmentViewModel.medicineDetails.collect {
+                    it.onSuccess {
+                        initTabs()
+                        LoadingDialog.dismiss()
+                    }.onError {
+                        LoadingDialog.dismiss()
+                    }.onLoading {
+                        LoadingDialog.showLoadingDialog(requireContext(), null)
                     }
                 }
             }
 
-            launch {
+            repeatOnStarted {
                 fragmentViewModel.eventState.collectLatest {
-                    when (it) {
-                        is EventState.Favorite -> {
-                            binding.interestBtn.isEnabled = it.lockChecked
-                            binding.interestBtn.isChecked = it.isFavorite
-                        }
-
-                        is EventState.ScrollToBottom -> {
-                            binding.topAppBar.setExpanded(false, true)
-                        }
+                    it.onFavorite { lockChecked, isFavorite ->
+                        binding.interestBtn.isEnabled = lockChecked
+                        binding.interestBtn.isChecked = isFavorite
                     }
                 }
-
             }
 
-            launch {
+            repeatOnStarted {
                 systemBarColorAnalyzer.statusBarColor.collect {
                     (if (it == SystemBarStyler.SystemBarColor.WHITE) Color.WHITE else Color.BLACK).also { color ->
-                        binding.toolbar.backButton.imageTintList =
-                            ColorStateList.valueOf(color)
+                        binding.toolbar.backButton.imageTintList = ColorStateList.valueOf(color)
                         binding.toolbar.title.setTextColor(color)
                     }
                 }
@@ -103,25 +94,40 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
         }
     }
 
-    private fun setBarStyle() = binding.apply {
-
-    }
-
 
     // 탭 레이아웃 초기화
     private fun initTabs() {
         binding.apply {
             contentViewPager.adapter = MedicineInfoPageAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
-
-            // 탭 레이아웃에 탭 추가
-            resources.getStringArray(R.array.medicineInfoTab).also { tabTextList ->
+            resources.getStringArray(R.array.medicineInfoTab).let { tabTextList ->
                 TabLayoutMediator(tabLayout, contentViewPager) { tab, position ->
                     tab.text = tabTextList[position]
                 }.attach()
             }
+
+            tabLayout.addOnTabSelectedListener(
+                object : TabLayout.OnTabSelectedListener {
+                    override fun onTabSelected(tab: TabLayout.Tab) {
+                        if ((tab.position == MedicineInfoViewModel.COMMENT_TAB_POSITION) and tab.isSelected) {
+                            scrollController.scrollable = false
+                            topAppBar.setExpanded(false, true)
+                        } else {
+                            scrollController.scrollable = true
+                        }
+                    }
+
+                    override fun onTabUnselected(tab: TabLayout.Tab) {
+
+                    }
+
+                    override fun onTabReselected(tab: TabLayout.Tab) {
+
+                    }
+
+                },
+            )
         }
 
     }
-
 
 }
