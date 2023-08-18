@@ -10,6 +10,7 @@ import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.EditCommentUseCase
 import com.android.mediproject.core.domain.GetAccountStateUseCase
 import com.android.mediproject.core.domain.GetCommentsUseCase
+import com.android.mediproject.core.model.comments.BaseComment
 import com.android.mediproject.core.model.comments.Comment
 import com.android.mediproject.core.model.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.model.requestparameters.DeleteCommentParameter
@@ -188,12 +189,11 @@ class MedicineCommentsViewModel @Inject constructor(
      * 답글 작성 시작하기 버튼 클릭
      * - 답글 등록하기 버튼 클릭이 아님
      *
-     * @param comment 답글을 작성할 댓글의 id
-     * @param commentId 답글을 작성할 댓글의 id
+     * @param comment 답글을 작성할 댓글의 정보
      */
-    private fun onClickedReply(comment: String, commentId: Long) {
+    private fun onClickedReply(comment: BaseComment) {
         viewModelScope.launch {
-            _replyId.value = commentId
+            _replyId.value = comment.commentId
             _action.emit(OnClickToReply(comment))
         }
     }
@@ -285,13 +285,7 @@ class MedicineCommentsViewModel @Inject constructor(
             _medicineBasicInfo.emit(medicineBasicInfo)
         }
     }
-
-    fun cancelReply() {
-        viewModelScope.launch {
-            _action.emit(CommentActionState.OnCancelReply)
-            _replyId.value = NONE_REPLY_ID
-        }
-    }
+    
 }
 
 /**
@@ -318,11 +312,7 @@ sealed interface CommentActionState {
     object OnClickToComment : CommentActionState
 
 
-    /**
-     * @property comment 답글 내용
-     */
-    data class OnClickToReply(val comment: String) : CommentActionState
-    object OnCancelReply : CommentActionState
+    data class OnClickToReply(val baseComment: BaseComment) : CommentActionState
     object OnClickToLike : CommentActionState
 
     /**

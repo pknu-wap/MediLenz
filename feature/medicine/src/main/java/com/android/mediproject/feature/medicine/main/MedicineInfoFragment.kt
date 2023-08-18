@@ -54,6 +54,9 @@ class MedicineInfoFragment : BaseFragment<FragmentMedicineInfoBinding, MedicineI
             topAppBar.viewTreeObserver.addOnGlobalLayoutListener {
                 systemBarColorAnalyzer.convert()
             }
+            topAppBar.addOnOffsetChangedListener { _, _ ->
+                systemBarColorAnalyzer.convert()
+            }
 
             root.doOnLayout {
                 scrollController.init(collapsingToolbarLayout, toolbar, topAppBar)

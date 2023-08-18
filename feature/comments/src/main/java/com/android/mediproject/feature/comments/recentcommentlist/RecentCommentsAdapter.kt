@@ -4,7 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.android.mediproject.core.model.comments.BaseComment
 import com.android.mediproject.core.model.comments.Comment
+import com.android.mediproject.core.model.common.UiModelMapperFactory
 import com.android.mediproject.core.ui.base.view.SimpleListItemView
 
 class RecentCommentsAdapter : ListAdapter<Comment, RecentCommentsAdapter.RecentCommentListViewHolder>(AsyncDiffer) {
@@ -19,7 +21,7 @@ class RecentCommentsAdapter : ListAdapter<Comment, RecentCommentsAdapter.RecentC
                 item?.apply {
                     onClickDelete?.invoke(commentId)
                     onClickLike?.invoke(commentId, !isLiked)
-                    onClickReply?.invoke(content, commentId)
+                    onClickReply?.invoke(UiModelMapperFactory.create<BaseComment>(this).convert())
                 }
             }
         }

@@ -31,7 +31,7 @@ class MedicineCommentsFragment : BaseFragment<FragmentMedicineCommentsBinding, M
             viewModel = fragmentViewModel
 
             commentInputView.setOnClickListener {
-                CommentDialog.show(requireActivity(), fragmentViewModel)
+                CommentDialog.showComment(requireActivity(), fragmentViewModel)
             }
 
             val adapter = CommentsAdapter().apply {
@@ -64,7 +64,6 @@ class MedicineCommentsFragment : BaseFragment<FragmentMedicineCommentsBinding, M
                 fragmentViewModel.action.collect { action ->
                     action.onNone {
 
-                    }.onOnCancelReply {
                     }.onOnClickEditComment { positionOnList ->
                         adapter.notifyItemChanged(positionOnList)
                     }.onOnClickToDeleteComment { commentId ->
@@ -98,7 +97,7 @@ class MedicineCommentsFragment : BaseFragment<FragmentMedicineCommentsBinding, M
                             adapter.refresh()
                         }
                     }.onOnClickToReply { comment ->
-
+                        CommentDialog.showReply(requireActivity(), fragmentViewModel, comment)
                     }
                 }
 
