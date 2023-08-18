@@ -29,4 +29,5 @@ dependencies {
 
     ksp(libs.ksealedbinding.compiler)
     implementation(libs.ksealedbinding.annotation)
+    implementation(libs.simpledialog)
 }

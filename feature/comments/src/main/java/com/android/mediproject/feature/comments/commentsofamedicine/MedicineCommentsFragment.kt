@@ -3,10 +3,6 @@ package com.android.mediproject.feature.comments.commentsofamedicine
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.StringRes
-import androidx.core.text.HtmlCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +29,10 @@ class MedicineCommentsFragment : BaseFragment<FragmentMedicineCommentsBinding, M
 
         binding.apply {
             viewModel = fragmentViewModel
-            replyHeader.isVisible = false
+
+            commentInputView.setOnClickListener {
+                CommentDialog.show(requireActivity(), fragmentViewModel)
+            }
 
             val adapter = CommentsAdapter().apply {
                 setOnStateChangedListener(
@@ -66,7 +65,6 @@ class MedicineCommentsFragment : BaseFragment<FragmentMedicineCommentsBinding, M
                     action.onNone {
 
                     }.onOnCancelReply {
-                        replyHeader.isVisible = false
                     }.onOnClickEditComment { positionOnList ->
                         adapter.notifyItemChanged(positionOnList)
                     }.onOnClickToDeleteComment { commentId ->
@@ -85,9 +83,7 @@ class MedicineCommentsFragment : BaseFragment<FragmentMedicineCommentsBinding, M
                             adapter.refresh()
                         }
                     }.onOnCompleteApplyCommentOrReply { result ->
-                        replayInfoHeader.isVisible = false
                         if (result) {
-                            replyHeader.isVisible = false
                             toast(getString(R.string.appliedComment))
                             adapter.refresh()
                         }
@@ -102,24 +98,15 @@ class MedicineCommentsFragment : BaseFragment<FragmentMedicineCommentsBinding, M
                             adapter.refresh()
                         }
                     }.onOnClickToReply { comment ->
-                        val text = HtmlCompat.fromHtml(getString(R.string.replyHeader) + comment, HtmlCompat.FROM_HTML_MODE_COMPACT)
-                        replayInfoHeader.text = text
-                        replyHeader.isVisible = true
+
                     }
                 }
-
 
             }
 
             viewLifecycleOwner.repeatOnStarted {
                 fragmentViewModel.comments.collectLatest {
                     adapter.submitData(it)
-                }
-            }
-
-            binding.commentInput.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus) {
-                    WindowCompat.getInsetsController(requireActivity().window, v).show(WindowInsetsCompat.Type.ime())
                 }
             }
 

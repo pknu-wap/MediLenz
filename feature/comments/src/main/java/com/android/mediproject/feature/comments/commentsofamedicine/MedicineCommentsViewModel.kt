@@ -315,6 +315,9 @@ sealed interface CommentActionState {
      */
     data class OnClickToDeleteComment(val commentId: Long) : CommentActionState
 
+    object OnClickToComment : CommentActionState
+
+
     /**
      * @property comment 답글 내용
      */
