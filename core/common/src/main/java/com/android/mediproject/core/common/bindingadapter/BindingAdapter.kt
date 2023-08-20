@@ -36,6 +36,16 @@ object BindingAdapter {
         GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(caching).into(imageView)
     }
 
+    @BindingAdapter("loadUserImage", requireAll = false)
+    @JvmStatic
+    fun loadUserImage(imageView: ImageView, img: String) {
+        if (img.isEmpty()) {
+            imageView.setImageResource(R.drawable.default_user_image)
+            return
+        }
+        GlideApp.with(imageView.context).load(img).circleCrop().into(imageView)
+    }
+
     @BindingAdapter("img")
     @JvmStatic
     fun loadImage(imageView: ImageView, img: Bitmap) {

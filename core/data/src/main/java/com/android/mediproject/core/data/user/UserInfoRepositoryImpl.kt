@@ -2,6 +2,8 @@ package com.android.mediproject.core.data.user
 
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.user.AccountState
+import com.android.mediproject.core.model.user.User
+import com.android.mediproject.core.model.user.remote.toUser
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -57,13 +59,18 @@ class UserInfoRepositoryImpl @Inject constructor(
      */
     override fun getMyAccountInfo() = channelFlow {
         userInfoDataSource.getUserInfo().collectLatest {
-            it.onSuccess { userResponse ->
-                _myAccountInfo.value = AccountState.SignedIn(userResponse.userId, userResponse.nickname, userResponse.email)
-            }.onFailure {
-                _myAccountInfo.value = AccountState.Unknown
+            it.fold(
+                onSuccess = { userResponse ->
+                    _myAccountInfo.value = AccountState.SignedIn(userResponse.userId, userResponse.nickname, userResponse.email)
+                    Result.success(userResponse.toUser())
+                },
+                onFailure = {
+                    _myAccountInfo.value = AccountState.Unknown
+                    Result.failure(it)
+                },
+            ).also {
+                trySend(it)
             }
-            trySend(it)
         }
     }
-
 }

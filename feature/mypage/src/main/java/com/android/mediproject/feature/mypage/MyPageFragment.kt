@@ -132,7 +132,8 @@ class MyPageFragment :
 
             is UiState.Success -> {
                 setSuccessUserVisible()
-                binding.userDto = userState.data
+                binding.user = userState.data
+
             }
 
             is UiState.Error -> {
@@ -140,6 +141,7 @@ class MyPageFragment :
             }
         }
     }
+
 
     private fun setLoadingUserVisible() = binding.apply {
         userNameTV.visibility = View.GONE

@@ -10,7 +10,7 @@
             type="com.android.mediproject.feature.mypage.MyPageViewModel" />
 
         <variable
-            name="userDto"
+            name="user"
             type="com.android.mediproject.core.model.user.User" />
     </data>
 
@@ -152,7 +152,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/default_user_image"
+                    loadUserImage="@{user.profileUrl}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -161,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="@{userDto.nickName}"
+                    android:text="@{user.nickName}"
                     android:textColor="@color/black"
                     android:textSize="28sp"
                     app:layout_constraintBottom_toBottomOf="@id/userImageIV"
@@ -266,7 +266,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp" />
-
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
