@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class UserResponse(
-    val nickname: String, val userId: Long, val email: String, val message: String,
+    val nickname: String, val userId: Long, val email: String, val message: String, @SerialName("profile_url") val profileUrl: String? = "",
 )
 
 fun UserResponse.toUserDto() = User(nickName = nickname).apply {
