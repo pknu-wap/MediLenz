@@ -69,24 +69,21 @@ class MyPageFragment :
         is MyPageViewModel.MyPageEvent.Login -> navigateWithUri("medilens://main/intro_nav/login")
         is MyPageViewModel.MyPageEvent.SignUp -> navigateWithUri("medilens://main/intro_nav/signUp")
         is MyPageViewModel.MyPageEvent.NavigateToMyCommentList -> navigateWithUri("medilens://main/comments_nav/myCommentsListFragment")
-        is MyPageViewModel.MyPageEvent.NavigateToMyPageMore -> showMyPageBottomSheet()
+        is MyPageViewModel.MyPageEvent.NavigateToMyPageMore -> showMyPageBottomSheet(MyPageMoreBottomSheetFragment.BottomSheetType.DEFAULT)
+        is MyPageViewModel.MyPageEvent.ClickMyImage -> showMyPageBottomSheet(MyPageMoreBottomSheetFragment.BottomSheetType.IMAGE)
     }
 
-    private fun showMyPageBottomSheet() {
+    private fun showMyPageBottomSheet(bottomSheetType: MyPageMoreBottomSheetFragment.BottomSheetType) {
         if (myPageMoreBottomSheet == null) {
-            showMyPageMoreBottomSheet()
-        }
-    }
+            myPageMoreBottomSheet = MyPageMoreBottomSheetFragment(bottomSheetType) {
+                myPageMoreBottomSheet = null
+            }
 
-    private fun showMyPageMoreBottomSheet() {
-        myPageMoreBottomSheet = MyPageMoreBottomSheetFragment {
-            myPageMoreBottomSheet = null
+            myPageMoreBottomSheet!!.show(
+                parentFragmentManager,
+                MyPageMoreBottomSheetFragment.TAG,
+            )
         }
-
-        myPageMoreBottomSheet!!.show(
-            parentFragmentManager,
-            MyPageMoreBottomSheetFragment.TAG,
-        )
     }
 
     private fun guestModeScreen() = binding.apply {

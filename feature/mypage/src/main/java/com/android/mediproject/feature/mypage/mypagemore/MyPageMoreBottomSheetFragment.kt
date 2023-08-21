@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 
 @AndroidEntryPoint
-class MyPageMoreBottomSheetFragment(private val backCallback: () -> Unit) :
+class MyPageMoreBottomSheetFragment(private val bottomSheetType: BottomSheetType, private val backCallback: () -> Unit) :
     BottomSheetDialogFragment() {
 
     companion object {
@@ -32,6 +32,10 @@ class MyPageMoreBottomSheetFragment(private val backCallback: () -> Unit) :
         CHANGE_PASSWORD(302),
         WITHDRAWAL(303),
         LOGOUT(304)
+    }
+
+    enum class BottomSheetType {
+        DEFAULT, IMAGE
     }
 
     private var _binding: FragmentMyPageMoreBottomSheetBinding? = null
