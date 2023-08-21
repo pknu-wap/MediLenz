@@ -53,11 +53,14 @@ class MyPageViewModel @Inject constructor(
 
     fun navigateToMyCommentList() = event(MyPageEvent.NavigateToMyCommentList)
 
+    fun clickMyImage() = event(MyPageEvent.ClickMyImage)
+
     sealed class MyPageEvent {
         object Login : MyPageEvent()
         object SignUp : MyPageEvent()
         object NavigateToMyPageMore : MyPageEvent()
         object NavigateToMyCommentList : MyPageEvent()
+        object ClickMyImage : MyPageEvent()
     }
 
     private val _token = MutableSharedFlow<TokenState<CurrentTokens>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
