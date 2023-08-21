@@ -98,4 +98,39 @@ class SpanProvider @Inject constructor() {
             setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
+
+    fun myPageMoreDialogGetWithdrawalSpan(context : Context): SpannableStringBuilder {
+        return SpannableStringBuilder(context.getString(R.string.withdrawalDescription)).apply {
+            setSpan(
+                ForegroundColorSpan(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.red,
+                    ),
+                ),
+                4,
+                8,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        }
+    }
+
+    fun myPageMoregGetLogoutSpan(context: Context): SpannableStringBuilder {
+        return SpannableStringBuilder(context.getString(R.string.logoutDescription)).apply {
+            setSpan(
+                ForegroundColorSpan(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.red,
+                    ),
+                ),
+                4,
+                8,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        }
+    }
+
 }

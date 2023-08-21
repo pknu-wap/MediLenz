@@ -73,4 +73,7 @@
 
     <string name="noMyComment">내가 작성한 댓글이 없습니다.</string>
     <string name="guestDescription">로그인하여 다른 사용자들과 \n소통을 즐겨보세요 !</string>
+
+    <string name="logoutDescription">정말로 로그아웃을 원하신다면 완료 버튼을 눌러주세요.</string>
+    <string name="withdrawalDescription">정말로 회원탈퇴를 원하신다면 “회원탈퇴”를 입력한 뒤, 완료 버튼을 눌러주세요.</string>
 </resources>

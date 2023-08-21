@@ -28,10 +28,6 @@ import javax.inject.Singleton
 @Singleton
 class MedicineInfoMapper @Inject constructor() {
 
-    companion object {
-        private const val TEXT_SIZE_PERCENT = 1.2F
-    }
-
     /**
      * 용법용량 정보 데이터를 UI에 맞게 변환
      */

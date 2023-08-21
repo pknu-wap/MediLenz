@@ -17,12 +17,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import com.android.mediproject.core.common.mapper.SpanProvider
 import com.android.mediproject.core.ui.base.view.Subtitle.Companion.PASSWORD
 import com.android.mediproject.feature.mypage.R
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageMoreDialogBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyPageMoreDialogFragment(private val flag: DialogType) : DialogFragment() {
@@ -37,6 +39,9 @@ class MyPageMoreDialogFragment(private val flag: DialogType) : DialogFragment() 
         WITHDRAWAL(307),
         LOGOUT(308)
     }
+
+    @Inject
+    lateinit var spanProvider: SpanProvider
 
     private val fragmentViewModel: MyPageMoreDialogViewModel by viewModels()
     private var _binding: FragmentMyPageMoreDialogBinding? = null
@@ -311,20 +316,7 @@ class MyPageMoreDialogFragment(private val flag: DialogType) : DialogFragment() 
     }
 
     private fun getWithdrawalSpan(): SpannableStringBuilder {
-        return SpannableStringBuilder(getString(R.string.withdrawalDescription)).apply {
-            setSpan(
-                ForegroundColorSpan(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        com.android.mediproject.core.ui.R.color.red,
-                    ),
-                ),
-                4,
-                8,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-            )
-            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-        }
+        return spanProvider.myPageMoreDialogGetWithdrawalSpan(requireContext())
     }
 
     private fun setLogoutVisible() = binding.apply {
@@ -333,20 +325,7 @@ class MyPageMoreDialogFragment(private val flag: DialogType) : DialogFragment() 
     }
 
     private fun getLogoutSpan(): SpannableStringBuilder {
-        return SpannableStringBuilder(getString(R.string.logoutDescription)).apply {
-            setSpan(
-                ForegroundColorSpan(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        com.android.mediproject.core.ui.R.color.red,
-                    ),
-                ),
-                4,
-                8,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-            )
-            setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-        }
+        return spanProvider.myPageMoregGetLogoutSpan(requireContext())
     }
 
     private fun checkEditableWithdrawal(editable: Editable?): Boolean {
