@@ -203,6 +203,7 @@ class MyPageFragment :
             MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.CHANGE_PASSWORD)
             MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.WITHDRAWAL)
             MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.LOGOUT)
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_USER_IMAGE.value -> {}
         }
     }
 
