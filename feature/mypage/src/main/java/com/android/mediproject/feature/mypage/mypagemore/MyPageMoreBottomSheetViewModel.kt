@@ -39,6 +39,10 @@ class MyPageMoreBottomSheetViewModel @Inject constructor() : BaseViewModel() {
         _bottomsheetFlag.value = MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT
     }
 
+    fun changeUserImage(){
+        _bottomsheetFlag.value = MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_USER_IMAGE
+    }
+
     sealed class MyPageMoreBottomSheetEvent {
         data class CompleteBottomSheet(val flag: MyPageMoreBottomSheetFragment.BottomSheetFlag = MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_NICKNAME) :
             MyPageMoreBottomSheetEvent()

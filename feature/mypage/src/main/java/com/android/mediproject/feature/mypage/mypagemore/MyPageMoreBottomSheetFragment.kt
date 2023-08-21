@@ -31,7 +31,8 @@ class MyPageMoreBottomSheetFragment(private val bottomSheetType: BottomSheetType
         CHANGE_NICKNAME(301),
         CHANGE_PASSWORD(302),
         WITHDRAWAL(303),
-        LOGOUT(304)
+        LOGOUT(304),
+        CHANGE_USER_IMAGE(305)
     }
 
     enum class BottomSheetType {
@@ -74,7 +75,15 @@ class MyPageMoreBottomSheetFragment(private val bottomSheetType: BottomSheetType
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setBottomSheetType()
         setBinding()
+    }
+
+    private fun setBottomSheetType() {
+        when (bottomSheetType) {
+            BottomSheetType.DEFAULT -> {}
+            BottomSheetType.IMAGE -> {}
+        }
     }
 
     private fun setBinding() {
@@ -96,6 +105,7 @@ class MyPageMoreBottomSheetFragment(private val bottomSheetType: BottomSheetType
                     BottomSheetFlag.CHANGE_PASSWORD -> completeBottomSheetChangePassword()
                     BottomSheetFlag.WITHDRAWAL -> completeBottomSheetWithdrawal()
                     BottomSheetFlag.LOGOUT -> completeBottomSheetLogout()
+                    BottomSheetFlag.CHANGE_USER_IMAGE -> {}
                 }
             }
         }
@@ -123,11 +133,13 @@ class MyPageMoreBottomSheetFragment(private val bottomSheetType: BottomSheetType
             BottomSheetFlag.CHANGE_PASSWORD -> highlight(binding.changePasswordTV)
             BottomSheetFlag.WITHDRAWAL -> highlight(binding.withdrawalTV)
             BottomSheetFlag.LOGOUT -> highlight(binding.logoutTV)
+            BottomSheetFlag.CHANGE_USER_IMAGE -> highlight(binding.changeUserImageTV)
         }
     }
 
     private fun highlight(view: TextView) {
-        val flagTextViewList = listOf(binding.changePasswordTV, binding.withdrawalTV, binding.changeNickNameTV, binding.logoutTV)
+        val flagTextViewList =
+            listOf(binding.changePasswordTV, binding.withdrawalTV, binding.changeNickNameTV, binding.logoutTV, binding.changeUserImageTV)
 
         flagTextViewList.forEach { flagTextView ->
             if (view == flagTextView) {

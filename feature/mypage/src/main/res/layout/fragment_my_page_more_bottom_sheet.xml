@@ -67,6 +67,19 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/changeUserImageTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.changeUserImage()}"
+            android:padding="10dp"
+            android:text="@string/changeUserImage"
+            android:visibility="gone"
+            android:textColor="@color/gray3"
+            android:textSize="18sp" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="25dp"
