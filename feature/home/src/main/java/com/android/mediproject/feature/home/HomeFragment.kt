@@ -6,8 +6,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.common.mapper.MedicineInfoMapper
-import com.android.mediproject.core.common.mapper.SpanProvider
+import com.android.mediproject.core.common.util.SpanProvider
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment

@@ -1,20 +1,16 @@
 package com.android.mediproject.feature.mypage
 
 import android.os.Bundle
-import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
-import android.text.style.UnderlineSpan
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.mediproject.core.common.mapper.SpanProvider
+import com.android.mediproject.core.common.bindingadapter.GlideApp
+import com.android.mediproject.core.common.util.SpanProvider
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
-import com.android.mediproject.core.ui.R
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFragment
@@ -23,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.user.User
+import com.bumptech.glide.Glide
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,6 +28,7 @@ class MyPageFragment :
 
     @Inject
     lateinit var systemBarStyler: SystemBarStyler
+
     @Inject
     lateinit var spanProvider: SpanProvider
 
@@ -45,18 +43,18 @@ class MyPageFragment :
     }
 
     private fun setBinding() = binding.apply {
-            viewModel = fragmentViewModel.apply {
-                viewLifecycleOwner.apply {
-                    repeatOnStarted { token.collect { handleToken(it) } }
-                    repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { user.collect { handleUserState(it) } }
-                    repeatOnStarted { myCommentsList.collect { handleMyCommentListState(it) } }
-                }
-                loadTokens()
+        viewModel = fragmentViewModel.apply {
+            viewLifecycleOwner.apply {
+                repeatOnStarted { token.collect { handleToken(it) } }
+                repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+                repeatOnStarted { user.collect { handleUserState(it) } }
+                repeatOnStarted { myCommentsList.collect { handleMyCommentListState(it) } }
             }
-            setBarStyle()
-            setRecyclerView()
+            loadTokens()
         }
+        setBarStyle()
+        setRecyclerView()
+    }
 
     private fun handleToken(tokenState: TokenState<CurrentTokens>) {
         log(tokenState.toString())
@@ -118,8 +116,7 @@ class MyPageFragment :
 
             is UiState.Success -> {
                 setSuccessUserVisible()
-                binding.user = userState.data
-
+                updateUserInformation(userState.data)
             }
 
             is UiState.Error -> {
@@ -128,6 +125,14 @@ class MyPageFragment :
         }
     }
 
+    private fun updateUserInformation(newUserData: User) =binding.apply{
+        user = newUserData
+        if (newUserData.profileUrl.isEmpty()) {
+            userImageIV.setImageResource(com.android.mediproject.core.common.R.drawable.default_user_image)
+            return@apply
+        }
+        GlideApp.with(requireContext()).load(newUserData.profileUrl).circleCrop().into(userImageIV)
+    }
 
     private fun setLoadingUserVisible() = binding.apply {
         userNameTV.visibility = View.GONE

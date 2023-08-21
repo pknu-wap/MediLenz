@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.android.mediproject.core.common.mapper.MedicineInfoMapper
-import com.android.mediproject.core.common.mapper.SpanProvider
+import com.android.mediproject.core.common.util.SpanProvider
 import com.android.mediproject.core.common.util.deepNavigate
 import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.common.viewmodel.UiState

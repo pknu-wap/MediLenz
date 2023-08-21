@@ -36,7 +36,7 @@ object BindingAdapter {
         GlideApp.with(imageView.context).load(img).centerInside().skipMemoryCache(caching).into(imageView)
     }
 
-    @BindingAdapter("loadUserImage", requireAll = false)
+    @BindingAdapter("loadUserImage")
     @JvmStatic
     fun loadUserImage(imageView: ImageView, img: String) {
         if (img.isEmpty()) {

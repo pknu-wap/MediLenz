@@ -1,4 +1,4 @@
-package com.android.mediproject.core.common.mapper
+package com.android.mediproject.core.common.util
 
 import android.content.Context
 import android.graphics.Typeface
@@ -9,7 +9,6 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.android.mediproject.core.common.R
 import javax.inject.Inject
@@ -17,6 +16,7 @@ import javax.inject.Singleton
 
 @Singleton
 class SpanProvider @Inject constructor() {
+
     companion object {
         private const val TEXT_SIZE_PERCENT = 1.2F
     }
@@ -132,5 +132,4 @@ class SpanProvider @Inject constructor() {
             setSpan(UnderlineSpan(), 4, 8, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         }
     }
-
 }

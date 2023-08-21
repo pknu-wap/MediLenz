@@ -152,7 +152,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
-                    loadUserImage="@{user.profileUrl}"
                     android:onClick="@{()->viewModel.clickMyImage()}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
