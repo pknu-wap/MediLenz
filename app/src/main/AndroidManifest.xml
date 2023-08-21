@@ -37,8 +37,8 @@
         </activity>
 
         <provider
-            android:name=".feature.camera.tflite.camera.CameraHelper"
-            android:authorities="${applicationId}.camera.helper"
+            android:name=".core.ai.AiModelLoader"
+            android:authorities="${applicationId}.ai.modelloader"
             android:exported="false" />
     </application>
 

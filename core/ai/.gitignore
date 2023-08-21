@@ -1,4 +1,3 @@
 /build
 
-main/assets/
-main/ml/
+src/main/assets/

@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.camera
+package com.android.mediproject.core.ai
 
 import io.github.pknujsp.core.annotation.KBindFunc
 

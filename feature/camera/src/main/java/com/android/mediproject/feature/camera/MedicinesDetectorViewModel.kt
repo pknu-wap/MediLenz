@@ -1,17 +1,19 @@
 package com.android.mediproject.feature.camera
 
-import android.graphics.Bitmap
-import android.util.Size
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
+import com.android.mediproject.core.ai.AiModel
+import com.android.mediproject.core.ai.AiModelManager
+import com.android.mediproject.core.ai.camera.CameraController
+import com.android.mediproject.core.ai.camera.CameraHelper
+import com.android.mediproject.core.ai.model.CapturedDetectionEntity
+import com.android.mediproject.core.ai.model.InferenceState
+import com.android.mediproject.core.ai.onLoadFailed
+import com.android.mediproject.core.ai.onLoaded
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
-import com.android.mediproject.core.model.ai.DetectionResultEntity
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.camera.tflite.camera.AiController
-import com.android.mediproject.feature.camera.tflite.camera.CameraController
-import com.android.mediproject.feature.camera.tflite.camera.CameraHelper
 import com.android.mediproject.feature.camera.util.VibrationManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.pknujsp.core.annotation.KBindFunc
@@ -22,41 +24,30 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.tensorflow.lite.task.gms.vision.detector.Detection
 import javax.inject.Inject
+import javax.inject.Named
 
 
 @HiltViewModel
 class MedicinesDetectorViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
-    private val aiController: AiController,
     private val cameraController: CameraController,
     private val vibrationManager: VibrationManager,
+    @Named(AiModelManager.Detector) detectorModelManager: AiModel,
 ) : BaseViewModel() {
 
-    private val _aiModelState = MutableStateFlow<AiModelState>(AiModelState.Initial)
-    private val aiModelState get() = _aiModelState.asStateFlow()
+    private val aiModelState = detectorModelManager.aiModelState
 
     private val _cameraConnectionState = MutableStateFlow<CameraConnectionState>(CameraConnectionState.Disconnected)
     val cameraConnectionState get() = _cameraConnectionState.asStateFlow()
 
-    // 검출 정보 가록
-    private val _inferenceState = MutableSharedFlow<InferenceState>(replay = 1, extraBufferCapacity = 1)
-    val inferenceState get() = _inferenceState.asSharedFlow()
+    // 검출 정보 기록
+    private val _captureState = MutableSharedFlow<InferenceState<CapturedDetectionEntity>>(replay = 1, extraBufferCapacity = 1)
+    val captureState get() = _captureState.asSharedFlow()
 
-    init {
-        viewModelScope.launch(defaultDispatcher) {
-            _aiModelState.value = AiModelState.Loading
+    private val vibrateDuration = 50L
 
-            aiController.getObjectDetectorStatus().onSuccess {
-                _aiModelState.value = AiModelState.Loaded
-            }.onFailure {
-                _aiModelState.value = AiModelState.LoadFailed
-            }
-        }
-    }
-
-    fun connectCamera(previewView: PreviewView, viewLifeCycleOwner: LifecycleOwner, detectionCallback: CameraHelper.ObjDetectionCallback) {
+    fun connectCamera(previewView: PreviewView, viewLifeCycleOwner: LifecycleOwner, detectionCallback: CameraHelper.OnDetectionListener) {
         viewModelScope.launch {
             aiModelState.collect { state ->
                 state.onLoaded {
@@ -71,7 +62,7 @@ class MedicinesDetectorViewModel @Inject constructor(
     private suspend fun realConnectCamera(
         previewView: PreviewView,
         viewLifeCycleOwner: LifecycleOwner,
-        detectionCallback: CameraHelper.ObjDetectionCallback,
+        detectionCallback: CameraHelper.OnDetectionListener,
     ) {
         cameraController.fragmentLifeCycleOwner = viewLifeCycleOwner
         cameraController.detectionCallback = detectionCallback
@@ -82,45 +73,17 @@ class MedicinesDetectorViewModel @Inject constructor(
     }
 
 
-    private fun capture(detectedObjectResult: DetectedObjectResult) {
+    private fun capture(capturedDetectionEntity: CapturedDetectionEntity) {
         viewModelScope.launch {
-            vibrationManager.vibrate(50L)
-            if (detectedObjectResult.detections.isEmpty()) {
-                _inferenceState.emit(InferenceState.DetectFailed)
-                return@launch
-            }
-
+            vibrationManager.vibrate(vibrateDuration)
             withContext(defaultDispatcher) {
-                detectedObjectResult.run {
-                    // 처리중 오류 발생시 DetectFailed 상태로 변경
-                    val scaleFactor = maxOf(
-                        realWindowSize.width.toFloat() / resizedWindowSize.height,
-                        realWindowSize.height.toFloat() / resizedWindowSize.height,
-                    )
-
-                    // 검출된 객체 자르기
-                    val cutted = detections.map {
-                        val boundingBox = it.boundingBox
-
-                        val top = boundingBox.top * scaleFactor
-                        val bottom = boundingBox.bottom * scaleFactor
-                        val left = boundingBox.left * scaleFactor
-                        val right = boundingBox.right * scaleFactor
-
-                        val width = right - left
-                        val height = bottom - top
-
-                        DetectionResultEntity.Object(
-                            it,
-                            Bitmap.createBitmap(backgroundImage, left.toInt(), top.toInt(), width.toInt(), height.toInt()),
-                        )
-                    }
-                    _inferenceState.emit(
-                        InferenceState.Detected(
-                            DetectionResultEntity(
-                                cutted, backgroundImage, resizedWindowSize.width,
-                                resizedWindowSize.height,
-                            ),
+                if (capturedDetectionEntity.items.isEmpty()) {
+                    _captureState.emit(InferenceState.Failure)
+                } else {
+                    capturedDetectionEntity.separateImages()
+                    _captureState.emit(
+                        InferenceState.Success(
+                            capturedDetectionEntity,
                         ),
                     )
                 }
@@ -129,14 +92,13 @@ class MedicinesDetectorViewModel @Inject constructor(
         }
     }
 
-    var captureFunc: (detectedObjectResult: DetectedObjectResult) -> Unit = ::capture
+    var captureFunc: (capturedDetectionEntity: CapturedDetectionEntity) -> Unit = ::capture
 
     fun disconnectCamera() {
         viewModelScope.launch {
             _cameraConnectionState.value = CameraConnectionState.Disconnected
         }
     }
-
 }
 
 @KBindFunc
@@ -145,16 +107,3 @@ sealed interface CameraConnectionState {
     object Disconnected : CameraConnectionState
     object UnableToConnect : CameraConnectionState
 }
-
-
-@KBindFunc
-sealed interface InferenceState {
-    object Initial : InferenceState
-    data class Detected(val detection: DetectionResultEntity, var consumed: Boolean = false) : InferenceState
-    object DetectFailed : InferenceState
-}
-
-data class DetectedObjectResult(
-    val detections: List<Detection>, val backgroundImage: Bitmap, val realWindowSize: Size,
-    val resizedWindowSize: Size,
-)
