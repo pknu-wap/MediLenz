@@ -1,8 +1,12 @@
 package com.android.mediproject.feature.mypage
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.bindingadapter.GlideApp
@@ -35,6 +39,7 @@ class MyPageFragment :
     override val fragmentViewModel: MyPageViewModel by viewModels()
     private val myCommentListAdapter: MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
     private var myPageMoreBottomSheet: MyPageMoreBottomSheetFragment? = null
+    private var userImageUri : String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -125,7 +130,7 @@ class MyPageFragment :
         }
     }
 
-    private fun updateUserInformation(newUserData: User) =binding.apply{
+    private fun updateUserInformation(newUserData: User) = binding.apply {
         user = newUserData
         if (newUserData.profileUrl.isEmpty()) {
             userImageIV.setImageResource(com.android.mediproject.core.common.R.drawable.default_user_image)
@@ -198,8 +203,25 @@ class MyPageFragment :
             MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.WITHDRAWAL)
             MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.LOGOUT)
 
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_IMAGE.value -> {}
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_IMAGE.value -> navigateToGallery()
             MyPageMoreBottomSheetFragment.BottomSheetFlag.REMOVE_IMAGE.value -> {}
+        }
+    }
+
+    private fun navigateToGallery() {
+        val intenet = Intent(Intent.ACTION_GET_CONTENT)
+        intenet.type = "image/*"
+        activityResult.launch(intenet)
+    }
+
+    private val activityResult: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK && it.data != null) {
+            userImageUri = it.data!!.data
+
+            Glide.with(requireContext())
+                .load(uri)
+                .circleCrop()
+                .into(binding.userImageIV)
         }
     }
 
