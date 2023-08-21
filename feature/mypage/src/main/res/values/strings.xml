@@ -11,7 +11,8 @@
     <string name="changePassword">비밀번호 변경</string>
     <string name="withdrawal">회원 탈퇴</string>
     <string name="logout">로그아웃</string>
-    <string name="changeUserImage">내 이미지 변경</string>
+    <string name="changeImage">이미지 변경</string>
+    <string name="removeImage">이미지 제거</string>
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
 

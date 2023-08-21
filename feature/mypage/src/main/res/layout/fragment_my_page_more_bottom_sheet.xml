@@ -18,66 +18,94 @@
         android:orientation="vertical"
         tools:context=".mypagemore.MyPageMoreBottomSheetFragment">
 
-        <TextView
-            android:id="@+id/changeNickNameTV"
+        <LinearLayout
+            android:id="@+id/defaultBottomSheetLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
             android:gravity="center"
-            android:onClick="@{()->viewModel.changeNickName()}"
-            android:padding="10dp"
-            android:text="@string/changeNickName"
-            android:textColor="@color/gray3"
-            android:textSize="18sp" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/changePasswordTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:onClick="@{()->viewModel.changePassword()}"
-            android:padding="10dp"
-            android:text="@string/changePassword"
-            android:textColor="@color/gray3"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/changeNickNameTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.changeNickName()}"
+                android:padding="10dp"
+                android:text="@string/changeNickName"
+                android:textColor="@color/gray3"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/withdrawalTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:onClick="@{()->viewModel.withdrawal()}"
-            android:padding="10dp"
-            android:text="@string/withdrawal"
-            android:textColor="@color/gray3"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/changePasswordTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.changePassword()}"
+                android:padding="10dp"
+                android:text="@string/changePassword"
+                android:textColor="@color/gray3"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/logoutTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:onClick="@{()->viewModel.logout()}"
-            android:padding="10dp"
-            android:text="@string/logout"
-            android:textColor="@color/gray3"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/withdrawalTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.withdrawal()}"
+                android:padding="10dp"
+                android:text="@string/withdrawal"
+                android:textColor="@color/gray3"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/changeUserImageTV"
+            <TextView
+                android:id="@+id/logoutTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.logout()}"
+                android:padding="10dp"
+                android:text="@string/logout"
+                android:textColor="@color/gray3"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/imageBottomSheetLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:gravity="center"
-            android:onClick="@{()->viewModel.changeUserImage()}"
-            android:padding="10dp"
-            android:text="@string/changeUserImage"
-            android:visibility="gone"
-            android:textColor="@color/gray3"
-            android:textSize="18sp" />
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/changeImageTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.changeImage()}"
+                android:padding="10dp"
+                android:text="@string/changeImage"
+                android:textColor="@color/gray3"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/removeImageTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.removeImage()}"
+                android:padding="10dp"
+                android:text="@string/removeImage"
+                android:textColor="@color/gray3"
+                android:textSize="18sp" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"

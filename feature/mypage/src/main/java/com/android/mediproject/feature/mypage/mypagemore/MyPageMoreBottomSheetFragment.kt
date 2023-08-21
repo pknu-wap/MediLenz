@@ -32,7 +32,8 @@ class MyPageMoreBottomSheetFragment(private val bottomSheetType: BottomSheetType
         CHANGE_PASSWORD(302),
         WITHDRAWAL(303),
         LOGOUT(304),
-        CHANGE_USER_IMAGE(305)
+        CHANGE_IMAGE(305),
+        REMOVE_IMAGE(306)
     }
 
     enum class BottomSheetType {
@@ -82,20 +83,18 @@ class MyPageMoreBottomSheetFragment(private val bottomSheetType: BottomSheetType
     private fun setBottomSheetType() {
         when (bottomSheetType) {
             BottomSheetType.DEFAULT -> defaultBottomSheetVisible()
-            BottomSheetType.IMAGE ->imageBottomSheetVisible()
+            BottomSheetType.IMAGE -> imageBottomSheetVisible()
         }
     }
 
-    private fun defaultBottomSheetVisible() {
-        binding.changeUserImageTV.visibility = View.GONE
+    private fun defaultBottomSheetVisible() = binding.apply {
+        defaultBottomSheetLL.visibility = View.VISIBLE
+        imageBottomSheetLL.visibility = View.GONE
     }
 
     private fun imageBottomSheetVisible() = binding.apply {
-        changeNickNameTV.visibility = View.GONE
-        changePasswordTV.visibility = View.GONE
-        withdrawalTV.visibility = View.GONE
-        logoutTV.visibility = View.GONE
-        changeUserImageTV.visibility = View.VISIBLE
+        defaultBottomSheetLL.visibility = View.GONE
+        imageBottomSheetLL.visibility = View.VISIBLE
     }
 
     private fun setBinding() {
@@ -117,7 +116,9 @@ class MyPageMoreBottomSheetFragment(private val bottomSheetType: BottomSheetType
                     BottomSheetFlag.CHANGE_PASSWORD -> completeBottomSheetChangePassword()
                     BottomSheetFlag.WITHDRAWAL -> completeBottomSheetWithdrawal()
                     BottomSheetFlag.LOGOUT -> completeBottomSheetLogout()
-                    BottomSheetFlag.CHANGE_USER_IMAGE -> completeBottomSheetChangeUserImage()
+
+                    BottomSheetFlag.CHANGE_IMAGE -> completeBottomSheetChangeImage()
+                    BottomSheetFlag.REMOVE_IMAGE -> completeBottomSheetRemoveImage()
                 }
             }
         }
@@ -139,8 +140,12 @@ class MyPageMoreBottomSheetFragment(private val bottomSheetType: BottomSheetType
         setFragmentResult(TAG, bundleOf(TAG to BottomSheetFlag.LOGOUT.value))
     }
 
-    private fun completeBottomSheetChangeUserImage() {
-        setFragmentResult(TAG, bundleOf(TAG to BottomSheetFlag.CHANGE_USER_IMAGE.value))
+    private fun completeBottomSheetChangeImage() {
+        setFragmentResult(TAG, bundleOf(TAG to BottomSheetFlag.CHANGE_IMAGE.value))
+    }
+
+    private fun completeBottomSheetRemoveImage() {
+        setFragmentResult(TAG, bundleOf(TAG to BottomSheetFlag.REMOVE_IMAGE.value))
     }
 
     private fun handleFlag(flag: BottomSheetFlag) {
@@ -149,13 +154,22 @@ class MyPageMoreBottomSheetFragment(private val bottomSheetType: BottomSheetType
             BottomSheetFlag.CHANGE_PASSWORD -> highlight(binding.changePasswordTV)
             BottomSheetFlag.WITHDRAWAL -> highlight(binding.withdrawalTV)
             BottomSheetFlag.LOGOUT -> highlight(binding.logoutTV)
-            BottomSheetFlag.CHANGE_USER_IMAGE -> highlight(binding.changeUserImageTV)
+
+            BottomSheetFlag.CHANGE_IMAGE -> highlight(binding.changeImageTV)
+            BottomSheetFlag.REMOVE_IMAGE -> highlight(binding.removeImageTV)
         }
     }
 
     private fun highlight(view: TextView) {
         val flagTextViewList =
-            listOf(binding.changePasswordTV, binding.withdrawalTV, binding.changeNickNameTV, binding.logoutTV, binding.changeUserImageTV)
+            listOf(
+                binding.changePasswordTV,
+                binding.withdrawalTV,
+                binding.changeNickNameTV,
+                binding.logoutTV,
+                binding.changeImageTV,
+                binding.removeImageTV,
+            )
 
         flagTextViewList.forEach { flagTextView ->
             if (view == flagTextView) {

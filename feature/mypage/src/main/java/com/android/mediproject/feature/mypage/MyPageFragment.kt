@@ -40,8 +40,7 @@ class MyPageFragment :
         setFragmentResultListner()
     }
 
-    private fun setBinding() =
-        binding.apply {
+    private fun setBinding() = binding.apply {
             viewModel = fragmentViewModel.apply {
                 viewLifecycleOwner.apply {
                     repeatOnStarted { token.collect { handleToken(it) } }
@@ -203,7 +202,9 @@ class MyPageFragment :
             MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_PASSWORD.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.CHANGE_PASSWORD)
             MyPageMoreBottomSheetFragment.BottomSheetFlag.WITHDRAWAL.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.WITHDRAWAL)
             MyPageMoreBottomSheetFragment.BottomSheetFlag.LOGOUT.value -> showMyPageMoreDialog(MyPageMoreDialogFragment.DialogType.LOGOUT)
-            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_USER_IMAGE.value -> {}
+
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.CHANGE_IMAGE.value -> {}
+            MyPageMoreBottomSheetFragment.BottomSheetFlag.REMOVE_IMAGE.value -> {}
         }
     }
 
