@@ -12,7 +12,7 @@ class GetUserUseCase @Inject constructor(private val appDataStore: AppDataStore)
     suspend operator fun invoke(): Flow<User> = channelFlow {
         appDataStore.nickName.collect { nickName ->
             Log.d("wap", nickName)
-            trySend(User(nickName = nickName))
+            trySend(User(nickName = nickName,""))
         }
     }
 }

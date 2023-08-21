@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.mapper.MedicineInfoMapper
+import com.android.mediproject.core.common.mapper.SpanProvider
 import com.android.mediproject.core.common.util.deepNavigate
 import com.android.mediproject.core.common.util.navigateByDeepLink
 import com.android.mediproject.core.common.viewmodel.UiState
@@ -29,7 +30,7 @@ class RecentPenaltyListFragment :
     lateinit var penaltyListAdapter: PenaltyListAdapter
 
     @Inject
-    lateinit var medicineInfoMapper: MedicineInfoMapper
+    lateinit var spanProvider: SpanProvider
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,7 +47,7 @@ class RecentPenaltyListFragment :
                 }
                 repeatOnStarted { eventFlow.collect { event -> handleEvent(event) } }
             }
-            noHistoryTextView.text = medicineInfoMapper.getNoHistorySpan(requireContext())
+            noHistoryTextView.text = spanProvider.penaltyGetNoHistorySpan(requireContext())
         }
         setRecyclerView()
     }

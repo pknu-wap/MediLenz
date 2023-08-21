@@ -7,6 +7,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.mapper.MedicineInfoMapper
+import com.android.mediproject.core.common.mapper.SpanProvider
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
@@ -28,7 +29,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
 
     @Inject lateinit var systemBarStyler: SystemBarStyler
 
-    @Inject lateinit var medicineInfoMapper: MedicineInfoMapper
+    @Inject lateinit var spanProvider: SpanProvider
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -132,7 +133,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHo
     private fun setHeaderText() {
         val span: SpannableStringBuilder
         viewLifecycleOwner.apply {
-            span = medicineInfoMapper.initHeaderSpan(requireContext(), getString(R.string.headerTextOnHome))
+            span = spanProvider.homeInitHeaderSpan(requireContext(), getString(R.string.headerTextOnHome))
         }
         binding.headerText.text = span
     }

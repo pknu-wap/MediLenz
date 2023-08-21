@@ -9,6 +9,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.mediproject.core.common.mapper.SpanProvider
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.model.token.CurrentTokens
@@ -30,6 +31,9 @@ class MyPageFragment :
 
     @Inject
     lateinit var systemBarStyler: SystemBarStyler
+    @Inject
+    lateinit var spanProvider: SpanProvider
+
     override val fragmentViewModel: MyPageViewModel by viewModels()
     private val myCommentListAdapter: MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
     private var myPageMoreBottomSheet: MyPageMoreBottomSheetFragment? = null
@@ -91,21 +95,7 @@ class MyPageFragment :
     }
 
     private fun setGuestModeScreenSpan(): SpannableStringBuilder {
-        val span =
-            SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
-                setSpan(
-                    ForegroundColorSpan(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.main,
-                        ),
-                    ),
-                    15, 18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-                )
-                setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            }
-        return span
+        return spanProvider.myPageSetGuestModeScreenSpan(requireContext())
     }
 
     private fun setGuestModeScreenVisible() = binding.apply {
@@ -253,25 +243,7 @@ class MyPageFragment :
     }
 
     private fun setNoShowCommentListSpan(): SpannableStringBuilder {
-        val span =
-            SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.noMyComment)).apply {
-                setSpan(
-                    ForegroundColorSpan(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.main,
-                        ),
-                    ),
-                    7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                )
-                setSpan(
-                    UnderlineSpan(),
-                    7,
-                    9,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                )
-            }
-        return span
+        return spanProvider.myPageSetNoShowCommentListSpan(requireContext())
     }
 
     private fun setNoShowCommentListVisible() = binding.apply {
