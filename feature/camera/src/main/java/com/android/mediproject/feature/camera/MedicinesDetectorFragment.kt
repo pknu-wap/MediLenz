@@ -115,9 +115,9 @@ class MedicinesDetectorFragment :
         }
     }
 
-    override fun onDetect(boundingBoxes: List<RectF>, capturedImageWidth: Int, capturedImageHeight: Int) {
+    override fun onDetect(objects: List<CameraHelper.OnDetectionListener.Object>, capturedImageWidth: Int, capturedImageHeight: Int) {
         if (isVisible) binding.overlayView.apply {
-            setResults(boundingBoxes, capturedImageWidth, capturedImageHeight)
+            setResults(objects, capturedImageWidth, capturedImageHeight)
             invalidate()
         }
     }

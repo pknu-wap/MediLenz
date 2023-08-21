@@ -35,8 +35,9 @@ object MedicineDetectorImpl : MedicineDetector {
     override fun detect(image: ImageProxy, bitmapBuffer: Bitmap): Result<DetectionResultEntity> {
         val imageProcessor = ImageProcessor.Builder().add(Rot90Op((-image.imageInfo.rotationDegrees) / 90)).build()
         val tensorImage = WeakReference(imageProcessor.process(TensorImage.fromBitmap(bitmapBuffer))).get()!!
-        val items = objectDetector.detect(tensorImage).map {
-            DetectionResultEntity.Item(it.boundingBox)
+        val items = objectDetector.detect(tensorImage).map { detection ->
+            val (confidence, label) = detection.categories.maxBy { it.score }.run { (score * 100).toInt() to label }
+            DetectionResultEntity.Item(detection.boundingBox, label, confidence)
         }
         return Result.success(
             DetectionResultEntity(
@@ -54,8 +55,8 @@ object MedicineDetectorImpl : MedicineDetector {
         try {
             TfLiteVision.initialize(context).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val modelFile = WeakReference(context.assets.open("automl_tflite3.tflite")).get()!!
-                    val objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setMaxResults(10).setScoreThreshold(0.4f)
+                    val modelFile = WeakReference(context.assets.open("efficientdetlite3.tflite")).get()!!
+                    val objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setMaxResults(10).setScoreThreshold(0.6f)
                         .setBaseOptions(
                             BaseOptions.builder().useNnapi().build(),
                         ).build()

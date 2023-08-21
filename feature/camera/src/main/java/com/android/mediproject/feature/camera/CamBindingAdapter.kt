@@ -15,7 +15,7 @@ object CamBindingAdapter {
             onCapture.invoke(
                 CapturedDetectionEntity(
                     items = overlayView.capture().map {
-                        CapturedDetectionEntity.Item(it)
+                        CapturedDetectionEntity.Item(it.boundingBox, it.label, it.confidence)
                     },
                     capturedImage = srcPreview.bitmap!!,
                     originalImageSize = Size(overlayView.width, overlayView.height),

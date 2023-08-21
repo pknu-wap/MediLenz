@@ -58,7 +58,7 @@ object MedicineClassifierImpl : MedicineClassifier {
                     val maxScore = scores.withIndex().maxBy { it.value }
                     val itemSeq: String = metaData.getClass(maxScore.index)
 
-                    ClassificationResultEntity.Item(itemSeq, maxScore.value.toFloat())
+                    ClassificationResultEntity.Item(itemSeq, maxScore.value)
                 }
                 send(Result.success(ClassificationResultEntity(result)))
             }.onLoadFailed {
@@ -70,7 +70,7 @@ object MedicineClassifierImpl : MedicineClassifier {
     override suspend fun initialize(context: Context): Result<Unit> {
         _aiModelState.value = AiModelState.Loading
         return try {
-            _aiModel = LiteModuleLoader.loadModuleFromAsset(context.assets, "model46.ptl")
+            _aiModel = LiteModuleLoader.loadModuleFromAsset(context.assets, "mobilenetsmall38.ptl")
             _metaData = json.decodeFromString(
                 ClassificationMetaDataEntity.serializer(),
                 context.assets.open("metadata.json").bufferedReader().use { it.readText() },

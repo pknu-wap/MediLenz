@@ -142,7 +142,11 @@ class CameraHelper @Inject constructor(
         medicineDetector.detect(imageProxy, bitmapBuffer).onSuccess { detectionResultEntity ->
             detectionCallback.onDetect(
                 detectionResultEntity.items.map {
-                    it.boundingBox
+                    OnDetectionListener.Object(
+                        it.boundingBox,
+                        it.confidence,
+                        it.label,
+                    )
                 },
                 detectionResultEntity.inferencedImageSize.width, detectionResultEntity.inferencedImageSize.height,
             )
@@ -150,6 +154,12 @@ class CameraHelper @Inject constructor(
     }
 
     fun interface OnDetectionListener {
-        fun onDetect(boundingBoxes: List<RectF>, capturedImageWidth: Int, capturedImageHeight: Int)
+        fun onDetect(objects: List<Object>, capturedImageWidth: Int, capturedImageHeight: Int)
+
+        data class Object(
+            val boundingBox: RectF,
+            val confidence: Int,
+            val label: String,
+        )
     }
 }

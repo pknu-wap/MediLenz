@@ -16,7 +16,7 @@ data class CapturedDetectionEntity(
     val items: List<Item>, val capturedImage: Bitmap, val originalImageSize: Size,
     val resizedImageSize: Size,
 ) {
-    private val scaleFactor = maxOf(
+    val scaleFactor = maxOf(
         originalImageSize.width.toFloat() / resizedImageSize.height,
         originalImageSize.height.toFloat() / resizedImageSize.height,
     )
@@ -41,6 +41,8 @@ data class CapturedDetectionEntity(
 
     data class Item(
         val boundingBox: RectF,
+        val label: String,
+        val confidence: Int,
         var bitmap: Bitmap? = null,
     )
 }

@@ -11,7 +11,7 @@ abstract class InferenceResultEntity<T : InferenceItem> {
 data class DetectionResultEntity(
     val inferencedImageSize: Size, override val items: List<Item>,
 ) : InferenceResultEntity<DetectionResultEntity.Item>() {
-    data class Item(val boundingBox: RectF) : InferenceItem
+    data class Item(val boundingBox: RectF, val label: String, val confidence: Int) : InferenceItem
 }
 
 data class ClassificationResultEntity(
