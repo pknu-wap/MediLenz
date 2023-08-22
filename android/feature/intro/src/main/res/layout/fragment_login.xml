@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.feature.intro.LoginViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".LoginFragment">
+
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/loginBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setTheme="blue"
+            app:showBackButton="true"
+            app:title="@string/login" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/loginBar">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/loginSignUpMarginHorizontal" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/loginSignUpMarginHorizontal" />
+
+            <com.android.mediproject.core.ui.base.view.Subtitle
+                android:id="@+id/loginEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="160dp"
+                app:edtHint="@string/emailHint"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:title="@string/email" />
+
+            <com.android.mediproject.core.ui.base.view.Subtitle
+                android:id="@+id/loginPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:dataType="password"
+                app:edtHint="@string/passwordHint"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toBottomOf="@id/loginEmail"
+                app:title="@string/password" />
+
+            <FrameLayout
+                android:id="@+id/loginFL"
+                android:layout_width="113dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="43dp"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/loginPassword">
+
+                <CheckBox
+                    android:id="@+id/rememberEmailCB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleX="0.80"
+                    android:scaleY="0.80" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+                    android:text="@string/rememberEmail"
+                    android:textColor="@color/gray2"
+                    android:textSize="16sp" />
+            </FrameLayout>
+
+            <com.android.mediproject.core.ui.base.view.IntroButton
+                android:id="@+id/loginBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:background="@color/login"
+                android:onClick="@{()->viewModel.login()}"
+                app:button_icon="@drawable/login"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toBottomOf="@id/loginFL"
+                app:setTitleColor="@color/white"
+                app:title="@string/login" />
+
+
+            <com.android.mediproject.core.ui.base.view.IntroButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="115dp"
+                android:background="@color/main"
+                android:onClick="@{()->viewModel.signUp()}"
+                app:button_icon="@drawable/signup"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toBottomOf="@id/loginFL"
+                app:setTitleColor="@color/white"
+                app:title="@string/signUpFull" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

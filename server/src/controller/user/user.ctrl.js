@@ -60,8 +60,15 @@ const edit = {
     // [PATCH] /user
     patchUserInfo: async (req, res) => {
         const { userId } = req.verifiedToken;
-        const { newNickname, newPassword } = req.body;
-        const result = await updateUserInfo(userId, newNickname, newPassword); // update user nickname or password
+        const { newNickname, newPassword } = req.body;    
+        let profile_img = req.file;
+    
+        if (profile_img) { // image exists
+            profile_img = profile_img.filename; // name of the uploaded image
+        } else { // if profile_img is null, change to default image
+            profile_img = "default.jpg";
+        }
+        const result = await updateUserInfo(userId, newNickname, newPassword, profile_img); // update user information
         return res.status(result.code).send(result.response);
     }
 }

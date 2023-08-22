@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mypage_nav"
+    app:startDestination="@id/myPageFragment">
+
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.android.mediproject.feature.mypage.MyPageFragment"
+        android:label="MyPageFragment" />
+
+    <deepLink app:uri="medilens://main/mypage_nav" />
+</navigation>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/ModalBottomSheetDialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/white"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="24dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <TextView
+        android:id="@+id/messageTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:lineSpacingMultiplier="1.2"
+        android:bufferType="spannable"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/okButton"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/main"
+        android:text="@string/confirm" />
+
+</LinearLayout>

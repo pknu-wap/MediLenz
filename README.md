@@ -66,7 +66,7 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 
 ## App Design Templates (Figma)
 
-![image](https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/assets/116813010/6020601b-a74b-421f-af46-3b9b8d31e0d0)
+![image](https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/assets/116813010/466463b2-b69e-40fe-bcb2-30685a4cf7c0)
 
 
 <https://www.figma.com/file/wgaIpwcuWfSpy1SA52wiUt/%ED%99%94%EB%A9%B4?node-id=0%3A1&t=VEl3ZiT2Q5Cyp4ps-1>

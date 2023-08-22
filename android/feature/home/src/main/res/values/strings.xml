@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="headerTextOnHome">약을 찾고,\n다른사람과 소통을 나눠보세요!</string>
+    <string name="searchWithAi">AI 검색</string>
+    <string name="searchHint">의약품 명 / 고유번호 검색</string>
+    <string name="alertEmptyQuery">검색어가 비어있습니다.</string>
+</resources>

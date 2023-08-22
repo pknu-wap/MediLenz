@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dummyDosage">1. 성인 및 6세 이상의 소아\n\n: 세티리진염산염으로서 1일 1회 10mg 취침 전에 경구 투여하십시오. [복용하십시오.]\n\n2. 이상반응에 민감한 환자의 경우는 5mg씩을 아침, 저녁에 투여하십시오.\n\n3. 연령[나이], 증상에 따라 적절히 증감하십시오.\n\n4. 신장애[신장장애] 환자\n\n: 투여 간격은 환자의 신기능에 따라 조절되어야 합니다. 다음 표를 참조하여 용량을 조절합니다. 이 용량 표를 사용하기 위해서는 mL/min 단위의 크레아티닌 청소율 (CLcr)이 필요합니다. CLcr (mL/min)은 다음 공식을 이용하여 혈청 크레아티닌 (mg/dL) 측정치로부터 계산됩니다 :</string>
+
+    <string name="specialtyMedication">전문 의약품</string>
+    <string name="generalMedication">일반 의약품</string>
+    <string name="all">모두</string>
+    <string name="back">뒤로 가기</string>
+
+    <string name="medicineInfoTitle">의약품 정보</string>
+    <string name="companyInfoTitle">업체 정보</string>
+    <string name="classificationInfoTitle">의약품 분류 정보</string>
+    <string name="miscInfoTitle">기타 정보</string>
+    <string name="printAndImageInfoTitle">인쇄 및 이미지 정보</string>
+    <string name="medicineImageInfoTitle">의약품 이미지 정보</string>
+    <string name="medicineShapeInfoTitle">의약품 형태 정보</string>
+    <string name="lineInfoTitle">구분선 정보</string>
+
+    <!-- 의약품 정보 -->
+    <string name="itemSeqTitle">의약품 코드</string>
+    <string name="itemNameTitle">의약품 이름</string>
+    <string name="itemEngNameTitle">의약품 영문 이름</string>
+
+    <!-- 업체 정보 -->
+    <string name="entpSeqTitle">업체 코드</string>
+    <string name="entpNameTitle">업체 이름</string>
+    <string name="bizrnoTitle">업체 번호</string>
+
+    <!-- 의약품 분류 정보 -->
+    <string name="classNoTitle">의약품 분류 코드</string>
+    <string name="classNameTitle">의약품 분류 이름</string>
+    <string name="etcOtcNameTitle">의약품 유형 정보</string>
+
+    <!-- 기타 정보 -->
+    <string name="formCodeNameTitle">제형 정보</string>
+    <string name="itemPermitDateTitle">의약품 허가 일자</string>
+    <string name="changeDateTitle">정보 변경 일자</string>
+
+    <!-- 인쇄 및 이미지 정보 -->
+    <string name="printFrontTitle">앞면 인쇄 정보</string>
+    <string name="printBackTitle">뒷면 인쇄 정보</string>
+    <string name="markCodeFrontAnalTitle">앞면 분석용 인쇄 정보</string>
+    <string name="markCodeBackAnalTitle">뒷면 분석용 인쇄 정보</string>
+    <string name="markCodeFrontImgTitle">앞면 이미지 정보</string>
+    <string name="markCodeBackImgTitle">뒷면 이미지 정보</string>
+
+    <!-- 의약품 이미지 정보 -->
+    <string name="chartTitle">의약품의 캡슐 형태 및 색상 정보</string>
+    <string name="itemImageTitle">의약품 이미지 URL</string>
+
+    <!--의약품 형태 정보 -->
+    <string name="medicineShapeTitle">의약품의 형태 정보</string>
+    <string name="colorClass1Title">색상 정보 1</string>
+    <string name="colorClass2Title">색상 정보 2</string>
+
+    <!-- 구분선 정보 -->
+    <string name="lineFrontTitle">앞면 구분선 정보</string>
+    <string name="lineBackTitle">뒷면 구분선 정보</string>
+    <string name="lengLongTitle">긴 변의 길이</string>
+    <string name="lengShortTitle">짧은 변의 길이</string>
+    <string name="thickTitle">두께</string>
+    <string name="imgRegistTsTitle">이미지 등록 일시</string>
+    <string name="safeUseOfMedicine">안전 사용</string>
+
+    <!-- 안전 사용 아이템 제목 -->
+    <string name="combinationProhibition">병용 금기</string>
+    <string name="specificAgeGroupProhibition">특정 연령대 금기</string>
+    <string name="pregnancyProhibition">임부 금기</string>
+    <string name="doseCaution">용량 주의</string>
+    <string name="durationOfUseCaution">투여기간 주의</string>
+    <string name="elderlyCaution">노인 주의</string>
+    <string name="efficacyGroupDuplicationCaution">효능군 중복</string>
+    <string name="divisionCaution">분할 주의</string>
+    <string name="additiveCaution">첨가제 주의</string>
+    <string name="noInternetConnection">인터넷 연결이 필요합니다.</string>
+</resources>
