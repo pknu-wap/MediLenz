@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="medicineInfoArgs"
+            type="com.android.mediproject.core.model.local.navargs.MedicineInfoArgs" />
+
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.feature.medicine.main.MedicineInfoViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/medicineInfoBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setTheme="white"
+            app:showBackButton="true"
+            app:title="의약품 정보" />
+
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/medicineInfoBar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            android:backgroundTint="@color/design_default_color_on_primary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setTheme="medicine_info"
+            app:showBackButton="true"
+            app:title="의약품 정보" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/rootLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/medicineInfoBar">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                app:expanded="false">
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/collapsingToolbarLayout"
+                    style="?attr/collapsingToolbarLayoutLargeStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
+                    app:collapsedTitleTextColor="@color/white"
+                    app:contentScrim="@color/design_default_color_primary"
+                    app:expandedTitleMarginBottom="0dp"
+                    app:expandedTitleTextColor="@android:color/transparent"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                    app:title="@{medicineInfoArgs.itemKorName}"
+                    app:titleCollapseMode="scale">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/medicinePrimaryInfoViewgroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:layout_marginHorizontal="18dp"
+                        android:animateLayoutChanges="true"
+                        android:background="@drawable/medicine_primary_info_background"
+                        android:elevation="4dp"
+                        app:layout_collapseMode="parallax">
+
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/medicineImageView"
+                            img="@{medicineInfoArgs.imgUrl}"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:contentDescription="@string/medicineImage"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:message="@{@string/emptyImage}"
+                            app:messageView="@{emptyImageTextView}"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize.20DP" />
+
+                        <TextView
+                            android:id="@+id/emptyImageTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:gravity="center"
+                            android:text="@string/emptyImage"
+                            android:textColor="@color/white"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/medicineKorName"
+                            style="@style/TextAppearance.Material3.LabelLarge"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:maxLines="1"
+                            android:text="@{medicineInfoArgs.itemKorName}"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toTopOf="@id/medicineEngName"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toLeftOf="@id/interestBtn"
+                            app:layout_constraintTop_toBottomOf="@id/medicineImageView"
+                            app:layout_constraintVertical_chainStyle="packed" />
+
+                        <TextView
+                            android:id="@+id/medicineEngName"
+                            style="@style/TextAppearance.Material3.LabelMedium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:maxLines="1"
+                            android:text="@{medicineInfoArgs.itemEngName}"
+                            android:textColor="@color/medicineEngName"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="@id/medicineKorName"
+                            app:layout_constraintRight_toLeftOf="@id/interestBtn"
+                            app:layout_constraintTop_toBottomOf="@id/medicineKorName" />
+
+
+                        <CheckBox
+                            android:id="@+id/interestBtn"
+                            style="?attr/materialIconButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="12dp"
+                            android:button="@drawable/checkbox_interest"
+                            android:checked="false"
+                            android:contentDescription="@string/interestBtn"
+                            android:onClick="@{() -> viewModel.checkInterestMedicine()}"
+                            android:scaleX="1.4"
+                            android:scaleY="1.4"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/medicineImageView" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="@color/white"
+                    app:tabIndicatorColor="@color/design_default_color_primary"
+                    app:tabTextColor="@color/black" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/contentViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

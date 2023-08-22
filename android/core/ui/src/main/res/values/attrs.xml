@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="title" format="string|reference" />
+
+    <declare-styleable name="Bar">
+        <attr name="showBackButton" format="boolean" />
+        <attr name="title" />
+        <attr name="setTheme" format="enum">
+            <enum name="blue" value="0" />
+            <enum name="white" value="1" />
+            <enum name="home_blue" value="2" />
+            <enum name="home_white" value="3" />
+            <enum name="medicine_info" value="4" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="Subtitle">
+        <attr name="title" />
+        <attr name="redPoint" format="boolean" />
+        <attr name="edtHint" format="string|reference" />
+        <attr name="dataType" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="password" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="IntroButton">
+        <attr name="title" />
+        <attr name="button_icon" format="reference" />
+        <attr name="setTitleColor" format="reference" />
+        <attr name="setStroke" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="white" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SettingBar">
+        <attr name="title" />
+        <attr name="showArrow" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="MediSearchbar">
+        <attr name="search_hint" format="string|reference" />
+        <attr name="ai_text" format="string|reference" />
+        <attr name="search_icon" format="reference" />
+        <attr name="camera_icon" format="reference" />
+        <attr name="hint_font_size" format="dimension|reference" />
+        <attr name="ai_btn_font_size" format="dimension|reference" />
+        <attr name="is_all_btn" format="boolean" />
+        <attr name="ime_options">
+            <flag name="normal" value="0x00000000" />
+            <flag name="actionUnspecified" value="0x00000000" />
+            <flag name="actionNone" value="0x00000001" />
+            <flag name="actionGo" value="0x00000002" />
+            <flag name="actionSearch" value="0x00000003" />
+            <flag name="actionSend" value="0x00000004" />
+            <flag name="actionNext" value="0x00000005" />
+            <flag name="actionDone" value="0x00000006" />
+            <flag name="actionPrevious" value="0x00000007" />
+            <flag name="flagNoPersonalizedLearning" value="0x1000000" />
+            <flag name="flagNoFullscreen" value="0x2000000" />
+            <flag name="flagNavigatePrevious" value="0x4000000" />
+            <flag name="flagNavigateNext" value="0x8000000" />
+            <flag name="flagNoExtractUi" value="0x10000000" />
+            <flag name="flagNoAccessoryAction" value="0x20000000" />
+            <flag name="flagNoEnterAction" value="0x40000000" />
+            <flag name="flagForceAscii" value="0x80000000" />
+        </attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="HeaderForElementsView">
+        <attr name="header_title" format="string|reference" />
+        <attr name="header_title_color" format="color|reference" />
+        <attr name="more_title" format="string|reference" />
+        <attr name="more_color" format="color|reference" />
+        <attr name="expand_icon_color" format="color|reference" />
+        <attr name="title_text_size" format="dimension|reference" />
+        <attr name="more_text_size" format="dimension|reference" />
+        <attr name="visibility_target_view" format="reference" />
+        <attr name="more_visibility" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="gone" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ButtonChip"></declare-styleable>
+
+    <declare-styleable name="SimpleCommentItemView"></declare-styleable>
+</resources>

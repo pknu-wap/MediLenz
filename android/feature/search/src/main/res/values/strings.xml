@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="recentSearch">최근 검색 목록</string>
+    <string name="medicineSearch">의약품 검색</string>
+
+    <string name="medicineImage">의약품 이미지</string>
+    <string name="medicineName">의약품 명</string>
+    <string name="mainIngredient">주요 성분</string>
+    <string name="mainEffect">주요 효능</string>
+    <string name="companyName">제조사</string>
+    <string name="medicineType">의약품 종류</string>
+    <string name="searchResultIsEmpty">검색 결과가 없습니다</string>
+    <string name="noHistoryOfSearch">최근 검색한 약품이 없습니다.</string>
+    <string name="aiCamera">AI Camera</string>
+
+</resources>

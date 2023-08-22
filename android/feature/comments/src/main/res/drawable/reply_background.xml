@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="@dimen/commentReplyArrowIconSize"
+        android:height="@dimen/commentReplyArrowIconSize"
+        android:drawable="@drawable/outline_subdirectory_arrow_right_24"
+        android:gravity="center_vertical|left" />
+
+    <item android:left="@dimen/commentReplyContentLeftSpace">
+
+        <shape android:shape="rectangle">
+            <padding
+                android:bottom="@dimen/commentLayoutVerticalPadding"
+                android:left="@dimen/commentReplyViewLeftPadding"
+                android:right="@dimen/commentLayoutHorizontalPadding"
+                android:top="@dimen/commentLayoutVerticalPadding" />
+            <corners android:radius="12dp" />
+            <solid android:color="@color/replyBackground" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.android.mediproject.feature.home.HomeViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/headerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/main"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/headerText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="69dp"
+                        android:layout_marginBottom="58dp"
+                        android:bufferType="spannable"
+                        android:lineSpacingMultiplier="1.1"
+                        android:text="@{viewModel.headerText}"
+                        android:textColor="@color/white"
+                        android:textSize="23sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipChildren="false"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/headerLayout">
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/recentSearchListFragment"
+                        android:name="com.android.mediproject.feature.search.recentsearchlist.RecentSearchListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="@dimen/divider_margin_vertical" />
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/recentCommentListFragment"
+                        android:name="com.android.mediproject.feature.comments.recentcommentlist.RecentCommentListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="@dimen/divider_margin_vertical" />
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/recentPenaltyListFragment"
+                        android:name="com.android.mediproject.feature.penalties.recentpenaltylist.RecentPenaltyListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/divider_margin_vertical" />
+                </LinearLayout>
+
+                <com.android.mediproject.core.ui.base.view.MediSearchbar
+                    android:id="@+id/search_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="38dp"
+                    app:ai_text="@string/searchWithAi"
+                    app:camera_icon="@drawable/baseline_camera_24"
+                    app:is_all_btn="true"
+                    app:layout_constraintBottom_toBottomOf="@id/headerLayout"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/headerLayout"
+                    app:search_hint="@string/searchHint"
+                    app:search_icon="@drawable/baseline_search_24" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/homeBar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            app:setTheme="home_blue" />
+
+        <com.android.mediproject.core.ui.base.view.Bar
+            android:id="@+id/homeBar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:alpha="0"
+            app:setTheme="home_white" />
+    </FrameLayout>
+</layout>
