@@ -4,7 +4,7 @@ const { User } = require("../models/index");
 const { responseFormat } = require("../config/response");
 const responseMsg = require("../config/responseMsg");
 const { createAccessToken, createRefreshToken } = require("../config/jwt");
-const { imgsDir } = require("../src/config/staticDirLoc");
+const { imgsDir } = require("../config/staticDirLoc");
 
 // sign-in response format
 const tokenResponseFormat = (
@@ -106,9 +106,9 @@ const getUserInfo = async (user_id) => {
                 where: { ID: user_id },
             })
         ).dataValues;
-
-        const profile_url = getUserProfileURL(user.PROFILE_URL);
-
+            
+        const profile_url = await getUserProfileURL(user.PROFILE_URL);
+        
         return responseFormat(200, {
             userId: user.ID,
             email: user.EMAIL,

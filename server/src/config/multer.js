@@ -1,7 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const { nanoid } = require("nanoid");
-const { imgsDir } = require("../src/config/staticDirLoc");
+const { imgsDir } = require("../config/staticDirLoc");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

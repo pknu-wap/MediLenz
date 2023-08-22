@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Hide bottom navigation view on these fragments -->
+    <array name="hideBottomNavDestinationIds">
+        <item>@id/medicinesDetectorFragment</item>
+        <item>@id/confirmDialogFragment</item>
+        <item>@id/detectedImageFragment</item>
+        <item>@id/loginFragment</item>
+        <item>@id/signUpFragment</item>
+        <item>@id/introFragment</item>
+    </array>
+</resources>
