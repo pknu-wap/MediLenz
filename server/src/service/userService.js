@@ -106,9 +106,9 @@ const getUserInfo = async (user_id) => {
                 where: { ID: user_id },
             })
         ).dataValues;
-
-        const profile_url = getUserProfileURL(user.PROFILE_URL);
-
+            
+        const profile_url = await getUserProfileURL(user.PROFILE_URL);
+        
         return responseFormat(200, {
             userId: user.ID,
             email: user.EMAIL,
