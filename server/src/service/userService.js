@@ -4,7 +4,7 @@ const { User } = require("../models/index");
 const { responseFormat } = require("../config/response");
 const responseMsg = require("../config/responseMsg");
 const { createAccessToken, createRefreshToken } = require("../config/jwt");
-const { imgsDir } = require("../src/config/staticDirLoc");
+const { imgsDir } = require("../config/staticDirLoc");
 
 // sign-in response format
 const tokenResponseFormat = (
