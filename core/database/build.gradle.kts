@@ -1,6 +1,7 @@
 plugins {
     id("mediproject.android.library")
     id("mediproject.android.hilt")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -13,5 +14,5 @@ dependencies {
     implementation(libs.bundles.rooms)
     implementation(libs.lz4)
     implementation(libs.kotlinx.coroutines.android)
-    kapt(libs.androidx.room.compileKsp)
+    ksp(libs.androidx.room.compileKsp)
 }

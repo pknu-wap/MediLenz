@@ -1,4 +1,4 @@
-package com.android.mediproject.core.ui.compose
+package com.android.mediproject.feature.news
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

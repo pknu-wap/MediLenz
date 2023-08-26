@@ -77,18 +77,16 @@ class MedicinesDetectorViewModel @Inject constructor(
         viewModelScope.launch {
             vibrationManager.vibrate(vibrateDuration)
             withContext(defaultDispatcher) {
-                if (capturedDetectionEntity.items.isEmpty()) {
-                    _captureState.emit(InferenceState.Failure)
+                val result = if (capturedDetectionEntity.items.isEmpty()) {
+                    InferenceState.Failure
                 } else {
                     capturedDetectionEntity.separateImages()
-                    _captureState.emit(
-                        InferenceState.Success(
-                            capturedDetectionEntity,
-                        ),
+                    InferenceState.Success(
+                        capturedDetectionEntity,
                     )
                 }
+                _captureState.emit(result)
             }
-
         }
     }
 

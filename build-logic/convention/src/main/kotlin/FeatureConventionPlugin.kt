@@ -1,8 +1,6 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 
 class FeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -12,8 +10,6 @@ class FeatureConventionPlugin : Plugin<Project> {
                 apply("mediproject.android.hilt")
                 apply("androidx.navigation.safeargs.kotlin")
             }
-
-            val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
             dependencies {
                 "implementation"(libs.findBundle("navigations").get())

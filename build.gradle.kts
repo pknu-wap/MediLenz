@@ -34,12 +34,6 @@ gradle.allprojects {
     tasks.withType<JavaCompile>().configureEach {
         options.compilerArgs = options.compilerArgs + "-Xmaxerrs" + "1000"
     }
-
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            //languageVersion = "2.0"
-        }
-    }
 }
 
 subprojects {
@@ -49,10 +43,6 @@ subprojects {
     configurations {
         ktlint
         detekt
-    }
-
-    repositories {
-        mavenCentral()
     }
 
     detekt {

@@ -1,14 +1,14 @@
 # 라이브러리 버전---------------------------------------------------------------------------------------------------------------
 [versions]
 # kotlin
-kotlin = "1.8.22"
-kotlinCompilerExtension = "1.4.8"
+kotlin = "1.9.0"
+kotlinCompilerExtension = "1.5.2"
 kotlinxCoroutines = "1.7.3"
 kotlinxSerializationJson = "1.5.0"
 kotlinxDateTime = "0.4.0"
-ksp = "1.8.22-1.0.11"
+ksp = "1.9.0-1.0.13"
 
-androidGradlePlugin = "8.0.2"
+androidGradlePlugin = "8.1.1"
 androidDesugarJdkLibs = "2.0.3"
 photoview = "2.3.0"
 
@@ -18,8 +18,8 @@ lz4Java = "1.8.0"
 androidxCore = "1.10.1"
 androidxActivity = "1.7.2"
 androidxFragment = "1.6.1"
-androidxNavigation = "2.6.0"
-androidxComposeBom = "2023.06.01"
+androidxNavigation = "2.7.1"
+androidxComposeBom = "2023.08.00"
 androidxConcurrentFutures = "1.1.0"
 androidxLifecycle = "2.6.1"
 androidxDatastore = "1.0.0"
@@ -50,8 +50,8 @@ hiltTesting = "2.47"
 
 androidXSplashScreen = "1.0.1"
 
-protocolBuffer = "3.23.1"
-protoBufGradlePlugin = "0.9.3"
+protocolBuffer = "3.24.1"
+protoBufGradlePlugin = "0.9.4"
 googleOssPlugin = "0.10.6"
 
 androidXTestTruth = "1.5.0"
@@ -59,17 +59,17 @@ androidXTestOrchestra = "1.4.2"
 androidXTestArch = "2.2.0"
 
 cameraX = "1.2.3"
-accompanist = "0.30.1"
+accompanist = "0.32.0"
 
 jUnit = "4.13.2"
 mockit = "5.4.0"
-mockitKotlin = "5.0.0"
+mockitKotlin = "5.1.0"
 robolectric = "4.10.3"
-lottie = "6.0.0"
+lottie = "6.1.0"
 
 material = "1.9.0"
-glide = "4.15.1"
-glideCompose = "1.0.0-alpha.3"
+glide = "4.16.0"
+glideCompose = "1.0.0-alpha.5"
 gms = "4.3.15"
 retrofit2 = "2.9.0"
 retrofit2KotlinxSerializationJson = "1.0.0"
@@ -79,12 +79,12 @@ okhttp3 = "4.11.0"
 
 flexbox = "3.0.0"
 
-compileSdk = "33"
-targetSdk = "33"
+compileSdk = "34"
+targetSdk = "34"
 minSdk = "28"
 
 #firebase
-firebaseCrashlytics = "18.4.0"
+firebaseCrashlytics = "18.4.1"
 firebaseCrashlyticsGradlePlugin = "2.9.5"
 firebaseAnalytics = "21.3.0"
 
@@ -103,12 +103,14 @@ simple_dialog = "1.0.2"
 ksealedbinding = "1.0.0"
 
 ktlint = "0.50.0"
-ktlint_gradle_plugin = "11.5.0"
-detekt = "1.23.0"
+ktlint_gradle_plugin = "11.5.1"
+detekt = "1.23.1"
 
 jsoup = "1.16.1"
 
 pytorch_android = "1.13.1"
+onnx_runtime_android = "1.15.1"
+onnx_runtime_extensions_android = "0.8.0"
 
 # 라이브러리 의존성------------------------------------------------------------------------------------------------------------------------
 [libraries]
@@ -122,7 +124,6 @@ tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", v
 tensorflow-lite-gpuDelegate = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "gpuDelegate" }
 tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tfliteGpu" }
 tensorflow-lite-metadata = { module = "org.tensorflow:tensorflow-lite-metadata", version.ref = "tfliteMetadata" }
-
 
 
 # androidX--------------------------------------------------------------------------------------------------------------------
@@ -264,8 +265,13 @@ lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
 # pytorch --------------------------------------------------------------------------------------------------------------
 
-pytorch-lite = { module = "org.pytorch:pytorch_android_lite", version.ref = "pytorch_android" }
-pytorch-torchvision = { module = "org.pytorch:pytorch_android_torchvision_lite", version.ref = "pytorch_android" }
+pytorch-lite = { module = "org.pytorch:pytorch_android", version.ref = "pytorch_android" }
+pytorch-torchvision = { module = "org.pytorch:pytorch_android_torchvision", version.ref = "pytorch_android" }
+
+# onnx --------------------------------------------------------------------------------------------------------------
+
+onnx-runtime-android = { module = "com.microsoft.onnxruntime:onnxruntime-android", version.ref = "onnx_runtime_android" }
+onnx-runtime-extensions-android = { module = "com.microsoft.onnxruntime:onnxruntime-extensions-android", version.ref = "onnx_runtime_extensions_android" }
 
 # material--------------------------------------------------------------------------------------------------------------
 material-main = { module = "com.google.android.material:material", version.ref = "material" }
@@ -310,29 +316,40 @@ composes = [
     "androidx-compose-ui-util",
     "androidx-compose-ui",
     "androidx-compose-foundation",
-    "androidx-compose-foundation-layout"]
-
-uiAndroidx = ["androidx-appcompat", "androidx-preference-ktx", "androidx-core-ktx", "androidx-fragment", "androidx-activity",
-    "androidx-recyclerview", "androidx-constraintlayout", "androidx-constraintlayout-compose", "androidx-activity-compose",
+    "androidx-compose-foundation-layout",
+    "androidx-compose-material3",
+    "androidx-compose-material3-windowSizeClass"
 ]
 
+uiAndroidx = ["androidx-appcompat", "androidx-preference-ktx", "androidx-core-ktx", "androidx-fragment", "androidx-activity",
+    "androidx-recyclerview", "androidx-constraintlayout",
+]
+
+compose-uiAndroidx = ["androidx-constraintlayout-compose", "androidx-activity-compose"]
+
 lifecycles = ["androidx-lifecycle-livedata-ktx", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx",
-    "androidx-lifecycle-viewmodel-savedstate", "androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-runtime-compose"]
+    "androidx-lifecycle-viewmodel-savedstate"]
+
+compose-lifecycles = ["androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-runtime-compose"]
 
 retrofits = ["retrofit-core", "retrofit-kotlinx-serialization", "retrofit-scalars"]
 
-navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-compose", "androidx-navigation-dynamic"]
+navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-dynamic"]
+
+compose-navigations = ["androidx-navigation-compose"]
 
 kotlins = ["kotlin-stdlib-root", "kotlinx-coroutines-android", "kotlinx-serialization-json", "kotlin-reflection"]
 
-materials = ["material-main", "androidx-compose-material3", "androidx-compose-material3-windowSizeClass"]
+materials = ["material-main"]
 
 glides = ["glide-main"]
 
 glides-kapt = ["glide-kapt"]
 
-hilts = ["androidx-hilt-navigation-compose", "androidx-hilt-android", "androidx-hilt-navigation-fragment",
-    "androidx-hilt-work", "androidx-hilt-navigation-compose"]
+hilts = ["androidx-hilt-android", "androidx-hilt-navigation-fragment",
+    "androidx-hilt-work"]
+
+compose-hilts = ["androidx-hilt-navigation-compose"]
 
 rooms = ["androidx-room-ktx", "androidx-room-runtime", "androidx-room-paging"]
 

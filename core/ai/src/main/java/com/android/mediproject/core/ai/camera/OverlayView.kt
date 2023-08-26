@@ -18,7 +18,8 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     private val objects = mutableListOf<CameraHelper.OnDetectionListener.Object>()
 
-    private var scaleFactor: Float = 1f
+    private var widthScaleFactor: Float = 1f
+    private var heightScaleFactor: Float = 1f
 
     var resizedWidth: Int = 0
     var resizeHeight: Int = 0
@@ -33,7 +34,8 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
                     it.boundingBox,
                 )
             },
-            scaleFactor,
+            widthScaleFactor,
+            heightScaleFactor,
         )
     }
 
@@ -50,7 +52,8 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         resizedWidth = capturedImageWidth
         resizeHeight = capturedImageHeight
 
-        scaleFactor = maxOf(width.toFloat() / capturedImageHeight, height.toFloat() / capturedImageHeight)
+        widthScaleFactor = width.toFloat() / capturedImageWidth
+        heightScaleFactor = height.toFloat() / capturedImageHeight
     }
 
     fun capture() = synchronized(detectionResult) {

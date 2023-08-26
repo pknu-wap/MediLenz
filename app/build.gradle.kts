@@ -88,7 +88,6 @@ dependencies {
 
     implementation(libs.bundles.lifecycles)
     implementation(libs.bundles.materials)
-    implementation(libs.bundles.composes)
     implementation(libs.bundles.navigations)
     implementation(libs.bundles.kotlins)
     implementation(libs.bundles.workManagers)

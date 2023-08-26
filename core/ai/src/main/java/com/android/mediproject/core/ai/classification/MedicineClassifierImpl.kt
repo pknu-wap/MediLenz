@@ -16,10 +16,10 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.json.Json
 import org.pytorch.IValue
-import org.pytorch.LiteModuleLoader
 import org.pytorch.Module
 import org.pytorch.Tensor
 import org.pytorch.torchvision.TensorImageUtils
+import java.io.File
 import java.io.IOException
 import java.lang.ref.WeakReference
 
@@ -55,10 +55,10 @@ object MedicineClassifierImpl : MedicineClassifier {
                     ).get()!!
                     val outputTensor: Tensor = aiModel.forward(IValue.from(inputTensor)).toTensor()
                     val scores = outputTensor.dataAsFloatArray
-                    val maxScore = scores.withIndex().maxBy { it.value }
-                    val itemSeq: String = metaData.getClass(maxScore.index)
+                    val maxScore = scores.withIndex().sortedByDescending { it.value }
+                    val itemSeq: String = metaData.getClass(maxScore.first().index)
 
-                    ClassificationResultEntity.Item(itemSeq, maxScore.value)
+                    ClassificationResultEntity.Item(itemSeq, maxScore.first().value)
                 }
                 send(Result.success(ClassificationResultEntity(result)))
             }.onLoadFailed {
@@ -70,11 +70,31 @@ object MedicineClassifierImpl : MedicineClassifier {
     override suspend fun initialize(context: Context): Result<Unit> {
         _aiModelState.value = AiModelState.Loading
         return try {
-            _aiModel = LiteModuleLoader.loadModuleFromAsset(context.assets, "mobilenetsmall38.ptl")
+            val modelFileName = "maxvittiny.pt"
+            val modelFilePath = "${context.filesDir.absolutePath}/$modelFileName"
+            val outputFile = File(modelFilePath)
+
+            val ex = outputFile.exists()
+
+            context.assets.open(modelFileName).use { input ->
+                outputFile.outputStream().use { output ->
+                    val buffer = ByteArray(8 * 1024)
+                    var read: Int
+
+                    while (input.read(buffer).also { read = it } != -1) {
+                        output.write(buffer, 0, read)
+                    }
+                    output.flush()
+                }
+            }
+
+            _aiModel = Module.load(modelFilePath)
+            //_aiModel = LiteModuleLoader.loadModuleFromAsset(context.assets, "regnetxepoch22.pth")
             _metaData = json.decodeFromString(
                 ClassificationMetaDataEntity.serializer(),
-                context.assets.open("metadata.json").bufferedReader().use { it.readText() },
+                context.assets.open("metadata2.json").bufferedReader().use { it.readText() },
             )
+
             _aiModelState.value = AiModelState.Loaded
             Result.success(Unit)
         } catch (e: IOException) {

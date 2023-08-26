@@ -28,7 +28,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.android.mediproject.core.model.news.recall.RecallSaleSuspension
-import com.android.mediproject.core.ui.compose.CenterProgressIndicator
+import com.android.mediproject.feature.news.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.ListItemScreen
 import com.android.mediproject.feature.news.listDateTimeFormat

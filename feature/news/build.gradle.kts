@@ -1,5 +1,5 @@
 plugins {
-    id("mediproject.android.feature.compose")
+    id("mediproject.android.feature")
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
 }
@@ -7,8 +7,17 @@ plugins {
 android {
     namespace = "com.android.mediproject.feature.news"
 
+    buildFeatures {
+        compose = true
+    }
+
     hilt {
         enableAggregatingTask = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtension.get().toString()
+        useLiveLiterals = true
     }
 }
 
@@ -18,6 +27,14 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
+
+    implementation(platform(libs.androidx.compose.bom))
+
+    implementation(libs.bundles.compose.lifecycles)
+    implementation(libs.bundles.compose.uiAndroidx)
+    implementation(libs.bundles.compose.hilts)
+    implementation(libs.bundles.compose.navigations)
+    
     implementation(libs.bundles.glides)
     implementation(libs.glide.compose)
     implementation(libs.bundles.kotlins)
@@ -33,7 +50,6 @@ dependencies {
     debugImplementation(libs.bundles.compose.debug)
 
     kapt(libs.bundles.glides.kapt)
-
     ksp(libs.ksealedbinding.compiler)
     implementation(libs.ksealedbinding.annotation)
 }

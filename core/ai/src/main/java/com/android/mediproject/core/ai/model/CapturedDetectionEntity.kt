@@ -16,10 +16,8 @@ data class CapturedDetectionEntity(
     val items: List<Item>, val capturedImage: Bitmap, val originalImageSize: Size,
     val resizedImageSize: Size,
 ) {
-    val scaleFactor = maxOf(
-        originalImageSize.width.toFloat() / resizedImageSize.height,
-        originalImageSize.height.toFloat() / resizedImageSize.height,
-    )
+    val widthScaleFactor = originalImageSize.width.toFloat() / resizedImageSize.width
+    val heightScaleFactor = originalImageSize.height.toFloat() / resizedImageSize.height
 
     fun separateImages() {
         items.forEach { item ->
@@ -28,11 +26,11 @@ data class CapturedDetectionEntity(
         }
     }
 
-    fun scale(rect: RectF): RectF = rect.run {
-        val top = top * scaleFactor
-        val bottom = bottom * scaleFactor
-        val left = left * scaleFactor
-        val right = right * scaleFactor
+    private fun scale(rect: RectF): RectF = rect.run {
+        val top = top * heightScaleFactor
+        val bottom = bottom * heightScaleFactor
+        val left = left * widthScaleFactor
+        val right = right * widthScaleFactor
 
         val width = right - left
         val height = bottom - top

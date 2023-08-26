@@ -21,26 +21,28 @@ object SharedObjectDetectionViewProperty {
     }
 
     private val labelTextPaint = TextPaint().apply {
-        color = Color.parseColor("#22A7CC")
+        color = Color.BLACK
+        strokeWidth = 1.dpToPx().toFloat()
         textSize = 14.dpToPx().toFloat()
         isAntiAlias = true
     }
 
     private val confidenceTextPaint = TextPaint().apply {
-        color = Color.parseColor("#22A7CC")
+        color = Color.BLACK
+        strokeWidth = 1.dpToPx().toFloat()
         textSize = 12.dpToPx().toFloat()
         isAntiAlias = true
     }
 
 
-    fun Canvas.draw(objects: List<Object>, scaleFactor: Float) {
+    fun Canvas.draw(objects: List<Object>, widthScaleFactor: Float, heightScaleFactor: Float) {
         for (obj in objects) {
             val boundingBox = obj.boundingBox
             val rect = RectF(
-                boundingBox.left * scaleFactor,
-                boundingBox.top * scaleFactor,
-                boundingBox.right * scaleFactor,
-                boundingBox.bottom * scaleFactor,
+                boundingBox.left * widthScaleFactor,
+                boundingBox.top * heightScaleFactor,
+                boundingBox.right * widthScaleFactor,
+                boundingBox.bottom * heightScaleFactor,
             )
             drawRoundRect(rect, ROUND_CORNER_RADIUS, ROUND_CORNER_RADIUS, boxPaint)
 

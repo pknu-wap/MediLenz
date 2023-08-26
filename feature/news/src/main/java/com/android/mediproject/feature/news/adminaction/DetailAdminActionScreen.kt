@@ -27,7 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.mediproject.core.common.viewmodel.onInitial
 import com.android.mediproject.core.common.viewmodel.onSuccess
 import com.android.mediproject.core.model.news.adminaction.AdminAction
-import com.android.mediproject.core.ui.compose.CenterProgressIndicator
+import com.android.mediproject.feature.news.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.CardBox
 import com.android.mediproject.feature.news.customui.Header

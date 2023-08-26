@@ -17,7 +17,8 @@ object ObjectBitmapCreator {
                         it.boundingBox,
                     )
                 },
-                capturedDetectionEntity.scaleFactor,
+                capturedDetectionEntity.widthScaleFactor,
+                capturedDetectionEntity.heightScaleFactor,
             )
         }
         return outBitmap

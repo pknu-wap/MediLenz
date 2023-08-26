@@ -3,6 +3,8 @@ package com.android.mediproject.core.ai.camera
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.RectF
+import android.util.Size
+import android.view.Surface
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
@@ -34,7 +36,7 @@ class CameraHelper @Inject constructor(
     private val medicineDetector: MedicineDetector,
 ) : LifecycleEventObserver, CameraController {
 
-    private val mCameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
+    private val mCameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
     private var _mPreview: Preview? = null
     private val mPreview get() = _mPreview!!
@@ -122,9 +124,11 @@ class CameraHelper @Inject constructor(
 
     private fun connectCamera() {
         cameraExecutor = newSingleThreadExecutor()
-        _mImageAnalyzer =
-            ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).setTargetRotation(mPreviewView.display.rotation)
-                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build()
+        val resolution = Size(720, 1280)
+
+        _mImageAnalyzer = ImageAnalysis.Builder().setOutputImageRotationEnabled(true).setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .setTargetResolution(resolution).setTargetRotation(Surface.ROTATION_0)
+            .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build()
         mImageAnalyzer.setAnalyzer(cameraExecutor!!) { image ->
             if (_bitmapBuffer == null) _bitmapBuffer = Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
             image.use {
@@ -133,13 +137,13 @@ class CameraHelper @Inject constructor(
             detect(image)
         }
 
-        _mPreview = Preview.Builder().setTargetRotation(mPreviewView.display.rotation).build()
+        _mPreview = Preview.Builder().setTargetResolution(resolution).setTargetRotation(Surface.ROTATION_0).build()
         mCameraProvider.bindToLifecycle(fragmentLifeCycleOwner, mCameraSelector, mPreview, mImageAnalyzer)
         mPreview.setSurfaceProvider(mPreviewView.surfaceProvider)
     }
 
     private fun detect(imageProxy: ImageProxy) {
-        medicineDetector.detect(imageProxy, bitmapBuffer).onSuccess { detectionResultEntity ->
+        medicineDetector.detect(bitmapBuffer).onSuccess { detectionResultEntity ->
             detectionCallback.onDetect(
                 detectionResultEntity.items.map {
                     OnDetectionListener.Object(
