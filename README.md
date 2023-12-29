@@ -2,6 +2,8 @@
 
 Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사용자들끼리 의약품에 관한 정보를 주고받을 수 있는 커뮤니티 기능을 제공하는 Android Native 앱입니다.
 
+<br><br><br>
+
 ## 주요 기능
 
 1. **의약품 검색 기능**: 의약품명/제조사명 등 사용자가 직접 입력하여 검색, 카메라로 의약품을 검출하여 분류해주는 AI 검색
@@ -13,6 +15,20 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 7. **의약품 안전 사용 정보 확인**
 8. **의약품 상세 정보**: 효능효과, 용법 용량, 주의 사항, 식별 정보 등 자세한 정보를 볼 수 있음
 
+<br><br>
+
+![ezgif com-video-to-gif-converter (1)](https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/assets/116813010/3bb387fd-3b8c-44e1-bfde-7cfceecec6ab)
+
+<br><br>
+
+![ezgif com-video-to-gif-converter (2)](https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/assets/116813010/a19f0785-f842-42cd-a902-96a17802618a)
+
+<br><br>
+
+![ezgif com-video-to-gif-converter (3)](https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/assets/116813010/eb145a93-c7c1-45e0-9980-4994b51f5c01)
+
+<br><br><br>
+
 ## 사용 기술 및 데이터
 
 - **앱 개발**: Android Studio
@@ -23,7 +39,9 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 - **의약품 정보 데이터**: 식약처 데이터(OpenApi)
 - **의약품 AI 학습 데이터**: AI Hub(과기부) 데이터
 
-### Android 사용 스택
+<br><br><br>
+
+## Android 사용 스택
 
 - databinding
 - viewbinding
@@ -36,14 +54,20 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 - datastore
 - 그 외 jetpack library
 
-### Android 앱 아키텍처
+<br><br><br>
+
+## Android 앱 아키텍처
 
 - MVVM
 - domain 영역 포함
 
+<br><br><br>
+
 ## Modules
 
 ![image](https://user-images.githubusercontent.com/48265129/234879804-42a22684-4534-421f-b71f-c83122e8e613.png)
+
+<br><br><br>
 
 ## Members
  #### 아래의 프로필 이미지를 클릭하시면 저희 팀원들의 커밋 내역을 확인하실 수 있습니다! 😀
@@ -51,6 +75,7 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 | :---: | :---: | :---: | :---: |
 | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/server_develop?author=ho-sick99"><img src="https://avatars.githubusercontent.com/u/83945722?s=64&v=4" width="64" height="64"></a> | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/android_develop?author=pknujsp"><img src="https://avatars.githubusercontent.com/u/48265129?s=64&v=4" width="64" height="64"></a> | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/android_develop?author=tgyuuAn"><img src="https://avatars.githubusercontent.com/u/116813010?s=64&v=4" width="64" height="64"></a> | <a href="https://github.com/pknu-wap/2023_1_WAP_APP_TEAM_MEDI/commits/server_develop?author=winocreative"><img src="https://avatars.githubusercontent.com/u/26576118?s=64&v=4" width="64" height="64"></a> |
 
+<br><br><br>
 
 ## Git Flow
 
@@ -65,6 +90,8 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 6. merge된 작업이 있을 경우, 다른 브랜치에서 작업을 진행 중이던 개발자는 본인의 브랜치로 merge된 작업을 Pull 받아온다.
 7. 종료된 Issue와 Pull Request의 Label과 Project를 관리한다.`
 ```
+
+<br><br><br>
 
 ## App Design Templates (Figma)
 
