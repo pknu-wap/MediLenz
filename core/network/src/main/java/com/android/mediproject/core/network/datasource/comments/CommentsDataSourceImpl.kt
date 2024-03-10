@@ -18,8 +18,8 @@ class CommentsDataSourceImpl @Inject constructor(
     private val awsNetworkApi: AwsNetworkApi,
 ) : CommentsDataSource {
 
-    override suspend fun getCommentsByMedicineId(medicineId: Long): Result<CommentListResponse> {
-        return awsNetworkApi.getCommentsByMedicineId(medicineId).onResponse().fold(
+    override suspend fun getCommentsByMedicineId(medicineId: Long, page: Int, rows: Int, userId: String): Result<CommentListResponse> {
+        return awsNetworkApi.getCommentsByMedicineId(medicineId, page, rows, userId).onResponse().fold(
             onSuccess = { response ->
                 if (response.commentList.isEmpty()) Result.failure(Exception("댓글이 없습니다."))
                 else Result.success(response)

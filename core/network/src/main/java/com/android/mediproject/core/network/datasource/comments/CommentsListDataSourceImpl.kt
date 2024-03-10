@@ -13,15 +13,18 @@ class CommentsListDataSourceImpl(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CommentListResponse.Comment> {
         return try {
-            commentsDataSource.getCommentsByMedicineId(medicineId).fold(onSuccess = {
-                LoadResult.Page(
-                    data = it.commentList,
-                    prevKey = null,
-                    nextKey = if (it.commentList.size > 1000000) 1 else null,
-                )
-            }, onFailure = {
-                LoadResult.Error(it)
-            })
+            commentsDataSource.getCommentsByMedicineId(medicineId, 1, 15, "-1").fold(
+                onSuccess = {
+                    LoadResult.Page(
+                        data = it.commentList,
+                        prevKey = null,
+                        nextKey = if (it.commentList.size > 1000000) 1 else null,
+                    )
+                },
+                onFailure = {
+                    LoadResult.Error(it)
+                },
+            )
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
