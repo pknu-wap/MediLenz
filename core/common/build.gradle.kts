@@ -20,7 +20,9 @@ android {
         buildConfigField("String", "DATA_GO_KR_SERVICE_KEY", "\"${properties["dataGoKrServiceKey"]}\"")
         buildConfigField("String", "DATA_GO_KR_BASE_URL", "\"${properties["dataGoKrBaseUrl"]}\"")
         buildConfigField("String", "AWS_BASE_URL", "\"${properties["awsUrl"]}\"")
-        buildConfigField("String", "VERTEX_ENDPOINT_URL", "\"${properties["vertexEndpointUrl"]}\"")
+        buildConfigField("String", "AWS_USER_POOL", "\"${properties["AWS_USER_POOL"]}\"")
+        buildConfigField("String", "AWS_USER_CLIENT_ID", "\"${properties["AWS_USER_CLIENT_ID"]}\"")
+        buildConfigField("String", "AWS_USER_CLIENT_SECRET", "\"${properties["AWS_USER_CLIENT_SECRET"]}\"")
     }
 
     hilt {

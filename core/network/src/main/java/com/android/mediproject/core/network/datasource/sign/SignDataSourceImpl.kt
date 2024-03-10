@@ -1,66 +1,32 @@
 package com.android.mediproject.core.network.datasource.sign
 
-import com.android.mediproject.core.common.util.AesCoder
-import com.android.mediproject.core.model.sign.SignInResponse
-import com.android.mediproject.core.model.sign.SignUpResponse
-import com.android.mediproject.core.model.token.RequestBehavior
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes
 import com.android.mediproject.core.model.requestparameters.LoginParameter
-
 import com.android.mediproject.core.model.requestparameters.SignUpParameter
-import com.android.mediproject.core.network.datasource.tokens.onResponseWithTokens
-import com.android.mediproject.core.network.module.AwsNetworkApi
-import com.android.mediproject.core.network.parameter.LoginRequestParameter
-import com.android.mediproject.core.network.parameter.SignUpRequestParameter
-import com.android.mediproject.core.network.tokens.TokenServer
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import java.lang.ref.WeakReference
-import javax.inject.Inject
 
-class SignDataSourceImpl @Inject constructor(
-    private val awsNetworkApi: AwsNetworkApi, private val tokenServer: TokenServer, private val aesCoder: AesCoder,
+class SignDataSourceImpl(
+    private val signInOutAWS: SignInOutAWS,
+    private val signUpAWS: SignUpAWS,
 ) : SignDataSource {
 
+    override suspend fun logIn(loginParameter: LoginParameter): Result<SignInOutAWS.SignInResponse> = signInOutAWS.signIn(
+        SignInOutAWS.SignInRequest(
+            loginParameter.email.contentToString(),
+            loginParameter.password.map { it.code.toByte() }.toByteArray(),
+        ),
+    )
 
-    /**
-     * 로그인
-     */
-    override fun logIn(loginParameter: LoginParameter): Flow<Result<SignInResponse>> = channelFlow {
-        awsNetworkApi.login(
-            LoginRequestParameter(
-                WeakReference(loginParameter.email.joinToString("")).get()!!,
-                WeakReference(aesCoder.encodePassword(loginParameter.email, loginParameter.password)).get()!!,
-            ),
-        ).onResponseWithTokens(RequestBehavior.NewTokens, tokenServer).fold(
-            onSuccess = {
-                Result.success(it)
+    override suspend fun signUp(signUpParameter: SignUpParameter): Result<SignUpAWS.SignUpResponse> = signUpAWS.signUp(
+        SignUpAWS.SignUpRequest(
+            signUpParameter.email.contentToString(),
+            signUpParameter.password.map { it.code.toByte() }.toByteArray(),
+            CognitoUserAttributes().apply {
+                addAttribute("user_name", signUpParameter.nickName)
             },
-            onFailure = {
-                Result.failure(it)
-            },
-        ).also {
-            trySend(it)
-        }
-    }
+        ),
+    )
 
-    override fun signUp(signUpParameter: SignUpParameter): Flow<Result<SignUpResponse>> = channelFlow {
-        awsNetworkApi.signUp(
-            SignUpRequestParameter(
-                WeakReference(signUpParameter.email.joinToString("")).get()!!,
-                WeakReference(aesCoder.encodePassword(signUpParameter.email, signUpParameter.password)).get()!!, signUpParameter.nickName,
-            ),
-        ).onResponseWithTokens(RequestBehavior.NewTokens, tokenServer).fold(
-            onSuccess = {
-                Result.success(it)
-
-            },
-            onFailure = { Result.failure(it) },
-        ).also {
-            trySend(it)
-        }
-    }
-
-    override fun signOut() {
-        tokenServer.removeTokens()
+    override suspend fun signOut() {
+        signInOutAWS.signOut()
     }
 }

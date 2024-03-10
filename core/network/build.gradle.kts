@@ -34,4 +34,5 @@ dependencies {
 
     ksp(libs.ksealedbinding.compiler)
     implementation(libs.ksealedbinding.annotation)
+    implementation(libs.aws.android.sdk.cognito)
 }

@@ -17,24 +17,20 @@ class SignRepositoryImpl(
     private val userInfoRepository: UserInfoRepository,
 ) : SignRepository {
 
-    override fun login(loginParameter: LoginParameter): Result<Boolean> {
-        signDataSource.logIn(loginParameter).collect { signInResult ->
-            if (signInResult.isFailure) {
-                trySend(Result.failure(signInResult.exceptionOrNull() ?: Exception("로그인 실패")))
-            } else {
-                appDataStore.apply {
-                    saveSkipIntro(true)
-                    signInResult.onSuccess {
-                        userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it._userId!!.toLong(), it._nickName!!, it._email!!))
-                        saveMyAccountInfo(it._email!!, it._nickName!!, it._userId!!.toLong())
-                    }
-                }
-                trySend(Result.success(Unit))
+    override suspend fun login(loginParameter: LoginParameter): Result<Boolean> {
+        val result = signDataSource.logIn(loginParameter)
+        if (result.isSuccess) {
+            appDataStore.run {
+                saveSkipIntro(true)
+                userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it._userId!!.toLong(), it._nickName!!, it._email!!))
+                saveMyAccountInfo(it._email!!, it._nickName!!, it._userId!!.toLong())
             }
         }
+
+        return Result.success(true)
     }
 
-    override fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>> = channelFlow {
+    override suspend fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>> = channelFlow {
         signDataSource.signUp(signUpParameter).collect { signUpResult ->
             if (signUpResult.isFailure) {
                 trySend(Result.failure(signUpResult.exceptionOrNull() ?: Exception("로그인 실패")))
@@ -58,6 +54,6 @@ class SignRepositoryImpl(
      *
      * 저장된 토큰 정보를 삭제한다.
      */
-    override fun signOut() = signDataSource.signOut()
+    override suspend fun signOut() = signDataSource.signOut()
 
 }

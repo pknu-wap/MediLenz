@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.aws
+package com.android.mediproject.core.network.datasource.sign
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes

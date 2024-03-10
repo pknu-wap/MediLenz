@@ -18,7 +18,6 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:test"))
     implementation(project(":core:data"))
-    implementation(project(":feature:aws"))
 
     implementation(libs.bundles.glides)
     kapt(libs.bundles.glides.kapt)

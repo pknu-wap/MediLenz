@@ -1,5 +1,8 @@
 package com.android.mediproject.core.network.module
 
+import android.content.Context
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool
+import com.amazonaws.regions.Regions
 import com.android.mediproject.core.common.BuildConfig
 import com.android.mediproject.core.common.util.AesCoder
 import com.android.mediproject.core.model.comments.CommentChangedResponse
@@ -30,6 +33,8 @@ import com.android.mediproject.core.network.datasource.medicineid.MedicineIdData
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
+import com.android.mediproject.core.network.datasource.sign.SignInOutAWSImpl
+import com.android.mediproject.core.network.datasource.sign.SignUpAWSImpl
 import com.android.mediproject.core.network.datasource.tokens.TokenDataSource
 import com.android.mediproject.core.network.datasource.tokens.TokenDataSourceImpl
 import com.android.mediproject.core.network.datasource.user.UserDataSource
@@ -41,6 +46,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -87,8 +93,14 @@ object ServerNetwork {
 
     @Provides
     fun providesSignDataSource(
-        awsNetworkApi: AwsNetworkApi, tokenServer: TokenServer, aesCoder: AesCoder,
-    ): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenServer, aesCoder)
+        @ApplicationContext context: Context,
+    ): SignDataSource {
+        val userPool = CognitoUserPool(
+            context, BuildConfig.AWS_USER_POOL, BuildConfig.AWS_USER_CLIENT_ID, BuildConfig.AWS_USER_CLIENT_SECRET,
+            Regions.US_EAST_2,
+        )
+        return SignDataSourceImpl(SignInOutAWSImpl(userPool), SignUpAWSImpl(userPool))
+    }
 
     @Provides
     @Singleton
