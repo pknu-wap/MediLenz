@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.android.mediproject.core.common.SERVER_PAGE_SIZE
+import com.android.mediproject.core.data.sign.TokenRepository
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 class CommentsRepositoryImpl @Inject constructor(
     private val commentsDataSource: CommentsDataSource,
+    private val tokenRepository: TokenRepository,
 ) : CommentsRepository {
     override fun getCommentsByMedicineId(medicineId: Long): Flow<PagingData<CommentListResponse.Comment>> = Pager(
         config = PagingConfig(pageSize = SERVER_PAGE_SIZE, prefetchDistance = 0),

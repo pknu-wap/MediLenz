@@ -26,8 +26,7 @@ import com.android.mediproject.core.data.search.SearchHistoryRepository
 import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
 import com.android.mediproject.core.data.sign.SignRepository
 import com.android.mediproject.core.data.sign.SignRepositoryImpl
-import com.android.mediproject.core.data.token.TokenRepository
-import com.android.mediproject.core.data.token.TokenRepositoryImpl
+import com.android.mediproject.core.data.sign.TokenRepository
 import com.android.mediproject.core.data.user.UserInfoRepository
 import com.android.mediproject.core.data.user.UserInfoRepositoryImpl
 import com.android.mediproject.core.data.user.UserRepository
@@ -47,10 +46,8 @@ import com.android.mediproject.core.network.datasource.news.recallsuspension.Rec
 import com.android.mediproject.core.network.datasource.news.recallsuspension.RecallSaleSuspensionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.news.safetynotification.SafetyNotificationDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
-import com.android.mediproject.core.network.datasource.tokens.TokenDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSource
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
-import com.android.mediproject.core.network.tokens.TokenServer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -115,14 +112,25 @@ object RepositoryModule {
     fun providesCommentsRepository(commentsDataSource: CommentsDataSource, tokenRepository: TokenRepository): CommentsRepository =
         CommentsRepositoryImpl(commentsDataSource, tokenRepository)
 
+    @Provides
+    @Singleton
+    fun providesSignRepositoryImpl(
+        signDataSource: SignDataSource,
+        appDataStore: AppDataStore,
+        userInfoRepository: UserInfoRepository,
+    ): SignRepositoryImpl = SignRepositoryImpl(signDataSource, appDataStore, userInfoRepository)
 
     @Provides
     @Singleton
     fun providesSignRepository(
-        signDataSource: SignDataSource,
-        appDataStore: AppDataStore,
-        userInfoRepository: UserInfoRepository,
-    ): SignRepository = SignRepositoryImpl(signDataSource, appDataStore, userInfoRepository)
+        signRepositoryImpl: SignRepositoryImpl,
+    ): SignRepository = signRepositoryImpl
+
+    @Provides
+    @Singleton
+    fun providesTokenRepository(
+        signRepositoryImpl: SignRepositoryImpl,
+    ): TokenRepository = signRepositoryImpl
 
     @Provides
     @Singleton
@@ -143,12 +151,12 @@ object RepositoryModule {
         userInfoDataSource: UserInfoDataSource, appDataStore: AppDataStore,
     ): UserInfoRepository = UserInfoRepositoryImpl(userInfoDataSource, appDataStore)
 
-    @Provides
-    @Singleton
-    fun providesTokenRepository(
-        tokenDataSource: TokenDataSource,
-        tokenServer: TokenServer,
-    ): TokenRepository = TokenRepositoryImpl(tokenDataSource, tokenServer)
+    /*    @Provides
+        @Singleton
+        fun providesTokenRepository(
+            tokenDataSource: TokenDataSource,
+            tokenServer: TokenServer,
+        ): TokenRepository = TokenRepositoryImpl(tokenDataSource, tokenServer)*/
 
     @Provides
     @Singleton

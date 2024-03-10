@@ -1,5 +1,6 @@
 package com.android.mediproject.core.data.sign
 
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession
 import com.android.mediproject.core.data.user.UserInfoRepository
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.requestparameters.LoginParameter
@@ -11,11 +12,16 @@ class SignRepositoryImpl(
     private val signDataSource: SignDataSource,
     private val appDataStore: AppDataStore,
     private val userInfoRepository: UserInfoRepository,
-) : SignRepository {
+) : SignRepository, TokenRepository {
+
+    private var _session: CognitoUserSession? = null
+
+    override val session: CognitoUserSession? get() = _session
 
     override suspend fun login(loginParameter: LoginParameter): Result<Boolean> {
         val result = signDataSource.logIn(loginParameter)
         result.onSuccess {
+            _session = it.userSession
             appDataStore.run {
                 saveSkipIntro(true)
                 userInfoRepository.updateMyAccountInfo(
@@ -31,6 +37,8 @@ class SignRepositoryImpl(
                     myAccountId = 0L,
                 )
             }
+        }.onFailure {
+            _session = null
         }
 
         return Result.success(true)
@@ -45,5 +53,8 @@ class SignRepositoryImpl(
         return Result.success(true)
     }
 
-    override suspend fun signOut() = signDataSource.signOut()
+    override suspend fun signOut() {
+        _session = null
+        signDataSource.signOut()
+    }
 }

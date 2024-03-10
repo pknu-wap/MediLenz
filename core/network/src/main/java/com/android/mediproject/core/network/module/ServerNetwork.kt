@@ -35,13 +35,10 @@ import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignInOutAWSImpl
 import com.android.mediproject.core.network.datasource.sign.SignUpAWSImpl
-import com.android.mediproject.core.network.datasource.tokens.TokenDataSource
-import com.android.mediproject.core.network.datasource.tokens.TokenDataSourceImpl
 import com.android.mediproject.core.network.datasource.user.UserDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSourceImpl
-import com.android.mediproject.core.network.tokens.TokenServer
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -114,12 +111,12 @@ object ServerNetwork {
     @Singleton
     fun providesUserDataSource(awsNetworkApi: AwsNetworkApi, aesCoder: AesCoder): UserDataSource = UserDataSourceImpl(awsNetworkApi, aesCoder)
 
-    @Provides
-    @Singleton
-    fun providesTokenDataSource(
-        awsNetworkApi: AwsNetworkApi,
-        tokenServer: TokenServer,
-    ): TokenDataSource = TokenDataSourceImpl(awsNetworkApi, tokenServer)
+    /*    @Provides
+        @Singleton
+        fun providesTokenDataSource(
+            awsNetworkApi: AwsNetworkApi,
+            tokenServer: TokenServer,
+        ): TokenDataSource = TokenDataSourceImpl(awsNetworkApi, tokenServer)*/
 }
 
 interface AwsNetworkApi {
