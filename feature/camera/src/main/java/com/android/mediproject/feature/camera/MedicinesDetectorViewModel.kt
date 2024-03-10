@@ -20,7 +20,7 @@ import io.github.pknujsp.core.annotation.KBindFunc
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,8 +42,8 @@ class MedicinesDetectorViewModel @Inject constructor(
     val cameraConnectionState get() = _cameraConnectionState.asStateFlow()
 
     // 검출 정보 기록
-    private val _captureState = MutableSharedFlow<InferenceState<CapturedDetectionEntity>>(replay = 1, extraBufferCapacity = 1)
-    val captureState get() = _captureState.asSharedFlow()
+    private val _captureState = MutableSharedFlow<InferenceState<CapturedDetectionEntity>>(replay = 1, extraBufferCapacity = 0)
+    val captureState: SharedFlow<InferenceState<CapturedDetectionEntity>> = _captureState
 
     private val vibrateDuration = 50L
 

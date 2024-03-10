@@ -2,7 +2,6 @@ package com.android.mediproject.core.network
 
 import com.android.mediproject.core.model.DataGoKrResponse
 import com.android.mediproject.core.model.toResult
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import retrofit2.Response
 
@@ -24,8 +23,10 @@ internal inline fun <reified T : Any> Response<T>.onResponse(): Result<T> {
 }
 
 private val json = Json {
-    coerceInputValues = true
     ignoreUnknownKeys = true
+    coerceInputValues = true
+    encodeDefaults = true
+    isLenient = true
 }
 
 private inline fun <reified T : Any> String.parse(): Result<T> = try {

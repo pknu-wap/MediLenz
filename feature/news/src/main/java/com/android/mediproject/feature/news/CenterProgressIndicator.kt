@@ -1,10 +1,9 @@
 package com.android.mediproject.feature.news
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -16,16 +15,14 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CenterProgressIndicator(message: String) {
-    Box(
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 24.dp),
-        contentAlignment = Alignment.Center,
+            .fillMaxSize()
+            .padding(24.dp),
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            CircularProgressIndicator()
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(text = message)
-        }
+        CircularProgressIndicator()
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = message)
     }
 }

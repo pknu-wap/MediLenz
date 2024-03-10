@@ -8,6 +8,10 @@ android {
     namespace = "com.android.mediproject.core.database"
 }
 
+ksp {
+    arg("room.generateKotlin", "true")
+}
+
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))

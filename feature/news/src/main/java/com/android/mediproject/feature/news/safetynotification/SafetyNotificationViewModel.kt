@@ -1,6 +1,6 @@
 package com.android.mediproject.feature.news.safetynotification
 
-import androidx.compose.runtime.MutableState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -29,16 +29,18 @@ class SafetyNotificationViewModel @Inject constructor(
     getSafetyNotificationUseCase: GetSafetyNotificationUseCase,
 ) : BaseViewModel() {
 
-    val listScrollState: MutableState<Int> = mutableStateOf(0)
+    val listScrollState = mutableStateOf(0 to 0)
+    val lazyListState: LazyListState = LazyListState(listScrollState.value.first, listScrollState.value.second)
+
     private val _clickedItem: MutableStateFlow<UiState<SafetyNotification>> = MutableStateFlow(UiState.Initial)
     val clickedItem = _clickedItem.asStateFlow()
 
-    val safetyNotificationList: Flow<PagingData<SafetyNotification>> = getSafetyNotificationUseCase().cachedIn(viewModelScope).map { pagingData ->
+    val safetyNotificationList: Flow<PagingData<SafetyNotification>> = getSafetyNotificationUseCase().map { pagingData ->
         pagingData.map { source ->
             val wrapper = UiModelMapperFactory.create<SafetyNotification>(source)
             wrapper.convert()
         }
-    }.flowOn(ioDispatcher)
+    }.cachedIn(viewModelScope).flowOn(ioDispatcher)
 
     fun onClick(safetyNotification: SafetyNotification) {
         viewModelScope.launch {

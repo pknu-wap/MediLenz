@@ -1,27 +1,31 @@
 package com.android.mediproject.feature.intro
 
-import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
-import com.android.mediproject.core.common.viewmodel.asEventFlow
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.model.navargs.TOHOME
-import com.android.mediproject.core.model.requestparameters.SignUpParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
+import com.android.mediproject.feature.aws.SignUpAWS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUseCase: SignUseCase, @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    private val signUpAWS: SignUpAWS,
 ) : BaseViewModel() {
+
 
     private val _signUpState = MutableStateFlow<SignUpState>(SignUpState.Initial)
     val signUpState = _signUpState.asStateFlow()
@@ -95,15 +99,29 @@ class SignUpViewModel @Inject constructor(
         val (emailCharArray, passwordCharArray) = pair.first to pair.second
 
         setSignUpState(SignUpState.SigningUp)
-        viewModelScope.launch(ioDispatcher) {
-            signUseCase.signUp(SignUpParameter(emailCharArray, passwordCharArray, nickName)).collect { result ->
-                result.fold(
-                    onSuccess = { setSignUpState(SignUpState.SignUpSuccess) },
-                    onFailure = { setSignUpState(SignUpState.SignUpFailed(it.message ?: "가입 실패")) },
+        viewModelScope.launch {
+            /* signUseCase.signUp(SignUpParameter(emailCharArray, passwordCharArray, nickName)).collect { result ->
+                 result.fold(
+                     onSuccess = { setSignUpState(SignUpState.SignUpSuccess) },
+                     onFailure = { setSignUpState(SignUpState.SignUpFailed(it.message ?: "가입 실패")) },
+                 )
+             }*/
+            withContext(ioDispatcher) {
+                signUpAWS.signUp(
+                    SignUpAWS.SignUpRequest(
+                        email, password.encodeToByteArray(),
+                        CognitoUserAttributes().apply {
+                            addAttribute("custom:user_name", nickName)
+                        },
+                    ),
                 )
+            }.onSuccess {
+                setSignUpState(SignUpState.SignUpSuccess)
+            }.onFailure {
+                setSignUpState(SignUpState.SignUpFailed(it.message ?: "가입 실패"))
             }
         }
-        fillEmailPassword(emailCharArray, passwordCharArray)
+        //fillEmailPassword(emailCharArray, passwordCharArray)
     }
 
     private fun isNotEqualPasswordCheck() {

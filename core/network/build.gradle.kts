@@ -31,8 +31,6 @@ dependencies {
     implementation(libs.okhttp.logginginterceptor)
     implementation(libs.okhttp)
     implementation(libs.jsoup)
-    kapt(libs.androidx.hilt.compilerKapt)
-    kapt(libs.androidx.hilt.work.compilerKapt)
 
     ksp(libs.ksealedbinding.compiler)
     implementation(libs.ksealedbinding.annotation)

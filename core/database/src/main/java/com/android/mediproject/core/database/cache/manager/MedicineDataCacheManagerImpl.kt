@@ -26,7 +26,7 @@ class MedicineDataCacheManagerImpl @Inject constructor(
 
     private val job = GlobalScope.launch(Dispatchers.Default) {
         cacheChannel.consumeAsFlow().collect { cacheType ->
-            if (!checkNeedsUpdate(cacheType.entity.itemSequence, cacheType.entity.changeDate)) return@collect
+            // if (!checkNeedsUpdate(cacheType.entity.itemSequence, cacheType.entity.changeDate)) return@collect
 
             when (cacheType) {
                 is CacheType.Image -> {

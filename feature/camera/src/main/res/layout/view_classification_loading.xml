@@ -17,7 +17,7 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/loading_ai"
-        app:lottie_speed="1.4" />
+        app:lottie_speed="2" />
 
     <TextView
         android:id="@+id/classifyingMedicinesTextView"

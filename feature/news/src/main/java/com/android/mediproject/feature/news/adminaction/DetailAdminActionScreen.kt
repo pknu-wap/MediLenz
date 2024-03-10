@@ -12,6 +12,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,9 +43,9 @@ fun DetailAdminActionScreen(
     }
 
     val viewModel: AdminActionViewModel = hiltViewModel()
-    val item = viewModel.clickedItem.collectAsStateWithLifecycle()
+    val item by viewModel.clickedItem.collectAsStateWithLifecycle()
 
-    item.value.onInitial {
+    item.onInitial {
         CenterProgressIndicator(stringResource(id = R.string.loadingAdminActionList))
     }.onSuccess {
         Item(it)

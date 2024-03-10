@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -115,18 +114,7 @@ class ConfirmFragment : BaseFragment<FragmentConfirmBinding, ConfirmViewModel>(F
                             .setCornerRadius(0)
                             .setBackgroundColor(resources.getColor(R.color.loadingDialogBackgroundColor, null))
                             .setLayoutSize(MATCH_PARENT, MATCH_PARENT)
-                            .buildAndShow().also { dialog ->
-                                val dialogWindow = dialog.window!!
-                                dialogWindow.setFlags(
-                                    android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                                    android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                                )
-                                WindowCompat.setDecorFitsSystemWindows(dialogWindow, false)
-                                WindowCompat.getInsetsController(dialogWindow, dialogWindow.decorView).apply {
-                                    isAppearanceLightStatusBars = false
-                                    isAppearanceLightNavigationBars = true
-                                }
-                            }
+                            .buildAndShow()
                     }
                 }
             }

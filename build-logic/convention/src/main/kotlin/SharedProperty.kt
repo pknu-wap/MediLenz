@@ -27,6 +27,11 @@ val VersionCatalog.minSdk: Int
         _minSdk = this
     }
 
+val Project.ANDROID_TEST_IMPLEMENTATION get() = "androidTestImplementation"
+val Project.TEST_IMPLEMENTATION get() = "testImplementation"
+val Project.IMPLEMENTATION get() = "implementation"
+val Project.KAPT get() = "kapt"
+val Project.KSP get() = "ksp"
 
 object SharedProperty {
     val jvmTarget: String = JavaVersion.VERSION_17.toString()

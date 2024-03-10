@@ -12,13 +12,13 @@ import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.Rot90Op
 import org.tensorflow.lite.task.core.BaseOptions
-import org.tensorflow.lite.task.gms.vision.TfLiteVision
-import org.tensorflow.lite.task.gms.vision.detector.ObjectDetector
+import org.tensorflow.lite.task.vision.detector.ObjectDetector
 import java.lang.ref.WeakReference
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+
 
 object MedicineDetectorImpl : MedicineDetector {
 
@@ -29,9 +29,10 @@ object MedicineDetectorImpl : MedicineDetector {
     override val aiModelState = _aiModelState.asStateFlow()
 
     private val imageProcessor = ImageProcessor.Builder().add(Rot90Op(0)).build()
-    private val objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setMaxResults(10).setScoreThreshold(0.45f).setBaseOptions(
-        BaseOptions.builder().useNnapi().build(),
-    ).build()
+    private val objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder()
+        .setMaxResults(10).setScoreThreshold(0.35f).setBaseOptions(
+            BaseOptions.builder().useNnapi().build(),
+        ).build()
 
     override fun release() {
 
@@ -57,6 +58,8 @@ object MedicineDetectorImpl : MedicineDetector {
             DetectionResultEntity.Item(detection.boundingBox.correct(imageSize), label, confidence)
         }
 
+        println("items: $items")
+
         return Result.success(
             DetectionResultEntity(
                 imageSize,
@@ -68,25 +71,17 @@ object MedicineDetectorImpl : MedicineDetector {
     override suspend fun initialize(context: Context) = suspendCoroutine<Result<Unit>> { cont ->
         _aiModelState.value = AiModelState.Loading
         try {
-            TfLiteVision.initialize(context).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val modelFile = WeakReference(context.assets.open("efficientdetlite3.tflite")).get()!!
-                    val byteBuffer = WeakReference(modelFile.readBytes()).get()!!.let { bytes ->
-                        ByteBuffer.allocateDirect(bytes.size).apply {
-                            order(ByteOrder.nativeOrder())
-                            put(bytes)
-                        }
-                    }
-
-                    _objectDetector = ObjectDetector.createFromBufferAndOptions(byteBuffer, objectDetectorOptions)
-                    _aiModelState.value = AiModelState.Loaded
-                    cont.resume(Result.success(Unit))
-                } else {
-                    it.exception?.printStackTrace()
-                    _aiModelState.value = AiModelState.LoadFailed
-                    cont.resume(Result.failure(Exception("Failed to initialize objectDetector")))
+            val modelFile = WeakReference(context.assets.open("automl_tflite3.tflite")).get()!!
+            val byteBuffer = WeakReference(modelFile.readBytes()).get()!!.let { bytes ->
+                ByteBuffer.allocateDirect(bytes.size).apply {
+                    order(ByteOrder.nativeOrder())
+                    put(bytes)
                 }
             }
+
+            _objectDetector = ObjectDetector.createFromBufferAndOptions(byteBuffer, objectDetectorOptions)
+            _aiModelState.value = AiModelState.Loaded
+            cont.resume(Result.success(Unit))
         } catch (e: Exception) {
             e.printStackTrace()
             _aiModelState.value = AiModelState.LoadFailed

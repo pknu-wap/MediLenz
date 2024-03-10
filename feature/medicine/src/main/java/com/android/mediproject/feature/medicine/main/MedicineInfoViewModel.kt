@@ -63,7 +63,7 @@ class MedicineInfoViewModel @Inject constructor(
     fun setMedicinePrimaryInfo(medicineArgs: MedicineInfoArgs) {
         viewModelScope.launch {
             _medicinePrimaryInfo.emit(medicineArgs)
-            getMedicineDetailsUseCase.updateImageCache(medicineArgs.itemSeq.toString(), medicineArgs.imgUrl)
+            //getMedicineDetailsUseCase.updateImageCache(medicineArgs.itemSeq.toString(), medicineArgs.imgUrl)
         }
     }
 

@@ -16,8 +16,6 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     private val detectionResult = LinkedList<CameraHelper.OnDetectionListener.Object>()
 
-    private val objects = mutableListOf<CameraHelper.OnDetectionListener.Object>()
-
     private var widthScaleFactor: Float = 1f
     private var heightScaleFactor: Float = 1f
 
@@ -57,9 +55,7 @@ class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }
 
     fun capture() = synchronized(detectionResult) {
-        objects.clear()
-        objects.addAll(detectionResult.toList())
-        objects.toList()
+        detectionResult.toList()
     }
 
 }

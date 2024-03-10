@@ -50,18 +50,20 @@ object SharedObjectDetectionViewProperty {
             val textY =
                 rect.top + labelTextPaint.textSize + SPACE_BETWEEN_BOX_AND_TEXT
 
+            /**
             drawText(
-                obj.label,
-                textX,
-                textY,
-                labelTextPaint,
+            obj.label,
+            textX,
+            textY,
+            labelTextPaint,
             )
             drawText(
-                "${obj.confidence}%",
-                textX + confidenceTextPaint.measureText(obj.label) + SPACE_BETWEEN_TEXT,
-                textY,
-                confidenceTextPaint,
+            "${obj.confidence}%",
+            textX + confidenceTextPaint.measureText(obj.label) + SPACE_BETWEEN_TEXT,
+            textY,
+            confidenceTextPaint,
             )
+             */
         }
     }
 

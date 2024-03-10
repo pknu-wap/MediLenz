@@ -7,7 +7,6 @@ import android.util.Size
 import android.view.Surface
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -124,25 +123,24 @@ class CameraHelper @Inject constructor(
 
     private fun connectCamera() {
         cameraExecutor = newSingleThreadExecutor()
-        val resolution = Size(720, 1280)
 
         _mImageAnalyzer = ImageAnalysis.Builder().setOutputImageRotationEnabled(true).setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .setTargetResolution(resolution).setTargetRotation(Surface.ROTATION_0)
+            .setTargetResolution(Size(720, 1280)).setTargetRotation(Surface.ROTATION_0)
             .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build()
         mImageAnalyzer.setAnalyzer(cameraExecutor!!) { image ->
             if (_bitmapBuffer == null) _bitmapBuffer = Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
             image.use {
                 bitmapBuffer.copyPixelsFromBuffer(it.planes[0].buffer)
             }
-            detect(image)
+            detect()
         }
 
-        _mPreview = Preview.Builder().setTargetResolution(resolution).setTargetRotation(Surface.ROTATION_0).build()
+        _mPreview = Preview.Builder().setTargetResolution(Size(720, 1280)).setTargetRotation(Surface.ROTATION_0).build()
         mCameraProvider.bindToLifecycle(fragmentLifeCycleOwner, mCameraSelector, mPreview, mImageAnalyzer)
         mPreview.setSurfaceProvider(mPreviewView.surfaceProvider)
     }
 
-    private fun detect(imageProxy: ImageProxy) {
+    private fun detect() {
         medicineDetector.detect(bitmapBuffer).onSuccess { detectionResultEntity ->
             detectionCallback.onDetect(
                 detectionResultEntity.items.map {

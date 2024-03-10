@@ -3,7 +3,6 @@ package com.android.mediproject.core.network.datasource.medicineapproval
 import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
 import com.android.mediproject.core.model.medicine.medicineapproval.MedicineApprovalListResponse
 import com.android.mediproject.core.model.medicine.medicinedetailinfo.MedicineDetailInfoResponse
-import com.android.mediproject.core.model.medicine.medicinedetailinfo.cache.MedicineCacheEntity
 import com.android.mediproject.core.model.toResult
 import com.android.mediproject.core.network.datasource.image.GoogleSearchDataSource
 import com.android.mediproject.core.network.module.datagokr.DataGoKrNetworkApi
@@ -14,7 +13,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.withContext
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class MedicineApprovalDataSourceImpl @Inject constructor(
@@ -51,7 +49,7 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
         dataGoKrNetworkApiWithString.getMedicineDetailInfo(itemName = itemName.safetyEncode()).let { response ->
             response.onStringResponse<MedicineDetailInfoResponse>().fold(
                 onSuccess = { entity ->
-                    cache(entity.first, entity.second)
+                    //cache(entity.first, entity.second)
                     Result.success(entity.first)
                 },
                 onFailure = {
@@ -68,7 +66,7 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
             dataGoKrNetworkApiWithJson.getMedicineDetailInfo(itemSeq = itemSeq).let { response ->
                 response.onStringResponse<MedicineDetailInfoResponse>().fold(
                     onSuccess = { entity ->
-                        cache(entity.first, entity.second)
+                        //cache(entity.first, entity.second)
                         Result.success(entity.first)
                     },
                     onFailure = {
@@ -87,14 +85,14 @@ class MedicineApprovalDataSourceImpl @Inject constructor(
     }
 
     private fun cache(response: MedicineDetailInfoResponse, string: String) {
-        val item = response.body.items.first()
-        medicineDataCacheManager.updateDetail(
-            MedicineCacheEntity(
-                itemSequence = item.itemSequence,
-                json = WeakReference(string).get()!!,
-                changeDate = item.changeDate,
-            ),
-        )
+        /* val item = response.body.items.first()
+         medicineDataCacheManager.updateDetail(
+             MedicineCacheEntity(
+                 itemSequence = item.itemSequence,
+                 json = WeakReference(string).get()!!,
+                 changeDate = item.changeDate,
+             ),
+         )*/
     }
 
     private suspend fun loadMedicineImageUrl(medicineApprovalListResponse: MedicineApprovalListResponse) {

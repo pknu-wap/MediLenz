@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -30,9 +30,7 @@ import com.android.mediproject.core.model.news.adminaction.AdminAction
 import com.android.mediproject.feature.news.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.ListItemScreen
-import com.android.mediproject.feature.news.rememberListState
-import com.android.mediproject.feature.news.restoreListState
-import java.time.format.DateTimeFormatter
+import com.android.mediproject.feature.news.listDateTimeFormat
 
 
 /**
@@ -40,14 +38,13 @@ import java.time.format.DateTimeFormatter
  */
 @Composable
 fun AdminActionScreen(
+    viewModelStoreOwner: ViewModelStoreOwner,
     onClicked: () -> Unit,
 ) {
-    val viewModel: AdminActionViewModel = hiltViewModel()
+    val viewModel: AdminActionViewModel = hiltViewModel(viewModelStoreOwner)
     val list = viewModel.adminActionList.collectAsLazyPagingItems()
-    val listState = rememberLazyListState()
-    restoreListState(listState = listState, listScrollState = viewModel.listScrollState)
 
-    LazyColumn(state = listState) {
+    LazyColumn(state = viewModel.lazyListState) {
         items(
             count = list.itemCount, key = list.itemKey(),
             contentType = list.itemContentType(
@@ -71,7 +68,6 @@ fun AdminActionScreen(
 
     }
 
-    rememberListState(listState = listState, listScrollState = viewModel.listScrollState)
 }
 
 /**
@@ -103,7 +99,7 @@ fun ItemOnList(adminAction: AdminAction) {
                     maxLines = 1,
                 )
                 Text(
-                    text = adminAction.adminActionDate.value.format(dateFormat),
+                    text = adminAction.adminActionDate.value.format(listDateTimeFormat),
                     style = TextStyle(
                         fontSize = 12.sp,
                         lineHeight = 16.sp,
@@ -160,6 +156,3 @@ fun ItemOnList(adminAction: AdminAction) {
     }
 
 }
-
-
-private val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")

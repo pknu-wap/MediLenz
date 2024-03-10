@@ -1,7 +1,6 @@
 plugins {
     id("mediproject.android.feature")
-    id(libs.plugins.kotlin.parcelize.get().pluginId)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {

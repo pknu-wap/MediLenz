@@ -32,7 +32,7 @@ interface DurProductInfoNetworkApi {
      * @param itemSeq 품목기준코드
      *
      */
-    @GET(value = "DURPrdlstInfoService02/getDurPrdlstInfoList2")
+    @GET(value = "DURPrdlstInfoService03/getDurPrdlstInfoList03")
     suspend fun getDurProductList(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
@@ -51,7 +51,7 @@ interface DurProductInfoNetworkApi {
      * @param itemSeq 품목기준코드
      *
      */
-    @GET(value = "DURPrdlstInfoService02/getOdsnAtentInfoList2")
+    @GET(value = "DURPrdlstInfoService03/getOdsnAtentInfoList03")
     suspend fun getSeniorCaution(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
@@ -71,7 +71,7 @@ interface DurProductInfoNetworkApi {
      * @param typeName DUR유형
      * @param itemSeq 품목기준코드
      */
-    @GET(value = "DURPrdlstInfoService02/getSeobangjeongPartitnAtentInfoList2")
+    @GET(value = "DURPrdlstInfoService03/getSeobangjeongPartitnAtentInfoList03")
     suspend fun getExReleaseTableSplitAttentionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
@@ -91,7 +91,7 @@ interface DurProductInfoNetworkApi {
      * @param typeName DUR유형
      * @param itemSeq 품목기준코드
      */
-    @GET(value = "DURPrdlstInfoService02/getEfcyDplctInfoList2")
+    @GET(value = "DURPrdlstInfoService03/getEfcyDplctInfoList03")
     suspend fun getEfficacyGroupDuplicationInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
@@ -112,7 +112,7 @@ interface DurProductInfoNetworkApi {
      * @param itemSeq 품목기준코드
      *
      */
-    @GET(value = "DURPrdlstInfoService02/getMdctnPdAtentInfoList2")
+    @GET(value = "DURPrdlstInfoService03/getMdctnPdAtentInfoList03")
     suspend fun getDosingCautionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
@@ -133,7 +133,7 @@ interface DurProductInfoNetworkApi {
      * @param itemSeq 품목기준코드
      *
      */
-    @GET(value = "DURPrdlstInfoService02/getCpctyAtentInfoList2")
+    @GET(value = "DURPrdlstInfoService03/getCpctyAtentInfoList03")
     suspend fun getCapacityAttentionInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
@@ -154,7 +154,7 @@ interface DurProductInfoNetworkApi {
      * @param itemSeq 품목기준코드
      *
      */
-    @GET(value = "DURPrdlstInfoService02/getPwnmTabooInfoList2")
+    @GET(value = "DURPrdlstInfoService03/getPwnmTabooInfoList03")
     suspend fun getPregnantWomanTabooInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
@@ -175,7 +175,7 @@ interface DurProductInfoNetworkApi {
      * @param itemSeq 품목기준코드
      *
      */
-    @GET(value = "DURPrdlstInfoService02/getSpcifyAgrdeTabooInfoList2")
+    @GET(value = "DURPrdlstInfoService03/getSpcifyAgrdeTabooInfoList03")
     suspend fun getSpecialtyAgeGroupTabooInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
@@ -196,7 +196,7 @@ interface DurProductInfoNetworkApi {
      * @param itemSeq 품목기준코드
      *
      */
-    @GET(value = "DURPrdlstInfoService02/getUsjntTabooInfoList02")
+    @GET(value = "DURPrdlstInfoService03/getUsjntTabooInfoList03")
     suspend fun getCombinationTabooInfo(
         @Query("serviceKey", encoded = true) serviceKey: String = BuildConfig.DATA_GO_KR_SERVICE_KEY,
         @Query("pageNo") pageNo: Int = DATA_GO_KR_PAGE_NO,
