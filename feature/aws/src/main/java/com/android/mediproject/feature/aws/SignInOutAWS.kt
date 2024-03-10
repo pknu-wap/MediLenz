@@ -17,7 +17,7 @@ internal class SignInOutAWSImpl(override val userPool: CognitoUserPool) : AWSAcc
     override suspend fun signIn(request: SignInOutAWS.SignInRequest) = suspendCancellableCoroutine { continuation ->
         userPool.getUser(request.email).getSession(
             object : AuthenticationHandler {
-                override fun onSuccess(userSession: CognitoUserSession, newDevice: CognitoDevice) {
+                override fun onSuccess(userSession: CognitoUserSession, newDevice: CognitoDevice?) {
                     val response = SignInOutAWS.SignInResponse(userSession, newDevice)
                     continuation.resume(Result.success(response))
                 }
@@ -68,6 +68,6 @@ interface SignInOutAWS {
 
     data class SignInResponse(
         val userSession: CognitoUserSession,
-        val newDevice: CognitoDevice,
+        val newDevice: CognitoDevice? = null,
     )
 }

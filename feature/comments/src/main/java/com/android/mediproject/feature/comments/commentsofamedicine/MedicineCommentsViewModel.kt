@@ -125,7 +125,7 @@ class MedicineCommentsViewModel @Inject constructor(
                     medicineId = medicineBasicInfo.filterNotNull().last().medicineIdInAws.toString(),
                     userId = myId.value.toString(),
                     content = comment,
-                    subOrdinationId = replyId.value.toString(),
+                    parentId = replyId.value.toString(),
                 ),
             ).collectLatest { result ->
                 result.onSuccess {
@@ -285,7 +285,7 @@ class MedicineCommentsViewModel @Inject constructor(
             _medicineBasicInfo.emit(medicineBasicInfo)
         }
     }
-    
+
 }
 
 /**

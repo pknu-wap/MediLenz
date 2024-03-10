@@ -13,10 +13,10 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class NewCommentParameter(
-    @SerialName("content") val content: String, // 테스트 - 서브 댓글 2 - 2
-    @SerialName("medicineId") val medicineId: String, // 41
-    @SerialName("subOrdinationId") val subOrdinationId: String = ROOT_COMMENT_ID, // 3
-    @SerialName("userId") val userId: String,
+    @SerialName("content") val content: String,
+    @SerialName("medicine_id") val medicineId: String,
+    @SerialName("parent_id") val parentId: String = ROOT_COMMENT_ID,
+    @SerialName("user_id") val userId: String,
 ) {
     companion object {
         const val ROOT_COMMENT_ID = "0"

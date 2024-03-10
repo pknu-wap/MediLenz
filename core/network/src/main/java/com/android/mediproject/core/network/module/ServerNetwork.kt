@@ -18,9 +18,6 @@ import com.android.mediproject.core.model.requestparameters.DeleteCommentParamet
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.GetMedicineIdParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
-import com.android.mediproject.core.model.sign.SignInResponse
-import com.android.mediproject.core.model.sign.SignUpResponse
-import com.android.mediproject.core.model.token.ReissueTokenResponse
 import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
 import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
 import com.android.mediproject.core.model.user.remote.UserResponse
@@ -39,8 +36,6 @@ import com.android.mediproject.core.network.datasource.user.UserDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSourceImpl
-import com.android.mediproject.core.network.parameter.LoginRequestParameter
-import com.android.mediproject.core.network.parameter.SignUpRequestParameter
 import com.android.mediproject.core.network.tokens.TokenServer
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -72,24 +67,7 @@ object ServerNetwork {
         coerceInputValues = true
     }
 
-
     @Provides
-    @Named("awsNetworkApiWithoutTokens")
-    @Singleton
-    fun providesWithoutTokensAwsNetworkApi(
-        @Named("okHttpClientWithoutAny") okHttpClient: OkHttpClient,
-    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-        .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
-
-
-    @Provides
-    @Singleton
-    fun provideFavoriteMedicineDatasource(
-        @Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi,
-    ): FavoriteMedicineDataSource = FavoriteMedicineDataSourceImpl(awsNetworkApi)
-
-    @Provides
-    @Named("awsNetworkApiWithAccessTokens")
     @Singleton
     fun providesAwsNetworkApi(
         @Named("okHttpClientWithAccessTokens") okHttpClient: OkHttpClient,
@@ -97,44 +75,37 @@ object ServerNetwork {
         .baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
 
     @Provides
-    @Named("awsNetworkApiWithRefreshTokens")
-    fun providesReissueTokenAwsNetworkApi(
-        @Named("okHttpClientWithReissueTokens") okHttpClient: OkHttpClient,
-    ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(
-        json.asConverterFactory(
-            "application/json".toMediaType(),
-        ),
-    ).baseUrl(BuildConfig.AWS_BASE_URL).build().create(AwsNetworkApi::class.java)
+    @Singleton
+    fun provideFavoriteMedicineDatasource(
+        awsNetworkApi: AwsNetworkApi,
+    ): FavoriteMedicineDataSource = FavoriteMedicineDataSourceImpl(awsNetworkApi)
+
 
     @Provides
     @Singleton
-    fun providesCommentsDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): CommentsDataSource =
-        CommentsDataSourceImpl(awsNetworkApi)
+    fun providesCommentsDataSource(awsNetworkApi: AwsNetworkApi): CommentsDataSource = CommentsDataSourceImpl(awsNetworkApi)
 
     @Provides
     fun providesSignDataSource(
-        @Named("awsNetworkApiWithoutTokens") awsNetworkApi: AwsNetworkApi, tokenServer: TokenServer, aesCoder: AesCoder,
+        awsNetworkApi: AwsNetworkApi, tokenServer: TokenServer, aesCoder: AesCoder,
     ): SignDataSource = SignDataSourceImpl(awsNetworkApi, tokenServer, aesCoder)
 
     @Provides
     @Singleton
-    fun providesGetMedicineIdDataSource(@Named("awsNetworkApiWithoutTokens") awsNetworkApi: AwsNetworkApi): MedicineIdDataSource =
-        MedicineIdDataSourceImpl(awsNetworkApi)
+    fun providesGetMedicineIdDataSource(awsNetworkApi: AwsNetworkApi): MedicineIdDataSource = MedicineIdDataSourceImpl(awsNetworkApi)
 
     @Provides
     @Singleton
-    fun providesUserInfosDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi): UserInfoDataSource =
-        UserInfoDataSourceImpl(awsNetworkApi)
+    fun providesUserInfosDataSource(awsNetworkApi: AwsNetworkApi): UserInfoDataSource = UserInfoDataSourceImpl(awsNetworkApi)
 
     @Provides
     @Singleton
-    fun providesUserDataSource(@Named("awsNetworkApiWithAccessTokens") awsNetworkApi: AwsNetworkApi, aesCoder: AesCoder): UserDataSource =
-        UserDataSourceImpl(awsNetworkApi, aesCoder)
+    fun providesUserDataSource(awsNetworkApi: AwsNetworkApi, aesCoder: AesCoder): UserDataSource = UserDataSourceImpl(awsNetworkApi, aesCoder)
 
     @Provides
     @Singleton
     fun providesTokenDataSource(
-        @Named("awsNetworkApiWithRefreshTokens") awsNetworkApi: AwsNetworkApi,
+        awsNetworkApi: AwsNetworkApi,
         tokenServer: TokenServer,
     ): TokenDataSource = TokenDataSourceImpl(awsNetworkApi, tokenServer)
 }
@@ -144,7 +115,8 @@ interface AwsNetworkApi {
     @GET(value = "medicine/favorite")
     suspend fun getFavoriteMedicineList(): Response<FavoriteMedicineListResponse>
 
-    @POST(value = "user/register")
+
+    /*@POST(value = "user/register")
     suspend fun signUp(
         @Body signUpRequestParameter: SignUpRequestParameter,
     ): Response<SignUpResponse>
@@ -157,21 +129,24 @@ interface AwsNetworkApi {
 
     @POST(value = "user/reissue")
     suspend fun reissueTokens(
-    ): Response<ReissueTokenResponse>
+    ): Response<ReissueTokenResponse>*/
 
     /**
      * 특정 약에 대한 댓글 목록 조회
      */
-    @GET(value = "medicine/comment/{medicineId}")
+    @GET(value = "comment/medicine_id={medicineId}&page={page}&rows={rows}&userId={userId}")
     suspend fun getCommentsByMedicineId(
         @Path("medicineId", encoded = true) medicineId: Long,
+        @Path("page", encoded = true) page: Int,
+        @Path("rows", encoded = true) rows: Int,
+        @Path("userId", encoded = true) userId: String = "-1",
     ): Response<CommentListResponse>
 
     /**
      * 내가 작성한 댓글 목록 조회
      */
     @GET(value = "user/comment")
-    suspend fun getMyCommentsList() : Response<MyCommentsListResponse>
+    suspend fun getMyCommentsList(): Response<MyCommentsListResponse>
 
     /**
      * 댓글 수정
@@ -210,7 +185,7 @@ interface AwsNetworkApi {
     /**
      * 댓글 등록
      */
-    @POST(value = "medicine/comment/writeTest")
+    @POST(value = "comment")
     suspend fun applyNewComment(
         @Body newCommentParameter: NewCommentParameter,
     ): Response<CommentChangedResponse>

@@ -18,10 +18,6 @@ class CommentsDataSourceImpl @Inject constructor(
     private val awsNetworkApi: AwsNetworkApi,
 ) : CommentsDataSource {
 
-    /**
-     * 약품에 대한 댓글 리스트를 가져온다.
-     * @param medicineId: 약품 고유 번호
-     */
     override suspend fun getCommentsByMedicineId(medicineId: Long): Result<CommentListResponse> {
         return awsNetworkApi.getCommentsByMedicineId(medicineId).onResponse().fold(
             onSuccess = { response ->

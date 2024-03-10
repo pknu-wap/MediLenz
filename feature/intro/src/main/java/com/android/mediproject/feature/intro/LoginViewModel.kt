@@ -11,6 +11,7 @@ import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.requestparameters.LoginParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
+import com.android.mediproject.feature.aws.SignInOutAWS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -29,6 +30,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val signUseCase: SignUseCase,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
+    private val signInAWS: SignInOutAWS,
 ) : BaseViewModel() {
 
     val savedEmail = signUseCase.savedEmail.flatMapLatest {
@@ -105,6 +107,13 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(defaultDispatcher + exceptionHandler) {
             val pair = initEmailPassword(email, password)
             val (emailCharArray, passwordCharArray) = pair.first to pair.second
+
+            val result = signInAWS.signIn(SignInOutAWS.SignInRequest(email, passwordCharArray.map { it.code.toByte() }.toByteArray()))
+            if (result.isSuccess) {
+                loginSuccess()
+            } else {
+                loginFailed()
+            }
 
             setLoginState(LoginState.Logining)
 
