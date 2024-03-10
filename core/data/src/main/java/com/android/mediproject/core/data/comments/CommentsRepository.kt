@@ -20,25 +20,25 @@ interface CommentsRepository {
     /**
      * 내가 작성한 댓글을 가져오는 메서드입니다.
      */
-    fun getMyCommentsList(): Flow<Result<MyCommentsListResponse>>
+    fun getMyCommentsList(): Result<MyCommentsListResponse>
 
     /**
      * 댓글을 수정합니다.
      */
-    fun editComment(parameter: EditCommentParameter): Flow<Result<CommentChangedResponse>>
+    fun editComment(parameter: EditCommentParameter): Result<CommentChangedResponse>
 
     /**
      * 댓글을 등록합니다.
      */
-    fun applyNewComment(parameter: NewCommentParameter): Flow<Result<CommentChangedResponse>>
+    fun applyNewComment(parameter: NewCommentParameter): Result<CommentChangedResponse>
 
     /**
      * 댓글 삭제 클릭
      */
-    fun deleteComment(parameter: DeleteCommentParameter): Flow<Result<CommentChangedResponse>>
+    fun deleteComment(parameter: DeleteCommentParameter): Result<CommentChangedResponse>
 
     /**
      * 댓글 좋아요 클릭
      */
-    fun likeComment(parameter: LikeCommentParameter): Flow<Result<LikeResponse>>
+    fun likeComment(parameter: LikeCommentParameter): Result<LikeResponse>
 }
