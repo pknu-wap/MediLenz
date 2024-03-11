@@ -5,15 +5,15 @@ import com.android.mediproject.core.data.session.AccountSessionRepository
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.sign.LoginParameter
 import com.android.mediproject.core.model.sign.SignUpParameter
-import com.android.mediproject.core.network.datasource.sign.SignDataSource
+import com.android.mediproject.core.network.datasource.sign.LoginDataSource
 
 internal class SignRepositoryImpl(
-    private val signDataSource: SignDataSource,
+    private val loginDataSource: LoginDataSource,
     private val accountSessionRepository: AccountSessionRepository,
     private val appDataStore: AppDataStore,
 ) : SignRepository {
 
-    override suspend fun login(loginParameter: LoginParameter) = signDataSource.logIn(loginParameter).fold(
+    override suspend fun login(loginParameter: LoginParameter) = loginDataSource.logIn(loginParameter).fold(
         onSuccess = {
             accountSessionRepository.updateSession(it.userSession)
             accountSessionRepository.updateAccount(loginParameter.email, it.userSession.username)
@@ -30,7 +30,7 @@ internal class SignRepositoryImpl(
     )
 
     override suspend fun signUp(signUpParameter: SignUpParameter): Result<Boolean> {
-        signDataSource.signUp(signUpParameter).onSuccess {
+        loginDataSource.signUp(signUpParameter).onSuccess {
             appDataStore.saveSkipIntro(true)
         }
         return Result.success(true)
@@ -38,11 +38,11 @@ internal class SignRepositoryImpl(
 
     override suspend fun signOut() {
         accountSessionRepository.updateSession(null)
-        signDataSource.signOut()
+        loginDataSource.logout()
     }
 
     override suspend fun verifyEmail(email: String, code: String): Result<Boolean> {
-        return signDataSource.vertifyEmail(email, code)
+        return loginDataSource.vertifyEmail(email, code)
     }
 }
 

@@ -44,7 +44,7 @@ import com.android.mediproject.core.network.datasource.news.adminaction.AdminAct
 import com.android.mediproject.core.network.datasource.news.recallsuspension.RecallSaleSuspensionDataSource
 import com.android.mediproject.core.network.datasource.news.recallsuspension.RecallSaleSuspensionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.news.safetynotification.SafetyNotificationDataSource
-import com.android.mediproject.core.network.datasource.sign.SignDataSource
+import com.android.mediproject.core.network.datasource.sign.LoginDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSource
 import dagger.Module
 import dagger.Provides
@@ -113,10 +113,10 @@ object RepositoryModule {
     @Provides
     @Singleton
     internal fun providesSignRepositoryImpl(
-        signDataSource: SignDataSource,
+        loginDataSource: LoginDataSource,
         appDataStore: AppDataStore,
         accountSessionRepository: AccountSessionRepository,
-    ): SignRepository = SignRepositoryImpl(signDataSource, accountSessionRepository, appDataStore)
+    ): SignRepository = SignRepositoryImpl(loginDataSource, accountSessionRepository, appDataStore)
 
 
     @Provides

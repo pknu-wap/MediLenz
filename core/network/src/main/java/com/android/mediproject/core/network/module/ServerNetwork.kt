@@ -30,11 +30,10 @@ import com.android.mediproject.core.network.datasource.favoritemedicine.Favorite
 import com.android.mediproject.core.network.datasource.favoritemedicine.FavoriteMedicineDataSourceImpl
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSource
 import com.android.mediproject.core.network.datasource.medicineid.MedicineIdDataSourceImpl
-import com.android.mediproject.core.network.datasource.sign.SignDataSource
-import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
-import com.android.mediproject.core.network.datasource.sign.SignInOutAWSImpl
-import com.android.mediproject.core.network.datasource.sign.SignUpAWSImpl
-import com.android.mediproject.core.network.datasource.sign.VerifyEmailImpl
+import com.android.mediproject.core.network.datasource.sign.LoginDataSource
+import com.android.mediproject.core.network.datasource.sign.LoginDataSourceImpl
+import com.android.mediproject.core.network.datasource.sign.SignupDataSource
+import com.android.mediproject.core.network.datasource.sign.SignupDataSourceImpl
 import com.android.mediproject.core.network.datasource.user.UserDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -70,6 +69,13 @@ object ServerNetwork {
 
     @Provides
     @Singleton
+    fun providesUserPool(@ApplicationContext context: Context) = CognitoUserPool(
+        context, BuildConfig.AWS_USER_POOL, BuildConfig.AWS_USER_CLIENT_ID, BuildConfig.AWS_USER_CLIENT_SECRET,
+        Regions.US_EAST_2,
+    )
+
+    @Provides
+    @Singleton
     fun providesAwsNetworkApi(
         @Named("okHttpClientWithAccessTokens") okHttpClient: OkHttpClient,
     ): AwsNetworkApi = Retrofit.Builder().client(okHttpClient).addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -88,14 +94,13 @@ object ServerNetwork {
 
     @Provides
     fun providesSignDataSource(
-        @ApplicationContext context: Context,
-    ): SignDataSource {
-        val userPool = CognitoUserPool(
-            context, BuildConfig.AWS_USER_POOL, BuildConfig.AWS_USER_CLIENT_ID, BuildConfig.AWS_USER_CLIENT_SECRET,
-            Regions.US_EAST_2,
-        )
-        return SignDataSourceImpl(SignInOutAWSImpl(userPool), SignUpAWSImpl(userPool), VerifyEmailImpl(userPool))
-    }
+        userPool: CognitoUserPool,
+    ): LoginDataSource = LoginDataSourceImpl(userPool)
+
+    @Provides
+    fun providesSignupDataSource(
+        userPool: CognitoUserPool,
+    ): SignupDataSource = SignupDataSourceImpl(userPool)
 
     @Provides
     @Singleton

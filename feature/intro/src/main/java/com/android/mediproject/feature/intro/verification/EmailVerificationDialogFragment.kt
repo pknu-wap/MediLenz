@@ -65,7 +65,7 @@ class EmailVerficationDialogFragment : DialogFragment() {
                     Toast.makeText(requireContext(), getString(R.string.verificationCodeHint), Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-                viewModel.onClickWithText(dialogSubtitle1.inputData.text.toString())
+                this@EmailVerficationDialogFragment.viewModel.onClickWithText(dialogSubtitle1.inputData.text.toString())
             }
             negativeButton.setOnClickListener {
                 dismiss()

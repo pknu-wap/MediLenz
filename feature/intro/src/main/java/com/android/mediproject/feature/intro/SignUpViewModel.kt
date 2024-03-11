@@ -9,17 +9,19 @@ import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.data.sign.SignRepository
 import com.android.mediproject.core.model.navargs.TOHOME
+import com.android.mediproject.core.model.sign.SignUpParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUseCase: SignRepository, @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    private val signUpRepository: SignRepository, @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
 
@@ -91,32 +93,18 @@ class SignUpViewModel @Inject constructor(
         password: String,
         nickName: String,
     ) {
-        val pair = initEmailPassword(email, password)
-        val (emailCharArray, passwordCharArray) = pair.first to pair.second
-
-        setSignUpState(SignUpState.SigningUp)
         viewModelScope.launch {
-            /* signUseCase.signUp(SignUpParameter(emailCharArray, passwordCharArray, nickName)).collect { result ->
-                 result.fold(
-                     onSuccess = { setSignUpState(SignUpState.SignUpSuccess) },
-                     onFailure = { setSignUpState(SignUpState.SignUpFailed(it.message ?: "가입 실패")) },
-                 )
-             }*//*    withContext(ioDispatcher) {
-                    signUpAWS.signUp(
-                        SignUpAWS.SignUpRequest(
-                            email, password.encodeToByteArray(),
-                            CognitoUserAttributes().apply {
-                                addAttribute("custom:user_name", nickName)
-                            },
-                        ),
-                    )
-                }.onSuccess {
-                    setSignUpState(SignUpState.SignUpSuccess)
-                }.onFailure {
-                    setSignUpState(SignUpState.SignUpFailed(it.message ?: "가입 실패"))
-                }*/
+            val pair = initEmailPassword(email, password)
+            setSignUpState(SignUpState.SigningUp)
+
+            withContext(ioDispatcher) {
+                signUpRepository.signUp(SignUpParameter(pair.first.concatToString(), password.toByteArray(), nickName))
+            }.onSuccess {
+                setSignUpState(SignUpState.SignUpSuccess)
+            }.onFailure {
+                setSignUpState(SignUpState.SignUpFailed(it.message ?: ""))
+            }
         }
-        //fillEmailPassword(emailCharArray, passwordCharArray)
     }
 
     private fun isNotEqualPasswordCheck() {

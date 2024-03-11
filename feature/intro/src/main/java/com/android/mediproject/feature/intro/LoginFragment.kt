@@ -16,6 +16,7 @@ import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
+import com.android.mediproject.feature.intro.verification.EmailVerficationDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainScope
@@ -86,8 +87,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
             is LoginViewModel.LoginUiState.LoginSuccess -> loginSuccess()
             is LoginViewModel.LoginUiState.LoginFailed -> loginFailed()
             is LoginViewModel.LoginUiState.RegexError -> regexError()
-            is LoginViewModel.LoginUiState.Initial -> initial()
-            is LoginViewModel.LoginUiState.NotVerified -> initial()
+            is LoginViewModel.LoginUiState.Initial -> notVerified()
+            is LoginViewModel.LoginUiState.NotVerified -> notVerified()
         }
     }
 
@@ -138,7 +139,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
         toast(getString(R.string.signInRegexError))
     }
 
-    private fun initial() {
+    private fun notVerified() {
+        EmailVerficationDialogFragment().show(childFragmentManager, "EmailVerificationDialogFragment")
     }
 
     private fun callSavedEmail(savedEmail: String) {

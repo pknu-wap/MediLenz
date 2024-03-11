@@ -10,10 +10,12 @@ import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.util.delayTextChangedCallback
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentSignUpBinding
+import com.android.mediproject.feature.intro.verification.EmailVerficationDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
@@ -24,21 +26,16 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SignUpFragment :
-    BaseFragment<FragmentSignUpBinding, SignUpViewModel>(FragmentSignUpBinding::inflate) {
+class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(FragmentSignUpBinding::inflate) {
 
     override val fragmentViewModel: SignUpViewModel by viewModels()
 
-    @Inject
-    @Dispatcher(MediDispatchers.Default)
-    lateinit var defaultDispatcher: CoroutineDispatcher
+    @Inject @Dispatcher(MediDispatchers.Default) lateinit var defaultDispatcher: CoroutineDispatcher
 
-    @Inject
-    lateinit var systemBarStyler: SystemBarStyler
+    @Inject lateinit var systemBarStyler: SystemBarStyler
 
     private val mainScope = MainScope()
 
@@ -99,7 +96,8 @@ class SignUpFragment :
     private fun signUpSuccess() {
         LoadingDialog.dismiss()
         toast(getString(R.string.signUpSuccess))
-        handleCallBackMoveFlag()
+        EmailVerficationDialogFragment().show(childFragmentManager, "EmailVerificationDialogFragment")
+        //handleCallBackMoveFlag()
     }
 
     private fun handleCallBackMoveFlag() {
@@ -116,16 +114,14 @@ class SignUpFragment :
     private fun navigateToHome() {
         navigateWithUriNavOptions(
             "medilens://main/home_nav",
-            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
-                .build(),
+            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build(),
         )
     }
 
     private fun navigateToMyPage() {
         navigateWithUriNavOptions(
             "medilens://main/mypage_nav",
-            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true)
-                .build(),
+            NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build(),
         )
     }
 
