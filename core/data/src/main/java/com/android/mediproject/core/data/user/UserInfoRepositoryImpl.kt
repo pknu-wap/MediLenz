@@ -4,21 +4,17 @@ import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.user.AccountState
 import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.zip
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class UserInfoRepositoryImpl @Inject constructor(
+class UserInfoRepositoryImpl(
     private val userInfoDataSource: UserInfoDataSource, private val appDataStore: AppDataStore,
 ) : UserInfoRepository {
 
     private val _myAccountInfo = MutableStateFlow<AccountState>(AccountState.Unknown)
-
-    override val myAccountInfo get() = _myAccountInfo as StateFlow<AccountState>
+    override val myAccountInfo = _myAccountInfo.asStateFlow()
 
     override suspend fun updateMyAccountInfo(accountState: AccountState) {
         _myAccountInfo.value = accountState
@@ -65,5 +61,4 @@ class UserInfoRepositoryImpl @Inject constructor(
             trySend(it)
         }
     }
-
 }
