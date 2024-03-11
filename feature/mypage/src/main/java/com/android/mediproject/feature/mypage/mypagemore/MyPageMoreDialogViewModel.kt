@@ -1,14 +1,12 @@
 package com.android.mediproject.feature.mypage.mypagemore
 
-import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
-import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.isPasswordValid
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
+import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.EditUserAccountUseCase
-import com.android.mediproject.core.model.requestparameters.ChangeNicknameParameter
-import com.android.mediproject.core.model.requestparameters.ChangePasswordParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -63,13 +61,13 @@ class MyPageMoreDialogViewModel @Inject constructor(
     }
 
     fun changeNickname(newNickname: String) = viewModelScope.launch(ioDispatcher) {
-        editUserAccountUseCase.changeNickname(changeNicknameParameter = ChangeNicknameParameter(newNickname))
-            .collect {
-                it.fold(
-                    onSuccess = { setMyPageDialogState(MyPageDialogState.Success(MyPageDialogFlag.CHANGENICKNAME)) },
-                    onFailure = { setMyPageDialogState(MyPageDialogState.Error(MyPageDialogFlag.CHANGENICKNAME)) },
-                )
-            }
+        /* editUserAccountUseCase.changeNickname(changeNicknameParameter = ChangeNicknameParameter(newNickname))
+             .collect {
+                 it.fold(
+                     onSuccess = { setMyPageDialogState(MyPageDialogState.Success(MyPageDialogFlag.CHANGENICKNAME)) },
+                     onFailure = { setMyPageDialogState(MyPageDialogState.Error(MyPageDialogFlag.CHANGENICKNAME)) },
+                 )
+             }*/
     }
 
     fun logout() = viewModelScope.launch {
@@ -77,16 +75,16 @@ class MyPageMoreDialogViewModel @Inject constructor(
     }
 
     fun withdrawal() = viewModelScope.launch {
-        editUserAccountUseCase.withdrawal().collect {
-            it.fold(
-                onSuccess = {
-                    setMyPageDialogState(MyPageDialogState.Success(MyPageDialogFlag.WITHDRAWAL))
-                },
-                onFailure = {
-                    setMyPageDialogState(MyPageDialogState.Error(MyPageDialogFlag.WITHDRAWAL))
-                },
-            )
-        }
+        /*     editUserAccountUseCase.withdrawal().collect {
+                 it.fold(
+                     onSuccess = {
+                         setMyPageDialogState(MyPageDialogState.Success(MyPageDialogFlag.WITHDRAWAL))
+                     },
+                     onFailure = {
+                         setMyPageDialogState(MyPageDialogState.Error(MyPageDialogFlag.WITHDRAWAL))
+                     },
+                 )
+             }*/
     }
 
     fun changePassword(newPassword: String) = viewModelScope.launch(ioDispatcher) {
@@ -100,12 +98,12 @@ class MyPageMoreDialogViewModel @Inject constructor(
             password[index] = c
         }
 
-        editUserAccountUseCase.changePassword(changePasswordParameter = ChangePasswordParameter(password))
-            .collect {
-                it.fold(
-                    onSuccess = { setMyPageDialogState(MyPageDialogState.Success(MyPageDialogFlag.CHANGEPASSWORD)) },
-                    onFailure = { setMyPageDialogState(MyPageDialogState.Error(MyPageDialogFlag.CHANGEPASSWORD)) },
-                )
-            }
+        /*    editUserAccountUseCase.changePassword(changePasswordParameter = ChangePasswordParameter(password))
+                .collect {
+                    it.fold(
+                        onSuccess = { setMyPageDialogState(MyPageDialogState.Success(MyPageDialogFlag.CHANGEPASSWORD)) },
+                        onFailure = { setMyPageDialogState(MyPageDialogState.Error(MyPageDialogFlag.CHANGEPASSWORD)) },
+                    )
+                }*/
     }
 }

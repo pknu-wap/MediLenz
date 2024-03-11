@@ -1,11 +1,12 @@
 package com.android.mediproject.feature.mypage
 
-import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.asEventFlow
+import com.android.mediproject.core.data.sign.SignRepository
 import com.android.mediproject.core.domain.GetCommentsUseCase
 import com.android.mediproject.core.domain.GetUserUseCase
 import com.android.mediproject.core.model.comments.MyCommentsListResponse
@@ -26,10 +27,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val getTokenUseCase: GetTokenUseCase,
     private val getUserUseCase: GetUserUseCase,
     private val getCommentsUseCase: GetCommentsUseCase,
-    private val signUseCase: SignUseCase,
+    private val signUseCase: SignRepository,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
@@ -62,9 +62,9 @@ class MyPageViewModel @Inject constructor(
     val token get() = _token.asSharedFlow()
 
     fun loadTokens() = viewModelScope.launch {
-        getTokenUseCase().collect {
-            _token.emit(it)
-        }
+        /*      getTokenUseCase().collect {
+                  _token.emit(it)
+              }*/
     }
 
     private val _userEntity = MutableStateFlow<UiState<UserEntity>>(UiState.Initial)
