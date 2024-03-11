@@ -2,11 +2,9 @@ package com.android.mediproject.core.data.sign
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession
 import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
-import com.android.mediproject.core.data.user.UserInfoRepository
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.sign.LoginParameter
 import com.android.mediproject.core.model.sign.SignUpParameter
-import com.android.mediproject.core.model.user.AccountState
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 
 internal class SignRepositoryImpl(

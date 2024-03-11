@@ -21,7 +21,7 @@ import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragmen
 import dagger.hilt.android.AndroidEntryPoint
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.model.comments.MyCommentsListResponse
-import com.android.mediproject.core.model.user.User
+import com.android.mediproject.core.model.user.UserEntity
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -124,19 +124,19 @@ class MyPageFragment :
         setLoginModeScreenVisible()
     }
 
-    private fun handleUserState(userState: UiState<User>) {
-        when (userState) {
+    private fun handleUserState(userEntityState: UiState<UserEntity>) {
+        when (userEntityState) {
             is UiState.Initial -> {}
 
             is UiState.Loading -> setLoadingUserVisible()
 
             is UiState.Success -> {
                 setSuccessUserVisible()
-                binding.userDto = userState.data
+                binding.userDto = userEntityState.data
             }
 
             is UiState.Error -> {
-                log(userState.message)
+                log(userEntityState.message)
             }
         }
     }

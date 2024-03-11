@@ -15,7 +15,6 @@ import com.android.mediproject.core.model.comments.Comment
 import com.android.mediproject.core.model.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
-import com.android.mediproject.core.model.user.AccountState
 import com.android.mediproject.core.model.user.onSignedIn
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.comments.commentsofamedicine.CommentActionState.None

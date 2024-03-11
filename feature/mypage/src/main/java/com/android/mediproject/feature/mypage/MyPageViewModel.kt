@@ -13,7 +13,7 @@ import com.android.mediproject.core.domain.GetUserUseCase
 import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
-import com.android.mediproject.core.model.user.User
+import com.android.mediproject.core.model.user.UserEntity
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -69,11 +69,11 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    private val _user = MutableStateFlow<UiState<User>>(UiState.Initial)
-    val user get() = _user.asStateFlow()
+    private val _userEntity = MutableStateFlow<UiState<UserEntity>>(UiState.Initial)
+    val user get() = _userEntity.asStateFlow()
 
-    fun setUserUiState(uiState: UiState<User>) {
-        _user.value = uiState
+    fun setUserUiState(uiState: UiState<UserEntity>) {
+        _userEntity.value = uiState
     }
 
     fun loadUser() = viewModelScope.launch(ioDispatcher) {

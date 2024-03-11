@@ -1,8 +1,6 @@
 package com.android.mediproject.core.model.user
 
-data class User(
+data class UserEntity(
     val nickName: String,
-) {
-    var id: Long = 0
-    var email: String = ""
-}
+    val email: String,
+)

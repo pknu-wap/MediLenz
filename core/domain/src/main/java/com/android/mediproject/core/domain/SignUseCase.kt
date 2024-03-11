@@ -1,10 +1,8 @@
 package com.android.mediproject.core.domain
 
 import com.android.mediproject.core.data.sign.SignRepository
-import com.android.mediproject.core.data.user.UserInfoRepository
 import com.android.mediproject.core.model.sign.LoginParameter
 import com.android.mediproject.core.model.sign.SignUpParameter
-import com.android.mediproject.core.model.user.AccountState
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton

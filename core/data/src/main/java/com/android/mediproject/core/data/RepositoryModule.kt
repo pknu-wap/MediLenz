@@ -27,8 +27,6 @@ import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
 import com.android.mediproject.core.data.sign.SignRepository
 import com.android.mediproject.core.data.sign.SignRepositoryImpl
 import com.android.mediproject.core.data.sign.AccountSessionRepository
-import com.android.mediproject.core.data.user.UserInfoRepository
-import com.android.mediproject.core.data.user.UserInfoRepositoryImpl
 import com.android.mediproject.core.data.user.UserRepository
 import com.android.mediproject.core.data.user.UserRepositoryImpl
 import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
