@@ -27,7 +27,9 @@ class MyPageViewModel @Inject constructor(
     private val signRepository: SignRepository,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
-    
+
+    val currentUser = accountSessionRepository.userOnCurrentSession
+
     private val _eventFlow = MutableEventFlow<MyPageEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 

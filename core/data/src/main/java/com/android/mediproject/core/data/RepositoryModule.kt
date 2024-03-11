@@ -1,5 +1,6 @@
 package com.android.mediproject.core.data
 
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.data.adminaction.AdminActionRepository
@@ -138,7 +139,8 @@ object RepositoryModule {
     @Singleton
     fun providesAccountSessionRepository(
         appDataStore: AppDataStore,
-    ): AccountSessionRepository = AccountSessionRepositoryImpl(appDataStore)
+        cognitoUserPool: CognitoUserPool,
+    ): AccountSessionRepository = AccountSessionRepositoryImpl(appDataStore, cognitoUserPool)
 
 
     @Provides

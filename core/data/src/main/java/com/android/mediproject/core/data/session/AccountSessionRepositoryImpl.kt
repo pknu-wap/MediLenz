@@ -1,5 +1,6 @@
 package com.android.mediproject.core.data.session
 
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.user.UserEntity
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 
 class AccountSessionRepositoryImpl(
     private val appDataStore: AppDataStore,
+    private val userPool: CognitoUserPool,
 ) : AccountSessionRepository {
     override val lastSavedEmail = appDataStore.userEmail.distinctUntilChanged()
 
@@ -25,6 +27,7 @@ class AccountSessionRepositoryImpl(
         mutableSession.value = session
 
         if (session == null) {
+            mutableUserOnCurrentSession.value = null
             appDataStore.clearMyAccountInfo()
         }
     }
@@ -33,4 +36,9 @@ class AccountSessionRepositoryImpl(
         mutableUserOnCurrentSession.value = UserEntity(email, nickName)
         appDataStore.saveMyAccountInfo(email, nickName)
     }
+
+    override suspend fun loadSession() {
+
+    }
+
 }
