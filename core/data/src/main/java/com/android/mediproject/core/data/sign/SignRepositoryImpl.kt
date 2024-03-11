@@ -40,6 +40,10 @@ internal class SignRepositoryImpl(
         accountSessionRepository.updateSession(null)
         signDataSource.signOut()
     }
+
+    override suspend fun verifyEmail(email: String, code: String): Result<Boolean> {
+        return signDataSource.vertifyEmail(email, code)
+    }
 }
 
 sealed interface LoginState {

@@ -8,4 +8,6 @@ import javax.inject.Inject
 @HiltViewModel
 class VerificationViewModel @Inject constructor(
     private val signRepository: SignRepository,
-) : BaseViewModel() {}
+) : BaseViewModel() {
+    
+}
