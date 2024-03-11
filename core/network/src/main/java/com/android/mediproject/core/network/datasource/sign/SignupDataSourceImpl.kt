@@ -27,6 +27,7 @@ class SignupDataSourceImpl(
 
                 override fun onFailure(exception: Exception) {
                     continuation.resumeWithException(exception)
+                    // UserExistsException : 이미 가입된 이메일일 때 발생
                 }
             },
         )

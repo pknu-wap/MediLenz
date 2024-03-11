@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.intro
+package com.android.mediproject.feature.intro.login
 
 
 import android.os.Bundle
@@ -15,6 +15,7 @@ import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.feature.intro.R
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
 import com.android.mediproject.feature.intro.verification.EmailVerficationDialogFragment
 import dagger.hilt.android.AndroidEntryPoint

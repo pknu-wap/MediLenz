@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -38,6 +39,9 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(private val 
     fun log(str: String) = Log.d("wap", str)
 
     fun toast(str: String) = Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
+
+    fun toast(@StringRes str: Int) = Toast.makeText(requireContext(), str, Toast.LENGTH_SHORT).show()
+
 
     fun navigateWithUri(deepLinkUri: String) = findNavController().navigate(deepLinkUri.toUri())
 

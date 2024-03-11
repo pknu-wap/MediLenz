@@ -1,6 +1,7 @@
 package com.android.mediproject.core.data.sign
 
 import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
+import com.amazonaws.services.cognitoidentityprovider.model.UsernameExistsException
 import com.android.mediproject.core.data.session.AccountSessionRepository
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.sign.LoginParameter
@@ -50,7 +51,11 @@ internal class SignRepositoryImpl(
             SignUpState.Success
         },
         onFailure = { exception ->
-            SignUpState.Failed(exception)
+            if (exception is UsernameExistsException) {
+                SignUpState.UserExists
+            } else {
+                SignUpState.Failed(exception)
+            }
         },
     )
 
@@ -72,6 +77,7 @@ sealed interface LoginState {
 
 sealed interface SignUpState {
     data object Success : SignUpState
-    data class Failed(val exception: Throwable) : SignUpState
+    data object UserExists : SignUpState
 
+    data class Failed(val exception: Throwable) : SignUpState
 }

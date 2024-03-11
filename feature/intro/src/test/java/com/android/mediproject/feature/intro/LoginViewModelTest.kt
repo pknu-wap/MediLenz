@@ -4,6 +4,7 @@ package com.android.mediproject.feature.intro
 import com.android.mediproject.core.test.MainCoroutineRule
 import com.android.mediproject.core.test.repositories.FakeSignRepository
 import com.android.mediproject.core.test.repositories.FakeUserInfoRepository
+import com.android.mediproject.feature.intro.login.LoginViewModel
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Assert.assertThat
 import org.junit.Before

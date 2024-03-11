@@ -27,7 +27,6 @@ class LoginDataSourceImpl(
                 override fun onFailure(exception: Exception) {
                     continuation.resumeWithException(exception)
                     // UserNotConfirmedException : 이메일 인증을 하지 않았을 때 발생
-                    // UserExistsException : 이미 가입된 이메일일 때 발생
                 }
 
                 override fun authenticationChallenge(continuation: ChallengeContinuation?) {

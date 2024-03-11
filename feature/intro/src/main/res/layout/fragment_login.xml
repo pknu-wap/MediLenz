@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
-            type="com.android.mediproject.feature.intro.LoginViewModel" />
+            type="com.android.mediproject.feature.intro.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".LoginFragment">
+        tools:context=".login.LoginFragment">
 
         <com.android.mediproject.core.ui.base.view.Bar
             android:id="@+id/loginBar"

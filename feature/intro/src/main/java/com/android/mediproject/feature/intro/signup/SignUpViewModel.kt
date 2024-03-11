@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.intro
+package com.android.mediproject.feature.intro.signup
 
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher
@@ -8,6 +8,7 @@ import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.data.sign.SignRepository
+import com.android.mediproject.core.data.sign.SignUpState
 import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.sign.SignUpParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -24,37 +25,22 @@ class SignUpViewModel @Inject constructor(
     private val signUpRepository: SignRepository, @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
-
-    private val _signUpState = MutableStateFlow<SignUpState>(SignUpState.Initial)
-    val signUpState = _signUpState.asStateFlow()
-
-    private fun setSignUpState(state: SignUpState) {
-        _signUpState.value = state
-    }
-
-    sealed class SignUpState {
-        object SigningUp : SignUpState()
-        object Initial : SignUpState()
-        object RegexError : SignUpState()
-        object PasswordError : SignUpState()
-        object SignUpSuccess : SignUpState()
-        data class SignUpFailed(val message: String) : SignUpState()
-    }
+    private val mutableSignUpUiState = MutableEventFlow<SignUpUiState>(replay = 1)
+    val signUpUiState = mutableSignUpUiState.asEventFlow()
 
     private val _eventFlow = MutableEventFlow<SignUpEvent>(replay = 1)
     val eventFlow = _eventFlow.asEventFlow()
 
+    private val _callBackMoveFlag = MutableStateFlow(TOHOME)
+    val callBackMoveFlag = _callBackMoveFlag.asStateFlow()
+
+    private fun setSignUpState(state: SignUpUiState) {
+        viewModelScope.launch { mutableSignUpUiState.emit(state) }
+    }
+
     fun event(event: SignUpEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
     fun signUp() = event(SignUpEvent.SignUp)
-
-
-    sealed class SignUpEvent {
-        object SignUp : SignUpEvent()
-    }
-
-    private val _callBackMoveFlag = MutableStateFlow(TOHOME)
-    val callBackMoveFlag get() = _callBackMoveFlag.asStateFlow()
 
     fun setCallBackMoveFlag(flag: Int) {
         _callBackMoveFlag.value = flag
@@ -63,21 +49,24 @@ class SignUpViewModel @Inject constructor(
     fun signUpWithCheckRegex(
         email: String, password: String, checkPassword: String, nickName: String,
     ) {
-        if (!checkEmailPasswordRegex(email, password)) {
-            signUpFaledWithRegexError()
-            return
-        }
+        viewModelScope.launch {
+            setSignUpState(SignUpUiState.SigningUp)
 
-        if (!password.contentEquals(checkPassword)) {
-            isNotEqualPasswordCheck()
-            return
-        }
+            if (!checkEmailPasswordRegex(email, password)) {
+                signUpFaledWithRegexError()
+                return@launch
+            }
+            if (!password.contentEquals(checkPassword)) {
+                isNotEqualPasswordCheck()
+                return@launch
+            }
 
-        signUp(email, password, nickName)
+            signUp(email, password, nickName)
+        }
     }
 
     private fun checkEmailPasswordRegex(email: String, password: String): Boolean {
-        return checkEmailRegex(email) && checkPasswordRegex(password)
+        return isEmailValid(email) && isPasswordValid(password)
     }
 
     private fun checkEmailRegex(email: String): Boolean {
@@ -88,30 +77,28 @@ class SignUpViewModel @Inject constructor(
         return isPasswordValid(password)
     }
 
-    private fun signUp(
+    private suspend fun signUp(
         email: String,
         password: String,
         nickName: String,
     ) {
-        viewModelScope.launch {
-            val pair = initEmailPassword(email, password)
-            setSignUpState(SignUpState.SigningUp)
+        val pair = initEmailPassword(email, password)
+        val signUpState = withContext(ioDispatcher) {
+            signUpRepository.signUp(SignUpParameter(email, pair.second, nickName))
+        }
 
-            withContext(ioDispatcher) {
-                signUpRepository.signUp(SignUpParameter(pair.first.concatToString(), password.toByteArray(), nickName))
-            }.onSuccess {
-                setSignUpState(SignUpState.SignUpSuccess)
-            }.onFailure {
-                setSignUpState(SignUpState.SignUpFailed(it.message ?: ""))
-            }
+        when (signUpState) {
+            is SignUpState.Success -> setSignUpState(SignUpUiState.Success)
+            is SignUpState.UserExists -> setSignUpState(SignUpUiState.UserExists)
+            is SignUpState.Failed -> setSignUpState(SignUpUiState.Failed(signUpState.exception.message ?: ""))
         }
     }
 
     private fun isNotEqualPasswordCheck() {
-        setSignUpState(SignUpState.PasswordError)
+        setSignUpState(SignUpUiState.PasswordError)
     }
 
-    private fun initEmailPassword(email: String, password: String): Pair<CharArray, CharArray> {
+    private fun initEmailPassword(email: String, password: String): Pair<CharArray, ByteArray> {
         return Pair(initEmail(email), initPassword(password))
     }
 
@@ -123,20 +110,22 @@ class SignUpViewModel @Inject constructor(
         return emailCharArray
     }
 
-    private fun initPassword(password: String): CharArray {
-        val passwordCharArray = CharArray(password.length)
-        password.trim().forEachIndexed { index, c ->
-            passwordCharArray[index] = c
-        }
-        return passwordCharArray
+    private fun initPassword(password: String): ByteArray {
+        return password.trim().toByteArray()
     }
 
     private fun signUpFaledWithRegexError() {
-        setSignUpState(SignUpState.RegexError)
+        setSignUpState(SignUpUiState.RegexError)
     }
 
     private fun fillEmailPassword(email: CharArray, password: CharArray) {
         email.fill('\u0000')
         password.fill('\u0000')
     }
+
+
+    sealed interface SignUpEvent {
+        data object SignUp : SignUpEvent
+    }
+
 }

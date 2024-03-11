@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.intro
+package com.android.mediproject.feature.intro.signup
 
 import android.os.Bundle
 import android.view.View
@@ -14,6 +14,7 @@ import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
+import com.android.mediproject.feature.intro.R
 import com.android.mediproject.feature.intro.databinding.FragmentSignUpBinding
 import com.android.mediproject.feature.intro.verification.EmailVerficationDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +52,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(Frag
         viewModel = fragmentViewModel.apply {
             viewLifecycleOwner.apply {
                 repeatOnStarted { eventFlow.collectLatest { handleEvent(it) } }
-                repeatOnStarted { signUpState.collectLatest { handleSignUpState(it) } }
+                repeatOnStarted { signUpUiState.collectLatest { handleSignUpState(it) } }
             }
         }
         setDelayTextWatcher()
@@ -75,14 +76,14 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(Frag
         )
     }
 
-    private fun handleSignUpState(signUpState: SignUpViewModel.SignUpState) {
-        when (signUpState) {
-            is SignUpViewModel.SignUpState.SigningUp -> signingUp()
-            is SignUpViewModel.SignUpState.SignUpSuccess -> signUpSuccess()
-            is SignUpViewModel.SignUpState.SignUpFailed -> signUpFailed()
-            is SignUpViewModel.SignUpState.RegexError -> regexError()
-            is SignUpViewModel.SignUpState.Initial -> initial()
-            is SignUpViewModel.SignUpState.PasswordError -> passwordError()
+    private fun handleSignUpState(signUpUiState: SignUpUiState) {
+        when (signUpUiState) {
+            is SignUpUiState.SigningUp -> signingUp()
+            is SignUpUiState.Success -> signUpSuccess()
+            is SignUpUiState.Failed -> toast(signUpUiState.message)
+            is SignUpUiState.RegexError -> toast(signUpUiState.text)
+            is SignUpUiState.UserExists -> toast(signUpUiState.text)
+            is SignUpUiState.PasswordError -> toast(signUpUiState.text)
         }
     }
 

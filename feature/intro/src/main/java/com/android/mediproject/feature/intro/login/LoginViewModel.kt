@@ -1,4 +1,4 @@
-package com.android.mediproject.feature.intro
+package com.android.mediproject.feature.intro.login
 
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.network.Dispatcher

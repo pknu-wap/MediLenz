@@ -5,12 +5,12 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttribu
 import com.amazonaws.services.cognitoidentityprovider.model.SignUpResult
 
 interface SignupDataSource {
-    suspend fun signUp(signUpParameter: SignUpRequest): Result<SignUpResponse>
+    suspend fun signUp(request: SignUpRequest): Result<SignUpResponse>
     suspend fun confirmEmail(email: String, code: String): Result<Unit>
     suspend fun resendConfirmationCode(cognitoUser: CognitoUser): Result<ConfirmationCodeDeliveryDetails>
 }
 
-private const val USER_NAME = "user_name"
+private const val USER_NAME = "nickname"
 
 class SignUpRequest(
     val email: String,
@@ -20,7 +20,7 @@ class SignUpRequest(
     val passwordString: String get() = password.decodeToString()
 
     val attr = CognitoUserAttributes().apply {
-        this.addAttribute(USER_NAME, nickName)
+        addAttribute(USER_NAME, nickName)
     }
 }
 

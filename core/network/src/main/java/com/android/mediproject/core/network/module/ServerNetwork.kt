@@ -69,7 +69,7 @@ object ServerNetwork {
 
     @Provides
     @Singleton
-    fun providesUserPool(@ApplicationContext context: Context) = CognitoUserPool(
+    fun providesUserPool(@ApplicationContext context: Context): CognitoUserPool = CognitoUserPool(
         context, BuildConfig.AWS_USER_POOL, BuildConfig.AWS_USER_CLIENT_ID, BuildConfig.AWS_USER_CLIENT_SECRET,
         Regions.US_EAST_2,
     )

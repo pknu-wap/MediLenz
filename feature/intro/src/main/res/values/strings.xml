@@ -21,4 +21,5 @@
     <string name="sendedVerificationCode">다음 이메일로 인증 코드가 전송되었습니다</string>
     <string name="verificationCodeError">인증 실패</string>
     <string name="confirmedVerificationCode">인증 완료</string>
+    <string name="signUpUserExists">이미 사용중인 이메일입니다</string>
 </resources>
