@@ -21,7 +21,6 @@ internal class SignRepositoryImpl(
     override val isSignedIn: Boolean
         get() = session != null
 
-
     override suspend fun login(loginParameter: LoginParameter) = signDataSource.logIn(loginParameter).fold(
         onSuccess = {
             _session = it.userSession
@@ -40,21 +39,20 @@ internal class SignRepositoryImpl(
                     myAccountId = 0L,
                 )
             }
-            SignInState.Success
+            LoginState.Success
         },
         onFailure = {
             if (it is UserNotConfirmedException) {
-                SignInState.NotVerified
+                LoginState.NotVerified
             } else {
-                SignInState.Failed(it)
+                LoginState.Failed(it)
             }
         },
     )
 
 
     override suspend fun signUp(signUpParameter: SignUpParameter): Result<Boolean> {
-        val result = signDataSource.signUp(signUpParameter)
-        if (result.isSuccess) {
+        signDataSource.signUp(signUpParameter).onSuccess {
             appDataStore.saveSkipIntro(true)
         }
         return Result.success(true)
@@ -67,8 +65,8 @@ internal class SignRepositoryImpl(
 }
 
 
-sealed interface SignInState {
-    data object Success : SignInState
-    data object NotVerified : SignInState
-    data class Failed(val exception: Throwable) : SignInState
+sealed interface LoginState {
+    data object Success : LoginState
+    data object NotVerified : LoginState
+    data class Failed(val exception: Throwable) : LoginState
 }
