@@ -7,7 +7,7 @@ interface AppDataStore {
     val nickName: Flow<String>
     val skipIntro: Flow<Boolean>
     val myAccountId: Flow<Long>
-    suspend fun saveMyAccountInfo(userEmail: String, nickName: String, myAccountId: Long)
+    suspend fun saveMyAccountInfo(email: String, nickName: String)
     suspend fun saveNickName(nickName: String)
     suspend fun saveSkipIntro(skipIntro: Boolean)
     suspend fun clearMyAccountInfo()

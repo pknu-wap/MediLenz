@@ -4,5 +4,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession
 
 interface AccountSessionRepository {
     val session: CognitoUserSession?
-    val isSignedIn: Boolean
+    val signedIn: Boolean
+    suspend fun updateSession(session: CognitoUserSession?)
+    suspend fun updateAccount(email: String, nickName: String)
 }
