@@ -1,19 +1,16 @@
 package com.android.mediproject.feature.comments.commentsofamedicine
 
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import androidx.paging.map
 import com.android.mediproject.core.common.bindingadapter.ISendText
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.data.session.AccountSessionRepository
 import com.android.mediproject.core.domain.EditCommentUseCase
 import com.android.mediproject.core.domain.GetCommentsUseCase
 import com.android.mediproject.core.model.comments.BaseComment
 import com.android.mediproject.core.model.comments.Comment
 import com.android.mediproject.core.model.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
-import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.comments.commentsofamedicine.CommentActionState.None
 import com.android.mediproject.feature.comments.commentsofamedicine.CommentActionState.OnClickEditComment
@@ -30,17 +27,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -59,9 +47,6 @@ class MedicineCommentsViewModel @Inject constructor(
     private val _medicineBasicInfo = MutableStateFlow<MedicineBasicInfoArgs?>(null)
     private val medicineBasicInfo = _medicineBasicInfo.asStateFlow()
 
-    private val _myId = MutableStateFlow(NONE_USER_ID)
-    private val myId = _myId.asStateFlow()
-
     private val _replyId = MutableStateFlow(NONE_REPLY_ID)
     private val replyId = _replyId.asStateFlow()
 
@@ -70,75 +55,64 @@ class MedicineCommentsViewModel @Inject constructor(
         const val NONE_USER_ID = -1L
     }
 
-    init {
-        viewModelScope.launch {
-            getAccountStateUseCase().collectLatest {
-                _accountState.value = it
-                it.onSignedIn { myId, _, _ ->
-                    _myId.value = myId
-                }
-            }
-        }
-    }
 
-    val comments: StateFlow<PagingData<Comment>> = medicineBasicInfo.filterNotNull().flatMapLatest { info ->
-        getCommentsUseCase.getCommentsByMedicineId(info.medicineIdInAws, myId.value).cachedIn(viewModelScope).mapLatest { pagingData ->
-            val signedIn = accountState.value is AccountState.SignedIn
-            pagingData.map { comment ->
-                comment.apply {
-                    onClickReply = ::onClickedReply
-                    onClickLike = ::onClickedLike
+    /*    val comments: StateFlow<PagingData<Comment>> = medicineBasicInfo.filterNotNull().flatMapLatest { info ->
+            getCommentsUseCase.getCommentsByMedicineId(info.medicineIdInAws, myId.value).cachedIn(viewModelScope).mapLatest { pagingData ->
+                pagingData.map { comment ->
+                    comment.apply {
+                        onClickReply = ::onClickedReply
+                        onClickLike = ::onClickedLike
 
-                    // 로그인 상태 파악 후
-                    // 내가 쓴 댓글이면 수정, 삭제 가능하도록 메서드 참조 설정
-                    if (comment.userId == myId.value && signedIn) {
-                        onClickEdit = ::onClickedEdit
-                        onClickDelete = ::onClickedDelete
-                        onClickApplyEdited = ::editComment
-                        isMine = true
+                        // 로그인 상태 파악 후
+                        // 내가 쓴 댓글이면 수정, 삭제 가능하도록 메서드 참조 설정
+                        if (comment.userId == myId.value && signedIn) {
+                            onClickEdit = ::onClickedEdit
+                            onClickDelete = ::onClickedDelete
+                            onClickApplyEdited = ::editComment
+                            isMine = true
+                        }
                     }
                 }
             }
-        }
-    }.flowOn(ioDispatcher).stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
+        }.flowOn(ioDispatcher).stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())*/
 
-
-    private fun applyReply(comment: String) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                editCommentUseCase.applyNewComment(
-                    NewCommentParameter(
-                        medicineId = medicineBasicInfo.filterNotNull().last().medicineIdInAws.toString(),
-                        userId = myId.value.toString(),
-                        content = comment,
-                        parentId = replyId.value.toString(),
-                    ),
-                )
-            }.onSuccess {
-                _action.emit(OnCompleteApplyCommentOrReply(true))
-            }.onFailure {
-                _action.emit(OnCompleteApplyCommentOrReply(false))
+    /*
+        private fun applyReply(comment: String) {
+            viewModelScope.launch {
+                withContext(ioDispatcher) {
+                    editCommentUseCase.applyNewComment(
+                        NewCommentParameter(
+                            medicineId = medicineBasicInfo.filterNotNull().last().medicineIdInAws.toString(),
+                            userId = myId.value.toString(),
+                            content = comment,
+                            parentId = replyId.value.toString(),
+                        ),
+                    )
+                }.onSuccess {
+                    _action.emit(OnCompleteApplyCommentOrReply(true))
+                }.onFailure {
+                    _action.emit(OnCompleteApplyCommentOrReply(false))
+                }
             }
-        }
-    }
+        }*/
 
-    private fun applyNewComment(content: String) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                editCommentUseCase.applyNewComment(
-                    NewCommentParameter(
-                        medicineId = medicineBasicInfo.value!!.medicineIdInAws.toString(),
-                        userId = myId.value.toString(),
-                        content = content,
-                    ),
-                )
-            }.onSuccess {
-                _action.emit(OnCompleteApplyCommentOrReply(true))
-            }.onFailure {
-                _action.emit(OnCompleteApplyCommentOrReply(false))
+    /*    private fun applyNewComment(content: String) {
+            viewModelScope.launch {
+                withContext(ioDispatcher) {
+                    editCommentUseCase.applyNewComment(
+                        NewCommentParameter(
+                            medicineId = medicineBasicInfo.value!!.medicineIdInAws.toString(),
+                            userId = myId.value.toString(),
+                            content = content,
+                        ),
+                    )
+                }.onSuccess {
+                    _action.emit(OnCompleteApplyCommentOrReply(true))
+                }.onFailure {
+                    _action.emit(OnCompleteApplyCommentOrReply(false))
+                }
             }
-        }
-    }
+        }*/
 
     private fun editComment(comment: Comment) {
         viewModelScope.launch {
@@ -200,15 +174,14 @@ class MedicineCommentsViewModel @Inject constructor(
         }
     }
 
-    override fun onClickedSendButton(text: CharSequence) {
-        viewModelScope.launch {
-            if (text.isEmpty()) {
-                _action.emit(OnCompleteApplyCommentOrReply(false))
-            } else {
-                if (replyId.value == NONE_REPLY_ID) applyNewComment(text.toString())
-                else applyReply(text.toString())
-            }
-        }
+    override fun onClickedSendButton(text: CharSequence) {/*   viewModelScope.launch {
+               if (text.isEmpty()) {
+                   _action.emit(OnCompleteApplyCommentOrReply(false))
+               } else {
+                   if (replyId.value == NONE_REPLY_ID) applyNewComment(text.toString())
+                   else applyReply(text.toString())
+               }
+           }*/
     }
 
     fun setMedicineBasicInfo(medicineBasicInfo: MedicineBasicInfoArgs) {

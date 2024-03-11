@@ -87,6 +87,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
             is LoginViewModel.LoginUiState.LoginFailed -> loginFailed()
             is LoginViewModel.LoginUiState.RegexError -> regexError()
             is LoginViewModel.LoginUiState.Initial -> initial()
+            is LoginViewModel.LoginUiState.NotVerified -> initial()
         }
     }
 

@@ -15,7 +15,6 @@ import com.android.mediproject.feature.comments.R
 import com.android.mediproject.feature.comments.databinding.FragmentMedicineCommentsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class MedicineCommentsFragment : BaseFragment<FragmentMedicineCommentsBinding, MedicineCommentsViewModel>(FragmentMedicineCommentsBinding::inflate) {
@@ -103,11 +102,11 @@ class MedicineCommentsFragment : BaseFragment<FragmentMedicineCommentsBinding, M
 
             }
 
-            viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.comments.collectLatest {
-                    adapter.submitData(it)
-                }
-            }
+            /*       viewLifecycleOwner.repeatOnStarted {
+                       fragmentViewModel.comments.collectLatest {
+                           adapter.submitData(it)
+                       }
+                   }*/
 
         }
 
