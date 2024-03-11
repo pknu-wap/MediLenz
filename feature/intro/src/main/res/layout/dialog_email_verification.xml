@@ -7,7 +7,6 @@
         <variable
             name="viewModel"
             type="com.android.mediproject.feature.intro.verification.VerificationViewModel" />
-
     </data>
 
     <LinearLayout
@@ -44,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sendedVerificationCode"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -80,8 +79,6 @@
                 android:text="@string/complete"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:onClick="@{()->viewModel.verifyEmail()}"
-                app:onClickSend="@{()->viewModel.verifyEmail()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="parent"

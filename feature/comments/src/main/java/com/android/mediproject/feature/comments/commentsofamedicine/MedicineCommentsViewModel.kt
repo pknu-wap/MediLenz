@@ -174,7 +174,7 @@ class MedicineCommentsViewModel @Inject constructor(
         }
     }
 
-    override fun onClickedSendButton(text: CharSequence) {/*   viewModelScope.launch {
+    override fun onClickWithText(text: String) {/*   viewModelScope.launch {
                if (text.isEmpty()) {
                    _action.emit(OnCompleteApplyCommentOrReply(false))
                } else {

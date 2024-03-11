@@ -1,6 +1,7 @@
 package com.android.mediproject.feature.intro.verification
 
 import androidx.lifecycle.viewModelScope
+import com.android.mediproject.core.common.bindingadapter.ISendText
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.data.session.AccountSessionRepository
@@ -19,16 +20,16 @@ class VerificationViewModel @Inject constructor(
     private val signRepository: SignRepository,
     private val accountSessionRepository: AccountSessionRepository,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: kotlinx.coroutines.CoroutineDispatcher,
-) : BaseViewModel() {
+) : BaseViewModel(), ISendText {
 
     val email = accountSessionRepository.lastSavedEmail.stateIn(viewModelScope, kotlinx.coroutines.flow.SharingStarted.Eagerly, "")
 
     private val _verificationState = MutableStateFlow<VerificationState?>(null)
     val verificationState = _verificationState.asStateFlow()
 
-    fun verifyEmail(code: String) {
+    override fun onClickWithText(text: String) {
         viewModelScope.launch {
-            withContext(defaultDispatcher) { signRepository.verifyEmail(email, code) }.onSuccess {
+            withContext(defaultDispatcher) { signRepository.verifyEmail(email.value, text) }.onSuccess {
                 _verificationState.value = VerificationState.Verified
             }.onFailure {
                 _verificationState.value = VerificationState.VerifyFailed

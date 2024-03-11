@@ -1,6 +1,7 @@
 package com.android.mediproject.core.common.bindingadapter
 
 import android.graphics.Bitmap
+import android.text.Editable
 import android.text.Spanned
 import android.view.View
 import android.widget.EditText
@@ -66,8 +67,16 @@ object BindingAdapter {
     @JvmStatic
     fun setOnClick(view: View, iSendText: ISendText, editText: EditText) {
         view.setOnClickListener {
-            iSendText.onClickedSendButton(editText.text)
+            iSendText.onClickWithText(editText.text.toString())
             editText.text.clear()
+        }
+    }
+
+    @BindingAdapter("onClickWithText", "otherEditText", requireAll = true)
+    @JvmStatic
+    fun setOnClickWithText(view: TextView, onClickWithText: ISendText, otherEditText: Editable) {
+        view.setOnClickListener {
+            onClickWithText.onClickWithText(otherEditText.toString())
         }
     }
 
