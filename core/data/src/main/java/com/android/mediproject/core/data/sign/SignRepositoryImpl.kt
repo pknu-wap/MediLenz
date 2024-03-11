@@ -32,6 +32,7 @@ internal class SignRepositoryImpl(
         },
         onFailure = {
             if (it is UserNotConfirmedException) {
+                accountSessionRepository.updateAccount(loginParameter.email)
                 LoginState.NotVerified
             } else {
                 LoginState.Failed(it)
@@ -47,7 +48,7 @@ internal class SignRepositoryImpl(
         ),
     ).fold(
         onSuccess = {
-            appDataStore.saveSkipIntro(true)
+            accountSessionRepository.updateAccount(signUpParameter.email, signUpParameter.nickName)
             SignUpState.Success
         },
         onFailure = { exception ->

@@ -9,7 +9,6 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Chal
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
@@ -17,7 +16,7 @@ class LoginDataSourceImpl(
     private val userPool: CognitoUserPool,
 ) : LoginDataSource {
 
-    override suspend fun login(request: LoginRequest) = suspendCoroutine { continuation ->
+    override suspend fun login(request: LoginRequest): Result<LoginResponse> = suspendCoroutine { continuation ->
         userPool.getUser(request.email).getSession(
             object : AuthenticationHandler {
                 override fun onSuccess(userSession: CognitoUserSession, newDevice: CognitoDevice?) {
@@ -25,7 +24,7 @@ class LoginDataSourceImpl(
                 }
 
                 override fun onFailure(exception: Exception) {
-                    continuation.resumeWithException(exception)
+                    continuation.resume(Result.failure(exception))
                     // UserNotConfirmedException : 이메일 인증을 하지 않았을 때 발생
                 }
 

@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.android.mediproject.core.common.dialog.LoadingDialog
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
@@ -16,7 +17,6 @@ import com.android.mediproject.core.model.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.R
 import com.android.mediproject.feature.intro.databinding.FragmentSignUpBinding
-import com.android.mediproject.feature.intro.verification.EmailVerficationDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
@@ -97,8 +97,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding, SignUpViewModel>(Frag
     private fun signUpSuccess() {
         LoadingDialog.dismiss()
         toast(getString(R.string.signUpSuccess))
-        EmailVerficationDialogFragment().show(childFragmentManager, "EmailVerificationDialogFragment")
-        //handleCallBackMoveFlag()
+        findNavController().popBackStack()
     }
 
     private fun handleCallBackMoveFlag() {

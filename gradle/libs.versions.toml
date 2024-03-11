@@ -108,7 +108,7 @@ pytorch_android = "1.13.1"
 onnx_runtime_android = "1.15.1"
 onnx_runtime_extensions_android = "0.8.0"
 
-aws_android_sdk_cognito = "2.74.0"
+aws_android_sdk_cognito = "2.75.0"
 
 # 라이브러리 의존성------------------------------------------------------------------------------------------------------------------------
 [libraries]

@@ -23,9 +23,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -52,10 +52,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
             viewLifecycleOwner.apply {
                 repeatOnStarted { eventFlow.collect { handleEvent(it) } }
                 repeatOnStarted {
-                    loginState.collectLatest { handleSignInState(it) }
+                    loginState.filterNotNull().collect { handleSignInState(it) }
                 }
                 repeatOnStarted {
-                    savedEmail.collectLatest { callSavedEmail(it) }
+                    savedEmail.collect { callSavedEmail(it) }
                 }
             }
         }
@@ -82,23 +82,15 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
         navigateWithNavDirections(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
     }
 
-    private fun handleSignInState(loginUiState: LoginViewModel.LoginUiState) {
+    private fun handleSignInState(loginUiState: LoginUiState) {
         when (loginUiState) {
-            is LoginViewModel.LoginUiState.Logining -> showLoadingDialog()
-            is LoginViewModel.LoginUiState.LoginSuccess -> loginSuccess()
-            is LoginViewModel.LoginUiState.LoginFailed -> loginFailed()
-            is LoginViewModel.LoginUiState.RegexError -> regexError()
-            is LoginViewModel.LoginUiState.Initial -> notVerified()
-            is LoginViewModel.LoginUiState.NotVerified -> notVerified()
+            is LoginUiState.Success -> loginSuccess()
+            is LoginUiState.Failed -> loginFailed()
+            is LoginUiState.RegexError -> toast(loginUiState.text)
+            is LoginUiState.NotVerified -> notVerified()
         }
     }
 
-    private fun showLoadingDialog() {
-        LoadingDialog.showLoadingDialog(
-            requireActivity(),
-            getString(R.string.signing),
-        )
-    }
 
     private fun loginSuccess() {
         LoadingDialog.dismiss()
@@ -141,7 +133,16 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
     }
 
     private fun notVerified() {
-        EmailVerficationDialogFragment().show(childFragmentManager, "EmailVerificationDialogFragment")
+        EmailVerficationDialogFragment().show(childFragmentManager, EmailVerficationDialogFragment.TAG)
+        childFragmentManager.setFragmentResultListener(EmailVerficationDialogFragment.TAG, viewLifecycleOwner) { _, bundle ->
+            if (bundle.getBoolean(EmailVerficationDialogFragment.CONFIRMED)) {
+                fragmentViewModel.loginWithCheckRegex(
+                    binding.loginEmail.getValue(),
+                    binding.loginPassword.getValue(),
+                    binding.rememberEmailCB.isChecked,
+                )
+            }
+        }
     }
 
     private fun callSavedEmail(savedEmail: String) {

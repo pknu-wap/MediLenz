@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.android.mediproject.core.common.viewmodel.repeatOnStarted
@@ -22,6 +23,11 @@ class EmailVerficationDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<VerificationViewModel>()
+
+    companion object {
+        const val TAG = "EmailVerficationDialogFragment"
+        const val CONFIRMED = "confirmed"
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogEmailVerificationBinding.inflate(layoutInflater, null, false)
@@ -47,6 +53,9 @@ class EmailVerficationDialogFragment : DialogFragment() {
                 when (it) {
                     is VerificationState.Verified -> {
                         Toast.makeText(requireContext(), getString(R.string.confirmedVerificationCode), Toast.LENGTH_SHORT).show()
+                        parentFragmentManager.apply {
+                            setFragmentResult(TAG, bundleOf(CONFIRMED to true))
+                        }
                         dismiss()
                     }
 

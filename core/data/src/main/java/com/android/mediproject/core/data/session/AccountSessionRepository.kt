@@ -8,5 +8,5 @@ interface AccountSessionRepository {
     val session: CognitoUserSession?
     val signedIn: Boolean
     suspend fun updateSession(session: CognitoUserSession?)
-    suspend fun updateAccount(email: String, nickName: String)
+    suspend fun updateAccount(email: String, nickName: String = "")
 }

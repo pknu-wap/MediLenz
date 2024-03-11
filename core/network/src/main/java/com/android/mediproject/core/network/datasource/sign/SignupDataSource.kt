@@ -10,7 +10,7 @@ interface SignupDataSource {
     suspend fun resendConfirmationCode(cognitoUser: CognitoUser): Result<ConfirmationCodeDeliveryDetails>
 }
 
-private const val USER_NAME = "nickname"
+private const val USER_NAME = "custom:user_name"
 
 class SignUpRequest(
     val email: String,

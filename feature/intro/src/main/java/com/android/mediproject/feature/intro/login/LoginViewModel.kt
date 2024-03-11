@@ -15,7 +15,6 @@ import com.android.mediproject.core.model.sign.LoginParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,20 +32,14 @@ class LoginViewModel @Inject constructor(
 
     val savedEmail = accountSessionRepository.lastSavedEmail.stateIn(viewModelScope, SharingStarted.Eagerly, "")
 
-    private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Initial)
-    val loginState = _loginUiState.asStateFlow()
+    private val mutableLoginUiState = MutableEventFlow<LoginUiState?>(replay = 1)
+    val loginState = mutableLoginUiState.asEventFlow()
+
+    private val _eventFlow = MutableEventFlow<LoginEvent>(replay = 1)
+    val eventFlow = _eventFlow.asEventFlow()
 
     private fun setLoginState(state: LoginUiState) {
-        _loginUiState.value = state
-    }
-
-    sealed class LoginUiState {
-        data object Initial : LoginUiState()
-        data object Logining : LoginUiState()
-        data object NotVerified : LoginUiState()
-        data object RegexError : LoginUiState()
-        data object LoginSuccess : LoginUiState()
-        data class LoginFailed(val message: String) : LoginUiState()
+        viewModelScope.launch { mutableLoginUiState.emit(state) }
     }
 
     private val _callBackMoveFlag = MutableStateFlow(TOHOME)
@@ -56,19 +49,12 @@ class LoginViewModel @Inject constructor(
         _callBackMoveFlag.value = flag
     }
 
-    private val _eventFlow = MutableEventFlow<LoginEvent>(replay = 1)
-    val eventFlow = _eventFlow.asEventFlow()
-
     fun event(event: LoginEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
     fun loginWithCheckRegex() = event(LoginEvent.Login)
 
     fun signUp() = event(LoginEvent.SignUp)
 
-    sealed class LoginEvent {
-        data object Login : LoginEvent()
-        data object SignUp : LoginEvent()
-    }
 
     fun loginWithCheckRegex(email: String, password: String, isEmailSaved: Boolean) {
         if (!checkEmailPasswordRegex(email, password)) {
@@ -96,12 +82,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun login(email: String, password: String, isEmailSaved: Boolean) {
-        val exceptionHandler = CoroutineExceptionHandler { _, _ ->
-            loginFailed()
-        }
-        viewModelScope.launch(exceptionHandler) {
-            setLoginState(LoginUiState.Logining)
-
+        viewModelScope.launch {
             val pw = password.trim().toByteArray()
             val result = withContext(defaultDispatcher) {
                 signRepository.login(LoginParameter(email, pw, isEmailSaved))
@@ -139,14 +120,19 @@ class LoginViewModel @Inject constructor(
     private fun initPassword(password: String): ByteArray = password.trim().toByteArray()
 
     private fun loginFailed() {
-        setLoginState(LoginUiState.LoginFailed("로그인 실패"))
+        setLoginState(LoginUiState.Failed(""))
     }
 
     private fun loginSuccess() {
-        setLoginState(LoginUiState.LoginSuccess)
+        setLoginState(LoginUiState.Success)
     }
 
     private fun loginFailedWithRegexError() {
         setLoginState(LoginUiState.RegexError)
+    }
+
+    sealed class LoginEvent {
+        data object Login : LoginEvent()
+        data object SignUp : LoginEvent()
     }
 }
