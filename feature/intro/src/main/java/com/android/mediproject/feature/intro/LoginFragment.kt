@@ -11,13 +11,13 @@ import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.SystemBarController
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.util.delayTextChangedCallback
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.navargs.TOMYPAGE
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.intro.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -61,7 +60,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
         setBarStyle()
         setCallBackMoveFlag()
         setDelayTextWatcher()
-        setLoginButtonDisenabled()
+        setLoginButtonDisabled()
     }
 
     private fun handleEvent(event: LoginViewModel.LoginEvent) = when (event) {
@@ -172,12 +171,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
         ) { e, p ->
             e to p
         }.flowOn(defaultDispatcher).onEach {
-            log("loginBtn 활성화 : ${!it.first.isNullOrEmpty() && !it.second.isNullOrEmpty()}")
             binding.loginBtn.isEnabled = !it.first.isNullOrEmpty() && !it.second.isNullOrEmpty()
-        }.flowOn(Dispatchers.Main).launchIn(mainScope)
+        }.launchIn(mainScope)
     }
 
-    private fun setLoginButtonDisenabled() {
+    private fun setLoginButtonDisabled() {
         binding.loginBtn.isEnabled = false
     }
 

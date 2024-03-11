@@ -1,7 +1,6 @@
 package com.android.mediproject.feature.intro
 
 import androidx.lifecycle.viewModelScope
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.util.isEmailValid
@@ -11,19 +10,16 @@ import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.aws.SignUpAWS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUseCase: SignUseCase, @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-    private val signUpAWS: SignUpAWS,
 ) : BaseViewModel() {
 
 
@@ -105,21 +101,20 @@ class SignUpViewModel @Inject constructor(
                      onSuccess = { setSignUpState(SignUpState.SignUpSuccess) },
                      onFailure = { setSignUpState(SignUpState.SignUpFailed(it.message ?: "가입 실패")) },
                  )
-             }*/
-            withContext(ioDispatcher) {
-                signUpAWS.signUp(
-                    SignUpAWS.SignUpRequest(
-                        email, password.encodeToByteArray(),
-                        CognitoUserAttributes().apply {
-                            addAttribute("custom:user_name", nickName)
-                        },
-                    ),
-                )
-            }.onSuccess {
-                setSignUpState(SignUpState.SignUpSuccess)
-            }.onFailure {
-                setSignUpState(SignUpState.SignUpFailed(it.message ?: "가입 실패"))
-            }
+             }*//*    withContext(ioDispatcher) {
+                    signUpAWS.signUp(
+                        SignUpAWS.SignUpRequest(
+                            email, password.encodeToByteArray(),
+                            CognitoUserAttributes().apply {
+                                addAttribute("custom:user_name", nickName)
+                            },
+                        ),
+                    )
+                }.onSuccess {
+                    setSignUpState(SignUpState.SignUpSuccess)
+                }.onFailure {
+                    setSignUpState(SignUpState.SignUpFailed(it.message ?: "가입 실패"))
+                }*/
         }
         //fillEmailPassword(emailCharArray, passwordCharArray)
     }

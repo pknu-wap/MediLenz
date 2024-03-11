@@ -9,9 +9,8 @@ import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.model.navargs.TOHOME
-import com.android.mediproject.core.model.requestparameters.LoginParameter
+import com.android.mediproject.core.model.sign.LoginParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
-import com.android.mediproject.feature.aws.SignInOutAWS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -21,22 +20,21 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val signUseCase: SignUseCase,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
-    private val signInAWS: SignInOutAWS,
 ) : BaseViewModel() {
 
     val savedEmail = signUseCase.savedEmail.flatMapLatest {
         if (it.isEmpty()) emptyFlow()
         else flowOf(it.toCharArray())
-    }.flowOn(defaultDispatcher).stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = CharArray(0))
+    }.stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = CharArray(0))
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Initial)
     val loginState = _loginState.asStateFlow()
@@ -46,15 +44,16 @@ class LoginViewModel @Inject constructor(
     }
 
     sealed class LoginState {
-        object Initial : LoginState()
-        object Logining : LoginState()
-        object RegexError : LoginState()
-        object LoginSuccess : LoginState()
+        data object Initial : LoginState()
+        data object Logining : LoginState()
+        data object NotVerified : LoginState()
+        data object RegexError : LoginState()
+        data object LoginSuccess : LoginState()
         data class LoginFailed(val message: String) : LoginState()
     }
 
     private val _callBackMoveFlag = MutableStateFlow(TOHOME)
-    val callBackMoveFlag get() = _callBackMoveFlag.asStateFlow()
+    val callBackMoveFlag = _callBackMoveFlag.asStateFlow()
 
     fun setMoveFlag(flag: Int) {
         _callBackMoveFlag.value = flag
@@ -70,8 +69,8 @@ class LoginViewModel @Inject constructor(
     fun signUp() = event(LoginEvent.SignUp)
 
     sealed class LoginEvent {
-        object Login : LoginEvent()
-        object SignUp : LoginEvent()
+        data object Login : LoginEvent()
+        data object SignUp : LoginEvent()
     }
 
     fun loginWithCheckRegex(email: String, password: String, isEmailSaved: Boolean) {
@@ -82,7 +81,7 @@ class LoginViewModel @Inject constructor(
         login(email, password, isEmailSaved)
     }
 
-    private fun fillEmailPassword(email: CharArray, password: CharArray) {
+    private fun clearEmailAndPassword(email: CharArray, password: CharArray) {
         email.fill('\u0000')
         password.fill('\u0000')
     }
@@ -100,33 +99,27 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun login(email: String, password: String, isEmailSaved: Boolean) {
-        val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            throwable.printStackTrace()
+        val exceptionHandler = CoroutineExceptionHandler { _, _ ->
             loginFailed()
         }
-        viewModelScope.launch(defaultDispatcher + exceptionHandler) {
-            val pair = initEmailPassword(email, password)
-            val (emailCharArray, passwordCharArray) = pair.first to pair.second
-
-            val result = signInAWS.signIn(SignInOutAWS.SignInRequest(email, passwordCharArray.map { it.code.toByte() }.toByteArray()))
-            if (result.isSuccess) {
-                loginSuccess()
-            } else {
-                loginFailed()
-            }
-
+        viewModelScope.launch(exceptionHandler) {
             setLoginState(LoginState.Logining)
 
-            signUseCase.login(LoginParameter(emailCharArray, passwordCharArray, isEmailSaved)).collect { result ->
-                result.fold(
-                    onSuccess = { loginSuccess() }, onFailure = { loginFailed() },
-                )
+            val pw = password.trim().toByteArray()
+            val result = withContext(defaultDispatcher) {
+                signUseCase.login(LoginParameter(email, pw, isEmailSaved))
             }
-            fillEmailPassword(emailCharArray, passwordCharArray)
+
+            if (result.isSuccess) {
+                loginSuccess()
+                pw.fill(0)
+            } else {
+                loginFailed()
+            }/*clearEmailAndPassword(emailCharArray, passwordCharArray)*/
         }
     }
 
-    private fun initEmailPassword(email: String, password: String): Pair<CharArray, CharArray> {
+    private fun initEmailPassword(email: String, password: String): Pair<CharArray, ByteArray> {
         return Pair(initEmail(email), initPassword(password))
     }
 
@@ -138,13 +131,7 @@ class LoginViewModel @Inject constructor(
         return emailCharArray
     }
 
-    private fun initPassword(password: String): CharArray {
-        val passwordCharArray = CharArray(password.length)
-        password.trim().forEachIndexed { index, c ->
-            passwordCharArray[index] = c
-        }
-        return passwordCharArray
-    }
+    private fun initPassword(password: String): ByteArray = password.trim().toByteArray()
 
     private fun loginFailed() {
         setLoginState(LoginState.LoginFailed("로그인 실패"))

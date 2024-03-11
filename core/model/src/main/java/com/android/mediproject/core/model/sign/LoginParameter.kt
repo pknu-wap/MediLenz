@@ -1,14 +1,8 @@
-package com.android.mediproject.core.model.requestparameters
+package com.android.mediproject.core.model.sign
 
-/**
- * 로그인을 위한 파라미터 클래스입니다.
- *
- * @property email 이메일
- * @property password 비밀번호
- * @property isSavedEmail 이메일 저장 여부
- */
+
 data class LoginParameter(
-    val email: CharArray, val password: CharArray, val isSavedEmail: Boolean
+    val email: String, val password: ByteArray, val isSavedEmail: Boolean,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -16,7 +10,7 @@ data class LoginParameter(
 
         other as LoginParameter
 
-        if (!email.contentEquals(other.email)) return false
+        if (email != other.email) return false
         if (!password.contentEquals(other.password)) return false
         if (isSavedEmail != other.isSavedEmail) return false
 
@@ -24,10 +18,9 @@ data class LoginParameter(
     }
 
     override fun hashCode(): Int {
-        var result = email.contentHashCode()
+        var result = email.hashCode()
         result = 31 * result + password.contentHashCode()
         result = 31 * result + isSavedEmail.hashCode()
         return result
     }
-
 }

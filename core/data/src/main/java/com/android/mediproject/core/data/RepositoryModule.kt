@@ -114,21 +114,19 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesSignRepositoryImpl(
+    internal fun providesSignRepositoryImpl(
         signDataSource: SignDataSource,
         appDataStore: AppDataStore,
         userInfoRepository: UserInfoRepository,
     ): SignRepositoryImpl = SignRepositoryImpl(signDataSource, appDataStore, userInfoRepository)
 
     @Provides
-    @Singleton
-    fun providesSignRepository(
+    internal fun providesSignRepository(
         signRepositoryImpl: SignRepositoryImpl,
     ): SignRepository = signRepositoryImpl
 
     @Provides
-    @Singleton
-    fun providesTokenRepository(
+    internal fun providesTokenRepository(
         signRepositoryImpl: SignRepositoryImpl,
     ): TokenRepository = signRepositoryImpl
 

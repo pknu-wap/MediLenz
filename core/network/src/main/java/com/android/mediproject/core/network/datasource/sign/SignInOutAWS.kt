@@ -8,22 +8,25 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Auth
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChallengeContinuation
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler
+import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
-internal class SignInOutAWSImpl(override val userPool: CognitoUserPool) : AWSAccountManager(userPool), SignInOutAWS {
+internal class SignInOutAWSImpl(userPool: CognitoUserPool) : AWSAccountManager(userPool), SignInOutAWS {
 
-    override suspend fun signIn(request: SignInOutAWS.SignInRequest) = suspendCancellableCoroutine { continuation ->
+    override suspend fun signIn(request: SignInRequest) = suspendCancellableCoroutine { continuation ->
         userPool.getUser(request.email).getSession(
             object : AuthenticationHandler {
                 override fun onSuccess(userSession: CognitoUserSession, newDevice: CognitoDevice?) {
-                    val response = SignInOutAWS.SignInResponse(userSession, newDevice)
-                    continuation.resume(Result.success(response))
+                    continuation.resume(SignInState.Success(userSession, newDevice))
                 }
 
                 override fun onFailure(exception: Exception) {
-                    continuation.resumeWithException(exception)
+                    if (exception is UserNotConfirmedException) {
+                        continuation.resume(SignInState.NotVerified)
+                    } else {
+                        continuation.resume(SignInState.Failed(exception))
+                    }
                     // UserNotConfirmedException : 이메일 인증을 하지 않았을 때 발생
                 }
 
@@ -33,7 +36,7 @@ internal class SignInOutAWSImpl(override val userPool: CognitoUserPool) : AWSAcc
 
                 override fun getAuthenticationDetails(authenticationContinuation: AuthenticationContinuation, userId: String) {
                     authenticationContinuation.run {
-                        val authDetails = AuthenticationDetails(userId, request.passwordString, null)
+                        val authDetails = AuthenticationDetails(userId, request.password.decodeToString(), null)
                         setAuthenticationDetails(authDetails)
                         continueTask()
                     }
@@ -46,28 +49,28 @@ internal class SignInOutAWSImpl(override val userPool: CognitoUserPool) : AWSAcc
         )
     }
 
-    override suspend fun signOut() = suspendCancellableCoroutine { continuation ->
-        userPool.currentUser.signOut()
-        continuation.resume(Result.success(Unit))
-    }
+    override suspend fun signOut() = userPool.currentUser.signOut()
 }
 
 
 interface SignInOutAWS {
+    suspend fun signIn(request: SignInRequest): SignInState
 
-    suspend fun signIn(request: SignInRequest): Result<SignInResponse>
+    suspend fun signOut()
+}
 
-    suspend fun signOut(): Result<Unit>
+class SignInRequest(
+    val email: String,
+    val password: ByteArray,
+)
 
-    class SignInRequest(
-        val email: String,
-        private val password: ByteArray,
-    ) {
-        val passwordString: String get() = password.decodeToString()
-    }
 
-    data class SignInResponse(
+sealed interface SignInState {
+    class Success(
         val userSession: CognitoUserSession,
-        val newDevice: CognitoDevice? = null,
-    )
+        val device: CognitoDevice? = null,
+    ) : SignInState
+
+    data class Failed(val exception: Exception) : SignInState
+    data object NotVerified : SignInState
 }

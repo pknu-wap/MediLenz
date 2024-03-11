@@ -1,8 +1,10 @@
 package com.android.mediproject.core.network.datasource.sign
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes
-import com.android.mediproject.core.model.requestparameters.LoginParameter
-import com.android.mediproject.core.model.requestparameters.SignUpParameter
+import com.android.mediproject.core.model.sign.LoginParameter
+import com.android.mediproject.core.model.sign.SignUpParameter
+
+private const val USER_NAME = "user_name"
 
 class SignDataSourceImpl(
     private val signInOutAWS: SignInOutAWS,
@@ -11,17 +13,17 @@ class SignDataSourceImpl(
 
     override suspend fun logIn(loginParameter: LoginParameter): Result<SignInOutAWS.SignInResponse> = signInOutAWS.signIn(
         SignInOutAWS.SignInRequest(
-            loginParameter.email.contentToString(),
-            loginParameter.password.map { it.code.toByte() }.toByteArray(),
+            loginParameter.email,
+            loginParameter.password,
         ),
     )
 
     override suspend fun signUp(signUpParameter: SignUpParameter): Result<SignUpAWS.SignUpResponse> = signUpAWS.signUp(
         SignUpAWS.SignUpRequest(
-            signUpParameter.email.contentToString(),
-            signUpParameter.password.map { it.code.toByte() }.toByteArray(),
+            signUpParameter.email,
+            signUpParameter.password,
             CognitoUserAttributes().apply {
-                addAttribute("user_name", signUpParameter.nickName)
+                addAttribute(USER_NAME, signUpParameter.nickName)
             },
         ),
     )
