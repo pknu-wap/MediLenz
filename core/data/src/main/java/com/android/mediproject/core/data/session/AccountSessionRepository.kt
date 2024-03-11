@@ -1,4 +1,4 @@
-package com.android.mediproject.core.data.sign
+package com.android.mediproject.core.data.session
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession
 

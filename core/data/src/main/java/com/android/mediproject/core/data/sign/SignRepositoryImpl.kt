@@ -1,6 +1,7 @@
 package com.android.mediproject.core.data.sign
 
 import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
+import com.android.mediproject.core.data.session.AccountSessionRepository
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.sign.LoginParameter
 import com.android.mediproject.core.model.sign.SignUpParameter
@@ -11,7 +12,6 @@ internal class SignRepositoryImpl(
     private val accountSessionRepository: AccountSessionRepository,
     private val appDataStore: AppDataStore,
 ) : SignRepository {
-
 
     override suspend fun login(loginParameter: LoginParameter) = signDataSource.logIn(loginParameter).fold(
         onSuccess = {
@@ -29,7 +29,6 @@ internal class SignRepositoryImpl(
         },
     )
 
-
     override suspend fun signUp(signUpParameter: SignUpParameter): Result<Boolean> {
         signDataSource.signUp(signUpParameter).onSuccess {
             appDataStore.saveSkipIntro(true)
@@ -42,7 +41,6 @@ internal class SignRepositoryImpl(
         signDataSource.signOut()
     }
 }
-
 
 sealed interface LoginState {
     data object Success : LoginState

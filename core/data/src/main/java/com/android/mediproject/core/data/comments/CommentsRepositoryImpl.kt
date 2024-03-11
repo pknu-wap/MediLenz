@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.android.mediproject.core.common.SERVER_PAGE_SIZE
-import com.android.mediproject.core.data.sign.AccountSessionRepository
+import com.android.mediproject.core.data.session.AccountSessionRepository
 import com.android.mediproject.core.model.comments.CommentChangedResponse
 import com.android.mediproject.core.model.comments.CommentListResponse
 import com.android.mediproject.core.model.comments.LikeResponse

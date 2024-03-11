@@ -1,6 +1,6 @@
 package com.android.mediproject.core.domain
 
-import com.android.mediproject.core.data.sign.AccountSessionRepository
+import com.android.mediproject.core.data.session.AccountSessionRepository
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
 import kotlinx.coroutines.flow.Flow

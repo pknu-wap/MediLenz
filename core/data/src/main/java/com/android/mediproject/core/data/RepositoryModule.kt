@@ -24,9 +24,10 @@ import com.android.mediproject.core.data.safetynotification.SafetyNotificationRe
 import com.android.mediproject.core.data.safetynotification.SafetyNotificationRepositoryImpl
 import com.android.mediproject.core.data.search.SearchHistoryRepository
 import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
+import com.android.mediproject.core.data.session.AccountSessionRepository
+import com.android.mediproject.core.data.session.AccountSessionRepositoryImpl
 import com.android.mediproject.core.data.sign.SignRepository
 import com.android.mediproject.core.data.sign.SignRepositoryImpl
-import com.android.mediproject.core.data.sign.AccountSessionRepository
 import com.android.mediproject.core.data.user.UserRepository
 import com.android.mediproject.core.data.user.UserRepositoryImpl
 import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
@@ -45,7 +46,6 @@ import com.android.mediproject.core.network.datasource.news.recallsuspension.Rec
 import com.android.mediproject.core.network.datasource.news.safetynotification.SafetyNotificationDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSource
-import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -115,18 +115,9 @@ object RepositoryModule {
     internal fun providesSignRepositoryImpl(
         signDataSource: SignDataSource,
         appDataStore: AppDataStore,
-        userInfoRepository: UserInfoRepository,
-    ): SignRepositoryImpl = SignRepositoryImpl(signDataSource, appDataStore, userInfoRepository)
+        accountSessionRepository: AccountSessionRepository,
+    ): SignRepository = SignRepositoryImpl(signDataSource, accountSessionRepository, appDataStore)
 
-    @Provides
-    internal fun providesSignRepository(
-        signRepositoryImpl: SignRepositoryImpl,
-    ): SignRepository = signRepositoryImpl
-
-    @Provides
-    internal fun providesTokenRepository(
-        signRepositoryImpl: SignRepositoryImpl,
-    ): AccountSessionRepository = signRepositoryImpl
 
     @Provides
     @Singleton
@@ -143,16 +134,10 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesUserInfoRepository(
-        userInfoDataSource: UserInfoDataSource, appDataStore: AppDataStore,
-    ): UserInfoRepository = UserInfoRepositoryImpl(userInfoDataSource, appDataStore)
+    fun providesAccountSessionRepository(
+        appDataStore: AppDataStore,
+    ): AccountSessionRepository = AccountSessionRepositoryImpl(appDataStore)
 
-    /*    @Provides
-        @Singleton
-        fun providesTokenRepository(
-            tokenDataSource: TokenDataSource,
-            tokenServer: TokenServer,
-        ): TokenRepository = TokenRepositoryImpl(tokenDataSource, tokenServer)*/
 
     @Provides
     @Singleton
