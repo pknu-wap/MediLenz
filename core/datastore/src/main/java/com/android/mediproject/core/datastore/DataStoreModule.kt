@@ -12,7 +12,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
 
-
     @Provides
     @Singleton
     fun providesAppDataStore(

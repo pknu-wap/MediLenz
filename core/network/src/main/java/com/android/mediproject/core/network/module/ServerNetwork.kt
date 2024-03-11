@@ -23,7 +23,6 @@ import com.android.mediproject.core.model.requestparameters.GetMedicineIdParamet
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
 import com.android.mediproject.core.model.user.remote.ChangeNicknameResponse
 import com.android.mediproject.core.model.user.remote.ChangePasswordResponse
-import com.android.mediproject.core.model.user.remote.UserResponse
 import com.android.mediproject.core.model.user.remote.WithdrawalResponse
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSource
 import com.android.mediproject.core.network.datasource.comments.CommentsDataSourceImpl
@@ -35,6 +34,7 @@ import com.android.mediproject.core.network.datasource.sign.SignDataSource
 import com.android.mediproject.core.network.datasource.sign.SignDataSourceImpl
 import com.android.mediproject.core.network.datasource.sign.SignInOutAWSImpl
 import com.android.mediproject.core.network.datasource.sign.SignUpAWSImpl
+import com.android.mediproject.core.network.datasource.sign.VerifyEmailImpl
 import com.android.mediproject.core.network.datasource.user.UserDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -94,7 +94,7 @@ object ServerNetwork {
             context, BuildConfig.AWS_USER_POOL, BuildConfig.AWS_USER_CLIENT_ID, BuildConfig.AWS_USER_CLIENT_SECRET,
             Regions.US_EAST_2,
         )
-        return SignDataSourceImpl(SignInOutAWSImpl(userPool), SignUpAWSImpl(userPool))
+        return SignDataSourceImpl(SignInOutAWSImpl(userPool), SignUpAWSImpl(userPool), VerifyEmailImpl(userPool))
     }
 
     @Provides
@@ -103,18 +103,8 @@ object ServerNetwork {
 
     @Provides
     @Singleton
-    fun providesUserInfosDataSource(awsNetworkApi: AwsNetworkApi): UserInfoDataSource = UserInfoDataSourceImpl(awsNetworkApi)
-
-    @Provides
-    @Singleton
     fun providesUserDataSource(awsNetworkApi: AwsNetworkApi, aesCoder: AesCoder): UserDataSource = UserDataSourceImpl(awsNetworkApi, aesCoder)
 
-    /*    @Provides
-        @Singleton
-        fun providesTokenDataSource(
-            awsNetworkApi: AwsNetworkApi,
-            tokenServer: TokenServer,
-        ): TokenDataSource = TokenDataSourceImpl(awsNetworkApi, tokenServer)*/
 }
 
 interface AwsNetworkApi {
@@ -226,12 +216,6 @@ interface AwsNetworkApi {
     suspend fun getMedicineId(
         @Body getMedicineIdParameter: GetMedicineIdParameter,
     ): Response<MedicineIdResponse>
-
-    /**
-     * 유저 정보 조회
-     */
-    @GET(value = "user")
-    suspend fun getUserInfo(): Response<UserResponse>
 
     /**
      * 관심 약 조회
