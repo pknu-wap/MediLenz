@@ -3,7 +3,6 @@ package com.android.mediproject.feature.favoritemedicine.favoritemedicinemore
 import androidx.lifecycle.viewModelScope
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
-import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicineMoreInfo
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
@@ -18,7 +17,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteMedicineMoreViewModel @Inject constructor(
-    private val getTokenUseCase: GetTokenUseCase,
     private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase,
 ) : BaseViewModel() {
 
@@ -33,20 +31,18 @@ class FavoriteMedicineMoreViewModel @Inject constructor(
     val token get() = _token.asSharedFlow()
 
     fun loadTokens() = viewModelScope.launch {
-        getTokenUseCase().collect {
-            _token.emit(it)
-        }
+        /*    getTokenUseCase().collect {
+                _token.emit(it)
+            }*/
     }
 
-    fun loadFavoriteMedicines() =
-        viewModelScope.launch {
-            setFavoriteMedicineListUiState(UiState.Loading)
-            getFavoriteMedicineUseCase.getFavoriteMedicineMoreList()
-                .collect { result ->
-                    result.fold(
-                        onSuccess = { setFavoriteMedicineListUiState(UiState.Success(it)) },
-                        onFailure = { setFavoriteMedicineListUiState(UiState.Error("즐겨찾기를 불러오는 데 실패하였습니다.")) },
-                    )
-                }
-        }
+    fun loadFavoriteMedicines() = viewModelScope.launch {
+        setFavoriteMedicineListUiState(UiState.Loading)
+        getFavoriteMedicineUseCase.getFavoriteMedicineMoreList().collect { result ->
+                result.fold(
+                    onSuccess = { setFavoriteMedicineListUiState(UiState.Success(it)) },
+                    onFailure = { setFavoriteMedicineListUiState(UiState.Error("즐겨찾기를 불러오는 데 실패하였습니다.")) },
+                )
+            }
+    }
 }

@@ -1,7 +1,6 @@
 package com.android.mediproject.feature.intro
 
 
-import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.test.MainCoroutineRule
 import com.android.mediproject.core.test.repositories.FakeSignRepository
 import com.android.mediproject.core.test.repositories.FakeUserInfoRepository
@@ -43,7 +42,7 @@ class LoginViewModelTest {
 
         //then
         val actual = viewModel.loginState.value
-        val expected = LoginViewModel.LoginState.RegexError
+        val expected = LoginViewModel.LoginUiState.RegexError
         assertThat(actual).isEqualTo(expected)
     }
 
@@ -62,7 +61,7 @@ class LoginViewModelTest {
 
         //then
         val actual = viewModel.loginState.value
-        val expected = LoginViewModel.LoginState.RegexError
+        val expected = LoginViewModel.LoginUiState.RegexError
         assertThat(actual).isEqualTo(expected)
     }
 
@@ -81,7 +80,7 @@ class LoginViewModelTest {
 
         //then
         val actual = viewModel.loginState.value
-        val expected = LoginViewModel.LoginState.RegexError
+        val expected = LoginViewModel.LoginUiState.RegexError
         assertThat(actual).isEqualTo(expected)
     }
 
@@ -100,7 +99,7 @@ class LoginViewModelTest {
 
         //then
         val actual = viewModel.loginState.value
-        val expected = LoginViewModel.LoginState.LoginSuccess
+        val expected = LoginViewModel.LoginUiState.LoginSuccess
         assertThat(actual).isEqualTo(expected)
     }
 }

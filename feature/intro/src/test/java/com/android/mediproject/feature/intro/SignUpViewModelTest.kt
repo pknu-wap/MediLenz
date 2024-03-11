@@ -1,9 +1,7 @@
 package com.android.mediproject.feature.intro
 
-import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.test.repositories.FakeSignRepository
 import com.android.mediproject.core.test.repositories.FakeUserInfoRepository
-import com.google.common.truth.Truth.assertThat
 import com.android.mediproject.core.test.MainCoroutineRule
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Assert.assertThat

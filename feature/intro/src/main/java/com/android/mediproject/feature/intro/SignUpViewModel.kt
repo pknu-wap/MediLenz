@@ -7,7 +7,6 @@ import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
-import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

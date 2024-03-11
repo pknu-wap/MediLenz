@@ -8,14 +8,12 @@ import com.android.mediproject.core.common.bindingadapter.ISendText
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.domain.EditCommentUseCase
-import com.android.mediproject.core.domain.GetAccountStateUseCase
 import com.android.mediproject.core.domain.GetCommentsUseCase
 import com.android.mediproject.core.model.comments.BaseComment
 import com.android.mediproject.core.model.comments.Comment
 import com.android.mediproject.core.model.navargs.MedicineBasicInfoArgs
 import com.android.mediproject.core.model.requestparameters.EditCommentParameter
 import com.android.mediproject.core.model.requestparameters.NewCommentParameter
-import com.android.mediproject.core.model.user.onSignedIn
 import com.android.mediproject.core.ui.base.BaseViewModel
 import com.android.mediproject.feature.comments.commentsofamedicine.CommentActionState.None
 import com.android.mediproject.feature.comments.commentsofamedicine.CommentActionState.OnClickEditComment
@@ -51,7 +49,7 @@ import javax.inject.Inject
 class MedicineCommentsViewModel @Inject constructor(
     private val getCommentsUseCase: GetCommentsUseCase,
     private val editCommentUseCase: EditCommentUseCase,
-    private val getAccountStateUseCase: GetAccountStateUseCase,
+    private val accountSessionRepository: AccountSessionRepository,
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel(), ISendText {
 
@@ -63,9 +61,6 @@ class MedicineCommentsViewModel @Inject constructor(
 
     private val _myId = MutableStateFlow(NONE_USER_ID)
     private val myId = _myId.asStateFlow()
-
-    private val _accountState = MutableStateFlow<AccountState>(AccountState.SignedOut)
-    private val accountState = _accountState.asStateFlow()
 
     private val _replyId = MutableStateFlow(NONE_REPLY_ID)
     private val replyId = _replyId.asStateFlow()

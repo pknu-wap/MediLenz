@@ -80,13 +80,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
         navigateWithNavDirections(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
     }
 
-    private fun handleSignInState(loginState: LoginViewModel.LoginState) {
-        when (loginState) {
-            is LoginViewModel.LoginState.Logining -> showLoadingDialog()
-            is LoginViewModel.LoginState.LoginSuccess -> loginSuccess()
-            is LoginViewModel.LoginState.LoginFailed -> loginFailed()
-            is LoginViewModel.LoginState.RegexError -> regexError()
-            is LoginViewModel.LoginState.Initial -> initial()
+    private fun handleSignInState(loginUiState: LoginViewModel.LoginUiState) {
+        when (loginUiState) {
+            is LoginViewModel.LoginUiState.Logining -> showLoadingDialog()
+            is LoginViewModel.LoginUiState.LoginSuccess -> loginSuccess()
+            is LoginViewModel.LoginUiState.LoginFailed -> loginFailed()
+            is LoginViewModel.LoginUiState.RegexError -> regexError()
+            is LoginViewModel.LoginUiState.Initial -> initial()
         }
     }
 
@@ -140,11 +140,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
     private fun initial() {
     }
 
-    private fun callSavedEmail(savedEmail: CharArray) {
+    private fun callSavedEmail(savedEmail: String) {
         if (savedEmail.isNotEmpty()) {
             binding.apply {
                 rememberEmailCB.isChecked = true
-                loginEmail.inputData.setText(savedEmail, 0, savedEmail.size)
+                loginEmail.inputData.setText(savedEmail)
             }
         }
     }
@@ -183,5 +183,4 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(Fragmen
         mainScope.cancel()
         super.onDestroyView()
     }
-
 }

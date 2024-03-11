@@ -7,7 +7,9 @@ import com.android.mediproject.core.common.util.isEmailValid
 import com.android.mediproject.core.common.util.isPasswordValid
 import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
-import com.android.mediproject.core.domain.SignUseCase
+import com.android.mediproject.core.data.session.AccountSessionRepository
+import com.android.mediproject.core.data.sign.LoginState
+import com.android.mediproject.core.data.sign.SignRepository
 import com.android.mediproject.core.model.navargs.TOHOME
 import com.android.mediproject.core.model.sign.LoginParameter
 import com.android.mediproject.core.ui.base.BaseViewModel
@@ -17,9 +19,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,29 +26,27 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val signUseCase: SignUseCase,
+    private val signRepository: SignRepository,
+    private val accountSessionRepository: AccountSessionRepository,
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
-    val savedEmail = signUseCase.savedEmail.flatMapLatest {
-        if (it.isEmpty()) emptyFlow()
-        else flowOf(it.toCharArray())
-    }.stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = CharArray(0))
+    val savedEmail = accountSessionRepository.lastSavedEmail.stateIn(viewModelScope, SharingStarted.Eagerly, "")
 
-    private val _loginState = MutableStateFlow<LoginState>(LoginState.Initial)
-    val loginState = _loginState.asStateFlow()
+    private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Initial)
+    val loginState = _loginUiState.asStateFlow()
 
-    private fun setLoginState(state: LoginState) {
-        _loginState.value = state
+    private fun setLoginState(state: LoginUiState) {
+        _loginUiState.value = state
     }
 
-    sealed class LoginState {
-        data object Initial : LoginState()
-        data object Logining : LoginState()
-        data object NotVerified : LoginState()
-        data object RegexError : LoginState()
-        data object LoginSuccess : LoginState()
-        data class LoginFailed(val message: String) : LoginState()
+    sealed class LoginUiState {
+        data object Initial : LoginUiState()
+        data object Logining : LoginUiState()
+        data object NotVerified : LoginUiState()
+        data object RegexError : LoginUiState()
+        data object LoginSuccess : LoginUiState()
+        data class LoginFailed(val message: String) : LoginUiState()
     }
 
     private val _callBackMoveFlag = MutableStateFlow(TOHOME)
@@ -103,19 +100,27 @@ class LoginViewModel @Inject constructor(
             loginFailed()
         }
         viewModelScope.launch(exceptionHandler) {
-            setLoginState(LoginState.Logining)
+            setLoginState(LoginUiState.Logining)
 
             val pw = password.trim().toByteArray()
             val result = withContext(defaultDispatcher) {
-                signUseCase.login(LoginParameter(email, pw, isEmailSaved))
+                signRepository.login(LoginParameter(email, pw, isEmailSaved))
             }
 
-            if (result.isSuccess) {
-                loginSuccess()
-                pw.fill(0)
-            } else {
-                loginFailed()
-            }/*clearEmailAndPassword(emailCharArray, passwordCharArray)*/
+            when (result) {
+                is LoginState.Success -> {
+                    loginSuccess()
+                    pw.fill(0)
+                }
+
+                is LoginState.NotVerified -> {
+                    setLoginState(LoginUiState.NotVerified)
+                }
+
+                else -> {
+                    loginFailed()
+                }
+            }
         }
     }
 
@@ -134,14 +139,14 @@ class LoginViewModel @Inject constructor(
     private fun initPassword(password: String): ByteArray = password.trim().toByteArray()
 
     private fun loginFailed() {
-        setLoginState(LoginState.LoginFailed("로그인 실패"))
+        setLoginState(LoginUiState.LoginFailed("로그인 실패"))
     }
 
     private fun loginSuccess() {
-        setLoginState(LoginState.LoginSuccess)
+        setLoginState(LoginUiState.LoginSuccess)
     }
 
     private fun loginFailedWithRegexError() {
-        setLoginState(LoginState.RegexError)
+        setLoginState(LoginUiState.RegexError)
     }
 }

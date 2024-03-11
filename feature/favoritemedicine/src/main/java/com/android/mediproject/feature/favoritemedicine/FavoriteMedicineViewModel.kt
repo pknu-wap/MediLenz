@@ -5,7 +5,6 @@ import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetFavoriteMedicineUseCase
-import com.android.mediproject.core.domain.GetTokenUseCase
 import com.android.mediproject.core.model.favoritemedicine.FavoriteMedicine
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
@@ -20,7 +19,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteMedicineViewModel @Inject constructor(
-    private val getTokenUseCase: GetTokenUseCase,
     private val getFavoriteMedicineUseCase: GetFavoriteMedicineUseCase,
 ) : BaseViewModel() {
 
@@ -32,7 +30,7 @@ class FavoriteMedicineViewModel @Inject constructor(
     fun navigateToFavoriteMeidcineMore() = event(FavoriteMedicineEvent.NavigateToFavoriteMedicineMore)
 
     sealed class FavoriteMedicineEvent {
-        object NavigateToFavoriteMedicineMore : FavoriteMedicineEvent()
+        data object NavigateToFavoriteMedicineMore : FavoriteMedicineEvent()
     }
 
     private val _favoriteMedicineList = MutableStateFlow<UiState<List<FavoriteMedicine>>>(UiState.Initial)
@@ -46,9 +44,9 @@ class FavoriteMedicineViewModel @Inject constructor(
     val token get() = _token.asSharedFlow()
 
     fun loadTokens() = viewModelScope.launch {
-        getTokenUseCase().collect {
-            _token.emit(it)
-        }
+        /*     getTokenUseCase().collect {
+                 _token.emit(it)
+             }*/
     }
 
     fun loadFavoriteMedicines() {

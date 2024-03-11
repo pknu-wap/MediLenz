@@ -7,8 +7,6 @@ import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.common.viewmodel.UiState
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.domain.GetCommentsUseCase
-import com.android.mediproject.core.domain.GetTokenUseCase
-import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.domain.GetUserUseCase
 import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.token.CurrentTokens

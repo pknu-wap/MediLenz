@@ -11,7 +11,6 @@ import com.android.mediproject.core.network.module.AwsNetworkApi
 import com.android.mediproject.core.network.onResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 class UserDataSourceImpl @Inject constructor(
@@ -25,9 +24,9 @@ class UserDataSourceImpl @Inject constructor(
     }
 
     override suspend fun changePassword(changePasswordParameter: ChangePasswordParameter): Flow<Result<ChangePasswordResponse>> = channelFlow {
-        val password = WeakReference(aesCoder.encodePassword(changePasswordParameter.email, changePasswordParameter.newPassword)).get()!!
-        awsNetworkApi.changePassword(ChangePasswordParameter(password.toCharArray())).onResponse()
-            .fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) }).also { trySend(it) }
+        /*      val password = WeakReference(aesCoder.encodePassword(changePasswordParameter.email, changePasswordParameter.newPassword)).get()!!
+              awsNetworkApi.changePassword(ChangePasswordParameter(password.toCharArray())).onResponse()
+                  .fold(onSuccess = { Result.success(it) }, onFailure = { Result.failure(it) }).also { trySend(it) }*/
     }
 
 
