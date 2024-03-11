@@ -1,6 +1,7 @@
 package com.android.mediproject.core.network.datasource.sign
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession
 
 interface LoginDataSource {
@@ -15,5 +16,6 @@ class LoginRequest(
 
 class LoginResponse(
     val userSession: CognitoUserSession,
-    val newDevice: CognitoDevice?,
+    val attr: CognitoUserDetails,
+    val newDevice: CognitoDevice? = null,
 )

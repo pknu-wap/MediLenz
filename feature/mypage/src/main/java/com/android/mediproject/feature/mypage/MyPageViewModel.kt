@@ -10,12 +10,16 @@ import com.android.mediproject.core.data.session.AccountSessionRepository
 import com.android.mediproject.core.data.sign.SignRepository
 import com.android.mediproject.core.domain.GetCommentsUseCase
 import com.android.mediproject.core.model.comments.MyCommentsListResponse
+import com.android.mediproject.core.model.user.UserEntity
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -28,13 +32,29 @@ class MyPageViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
-    val currentUser = accountSessionRepository.userOnCurrentSession
+    val currentUser = accountSessionRepository.userOnCurrentSession.map {
+        if (it != null) {
+            LoginUiState.Online(it)
+        } else {
+            LoginUiState.Offline()
+        }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val _eventFlow = MutableEventFlow<MyPageEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
     private val _myCommentsList = MutableStateFlow<UiState<List<MyCommentsListResponse.Comment>>>(UiState.Initial)
     val myCommentsList = _myCommentsList.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                if (accountSessionRepository.signedIn.not()) {
+                    accountSessionRepository.loadSession()
+                }
+            }
+        }
+    }
 
     fun event(event: MyPageEvent) = viewModelScope.launch { _eventFlow.emit(event) }
 
@@ -73,4 +93,12 @@ sealed interface MyPageEvent {
     data object SignUp : MyPageEvent
     data object NavigateToMyPageMore : MyPageEvent
     data object NavigateToMyCommentList : MyPageEvent
+}
+
+
+sealed interface LoginUiState {
+    val userEntity: UserEntity
+
+    class Online(override val userEntity: UserEntity) : LoginUiState
+    class Offline(override val userEntity: UserEntity = UserEntity()) : LoginUiState
 }

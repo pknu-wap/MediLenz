@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface AccountSessionRepository {
     val lastSavedEmail: Flow<String>
-    val userOnCurrentSession: StateFlow<UserEntity?>
+    val userOnCurrentSession: Flow<UserEntity?>
     val session: StateFlow<CognitoUserSession?>
 
     val signedIn: Boolean

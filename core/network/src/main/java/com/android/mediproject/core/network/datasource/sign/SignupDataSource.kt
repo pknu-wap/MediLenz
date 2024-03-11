@@ -10,7 +10,7 @@ interface SignupDataSource {
     suspend fun resendConfirmationCode(cognitoUser: CognitoUser): Result<ConfirmationCodeDeliveryDetails>
 }
 
-private const val USER_NAME = "custom:user_name"
+private const val CUSTOM_USER_NAME = "custom:user_name"
 
 class SignUpRequest(
     val email: String,
@@ -20,7 +20,7 @@ class SignUpRequest(
     val passwordString: String get() = password.decodeToString()
 
     val attr = CognitoUserAttributes().apply {
-        addAttribute(USER_NAME, nickName)
+        addAttribute(CUSTOM_USER_NAME, nickName)
     }
 }
 

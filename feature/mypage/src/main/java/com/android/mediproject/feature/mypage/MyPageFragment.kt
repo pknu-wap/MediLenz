@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.mediproject.core.common.util.SystemBarStyler
 import com.android.mediproject.core.common.viewmodel.UiState
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
+import com.android.mediproject.core.model.comments.MyCommentsListResponse
 import com.android.mediproject.core.model.token.CurrentTokens
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.ui.R
@@ -19,17 +21,13 @@ import com.android.mediproject.feature.mypage.databinding.FragmentMyPageBinding
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreBottomSheetFragment
 import com.android.mediproject.feature.mypage.mypagemore.MyPageMoreDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
-import com.android.mediproject.core.model.comments.MyCommentsListResponse
-import com.android.mediproject.core.model.user.UserEntity
+import kotlinx.coroutines.flow.filterNotNull
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MyPageFragment :
-    BaseFragment<FragmentMyPageBinding, MyPageViewModel>(FragmentMyPageBinding::inflate) {
+class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(FragmentMyPageBinding::inflate) {
 
-    @Inject
-    lateinit var systemBarStyler: SystemBarStyler
+    @Inject lateinit var systemBarStyler: SystemBarStyler
     override val fragmentViewModel: MyPageViewModel by viewModels()
     private val myCommentListAdapter: MyPageMyCommentAdapter by lazy { MyPageMyCommentAdapter() }
     private var myPageMoreBottomSheet: MyPageMoreBottomSheetFragment? = null
@@ -40,20 +38,17 @@ class MyPageFragment :
         setFragmentResultListner()
     }
 
-    private fun setBinding() =
-        binding.apply {
-            viewModel = fragmentViewModel.apply {
-                viewLifecycleOwner.apply {
-                    repeatOnStarted { token.collect { handleToken(it) } }
-                    repeatOnStarted { eventFlow.collect { handleEvent(it) } }
-                    repeatOnStarted { user.collect { handleUserState(it) } }
-                    repeatOnStarted { myCommentsList.collect { handleMyCommentListState(it) } }
-                }
-                loadTokens()
+    private fun setBinding() = binding.apply {
+        viewModel = fragmentViewModel.apply {
+            viewLifecycleOwner.apply {
+                repeatOnStarted { eventFlow.collect { handleEvent(it) } }
+                repeatOnStarted { myCommentsList.collect { handleMyCommentListState(it) } }
+                repeatOnStarted { currentUser.filterNotNull().collect { handleUserState(it) } }
             }
-            setBarStyle()
-            setRecyclerView()
         }
+        setBarStyle()
+        setRecyclerView()
+    }
 
     private fun handleToken(tokenState: TokenState<CurrentTokens>) {
         log(tokenState.toString())
@@ -65,11 +60,11 @@ class MyPageFragment :
         }
     }
 
-    private fun handleEvent(event: MyPageViewModel.MyPageEvent) = when (event) {
-        is MyPageViewModel.MyPageEvent.Login -> navigateWithUri("medilens://main/intro_nav/login")
-        is MyPageViewModel.MyPageEvent.SignUp -> navigateWithUri("medilens://main/intro_nav/signUp")
-        is MyPageViewModel.MyPageEvent.NavigateToMyCommentList -> navigateWithUri("medilens://main/comments_nav/myCommentsListFragment")
-        is MyPageViewModel.MyPageEvent.NavigateToMyPageMore -> showMyPageBottomSheet()
+    private fun handleEvent(event: MyPageEvent) = when (event) {
+        is MyPageEvent.Login -> navigateWithUri("medilens://main/intro_nav/login")
+        is MyPageEvent.SignUp -> navigateWithUri("medilens://main/intro_nav/signUp")
+        is MyPageEvent.NavigateToMyCommentList -> navigateWithUri("medilens://main/comments_nav/myCommentsListFragment")
+        is MyPageEvent.NavigateToMyPageMore -> showMyPageBottomSheet()
     }
 
     private fun showMyPageBottomSheet() {
@@ -95,20 +90,19 @@ class MyPageFragment :
     }
 
     private fun setGuestModeScreenSpan(): SpannableStringBuilder {
-        val span =
-            SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
-                setSpan(
-                    ForegroundColorSpan(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.main,
-                        ),
+        val span = SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.guestDescription)).apply {
+            setSpan(
+                ForegroundColorSpan(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.main,
                     ),
-                    15, 18,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-                )
-                setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            }
+                ),
+                15, 18,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+            setSpan(UnderlineSpan(), 15, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
         return span
     }
 
@@ -119,25 +113,18 @@ class MyPageFragment :
     }
 
     private fun loginModeScreen() = fragmentViewModel.apply {
-        loadUser()
         loadMyCommentsList()
         setLoginModeScreenVisible()
     }
 
-    private fun handleUserState(userEntityState: UiState<UserEntity>) {
-        when (userEntityState) {
-            is UiState.Initial -> {}
+    private fun handleUserState(userEntityState: LoginUiState) {
+        setSuccessUserVisible()
+        binding.userDto = userEntityState.userEntity
 
-            is UiState.Loading -> setLoadingUserVisible()
-
-            is UiState.Success -> {
-                setSuccessUserVisible()
-                binding.userDto = userEntityState.data
-            }
-
-            is UiState.Error -> {
-                log(userEntityState.message)
-            }
+        if (userEntityState is LoginUiState.Online) {
+            loginModeScreen()
+        } else {
+            guestModeScreen()
         }
     }
 
@@ -151,6 +138,7 @@ class MyPageFragment :
         userNameTV.visibility = View.VISIBLE
         userImageIV.visibility = View.VISIBLE
         userLottie.visibility = View.GONE
+        tokenLottie.visibility = View.GONE
     }
 
     private fun handleMyCommentListState(commentListState: UiState<List<MyCommentsListResponse.Comment>>) {
@@ -225,7 +213,6 @@ class MyPageFragment :
 
     private fun changeNicknameCallback() {
         log("MyPageDialog Callback : changeNickname() ")
-        fragmentViewModel.loadUser()
     }
 
     private fun changePasswordCallback() {
@@ -252,24 +239,23 @@ class MyPageFragment :
     }
 
     private fun setNoShowCommentListSpan(): SpannableStringBuilder {
-        val span =
-            SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.noMyComment)).apply {
-                setSpan(
-                    ForegroundColorSpan(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.main,
-                        ),
+        val span = SpannableStringBuilder(getString(com.android.mediproject.feature.mypage.R.string.noMyComment)).apply {
+            setSpan(
+                ForegroundColorSpan(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.main,
                     ),
-                    7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                )
-                setSpan(
-                    UnderlineSpan(),
-                    7,
-                    9,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE,
-                )
-            }
+                ),
+                7, 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+            setSpan(
+                UnderlineSpan(),
+                7,
+                9,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
+            )
+        }
         return span
     }
 
