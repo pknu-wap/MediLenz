@@ -43,7 +43,7 @@ class MyPageViewModel @Inject constructor(
     fun signUp() = event(MyPageEvent.SignUp)
 
     fun signOut() = viewModelScope.launch {
-        signUseCase.signOut()
+        signUseCase.logout()
         loadTokens()
     }
 

@@ -32,8 +32,8 @@ class EditUserAccountUseCase @Inject constructor(
 
     suspend fun withdrawal() {
         userRepository.withdrawal()
-        signRepository.signOut()
+        signRepository.logout()
         appDataStore.clearMyAccountInfo()
     }
-    
+
 }

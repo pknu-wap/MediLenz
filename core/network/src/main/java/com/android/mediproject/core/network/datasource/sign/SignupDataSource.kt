@@ -10,12 +10,18 @@ interface SignupDataSource {
     suspend fun resendConfirmationCode(cognitoUser: CognitoUser): Result<ConfirmationCodeDeliveryDetails>
 }
 
+private const val USER_NAME = "user_name"
+
 class SignUpRequest(
     val email: String,
     private val password: ByteArray,
-    val cognitoUserAttributes: CognitoUserAttributes,
+    val nickName: String,
 ) {
     val passwordString: String get() = password.decodeToString()
+
+    val attr = CognitoUserAttributes().apply {
+        this.addAttribute(USER_NAME, nickName)
+    }
 }
 
 data class SignUpResponse(

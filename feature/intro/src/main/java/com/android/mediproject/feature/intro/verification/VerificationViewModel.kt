@@ -29,7 +29,7 @@ class VerificationViewModel @Inject constructor(
 
     override fun onClickWithText(text: String) {
         viewModelScope.launch {
-            withContext(defaultDispatcher) { signRepository.verifyEmail(email.value, text) }.onSuccess {
+            withContext(defaultDispatcher) { signRepository.confirmEmail(email.value, text) }.onSuccess {
                 _verificationState.value = VerificationState.Verified
             }.onFailure {
                 _verificationState.value = VerificationState.VerifyFailed
