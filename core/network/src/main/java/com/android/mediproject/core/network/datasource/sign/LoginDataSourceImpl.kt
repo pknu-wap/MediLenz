@@ -19,18 +19,16 @@ class LoginDataSourceImpl(
 ) : LoginDataSource {
 
     override suspend fun login(request: LoginRequest): Result<LoginResponse> {
-        val session = getSession(request)
-        session.fold(
+        return getSession(request).fold(
             onSuccess = { userSession ->
-                val attr = getUserAttr(userSession)
-                return attr.fold(
+                getUserAttr(userSession).fold(
                     onSuccess = { userAttr ->
                         Result.success(LoginResponse(userSession, userAttr))
                     },
                     onFailure = { Result.failure(it) },
                 )
             },
-            onFailure = { return Result.failure(it) },
+            onFailure = { Result.failure(it) },
         )
     }
 
@@ -72,7 +70,7 @@ class LoginDataSourceImpl(
     }
 
     private suspend fun getUserAttr(session: CognitoUserSession) = suspendCoroutine<Result<CognitoUserDetails>> {
-        userPool.getUser(session.username).getDetails(
+        userPool.currentUser.getDetails(
             object : GetDetailsHandler {
                 override fun onSuccess(cognitoUserDetails: CognitoUserDetails) {
                     it.resume(Result.success(cognitoUserDetails))

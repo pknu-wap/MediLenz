@@ -11,6 +11,8 @@ import com.android.mediproject.core.network.datasource.sign.LoginRequest
 import com.android.mediproject.core.network.datasource.sign.SignUpRequest
 import com.android.mediproject.core.network.datasource.sign.SignupDataSource
 
+private const val USER_NAME = "custom:user_name"
+
 internal class SignRepositoryImpl(
     private val loginDataSource: LoginDataSource,
     private val signupDataSource: SignupDataSource,
@@ -26,7 +28,7 @@ internal class SignRepositoryImpl(
     ).fold(
         onSuccess = {
             accountSessionRepository.updateSession(it.userSession)
-            accountSessionRepository.updateAccount(loginParameter.email, it.userSession.username)
+            accountSessionRepository.updateAccount(loginParameter.email, it.attr.attributes.attributes[USER_NAME]!!)
             appDataStore.saveSkipIntro(true)
             LoginState.Success
         },
