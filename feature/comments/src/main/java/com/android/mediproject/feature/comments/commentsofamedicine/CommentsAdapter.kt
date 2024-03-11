@@ -7,7 +7,9 @@ import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.android.mediproject.core.model.comments.BaseComment
 import com.android.mediproject.core.model.comments.Comment
+import com.android.mediproject.core.model.common.UiModelMapperFactory
 import com.android.mediproject.core.ui.base.view.listfilter.MediPopupMenu
 import com.android.mediproject.feature.comments.R
 import com.android.mediproject.feature.comments.databinding.ItemViewCommentBinding
@@ -62,7 +64,7 @@ class CommentsAdapter : PagingDataAdapter<Comment, CommentsAdapter.BaseCommentVi
             binding.apply {
                 replyButton.setOnClickListener {
                     comment?.apply {
-                        onClickReply?.invoke(content, commentId)
+                        onClickReply?.invoke(UiModelMapperFactory.create<BaseComment>(this).convert())
                     }
                 }
                 likeButton.setOnClickListener {
@@ -111,7 +113,7 @@ class CommentsAdapter : PagingDataAdapter<Comment, CommentsAdapter.BaseCommentVi
             binding.apply {
                 commentView.replyButton.setOnClickListener {
                     commentView.comment?.apply {
-                        onClickReply?.invoke(content, commentId)
+                        onClickReply?.invoke(UiModelMapperFactory.create<BaseComment>(this).convert())
                     }
                 }
                 commentView.likeButton.setOnClickListener {

@@ -12,16 +12,18 @@ object CamBindingAdapter {
     @JvmStatic
     fun setOnClick(view: View, onCapture: (CapturedDetectionEntity) -> Unit, srcPreview: PreviewView, overlayView: OverlayView) {
         view.setOnClickListener {
-            onCapture.invoke(
-                CapturedDetectionEntity(
-                    items = overlayView.capture().map {
-                        CapturedDetectionEntity.Item(it)
-                    },
-                    capturedImage = srcPreview.bitmap!!,
-                    originalImageSize = Size(overlayView.width, overlayView.height),
-                    resizedImageSize = Size(overlayView.resizedWidth, overlayView.resizeHeight),
-                ),
-            )
+            if (srcPreview.previewStreamState.isInitialized) {
+                onCapture.invoke(
+                    CapturedDetectionEntity(
+                        items = overlayView.capture().map {
+                            CapturedDetectionEntity.Item(it.boundingBox, it.label, it.confidence)
+                        },
+                        capturedImage = srcPreview.bitmap!!,
+                        originalImageSize = Size(overlayView.width, overlayView.height),
+                        resizedImageSize = Size(overlayView.resizedWidth, overlayView.resizeHeight),
+                    ),
+                )
+            }
         }
     }
 }

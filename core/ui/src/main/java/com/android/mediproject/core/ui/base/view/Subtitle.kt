@@ -24,9 +24,9 @@ class Subtitle @JvmOverloads constructor(
         const val PASSWORD = 1
     }
 
-    lateinit var title: TextView
-    lateinit var redPoint: TextView
-    lateinit var inputData: EditText
+    var title: TextView
+    var redPoint: TextView
+    var inputData: EditText
 
     init {
         val infService = Context.LAYOUT_INFLATER_SERVICE

@@ -1,16 +1,13 @@
 package com.android.mediproject.core.data.sign
 
 
-import com.android.mediproject.core.model.requestparameters.LoginParameter
-import com.android.mediproject.core.model.requestparameters.SignUpParameter
-import kotlinx.coroutines.flow.Flow
+import com.android.mediproject.core.model.sign.LoginParameter
+import com.android.mediproject.core.model.sign.SignUpParameter
 
 interface SignRepository {
+    suspend fun login(loginParameter: LoginParameter): LoginState
+    suspend fun signUp(signUpParameter: SignUpParameter): SignUpState
 
-    fun login(loginParameter: LoginParameter): Flow<Result<Unit>>
-
-    fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>>
-
-    fun signOut()
-
+    suspend fun logout()
+    suspend fun confirmEmail(email: String, code: String): Result<Unit>
 }

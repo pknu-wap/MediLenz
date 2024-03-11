@@ -1,8 +1,6 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 
 class FeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -13,13 +11,11 @@ class FeatureConventionPlugin : Plugin<Project> {
                 apply("androidx.navigation.safeargs.kotlin")
             }
 
-            val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
             dependencies {
-                "implementation"(libs.findBundle("navigations").get())
-                "implementation"(libs.findBundle("lifecycles").get())
-                "implementation"(libs.findBundle("kotlins").get())
-                "kapt"(libs.findLibrary("androidx.lifecycle.compilerKapt").get())
+                IMPLEMENTATION(libs.findBundle("navigations").get())
+                IMPLEMENTATION(libs.findBundle("lifecycles").get())
+                IMPLEMENTATION(libs.findBundle("kotlins").get())
+                KAPT(libs.findLibrary("androidx.lifecycle.compilerKapt").get())
             }
         }
     }

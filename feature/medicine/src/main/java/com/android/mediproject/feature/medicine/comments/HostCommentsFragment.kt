@@ -43,7 +43,6 @@ class HostCommentsFragment : Fragment() {
             ?.setArguments(MedicineBasicInfoArgs(args.itemSequence.toLong(), args.medicineIdInServer))
 
         navHostFragment.navController.graph = graph
-        viewModel.scrollToBottom()
     }
 
 

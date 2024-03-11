@@ -16,7 +16,6 @@ import com.android.mediproject.core.model.ai.ClassificationResult
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -64,7 +63,6 @@ class ConfirmViewModel @Inject constructor(
                                     itemSeq = item.itemSeq, score = item.score, bitmap = detection.items[i].bitmap!!,
                                 )
                             }
-                            delay(2000L)
                             _classificationResult.value = InferenceState.Success(
                                 ClassificationResult(
                                     items = items,

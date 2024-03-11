@@ -1,5 +1,6 @@
 package com.android.mediproject.feature.news.recallsalesuspension
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -18,7 +19,9 @@ class RecallSuspensionViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
+    val listScrollState = mutableStateOf(0 to 0)
+    val lazyListState: LazyListState = LazyListState(listScrollState.value.first, listScrollState.value.second)
+
     val recallDisposalList = getRecallSaleSuspensionUseCase.getRecallSaleSuspensionList().cachedIn(viewModelScope).flowOn(ioDispatcher)
 
-    val listScrollState = mutableStateOf(0)
 }

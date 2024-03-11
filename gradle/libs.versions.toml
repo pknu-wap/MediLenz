@@ -1,41 +1,37 @@
 # 라이브러리 버전---------------------------------------------------------------------------------------------------------------
 [versions]
 # kotlin
-kotlin = "1.8.22"
-kotlinCompilerExtension = "1.4.8"
+kotlin = "1.9.22"
+kotlinCompilerExtension = "1.5.8"
 kotlinxCoroutines = "1.7.3"
-kotlinxSerializationJson = "1.5.0"
+kotlinxSerializationJson = "1.6.2"
 kotlinxDateTime = "0.4.0"
-ksp = "1.8.22-1.0.11"
+ksp = "1.9.22-1.0.17"
 
-androidGradlePlugin = "8.0.2"
-androidDesugarJdkLibs = "2.0.3"
+androidGradlePlugin = "8.2.2"
+androidDesugarJdkLibs = "2.0.4"
 photoview = "2.3.0"
 
 lz4Java = "1.8.0"
 
 # androidx
-androidxCore = "1.10.1"
-androidxActivity = "1.7.2"
-androidxFragment = "1.6.1"
-androidxNavigation = "2.6.0"
-androidxComposeBom = "2023.06.01"
+androidxCore = "1.12.0"
+androidxActivity = "1.8.2"
+androidxFragment = "1.6.2"
+androidxNavigation = "2.7.6"
+androidxComposeBom = "2023.10.01"
 androidxConcurrentFutures = "1.1.0"
-androidxLifecycle = "2.6.1"
+androidxLifecycle = "2.7.0"
 androidxDatastore = "1.0.0"
-androidxWork = "2.8.1"
-androidxRoom = "2.5.2"
-androidxRecyclerview = "1.3.1"
+androidxWork = "2.9.0"
+androidxRoom = "2.6.1"
+androidxRecyclerview = "1.3.2"
 androidxRecyclerviewSelection = "1.1.0"
 androidxAppcompat = "1.6.1"
 androidxPreferenceKtx = "1.2.1"
 androidxConstraintlayout = "2.1.4"
 androidxConstraintlayoutCompose = "1.0.1"
 androidxGridlayout = "1.0.0"
-androidxHilt = "2.47"
-androidxHiltNavigationCompose = "1.0.0"
-androidxHiltWork = "1.0.0"
-androidxHiltNavigationFragment = "1.0.0"
 androidxWindowManager = "1.0.0"
 androidXTestEspresso = "3.5.1"
 androidXTestRunner = "1.5.2"
@@ -43,50 +39,50 @@ androidXTestRules = "1.5.0"
 androidXTestCore = "1.5.0"
 androidXTestAnnotation = "1.0.1"
 androidXTestJUnit = "1.1.5"
-androidXPaging = "3.2.0"
+androidXPaging = "3.2.1"
 androidXAsynclayoutinflater = "1.1.0-alpha01"
 
-hiltTesting = "2.47"
-
+dagger = "2.50"
+androidx_hilt = "1.1.0"
 androidXSplashScreen = "1.0.1"
 
-protocolBuffer = "3.23.1"
-protoBufGradlePlugin = "0.9.3"
+protocolBuffer = "3.24.1"
+protoBufGradlePlugin = "0.9.4"
 googleOssPlugin = "0.10.6"
 
 androidXTestTruth = "1.5.0"
 androidXTestOrchestra = "1.4.2"
 androidXTestArch = "2.2.0"
-
-cameraX = "1.2.3"
-accompanist = "0.30.1"
+androidXTestHilt = "2.50"
+cameraX = "1.3.1"
+accompanist = "0.32.0"
 
 jUnit = "4.13.2"
 mockit = "5.4.0"
-mockitKotlin = "5.0.0"
+mockitKotlin = "5.1.0"
 robolectric = "4.10.3"
-lottie = "6.0.0"
+lottie = "6.3.0"
 
-material = "1.9.0"
-glide = "4.15.1"
-glideCompose = "1.0.0-alpha.3"
-gms = "4.3.15"
+material = "1.11.0"
+glide = "4.16.0"
+glideCompose = "1.0.0-beta01"
+gms = "4.4.0"
 retrofit2 = "2.9.0"
 retrofit2KotlinxSerializationJson = "1.0.0"
 androidArchLifecycle = "1.1.1"
 
-okhttp3 = "4.11.0"
+okhttp3 = "4.12.0"
 
 flexbox = "3.0.0"
 
-compileSdk = "33"
-targetSdk = "33"
+compileSdk = "34"
+targetSdk = "34"
 minSdk = "28"
 
 #firebase
-firebaseCrashlytics = "18.4.0"
-firebaseCrashlyticsGradlePlugin = "2.9.5"
-firebaseAnalytics = "21.3.0"
+firebaseCrashlytics = "18.6.1"
+firebaseCrashlyticsGradlePlugin = "2.9.9"
+firebaseAnalytics = "21.5.0"
 
 taskVision = "0.4.4"
 playServicesTfliteJava = "16.1.0"
@@ -102,19 +98,23 @@ smart_deeplink_annotation = "1.0.0-rc05"
 simple_dialog = "1.0.2"
 ksealedbinding = "1.0.0"
 
-ktlint = "0.50.0"
-ktlint_gradle_plugin = "11.5.0"
-detekt = "1.23.0"
+ktlint = "1.1.1"
+ktlint_gradle_plugin = "12.1.0"
+detekt = "1.23.4"
 
-jsoup = "1.16.1"
+jsoup = "1.17.2"
 
 pytorch_android = "1.13.1"
+onnx_runtime_android = "1.15.1"
+onnx_runtime_extensions_android = "0.8.0"
+
+aws_android_sdk_cognito = "2.75.0"
 
 # 라이브러리 의존성------------------------------------------------------------------------------------------------------------------------
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 
-tensorflow-lite-taskVisionPlayServices = { module = "org.tensorflow:tensorflow-lite-task-vision-play-services", version.ref = "taskVision" }
+tensorflow-lite-taskVisionPlayServices = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "taskVision" }
 tensorflow-lite-playServicesTfliteGpu = { module = "com.google.android.gms:play-services-tflite-gpu", version.ref = "playServicesTfliteGpu" }
 tensorflow-lite-playServicesTfliteJava = { module = "com.google.android.gms:play-services-tflite-java", version.ref = "playServicesTfliteJava" }
 tensorflow-lite-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tflite" }
@@ -122,7 +122,6 @@ tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", v
 tensorflow-lite-gpuDelegate = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "gpuDelegate" }
 tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tfliteGpu" }
 tensorflow-lite-metadata = { module = "org.tensorflow:tensorflow-lite-metadata", version.ref = "tfliteMetadata" }
-
 
 
 # androidX--------------------------------------------------------------------------------------------------------------------
@@ -133,7 +132,7 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
-androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidx_hilt" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidxConstraintlayoutCompose" }
 
 # Accompanist----------------------------------------------------------------------------------------------------------------------------
@@ -200,6 +199,11 @@ camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraX" 
 camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraX" }
 camera-video = { module = "androidx.camera:camera-video", version.ref = "cameraX" }
 
+
+# aws --------------------------------------------------------------------------------------------------------------------------------
+
+aws-android-sdk-cognito = { module = "com.amazonaws:aws-android-sdk-cognitoidentityprovider", version.ref = "aws_android_sdk_cognito" }
+
 # androidTestImplementation------------------------------------------------------------------------------------------------------------------------
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidXTestEspresso" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidXTestRunner" }
@@ -217,23 +221,22 @@ mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "
 junit = { module = "junit:junit", version.ref = "jUnit" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 android-flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
-google-dagger-hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltTesting" }
+google-dagger-hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "androidXTestHilt" }
 
 # firebase--------------------------------------------------------------------------------------------------------------------
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlytics" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx", version.ref = "firebaseAnalytics" }
 
-# hilt------------------------------------------------------------------------------------------------------------------------
-androidx-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "androidxHilt" }
-androidx-hilt-android-testingAndroidTestImplementation = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "androidxHilt" }
-androidx-hilt-compilerKapt = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "androidxHilt" }
+# dagger hilt------------------------------------------------------------------------------------------------------------------------
+dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
+dagger-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
+dagger-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger" }
 
-# with Navigation---------------------------------------
-androidx-hilt-navigation-fragment = { group = "androidx.hilt", name = "hilt-navigation-fragment", version.ref = "androidxHiltNavigationFragment" }
-
-# with WorkManager----------------------------------
-androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "androidxHiltWork" }
-androidx-hilt-work-compilerKapt = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidxHiltWork" }
+# hilt --------------------------------------------------------------------------------------------------------------------------------
+androidx-hilt-common = { module = "androidx.hilt:hilt-common", version.ref = "androidx_hilt" }
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "androidx_hilt" }
+androidx-hilt-work-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidx_hilt" }
+androidx-hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "androidx_hilt" }
 
 # kotlin--------------------------------------------------------------------------------------------------------------
 
@@ -264,8 +267,13 @@ lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
 # pytorch --------------------------------------------------------------------------------------------------------------
 
-pytorch-lite = { module = "org.pytorch:pytorch_android_lite", version.ref = "pytorch_android" }
-pytorch-torchvision = { module = "org.pytorch:pytorch_android_torchvision_lite", version.ref = "pytorch_android" }
+pytorch-lite = { module = "org.pytorch:pytorch_android", version.ref = "pytorch_android" }
+pytorch-torchvision = { module = "org.pytorch:pytorch_android_torchvision", version.ref = "pytorch_android" }
+
+# onnx --------------------------------------------------------------------------------------------------------------
+
+onnx-runtime-android = { module = "com.microsoft.onnxruntime:onnxruntime-android", version.ref = "onnx_runtime_android" }
+onnx-runtime-extensions-android = { module = "com.microsoft.onnxruntime:onnxruntime-extensions-android", version.ref = "onnx_runtime_extensions_android" }
 
 # material--------------------------------------------------------------------------------------------------------------
 material-main = { module = "com.google.android.material:material", version.ref = "material" }
@@ -310,29 +318,37 @@ composes = [
     "androidx-compose-ui-util",
     "androidx-compose-ui",
     "androidx-compose-foundation",
-    "androidx-compose-foundation-layout"]
-
-uiAndroidx = ["androidx-appcompat", "androidx-preference-ktx", "androidx-core-ktx", "androidx-fragment", "androidx-activity",
-    "androidx-recyclerview", "androidx-constraintlayout", "androidx-constraintlayout-compose", "androidx-activity-compose",
+    "androidx-compose-foundation-layout",
+    "androidx-compose-material3",
+    "androidx-compose-material3-windowSizeClass"
 ]
 
+uiAndroidx = ["androidx-appcompat", "androidx-preference-ktx", "androidx-core-ktx", "androidx-fragment", "androidx-activity",
+    "androidx-recyclerview", "androidx-constraintlayout",
+]
+
+compose-uiAndroidx = ["androidx-constraintlayout-compose", "androidx-activity-compose"]
+
 lifecycles = ["androidx-lifecycle-livedata-ktx", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx",
-    "androidx-lifecycle-viewmodel-savedstate", "androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-runtime-compose"]
+    "androidx-lifecycle-viewmodel-savedstate"]
+
+compose-lifecycles = ["androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-runtime-compose"]
 
 retrofits = ["retrofit-core", "retrofit-kotlinx-serialization", "retrofit-scalars"]
 
-navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-compose", "androidx-navigation-dynamic"]
+navigations = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-dynamic"]
+
+compose-navigations = ["androidx-navigation-compose"]
 
 kotlins = ["kotlin-stdlib-root", "kotlinx-coroutines-android", "kotlinx-serialization-json", "kotlin-reflection"]
 
-materials = ["material-main", "androidx-compose-material3", "androidx-compose-material3-windowSizeClass"]
+materials = ["material-main"]
 
 glides = ["glide-main"]
 
 glides-kapt = ["glide-kapt"]
 
-hilts = ["androidx-hilt-navigation-compose", "androidx-hilt-android", "androidx-hilt-navigation-fragment",
-    "androidx-hilt-work", "androidx-hilt-navigation-compose"]
+daggerhilt = ["dagger-hilt-android", "androidx-hilt-work", "androidx-hilt-navigation-compose", "androidx-hilt-common", "androidx-hilt-navigation-fragment"]
 
 rooms = ["androidx-room-ktx", "androidx-room-runtime", "androidx-room-paging"]
 
@@ -358,7 +374,7 @@ android-library = { id = "com.android.library", version.ref = "androidGradlePlug
 
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradlePlugin" }
 gms = { id = "com.google.gms.google-services", version.ref = "gms" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "androidxHilt" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 # for kotlin-serialization

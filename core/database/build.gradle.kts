@@ -1,10 +1,15 @@
 plugins {
     id("mediproject.android.library")
     id("mediproject.android.hilt")
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.android.mediproject.core.database"
+}
+
+ksp {
+    arg("room.generateKotlin", "true")
 }
 
 dependencies {
@@ -13,5 +18,5 @@ dependencies {
     implementation(libs.bundles.rooms)
     implementation(libs.lz4)
     implementation(libs.kotlinx.coroutines.android)
-    kapt(libs.androidx.room.compileKsp)
+    ksp(libs.androidx.room.compileKsp)
 }

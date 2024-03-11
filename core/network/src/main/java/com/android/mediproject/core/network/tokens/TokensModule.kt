@@ -1,8 +1,7 @@
 package com.android.mediproject.core.network.tokens
 
-import androidx.datastore.core.DataStore
 import com.android.mediproject.core.common.util.AesCoder
-import com.android.mediproject.core.datastore.SavedToken
+import com.android.mediproject.core.model.token.TokenState
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +15,6 @@ object TokensModule {
     @Provides
     @Singleton
     fun providesTokenServer(
-        tokenDataStore: DataStore<SavedToken>,
         aesCoder: AesCoder,
-    ): TokenServer = TokenServerImpl(tokenDataStore, aesCoder)
+    ): TokenServer = TokenServerImpl(aesCoder, TokenState.Empty)
 }

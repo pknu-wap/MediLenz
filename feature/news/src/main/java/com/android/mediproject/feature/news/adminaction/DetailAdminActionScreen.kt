@@ -12,6 +12,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.mediproject.core.common.viewmodel.onInitial
 import com.android.mediproject.core.common.viewmodel.onSuccess
 import com.android.mediproject.core.model.news.adminaction.AdminAction
-import com.android.mediproject.core.ui.compose.CenterProgressIndicator
+import com.android.mediproject.feature.news.CenterProgressIndicator
 import com.android.mediproject.feature.news.R
 import com.android.mediproject.feature.news.customui.CardBox
 import com.android.mediproject.feature.news.customui.Header
@@ -42,9 +43,9 @@ fun DetailAdminActionScreen(
     }
 
     val viewModel: AdminActionViewModel = hiltViewModel()
-    val item = viewModel.clickedItem.collectAsStateWithLifecycle()
+    val item by viewModel.clickedItem.collectAsStateWithLifecycle()
 
-    item.value.onInitial {
+    item.onInitial {
         CenterProgressIndicator(stringResource(id = R.string.loadingAdminActionList))
     }.onSuccess {
         Item(it)

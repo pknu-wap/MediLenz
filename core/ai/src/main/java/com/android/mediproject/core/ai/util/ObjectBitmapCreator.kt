@@ -1,31 +1,48 @@
 package com.android.mediproject.core.ai.util
 
 import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.Paint
 import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.scale
 import com.android.mediproject.core.ai.model.CapturedDetectionEntity
+import com.android.mediproject.core.ai.util.SharedObjectDetectionViewProperty.draw
+import java.lang.ref.WeakReference
 
 object ObjectBitmapCreator {
-
-    const val ROUND_CORNER_RADIUS = 10f
-    
-    val boxPaint = Paint().apply {
-        color = Color.WHITE
-        strokeWidth = 12f
-        style = Paint.Style.STROKE
-        strokeCap = Paint.Cap.SQUARE
-        isAntiAlias = true
-    }
+    private const val TARGET_SIZE = 224
 
     fun createBitmapWithObjects(capturedDetectionEntity: CapturedDetectionEntity): Bitmap {
         val outBitmap = capturedDetectionEntity.capturedImage.applyCanvas {
-            for (item in capturedDetectionEntity.items) {
-                val rect = capturedDetectionEntity.scale(item.boundingBox)
-                drawRoundRect(rect, ROUND_CORNER_RADIUS, ROUND_CORNER_RADIUS, boxPaint)
+            draw(
+                capturedDetectionEntity.items.map {
+                    SharedObjectDetectionViewProperty.Object(
+                        it.label,
+                        it.confidence,
+                        it.boundingBox,
+                    )
+                },
+                capturedDetectionEntity.widthScaleFactor,
+                capturedDetectionEntity.heightScaleFactor,
+            )
+        }
+        return outBitmap
+    }
+
+    fun resizeBitmap(bitmap: Bitmap): Bitmap {
+        return bitmap.let { src ->
+            if (src.width == TARGET_SIZE && src.height == TARGET_SIZE) {
+                src
+            } else {
+                val resizeRatio: Float = maxOf(bitmap.width, bitmap.height).let { max ->
+                    if (max > TARGET_SIZE) TARGET_SIZE / max.toFloat() else max.toFloat() / TARGET_SIZE
+                }
+                val resizedBitmap = WeakReference(
+                    bitmap.scale(
+                        (bitmap.width * resizeRatio).toInt(),
+                        (bitmap.height * resizeRatio).toInt(),
+                    ),
+                ).get()!!
+                resizedBitmap
             }
         }
-
-        return outBitmap
     }
 }

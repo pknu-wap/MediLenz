@@ -1,72 +1,86 @@
 package com.android.mediproject.core.data.sign
 
-import com.android.mediproject.core.data.user.UserInfoRepository
+import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
+import com.amazonaws.services.cognitoidentityprovider.model.UsernameExistsException
+import com.android.mediproject.core.data.session.AccountSessionRepository
 import com.android.mediproject.core.datastore.AppDataStore
-import com.android.mediproject.core.model.requestparameters.LoginParameter
+import com.android.mediproject.core.model.sign.LoginParameter
+import com.android.mediproject.core.model.sign.SignUpParameter
+import com.android.mediproject.core.network.datasource.sign.LoginDataSource
+import com.android.mediproject.core.network.datasource.sign.LoginRequest
+import com.android.mediproject.core.network.datasource.sign.SignUpRequest
+import com.android.mediproject.core.network.datasource.sign.SignupDataSource
 
-import com.android.mediproject.core.model.requestparameters.SignUpParameter
-import com.android.mediproject.core.model.user.AccountState
-import com.android.mediproject.core.network.datasource.sign.SignDataSource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import javax.inject.Inject
+private const val USER_NAME = "custom:user_name"
 
-class SignRepositoryImpl @Inject constructor(
-    private val signDataSource: SignDataSource,
+internal class SignRepositoryImpl(
+    private val loginDataSource: LoginDataSource,
+    private val signupDataSource: SignupDataSource,
+    private val accountSessionRepository: AccountSessionRepository,
     private val appDataStore: AppDataStore,
-    private val userInfoRepository: UserInfoRepository,
 ) : SignRepository {
 
-
-    /**
-     * 서버에 로그인 요청을 하고, 토큰 정보를 받는다.
-     *
-     * @param loginParameter 로그인 요청 파라미터
-     * @return 응답받은 토큰
-     */
-    override fun login(loginParameter: LoginParameter): Flow<Result<Unit>> = channelFlow {
-        signDataSource.logIn(loginParameter).collect { signInResult ->
-
-            if (signInResult.isFailure) {
-                trySend(Result.failure(signInResult.exceptionOrNull() ?: Exception("로그인 실패")))
+    override suspend fun login(loginParameter: LoginParameter) = loginDataSource.login(
+        LoginRequest(
+            loginParameter.email,
+            loginParameter.password,
+        ),
+    ).fold(
+        onSuccess = {
+            accountSessionRepository.updateSession(it.userSession)
+            accountSessionRepository.updateAccount(loginParameter.email, it.attr.attributes.attributes[USER_NAME]!!)
+            appDataStore.saveSkipIntro(true)
+            LoginState.Success
+        },
+        onFailure = {
+            if (it is UserNotConfirmedException) {
+                accountSessionRepository.updateAccount(loginParameter.email)
+                LoginState.NotVerified
             } else {
-                appDataStore.apply {
-                    saveSkipIntro(true)
-                    signInResult.onSuccess {
-                        // 내 계정 정보 메모리에 저장
-                        userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it._userId!!.toLong(), it._nickName!!, it._email!!))
-                        saveMyAccountInfo(it._email!!, it._nickName!!, it._userId!!.toLong())
-                    }
-                }
-                trySend(Result.success(Unit))
+                LoginState.Failed(it)
             }
-        }
+        },
+    )
+
+    override suspend fun signUp(signUpParameter: SignUpParameter) = signupDataSource.signUp(
+        SignUpRequest(
+            signUpParameter.email,
+            signUpParameter.password,
+            signUpParameter.nickName,
+        ),
+    ).fold(
+        onSuccess = {
+            accountSessionRepository.updateAccount(signUpParameter.email, signUpParameter.nickName)
+            SignUpState.Success
+        },
+        onFailure = { exception ->
+            if (exception is UsernameExistsException) {
+                SignUpState.UserExists
+            } else {
+                SignUpState.Failed(exception)
+            }
+        },
+    )
+
+    override suspend fun logout() {
+        accountSessionRepository.updateSession(null)
+        loginDataSource.logout()
     }
 
-    override fun signUp(signUpParameter: SignUpParameter): Flow<Result<Unit>> = channelFlow {
-        signDataSource.signUp(signUpParameter).collect { signUpResult ->
-            if (signUpResult.isFailure) {
-                trySend(Result.failure(signUpResult.exceptionOrNull() ?: Exception("로그인 실패")))
-                return@collect
-            } else {
-                appDataStore.apply {
-                    saveSkipIntro(true)
-                    signUpResult.onSuccess {
-                        // 내 계정 정보 메모리에 저장
-                        userInfoRepository.updateMyAccountInfo(AccountState.SignedIn(it._userId!!.toLong(), it._nickName!!, it._email!!))
-                        saveMyAccountInfo(it._email!!, it._nickName!!, it._userId!!.toLong())
-                    }
-                }
-                trySend(Result.success(Unit))
-            }
-        }
+    override suspend fun confirmEmail(email: String, code: String): Result<Unit> {
+        return signupDataSource.confirmEmail(email, code)
     }
+}
 
-    /**
-     * 로그아웃
-     *
-     * 저장된 토큰 정보를 삭제한다.
-     */
-    override fun signOut() = signDataSource.signOut()
+sealed interface LoginState {
+    data object Success : LoginState
+    data object NotVerified : LoginState
+    data class Failed(val exception: Throwable) : LoginState
+}
 
+sealed interface SignUpState {
+    data object Success : SignUpState
+    data object UserExists : SignUpState
+
+    data class Failed(val exception: Throwable) : SignUpState
 }

@@ -3,53 +3,109 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/comment_input_background"
-    android:paddingHorizontal="16dp"
-    >
+    android:background="@drawable/comment_input_background">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/replyContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
-        app:endIconMode="clear_text"
-        app:expandedHintEnabled="false"
-        app:hintAnimationEnabled="false"
-        app:hintEnabled="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sendBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        app:layout_constraintBottom_toTopOf="@id/inputContainer"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/commentInput"
+        <TextView
+            android:id="@+id/replyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:text="@string/replyComment"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/baseCommentInfoTextView"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/baseCommentInfoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@color/dark_gray"
+            android:textSize="12sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/replyTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/replyTitle" />
+
+        <TextView
+            android:id="@+id/baseCommentTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/commentInputHint"
-            android:inputType="text"
-            android:maxLines="2"
-            android:paddingVertical="14dp"
-            android:textAppearance="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense"
-            android:textColorHint="@color/black"
-            android:textSize="14sp"
-            />
+            android:layout_marginTop="12dp"
+            android:textColor="@color/dark_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/baseCommentInfoTextView" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageButton
-        android:id="@+id/sendBtn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/inputContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/sendButtonContentDescription"
-        android:padding="4dp"
-        android:src="@drawable/outline_send_24"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/sendButtonBackground"
-        />
+        app:layout_constraintTop_toBottomOf="@id/replyContainer">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            app:boxCornerRadiusBottomEnd="@dimen/commentInputLayoutCornerRadius"
+            app:boxCornerRadiusBottomStart="@dimen/commentInputLayoutCornerRadius"
+            app:boxCornerRadiusTopEnd="@dimen/commentInputLayoutCornerRadius"
+            app:boxCornerRadiusTopStart="@dimen/commentInputLayoutCornerRadius"
+            app:boxStrokeColor="@color/main"
+            app:boxStrokeErrorColor="@color/main"
+            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:expandedHintEnabled="false"
+            app:hintAnimationEnabled="false"
+            app:hintEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/commentInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/commentInputHint"
+                android:inputType="text|textMultiLine"
+                android:maxLines="6"
+                android:minLines="1"
+                android:scrollbars="vertical"
+                android:scrollbarStyle="outsideOverlay"
+                android:paddingVertical="14dp"
+                android:textAppearance="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/sendBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/sendButtonContentDescription"
+            android:scaleType="center"
+            android:scaleX="1.3"
+            android:scaleY="1.3"
+            android:src="@drawable/outline_send_24"
+            app:tint="@color/sendButtonBackground" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

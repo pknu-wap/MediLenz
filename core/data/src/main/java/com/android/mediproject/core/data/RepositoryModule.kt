@@ -1,5 +1,6 @@
 package com.android.mediproject.core.data
 
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool
 import com.android.mediproject.core.common.network.Dispatcher
 import com.android.mediproject.core.common.network.MediDispatchers
 import com.android.mediproject.core.data.adminaction.AdminActionRepository
@@ -24,12 +25,10 @@ import com.android.mediproject.core.data.safetynotification.SafetyNotificationRe
 import com.android.mediproject.core.data.safetynotification.SafetyNotificationRepositoryImpl
 import com.android.mediproject.core.data.search.SearchHistoryRepository
 import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
+import com.android.mediproject.core.data.session.AccountSessionRepository
+import com.android.mediproject.core.data.session.AccountSessionRepositoryImpl
 import com.android.mediproject.core.data.sign.SignRepository
 import com.android.mediproject.core.data.sign.SignRepositoryImpl
-import com.android.mediproject.core.data.token.TokenRepository
-import com.android.mediproject.core.data.token.TokenRepositoryImpl
-import com.android.mediproject.core.data.user.UserInfoRepository
-import com.android.mediproject.core.data.user.UserInfoRepositoryImpl
 import com.android.mediproject.core.data.user.UserRepository
 import com.android.mediproject.core.data.user.UserRepositoryImpl
 import com.android.mediproject.core.database.cache.manager.MedicineDataCacheManager
@@ -46,11 +45,9 @@ import com.android.mediproject.core.network.datasource.news.adminaction.AdminAct
 import com.android.mediproject.core.network.datasource.news.recallsuspension.RecallSaleSuspensionDataSource
 import com.android.mediproject.core.network.datasource.news.recallsuspension.RecallSaleSuspensionListDataSourceImpl
 import com.android.mediproject.core.network.datasource.news.safetynotification.SafetyNotificationDataSource
-import com.android.mediproject.core.network.datasource.sign.SignDataSource
-import com.android.mediproject.core.network.datasource.tokens.TokenDataSource
+import com.android.mediproject.core.network.datasource.sign.LoginDataSource
+import com.android.mediproject.core.network.datasource.sign.SignupDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSource
-import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
-import com.android.mediproject.core.network.tokens.TokenServer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -112,17 +109,18 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesCommentsRepository(commentsDataSource: CommentsDataSource, tokenRepository: TokenRepository): CommentsRepository =
-        CommentsRepositoryImpl(commentsDataSource, tokenRepository)
-
+    fun providesCommentsRepository(commentsDataSource: CommentsDataSource, accountSessionRepository: AccountSessionRepository): CommentsRepository =
+        CommentsRepositoryImpl(commentsDataSource, accountSessionRepository)
 
     @Provides
     @Singleton
-    fun providesSignRepository(
-        signDataSource: SignDataSource,
+    internal fun providesSignRepositoryImpl(
+        loginDataSource: LoginDataSource,
+        signupDataSource: SignupDataSource,
         appDataStore: AppDataStore,
-        userInfoRepository: UserInfoRepository,
-    ): SignRepository = SignRepositoryImpl(signDataSource, appDataStore, userInfoRepository)
+        accountSessionRepository: AccountSessionRepository,
+    ): SignRepository = SignRepositoryImpl(loginDataSource, signupDataSource, accountSessionRepository, appDataStore)
+
 
     @Provides
     @Singleton
@@ -139,16 +137,11 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesUserInfoRepository(
-        userInfoDataSource: UserInfoDataSource, appDataStore: AppDataStore,
-    ): UserInfoRepository = UserInfoRepositoryImpl(userInfoDataSource, appDataStore)
+    fun providesAccountSessionRepository(
+        appDataStore: AppDataStore,
+        cognitoUserPool: CognitoUserPool,
+    ): AccountSessionRepository = AccountSessionRepositoryImpl(appDataStore, cognitoUserPool)
 
-    @Provides
-    @Singleton
-    fun providesTokenRepository(
-        tokenDataSource: TokenDataSource,
-        tokenServer: TokenServer,
-    ): TokenRepository = TokenRepositoryImpl(tokenDataSource, tokenServer)
 
     @Provides
     @Singleton

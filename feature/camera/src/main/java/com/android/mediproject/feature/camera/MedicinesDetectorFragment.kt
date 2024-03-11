@@ -2,7 +2,6 @@ package com.android.mediproject.feature.camera
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.RectF
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -115,9 +114,9 @@ class MedicinesDetectorFragment :
         }
     }
 
-    override fun onDetect(boundingBoxes: List<RectF>, capturedImageWidth: Int, capturedImageHeight: Int) {
-        if (isVisible) binding.overlayView.apply {
-            setResults(boundingBoxes, capturedImageWidth, capturedImageHeight)
+    override fun onDetect(objects: List<CameraHelper.OnDetectionListener.Object>, capturedImageWidth: Int, capturedImageHeight: Int) {
+        if (isVisible) binding.overlayView.run {
+            setResults(objects, capturedImageWidth, capturedImageHeight)
             invalidate()
         }
     }

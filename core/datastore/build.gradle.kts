@@ -8,6 +8,7 @@ android {
     namespace = "com.android.mediproject.core.datastore"
 }
 
+/*
 protobuf {
     protoc {
         artifact = libs.google.protobuf.protoc.get().toString()
@@ -25,6 +26,7 @@ protobuf {
         }
     }
 }
+*/
 
 dependencies {
     implementation(project(":core:common"))
@@ -32,5 +34,4 @@ dependencies {
 
     implementation(libs.bundles.dataStores)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.google.protobuf.kotlin.lite)
 }

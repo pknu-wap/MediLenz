@@ -12,6 +12,7 @@
     <color name="button_chip_text_color">#22A7CC</color>
     <color name="red">#F70A0A</color>
     <color name="gray">#BDBDBD</color>
+    <color name="dark_gray">#6D6D6D</color>
     <color name="gray2">#595959</color>
     <color name="gray3">#808080</color>
 </resources>

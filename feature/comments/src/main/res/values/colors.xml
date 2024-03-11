@@ -4,6 +4,6 @@
     <color name="likeButtonColor">#808080</color>
     <color name="moreButtonColor">#808080</color>
     <color name="replyBackground">#F1F1F1</color>
-    <color name="commentInputBackground">#F1F1F1</color>
-    <color name="sendButtonBackground">#787878</color>
+    <color name="commentInputBackground">#FFFFFF</color>
+    <color name="sendButtonBackground">@color/main</color>
 </resources>

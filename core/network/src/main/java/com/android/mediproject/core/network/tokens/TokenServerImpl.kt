@@ -1,22 +1,25 @@
 package com.android.mediproject.core.network.tokens
 
-import android.util.Log
-import androidx.datastore.core.DataStore
 import com.android.mediproject.core.common.util.AesCoder
-import com.android.mediproject.core.datastore.SavedToken
 import com.android.mediproject.core.model.token.CurrentTokens
-import com.android.mediproject.core.model.token.RequestBehavior
 import com.android.mediproject.core.model.token.TokenState
 import com.android.mediproject.core.network.datasource.tokens.NewTokens
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import java.time.LocalDateTime
-import javax.inject.Inject
+
+internal class TokenServerImpl(
+    private val aesCoder: AesCoder, override val tokenState: TokenState<CurrentTokens>,
+) : TokenServer {
+    override suspend fun saveTokens(newTokens: NewTokens) {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeTokens() {
+        TODO("Not yet implemented")
+    }
+
+}
+
+
+/*
 
 @OptIn(DelicateCoroutinesApi::class)
 internal class TokenServerImpl @Inject constructor(
@@ -43,11 +46,13 @@ internal class TokenServerImpl @Inject constructor(
         }
     }
 
-    /**
-     * 로컬에 저장된 토큰을 불러온다.
-     *
-     * TokenServer인스턴스가 생성된 직후에 호출된다.
-     */
+    */
+/**
+ * 로컬에 저장된 토큰을 불러온다.
+ *
+ * TokenServer인스턴스가 생성된 직후에 호출된다.
+ *//*
+
     private suspend fun loadSavedTokens() {
         Log.d("wap", "loadSavedTokens")
 
@@ -73,13 +78,15 @@ internal class TokenServerImpl @Inject constructor(
     }
 
 
-    /**
-     * 토큰을 로컬에 저장한다.
-     *
-     * @param newTokens 새로 발급받은 토큰
-     *
-     * 서버에서 응답 받으면 가장 먼저 호출되는 함수이다.
-     */
+    */
+/**
+ * 토큰을 로컬에 저장한다.
+ *
+ * @param newTokens 새로 발급받은 토큰
+ *
+ * 서버에서 응답 받으면 가장 먼저 호출되는 함수이다.
+ *//*
+
     override suspend fun saveTokens(newTokens: NewTokens) {
         tokenDataStore.updateData { newToken ->
             newToken.toBuilder().setAccessToken(aesCoder.encode(newTokens.accessToken))
@@ -161,3 +168,4 @@ internal class TokenServerImpl @Inject constructor(
         }
     }
 }
+*/

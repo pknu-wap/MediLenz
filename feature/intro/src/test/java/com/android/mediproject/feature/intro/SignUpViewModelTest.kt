@@ -1,10 +1,9 @@
 package com.android.mediproject.feature.intro
 
-import com.android.mediproject.core.domain.SignUseCase
 import com.android.mediproject.core.test.repositories.FakeSignRepository
 import com.android.mediproject.core.test.repositories.FakeUserInfoRepository
-import com.google.common.truth.Truth.assertThat
 import com.android.mediproject.core.test.MainCoroutineRule
+import com.android.mediproject.feature.intro.signup.SignUpViewModel
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Assert.assertThat
 import org.junit.Before
@@ -44,8 +43,8 @@ class SignUpViewModelTest {
         )
 
         //then
-        val actual = viewModel.signUpState.value
-        val expected = SignUpViewModel.SignUpState.RegexError
+        val actual = viewModel.signUpUiState.value
+        val expected = SignUpViewModel.SignUpUiState.RegexError
         assertThat(actual).isEqualTo(expected)
     }
 
@@ -65,8 +64,8 @@ class SignUpViewModelTest {
         )
 
         //then
-        val actual = viewModel.signUpState.value
-        val expected = SignUpViewModel.SignUpState.RegexError
+        val actual = viewModel.signUpUiState.value
+        val expected = SignUpViewModel.SignUpUiState.RegexError
         assertThat(actual).isEqualTo(expected)
     }
 
@@ -86,8 +85,8 @@ class SignUpViewModelTest {
         )
 
         //then
-        val actual = viewModel.signUpState.value
-        val expected = SignUpViewModel.SignUpState.RegexError
+        val actual = viewModel.signUpUiState.value
+        val expected = SignUpViewModel.SignUpUiState.RegexError
         assertThat(actual).isEqualTo(expected)
     }
 
@@ -108,8 +107,8 @@ class SignUpViewModelTest {
         )
 
         //then
-        val actual = viewModel.signUpState.value
-        val expected = SignUpViewModel.SignUpState.PasswordError
+        val actual = viewModel.signUpUiState.value
+        val expected = SignUpViewModel.SignUpUiState.PasswordError
         assertThat(actual).isEqualTo(expected)
     }
 
@@ -129,8 +128,8 @@ class SignUpViewModelTest {
         )
 
         //then
-        val actual = viewModel.signUpState.value
-        val expected = SignUpViewModel.SignUpState.SignUpSuccess
+        val actual = viewModel.signUpUiState.value
+        val expected = SignUpViewModel.SignUpUiState.SignUpUiSuccess
         assertThat(actual).isEqualTo(expected)
     }
 }

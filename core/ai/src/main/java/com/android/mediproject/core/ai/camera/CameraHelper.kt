@@ -3,9 +3,10 @@ package com.android.mediproject.core.ai.camera
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.RectF
+import android.util.Size
+import android.view.Surface
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -34,7 +35,7 @@ class CameraHelper @Inject constructor(
     private val medicineDetector: MedicineDetector,
 ) : LifecycleEventObserver, CameraController {
 
-    private val mCameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
+    private val mCameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
     private var _mPreview: Preview? = null
     private val mPreview get() = _mPreview!!
@@ -122,27 +123,32 @@ class CameraHelper @Inject constructor(
 
     private fun connectCamera() {
         cameraExecutor = newSingleThreadExecutor()
-        _mImageAnalyzer =
-            ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).setTargetRotation(mPreviewView.display.rotation)
-                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build()
+
+        _mImageAnalyzer = ImageAnalysis.Builder().setOutputImageRotationEnabled(true).setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .setTargetResolution(Size(720, 1280)).setTargetRotation(Surface.ROTATION_0)
+            .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888).build()
         mImageAnalyzer.setAnalyzer(cameraExecutor!!) { image ->
             if (_bitmapBuffer == null) _bitmapBuffer = Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
             image.use {
                 bitmapBuffer.copyPixelsFromBuffer(it.planes[0].buffer)
             }
-            detect(image)
+            detect()
         }
 
-        _mPreview = Preview.Builder().setTargetRotation(mPreviewView.display.rotation).build()
+        _mPreview = Preview.Builder().setTargetResolution(Size(720, 1280)).setTargetRotation(Surface.ROTATION_0).build()
         mCameraProvider.bindToLifecycle(fragmentLifeCycleOwner, mCameraSelector, mPreview, mImageAnalyzer)
         mPreview.setSurfaceProvider(mPreviewView.surfaceProvider)
     }
 
-    private fun detect(imageProxy: ImageProxy) {
-        medicineDetector.detect(imageProxy, bitmapBuffer).onSuccess { detectionResultEntity ->
+    private fun detect() {
+        medicineDetector.detect(bitmapBuffer).onSuccess { detectionResultEntity ->
             detectionCallback.onDetect(
                 detectionResultEntity.items.map {
-                    it.boundingBox
+                    OnDetectionListener.Object(
+                        it.boundingBox,
+                        it.confidence,
+                        it.label,
+                    )
                 },
                 detectionResultEntity.inferencedImageSize.width, detectionResultEntity.inferencedImageSize.height,
             )
@@ -150,6 +156,12 @@ class CameraHelper @Inject constructor(
     }
 
     fun interface OnDetectionListener {
-        fun onDetect(boundingBoxes: List<RectF>, capturedImageWidth: Int, capturedImageHeight: Int)
+        fun onDetect(objects: List<Object>, capturedImageWidth: Int, capturedImageHeight: Int)
+
+        data class Object(
+            val boundingBox: RectF,
+            val confidence: Int,
+            val label: String,
+        )
     }
 }

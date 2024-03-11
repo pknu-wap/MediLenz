@@ -1,23 +1,21 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 
 class HiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
                 apply("org.jetbrains.kotlin.kapt")
+                apply("com.google.devtools.ksp")
                 apply("com.google.dagger.hilt.android")
             }
-            val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
             dependencies {
-                "implementation"(libs.findBundle("hilts").get())
-                "kapt"(libs.findLibrary("androidx.hilt.work.compilerKapt").get())
-                "kapt"(libs.findLibrary("androidx.hilt.compilerKapt").get())
-                //"androidTestImplementation"(libs.findLibrary("androidx.hilt.android.testingAndroidTestImplementation").get())
+                IMPLEMENTATION(libs.findBundle("daggerhilt").get())
+                KAPT(libs.findLibrary("dagger.hilt.compiler").get())
+                KAPT(libs.findLibrary("androidx.hilt.work.compiler").get())
+                ANDROID_TEST_IMPLEMENTATION(libs.findLibrary("dagger.hilt.android.testing").get())
             }
         }
     }

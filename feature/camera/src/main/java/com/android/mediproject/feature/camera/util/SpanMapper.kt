@@ -10,7 +10,7 @@ import android.text.style.StyleSpan
 import androidx.core.content.ContextCompat
 import com.android.mediproject.feature.camera.R
 
-object SpanMapper {
+internal object SpanMapper {
     private val spanCache = mutableMapOf<String, Spannable>()
 
     fun createCheckCountsOfMedicinesMessage(context: Context): Spannable {

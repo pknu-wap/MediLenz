@@ -25,7 +25,9 @@ android {
 
 dependencies {
     ksp(project(":core:compiler"))
+    ksp(libs.ksealedbinding.compiler)
     implementation(project(":core:annotation"))
+    implementation(libs.ksealedbinding.annotation)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlin.reflection)
     implementation(libs.androidx.navigation.ui.ktx)

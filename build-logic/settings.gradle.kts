@@ -1,9 +1,7 @@
-@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://www.jitpack.io") }
     }
     versionCatalogs {
         create("libs") {

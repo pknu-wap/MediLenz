@@ -1,6 +1,6 @@
 package com.android.mediproject.feature.news.adminaction
 
-import androidx.compose.runtime.MutableState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import androidx.paging.DifferCallback
@@ -30,7 +30,9 @@ class AdminActionViewModel @Inject constructor(
     @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : BaseViewModel() {
 
-    val listScrollState: MutableState<Int> = mutableStateOf(0)
+    val listScrollState = mutableStateOf(0 to 0)
+    val lazyListState: LazyListState = LazyListState(listScrollState.value.first, listScrollState.value.second)
+
     val adminActionList = getAdminActionInfoUseCase.getAdminActionList().cachedIn(viewModelScope).flowOn(ioDispatcher)
     private val _clickedItem = MutableStateFlow<UiState<AdminAction>>(UiState.Initial)
     val clickedItem = _clickedItem.asStateFlow()

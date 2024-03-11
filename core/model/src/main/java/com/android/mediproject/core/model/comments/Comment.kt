@@ -1,5 +1,6 @@
 package com.android.mediproject.core.model.comments
 
+import com.android.mediproject.core.model.common.UiModel
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -32,28 +33,17 @@ data class Comment(
     val content: String,
     val createdAt: String,
     val updatedAt: String,
-    var onClickReply: ((String, Long) -> Unit)?,
+    var onClickReply: ((BaseComment) -> Unit)?,
     var onClickLike: ((Long, Boolean) -> Unit)?,
     var onClickDelete: ((Long) -> Unit)?,
     var onClickEdit: ((Comment, Int) -> Unit)?,
     var onClickApplyEdited: ((Comment) -> Unit)?,
     var isMine: Boolean = false,
-) {
+) : UiModel {
 
     var isEditing: Boolean = false
     var isLiked: Boolean = false
 }
-
-
-/*
-ID	int	기본키
-USER_ID	int	회원 id(외래키)
-MEDICINE_ID	varchar2	약 고유코드(외래키)
-SUBORDINATION	int	댓글 종속성
-CONTENT	varchar2	댓글 내용
-CREATED_AT	DATETIME	작성 시각
-UPDATED_AT	DATETIME	수정 시각
- */
 
 fun CommentListResponse.Comment.toComment() = Comment(
     commentId = id,

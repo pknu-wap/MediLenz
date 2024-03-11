@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.android.mediproject.feature.intro.SignUpFragment"
+        android:name="com.android.mediproject.feature.intro.signup.SignUpFragment"
         android:label="SignUpFragment">
 
         <deepLink app:uri="medilens://main/intro_nav/signUp" />
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.android.mediproject.feature.intro.LoginFragment"
+        android:name="com.android.mediproject.feature.intro.login.LoginFragment"
         android:label="LoginFragment">
 
         <action

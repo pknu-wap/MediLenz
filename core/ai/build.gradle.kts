@@ -7,19 +7,17 @@ plugins {
 
 android {
     namespace = "com.android.mediproject.core.ai"
-    androidResources {
-        noCompress += listOf("tflite")
-    }
 
-    @Suppress("UnstableApiUsage") buildFeatures {
+    buildFeatures {
         mlModelBinding = true
     }
-
+    
     @Suppress("UnstableApiUsage") testOptions {
         unitTests {
             isIncludeAndroidResources = true
         }
     }
+
 }
 
 
@@ -34,4 +32,6 @@ dependencies {
     implementation(libs.ksealedbinding.annotation)
     implementation(libs.bundles.pytorch)
     testImplementation(libs.bundles.testAndroid)
+    implementation(libs.onnx.runtime.android)
+    implementation(libs.onnx.runtime.extensions.android)
 }

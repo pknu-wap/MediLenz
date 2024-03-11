@@ -1,12 +1,11 @@
 package com.android.mediproject
 
-import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import android.content.res.Resources
 import androidx.annotation.ArrayRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
-import com.android.mediproject.core.domain.GetAccountStateUseCase
 import com.android.mediproject.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getAccountStateUseCase: GetAccountStateUseCase,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel() {
     val lastSelectedBottomNavFragmentIdKey = "lastSelectedBottomNavFragmentId"
@@ -27,7 +25,7 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getAccountStateUseCase.loadAccountState()
+/*            getAccountStateUseCase.loadAccountState()*/
             if (savedStateHandle.keys().isNotEmpty()) {
                 savedStateHandle.get<Int>(lastSelectedBottomNavFragmentIdKey)?.let {
                     _selectedBottomNavFragmentId.emit(it)

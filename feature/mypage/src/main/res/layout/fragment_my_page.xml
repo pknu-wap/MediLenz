@@ -11,7 +11,7 @@
 
         <variable
             name="userDto"
-            type="com.android.mediproject.core.model.user.User" />
+            type="com.android.mediproject.core.model.user.UserEntity" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -46,7 +46,7 @@
                 app:layout_constraintTop_toBottomOf="@id/mypageBar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/guestModeCL"
@@ -259,7 +259,7 @@
                         app:lottie_loop="true"
                         app:lottie_rawRes="@raw/loading"
                         android:layout_marginTop="30dp"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/myCommentsListRV"

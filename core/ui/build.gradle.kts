@@ -1,5 +1,5 @@
 plugins {
-    id("mediproject.android.feature.compose")
+    id("mediproject.android.feature")
 }
 
 android {
@@ -19,8 +19,6 @@ dependencies {
     implementation(libs.bundles.materials)
     implementation(libs.bundles.glides)
     implementation(libs.androidx.splash)
-    implementation(libs.bundles.composes)
-    debugImplementation(libs.bundles.compose.debug)
 
     kapt(libs.bundles.glides.kapt)
 

@@ -1,5 +1,6 @@
 plugins {
     id("mediproject.android.feature")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -17,6 +18,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
+    implementation(project(":core:data"))
 
     implementation(libs.bundles.glides)
     kapt(libs.bundles.glides.kapt)
@@ -25,4 +27,8 @@ dependencies {
     implementation(libs.bundles.uiAndroidx)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.lottie)
+
+    ksp(libs.ksealedbinding.compiler)
+    implementation(libs.ksealedbinding.annotation)
+    implementation(libs.simpledialog)
 }

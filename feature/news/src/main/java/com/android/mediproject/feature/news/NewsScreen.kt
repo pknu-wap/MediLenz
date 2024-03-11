@@ -14,10 +14,11 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -55,7 +56,7 @@ sealed class ChipType(@StringRes val nameStringId: Int) : Parcelable {
 fun NewsNavHost(
     arguments: RecallDisposalArgs,
 ) {
-    val navController: NavHostController = rememberNavController()
+    val navController = rememberNavController()
     val startDestination by remember {
         mutableStateOf(
             if (arguments.product.isNotEmpty()) RecallSaleSuspensionRoutes.RecallSaleSuspensionRoutesDetail.name
@@ -72,47 +73,35 @@ fun NewsNavHost(
 
 @Composable
 fun NewsScreen() {
-    var selectedChip: ChipType by rememberSaveable { mutableStateOf(ChipType.RecallSaleSuspension) }
-    var displayList: Boolean by rememberSaveable { mutableStateOf(true) }
-    var argument: String by rememberSaveable { mutableStateOf("") }
+    val selectedChip: MutableState<ChipType> by remember { derivedStateOf { mutableStateOf(ChipType.RecallSaleSuspension) } }
+    var displayList: Boolean by remember { mutableStateOf(true) }
+    var argument: String by remember { mutableStateOf("") }
+    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
 
     if (displayList) {
         Column {
             ChipGroup(
-                selectedChip,
+                selectedChip.value,
                 onChipSelected = { chip ->
-                    selectedChip = chip
+                    selectedChip.value = chip
                 },
             )
             Divider(modifier = Modifier.padding(horizontal = 24.dp))
-            when (selectedChip) {
-                is ChipType.RecallSaleSuspension -> RecallSaleSuspensionScreen {
+            when (selectedChip.value) {
+                is ChipType.RecallSaleSuspension -> RecallSaleSuspensionScreen(viewModelStoreOwner) {
                     argument = it
                     displayList = false
                 }
 
-                is ChipType.AdminAction -> AdminActionScreen {
-                    displayList = false
-                }
-
-                is ChipType.SafetyNotification -> SafetyNotificationScreen {
-                    displayList = false
-                }
+                is ChipType.AdminAction -> AdminActionScreen(viewModelStoreOwner) { displayList = false }
+                is ChipType.SafetyNotification -> SafetyNotificationScreen(viewModelStoreOwner) { displayList = false }
             }
         }
     } else {
-        when (selectedChip) {
-            is ChipType.RecallSaleSuspension -> DetailRecallSaleSuspensionScreen(product = argument) {
-                displayList = true
-            }
-
-            is ChipType.AdminAction -> DetailAdminActionScreen {
-                displayList = true
-            }
-
-            is ChipType.SafetyNotification -> DetailSafetyNotificationScreen {
-                displayList = true
-            }
+        when (selectedChip.value) {
+            is ChipType.RecallSaleSuspension -> DetailRecallSaleSuspensionScreen(product = argument) { displayList = true }
+            is ChipType.AdminAction -> DetailAdminActionScreen { displayList = true }
+            is ChipType.SafetyNotification -> DetailSafetyNotificationScreen { displayList = true }
         }
     }
 }

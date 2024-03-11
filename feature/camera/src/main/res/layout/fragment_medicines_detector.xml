@@ -17,7 +17,7 @@
             android:id="@+id/previewView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:scaleType="fillStart" />
+            app:scaleType="fillCenter" />
 
         <com.android.mediproject.core.ai.camera.OverlayView
             android:id="@+id/overlayView"
@@ -78,10 +78,10 @@
             app:layout_constraintBottom_toTopOf="@id/detectionDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:strokeColor="@android:color/transparent"
             app:onCapture="@{viewModel.captureFunc}"
             app:overlayView="@{overlayView}"
-            app:srcPreview="@{previewView}" />
+            app:srcPreview="@{previewView}"
+            app:strokeColor="@android:color/transparent" />
 
         <TextView
             android:id="@+id/detectionDescription"

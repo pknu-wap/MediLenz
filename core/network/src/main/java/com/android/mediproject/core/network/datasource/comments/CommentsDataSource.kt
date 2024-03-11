@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CommentsDataSource {
 
-    suspend fun getCommentsByMedicineId(medicineId: Long): Result<CommentListResponse>
+    suspend fun getCommentsByMedicineId(medicineId: Long, page: Int, rows: Int, userId: String = "-1"): Result<CommentListResponse>
 
     suspend fun getMyCommentsList(): Flow<Result<MyCommentsListResponse>>
 

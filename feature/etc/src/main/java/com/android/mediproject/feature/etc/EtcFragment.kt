@@ -6,20 +6,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import com.android.mediproject.core.common.util.SystemBarStyler
+import com.android.mediproject.core.common.viewmodel.repeatOnStarted
 import com.android.mediproject.core.ui.base.BaseFragment
 import com.android.mediproject.feature.etc.databinding.FragmentEtcBinding
 import dagger.hilt.android.AndroidEntryPoint
-import com.android.mediproject.core.common.viewmodel.repeatOnStarted
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class EtcFragment :
-    BaseFragment<FragmentEtcBinding, EtcViewModel>(FragmentEtcBinding::inflate) {
+class EtcFragment : BaseFragment<FragmentEtcBinding, EtcViewModel>(FragmentEtcBinding::inflate) {
     override val fragmentViewModel: EtcViewModel by viewModels()
-
-    @Inject
-    lateinit var systemBarStyler: SystemBarStyler
+    //@Inject lateinit var systemBarStyler: SystemBarController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,7 +29,7 @@ class EtcFragment :
     }
 
     private fun setBarStyle() = binding.apply {
-        systemBarStyler.changeMode(topViews = listOf(SystemBarStyler.ChangeView(etcBar, SystemBarStyler.SpacingType.PADDING)))
+        // systemBarStyler.changeMode(topViews = listOf(SystemBarStyler.ChangeView(etcBar, SystemBarStyler.SpacingType.PADDING)))
     }
 
     private fun handleEvent(event: EtcViewModel.EtcEvent) {

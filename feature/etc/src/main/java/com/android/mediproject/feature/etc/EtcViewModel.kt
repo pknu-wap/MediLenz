@@ -1,12 +1,21 @@
 package com.android.mediproject.feature.etc
 
-import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import androidx.lifecycle.viewModelScope
+import com.android.mediproject.core.common.network.Dispatcher
+import com.android.mediproject.core.common.network.MediDispatchers
+import com.android.mediproject.core.common.viewmodel.MutableEventFlow
 import com.android.mediproject.core.common.viewmodel.asEventFlow
 import com.android.mediproject.core.ui.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EtcViewModel : BaseViewModel() {
+
+@HiltViewModel
+class EtcViewModel @Inject constructor(
+    @Dispatcher(MediDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher,
+) : BaseViewModel() {
     private val _eventFlow = MutableEventFlow<EtcEvent>()
     val eventFlow = _eventFlow.asEventFlow()
 
@@ -19,10 +28,10 @@ class EtcViewModel : BaseViewModel() {
     fun communicate() = event(EtcEvent.Communicate)
 
     sealed class EtcEvent {
-        object Notice : EtcEvent()
-        object Introduce : EtcEvent()
-        object Policy : EtcEvent()
-        object Privacy : EtcEvent()
-        object Communicate : EtcEvent()
+        data object Notice : EtcEvent()
+        data object Introduce : EtcEvent()
+        data object Policy : EtcEvent()
+        data object Privacy : EtcEvent()
+        data object Communicate : EtcEvent()
     }
 }
