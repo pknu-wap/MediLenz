@@ -26,7 +26,7 @@ import com.android.mediproject.core.data.search.SearchHistoryRepository
 import com.android.mediproject.core.data.search.SearchHistoryRepositoryImpl
 import com.android.mediproject.core.data.sign.SignRepository
 import com.android.mediproject.core.data.sign.SignRepositoryImpl
-import com.android.mediproject.core.data.sign.TokenRepository
+import com.android.mediproject.core.data.sign.AccountSessionRepository
 import com.android.mediproject.core.data.user.UserInfoRepository
 import com.android.mediproject.core.data.user.UserInfoRepositoryImpl
 import com.android.mediproject.core.data.user.UserRepository
@@ -109,8 +109,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesCommentsRepository(commentsDataSource: CommentsDataSource, tokenRepository: TokenRepository): CommentsRepository =
-        CommentsRepositoryImpl(commentsDataSource, tokenRepository)
+    fun providesCommentsRepository(commentsDataSource: CommentsDataSource, accountSessionRepository: AccountSessionRepository): CommentsRepository =
+        CommentsRepositoryImpl(commentsDataSource, accountSessionRepository)
 
     @Provides
     @Singleton
@@ -128,7 +128,7 @@ object RepositoryModule {
     @Provides
     internal fun providesTokenRepository(
         signRepositoryImpl: SignRepositoryImpl,
-    ): TokenRepository = signRepositoryImpl
+    ): AccountSessionRepository = signRepositoryImpl
 
     @Provides
     @Singleton

@@ -13,10 +13,14 @@ internal class SignRepositoryImpl(
     private val signDataSource: SignDataSource,
     private val appDataStore: AppDataStore,
     private val userInfoRepository: UserInfoRepository,
-) : SignRepository, TokenRepository {
+) : SignRepository, AccountSessionRepository {
 
     private var _session: CognitoUserSession? = null
     override val session: CognitoUserSession? get() = _session
+
+    override val isSignedIn: Boolean
+        get() = session != null
+
 
     override suspend fun login(loginParameter: LoginParameter) = signDataSource.logIn(loginParameter).fold(
         onSuccess = {
