@@ -37,8 +37,6 @@ import com.android.mediproject.core.network.datasource.sign.SignInOutAWSImpl
 import com.android.mediproject.core.network.datasource.sign.SignUpAWSImpl
 import com.android.mediproject.core.network.datasource.user.UserDataSource
 import com.android.mediproject.core.network.datasource.user.UserDataSourceImpl
-import com.android.mediproject.core.network.datasource.user.UserInfoDataSource
-import com.android.mediproject.core.network.datasource.user.UserInfoDataSourceImpl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
