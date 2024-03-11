@@ -9,17 +9,18 @@ private const val USER_NAME = "user_name"
 class SignDataSourceImpl(
     private val signInOutAWS: SignInOutAWS,
     private val signUpAWS: SignUpAWS,
+    private val verifyEmailAWS: VerifyEmailAWS,
 ) : SignDataSource {
 
-    override suspend fun logIn(loginParameter: LoginParameter): Result<SignInOutAWS.SignInResponse> = signInOutAWS.signIn(
-        SignInOutAWS.SignInRequest(
+    override suspend fun logIn(loginParameter: LoginParameter) = signInOutAWS.signIn(
+        SignInRequest(
             loginParameter.email,
             loginParameter.password,
         ),
     )
 
-    override suspend fun signUp(signUpParameter: SignUpParameter): Result<SignUpAWS.SignUpResponse> = signUpAWS.signUp(
-        SignUpAWS.SignUpRequest(
+    override suspend fun signUp(signUpParameter: SignUpParameter): Result<SignUpResponse> = signUpAWS.signUp(
+        SignUpRequest(
             signUpParameter.email,
             signUpParameter.password,
             CognitoUserAttributes().apply {
@@ -27,6 +28,8 @@ class SignDataSourceImpl(
             },
         ),
     )
+
+    override suspend fun vertifyEmail(email: String, code: String): Result<Boolean> = verifyEmailAWS.verifyEmail(email, code)
 
     override suspend fun signOut() {
         signInOutAWS.signOut()

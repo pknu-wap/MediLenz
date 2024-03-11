@@ -3,6 +3,7 @@ package com.android.mediproject.core.network.datasource.sign
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class VerifyEmailImpl(userPool: CognitoUserPool) : AWSAccountManager(userPool), VerifyEmailAWS {
@@ -11,11 +12,11 @@ class VerifyEmailImpl(userPool: CognitoUserPool) : AWSAccountManager(userPool), 
             code, true,
             object : GenericHandler {
                 override fun onSuccess() {
-                    it.resume(true)
+                    it.resume(Result.success(true))
                 }
 
                 override fun onFailure(exception: Exception) {
-                    it.resume(false)
+                    it.resumeWithException(exception)
                 }
             },
         )
@@ -23,5 +24,5 @@ class VerifyEmailImpl(userPool: CognitoUserPool) : AWSAccountManager(userPool), 
 }
 
 interface VerifyEmailAWS {
-    suspend fun verifyEmail(email: String, code: String): Boolean
+    suspend fun verifyEmail(email: String, code: String): Result<Boolean>
 }

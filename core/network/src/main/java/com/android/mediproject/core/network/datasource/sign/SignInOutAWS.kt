@@ -8,25 +8,21 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Auth
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChallengeContinuation
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler
-import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 internal class SignInOutAWSImpl(userPool: CognitoUserPool) : AWSAccountManager(userPool), SignInOutAWS {
 
-    override suspend fun signIn(request: SignInRequest) = suspendCancellableCoroutine { continuation ->
+    override suspend fun signIn(request: SignInRequest) = suspendCoroutine { continuation ->
         userPool.getUser(request.email).getSession(
             object : AuthenticationHandler {
                 override fun onSuccess(userSession: CognitoUserSession, newDevice: CognitoDevice?) {
-                    continuation.resume(SignInState.Success(userSession, newDevice))
+                    continuation.resume(Result.success(SignInResponse(userSession, newDevice)))
                 }
 
                 override fun onFailure(exception: Exception) {
-                    if (exception is UserNotConfirmedException) {
-                        continuation.resume(SignInState.NotVerified)
-                    } else {
-                        continuation.resume(SignInState.Failed(exception))
-                    }
+                    continuation.resumeWithException(exception)
                     // UserNotConfirmedException : 이메일 인증을 하지 않았을 때 발생
                 }
 
@@ -54,7 +50,7 @@ internal class SignInOutAWSImpl(userPool: CognitoUserPool) : AWSAccountManager(u
 
 
 interface SignInOutAWS {
-    suspend fun signIn(request: SignInRequest): SignInState
+    suspend fun signIn(request: SignInRequest): Result<SignInResponse>
 
     suspend fun signOut()
 }
@@ -64,13 +60,7 @@ class SignInRequest(
     val password: ByteArray,
 )
 
-
-sealed interface SignInState {
-    class Success(
-        val userSession: CognitoUserSession,
-        val device: CognitoDevice? = null,
-    ) : SignInState
-
-    data class Failed(val exception: Exception) : SignInState
-    data object NotVerified : SignInState
-}
+class SignInResponse(
+    val userSession: CognitoUserSession,
+    val newDevice: CognitoDevice?,
+)

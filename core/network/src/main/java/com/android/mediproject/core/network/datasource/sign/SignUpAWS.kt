@@ -8,20 +8,20 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHa
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler
 import com.amazonaws.services.cognitoidentityprovider.model.SignUpResult
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 internal class SignUpAWSImpl(
-    override val userPool: CognitoUserPool,
+    userPool: CognitoUserPool,
 ) : AWSAccountManager(userPool), SignUpAWS {
 
-    override suspend fun signUp(request: SignUpAWS.SignUpRequest) = suspendCancellableCoroutine { continuation ->
+    override suspend fun signUp(request: SignUpRequest) = suspendCoroutine { continuation ->
         userPool.signUp(
             request.email, request.passwordString, request.cognitoUserAttributes, null,
             object : SignUpHandler {
                 override fun onSuccess(cognitoUser: CognitoUser, signUpResult: SignUpResult) {
-                    val response = SignUpAWS.SignUpResponse(cognitoUser, signUpResult)
+                    val response = SignUpResponse(cognitoUser, signUpResult)
                     continuation.resume(Result.success(response))
                 }
 
@@ -32,7 +32,7 @@ internal class SignUpAWSImpl(
         )
     }
 
-    override suspend fun confirmSignUp(cognitoUser: CognitoUser, confirmationCode: String) = suspendCancellableCoroutine { continuation ->
+    override suspend fun confirmSignUp(cognitoUser: CognitoUser, confirmationCode: String) = suspendCoroutine { continuation ->
         cognitoUser.confirmSignUpInBackground(
             confirmationCode, false,
             object : GenericHandler {
@@ -47,14 +47,14 @@ internal class SignUpAWSImpl(
         )
     }
 
-    override suspend fun resendConfirmationCode(cognitoUser: CognitoUser): Result<SignUpAWS.ConfirmationCodeDeliveryDetails> =
-        suspendCancellableCoroutine { continuation ->
+    override suspend fun resendConfirmationCode(cognitoUser: CognitoUser): Result<ConfirmationCodeDeliveryDetails> =
+        suspendCoroutine { continuation ->
             cognitoUser.resendConfirmationCode(
                 object : VerificationHandler {
                     override fun onSuccess(verificationCodeDeliveryMedium: CognitoUserCodeDeliveryDetails) {
                         continuation.resume(
                             Result.success(
-                                SignUpAWS.ConfirmationCodeDeliveryDetails(
+                                ConfirmationCodeDeliveryDetails(
                                     destination = verificationCodeDeliveryMedium.destination,
                                     deliveryMedium = verificationCodeDeliveryMedium.deliveryMedium,
                                     attributeName = verificationCodeDeliveryMedium.attributeName,
@@ -79,23 +79,23 @@ interface SignUpAWS {
     suspend fun confirmSignUp(cognitoUser: CognitoUser, confirmationCode: String): Result<Unit>
 
     suspend fun resendConfirmationCode(cognitoUser: CognitoUser): Result<ConfirmationCodeDeliveryDetails>
-
-    class SignUpRequest(
-        val email: String,
-        private val password: ByteArray,
-        val cognitoUserAttributes: CognitoUserAttributes,
-    ) {
-        val passwordString: String get() = password.decodeToString()
-    }
-
-    data class SignUpResponse(
-        val cognitoUser: CognitoUser,
-        val signUpResult: SignUpResult,
-    )
-
-    data class ConfirmationCodeDeliveryDetails(
-        val destination: String,
-        val deliveryMedium: String,
-        val attributeName: String,
-    )
 }
+
+class SignUpRequest(
+    val email: String,
+    private val password: ByteArray,
+    val cognitoUserAttributes: CognitoUserAttributes,
+) {
+    val passwordString: String get() = password.decodeToString()
+}
+
+data class SignUpResponse(
+    val cognitoUser: CognitoUser,
+    val signUpResult: SignUpResult,
+)
+
+data class ConfirmationCodeDeliveryDetails(
+    val destination: String,
+    val deliveryMedium: String,
+    val attributeName: String,
+)

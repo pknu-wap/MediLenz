@@ -1,6 +1,7 @@
 package com.android.mediproject.core.data.sign
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession
+import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
 import com.android.mediproject.core.data.user.UserInfoRepository
 import com.android.mediproject.core.datastore.AppDataStore
 import com.android.mediproject.core.model.sign.LoginParameter
@@ -17,8 +18,8 @@ internal class SignRepositoryImpl(
     private var _session: CognitoUserSession? = null
     override val session: CognitoUserSession? get() = _session
 
-    override suspend fun login(loginParameter: LoginParameter): Result<Boolean> {
-        signDataSource.logIn(loginParameter).onSuccess {
+    override suspend fun login(loginParameter: LoginParameter) = signDataSource.logIn(loginParameter).fold(
+        onSuccess = {
             _session = it.userSession
             appDataStore.run {
                 saveSkipIntro(true)
@@ -35,19 +36,23 @@ internal class SignRepositoryImpl(
                     myAccountId = 0L,
                 )
             }
-        }.onFailure {
-            _session = null
-        }
+            SignInState.Success
+        },
+        onFailure = {
+            if (it is UserNotConfirmedException) {
+                SignInState.NotVerified
+            } else {
+                SignInState.Failed(it)
+            }
+        },
+    )
 
-        return Result.success(true)
-    }
 
     override suspend fun signUp(signUpParameter: SignUpParameter): Result<Boolean> {
         val result = signDataSource.signUp(signUpParameter)
         if (result.isSuccess) {
             appDataStore.saveSkipIntro(true)
         }
-
         return Result.success(true)
     }
 
@@ -55,4 +60,11 @@ internal class SignRepositoryImpl(
         _session = null
         signDataSource.signOut()
     }
+}
+
+
+sealed interface SignInState {
+    data object Success : SignInState
+    data object NotVerified : SignInState
+    data class Failed(val exception: Throwable) : SignInState
 }

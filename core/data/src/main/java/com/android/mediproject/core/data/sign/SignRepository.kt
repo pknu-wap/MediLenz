@@ -5,7 +5,7 @@ import com.android.mediproject.core.model.sign.LoginParameter
 import com.android.mediproject.core.model.sign.SignUpParameter
 
 interface SignRepository {
-    suspend fun login(loginParameter: LoginParameter): Result<Boolean>
+    suspend fun login(loginParameter: LoginParameter): SignInState
     suspend fun signUp(signUpParameter: SignUpParameter): Result<Boolean>
 
     suspend fun signOut()

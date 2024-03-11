@@ -4,6 +4,4 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool
 
 open class AWSAccountManager(
     protected val userPool: CognitoUserPool,
-) {
-
-}
+)
