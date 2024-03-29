@@ -59,6 +59,7 @@ Medilenz는 사용자가 필요로 하는 의약품 정보를 검색하고, 사�
 ## Android 앱 아키텍처
 
 - MVVM
+- Clean Architecture
 - domain 영역 포함
 
 <br><br><br>
